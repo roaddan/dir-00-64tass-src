@@ -36,7 +36,7 @@ header                        ;0123456789012345678901234567890123456789
                 .byte   $0d
                 .text          "        (c) 1979 Brad Templeton"
                 .byte   $0d,$0d
-                .text          "     Programmed by Daniel Lafrance."
+                .text          "     programmed by Daniel Lafrance."
                 .byte   $0d
                 .text   format("       Version: %s.",Version)
                 .byte   $0d,0
