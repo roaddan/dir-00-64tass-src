@@ -1,0 +1,138 @@
+                        *= 49666
+c202 a9 00     start    lda #$00
+c204 a0 c0              ldy #$c0
+c206 20 1e ab           jsr $ab1e
+c209 a9 4c              lda #$4c
+c20b 85 7c              sta $7c
+c20d a9 18              lda #$18
+c20f 85 7d              sta $7d
+c211 a9 c2              lda #$c2
+c213 85 7e              sta $7e
+c215 6c 02 03           jmp ($0302)
+               ;wos start here
+c218 c9 40              cmp #$40
+c21a 00                 bne $44
+c21b a5 9d     lbl1     lda $9d
+c21d 00                 beq $28
+c21e ad 00 02           lda $0200
+c221 c9 40              cmp #$40
+c223 00                 bne $1c
+c224 20 72 c2           jsr $c272
+c227 a0 00              ldy #$00
+c229 b1 7a              lda ($7a),y
+c22b c9 20              cmp #$20
+c22d 00                 beq $09
+c22e e6 7a              inc $7a
+c230 00                 bne $f6
+c231 e6 7b              inc $7b
+c233 38                 sec
+c234 00                 bcs $f1
+c235 20 74 a4           jsr $a474
+c238 a9 00              lda #$00
+c23a 38                 sec
+c23b 00                 bcs $18
+                        ; program-mode
+c23c 20 72 c2           jsr $c272
+c23f a0 00              ldy #$00
+c241 b1 7a              lda ($7a),y
+c243 c9 00              cmp #$00
+c245 00                 beq $0d
+c246 c9 3a              cmp #$3a
+c248 00                 beq $09
+c249 e6 7a              inc $7a
+c24b 00                 bne $f2
+c24c e6 7b              inc $7b
+c24e 38                 sec
+c24f 00                 bcs $ed
+c250 c9 3a              cmp #$3a
+c252 00                 bcs $0a
+c253 c9 20              cmp #$20
+c255 00                 beq $07
+c256 38                 sec
+c257 e9 30              sbc #$30
+c259 38                 sec
+c25a e9 d0              sbc #$d0
+c25c 60                 rts
+c25d 4c 73 00           jmp $73
+               ; find-execute
+c260 a9 00              lda #$00
+c262 85 7f              sta $7f
+c264 a9 c1              lda #$c1
+c266 85 80              sta $80
+c268 e6 7a              inc $7a
+c26a 00                 bne $02
+c26b e6 7b              inc $7b
+c26d a0 00              ldy #$00
+c26f a2 00              ldx #$00
+c271 b1 7f              lda ($7f),y
+c273 00                 beq $24
+c274 d1 7a              cmp ($7a),y
+c276 00                 bne $04
+c277 c8                 iny
+c278 38                 sec
+c279 00                 bcs $f4
+c27a b1 7f              lda ($7f),y
+c27c 00                 beq $04
+c27d c8                 iny
+c27e 38                 sec
+c27f 00                 bcs $f8
+c280 c8                 iny
+c281 98                 tya
+c282 18                 clc
+c283 65 7f              adc $7f
+c285 85 7f              sta $7f
+c287 a9 00              lda #$00
+c289 65 80              adc $80
+c28b 85 80              sta $80
+c28d a0 00              ldy #$00
+c28f e8                 inx
+c290 e8                 inx
+c291 38                 sec
+c292 00                 bcs $d8
+c293 bd 50 c0           lda $c050,x
+c296 85 80              sta $80
+c298 e8                 inx
+c299 bd 50 c0           lda $c050,x
+c29c 85 81              sta $81
+c29e 6c 80 00           jmp ($80)
+               ; illegal
+c2a1 a2 0b              ldx #$0b
+c2a3 6c 00 03           jmp ($0300)
+               ;setup command table
+                        *= 49808
+               ;ascii command data
+c290 43 4c 53 00
+                        .byte 67,76,83,0 ;CLS
+c294 4c 4f 57 00
+                        .byte 76,79,87,0 ;LOW
+c298 55 50 00           .byte 85,80,0    ;UP
+               ;title message displayed on sys 49666
+                        *= 49152
+c000 93 0d 20 20 20 2a 2a 20
+                        .byte 147,13,32,32,32,42,42,32
+c008 43 36 34 20 45 58 54 45
+                        .byte 67,54,52,32,69,88,84,69
+c010 4e 44 45 44 20 53 55 50
+                        .byte 78,68,69,68,32,83,85,80
+c018 45 52 20 42 41 53 49 43
+                        .byte 69,82,32,66,65,83,73,67
+c020 20 56 31 2e 30 20 2a 2a
+                        .byte 32,86,49,46,48,32,42,42
+c028 0d 00              .byte 13,0
+               ;set up m/c for commands
+                        *= 50176
+                        ; CLS
+c400 a9 93              lda #$93
+c402 4c d2 ff           jmp $ffd2
+                        ; LOW
+c405 a9 0e              lda #$0e
+c407 4c d2 ff           jmp $ffd2
+                        ; UP
+c40a a5 8d              lda $8d
+c40c 4c d2 ff           jmp $ffd2
+               ;set up address table
+                        *= 49232
+c050 00 c4              .byte 0,196 ;CLS
+c052 05 c4              .byte 5,196 ;LOW
+c054 0a c4              .byte 10,196;UP
+

@@ -1,0 +1,1 @@
+;---------------------------------------LSRA4BITS         .BLOCK         PHP         LSR A         LSR A         LSR A         LSR A         PLP         RTS         .BEND

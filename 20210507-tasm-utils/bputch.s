@@ -1,0 +1,1 @@
+;---------------------------------------BPUTCH         .BLOCK         PHP         JSR $FFD2         PLP         RTS         .BEND

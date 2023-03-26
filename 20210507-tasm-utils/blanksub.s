@@ -1,0 +1,1 @@
+;---------------------------------------; ÒOUTINE: BLANKSUB.S;---------------------------------------BLANKSUB         .BLOCK         PHP         PHA         TXA         PHA         TYA         PHA; LECODE VA ICI         PLA         TAY         PLA         TAX         PLA         PLP         RTS         .BEND;---------------------------------------

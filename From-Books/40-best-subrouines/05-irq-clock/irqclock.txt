@@ -1,0 +1,1212 @@
+
+; 64tass Turbo Assembler Macro V1.52.1237? listing file
+; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib -i -L irqclock.txt -o irqclock.prg irqclock.asm
+; Sat Mar 25 15:33:33 2023
+
+;Offset	;Hex		;Source
+
+;******  Processing input file: irqclock.asm
+
+="20230319-090800-a"	Version = "20230319-090800-a"
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/header-c64.asm
+
+>0801	0b 08 0a 00	.word (+), 10
+>0805	9e 32 30 36	.null $9e, "2061"
+>0809	31 00
+>080b	00 00		+ .word 0
+
+;******  Return to file: irqclock.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/macros-64tass.asm
+
+
+;******  Return to file: irqclock.asm
+
+.080d			main
+.080d	20 00 10	                jsr scrmaninit
+.0810	20 14 08	                jsr help
+.0813	60		                rts
+.0814			help
+.0814	20 21 10	                jsr cls
+.0817	a2 2d		                ldx  #<header
+.0819	a0 08		                ldy  #>header
+.081b	20 36 10	                jsr  puts
+.081e	a2 17		                ldx  #<shortcuts
+.0820	a0 09		                ldy  #>shortcuts
+.0822	20 36 10	                jsr  puts
+.0825	a2 94		                ldx  #<helptext
+.0827	a0 09		                ldy  #>helptext
+.0829	20 36 10	                jsr  puts
+.082c	60		                rts
+.082d			header
+>082d	0d		                .byte   $0d
+>082e	20 20 20 20	                .text          "     40 BEST MACHINE CODE ROUTINES"
+>0832	20 34 30 20 c2 c5 d3 d4 20 cd c1 c3 c8 c9 ce c5
+>0842	20 c3 cf c4 c5 20 d2 cf d5 d4 c9 ce c5 d3
+>0850	0d		                .byte   $0d
+>0851	20 20 20 20	                .text          "          FOR THE COMMODORE 64"
+>0855	20 20 20 20 20 20 c6 cf d2 20 d4 c8 c5 20 c3 cf
+>0865	cd cd cf c4 cf d2 c5 20 36 34
+>086f	0d		                .byte   $0d
+>0870	20 20 20 20	                .text          "       Book by Mark Greenshields."
+>0874	20 20 20 c2 4f 4f 4b 20 42 59 20 cd 41 52 4b 20
+>0884	c7 52 45 45 4e 53 48 49 45 4c 44 53 2e
+>0891	0d 0d		                .byte   $0d,$0d
+>0893	20 20 20 20	                .text          "             IRQCLOCK (p32)"
+>0897	20 20 20 20 20 20 20 20 20 c9 d2 d1 c3 cc cf c3
+>08a7	cb 20 28 50 33 32 29
+>08ae	0d		                .byte   $0d
+>08af	20 20 20 20	                .text          "        (c)1979 Brad Templeton"
+>08b3	20 20 20 20 28 43 29 31 39 37 39 20 c2 52 41 44
+>08c3	20 d4 45 4d 50 4c 45 54 4f 4e
+>08cd	0d 0d		                .byte   $0d,$0d
+>08cf	20 20 20 20	                .text          "     Programmed by Daniel Lafrance."
+>08d3	20 d0 52 4f 47 52 41 4d 4d 45 44 20 42 59 20 c4
+>08e3	41 4e 49 45 4c 20 cc 41 46 52 41 4e 43 45 2e
+>08f2	0d		                .byte   $0d
+>08f3	20 20 20 20	                .text   format("       Version: %s.",Version)
+>08f7	20 20 20 d6 45 52 53 49 4f 4e 3a 20 32 30 32 33
+>0907	30 33 31 39 2d 30 39 30 38 30 30 2d 41 2e
+>0915	0d 00		                .byte   $0d,0
+>0917	0d		shortcuts       .byte   $0d
+>0918	20 2d 2d 2d	                .text          " -------- S H O R T - C U T S ---------"
+>091c	2d 2d 2d 2d 2d 20 d3 20 c8 20 cf 20 d2 20 d4 20
+>092c	2d 20 c3 20 d5 20 d4 20 d3 20 2d 2d 2d 2d 2d 2d
+>093c	2d 2d 2d
+>093f	0d		                .byte   $0d
+>0940	20 52 55 4e	                .text   format(" run=SYS%5d, help=SYS%5d",main, help)
+>0944	3d d3 d9 d3 20 32 30 36 31 2c 20 48 45 4c 50 3d
+>0954	d3 d9 d3 20 32 30 36 38
+>095c	0d		                .byte   $0d
+>095d	20 43 4c 53	                .text   format(" cls=SYS%5d",cls)
+>0961	3d d3 d9 d3 20 34 31 32 39
+>096a	0d		                .byte   $0d
+>096b	20 2d 2d 2d	                .text          " --------------------------------------"
+>096f	2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d
+>097f	2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d
+>098f	2d 2d 2d
+>0992	0d 00		                .byte   $0d,0
+>0994	0d		helptext        .byte   $0d
+>0995	20 20 c3 cc	                .text   format("  CLOCK : SYS%5d,heures,minutes",clock)
+>0999	cf c3 cb 20 3a 20 d3 d9 d3 20 32 35 31 32 2c 48
+>09a9	45 55 52 45 53 2c 4d 49 4e 55 54 45 53
+>09b6	0d		                .byte   $0d
+>09b7	20 20 20 20	                .text   format("     ex.: SYS%5d,7,30",clock)
+>09bb	20 45 58 2e 3a 20 d3 d9 d3 20 32 35 31 32 2c 37
+>09cb	2c 33 30
+>09ce	0d 00		                .byte   $0d,0
+.09d0			clock
+.09d0	20 fd ae	                jsr b_chk4comma
+.09d3	20 9e b7	                jsr b_getacc1lsb
+.09d6	8a		                txa
+.09d7	c9 18		                cmp #24
+.09d9	b0 14		                bcs iqerr
+.09db	8d 9e 0a	                sta heure
+.09de	20 fd ae	                jsr b_chk4comma
+.09e1	20 9e b7	                jsr b_getacc1lsb
+.09e4	8a		                txa
+.09e5	c9 3c		                cmp #60
+.09e7	b0 06		                bcs iqerr
+.09e9	8d 9f 0a	                sta minute
+.09ec	4c f2 09	                jmp setup
+.09ef	4c 48 b2	iqerr           jmp b_fcerr
+.09f2	78		setup           sei
+.09f3	a9 0f		                lda #<princ
+.09f5	8d 14 03	                sta cinv
+.09f8	a9 0a		                lda #>princ
+.09fa	8d 15 03	                sta cinv+1
+.09fd	ad 9e 0a	                lda heure
+.0a00	ad 9f 0a	                lda minute
+.0a03	a9 00		                lda #0
+.0a05	8d a0 0a	                sta seconde
+.0a08	a9 00		                lda #0
+.0a0a	8d a1 0a	                sta compteur
+.0a0d	58		                cli
+.0a0e	60		                rts
+.0a0f	ee a1 0a	princ           inc compteur
+.0a12	ad a1 0a	                lda compteur
+.0a15	c9 5a		                cmp #90
+.0a17	b0 03		                bcs change
+.0a19	4c 31 ea	                jmp irq ; IRQ interrupt entry
+.0a1c	a9 00		change          lda #0
+.0a1e	8d a1 0a	                sta compteur
+.0a21	ee a0 0a	                inc seconde
+.0a24	ad a0 0a	                lda seconde
+.0a27	c9 3c		                cmp #60
+.0a29	b0 03		                bcs changeminute
+.0a2b	4c 5d 0a	                jmp printit
+.0a2e	a9 00		changeminute    lda #0
+.0a30	8d a0 0a	                sta seconde
+.0a33	ee 9f 0a	                inc minute
+.0a36	ad 9f 0a	                lda minute
+.0a39	c9 3c		                cmp #60
+.0a3b	b0 03		                bcs changeheure
+.0a3d	4c 5d 0a	                jmp printit
+.0a40	a9 00		changeheure     lda #0
+.0a42	8d 9f 0a	                sta minute
+.0a45	ee 9e 0a	                inc heure
+.0a48	ad 9e 0a	                lda heure
+.0a4b	c9 18		                cmp #24
+.0a4d	90 0e		                bcc printit
+.0a4f	a9 00		                lda #0
+.0a51	8d a0 0a	                sta seconde
+.0a54	8d 9f 0a	                sta minute
+.0a57	8d 9e 0a	                sta heure
+.0a5a	4c 31 ea	                jmp irq   ; IRQ interrupt entry
+.0a5d	38		printit           sec
+.0a5e	20 f0 ff	                jsr plot
+.0a61	8e a2 0a	                stx cursx
+.0a64	8c a3 0a	                sty cursy
+.0a67	a2 00		                ldx #0
+.0a69	a0 1e		                ldy #30
+.0a6b	18		                clc
+.0a6c	20 f0 ff	                jsr plot
+.0a6f	a9 00		                lda #0
+.0a71	ae 9e 0a	                ldx heure
+.0a74	20 cd bd	                jsr b_putint
+.0a77	a9 3a		                lda #":"
+.0a79	20 d2 ff	                jsr chrout
+.0a7c	a9 00		                lda #0
+.0a7e	ae 9f 0a	                ldx minute
+.0a81	20 cd bd	                jsr b_putint
+.0a84	a9 3a		                lda #":"
+.0a86	20 d2 ff	                jsr chrout
+.0a89	a9 00		                lda #0
+.0a8b	ae a0 0a	                ldx seconde
+.0a8e	20 cd bd	                jsr b_putint
+.0a91	ae a2 0a	                ldx cursx
+.0a94	ac a3 0a	                ldy cursy
+.0a97	18		                clc
+.0a98	20 f0 ff	                jsr plot
+.0a9b	4c 31 ea	                jmp irq   ; IRQ interrupt entry
+>0a9e	00		heure           .byte   0
+>0a9f	00		minute          .byte   0
+>0aa0	00		seconde         .byte   0
+>0aa1	00		compteur        .byte   0
+>0aa2	00		cursx           .byte   0
+>0aa3	00		cursy           .byte   0
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-kernal.asm
+
+=$90			kiostatus       =       $90       ; Kernal I/O status word (st) (byte)
+=$b7			curfnlen        =       $b7       ; Current filename length (byte)
+=$b9			cursecadd       =       $b9       ; Current secondary address (byte)
+=$ba			curdevno        =       $ba       ; Current device number (byte)
+=$bb			curfptr         =       $bb       ; Current file pointer (word)
+=$fb			zpage1          =       $fb       ; zero page 1 address (word)
+=$fd			zpage2          =       $fd       ; zero page 2 address (word)
+=$fb			zeropage        =       zpage1
+=$fd			zonepage        =       zpage2
+=$0286			bascol          =       $0286     ;basic next chr colscreenram (byte)
+=$0400			scrnram         =       $0400     ;video character ram
+=$0400			scrram0         =       $0400
+=$0500			scrram1         =       $0500
+=$0600			scrram2         =       $0600
+=$0700			scrram3         =       $0700
+=$0801			basicsta        =       $0801     ;basic start address
+=$a000			basicrom        =       $a000
+=$d400			sid             =       $d400     ;sid base address
+=$d800			colorram        =       $d800     ;video color ram
+=$d800			colram0         =       $d800
+=$d900			colram1         =       $d900
+=$da00			colram2         =       $da00
+=$db00			colram3         =       $db00
+=$dc00			cia1            =       $dc00     ;cia1  base address
+=$dd00			cia2            =       $dd00     ;cia2 base address
+=$e000			kernalrom       =       $e000
+=43			txttab          =       43
+=$14			linnum          =       $14
+=$c6			ndx             =       $c6     ;Number of character in keyboard buffer
+=$033c			tpbuff          =       $033c   ;$033c-$03fb (828-1019)
+=$277			kbbuff          =       $277
+=$28d			shflag          =       $28d    ;653
+=828			tbuffer         =       828
+=806			ibsout          =       806
+=$ea31			irq             =       $ea31
+=$314			cinv            =       $314        ; brk instruction interupt
+=$c5			lstx            =       $c5         ;matrix coordinate of last key pressed
+=$03			bstop           =       $03      ;stop
+=$05			bwhite          =       $05      ;set color white
+=$08			block           =       $08      ;lock the charset
+=$09			bunlock         =       $09      ;unlock the charset
+=$0d			bcarret         =       $0d
+=$0e			btext           =       $0e
+=$11			bcrsdn          =       $11      ;cursor down 1 line
+=$12			brevcol         =       $12
+=$13			bhome           =       $13
+=$14			bdelete         =       $14
+=$1c			bred            =       $1c
+=$1d			bcuright        =       $1d
+=$1e			bgreen          =       $1e
+=$1f			bblue           =       $1f
+=$81			borange         =       $81
+=$83			blrun           =       $83
+=$85			bfkey1          =       $85
+=$86			bfkey2          =       $86
+=$87			bfkey3          =       $87
+=$88			bfkey4          =       $88
+=$89			bfkey5          =       $89
+=$8a			bfkey6          =       $8a
+=$8b			bfkey7          =       $8b
+=$8c			bfkey8          =       $8c
+=$8d			bcarret1        =       $8d
+=$8e			bgraph          =       $8e
+=$90			bblack          =       $90
+=$91			bcuup           =       $91
+=$92			brevoff         =       $92
+=$93			bclear          =       $93
+=$94			binsert         =       $94
+=$95			bbrown          =       $95
+=$96			bltred          =       $96
+=$97			bdkgrey         =       $97
+=$98			bmdgrey         =       $98
+=$99			bltgreen        =       $99
+=$9a			bltblue         =       $9a
+=$9b			bltgrey         =       $9b
+=$9c			bmagenta        =       $9c
+=$9d			bculeft         =       $9d
+=$9e			byellow         =       $9e
+=$9f			bcyan           =       $9f
+=$0286			carcol          =       $0286
+=$030a			ieval           =       $030a
+=$73			chrget          =       $73
+=$79			chrgot          =       $79
+=$0			cnoir       = $0
+=$1			cblanc      = $1
+=$2			crouge      = $2
+=$3			cocean      = $3
+=$4			cmauve      = $4
+=$5			cvert       = $5
+=$6			cbleu       = $6
+=$7			cjaune      = $7
+=$8			corange     = $8
+=$9			cbrun       = $9
+=$a			crose       = $a
+=$b			cgrisfonce  = $b
+=$c			cgrismoyen  = $c
+=$d			cvertpale   = $d
+=$e			cbleupale   = $e
+=$f			cgrispale   = $f
+=$0			cblack      = $0
+=$1			cwhite      = $1
+=$2			cred        = $2
+=$3			ccyan       = $3
+=$4			cpurple     = $4
+=$5			cgreen      = $5
+=$6			cblue       = $6
+=$7			cyellow     = $7
+=$9			cbrown      = $9
+=$a			clightred   = $a
+=$b			cdarkgray   = $b
+=$c			cmidgray    = $c
+=$d			clightgreen = $d
+=$e			clightblue  = $e
+=$f			clightgray  = $f
+=$00			vnoir     =    %00000000
+=$00			vblack    =    %00000000
+=$01			vblanc    =    %00000001
+=$01			vwhite    =    %00000001
+=$02			vrouge    =    %00000010
+=$02			vred      =    %00000010
+=$03			vocean    =    %00000011
+=$03			vcyan     =    %00000011
+=$04			vmauve    =    %00000100
+=$04			vpurple   =    %00000100
+=$05			vvert     =    %00000101
+=$05			vgreen    =    %00000101
+=$06			vbleu     =    %00000110
+=$06			vblue     =    %00000110
+=$07			vjaune    =    %00000111
+=$07			vyellow   =    %00000111
+=$08			vorange   =    %00001000
+=$09			vbrun     =    %00001001
+=$09			vbrown    =    %00001001
+=$0a			vrose     =    %00001010
+=$0a			vpink     =    %00001010
+=$0b			vgris     =    %00001011
+=$0b			vgray     =    %00001011
+=$0b			vgrey     =    %00001011
+=$0c			vgris1    =    %00001100
+=$0c			vgray1    =    %00001100
+=$0c			vgrey1    =    %00001100
+=$0d			vvert1    =    %00001101
+=$0d			vgreen1   =    %00001101
+=$0e			vbleu1    =    %00001110
+=$0e			vblue1    =    %00001110
+=$0f			vgris2    =    %00001111
+=$0f			vgray2    =    %00001111
+=$0f			vgrey2    =    %00001111
+=$e1d4			setprms = $e1d4 ; Set parameters for LOAD, SAVE, and verify
+=$ed09			stalk   = $ed09 ; Send Talk command to serial bus.
+=$ed0c			slisten = $ed0c ; Send LISTEN command to serial bus.
+=$ed40			sflush  = $ed40 ; Flush serial bus output cache at memory address $0095, to
+=$edb9			slisten2= $edb9 ; Send LISTEN secondary addressto serial bus.
+=$edb9			stalk2  = $edb9 ; Send TALK secondary addressto serial bus.
+=$eddd			sbout   = $eddd ; Write byte to serial bus.
+=$edef			sutalk  = $edef ; Send UNTalk command to serial bus.
+=$edfe			sulisten= $edfe ; Send UNLISTEN command to serial bus.
+=$ee85			sclkhigh= $ee85 ; Set CLOCK OUT to High
+=$ee8e			sclklow = $ee8e ; Set CLOCK OUT to low
+=$ee97			sdathigh= $ee97 ; Set DATA OUT to High
+=$eea0			sdatlow = $eea0 ; Set DATA OUT to low
+=$eea9			sclkdta = $eea9 ; Read CLOCK IN and DATA IN.
+=$f1ad			sbread  = $f1ad ; Read one byte from serial port.
+=$f237			sstdin  = $F237 ; Define serial bus as standard input; do not send TALK
+=$f279			sstdout = $F279 ; Define serial bus as standard output; do not send LISTEN
+=$f3d5			sfopen  = $F3D5 ; Open file on serial bus; do not send file name if secondary
+=$f528			sutclose= $F528 ; Send UNTALK and CLOSE command to serial bus.
+=$f63f			sulclose= $F63F ; Send UNLISTEN and CLOSE command to serial bus.
+=$f642			sfclose = $F642 ; Close file on serial bus; do not send CLOSE secondary address
+=$fe21			stimeout= $FE21 ; Unknown. (Set serial bus timeout.)
+=$ffa5			acptr   = $ffa5 ; jmp $ee13 Recoit un caractere provenant du port serie
+=$ffc6			chkin   = $ffc6 ; jmp ($031e) Define an input channel.
+=$ffc9			chkout  = $ffc9 ; jmp ($0320) Define an output channel.
+=$ffcf			chrin   = $ffcf ; jmp ($0324) Get a character from the input channel
+=$ffd2			chrout  = $ffd2 ; jmp ($0326) Output a character
+=$ff81			cint    = $ff81 ; jsr $e518 Initialize the screen editor and vic-ii chip
+=$ffa8			ciout   = $ffa8 ; jmp $eddd Transmit a byte over the serial bus
+=$ffe7			clall   = $ffe7 ; jmp ($032c) Close all open files
+=$ffc3			close   = $ffc3 ; jmp ($031c) Close a logical file
+=$ffcc			clrchn  = $ffcc ; jmp ($0322) - Clear all i/o channels.
+=$ffe4			getin   = $ffe4 ; jmp ($032a) Get a character.
+=$fff3			iobase  = $fff3 ; jmp $e500 Define i/o memory page
+=$ff84			ioinit  = $ff84 ; ($fda3) Initialize i/o devices.
+=$ffb1			listen  = $ffb1 ; jmp ($ed0c) Command a device on the serial bus to listen.
+=$ffd5			load    = $ffd5 ; jmp $f4e9 Load device to RAM.
+=$ff9c			membot  = $ff9c ; jmp $fe34 Get/set bottom of memory.
+=$ff99			memtop  = $ff99 ; jmp $fe25 Get/Set top of ram
+=$ffc0			open    = $ffc0 ; jmp ($031a) Open a logical file
+=$fff0			plot    = $fff0 ; jmp $e50a Set or retrieve cursor location x=column, y=line
+=$ff87			ramtas  = $ff87 ; ($fd50) Initialise ram, tape buffer and screen.
+=$ffde			rdtim   = $ffde ; jmp $f6dd Read system clock
+=$ffb7			readst  = $ffb7 ; jmp $fe07 Read i/o status word
+=$ff8a			restor  = $ff8a ; jmp $fd15 Restore default I/O vectors.
+=$ffd8			save    = $ffd8 ; jmp $f5dd Save memory to a device.
+=$ff9f			scnkey  = $ff9f ; jmp $ea87 Scan the keyboard
+=$ffed			screen  = $ffed ; jmp $e505 Return screen format
+=$ff93			second  = $ff93 ; jmp $edb9 Send secondary address after listen
+=$ffba			setlfs  = $ffba ; jmp $fe00 Set up a logical file
+=$ff90			setmsg  = $ff90 ; jmp $fe18 Set kernal message output flag
+=$ffbd			setnam  = $ffbd ; jmp $fdf9 Set up file name
+=$ffdb			settim  = $ffdb ; jmp $f6e4 Set the system clock.
+=$ffa2			settmo  = $ffa2 ; jmp $fe21 Set ieee bus card timeout flag
+=$ffe1			stop    = $ffe1 ; jmp ($0328) Check if stop key is pressed.
+=$ffb4			talk    = $ffb4 ; jmp $ed09 Command a device on the serial bus to talk
+=$ff96			tksa    = $ff96 ; jmp $edc7 Send a secondary address to a device commanded to talk
+=$ffea			udtim   = $ffea ; jmp $f69b Update the system clock
+=$ffae			unlsn   = $ffae ; jmp $edfe Send an unlisten command
+=$ffab			untlk   = $ffab ; jmp $edef Send an untalk command
+=$ff8d			vector  = $ff8d ; jmp $fd1a Read/set I/O vectors.
+=$e043			kd_poly1     =   $e043
+=$e059			kd_poly2     =   $e059
+=$e08d			kd_rmulc     =   $e08d       ;
+=$e092			kd_raddc     =   $e092       ;
+=$e097			kd_rnd       =   $e097
+=$e12a			kd_sys       =   $e12a
+=$e156			kd_save      =   $e156
+=$e165			kd_verify    =   $e165
+=$e168			kd_load      =   $e168
+=$f1ca			kd_chrout    =   $f1ca
+=$ff81			kcint       =   cint        ;   , init vic + ecran.
+=$ff84			kioinit     =   ioinit      ;   , init i/o dev.
+=$ff87			kramtas     =   ramtas      ;   , test de memoire.
+=$ffa8			kciout      =   ciout       ;a  ,tx byte  acia
+=$ff8a			krestor     =   restor      ;   , set ram plafond
+=$ff8d			kvector     =   vector      ;
+=$ff90			ksetmsg     =   setmsg      ;a  , set sys. msg. out
+=$ff93			ksecond     =   second      ;a  , tx adresse sec.
+=$ff96			ktksa       =   tksa        ;a  , talk adresse sec.
+=$ff99			kmemtop     =   memtop      ; yx, (c) get mem high
+=$ff9c			kmembot     =   membot      ; yx, (c) get mem low
+=$ff9f			kscankey    =   scnkey      ;   , scan clavier
+=$ffa2			ksettmo     =   settmo      ;a  , set ieee timeout
+=$ffa5			kacptr      =   acptr       ;a  ,rx serie.
+=$ffab			kuntlk      =   untlk       ;   , iec-cmc stop talk
+=$ffae			kunlsn      =   unlsn       ;   , iec-cmd stop lsn
+=$ffb1			klisten     =   listen      ;a  , iec-cmd dev ecout
+=$ffb4			ktalk       =   talk        ;a  , iec-cmd dev parle
+=$ffb7			kreadst     =   readst      ;a  , lecture i/o stats
+=$ffba			ksetlfs     =   setlfs      ;ayx, init fich logi.
+=$ffbd			ksetnam     =   setnam      ;ayx, init num.nom.fich
+=$ffc0			kopen       =   open        ;axy, ouvre fich-nom
+=$ffc3			kclose      =   close       ;a  , ferme fichier #a.
+=$ffc6			kchkin      =   chkin       ;  x,open canal in.
+=$ffc9			kchkout     =   chkout      ;  x,open canal out
+=$ffcc			kclrchn     =   clrchn      ;   , ferme canaux i/o.
+=$ffcf			kchrin      =   chrin       ;a  ,recup. un car.
+=$ffd2			kchrout     =   chrout      ;a  ,sort un car.
+=$ffd5			kload       =   load        ;ayx, dev->ram
+=$ffd8			ksave       =   save        ;   , sauve mem->dev
+=$ffdb			ksettim     =   settim      ;axy, init sysclock
+=$ffde			krdtim      =   rdtim       ;axy, lecture sysclock
+=$ffe1			kstop       =   stop        ;a  , ret. stopkey stat
+=$ffe4			kgetin      =   getin       ;a  , recup. car. #dev.
+=$ffe7			kclall      =   clall       ;   , ferme fichiers.
+=$ffea			kudtim      =   udtim       ;   , maj sysclock
+=$ffed			kscreen     =   screen      ; yx, get format ecran
+=$fff0			kplot       =   plot        ; yx, (c) get csr pos.
+=$fff3			kiobase     =   iobase      ; yx, def. i/o mem page
+=$e39a			k_echostartup = $e39a
+=$e716			k_putch       = $e716 ; 52) Print a character.          ;a--;---; a = char
+=$e7a0			k_cls         = $e7a0
+=$e87c			k_cursordown  = $e87c
+=$e8ea			k_scrollup    = $e8ea
+=$e94e			k_home        = $e94e
+=$e965			k_insertline  = $e965
+=$e9c8			k_screlldown  = $e9c8
+=$ed0c			k_devsndlstn  = $ed0c ; 55) Send 'LISTEN'>IEEE/Serial.  ;a--;---; a = dev #
+=$ee13			k_ieeein      = $ee13 ; 60) Input from IEEE/Serial.     ;---;a--; a = Data byte
+=$eef6			k_devsndutalk = $eef6 ; 58) Send 'UNTALK'>IEEE/Serial.  ;---;---;
+=$ef04			k_devsndulstn = $ef04 ; 59) Send 'UNLISTEN'>IEEE/Serial.;---;---;
+=$f12f			k_putsysmsg   = $f12f ; 53) Print system message.       ;--y;---; y = msg offset
+=$f291			k_cloself     = $f291 ; 61) Close logical file .        ;a--;---; a = file #
+=$f49e			k_loadsub     = $f49e ; 63) LOAD subroutine.            ;axy;---; a = # start=yyxx
+=$f5af			k_prnsrch     = $f5af ; 64) Print SEARCHING if imm mode.;---;---;
+=$f5b3			k_echosearch  = $f5b3 ; 64b) Skipping test part of 64.  ;---;---;
+=$f5c1			k_prnfnam     = $f5c1 ; 65) Print filename.             ;---;---;
+=$f6ed			k_stop        = $f6ed ; 62) Check for STOP key.         ;---;---; z = 1 pressed
+=$f7ea			k_gettaphdblk = $f7ea ; 66) Find a tape hdr blk.        ;a--;---; a = len
+=$f7ea			k_fndtaphdblk = $f7ea ; 67) Find any tape hdr blk.      ;---;---;
+=$f817			k_waittapplay = $f817 ; 68) Press PLAY... (wait)        ;---;---;
+=$f841			k_rdtape2buff = $f841 ; 69) Read tape to buffer.        ;---;---;
+=$f847			k_readtape    = $f847 ; 70) Read tape.                  ;---;---;
+=$f864			k_wrbuff2tape = $f864 ; 71) write buffer to tape.       ;---;---;
+=$f869			k_wrtape      = $f869 ; 72) write tape.                 ;a--;---; a = ldr len
+=$fb8e			k_resettapeio = $fb8e ; 73) Reset tape I/O.             ;---;---;
+=$fcbd			k_setintvect  = $fcbd ; 74) set interupt vector.        ;---;---;
+=$fce2			k_coldreset   = $fce2 ; 75) Power on reset.             ;---;---;
+=$fce2			k_coldstart   = $fce2 ; 75) Power on reset.             ;---;---;
+=$fce2			k_coldboot    = $fce2 ; 75) Power on reset.             ;---;---;
+=$fe66			k_warmreset   = $fe66 ;     Warm resetstart
+=$fe66			k_warmboot    = $fe66 ;     Warm resetstart
+=$ff93			k_devsndaddr2 = $ff93 ; 56) Send second address.        ;a--;---; a = SA or #$60
+=0			kerr00 = 0      ; routine ended by the stop key.
+=1			kerr01 = 1      ; too many files open.
+=2			kerr02 = 2      ; file already open.
+=3			kerr03 = 3      ; file not open.
+=4			kerr04 = 4      ; file not found.
+=5			kerr05 = 5      ; device not present.
+=6			kerr06 = 6      ; file is not an input file.
+=7			kerr07 = 7      ; file is not an output file.
+=8			kerr08 = 8      ; file name is missing.
+=9			kerr09 = 9      ; illegal device number.
+=240			kerrf0 = 240    ; top-of-memory change rs-232 buffer allocation.
+.1000			libtart
+
+;******  Return to file: irqclock.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-vicii.asm
+
+=$0400			viciiscn    =   $0400
+=$0400			viciiscn0   =   $0400
+=$04f0			viciiscn1   =   $04f0
+=$05e0			viciiscn2   =   $05e0
+=$06d0			viciiscn3   =   $06d0
+=$d000			vic = $d000			; VicII C64 memorymap base address
+=53248			vicsprt0x = vic+$00	; $d000, 53248 Sprt 0 Horizontal position (X)
+=53249			vicsprt0y = vic+$01	; $d001, 53249 Sprt 0 Vertical position (Y)
+=53250			vicsprt1x = vic+$02	; $d002, 53250 Sprt 1 Horizontal position (X)
+=53251			vicsprt1y = vic+$03	; $d003, 53251 Sprt 1 Vertical position (Y)
+=53252			vicsprt2x = vic+$04	; $d004, 53252 Sprt 2 Horizontal position (X)
+=53253			vicsprt2y = vic+$05	; $d005, 53253 Sprt 2 Vertical position (Y)
+=53254			vicsprt3x = vic+$06	; $d006, 53254 Sprt 3 Horizontal position (X)
+=53255			vicsprt3y = vic+$07	; $d007, 53255 Sprt 3 Vertical position (Y)
+=53256			vicsprt4x = vic+$08	; $d008, 53256 Sprt 4 Horizontal position (X)
+=53257			vicsprt4y = vic+$09	; $d009, 53257 Sprt 4 Vertical position (Y)
+=53258			vicsprt5x = vic+$0a	; $d00a, 53258 Sprt 5 Horizontal position (X)
+=53259			vicsprt5y = vic+$0b	; $d00b, 53259 Sprt 5 Vertical position (Y)
+=53260			vicsprt6x = vic+$0c	; $d00c, 53260 Sprt 6 Horizontal position (X)
+=53261			vicsprt6y = vic+$0d	; $d00d, 53261 Sprt 6 Vertical position (Y)
+=53262			vicsprt7x = vic+$0e	; $d00e, 53262 Sprt 7 Horizontal position (X)
+=53263			vicsprt7y = vic+$0f	; $d00f, 53263 Sprt 7 Vertical position (Y)
+=53264			vicspxmsb = vic+$10	; $D010, 53264
+=53265			vicctrl0v  = vic+$11	; $d011, 53265
+=53266			vicraster = vic+$12	; $d012, 53266	     	|b7|b6|b5|b4|b3|b2|b1|b0|
+=53267			viclpenhp = vic+$13	; $d013, 53267	     	|b7|b6|b5|b4|b3|b2|b1|b0|
+=53268			viclpenvp = vic+$14	; $d014, 53268	     	|b7|b6|b5|b4|b3|b2|b1|b0|
+=53269			vicsprctl = vic+$15	; $d015, 53269	     	|s7|s6|s5|s4|s3|s2|s1|s0|
+=53270			vicctrl1h = vic+$16	; $d016, 53270
+=53271			vicsprtexv = vic+$17	; $d017, 53271	     |s7|s6|s5|s4|s3|s2|s1|s0|
+=53272			vicmemptr  = vic+$18	; $d018, 53272
+=53273			vicirqreg  = vic+$19	; $d019, 53273
+=53274			vicirqena  = vic+$1a	; $d01a, 53274
+=53275			vicsprtprio = vic+$1b 	; $d01b, 53275		|s7|s6|s5|s4|s3|s2|s1|s0|
+=53276			vicsprtmcol = vic+$1c 	; $d01c, 53276		|s7|s6|s5|s4|s3|s2|s1|s0|
+=53277			vicsprtexh = vic+$1d 	; $d01d, 53277		|s7|s6|s5|s4|s3|s2|s1|s0|
+=53278			vicsprscol = vic+$1e 	; $d01e, 53278		|s7|s6|s5|s4|s3|s2|s1|s0|
+=53279			vicsprbakcol = vic+$1f ; $d01f, 53279		|s7|s6|s5|s4|s3|s2|s1|s0|
+=53280			vicbordcol = vic+$20 	; $d020, 53280		|--|--|--|--|c3|c2|c1|c0|
+=53281			vicbackcol  = vic+$21 	; $d021, 53281
+=53281			vicback0col = vic+$21 	; $d021, 53281		|--|--|--|--|c3|c2|c1|c0|
+=53282			vicback1col = vic+$22 	; $d022, 53282		|--|--|--|--|c3|c2|c1|c0|
+=53283			vicback2col= vic+$23 	; $d023, 53283		|--|--|--|--|c3|c2|c1|c0|
+=53284			vicback3col = vic+$24 	; $d024, 53284		|--|--|--|--|c3|c2|c1|c0|
+=53285			vicsprtmcol0 = vic+$25 	; $d025, 53285		|--|--|--|--|c3|c2|c1|c0|
+=53286			vicsprtmcol1 = vic+$26 	; $d026, 53286		|--|--|--|--|c3|c2|c1|c0|
+=53287			vicsprt0col = vic+$27 	; $d027, 53287		|--|--|--|--|c3|c2|c1|c0|
+=53288			vicsprt1col = vic+$28 	; $d028, 53288		|--|--|--|--|c3|c2|c1|c0|
+=53289			vicsprt2col = vic+$29 	; $d029, 53289		|--|--|--|--|c3|c2|c1|c0|
+=53290			vicsprt3col = vic+$2a 	; $d02a, 53290		|--|--|--|--|c3|c2|c1|c0|
+=53291			vicsprt4col = vic+$2b 	; $d02b, 53291		|--|--|--|--|c3|c2|c1|c0|
+=53292			vicsprt5col = vic+$2c 	; $d02c, 53292		|--|--|--|--|c3|c2|c1|c0|
+=53293			vicsprt6col = vic+$2d 	; $d02d, 53293		|--|--|--|--|c3|c2|c1|c0|
+=53294			vicsprt7col = vic+$2e 	; $d02e, 53294		|--|--|--|--|c3|c2|c1|c0|
+
+;******  Return to file: irqclock.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-basic2.asm
+
+=$a3bb			b_opentxtspc  = $a3bb ;  1) Open space in BASIC text.   ;a-y;---; Array top $yyaa
+=$a408			b_chkavailmem = $a408 ;  2) Check available Memory. *1  ;a-y;---; Array top $yyaa
+=$a435			b_outofmem    = $a435 ;  3) ?Out of memory.             ;---;---;
+=$a437			b_errormesg   = $a437 ;  4) Send BASIC error message.   ;a--;---; a = errno
+=$a474			b_warmstart   = $a474 ;  5) Basic warm start.           ;---;---;
+=$a48a			b_chrget      = $a48a ;  6) Main CHRGET entry.          ;---;---;
+=$a49c			b_newline     = $a49c ;  7) Crunch tokens, insert line. ;-x-;---; x = buff len
+=$a52a			b_clrready    = $a52a ;  8) Fix chaining CLR and READY. ;---;---;
+=$a533			b_fixchaining = $a533 ;  9) Fix chaining.               ;---;---;
+=$a560			b_kbgetline   = $a560 ; 10) Recieve line from keyboard.
+=$a579			b_crunchtkns  = $a579 ; 11) Crunch token. *7            ;-x-;---: x = buff len
+=$a613			b_findline    = $a613 ; 12) Find line in BASIC.         ;ax-;---; strBAS = $xxaa
+=$a642			b_new         = $a642 ; 13) Do NEW                      ;---;---;
+=$a659			b_resetclr    = $a659 ; 14) Reset BASIC and do CLR      ;---;---;
+=$a65e			b_clr         = $a65e ; 15) Do CLR                      ;---;---;
+=$a68e			b_rstchrget   = $a68e ; 17) Rst CHRGET to BASIC start   ;---;a--; strBAS hi
+=$a857			b_continue    = $a857 ; 18) Do CONTINUE.                ;a-y;---; curline $yyaa
+=$a96b			b_getint      = $a96b ; 19) Get int from BASIX text.    ;---;---;
+=$aad3			b_sndcr       = $aad3 ; 20) Send RETURN, LF in scr mode.;---;a--; a = LF
+=$aad7			b_sndcrlf     = $aad7 ; 21) Send RETURN, LINEFEED.      ;---;a--; a = LF
+=$ab1e			b_outstr_ay   = $ab1e ; 22) Print string from $yyaa.    ;a-y;---; sptr = $yyaa
+=$ab1e			b_puts        = b_outstr_ay
+=$ab24			b_outstrprep  = $ab24 ; 23) Print precomputated string. ;a--;---; a = strlen
+=$ab45			b_printqm     = $ab45 ; 24) Print '?'.                  ;---;---;
+=$ab47			b_sendchar    = $ab47 ; 25) Send char in a to device.   ;a--;a--; a = char
+=$ad8a			b_frmnum      = $ad8a ; Evaluate numeric expression and/or check for data type mismatch
+=$ad9e			b_evalexpr    = $ad9e ; 26) Evaluate expression.
+=$aefd			b_chk4comma   = $aefd ; 27) Check for coma.             ;---;a--; a = char
+=$aefa			b_chk4lpar    = $aefa ; 28) check for '('.              ;---;a--; a = char
+=$aef7			b_chk4rpar    = $aef7 ; 29) check for ')'.              ;---;a--; a = char
+=$af08			b_syntaxerr   = $af08 ; 30) send 'SYNTAX ERROR'.        ;---;---;
+=$b0e7			b_fndfloatvar = $b0e7 ; 31) find float var by name.     ;---;a-y; addr = $yyaa
+=$b185			b_bumpvaraddr = $b185 ; 32) Bumb var addr by 2. *31     ;---;a-y; addr = $yyaa
+=$b1bf			b_float2int   = $b1bf ; 33) Float to int in Acc#1.      ;---;---;
+=$b248			b_fcerr       = $b248 ; Print ILLEGAL QUANTITY error message.
+=$b391			b_int2float   = $b391 ; 34) Int to float in Acc#1.      ;---;---;
+=$b79e			b_getacc1lsb  = $b79e ; 35) Get Acc#1 LSB in x.         ;---;-x-; x = Acc#1 LSB
+=$b7b5			b_str2float   = $b7b5 ; 36) Evaluate str to float (VAL) ;---;---;
+=$b7b9			b_strxy2float = $b7b9 ; 37) Eval. float from str in xy. ;---;-xy; strptr = $yyxx
+=$b7eb			b_getpokeprms = $b7eb ; 38) Get 2 params for POKE, WAIT.;---;-x-; x = Param2
+=$b7f7			b_getadr      = $b7f7 ; Convert Floating point number to an Unsighed TwoByte Integer.
+=$b867			b_memfloatadd = $b867 ; 39) Add from memory.            ;a-y;---; ptr = $yyaa
+=$ba28			b_memfloatmul = $ba28 ; 40) Multiply from memory.       ;a-y;---; ptr = $yyaa
+=$bae2			b_acc1mul10   = $bae2 ; 41) Multiply Acc#1 by 10.       ;---;---; ptr = $yyaa
+=$bba2			b_memvar2acc1 = $bba2 ; 42) Unpack mem var to Acc#1.    ;a-y;---; ptr = $yyaa
+=$bbd7			b_copyacc12xy = $bbd7 ; 43) Copy Acc#1 to mem location. ;-xy;---; ptr = $yyxx
+=$bbfc			b_acc2toacc1  = $bbfc ; 44) Move Acc#2 to Acc#1.        ;---;---;
+=$bc0c			b_rndac1ac2   = $bc0c ; 45) Move rnd Acc#1 to Acc#2.    ;---;---;
+=$bc0f			b_urndac1ac2  = $bc0f ; 46) Move unrnd Acc#1 to Acc#2.  ;---;---;
+=$bc1b			b_rndac1      = $bc1b ; 47) Round Acc#1.                ;---;---;
+=$bdcd			b_putint      = $bdcd ; 48) Print fix point value.      ;ax-;---; Value = $xxaa
+=$bdd7			b_putfloat    = $bdd7 ; 49) Print Acc#1 float.          ;---;---;
+=$bddd			b_num2str     = $bddd ; 50) Cnv num to str at $0100. *48;a-y;---; a=#$00, y=#$01
+
+;******  Return to file: irqclock.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-c64-basic2.asm
+
+=0			bkcol=0
+=0			bkcol0=0
+=0			bkcol1=0
+=0			bkcol2=0
+=0			bkcol3=0
+.1000			scrmaninit
+.1000	20 27 11	               jsr  push
+.1003	a9 06		               lda  #vbleu
+.1005	8d 21 d0	               sta  vicbackcol
+.1008	a9 05		               lda  #vvert
+.100a	8d 20 d0	               sta  vicbordcol
+.100d	a9 01		               lda  #vblanc
+.100f	8d 86 02	               sta  bascol
+.1012	ad 00 04	               lda  scrnram
+.1015	29 fd		               and  #%11111101
+.1017	8d 00 04	               sta  scrnram
+.101a	20 21 10	               jsr  cls
+.101d	20 66 11	               jsr  pop
+.1020	60		               rts
+.1021			cls
+.1021	08		               php
+.1022	48		               pha
+.1023	a9 93		               lda  #$93
+.1025	20 30 10	               jsr  putch
+.1028	a9 0e		               lda  #$0e
+.102a	20 30 10	               jsr  putch
+.102d	68		               pla
+.102e	28		               plp
+.102f	60		               rts
+.1030			putch
+.1030	08		               php
+.1031	20 d2 ff	               jsr  $ffd2
+.1034	28		               plp
+.1035	60		               rts
+.1036			puts
+.1036	20 27 11	               jsr  push
+.1039	86 fb		               stx  zpage1
+.103b	84 fc		               sty  zpage1+1
+.103d	a0 00		               ldy  #0
+.103f	b1 fb		next           lda  (zpage1),y
+.1041	f0 09		               beq  exit
+.1043	20 30 10	               jsr  putch
+.1046	20 2e 12	               jsr  inczp1
+.1049	4c 3f 10	               jmp  next
+.104c	20 66 11	exit           jsr  pop
+.104f	60		               rts
+.1050			gotoxy
+.1050	08		               php
+.1051	18		               clc
+.1052	8a		               txa
+.1053	48		               pha
+.1054	98		               tya
+.1055	aa		               tax
+.1056	68		               pla
+.1057	a8		               tay
+.1058	20 f0 ff	               jsr  kplot
+.105b	28		               plp
+.105c	60		               rts
+.105d			cursor
+=$0286			bascol    =    $0286
+.105d	08		               php
+.105e	48		               pha
+.105f	90 12		               bcc  restore
+.1061	20 f0 ff	               jsr  kplot
+.1064	8c 85 10	               sty  cx
+.1067	8e 86 10	               stx  cy
+.106a	ad 86 02	               lda  bascol
+.106d	8d 87 10	               sta  bcol
+.1070	4c 82 10	               jmp  out
+.1073	ae 86 10	restore        ldx  cy
+.1076	ac 85 10	               ldy  cx
+.1079	20 f0 ff	               jsr  kplot
+.107c	ad 87 10	               lda  bcol
+.107f	8d 86 02	               sta  bascol
+.1082	68		out            pla
+.1083	28		               plp
+.1084	60		               rts
+>1085	00		cx   .byte     $00
+>1086	00		cy   .byte     $00
+>1087	00		bcol .byte     $00
+.1088			cursave
+.1088	08		               php
+.1089	38		               sec
+.108a	20 5d 10	               jsr  cursor
+.108d	28		               plp
+.108e	60		               rts
+.108f			curput
+.108f	08		               php
+.1090	18		               clc
+.1091	20 5d 10	               jsr  cursor
+.1094	28		               plp
+.1095	60		               rts
+.1096			putsxy
+.1096	20 27 11	               jsr  push
+.1099	86 fb		               stx  zpage1
+.109b	84 fc		               sty  zpage1+1
+.109d	a0 00		               ldy  #$00
+.109f	b1 fb		               lda  (zpage1),y
+.10a1	aa		               tax
+.10a2	20 2e 12	               jsr  inczp1
+.10a5	b1 fb		               lda  (zpage1),y
+.10a7	a8		               tay
+.10a8	20 50 10	               jsr  gotoxy
+.10ab	20 2e 12	               jsr  inczp1
+.10ae	a6 fb		               ldx  zpage1
+.10b0	a4 fc		               ldy  zpage1+1
+.10b2	20 36 10	               jsr  puts
+.10b5	20 66 11	               jsr  pop
+.10b8	60		               rts
+>10b9	00 00		straddr   .word     $00
+>10bb	00		px        .byte     $00
+>10bc	00		py        .byte     $00
+>10bd	00 00		zp1       .word     $00
+.10bf			putscxy
+.10bf	20 27 11	               jsr  push
+.10c2	84 fc		               sty  zpage1+1
+.10c4	86 fb		               stx  zpage1
+.10c6	ad 86 02	               lda  bascol
+.10c9	8d e9 10	               sta  bc
+.10cc	a0 00		               ldy #$00
+.10ce	b1 fb		               lda  (zpage1),y
+.10d0	8d 86 02	               sta  bascol
+.10d3	20 2e 12	               jsr  inczp1
+.10d6	a6 fb		               ldx  zpage1
+.10d8	a4 fc		               ldy  zpage1+1
+.10da	20 96 10	               jsr  putsxy
+.10dd	ad e9 10	               lda  bc
+.10e0	8d 86 02	               sta  bascol
+.10e3	20 66 11	               jsr  pop
+.10e6	60		               rts
+>10e7	00 00		straddr  .word      $00
+>10e9	00		bc       .byte      $00
+>10ea	00 00		zp1      .word      $00
+.10ec			putrahex
+.10ec	08		               php
+.10ed	48		               pha
+.10ee	20 34 13	               jsr  a2hex
+.10f1	a9 e0		               lda  #<a2hexstr
+.10f3	a0 12		               ldy  #>a2hexstr
+.10f5	20 36 10	               jsr  puts
+.10f8	68		               pla
+.10f9	28		               plp
+.10fa	60		               rts
+.10fb			kputrahexxy
+.10fb			bputrahexxy
+.10fb			putrahexxy
+.10fb	08		               php
+.10fc	20 34 13	               jsr  a2hex
+.10ff	a9 dd		               lda  #<a2hexpos
+.1101	a0 12		               ldy  #>a2hexpos
+.1103	20 96 10	               jsr  putsxy
+.1106	68		               pla
+.1107	28		               plp
+.1108	60		               rts
+.1109			putrahexcxy
+.1109	08		               php
+.110a	20 34 13	               jsr  a2hex
+.110d	a9 dd		               lda  #<a2hexpos
+.110f	a0 12		               ldy  #>a2hexpos
+.1111	20 bf 10	               jsr  putscxy
+.1114	68		               pla
+.1115	28		               plp
+.1116	60		               rts
+.1117			setinverse
+.1117	48		               pha
+.1118	a9 12		               lda  #$12
+.111a	20 d2 ff	               jsr  $ffd2
+.111d	68		               pla
+.111e	60		               rts
+.111f			clrinverse
+.111f	48		               pha
+.1120	a9 92		               lda  #$92
+.1122	20 d2 ff	               jsr  $ffd2
+.1125	68		               pla
+.1126	60		               rts
+
+;******  Return to file: irqclock.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-pushpop.asm
+
+.1127			push
+.1127	08		          php            ; stack : flg, pcl, pch
+.1128	78		          sei
+.1129	8d 63 11	          sta  ra        ; save a
+.112c	68		          pla            ; stack : pcl, pch
+.112d	8d 62 11	          sta  rp        ; save rp
+.1130	68		          pla            ; stack : pch
+.1131	8d 64 11	          sta  pc        ; save pcl
+.1134	68		          pla            ; stack : -
+.1135	8d 65 11	          sta  pc+1      ; save pch
+.1138	a5 fb		          lda  zpage1    ; get zpage1 low byte
+.113a	48		          pha            ; stack : zp1l
+.113b	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
+.113d	48		          pha            ; stack : zp1h, zp1l
+.113e	a5 fd		          lda  zpage2    ; get zpage2 low byte
+.1140	48		          pha            ; stack : zp2l, zp1h, zp1l
+.1141	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
+.1143	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
+.1144	ad 62 11	          lda  rp        ; get rp
+.1147	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
+.1148	ad 63 11	          lda  ra        ; get a
+.114b	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.114c	8a		          txa            ; get x
+.114d	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.114e	98		          tya            ; get y
+.114f	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1150	ad 65 11	          lda  pc+1      ; get pch
+.1153	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1154	ad 64 11	          lda  pc        ; get pcl
+.1157	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1158	ad 62 11	          lda  rp        ; get rp
+.115b	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.115c	ad 63 11	          lda  ra        ; get a
+.115f	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1160	58		          cli
+.1161	60		          rts
+>1162	00		rp        .byte     0
+>1163	00		ra        .byte     0
+>1164	00 00		pc        .word     0
+.1166			pull
+.1166			pop
+.1166	78		          sei
+.1167	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1168	8d 9b 11	          sta  pc        ; save pcl
+.116b	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.116c	8d 9c 11	          sta  pc+1      ; save pch
+.116f	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1170	a8		          tay            ; set y
+.1171	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.1172	aa		          tax            ; set x
+.1173	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
+.1174	8d 9a 11	          sta  ra        ; save a
+.1177	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
+.1178	8d 99 11	          sta  rp        ; save rp
+.117b	68		          pla            ; stack : zp2l, zp1h, zp1l
+.117c	85 fe		          sta  zpage2+1  ; get zpage1 low byte
+.117e	68		          pla            ; stack : zp1h, zp1l
+.117f	85 fd		          sta  zpage2    ; get zpage2 High byte
+.1181	68		          pla            ; stack : zp1l
+.1182	85 fc		          sta  zpage1+1  ; get zpage2 low byte
+.1184	68		          pla            ; stack :
+.1185	85 fb		          sta  zpage1    ; get zpage1 High byte
+.1187	ad 9c 11	          lda  pc+1      ; get pch
+.118a	48		          pha            ; stack : pch
+.118b	ad 9b 11	          lda  pc
+.118e	48		          pha            ; stack : pcl, pch
+.118f	ad 99 11	          lda  rp        ; get rp
+.1192	48		          pha            ; stack : rp, pcl, pch
+.1193	ad 9a 11	          lda  ra        ; set ra
+.1196	58		          cli
+.1197	28		          plp            ; stack : pcl, pch
+.1198	60		          rts
+>1199	00		rp        .byte     0
+>119a	00		ra        .byte     0
+>119b	00 00		pc        .word     0
+
+;******  Return to file: irqclock.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-mem.asm
+
+.119d			blkfill
+.119d	20 27 11	bf0            jsr  push
+.11a0	20 5b 12	               jsr  savezp1
+.11a3	84 fc		               sty  zpage1+1
+.11a5	a0 00		               ldy  #$00
+.11a7	84 fb		               sty  zpage1
+.11a9	91 fb		bf1            sta  (zpage1),y
+.11ab	c8		               iny
+.11ac	d0 fb		               bne  bf1
+.11ae	20 6a 12	               jsr  restzp1
+.11b1	20 66 11	               jsr  pop
+.11b4	60		               rts
+.11b5			memfill
+.11b5	20 27 11	               jsr  push
+.11b8	20 9d 11	mf1            jsr  blkfill
+.11bb	c8		               iny
+.11bc	ca		               dex
+.11bd	d0 f9		               bne  mf1
+.11bf	20 66 11	               jsr  pop
+.11c2	60		               rts
+.11c3			memmove
+.11c3	20 27 11	               jsr  push
+.11c6	ba		               tsx            ; On se crée un pointeur ...
+.11c7	8a		               txa
+.11c8	18		               clc
+.11c9	69 0b		               adc  #11
+.11cb	a8		               tay
+.11cc	a2 06		               ldx  #$06
+.11ce	b9 00 01	nextbyte       lda  $0100,y
+.11d1	99 1d 12	               sta  words,y
+.11d4	c8		               iny
+.11d5	ca		               dex
+.11d6	d0 f6		               bne  nextbyte
+.11d8	ad 1d 12	               lda  s
+.11db	8d f4 11	               sta  source+1
+.11de	ad 1e 12	               lda  s+1
+.11e1	8d f5 11	               sta  source+2
+.11e4	ad 1f 12	               lda  d
+.11e7	8d f1 11	               sta  destin+1
+.11ea	ad 20 12	               lda  d+1
+.11ed	8d f2 11	               sta  destin+2
+.11f0	ad ff ff	destin         lda  $ffff
+.11f3	8d ff ff	source         sta  $ffff
+.11f6	ee f1 11	               inc  destin+1
+.11f9	d0 03		               bne  src
+.11fb	ee f2 11	               inc  destin+2
+.11fe	ee f4 11	src            inc  source+1
+.1201	d0 03		               bne  cnt
+.1203	ee f5 11	               inc  source+2
+.1206	ad 21 12	cnt            lda  compte
+.1209	d0 08		               bne  decit
+.120b	ad 22 12	               lda  compte+1
+.120e	f0 09		               beq  fini
+.1210	ce 22 12	               dec  compte+1
+.1213	ce 21 12	decit          dec  compte
+.1216	4c f0 11	               jmp  destin
+.1219	20 66 11	fini           jsr  pop
+.121c	60		               rts
+.121d			words
+>121d	00 00		s         .word     $0000
+>121f	00 00		d         .word     $0000
+>1221	00 00		compte    .word     $0000
+.1223			decword
+.1223	20 27 11	               jsr  push
+.1226	86 fd		               stx  zpage2
+.1228	84 fe		               sty  zpage2+1
+.122a	20 66 11	               jsr  pop
+.122d	60		               rts
+.122e			inczp1
+.122e	08		               php
+.122f	e6 fb		               inc  zpage1
+.1231	d0 02		               bne  nopage
+.1233	e6 fc		               inc  zpage1+1
+.1235	28		nopage         plp
+.1236	60		               rts
+.1237			deczp1
+.1237	08		                php
+.1238	48		                pha
+.1239	c6 fb		                dec  zpage1
+.123b	d0 02		                bne  nopage
+.123d	c6 fc		                dec  zpage1+1
+.123f	c6 fb		nopage          dec  zpage1
+.1241	68		                pla
+.1242	28		                plp
+.1243	60		                rts
+.1244			inczp2
+.1244	08		               php
+.1245	48		               pha
+.1246	e6 fd		               inc  zpage2
+.1248	d0 02		               bne  nopage
+.124a	e6 fe		               inc  zpage2+1
+.124c	68		nopage         pla
+.124d	28		               plp
+.124e	60		               rts
+.124f			deczp2
+.124f	08		               php
+.1250	48		               pha
+.1251	a5 fd		               lda  zpage2
+.1253	d0 02		               bne  nopage
+.1255	c6 fe		               dec  zpage2+1
+.1257	c6 fd		nopage         dec  zpage2
+.1259	28		               plp
+.125a	60		               rts
+.125b			savezp1
+.125b	08		               php
+.125c	48		               pha
+.125d	a5 fb		               lda  zpage1
+.125f	8d d7 12	               sta  zp1
+.1262	a5 fc		               lda  zpage1+1
+.1264	8d d8 12	               sta  zp1+1
+.1267	68		               pla
+.1268	28		               plp
+.1269	60		               rts
+.126a			restzp1
+.126a	08		               php
+.126b	48		               pha
+.126c	ad d7 12	               lda zp1
+.126f	85 fb		               sta zpage1
+.1271	ad d8 12	               lda zp1+1
+.1274	85 fc		               sta zpage1+1
+.1276	68		               pla
+.1277	28		               plp
+.1278	60		               rts
+.1279			savezp2
+.1279	08		         php
+.127a	48		         pha
+.127b	a5 fd		         lda zpage2
+.127d	8d d9 12	         sta zp2
+.1280	a5 fe		         lda zpage2+1
+.1282	8d da 12	         sta zp2+1
+.1285	68		         pla
+.1286	28		         plp
+.1287	60		         rts
+.1288			restzp2
+.1288	08		                php
+.1289	48		                pha
+.128a	ad d9 12	                lda  zp2
+.128d	85 fd		                sta  zpage2
+.128f	ad da 12	                lda  zp2+1
+.1292	85 fe		                sta  zpage2+1
+.1294	68		                pla
+.1295	28		                plp
+.1296	60		                rts
+.1297			xy2addr
+.1297	08		                php
+.1298	48		                pha
+.1299	8a		                txa
+.129a	48		                pha
+.129b	98		                tya
+.129c	48		                pha
+.129d	ad d2 12	                lda     addr1+1
+.12a0	8d d4 12	                sta     addr2+1
+.12a3	ad d1 12	                lda     addr1
+.12a6	8d d3 12	                sta     addr2
+.12a9	c0 00		                cpy     #$00
+.12ab	f0 0f		                beq     addx
+.12ad	18		moreline        clc
+.12ae	6d d0 12	                adc     ymult
+.12b1	90 03		                bcc     norepy
+.12b3	ee d4 12	                inc     addr2+1
+.12b6	8d d3 12	norepy          sta     addr2
+.12b9	88		                dey
+.12ba	d0 f1		                bne     moreline
+.12bc	8a		addx            txa
+.12bd	18		                clc
+.12be	6d d3 12	                adc     addr2
+.12c1	90 03		                bcc     thatsit
+.12c3	ee d4 12	                inc     addr2+1
+.12c6	8d d3 12	thatsit         sta     addr2
+.12c9	68		                pla
+.12ca	a8		                tay
+.12cb	68		                pla
+.12cc	aa		                tax
+.12cd	68		                pla
+.12ce	28		                plp
+.12cf	60		                rts
+>12d0	28		ymult          .byte     40
+>12d1	00 00		addr1          .word     $0000
+>12d3	00 00		addr2          .word     $0000
+>12d5	00 00		bytecnt        .word     $0000
+>12d7	00 00		zp1        .word   $0000
+>12d9	00 00		zp2        .word   $0000
+
+;******  Return to file: irqclock.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-hex.asm
+
+>12db	01		a2hexcol       .byte     1              ; pour aputscxy
+>12dc	00		a2hexbkcol     .byte     %00000000
+.12dd			a2hexpos
+>12dd	00		a2hexpx        .byte     0              ; pour aputsxy
+>12de	00		a2hexpy        .byte     0
+>12df	24		a2hexprefix    .byte     "$"            ; pour aputs
+>12e0	00 00		a2hexstr       .word     $00
+>12e2	00 00		               .word     $00
+>12e4	00		               .byte     0              ; 0 end string
+.12e5			putahexfmtxy
+.12e5	20 27 11	               jsr  push
+.12e8	20 34 13	               jsr  a2hex
+.12eb	ae dd 12	               ldx  a2hexpx
+.12ee	ac de 12	               ldy  a2hexpy
+.12f1	20 50 10	               jsr  gotoxy
+.12f4	a2 df		               ldx  #<a2hexprefix
+.12f6	a0 12		               ldy  #>a2hexprefix
+.12f8	20 36 10	               jsr  puts
+.12fb	20 66 11	               jsr  pop
+.12fe	60		               rts
+.12ff			putahexfmt
+.12ff	20 27 11	               jsr  push
+.1302	20 34 13	               jsr  a2hex
+.1305	a2 df		               ldx  #<a2hexprefix
+.1307	a0 12		               ldy  #>a2hexprefix
+.1309	20 36 10	               jsr  puts
+.130c	20 66 11	               jsr  pop
+.130f	60		               rts
+.1310			putahex
+.1310	20 27 11	               jsr  push
+.1313	20 34 13	               jsr  a2hex
+.1316	a2 e0		               ldx  #<a2hexstr
+.1318	a0 12		               ldy  #>a2hexstr
+.131a	20 36 10	               jsr  puts
+.131d	20 66 11	               jsr  pop
+.1320	60		               rts
+.1321			nib2hex
+.1321	08		               php
+.1322	29 0f		               and  #$0f
+.1324	f8		               sed
+.1325	18		               clc
+.1326	69 90		               adc  #$90
+.1328	69 40		               adc  #$40
+.132a	d8		               cld
+.132b	28		               plp
+.132c	60		               rts
+.132d			lsra4bits
+.132d	08		               php
+.132e	4a		               lsr
+.132f	4a		               lsr
+.1330	4a		               lsr
+.1331	4a		               lsr
+.1332	28		               plp
+.1333	60		               rts
+.1334			a2hex
+.1334	08		               php
+.1335	48		               pha
+.1336	48		               pha
+.1337	20 2d 13	               jsr  lsra4bits
+.133a	20 21 13	               jsr  nib2hex
+.133d	8d e0 12	               sta  a2hexstr
+.1340	68		               pla
+.1341	20 21 13	               jsr  nib2hex
+.1344	8d e1 12	               sta  a2hexstr+1
+.1347	a9 00		               lda  #$00                ; set end of string
+.1349	8d e2 12	               sta  a2hexstr+2
+.134c	68		               pla
+.134d	28		               plp
+.134e	60		               rts
+.134f			xy2hex
+.134f	20 27 11	               jsr  push
+.1352	20 34 13	               jsr  a2hex
+.1355	8a		               txa
+.1356	48		               pha
+.1357	20 2d 13	               jsr  lsra4bits
+.135a	20 21 13	               jsr  nib2hex
+.135d	8d e0 12	               sta  a2hexstr
+.1360	68		               pla
+.1361	20 21 13	               jsr  nib2hex
+.1364	8d e1 12	               sta  a2hexstr+1
+.1367	98		               tya
+.1368	48		               pha
+.1369	20 2d 13	               jsr  lsra4bits
+.136c	20 21 13	               jsr  nib2hex
+.136f	8d e2 12	               sta  a2hexstr+2
+.1372	68		               pla
+.1373	20 21 13	               jsr  nib2hex
+.1376	8d e3 12	               sta  a2hexstr+3
+.1379	a9 00		               lda  #$00                ; 0 ended string
+.137b	8d e4 12	               sta  a2hexstr+4
+.137e	20 66 11	               jsr  pop
+.1381			atobin
+.1381	20 27 11	               jsr     push
+.1384	a2 08		               ldx     #8
+.1386	a0 00		               ldy     #0
+.1388	2a		nextbit        rol
+.1389	48		               pha
+.138a	69 00		               adc     #$00
+.138c	29 01		               and     #$01
+.138e	20 21 13	               jsr     nib2hex
+.1391	99 a2 13	               sta     abin,y
+.1394	68		               pla
+.1395	c8		               iny
+.1396	ca		               dex
+.1397	d0 ef		               bne     nextbit
+.1399	a9 00		               lda     #0
+.139b	99 a2 13	               sta     abin,y
+.139e	20 66 11	               jsr     pull
+.13a1	60		               rts
+>13a2	30 30 30 30	abin           .null   "00000000"
+>13a6	30 30 30 30 00
+.13ab			putabin
+.13ab	20 81 13	               jsr     atobin
+.13ae	20 27 11	               jsr     push
+.13b1	a2 a2		               ldx     #<abin
+.13b3	a0 13		               ldy     #>abin
+.13b5	20 36 10	               jsr     puts
+.13b8	20 66 11	               jsr     pop
+.13bb	60		               rts
+.13bc			putabinfmt
+.13bc	08		               php
+.13bd	48		               pha
+.13be	a9 25		               lda     #"%"
+.13c0	20 30 10	               jsr     putch
+.13c3	68		               pla
+.13c4	20 ab 13	               jsr     putabin
+.13c7	28		               plp
+.13c8	60		               rts
+.13c9			putabinxy
+.13c9	20 50 10	               jsr     gotoxy
+.13cc	20 ab 13	               jsr     putabin
+.13cf	60		               rts
+.13d0			putabinfmtxy
+.13d0	20 50 10	               jsr     gotoxy
+.13d3	20 bc 13	               jsr     putabinfmt
+.13d6	60		               rts
+
+;******  Return to file: irqclock.asm
+
+
+;******  End of listing
