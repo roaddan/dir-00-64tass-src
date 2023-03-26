@@ -1,19 +1,33 @@
-SOURCENAME=diskaccess
+# Note: Specify drive name if under windows
+# The basename of your project ((no extension) .asm is presumed).
+SOURCENAME=main-source-basename
+# The lowest common directory complete path.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
+# Complete path where the compiled files will be deposited. 
 VICEDIR=/Users/Locals/temp/Vice
+# Complete path to the Vic20 emulator program.
 V20=/Applications/VICE/xvic.app/Contents/MacOS/xvic
+# Complete path to the C64 emulator program.
 X64=/Applications/VICE/x64.app/Contents/MacOS/x64
+# Complete path to the C64sc emulator program.
 X64SC=/Applications/VICE/x64sc.app/Contents/MacOS/x64sc
+# Complete path to the c1541 emulator program.
 C1541=/Applications/vice-x86-64-gtk3-3.7.1/bin/c1541
+# Complete path to some other emulators emulator program.
 X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
 X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
+# Complete path to the 64tass assembler program.
 TASS=/Users/daniel/bin/64tass_dir/64tass
+# The Complete path to the library directory.
 TASSLIB=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib
+# Complete path to the c64 Utility disk you would like to be moiunted on drive 9.
 TMPSEP06=-9 $(BASEDIR)/dir-tmp-dskimg/turbo-macro-pro-sep06.d64
+# Complete path to the Vic20 Utility disk you would like to be moiunted on drive 9.
 V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
-VICE=$(X64SC)
+
 DISK8DIR=
 PRGDIR=dir-00-64tass-bin
+VICE=$(X64SC)
 # FTP SERVER CONFIG
 FTPSVR=10.0.1.10
 FTPPRGARG=cd /Usb0/d-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
