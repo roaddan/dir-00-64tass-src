@@ -1,20 +1,7 @@
-*= $801
-.word (+), 10
-.null $9e, "2061"
-+ .word 0
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-               .include  "c64_map_kernal.asm"
-               .include  "c64_map_vicii.asm" 
-               .include  "c64_lib_pushpop.asm"
-               .include  "c64_lib_mem.asm"
-               .include  "c64_lib_hex.asm"
-;               .include  "c64_lib_text_sd_new.asm"
-               .include  "c64_lib_text_mc.asm"
-               .include  "c64_lib_showregs.asm"                
-               .include  "c64_lib_joystick.asm"
-               .include  "c64_lib_spriteman.asm"
+                VERSION="20230326-115700"
+
+                .include "header-c64.asm"
+                .include "macros-64tass.asm"
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -161,7 +148,7 @@ nochange       ;jsr  showregs
                jsr     k_warmboot
 out            rts
 onebyte        .byte   0    
-               .enc    "screen"
+               .enc    screen
 bstring1       .byte   vjaune,bkcol0,0,0        
 ;                                 111111111122222222223333333333
 ;                       0123456789012345678901234567890123456789    
@@ -196,4 +183,17 @@ js_status6     .byte   vcyan,bkcol0,1,23
                .byte   0
                .bend
                 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+               .include  "map-c64-kernal.asm"
+               .include  "map-c64-vicii.asm" 
+               .include  "lib-cbm-pushpop.asm"
+               .include  "lib-cbm-mem.asm"
+               .include  "lib-cbm-hex.asm"
+;               .include  "lib-c64-text-sd.asm"
+               .include  "lib-c64-text-mc.asm"
+               .include  "lib-c64-showregs.asm"                
+               .include  "lib-c64-joystick.asm"
+               .include  "lib-c64-spriteman.asm"
                 
