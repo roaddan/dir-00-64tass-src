@@ -1,4 +1,4 @@
-                VERSION="20230326-115700"
+                VERSION="20230327-091500"
 
                 .include "header-c64.asm"
                 .include "macros-64tass.asm"
@@ -131,13 +131,13 @@ onebyte         .byte   0
 bstring1        .byte   vblanc,bkcol0,0,0        
 ;                                  111111111122222222223333333333
 ;                        0123456789012345678901234567890123456789    
-                .text   "      Visualisation du port jeu #2     "
+                .text   "      Visualisation du port jeu #2      "
                 .byte   0
 bstring2        .byte   vrose,bkcol1,0,1
                 .text   " Programme assembleur pour 6502 sur C64 "
                 .byte   0
 bstring3        .byte   vvert1,bkcol2,0,2
-                .text   "      par Daniel Lafrance (c)2021)     "
+                .text   "      par Daniel Lafrance (c) 2021      "
                 .byte   0
 bstring4        .byte   vjaune,bkcol3,11,4
                 .text   " Changer pointeur "
