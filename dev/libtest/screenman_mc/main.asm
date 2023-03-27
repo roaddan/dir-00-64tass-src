@@ -1,5 +1,7 @@
+                VERSION="20230326-115700"
+
                 .include "header-c64.asm"
-                .include "cbm-macros.asm"
+                .include "macros-64tass.asm"
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -135,7 +137,7 @@ bstring2        .byte   vrose,bkcol1,0,1
                 .text   " Programme assembleur pour 6502 sur C64 "
                 .byte   0
 bstring3        .byte   vvert1,bkcol2,0,2
-                .text   "      par Daniel Lafrance (2021) C     "
+                .text   "      par Daniel Lafrance (c)2021)     "
                 .byte   0
 bstring4        .byte   vjaune,bkcol3,11,4
                 .text   " Changer pointeur "
@@ -162,15 +164,15 @@ js_status6      .byte   vcyan,bkcol0,1,23
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-                .include "kernal-map-c64.asm"
-                .include "vicii-map.asm" 
-                .include "c64-lib-pushpop.asm"
-                .include "c64-lib-mem.asm"
-                .include "c64-lib-hex.asm"
-;                .include "c64-lib-text-sd-new.asm"
-                .include "c64-lib-text-mc.asm"
-                .include "c64-lib-showregs.asm"                
-                .include "c64-lib-joystick.asm"
-                .include "c64-lib-spriteman.asm"
+                .include "map-c64-kernal.asm"
+                .include "map-c64-vicii.asm" 
+                .include "lib-cbm-pushpop.asm"
+                .include "lib-cbm-mem.asm"
+                .include "lib-cbm-hex.asm"
+;                .include "lib-c64-text-sd.asm"
+                .include "lib-c64-text-mc.asm"
+                .include "lib-c64-showregs.asm"                
+                .include "lib-c64-joystick.asm"
+                .include "lib-c64-spriteman.asm"
                  
                 

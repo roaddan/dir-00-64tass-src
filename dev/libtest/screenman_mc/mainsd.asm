@@ -1,21 +1,7 @@
-*= $801
-.word (+), 10
-.null $9e, "2061"
-+ .word 0
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-                .include        "c64_map_kernal.asm"
-                .include        "c64_lib_pushpop.asm"
-                .include        "c64_lib_mem.asm"
-                .include        "c64_lib_hex.asm"
-;                .include        "butils.asm"
-;                .include        "initnmi.asm"
-;                .include        "memutils.asm"
-                .include        "c64_lib_sd.asm"
-                .include        "c64_lib_showregs.asm"                
-                .include        "c64_lib_joystick.asm"
-                .include        "c64_lib_spriteman.asm"
+                VERSION="20230326-115700"
+
+                .include "header-c64.asm"
+                .include "macros-64tass.asm"
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -106,7 +92,7 @@ looper          jsr     js_scan
                 pha
                 lda     js_2fire
                 and     #$0f
-                sta     vborder
+                ;sta     vborder
                 eor     #$0f
                 beq     nochange
                 sta     $d029
@@ -157,4 +143,20 @@ js_status6      .byte   vcyan,bkcol0,1,23
 
                 .bend
                 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+                .include        "map-c64-basic2.asm"
+                .include        "map-c64-kernal.asm"
+                .include        "map-c64-vicii.asm"
+                .include        "lib-cbm-pushpop.asm"
+                .include        "lib-cbm-mem.asm"
+                .include        "lib-cbm-hex.asm"
+;                .include        "butils.asm"
+;                .include        "initnmi.asm"
+;                .include        "memutils.asm"
+                .include        "lib-c64-text-sd.asm"
+                .include        "lib-c64-showregs.asm"                
+                .include        "lib-c64-joystick.asm"
+                .include        "lib-c64-spriteman.asm"
                 
