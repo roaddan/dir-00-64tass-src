@@ -4,8 +4,8 @@
 # ===============================================
 # The basename of your project main file ((no extension) .asm is presumed).
 SOURCENAME=main-project-source-basename
-# The lowest common project shared directory complete path.
-# for thingds like librairies, data files, images, etc.
+# The lowest common project shared directory complete path ...
+# ... for things like librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project ...
 # ... the following detail is used to specify where the resulting ...
@@ -30,7 +30,7 @@ X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
 # ===============================================
 # ========= 6 4 T A S S   S E C T I O N =========
 # ===============================================
-# Tis can be change to any assembler od your liking.
+# This can be changed to any assembler of your liking.
 # Complete path to the 64tass assembler program.
 TASS=/Users/daniel/bin/64tass_dir/64tass
 # The Complete path to the library directory.
