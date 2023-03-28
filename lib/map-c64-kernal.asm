@@ -19,97 +19,96 @@
 ;* macro sur les elements importants *
 ;--------------------------------------------------------------------------------
           
-kiostatus       =       $90       ; Kernal I/O status word (st) (byte) 
-curfnlen        =       $b7       ; Current filename length (byte)
-cursecadd       =       $b9       ; Current secondary address (byte)
-curdevno        =       $ba       ; Current device number (byte)
-curfptr         =       $bb       ; Current file pointer (word)  
-zpage1          =       $fb       ; zero page 1 address (word)
-zpage2          =       $fd       ; zero page 2 address (word)
+linnum          =       $14     ; 20
+txttab          =       $2b     ; 43
+chrget          =       $73     ; 115
+chrgot          =       $79     ; 121
+kiostatus       =       $90     ; 144 Kernal I/O status word (st) (byte) 
+curfnlen        =       $b7     ; 183 Current filename length (byte)
+cursecadd       =       $b9     ; 185 Current secondary address (byte)
+curdevno        =       $ba     ; 186 Current device number (byte)
+curfptr         =       $bb     ; 187 Current file pointer (word)  
+lstx            =       $c5     ; 197 matrix coordinate of last key pressed
+ndx             =       $c6     ; 198 Number of character in keyboard buffer
+zpage1          =       $fb     ; 251 zero page 1 address (word)
+zpage2          =       $fd     ; 253 zero page 2 address (word)
 zeropage        =       zpage1
 zonepage        =       zpage2
-bascol          =       $0286     ;basic next chr colscreenram (byte)
-scrnram         =       $0400     ;video character ram
-scrram0         =       $0400
-scrram1         =       $0500
-scrram2         =       $0600
-scrram3         =       $0700
-basicsta        =       $0801     ;basic start address
-basicrom        =       $a000
-sid             =       $d400     ;sid base address
-colorram        =       $d800     ;video color ram
-colram0         =       $d800
-colram1         =       $d900
-colram2         =       $da00
-colram3         =       $db00
-cia1            =       $dc00     ;cia1  base address
-cia2            =       $dd00     ;cia2 base address
-kernalrom       =       $e000
-txttab          =       43
-linnum          =       $14
-ndx             =       $c6     ;Number of character in keyboard buffer
-tpbuff          =       $033c   ;$033c-$03fb (828-1019)
-kbbuff          =       $277
-shflag          =       $28d    ;653
-tbuffer         =       828
-ibsout          =       806
-irq             =       $ea31
-cinv            =       $314        ; brk instruction interupt
-lstx            =       $c5         ;matrix coordinate of last key pressed
+kbbuff          =       $277    ; 631        
+carcol          =       $286    ; 646 basic next chr colscreenram (byte)
+kcarcol         =       carcol
+bascol          =       carcol
+shflag          =       $28d    ; 653
+ieval           =       $30a
+cinv            =       $314    ; $314-$315 brk instruction interupt
+tbuffer         =       $33c    ; 828
+ibsout          =       $326    ; 806
+tpbuff          =       $33c    ; $033c-$03fb (828-1019)
+scrnram         =       $400    ; 1024 video character ram
+scrram0         =       scrnram ; 1024
+scrram1         =       $500    ; 1280
+scrram2         =       $600    ; 1536
+scrram3         =       $700    ; 1792
+basicsta        =       $801    ; 2049  basic start address
+basicrom        =       $a000   ; 40960 Basic rom base address
+sid             =       $d400   ; 54272 sid base address
+colorram        =       $d800   ; 55296 video color ram
+colram0         =       colorram; 55296
+colram1         =       $d900   ; 55552
+colram2         =       $da00   ; 55808
+colram3         =       $db00   ; 56064
+cia1            =       $dc00   ; 56320 cia1 base address
+cia2            =       $dd00   ; 56576 cia2 base address
+kernalrom       =       $e000   ; 57344 start of kernal rom
+irq             =       $ea31   ; 59953 irq entry point
 ;--------------------------------------------------------------------------------
-;* basic petscii control characters *
+;* Basic petscii control characters 
+;  when printed with ?chr$(##) or jsr $ffd2 
+;  Where keystroke are shown, []+[]=combined 
 ;--------------------------------------------------------------------------------
-bstop           =       $03      ;stop
-bwhite          =       $05      ;set color white
-block           =       $08      ;lock the charset
-bunlock         =       $09      ;unlock the charset
-bcarret         =       $0d
-btext           =       $0e
-bcrsdn          =       $11      ;cursor down 1 line
-brevcol         =       $12
-bhome           =       $13
-bdelete         =       $14
-bred            =       $1c
-bcuright        =       $1d
-bgreen          =       $1e
-bblue           =       $1f
-borange         =       $81
-blrun           =       $83
-bfkey1          =       $85
-bfkey2          =       $86
-bfkey3          =       $87
-bfkey4          =       $88
-bfkey5          =       $89
-bfkey6          =       $8a
-bfkey7          =       $8b
-bfkey8          =       $8c
-bcarret1        =       $8d
-bgraph          =       $8e
-bblack          =       $90
-bcuup           =       $91
-brevoff         =       $92
-bclear          =       $93
-binsert         =       $94
-bbrown          =       $95
-bltred          =       $96
-bdkgrey         =       $97
-bmdgrey         =       $98
-bltgreen        =       $99
-bltblue         =       $9a
-bltgrey         =       $9b
-bmagenta        =       $9c
-bculeft         =       $9d
-byellow         =       $9e
-bcyan           =       $9f
-
-;--------------------------------------------------------------------------------
-; registre basic contienant la couleur du prochain caractÃ¨re. 
-;--------------------------------------------------------------------------------
-carcol          =       $0286
-ieval           =       $030a
-; vecteurs du basic
-chrget          =       $73
-chrgot          =       $79
+bstop           =       $03     ;  03 [STOP]
+bwhite          =       $05     ;  05 [CTRL]+[2]        Set colour to WHITE
+block           =       $08     ;  08 [SHIFT]+[C=]      disabled char map switch
+bunlock         =       $09     ;  09 [SHIFT]+[C=]      enabled. char map switch
+bcarret         =       $0d     ;  11 [RETURN]
+btext           =       $0e     ;  14 select Uppercase+lowercase charset
+bcrsdn          =       $11     ;  17 [CRS-D]           Cursor DOWN 1 line
+brevcol         =       $12     ;  18 [CTRL]+[9]        REVERSE VIDEO ON
+bhome           =       $13     ;  19 [HOME]            Cursor HOME
+bdelete         =       $14     ;  20 [DELETE]          Delete 1 char
+bred            =       $1c     ;  28 [CTRL]+[3]        Set colour to RED
+bcuright        =       $1d     ;  29 [CRS-R]           Cursor RIGHT
+bgreen          =       $1e     ;  30 [CTRL]+[6]        Set colour to GREEN
+bblue           =       $1f     ;  31 [CTRL]+[7]        Set colour to BLUE
+borange         =       $81     ; 129 [C=]+[1]          Set colour to ORANGE
+bfkey1          =       $85     ; 133 [F1]
+bfkey2          =       $86     ; 134 [F2]
+bfkey3          =       $87     ; 135 [F3]
+bfkey4          =       $88     ; 136 [F4]
+bfkey5          =       $89     ; 137 [F5]
+bfkey6          =       $8a     ; 138 [F6]
+bfkey7          =       $8b     ; 139 [F7]
+bfkey8          =       $8c     ; 140 [F8]
+bcarret1        =       $8d     ; 141 [SHIFT]+[RETURN]
+bgraph          =       $8e     ; 142 select Uppercase+graphics charset
+bblack          =       $90     ; 144 [CTRL]+[1]        Set colour to BLACK
+bcuup           =       $91     ; 145 [SHIFT]+[CRS-D]   cursor UP 1 line
+brevoff         =       $92     ; 146 [CTRL]+[0]        REVERSE VIDEO OFF
+bclear          =       $93     ; 147 [SHIFT]+[HOME]    CLEAR SCREEN
+binsert         =       $94     ; 148 [SHIFT]+[DELETE]  INSERT a char
+bbrown          =       $95     ; 149 [C=]+[2]          Set colour to BROWN
+bltred          =       $96     ; 150 [C=]+[3]          Set colour to PINK
+bdkgrey         =       $97     ; 151 [C=]+[4]          Set colour to DARK GREY
+bmdgrey         =       $98     ; 152 [C=]+[5]          Set colour to MEDIUM GREY
+bltgreen        =       $99     ; 153 [C=]+[6]          Set colour to LIGHT GREEN
+bltblue         =       $9a     ; 154 [C=]+[7]          Set colour to LIGHT BLUE
+bltgrey         =       $9b     ; 155 [C=]+[8]          Set colour to LIGHT GREY
+bmagenta        =       $9c     ; 156 [CTRL]+[5]        Set colour to MAGENTA
+bculeft         =       $9d     ; 157 [SHIFT]+[CRS-R]   cursor RIGHT 1 pos
+byellow         =       $9e     ; 158 [CTRL]+[8]        Set colour to YELLOW 
+bcyan           =       $9f     ; 159 [CTRL]+[4]        Set colour to CYAN
+bspace1         =       $a0     ; 169                   space
+bspace2         =       $e0     ; 224                   space
 ;+----+----------------------+-------------------------------------------------------------------------------------------------------+
 ;|    |                      |                                Peek from $dc01 (code in paranthesis):                                 |
 ;|row:| $dc00:               +------------+------------+------------+------------+------------+------------+------------+------------+
@@ -125,18 +124,18 @@ chrgot          =       $79
 ;|8.  | #%01111111 (127/$7f) | STOP  ($  )|   q   ($11)|COMMODR($  )| SPACE ($20)|   2   ($32)|CONTROL($  )|  <-   ($1f)|   1   ($31)|
 ;+----+----------------------+------------+------------+------------+------------+------------+------------+------------+------------+
 ; +==========================================================================+
-; |     c o u l e u r s   p o s s i b l e   d e s   c a r a c t Ã¨ r e s      |
+; |     c o u l e u r s   p o s s i b l e   d e s   c a r a c t e r e s      |
 ; +==========================================================================+
 ; | dec | hex |  binaire  | couleur    || dec | hex |  binaire  | couleur    |
 ; +-----+-----+-----------+------------++-----+-----+-----------+------------+
 ; |  0  | $0  | b00000000 | noir       ||  1  | $1  | b00000001 | blanc      |
-; |  2  | $0  | b00000010 | rouge      ||  3  | $3  | b00000011 | ocÃ©an      |
+; |  2  | $0  | b00000010 | rouge      ||  3  | $3  | b00000011 | ocean      |
 ; |  4  | $0  | b00000100 | mauve      ||  5  | $5  | b00000101 | vert       |
 ; |  6  | $0  | b00000110 | bleu       ||  7  | $7  | b00000111 | jaune      |
 ; |  8  | $0  | b00001000 | orange     ||  9  | $9  | b00001001 | brun       |
-; | 10  | $0  | b00001010 | rose       || 11  | $b  | b00001011 | gris foncÃ© |
-; | 12  | $0  | b00001100 | gris moyen || 13  | $d  | b00001101 | vert pÃ¢le  |
-; | 14  | $0  | b00001110 | blue pale  || 15  | $f  | b00001111 | gris pÃ¢le  |
+; | 10  | $0  | b00001010 | rose       || 11  | $b  | b00001011 | gris fonce |
+; | 12  | $0  | b00001100 | gris moyen || 13  | $d  | b00001101 | vert pale  |
+; | 14  | $0  | b00001110 | blue pale  || 15  | $f  | b00001111 | gris pale  |
 ; +-----+-----+-----------+------------++-----+-----+-----------+------------+
 ; constantes de couleurs en franÃ§ais.
 cnoir       = $0
@@ -177,12 +176,11 @@ clightgray  = $f
 ; couleur %xxxx0000
 ;              |||+-> bit 0   : Inverse tous les autres bits
 ;              |++--> bit 1,2 : 00=rgb, 01=Rgb, 10=rGb, 11=rgB 
-;              +----> bit 3   : IntensitÃ©          
+;              +----> bit 3   : Intensit          
 ;     0000=noir,  0001=Blanc, 1000=orange, 1001=brun        
 ;     0010=rouge, 0010=Cyan,  1010=rose  , 1011=gris      
 ;     0100=vert,  0101=mauve, 1100=gris1 , 1101=vert2           
 ;     0110=vleu,  0111=jaune, 1110=bleu1 , 1111=gris2           
-;           
 ;--------------------------------------------------------------------------------
 vnoir     =    %00000000
 vblack    =    %00000000
@@ -339,8 +337,8 @@ sbread  = $f1ad ; Read one byte from serial port.
                 ;---------------------------------------------------------------
                 ; Description:                
                 ;  - Read one byte from serial port.
-                ; Imput :     -
-                ; Output :    A Byte Read. (Read $0d, Return, if dev stat <> 0.)
+                ; Imput:     -
+                ; Output:    A Byte Read. (Read $0d, Return, if dev stat <> 0.)
                 ; Altered registers : A 
 ;-------------------------------------------------------------------------------
 sstdin  = $F237 ; Define serial bus as standard input; do not send TALK 

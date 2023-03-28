@@ -57,29 +57,30 @@ helptext        .text   format(" Colour:SYS%5d,screen,back,text,1,2,3",colour)
 ;*=$4000
 
 colour          .block
-                jsr $aefd
-                jsr param
-                sta 53281
 
-                jsr $aefd
-                jsr param
-                sta 53280
+                jsr $aefd   ; Fetch the first ...
+                jsr param   ; ... parameter and make it ...
+                sta vicback0col   ; ... the screen colour.
+
+                jsr $aefd   ; Fetch the first ...
+                jsr param   ; ... parameter and make it ...
+                sta vicbordcol   ; ... the border colour 0.
                 
-                jsr $aefd
-                jsr param
-                sta 646
+                jsr $aefd   ; Fetch the second ...
+                jsr param   ; ... parameter and make it ...
+                sta 646     ; ... the text colour.
                 
-                jsr $aefd
-                jsr param
-                sta 53282
+                jsr $aefd   ; Fetch the third ...
+                jsr param   ; ... parameter and make it ...
+                sta 53282   ; ... the multi colour 1.
                 
-                jsr $aefd
-                jsr param
-                sta 53283
+                jsr $aefd   ; Fetch the fourth ...
+                jsr param   ; ... parameter and make it ...
+                sta 53283   ; ... the multi colour 2.
                 
-                jsr $aefd
-                jsr param
-                sta 53284
+                jsr $aefd   ; Fetch the fifth ...
+                jsr param   ; ... parameter and make it ...
+                sta 53284   ; ... the multi colour 3.
                 rts
 param           jsr $b79e
                 txa
