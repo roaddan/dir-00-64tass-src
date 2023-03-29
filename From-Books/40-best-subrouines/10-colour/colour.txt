@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.52.1237? listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib -i -L colour.txt -o colour.prg colour.asm
-; Tue Mar 28 08:25:48 2023
+; Wed Mar 29 14:34:14 2023
 
 ;Offset	;Hex		;Source
 
@@ -74,8 +74,8 @@
 >08d2	20 20 20 20 28 43 29 20 31 39 37 39 20 c2 52 41
 >08e2	44 20 d4 45 4d 50 4c 45 54 4f 4e
 >08ed	0d 0d		                .byte   $0d,$0d
->08ef	20 20 20 20	                .text          "     programmed by Daniel Lafrance."
->08f3	20 50 52 4f 47 52 41 4d 4d 45 44 20 42 59 20 c4
+>08ef	20 20 20 20	                .text          "     Programmed by Daniel Lafrance."
+>08f3	20 d0 52 4f 47 52 41 4d 4d 45 44 20 42 59 20 c4
 >0903	41 4e 49 45 4c 20 cc 41 46 52 41 4e 43 45 2e
 >0912	0d		                .byte   $0d
 >0913	20 20 20 20	                .text   format("       Version: %s.",Version)
@@ -109,29 +109,29 @@
 >09f0	2c 30 2c 31 30 2c 31 31 2c 31 32
 >09fb	0d 00		                .byte   $0d,0
 .09fd			colour
-.09fd	20 fd ae	                jsr $aefd   ; Fetch the first ...
-.0a00	20 34 0a	                jsr param   ; ... parameter and make it ...
-.0a03	8d 21 d0	                sta vicback0col   ; ... the screen colour.
-.0a06	20 fd ae	                jsr $aefd   ; Fetch the first ...
-.0a09	20 34 0a	                jsr param   ; ... parameter and make it ...
-.0a0c	8d 20 d0	                sta vicbordcol   ; ... the border colour 0.
-.0a0f	20 fd ae	                jsr $aefd   ; Fetch the second ...
-.0a12	20 34 0a	                jsr param   ; ... parameter and make it ...
-.0a15	8d 86 02	                sta 646     ; ... the text colour.
-.0a18	20 fd ae	                jsr $aefd   ; Fetch the third ...
-.0a1b	20 34 0a	                jsr param   ; ... parameter and make it ...
-.0a1e	8d 22 d0	                sta 53282   ; ... the multi colour 1.
-.0a21	20 fd ae	                jsr $aefd   ; Fetch the fourth ...
-.0a24	20 34 0a	                jsr param   ; ... parameter and make it ...
-.0a27	8d 23 d0	                sta 53283   ; ... the multi colour 2.
-.0a2a	20 fd ae	                jsr $aefd   ; Fetch the fifth ...
-.0a2d	20 34 0a	                jsr param   ; ... parameter and make it ...
-.0a30	8d 24 d0	                sta 53284   ; ... the multi colour 3.
+.09fd	20 fd ae	                jsr b_chk4comma ; $aefd : Check for coma.
+.0a00	20 34 0a	                jsr param       ; Fetch the first parameter and make it the ...
+.0a03	8d 21 d0	                sta vicback0col ; vic+$21, $d021, 53281.
+.0a06	20 fd ae	                jsr b_chk4comma ; $aefd : Check for coma.   ;
+.0a09	20 34 0a	                jsr param       ; Fetch the second parameter and make it the ...
+.0a0c	8d 20 d0	                sta vicbordcol  ; vic+$20, $d020, 53280.
+.0a0f	20 fd ae	                jsr b_chk4comma ; $aefd : Check for coma.
+.0a12	20 34 0a	                jsr param       ; Fetch the third parameter and make it the ...
+.0a15	8d 86 02	                sta carcol      ; $286, 646 ... basic next chr colscreenram (byte).
+.0a18	20 fd ae	                jsr b_chk4comma ; $aefd : Check for coma.
+.0a1b	20 34 0a	                jsr param       ; Fetch the fourth parameter and make it the ...
+.0a1e	8d 22 d0	                sta vicback1col ; vic+$22, $d0221, 53282.
+.0a21	20 fd ae	                jsr b_chk4comma ; $aefd : Check for coma.
+.0a24	20 34 0a	                jsr param       ; Fetch the fifth parameter and make it the ...
+.0a27	8d 23 d0	                sta vicback2col ; vic+$23, $d023, 53283.
+.0a2a	20 fd ae	                jsr b_chk4comma ; $aefd : Check for coma.
+.0a2d	20 34 0a	                jsr param       ; Fetch the sixth parameter and make it the ...
+.0a30	8d 24 d0	                sta vicback3col ; vic+$24, $d024, 53284.
 .0a33	60		                rts
-.0a34	20 9e b7	param           jsr $b79e
+.0a34	20 9e b7	param           jsr $b79e       ; Check for coma.
 .0a37	8a		                txa
 .0a38	60		                rts
-.0a39	4c 48 b2	iqerr           jmp $b248
+.0a39	4c 48 b2	iqerr           jmp b_fcerr     ;$b248 : Print ILLEGAL QUANTITY error message.
 >0a3c	00		byte            .byte 0
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-kernal.asm
@@ -178,48 +178,49 @@
 =$dd00			cia2            =       $dd00   ; 56576 cia2 base address
 =$e000			kernalrom       =       $e000   ; 57344 start of kernal rom
 =$ea31			irq             =       $ea31   ; 59953 irq entry point
-=$03			bstop           =       $03     ; 03 [STOP]
-=$05			bwhite          =       $05     ; 05 [CTRL]+[1] set color WHITE
-=$08			block           =       $08     ; 08 [SHIFT]+[C=] disabled
-=$09			bunlock         =       $09     ; 09 [SHIFT]+[C=] enabled
-=$0d			bcarret         =       $0d     ; 11 [RETURN]
-=$0e			btext           =       $0e     ; 14 switch to Uppercase+lowercase charset
-=$11			bcrsdn          =       $11     ; 17 [SHIFT]cursor down 1 line
-=$12			brevcol         =       $12     ; 18 reverse video ON
-=$13			bhome           =       $13     ; 19 Cursor HOME
-=$14			bdelete         =       $14     ; 20 DELETE
-=$1c			bred            =       $1c     ;
-=$1d			bcuright        =       $1d     ;
-=$1e			bgreen          =       $1e     ;
-=$1f			bblue           =       $1f     ;
-=$81			borange         =       $81     ;
-=$83			blrun           =       $83     ;
-=$85			bfkey1          =       $85     ;
-=$86			bfkey2          =       $86     ;
-=$87			bfkey3          =       $87     ;
-=$88			bfkey4          =       $88     ;
-=$89			bfkey5          =       $89     ;
-=$8a			bfkey6          =       $8a     ;
-=$8b			bfkey7          =       $8b     ;
-=$8c			bfkey8          =       $8c     ;
-=$8d			bcarret1        =       $8d     ;
-=$8e			bgraph          =       $8e     ;
-=$90			bblack          =       $90     ;
-=$91			bcuup           =       $91     ;
-=$92			brevoff         =       $92     ;
-=$93			bclear          =       $93     ;
-=$94			binsert         =       $94     ;
-=$95			bbrown          =       $95     ;
-=$96			bltred          =       $96     ;
-=$97			bdkgrey         =       $97     ;
-=$98			bmdgrey         =       $98     ;
-=$99			bltgreen        =       $99     ;
-=$9a			bltblue         =       $9a     ;
-=$9b			bltgrey         =       $9b     ;
-=$9c			bmagenta        =       $9c     ;
-=$9d			bculeft         =       $9d     ;
-=$9e			byellow         =       $9e     ;
-=$9f			bcyan           =       $9f     ;
+=$03			bstop           =       $03     ;  03 [STOP]
+=$05			bwhite          =       $05     ;  05 [CTRL]+[2]        Set colour to WHITE
+=$08			block           =       $08     ;  08 [SHIFT]+[C=]      disabled char map switch
+=$09			bunlock         =       $09     ;  09 [SHIFT]+[C=]      enabled. char map switch
+=$0d			bcarret         =       $0d     ;  11 [RETURN]
+=$0e			btext           =       $0e     ;  14 select Uppercase+lowercase charset
+=$11			bcrsdn          =       $11     ;  17 [CRS-D]           Cursor DOWN 1 line
+=$12			brevcol         =       $12     ;  18 [CTRL]+[9]        REVERSE VIDEO ON
+=$13			bhome           =       $13     ;  19 [HOME]            Cursor HOME
+=$14			bdelete         =       $14     ;  20 [DELETE]          Delete 1 char
+=$1c			bred            =       $1c     ;  28 [CTRL]+[3]        Set colour to RED
+=$1d			bcuright        =       $1d     ;  29 [CRS-R]           Cursor RIGHT
+=$1e			bgreen          =       $1e     ;  30 [CTRL]+[6]        Set colour to GREEN
+=$1f			bblue           =       $1f     ;  31 [CTRL]+[7]        Set colour to BLUE
+=$81			borange         =       $81     ; 129 [C=]+[1]          Set colour to ORANGE
+=$85			bfkey1          =       $85     ; 133 [F1]
+=$86			bfkey2          =       $86     ; 134 [F2]
+=$87			bfkey3          =       $87     ; 135 [F3]
+=$88			bfkey4          =       $88     ; 136 [F4]
+=$89			bfkey5          =       $89     ; 137 [F5]
+=$8a			bfkey6          =       $8a     ; 138 [F6]
+=$8b			bfkey7          =       $8b     ; 139 [F7]
+=$8c			bfkey8          =       $8c     ; 140 [F8]
+=$8d			bcarret1        =       $8d     ; 141 [SHIFT]+[RETURN]
+=$8e			bgraph          =       $8e     ; 142 select Uppercase+graphics charset
+=$90			bblack          =       $90     ; 144 [CTRL]+[1]        Set colour to BLACK
+=$91			bcuup           =       $91     ; 145 [SHIFT]+[CRS-D]   cursor UP 1 line
+=$92			brevoff         =       $92     ; 146 [CTRL]+[0]        REVERSE VIDEO OFF
+=$93			bclear          =       $93     ; 147 [SHIFT]+[HOME]    CLEAR SCREEN
+=$94			binsert         =       $94     ; 148 [SHIFT]+[DELETE]  INSERT a char
+=$95			bbrown          =       $95     ; 149 [C=]+[2]          Set colour to BROWN
+=$96			bltred          =       $96     ; 150 [C=]+[3]          Set colour to PINK
+=$97			bdkgrey         =       $97     ; 151 [C=]+[4]          Set colour to DARK GREY
+=$98			bmdgrey         =       $98     ; 152 [C=]+[5]          Set colour to MEDIUM GREY
+=$99			bltgreen        =       $99     ; 153 [C=]+[6]          Set colour to LIGHT GREEN
+=$9a			bltblue         =       $9a     ; 154 [C=]+[7]          Set colour to LIGHT BLUE
+=$9b			bltgrey         =       $9b     ; 155 [C=]+[8]          Set colour to LIGHT GREY
+=$9c			bmagenta        =       $9c     ; 156 [CTRL]+[5]        Set colour to MAGENTA
+=$9d			bculeft         =       $9d     ; 157 [SHIFT]+[CRS-R]   cursor RIGHT 1 pos
+=$9e			byellow         =       $9e     ; 158 [CTRL]+[8]        Set colour to YELLOW
+=$9f			bcyan           =       $9f     ; 159 [CTRL]+[4]        Set colour to CYAN
+=$a0			bspace1         =       $a0     ; 169                   space
+=$e0			bspace2         =       $e0     ; 224                   space
 =$0			cnoir       = $0
 =$1			cblanc      = $1
 =$2			crouge      = $2
@@ -489,7 +490,7 @@
 =53281			vicbackcol  = vic+$21 	; $d021, 53281
 =53281			vicback0col = vic+$21 	; $d021, 53281		|--|--|--|--|c3|c2|c1|c0|
 =53282			vicback1col = vic+$22 	; $d022, 53282		|--|--|--|--|c3|c2|c1|c0|
-=53283			vicback2col= vic+$23 	; $d023, 53283		|--|--|--|--|c3|c2|c1|c0|
+=53283			vicback2col = vic+$23 	; $d023, 53283		|--|--|--|--|c3|c2|c1|c0|
 =53284			vicback3col = vic+$24 	; $d024, 53284		|--|--|--|--|c3|c2|c1|c0|
 =53285			vicsprtmcol0 = vic+$25 	; $d025, 53285		|--|--|--|--|c3|c2|c1|c0|
 =53286			vicsprtmcol1 = vic+$26 	; $d026, 53286		|--|--|--|--|c3|c2|c1|c0|

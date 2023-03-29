@@ -36,7 +36,7 @@ header                        ;0123456789012345678901234567890123456789
                 .byte   $0d
                 .text          "        (c) 1979 Brad Templeton"
                 .byte   $0d,$0d
-                .text          "     programmed by Daniel Lafrance."
+                .text          "     Programmed by Daniel Lafrance."
                 .byte   $0d
                 .text   format("       Version: %s.",Version)
                 .byte   $0d,0
@@ -58,34 +58,34 @@ helptext        .text   format(" Colour:SYS%5d,screen,back,text,1,2,3",colour)
 
 colour          .block
 
-                jsr $aefd   ; Fetch the first ...
-                jsr param   ; ... parameter and make it ...
-                sta vicback0col   ; ... the screen colour.
+                jsr b_chk4comma ; $aefd : Check for coma.   
+                jsr param       ; Fetch the first parameter and make it the ...
+                sta vicback0col ; vic+$21, $d021, 53281.
 
-                jsr $aefd   ; Fetch the first ...
-                jsr param   ; ... parameter and make it ...
-                sta vicbordcol   ; ... the border colour 0.
+                jsr b_chk4comma ; $aefd : Check for coma.   ; 
+                jsr param       ; Fetch the second parameter and make it the ...
+                sta vicbordcol  ; vic+$20, $d020, 53280.
                 
-                jsr $aefd   ; Fetch the second ...
-                jsr param   ; ... parameter and make it ...
-                sta 646     ; ... the text colour.
+                jsr b_chk4comma ; $aefd : Check for coma.
+                jsr param       ; Fetch the third parameter and make it the ...
+                sta carcol      ; $286, 646 ... basic next chr colscreenram (byte).
                 
-                jsr $aefd   ; Fetch the third ...
-                jsr param   ; ... parameter and make it ...
-                sta 53282   ; ... the multi colour 1.
+                jsr b_chk4comma ; $aefd : Check for coma.
+                jsr param       ; Fetch the fourth parameter and make it the ...
+                sta vicback1col ; vic+$22, $d0221, 53282.
                 
-                jsr $aefd   ; Fetch the fourth ...
-                jsr param   ; ... parameter and make it ...
-                sta 53283   ; ... the multi colour 2.
+                jsr b_chk4comma ; $aefd : Check for coma.
+                jsr param       ; Fetch the fifth parameter and make it the ...
+                sta vicback2col ; vic+$23, $d023, 53283.
                 
-                jsr $aefd   ; Fetch the fifth ...
-                jsr param   ; ... parameter and make it ...
-                sta 53284   ; ... the multi colour 3.
+                jsr b_chk4comma ; $aefd : Check for coma.
+                jsr param       ; Fetch the sixth parameter and make it the ...
+                sta vicback3col ; vic+$24, $d024, 53284.
                 rts
-param           jsr $b79e
+param           jsr $b79e       ; Check for coma.
                 txa
                 rts
-iqerr           jmp $b248                
+iqerr           jmp b_fcerr     ;$b248 : Print ILLEGAL QUANTITY error message.
 
 
                 .bend
