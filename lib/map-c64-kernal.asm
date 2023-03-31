@@ -18,9 +18,26 @@
 ;--------------------------------------------------------------------------------
 ;* macro sur les elements importants *
 ;--------------------------------------------------------------------------------
-          
-linnum          =       $14     ; 20
-txttab          =       $2b     ; 43
+u6510ddr        =       $00     ;   0 6510 port data dir. reg. (def: %xx101111)
+                                ;        (0=input, 1=output)
+u6510map        =       $01     ;   1 6510 port used as memory map reg.
+                                ;     bit-0 LORAM select ROM or RAM at $a000
+                                ;           1=Basic rom, 0=RAM          
+                                ;     bit-1 HIRAM select ROM or RAM at $e000
+                                ;           1=Kernal rom, 0=RAM          
+                                ;     bit-2 CHARGEN signal
+                                ;           1=Device I/O, 0=CharRom          
+                                ;     bit-3 Cassette Data Output line          
+                                ;     bit-4 Cassette switch sense
+                                ;         Reads button 0=Pressed, 1=Released          
+                                ;     bit-5 Cassette motor control
+                                ;         1=Motor on, 0=Motor off
+                                ;     bits 6 and 7 unused.
+unused2         =       $02     ;   2 unused.                
+adray1          =       $03     ; 3-4 vector to routine to convert a number ...
+                                ;     ... from floating to signed integer.                                            
+linnum          =       $14     ;  20
+txttab          =       $2b     ;  43
 chrget          =       $73     ; 115
 chrgot          =       $79     ; 121
 kiostatus       =       $90     ; 144 Kernal I/O status word (st) (byte) 
