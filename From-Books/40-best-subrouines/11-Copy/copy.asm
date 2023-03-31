@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20230327-214534-a"
+                Version = "20230330-234225"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                 
                 .include    "header-c64.asm"
@@ -43,7 +43,7 @@ headerb         .text          "              copy (p64)"
                 .byte   $0d
                 .text          "     programmed by Daniel Lafrance."
                 .byte   $0d
-                .text   format("       Version: %s.",Version)
+                .text   format("        Version: %s.",Version)
                 .byte   $0d,0
 
 shortcuts       .text          " -------- S H O R T - C U T S ---------"
@@ -52,7 +52,7 @@ shortcuts       .text          " -------- S H O R T - C U T S ---------"
                 .byte   $0d
                 .text   format(" cls=SYS%5d",cls)
                 .byte   $0d,0
-                
+
 line            .text          " --------------------------------------"
                 .byte   $0d,0
                 .bend
