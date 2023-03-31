@@ -63,6 +63,7 @@ helptext        .text   format(" spritechar  : SYS%5d",spritechar)
 
 spritechar        .block
                 lda 53248
+                sec
                 rts
                 .bend
 byte            .byte 0
