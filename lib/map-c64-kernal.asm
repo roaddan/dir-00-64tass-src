@@ -36,7 +36,7 @@ u6510map        =       $01     ;   1 6510 port used as memory map reg.
 unused2         =       $02     ;   2 unused.                
 adray1          =       $03     ; 3-4 Vector to routine to convert a number ...
                                 ;     ... from floating pointto signed integer.                                            
-adray1          =       $05     ; 5-6 Vector to routine to convert a number ...
+adray2          =       $05     ; 5-6 Vector to routine to convert a number ...
                                 ;     ... from integer to floating point.
 b_charac        =       $07     ;   7 Search character for scanning ...
                                 ;     ... BASIC text input.
@@ -108,7 +108,7 @@ bascol          =       carcol
 shflag          =       $28d    ; 653
 ieval           =       $30a
 cinv            =       $314    ; $314-$315 brk instruction interupt
-tbuffer         =       $33c    ; 828
+tbuffer         =       $33c    ; 828-1019 Cassette i/o buffer
 ibsout          =       $326    ; 806
 tpbuff          =       $33c    ; $033c-$03fb (828-1019)
 scrnram         =       $400    ; 1024 video character ram
