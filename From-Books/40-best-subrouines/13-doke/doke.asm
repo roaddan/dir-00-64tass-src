@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20230327-214534-a"
+                Version = "20230331-214836"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                 
                 .include    "header-c64.asm"
@@ -12,7 +12,6 @@ main            .block
                 jsr scrmaninit
                 jsr help
                 jsr anykey
-                jsr template
                 jmp b_warmstart
                 .bend
                  
@@ -35,7 +34,7 @@ headera                       ;0123456789012345678901234567890123456789
                 .text          "          ISBN 0-7156-1899-7"
                 .byte   $0d,0
 
-headerb         .text          "            template (pxx)"
+headerb         .text          "              doke (p75)"
                 .byte   $0d
                 .text          "        (c) 1979 Brad Templeton"
                 .byte   $0d
@@ -52,34 +51,41 @@ shortcuts       .text          " -------- S H O R T - C U T S ---------"
                 .byte   $0d,0
 line            .text          " --------------------------------------"
                 .byte   $0d,0
-helptext        .text   format(" Prepare to template  : SYS%5d",template)
+helptext        .text   format(" doke : SYS%5d, address, 16bits value",doke)
                 .byte   $0d
-                .text   format(" template: SYS%5d",template)
-                .byte   $0d
-                .text   format(" ex.: SYS%5d",template)
-                .byte   $0d
-                .text   format("      for i=0to100:SYS%5d:next",template)
+                .text   format(" ex.: SYS%5d(12*4096),65535",doke)
                 .byte   $0d,0
                 .bend
-;*=$4000
+*=$03c0
 
-template        .block
-                pha
-                lda vicbordcol
-                sta byte
-                lda #$10
-                sta vicbordcol
-                jsr anykey
-                lda byte
-                sta vicbordcol
-                pla
+doke            .block
+                jsr b_chk4comma ; $aefd : Check for coma.
+                jsr b_frmnum    ; $ad8a ; Evaluate numeric expression and/or ...
+                                ;         ... check for data type mismatch
+                jsr b_getadr    ; $b7f7 ; Convert Floating point number to ...
+                                ;         ...an Unsighed TwoByte Integer.
+                lda $14         ; Integer line number value LSB <LINNUM
+                sta zpage1      ; zeropage 1 low byte
+                lda $15         ; Integer line number value LSB >LINNUM
+                sta zpage1+1    ; zeropage 1 high byte
+                jsr b_chk4comma ; $aefd : Check for coma.
+                jsr b_frmnum    ; $ad8a ; Evaluate numeric expression and/or ...
+                                ;         ... check for data type mismatch
+                jsr b_getadr    ; $b7f7 ; Convert Floating point number to ...
+                                ;         ...an Unsighed TwoByte Integer.
+                ldy #$00
+                lda $14
+                sta (zpage1),y
+                ldy #$01
+                lda $15
+                sta (zpage1),y
                 rts
                 .bend
 byte            .byte 0
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
-;*=$c000        
+*=$c000        
                 .include "map-c64-kernal.asm"
                 .include "map-c64-vicii.asm" 
                 .include "map-c64-basic2.asm"
