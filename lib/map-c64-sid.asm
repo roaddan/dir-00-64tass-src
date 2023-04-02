@@ -1,11 +1,14 @@
 ;-------------------------------------------------------------------------
-; V O I C E   1  $d400-$d406
+; = = = = = = = = = = = = = = S I D   M A P = = = = = = = = = = = = = = = 
+; VERSION : 20230402-082548
 ;-------------------------------------------------------------------------
-sid1flow    =   $d400 ; 54272 - Voice 1 Low freq register low byte.
-sid1fhigh   =   $d401 ; 54273 - Voice 1 High freq register high byte.
-sid1pwlow 	=   $d402 ; 54274 - Voice 1 Pulse waveform width register low byte.
-sid1pwhigh 	=   $d403 ; 54275 - Voice 1 Pulse waveform width register high byte.
-sid1control	=   $d404 ; 54276 - Voice 1 Voice control register.
+; V O I C E   1  $d400-$d406 
+;-------------------------------------------------------------------------
+sidv1flow   =   $d400 ; 54272 - Voice 1 Low freq register low byte.
+sidv1fhigh  =   $d401 ; 54273 - Voice 1 High freq register high byte.
+sidv1pwlow 	=   $d402 ; 54274 - Voice 1 Pulse waveform width register low byte.
+sidv1pwhigh =   $d403 ; 54275 - Voice 1 Pulse waveform width register high byte.
+sidv1control=   $d404 ; 54276 - Voice 1 Voice control register.
 ;-------------------------------------------------------------------------
 ; VOICE CONTROL REGISTER
 ;-------------------------------------------------------------------------
@@ -19,28 +22,28 @@ sid1control	=   $d404 ; 54276 - Voice 1 Voice control register.
 ; |+-------6-> 1 = Select pulse waveform.
 ; +--------7-> 1 = Select random waveform.
 ;-------------------------------------------------------------------------
-sid1atkdec 	=	$d405 ; 54277 - 0-3: Voice 1 Decay duration, 4-7: Attack duration.
-sid1stnrel 	=   $d406 ; 54278 - 0-3: Voice 1 Rel. duration, 4-7: Sustain duration.
+sidv1atkdec =	$d405 ; 54277 - 0-3: Voice 1 Decay duration, 4-7: Attack duration.
+sidv1stnrel =   $d406 ; 54278 - 0-3: Voice 1 Rel. duration, 4-7: Sustain duration.
 ;-------------------------------------------------------------------------
 ; V O I C E   2  $d407-$d413
 ;-------------------------------------------------------------------------
-sid2flow    =   $d407 ; 54279 - Voice 2 Low freq register low byte.
-sid2fhigh   =   $d408 ; 54280 - Voice 2 High freq register high byte.
-sid2pwlow 	=   $d409 ; 54281 - Voice 2 Pulse waveform width register low byte.
-sid2pwhigh	=   $d40a ; 54282 - Voice 2 Pulse waveform width register high byte.
-sid2control	=   $d40b ; 54283 - Voice 2 Voice control register.
-sid2atkdec 	=   $d40c ; 54284 - Voice 2 0-3: Decay duration, 4-7: Attack duration.
-sid2stnrel 	=   $d40d ; 54285 - Voice 2 0-3: Rel. duration, 4-7: Sustain duration.
+sidv2flow   =   $d407 ; 54279 - Voice 2 Low freq register low byte.
+sidv2fhigh  =   $d408 ; 54280 - Voice 2 High freq register high byte.
+sidv2pwlow 	=   $d409 ; 54281 - Voice 2 Pulse waveform width register low byte.
+sidv2pwhigh	=   $d40a ; 54282 - Voice 2 Pulse waveform width register high byte.
+sidv2control=   $d40b ; 54283 - Voice 2 Voice control register.
+sidv2atkdec =   $d40c ; 54284 - Voice 2 0-3: Decay duration, 4-7: Attack duration.
+sidv2stnrel =   $d40d ; 54285 - Voice 2 0-3: Rel. duration, 4-7: Sustain duration.
 ;-------------------------------------------------------------------------
 ; V O I C E   3  $d40e-$d414
 ;-------------------------------------------------------------------------
-sid3flow    =   $d40e ; 54286 - Voice 3 Low freq register low byte.
-sid3fhigh   =   $d40f ; 54287 - Voice 3 High freq register high byte.
-sid3pwlow 	=   $d410 ; 54288 - Voice 3 Pulse waveform width register low byte.
-sid3pwhigh  =   $d411 ; 54289 - Voice 3 Pulse waveform width register high byte.
-sid3control	=   $d412 ; 54290 - Voice 3 Poice control register.
-sid3atkdec 	=   $d413 ; 54291 - Voice 3 0-3: Decay duration, 4-7: Attack duration.
-sid3stnrel 	=   $d414 ; 54292 - Voice 3 0-3: Rel. duration, 4-7: Sustain duration.
+sidv3flow   =   $d40e ; 54286 - Voice 3 Low freq register low byte.
+sidv3fhigh  =   $d40f ; 54287 - Voice 3 High freq register high byte.
+sidv3pwlow 	=   $d410 ; 54288 - Voice 3 Pulse waveform width register low byte.
+sidv3pwhigh =   $d411 ; 54289 - Voice 3 Pulse waveform width register high byte.
+sidv3control=   $d412 ; 54290 - Voice 3 Poice control register.
+sidv3atkdec =   $d413 ; 54291 - Voice 3 0-3: Decay duration, 4-7: Attack duration.
+sidv3stnrel =   $d414 ; 54292 - Voice 3 0-3: Rel. duration, 4-7: Sustain duration.
 ;-------------------------------------------------------------------------
 ; F I L T E R   C O N T R O L  $D415-$D418
 ;-------------------------------------------------------------------------

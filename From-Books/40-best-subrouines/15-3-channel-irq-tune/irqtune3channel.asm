@@ -1,7 +1,7 @@
 ;-------------------------------------------------------------------------------
-                Version = "20230327-214534-a"
-;-------------------------------------------------------------------------------                .include    "header-c64.asm"
-                
+                Version = "20230402-082548"
+;-------------------------------------------------------------------------------
+                .include    "header-c64.asm"               
                 .include    "header-c64.asm"
                 .include    "macros-64tass.asm"
 ;-------------------------------------------------------------------------------
@@ -73,14 +73,14 @@ irqtune3channel .block
                                 ;         Bit 6: Select high-pass filter, 1=high-pas on.
                                 ;         Bit 7: Disconnect output of voice 3, 1=voice 3 off.
                 lda #19
-                sta sid1control ; $d404 ; 54276 - Voice 1 Voice control register.
+                sta sidv1control; $d404 ; 54276 - Voice 1 Voice control register.
                 lda #64
-                sta sid1atkdec  ; $d405 ; 54277 - 0-3: Voice 1 Decay duration, 4-7: Attack duration.
-                sta sid1stnrel  ; $d406 ; 54278 - 0-3: Voice 1 Rel. duration, 4-7: Sustain duration.
-                sta sid2atkdec  ; $d40c ; 54284 - Voice 2 0-3: Decay duration, 4-7: Attack duration.
-                sta sid2stnrel  ; $d40d ; 54285 - Voice 2 0-3: Rel. duration, 4-7: Sustain duration.
+                sta sidv1atkdec ; $d405 ; 54277 - 0-3: Voice 1 Decay duration, 4-7: Attack duration.
+                sta sidv1stnrel ; $d406 ; 54278 - 0-3: Voice 1 Rel. duration, 4-7: Sustain duration.
+                sta sidv2atkdec ; $d40c ; 54284 - Voice 2 0-3: Decay duration, 4-7: Attack duration.
+                sta sidv2stnrel ; $d40d ; 54285 - Voice 2 0-3: Rel. duration, 4-7: Sustain duration.
                 lda #33
-                sta sid2control ; $d40b ; 54283 - Voice 2 Voice control register.
+                sta sidv2control; $d40b ; 54283 - Voice 2 Voice control register.
                 lda #0
                 sta 251
                 sta 252
@@ -90,13 +90,13 @@ irqtune3channel .block
 main            ldx 251
                 ldy 252
                 lda tune,x
-                sta sid1flow    ; $d400 ; 54272 - Voice 1 Low freq register low byte.
+                sta sidv1flow   ; $d400 ; 54272 - Voice 1 Low freq register low byte.
                 lda tune1-2,x
-                sta sid2flow    ; $d407 ; 54279 - Voice 2 Low freq register low byte.
+                sta sidv2flow   ; $d407 ; 54279 - Voice 2 Low freq register low byte.
                 lda tune1-1,x
-                sta sid2fhigh   ; $d408 ; 54280 - Voice 2 High freq register high byte.
+                sta sidv2fhigh  ; $d408 ; 54280 - Voice 2 High freq register high byte.
                 lda tune+1,x
-                sta sid1fhigh   ; $d401 ; 54273 - Voice 1 High freq register high byte.
+                sta sidv1fhigh  ; $d401 ; 54273 - Voice 1 High freq register high byte.
                 lda 253
                 cmp #10
                 bcs nextdelay
