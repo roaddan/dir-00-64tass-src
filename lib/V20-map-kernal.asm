@@ -6,26 +6,29 @@
 ; Version.....: 20191223.1
 ; Inspiration.: isbn 0-87455-082-3
 ;--------------------------------------------------------------------------------
-; Pour utilisation inscrire la ligne [.include "c64map.asm"] dans votre fichier 
-; source principal.
-;--------------------------------------------------------------------------------
-; Segmentation principales de la mémoire
+; Segmentation principales de la mÃ©moire
 ;--------------------------------------------------------------------------------
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou sans 64tass utilisez
 ; la syntaxes ...
 ;
 ;         .include "c64_map.s"
 ;
-; ... en prenant soin de placer le fichier dans le meme disque ou répertoire que
+; ... en prenant soin de placer le fichier dans le meme disque ou rÃ©pertoire que
 ; votre programme.
 ;--------------------------------------------------------------------------------
 ;* macro sur les elements importants *
 ;--------------------------------------------------------------------------------
-bascol    = $0286     ;basic next chr colscreenram  = $0400
-zpage1    = $fb       ;zero page 1 address
-zpage2    = $fd       ;zero page 2 address
-zeropage  = $00fb
-zonepage  = $00fd
+memmapreg = $01
+kiostatus = $90       ; Kernal I/O status word (st) (byte) 
+curfnlen  = $b7       ; Current filename length (byte)
+cursecadd = $b9       ; Current secondary address (byte)
+curdevno  = $ba       ; Current device number (byte)
+curfptr   = $bb       ; Current file pointer (word)  
+zpage1    = $fb       ; zero page 1 address (word)
+zpage2    = $fd       ; zero page 2 address (word)
+zeropage  = zpage1
+zonepage  = zpage2
+bascol    = $0286     ;basic next chr colscreenram (byte)
 scrnram   = $0400     ;video character ram
 scrram0   = $0400
 scrram1   = $0500
@@ -33,12 +36,8 @@ scrram2   = $0600
 scrram3   = $0700
 basicsta  = $0801     ;basic start address
 basicrom  = $a000
-vic       = $d000     ;vic base address
-vicscan   = vic+$12   ;vic raster line number
-vborder   = $d020     ;video border col.
-framecol  = $d020
-backgrnd  = $d021
-vbkgrnd   = $d021     ;video back col.
+chargen   = $d000
+vicii     = $d000
 sid       = $d400     ;sid base address
 colorram  = $d800     ;video color ram
 colram0   = $d800
@@ -95,29 +94,42 @@ byellow   =    $9e
 bcyan     =    $9f
 
 ;--------------------------------------------------------------------------------
-; registre basic contienant la couleur du prochain caractère. 
+; registre basic contienant la couleur du prochain caractÃ¨re. 
 ;--------------------------------------------------------------------------------
 carcol  = $0286
 ieval   = $030a
 ; vecteurs du basic
 chrget  = $73
 chrgot  = $79
-
+;+----+----------------------+-------------------------------------------------------------------------------------------------------+
+;|    |                      |                                Peek from $dc01 (code in paranthesis):                                 |
+;|row:| $dc00:               +------------+------------+------------+------------+------------+------------+------------+------------+
+;|    |                      |   BIT 7    |   BIT 6    |   BIT 5    |   BIT 4    |   BIT 3    |   BIT 2    |   BIT 1    |   BIT 0    |
+;+----+----------------------+------------+------------+------------+------------+------------+------------+------------+------------+
+;|1.  | #%11111110 (254/$fe) | DOWN  ($  )|   F5  ($  )|   F3  ($  )|   F1  ($  )|   F7  ($  )| RIGHT ($  )| RETURN($  )|DELETE ($  )|
+;|2.  | #%11111101 (253/$fd) |LEFT-SH($  )|   e   ($05)|   s   ($13)|   z   ($1a)|   4   ($34)|   a   ($01)|   w   ($17)|   3   ($33)|
+;|3.  | #%11111011 (251/$fb) |   x   ($18)|   t   ($14)|   f   ($06)|   c   ($03)|   6   ($36)|   d   ($04)|   r   ($12)|   5   ($35)|
+;|4.  | #%11110111 (247/$f7) |   v   ($16)|   u   ($15)|   h   ($08)|   b   ($02)|   8   ($38)|   g   ($07)|   y   ($19)|   7   ($37)|
+;|5.  | #%11101111 (239/$ef) |   n   ($0e)|   o   ($0f)|   k   ($0b)|   m   ($0d)|   0   ($30)|   j   ($0a)|   i   ($09)|   9   ($39)|
+;|6.  | #%11011111 (223/$df) |   ,   ($2c)|   @   ($00)|   :   ($3a)|   .   ($2e)|   -   ($2d)|   l   ($0c)|   p   ($10)|   +   ($2b)|
+;|7.  | #%10111111 (191/$bf) |   /   ($2f)|   ^   ($1e)|   =   ($3d)|RGHT-SH($  )|  HOME ($  )|   ;   ($3b)|   *   ($2a)|   Â£   ($1c)|
+;|8.  | #%01111111 (127/$7f) | STOP  ($  )|   q   ($11)|COMMODR($  )| SPACE ($20)|   2   ($32)|CONTROL($  )|  <-   ($1f)|   1   ($31)|
+;+----+----------------------+------------+------------+------------+------------+------------+------------+------------+------------+
 ; +==========================================================================+
-; |     c o u l e u r s   p o s s i b l e   d e s   c a r a c t è r e s      |
+; |     c o u l e u r s   p o s s i b l e   d e s   c a r a c t Ã¨ r e s      |
 ; +==========================================================================+
 ; | dec | hex |  binaire  | couleur    || dec | hex |  binaire  | couleur    |
 ; +-----+-----+-----------+------------++-----+-----+-----------+------------+
 ; |  0  | $0  | b00000000 | noir       ||  1  | $1  | b00000001 | blanc      |
-; |  2  | $0  | b00000010 | rouge      ||  3  | $3  | b00000011 | océan      |
+; |  2  | $0  | b00000010 | rouge      ||  3  | $3  | b00000011 | ocÃ©an      |
 ; |  4  | $0  | b00000100 | mauve      ||  5  | $5  | b00000101 | vert       |
 ; |  6  | $0  | b00000110 | bleu       ||  7  | $7  | b00000111 | jaune      |
 ; |  8  | $0  | b00001000 | orange     ||  9  | $9  | b00001001 | brun       |
-; | 10  | $0  | b00001010 | rose       || 11  | $b  | b00001011 | gris foncé |
-; | 12  | $0  | b00001100 | gris moyen || 13  | $d  | b00001101 | vert pâle  |
-; | 14  | $0  | b00001110 | blue pale  || 15  | $f  | b00001111 | gris pâle  |
+; | 10  | $0  | b00001010 | rose       || 11  | $b  | b00001011 | gris foncÃ© |
+; | 12  | $0  | b00001100 | gris moyen || 13  | $d  | b00001101 | vert pÃ¢le  |
+; | 14  | $0  | b00001110 | blue pale  || 15  | $f  | b00001111 | gris pÃ¢le  |
 ; +-----+-----+-----------+------------++-----+-----+-----------+------------+
-; constantes de couleurs en français.
+; constantes de couleurs en franÃ§ais.
 cnoir       = $0
 cblanc      = $1
 crouge      = $2
@@ -156,7 +168,7 @@ clightgray  = $f
 ; couleur %xxxx0000
 ;              |||+-> bit 0   : Inverse tous les autres bits
 ;              |++--> bit 1,2 : 00=rgb, 01=Rgb, 10=rGb, 11=rgB 
-;              +----> bit 3   : Intensité          
+;              +----> bit 3   : IntensitÃ©          
 ;     0000=noir,  0001=Blanc, 1000=orange, 1001=brun        
 ;     0010=rouge, 0010=Cyan,  1010=rose  , 1011=gris      
 ;     0100=vert,  0101=mauve, 1100=gris1 , 1101=vert2           
@@ -197,6 +209,169 @@ vblue1    =    %00001110
 vgris2    =    %00001111
 vgray2    =    %00001111
 vgrey2    =    %00001111
+;-------------------------------------------------------------------------------
+; R o u t i n e s   p o u r   l a   c o m m u n i c a t i o n   s é r i e
+;-------------------------------------------------------------------------------
+stalk   = $ed09 ; Send Talk command to serial bus.
+                ;---------------------------------------------------------------
+                ; Description:
+                ;  - stalk send's talk command to serial bus.
+                ; Imput :     A = Device number
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+slisten = $ed0c ; Send LISTEN command to serial bus.
+                ;---------------------------------------------------------------
+                ; Description:
+                ;  - slisten send's LISTEN command to serial bus.
+                ; Imput :     A = Device number
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+sflush  = $ed40 ; Flush serial bus output cache at memory address $0095, to 
+                ; serial bus.
+                ;---------------------------------------------------------------
+                ; Description:
+                ;  - slisten send's LISTEN command to serial bus.
+                ; Imput :     -
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+slisten2= $edb9 ; Send LISTEN secondary addressto serial bus.
+                ;---------------------------------------------------------------
+                ; Description:
+                ;  - slisten2 send's LISTEN command to serial bus.
+                ; Imput :     A = secondary address
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+stalk2  = $edb9 ; Send TALK secondary addressto serial bus.
+                ;---------------------------------------------------------------
+                ; Description:
+                ;  - stalk2 send's LISTEN command to serial bus.
+                ; Imput :     A = secondary address
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+sbout   = $eddd ; Write byte to serial bus.
+                ;---------------------------------------------------------------
+                ; Description:
+                ;  - sbout write byte to serial bus.
+                ; Imput :     A = secondary address
+                ; Output :    -
+                ; Altered registers : - 
+;-------------------------------------------------------------------------------
+sutalk  = $edef ; Send UNTalk command to serial bus.
+                ;---------------------------------------------------------------
+                ; Description:
+                ;  - sutalk send's UNtalk command to serial bus.
+                ; Imput :     -
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+sulisten= $edfe ; Send UNLISTEN command to serial bus.
+                ;---------------------------------------------------------------
+                ; Description:
+                ;  - slisten send's UNLISTEN command to serial bus.
+                ; Imput :     -
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+sclkhigh= $ee85 ; Set CLOCK OUT to High
+                ;---------------------------------------------------------------
+                ; Description:
+                ;  - sclkhi set's CLOCK OUT to hight.
+                ; Imput :     -
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+sclklow = $ee8e ; Set CLOCK OUT to low
+                ;---------------------------------------------------------------
+                ; Description:                
+                ;  - sclkhi set's CLOCK OUT to low.
+                ; Imput :     -
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+sdathigh= $ee97 ; Set DATA OUT to High
+                ;---------------------------------------------------------------
+                ; Description:
+                ;  - sdtahigh set's DATA OUT to hight.
+                ; Imput :     -
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+sdatlow = $eea0 ; Set DATA OUT to low
+                ;---------------------------------------------------------------
+                ; Description:                
+                ;  - sdatlow set's DATA OUT to low.
+                ; Imput :     -
+                ; Output :    -
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+sclkdta = $eea9 ; Read CLOCK IN and DATA IN.
+                ;---------------------------------------------------------------
+                ; Description:                
+                ;  - Read CLOCK IN and DATA IN.
+                ; Imput :     -
+                ; Output :    (C)arry = DATA IN; 
+                ;             (N)egative = CLOCK IN; 
+                ;             A = CLOCK IN (in bit #7)
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+sbread  = $f1ad ; Read one byte from serial port.
+                ;---------------------------------------------------------------
+                ; Description:                
+                ;  - Read one byte from serial port.
+                ; Imput :     -
+                ; Output :    A Byte Read. (Read $0d, Return, if dev stat <> 0.)
+                ; Altered registers : A 
+;-------------------------------------------------------------------------------
+sstdin  = $F237 ; Define serial bus as standard input; do not send TALK 
+                ; secondary address if secondary address bit #7 = 1.
+                ;---------------------------------------------------------------
+                ; Input: A = Device number.
+                ; Output: –
+                ; Used registers: A, X.
+;-------------------------------------------------------------------------------
+sstdout = $F279 ; Define serial bus as standard output; do not send LISTEN 
+                ; secondary address if secondary address bit #7 = 1.
+                ;---------------------------------------------------------------
+                ; Input: A = Device number.
+                ; Output: –
+                ; Used registers: A, X.                
+;-------------------------------------------------------------------------------
+sfopen  = $F3D5 ; Open file on serial bus; do not send file name if secondary 
+                ; address bit #7 = 1 or file name length = 0.
+                ;---------------------------------------------------------------
+                ; Input: –
+                ; Output: –
+                ; Used registers: A, Y.
+;-------------------------------------------------------------------------------
+sutclose= $F528 ; Send UNTALK and CLOSE command to serial bus.
+                ;---------------------------------------------------------------
+                ; Input: –
+                ; Output: –
+                ; Used registers: A.
+;-------------------------------------------------------------------------------
+sulclose= $F63F ; Send UNLISTEN and CLOSE command to serial bus.
+                ;---------------------------------------------------------------
+                ; Input: –
+                ; Output: –
+                ; Used registers: A.
+;-------------------------------------------------------------------------------
+sfclose = $F642 ; Close file on serial bus; do not send CLOSE secondary address 
+                ; if secondary address bit #7 = 1.
+                ;---------------------------------------------------------------
+                ; Input: –
+                ; Output: –
+                ; Used registers: –
+;-------------------------------------------------------------------------------
+stimeout= $FE21 ; Unknown. (Set serial bus timeout.)
+                ;---------------------------------------------------------------
+                ; Input: A = Timeout value.
+                ; Output: –
+                ; Used registers: –
 ;-------------------------------------------------------------------------------
 ; r o u t i n e s   p r é s e n t e s   d a n s   l e   k e r n a l
 ;-------------------------------------------------------------------------------
@@ -297,6 +472,11 @@ second  = $ff93 ; ($edb9) Send secondary address after listen
                 ; - After listen has been called, a secondary address may be 
                 ;   sent.
                 ;---------------------------------------------------------------
+                ; Input: A = Secondary address.
+                ; Output: –
+                ; Used registers: A.
+                ; Real address: $EDB9.
+                ;---------------------------------------------------------------
                 ; Exemple:
                 ; - Address device #8 with secondary address #15.
                 ;       lda #8
@@ -312,6 +492,11 @@ tksa    = $ff96 ; ($edc7) Send a secondary address to a device commanded to talk
                 ; Description:
                 ; - tksa is used to send a secondary address for a talk device.
                 ; - Function talk must be called first.
+                ;---------------------------------------------------------------
+                ; Input: A = Secondary address.
+                ; Output: –
+                ; Used registers: A.
+                ; Real address: $EDC7.
                 ;---------------------------------------------------------------
                 ; Exemple:
                 ; - Signal device #4 to talk with command #7.
@@ -360,7 +545,7 @@ membot  = $ff9c ; ($fe34) Get/set bottom of memory.
                 ; Note:
                 ; - The accumulator is left alone.
 ;-------------------------------------------------------------------------------
-scnkey  = $ff9f ; $(ea87) Scan the keyboard
+scankey = $ff9f ; $(ea87) Scan the keyboard
                 ;---------------------------------------------------------------
 ;-------------------------------------------------------------------------------
 settmo  = $ffa2 ; ($fe21) Set ieee bus card timeout flag
@@ -368,6 +553,11 @@ settmo  = $ffa2 ; ($fe21) Set ieee bus card timeout flag
                 ; Description:
                 ; - settmo is used only with an ieee add-on card to access the 
                 ;   serial bus.
+                ;---------------------------------------------------------------
+                ; Input: A = Timeout value.
+                ; Output: –
+                ; Used registers: –
+                ; Real address: $FE21.                
                 ;---------------------------------------------------------------
                 ; Exemple:
                 ; - Disable time-outs on serial bus.
@@ -378,20 +568,25 @@ settmo  = $ffa2 ; ($fe21) Set ieee bus card timeout flag
                 ; - To enable time-outs, set the accumulator to a 128 and call 
                 ;   settmo.
 ;-------------------------------------------------------------------------------
-acptr   = $ffa5 ; ($ee13) recoit un caractère provenant du port serie
+acptr   = $ffa5 ; ($ee13) recoit un caractere provenant du port serie
                 ;---------------------------------------------------------------
                 ; Description:
-                ; - acptr est utilisé pour recupérer des données provenant du 
+                ; - acptr est utilisÃ© pour recupÃ©rer des donnÃ©es provenant du 
                 ;   port série.
                 ;---------------------------------------------------------------
+                ; Input: –
+                ; Output: A = Byte read.
+                ; Used registers: A.
+                ; Real address: $EE13.
+                ;---------------------------------------------------------------
                 ; Exemple:
-                ; - Talk et tksa doivent d'abord être appelé.
+                ; - Talk et tksa doivent d'abord Ãªtre appelÃ©.
                 ;       jsr acptr
                 ;       sta $0800
                 ;---------------------------------------------------------------
                 ; Note:
-                ; - Cet exemple ne montre que le résultat final.
-                ; - Effectuez d'abord l’appel de talk et tksa.
+                ; - Cet exemple ne montre que le rÃ©sultat final.
+                ; - Effectuez d'abord lâ€™appel de talk et tksa.
 ;-------------------------------------------------------------------------------
 ciout   = $ffa8 ; ($eddd) Transmit a byte over the serial bus
                 ;---------------------------------------------------------------
@@ -399,6 +594,11 @@ ciout   = $ffa8 ; ($eddd) Transmit a byte over the serial bus
                 ; - ciout will send data to the serial bus. 
                 ; - listen and second must be called first. 
                 ; - Call unlsn to finish up neatly.
+                ;---------------------------------------------------------------
+                ; Input: A = Byte to write.
+                ; Output: –
+                ; Used registers: –
+                ; Real address: $EDDD.
                 ;---------------------------------------------------------------
                 ; Exemple:
                 ; - Send the letter x to the serial bus.
@@ -413,6 +613,11 @@ untlk   = $ffab ; ($edef) Send an untalk command
                 ;---------------------------------------------------------------
                 ; Description:
                 ; - All devices previously set to talk will stop sending data.
+                ;---------------------------------------------------------------
+                ; Input: –
+                ; Output: –
+                ; Used registers: A.
+                ; Real address: $EDEF.
                 ;---------------------------------------------------------------
                 ; Exemple:
                 ; - Command serial bus to stop sending data.
@@ -429,6 +634,11 @@ unlsn   = $ffae ; ($edfe) Send an unlisten command
                 ; - unlsn commands all devices on the serial bus to stop
                 ;   receiving data.
                 ;---------------------------------------------------------------
+                ; Input: –
+                ; Output: –
+                ; Used registers: A.
+                ; Real address: $EDFE.
+                ;---------------------------------------------------------------
                 ; Exemple:
                 ; - Command the serial bus to unlisten.
                 ;       jsr unlsn
@@ -442,6 +652,11 @@ listen  = $ffb1 ; ($ed0c) Command a device on the serial bus to listen.
                 ; Description:
                 ; - listen will command any device on the serial bus to receive 
                 ;   data.
+                ;---------------------------------------------------------------
+                ; Input: A = Device number.
+                ; Output: –
+                ; Used registers: A.
+                ; Real address: $ED0C.
                 ;---------------------------------------------------------------
                 ; Exemple:
                 ; - Command device #8 to listen.
@@ -457,6 +672,11 @@ talk    = $ffb4 ; ($ed09) Command a device on the serial bus to talk
                 ; - This routine will command a device on the serial bus to 
                 ;   send data.
                 ;---------------------------------------------------------------
+                ; Input: A = Device number.
+                ; Output: –
+                ; Used registers: A.
+                ; Real address: $ED09.
+                ;---------------------------------------------------------------
                 ; Exemple:
                 ; - Command device #8 to talk.
                 ;       lda #8
@@ -466,7 +686,7 @@ talk    = $ffb4 ; ($ed09) Command a device on the serial bus to talk
                 ; Note:
                 ; - The accumulator designates the file number.
 ;-------------------------------------------------------------------------------
-readst  = $ffb7 ; ($fe07) Read status word
+readst  = $ffb7 ; ($fe07) Read i/o status word
                 ;---------------------------------------------------------------
                 ; Description:
                 ; - When called, readst returns the status of the i/o devices. 
@@ -695,7 +915,7 @@ rdtim   = $ffde ; ($f6dd) Read system clock
                 ; Note:
                 ; - The system clock can be translated as hours/minutes/seconds.
 ;-------------------------------------------------------------------------------
-stop    = $ffe1 ; ($f6ed) Check if stop key is pressed
+stop    = $ffe1 ; ($f6ed) Check if stop key is pressed.
                 ;---------------------------------------------------------------
                 ; Description:
                 ; - Stop will set the z flag of the accumulator if the stop key 
@@ -811,45 +1031,94 @@ iobase  = $fff3 ; ($e500) Define i/o memory page
 ;* kernal function vectors *
 ;ayx=input ayx=outputs (c)=1 (c)=0
 ;--------------------------------------------------------------------------------
-kcint     =    cint      ;   , init vic + ecran.
-kioinit   =    ioinit    ;   , init i/o dev.
-kramtas   =    ramtas    ;   , test de memoire.
-kciout    =    ciout     ;a  ,tx byte  acia
-krestor   =    restor    ;   , set ram plafond
-kvector   =    vector    ;
-ksetmsg   =    setmsg    ;a  , set sys. msg. out
-ksecond   =    second    ;a  , tx adresse sec.
-ktksa     =    tksa      ;a  , talk adresse sec.
-kmemtop   =    memtop    ; yx, (c) get mem high
-kmembot   =    membot    ; yx, (c) get mem low
-kscnkey   =    scnkey    ;   , scan clavier
-ksettmo   =    settmo    ;a  , set ieee timeout
-kacptr    =    acptr     ;a  ,rx serie.
-kuntlk    =    untalk    ;   , iec-cmc stop talk
-kunlsn    =    unlsn     ;   , iec-cmd stop lsn
-klisten   =    listen    ;a  , iec-cmd dev ecout
-ktalk     =    talk      ;a  , iec-cmd dev parle
-kreadst   =    readst    ;a  , lecture i/o stats
-ksetlfs   =    setlfs    ;ayx, init fich logi.
-ksetnam   =    setnam    ;ayx, init num.nom.fich
-kopen     =    open      ;axy, ouvre fich-nom
-kclose    =    close     ;a  , ferme fichier #a.
-kchkin    =    chkin     ;  x,open canal in.
-kchkout   =    chkout    ;  x,open canal out
-kclrchn   =    clrchn    ;   , ferme canaux i/o.
-kchrin    =    chrin     ;a  ,recup. un car.
-kchrout   =    chrout    ;a  ,sort un car.
-kload     =    load      ;ayx, dev->ram
-ksave     =    save      ;   , sauve mem->dev
-ksettim   =    settim    ;axy, init sysclock
-krdtim    =    rdtim     ;axy, lecture sysclock
-kstop     =    stop      ;a  , ret. stopkey stat
-kgetin    =    getin     ;a  , recup. car. #dev.
-kclall    =    clall     ;   , ferme fichiers.
-kudtim    =    udtim     ;   , maj sysclock
-kscreen   =    screen    ; yx, get format ecran
-kplot     =    plot      ; yx, (c) get csr pos.
-kiobase   =    iobase    ; yx, def. i/o mem page
+kd_poly1     =   $e043
+kd_poly2     =   $e059
+kd_rmulc     =   $e08d       ;
+kd_raddc     =   $e092       ;
+kd_rnd       =   $e097
+kd_sys       =   $e12a
+kd_save      =   $e156
+kd_verify    =   $e165
+kd_load      =   $e168
+kcint       =   cint        ;   , init vic + ecran.
+kioinit     =   ioinit      ;   , init i/o dev.
+kramtas     =   ramtas      ;   , test de memoire.
+kciout      =   ciout       ;a  ,tx byte  acia
+krestor     =   restor      ;   , set ram plafond
+kvector     =   vector      ;
+ksetmsg     =   setmsg      ;a  , set sys. msg. out
+ksecond     =   second      ;a  , tx adresse sec.
+ktksa       =   tksa        ;a  , talk adresse sec.
+kmemtop     =   memtop      ; yx, (c) get mem high
+kmembot     =   membot      ; yx, (c) get mem low
+kscankey    =   scankey     ;   , scan clavier
+ksettmo     =   settmo      ;a  , set ieee timeout
+kacptr      =   acptr       ;a  ,rx serie.
+kuntlk      =   untlk       ;   , iec-cmc stop talk
+kunlsn      =   unlsn       ;   , iec-cmd stop lsn
+klisten     =   listen      ;a  , iec-cmd dev ecout
+ktalk       =   talk        ;a  , iec-cmd dev parle
+kreadst     =   readst      ;a  , lecture i/o stats
+ksetlfs     =   setlfs      ;ayx, init fich logi.
+ksetnam     =   setnam      ;ayx, init num.nom.fich
+kopen       =   open        ;axy, ouvre fich-nom
+kclose      =   close       ;a  , ferme fichier #a.
+kchkin      =   chkin       ;  x,open canal in.
+kchkout     =   chkout      ;  x,open canal out
+kclrchn     =   clrchn      ;   , ferme canaux i/o.
+kchrin      =   chrin       ;a  ,recup. un car.
+kchrout     =   chrout      ;a  ,sort un car.
+kd_chrout    =   $f1ca
+kload       =   load        ;ayx, dev->ram
+ksave       =   save        ;   , sauve mem->dev
+ksettim     =   settim      ;axy, init sysclock
+krdtim      =   rdtim       ;axy, lecture sysclock
+kstop       =   stop        ;a  , ret. stopkey stat
+kgetin      =   getin       ;a  , recup. car. #dev.
+kclall      =   clall       ;   , ferme fichiers.
+kudtim      =   udtim       ;   , maj sysclock
+kscreen     =   screen      ; yx, get format ecran
+kplot       =   plot        ; yx, (c) get csr pos.
+kiobase     =   iobase      ; yx, def. i/o mem page
+;--------------------------------------------------------------------------------
+; Kernal entry point
+;--------------------------------------------------------------------------------
+k_echostartup = $e39a
+k_putch       = $e716 ; 52) Print a character.          ;a--;---; a = char
+k_cls         = $e7a0
+k_cursordown  = $e87c
+k_scrollup    = $e8ea
+k_home        = $e94e
+k_insertline  = $e965
+k_screlldown  = $e9c8
+k_devsndlstn  = $ed0c ; 55) Send 'LISTEN'>IEEE/Serial.  ;a--;---; a = dev # 
+k_ieeein      = $ee13 ; 60) Input from IEEE/Serial.     ;---;a--; a = Data byte  
+k_devsndutalk = $eef6 ; 58) Send 'UNTALK'>IEEE/Serial.  ;---;---;
+k_devsndulstn = $ef04 ; 59) Send 'UNLISTEN'>IEEE/Serial.;---;---; 
+k_putsysmsg   = $f12f ; 53) Print system message.       ;--y;---; y = msg offset
+k_cloself     = $f291 ; 61) Close logical file .        ;a--;---; a = file # 
+k_loadsub     = $f49e ; 63) LOAD subroutine.            ;axy;---; a = # start=yyxx
+k_prnsrch     = $f5af ; 64) Print SEARCHING if imm mode.;---;---;
+k_echosearch  = $f5b3 ; 64b) Skipping test part of 64.  ;---;---; 
+k_prnfnam     = $f5c1 ; 65) Print filename.             ;---;---;
+k_stop        = $f6ed ; 62) Check for STOP key.         ;---;---; z = 1 pressed
+k_gettaphdblk = $f7ea ; 66) Find a tape hdr blk.        ;a--;---; a = len 
+                      ;     Prerequisit: Pointer to string in zpage1  
+k_fndtaphdblk = $f7ea ; 67) Find any tape hdr blk.      ;---;---; 
+k_waittapplay = $f817 ; 68) Press PLAY... (wait)        ;---;---;
+k_rdtape2buff = $f841 ; 69) Read tape to buffer.        ;---;---;
+k_readtape    = $f847 ; 70) Read tape.                  ;---;---;
+k_wrbuff2tape = $f864 ; 71) write buffer to tape.       ;---;---;
+k_wrtape      = $f869 ; 72) write tape.                 ;a--;---; a = ldr len
+k_resettapeio = $fb8e ; 73) Reset tape I/O.             ;---;---;
+k_setintvect  = $fcbd ; 74) set interupt vector.        ;---;---;
+k_coldreset   = $fce2 ; 75) Power on reset.             ;---;---;
+k_coldstart   = $fce2 ; 75) Power on reset.             ;---;---;
+k_coldboot    = $fce2 ; 75) Power on reset.             ;---;---;
+k_warmreset   = $fe66 ;     Warm resetstart
+k_warmboot    = $fe66 ;     Warm resetstart
+k_devsndaddr2 = $ff93 ; 56) Send second address.        ;a--;---; a = SA or #$60 
+
 ;--------------------------------------------------------------------------------
 ; error codes
 ;--------------------------------------------------------------------------------
@@ -870,14 +1139,13 @@ kerr08 = 8      ; file name is missing.
 kerr09 = 9      ; illegal device number.
 kerrf0 = 240    ; top-of-memory change rs-232 buffer allocation.
 ;---------------+---------------------------------------------------------------
-;--------------------------------------------------------------------------------
-; a p p e l   d e   l a   s o u s   r o u t i n e   p r i n c i p a l e
-;--------------------------------------------------------------------------------
-pgmstart        jsr     main            ; le programme principale
-                rts                     ; doit s'appeler "main"
 ;------------------------------ d e c i m a l-----------------------------------
 ;0000000001111111111222222222233333333334444444444555555555566666666667777777777
 ;1234567890123456789012345678901234567890123456789012345678901234567890123456789
 ;========================= h e x a - d e c i m a l==============================
 ;0000000000000001111111111111111222222222222222233333333333333334444444444444444
 ;123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+;--------------------------------------------------------------------------------
+; a p p e l   d e   l a   s o u s   r o u t i n e   p r i n c i p a l e
+;--------------------------------------------------------------------------------
+pgmstart        jmp      main  ; le programme principale doit s'appeler "main"

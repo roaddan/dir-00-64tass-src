@@ -1,3 +1,0 @@
-CHRGET = $73
-CHRPUT = $79
-IEVAL  = $030A
