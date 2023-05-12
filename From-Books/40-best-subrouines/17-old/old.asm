@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20230327-214534-a"
+                Version = "20230503-172800"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                 
                 .include    "header-c64.asm"
@@ -56,12 +56,12 @@ helptext        .text   format(" old: SYS%5d",old)
                 .text   format(" ex.: SYS%5d",old)
                 .byte   $0d,0
                 .bend
-*=$012c
+*=$c000
 old             .block
                 lda #$ff
                 ldy #$01
                 sta ($2b),y
-                jsr $a533
+                jsr b_fixchaining ; $a533 ; Fix chaining.
                 lda $22
                 clc
                 adc #$02
@@ -74,7 +74,7 @@ old             .block
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
-*=$c000        
+; *=$c000        
                 .include "map-c64-kernal.asm"
                 .include "map-c64-vicii.asm" 
                 .include "map-c64-basic2.asm"
