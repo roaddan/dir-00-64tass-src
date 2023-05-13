@@ -64,26 +64,26 @@ irqtune3channel .block
                 sta 788
                 lda #>main
                 sta 789
-                lda #$0a        ; #0-15 $00-$0f
+                lda #%00001010  ; #0-15 $00-$0f
                 sta sidsigvol   ; $d418 ; 54296 - Volume and Filter selectv register.
                                 ;         Bits 0-3: Select output volume (0-15).
                                 ;         Bit 4: Select low-pass filter, 1=low-pas on.
                                 ;         Bit 5: Select band-pass filter, 1=band-pas on.
                                 ;         Bit 6: Select high-pass filter, 1=high-pas on.
                                 ;         Bit 7: Disconnect output of voice 3, 1=voice 3 off.
-                lda #33
+                lda #%00100001
                 sta sidv1control; $d404 ; 54276 - Voice 1 Voice control register.
-                lda #33
+                lda #%00010001
                 sta sidv2control; $d40b ; 54283 - Voice 2 Voice control register.
-                lda #19
-                sta sidv3control; $xxxx ; ddddd - Voice 3 Voice control register.
+                lda #%01000001
+                sta sidv3control; $d412 ; 54290 - Voice 3 Voice control register.
                 lda #64
                 sta sidv1atkdec ; $d405 ; 54277 - Voice 1 0-3: Decay duration, 4-7: Attack duration.
                 sta sidv1stnrel ; $d406 ; 54278 - Voice 1 0-3: Rel. duration, 4-7: Sustain duration.
                 sta sidv2atkdec ; $d40c ; 54284 - Voice 2 0-3: Decay duration, 4-7: Attack duration.
                 sta sidv2stnrel ; $d40d ; 54285 - Voice 2 0-3: Rel. duration, 4-7: Sustain duration.
-                ;sta sidv3atkdec ; $xxxx ; ddddd - Voice 3 0-3: Decay duration, 4-7: Attack duration.
-                ;sta sidv3stnrel ; $xxxx ; ddddd - Voice 3 0-3: Rel. duration, 4-7: Sustain duration.
+                sta sidv3atkdec ; $d413 ; 54291 - Voice 3 0-3: Decay duration, 4-7: Attack duration.
+                sta sidv3stnrel ; $d414 ; 54292 - Voice 3 0-3: Rel. duration, 4-7: Sustain duration.
                 lda #0
                 sta 251
                 sta 252
@@ -98,16 +98,17 @@ main            ldx 251
                 sta sidv1flow   ; $d400 ; 54272 - Voice 1 Low freq register low byte.
                 lda tune1+1,x
                 sta sidv1fhigh  ; $d401 ; 54273 - Voice 1 High freq register high byte.
+
                 lda tune2,x
                 sta sidv2flow   ; $d407 ; 54279 - Voice 2 Low freq register low byte.
                 lda tune2+1,x
                 sta sidv2fhigh  ; $d408 ; 54280 - Voice 2 High freq register high byte.
-                ;lda tune3,x
-                ;sta sidv3flow   ; $xxxx ; ddddd - Voice 3 Low freq register low byte.
-                ;lda tune3+1,x
-                ;sta sidv3fhigh  ; $xxxx ; ddddd - Voice 3 High freq register high byte.
+                lda tune3,x
+                sta sidv3flow   ; $d40e ; 54286 - Voice 3 Low freq register low byte.
+                lda tune3+1,x
+                sta sidv3fhigh  ; $d40f ; 54287 - Voice 3 High freq register high byte.
                 lda 253
-                cmp #32
+delval          cmp #32
                 bcs nextdelay
                 inc 253
                 jmp irq     ; $ea31
@@ -118,7 +119,7 @@ nextdelay       lda #0
                 iny
                 stx 251
                 sty 252
-                cpx #48
+                cpx #60
                 bcs re
                 jmp irq     ; $ea31
 re              ldx #0
@@ -128,38 +129,50 @@ re              ldx #0
 
                 ;     lof,hif,    
 tune1           
-          .word     do1
+          .word     do5
           .word     silence
-          .word     re1
+          .word     re5
           .word     silence
-          .word     mi1
+tune2
+          .word     mi5
           .word     silence
-          .word     fa1
+          .word     fa5
           .word     silence
-          .word     sol1
+tune3          
+          .word     sol5
           .word     silence
-          .word     la1
+          .word     la5
           .word     silence
-          .word     si1
+          .word     si5
           .word     silence
-          .word     do2
+          .word     do6
           .word     silence
-          .word     si1
+          .word     si5
           .word     silence
-          .word     la1
+          .word     la5
           .word     silence
-          .word     sol1
+          .word     sol5
           .word     silence
-          .word     fa1
+          .word     fa5
           .word     silence
-          .word     mi1
+          .word     mi5
           .word     silence
-          .word     re1
+          .word     re5
           .word     silence
-          .word     do1
+          .word     do5
           .word     silence
 
-tune2
+          .word     do5
+          .word     silence
+          .word     re5
+          .word     silence
+
+          .word     do5
+          .word     silence
+          .word     re5
+          .word     silence
+
+tune6
           .word     la5
           .word     lad5
           .word     si5
@@ -191,7 +204,7 @@ tune2
           .word     0
           .word     0
 
-tune3      .word fa6 
+tune7      .word fa6 
           .word silence
           .word fa6
           .word mi6
