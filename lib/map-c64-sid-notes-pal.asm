@@ -1,5 +1,6 @@
 ; ----------------------------------------------------------------------------
 ; SID note frequency calculated for a PAL system with a 985248 Hz Christal.
+; ----------------------------------------------------------------------------
 ; Values are limited to the humain audible frequencies (20hx to 20000hz) and 
 ; to the maximum frequency register value of the sid II ($ffff : 65535)
 ;
