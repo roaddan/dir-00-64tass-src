@@ -1,130 +1,132 @@
 ; ----------------------------------------------------------------------------
 ; SID note frequency calculated for a NTSC system with a 1022727 Hz Chrystal.
 ; ----------------------------------------------------------------------------
+; Values are limited to the humain audible frequencies (20hx to 20000hz) and 
+; to the maximum frequency register value of the sid II ($ffff : 65535)
+;
+; doN=C, dodN=C#, reN=D, redN=D#, miN=E ,faN=F, 
+; fadN=F#, solN=G, soldN=G#, laN=A ,ladN=A#, siN=B
+; 
+; Where N is the octave number from 0 to 7
+; ----------------------------------------------------------------------------
 silence     = $0000 ; Silence (no frequency)
 ; ----------------------------------------------------------------------------
 ; Octave 0
 ; ----------------------------------------------------------------------------
-la0     = $00E1 ; NTSC (hex): high: $00, low: $E1 ; (dec): low:225, High:  0
-lad0    = $00EE ; NTSC (hex): high: $00, low: $EE ; (dec): low:238, High:  0
-si0     = $00FD ; NTSC (hex): high: $00, low: $FD ; (dec): low:253, High:  0
+do0   = $010C ;   16,35Hz NTSC (hex): hi: $01, lo: $0C ; (dec): lo: 12, Hi:  1
+dod0  = $011C ;   17,33Hz NTSC (hex): hi: $01, lo: $1C ; (dec): lo: 28, Hi:  1
+re0   = $012D ;   18,35Hz NTSC (hex): hi: $01, lo: $2D ; (dec): lo: 45, Hi:  1
+red0  = $013F ;   19,45Hz NTSC (hex): hi: $01, lo: $3F ; (dec): lo: 63, Hi:  1
+mi0   = $0152 ;   20,60Hz NTSC (hex): hi: $01, lo: $52 ; (dec): lo: 82, Hi:  1
+fa0   = $0166 ;   21,83Hz NTSC (hex): hi: $01, lo: $66 ; (dec): lo:102, Hi:  1
+fad0  = $017B ;   23,13Hz NTSC (hex): hi: $01, lo: $7B ; (dec): lo:123, Hi:  1
+sol0  = $0192 ;   24,50Hz NTSC (hex): hi: $01, lo: $92 ; (dec): lo:146, Hi:  1
+sold0 = $01AA ;   25,96Hz NTSC (hex): hi: $01, lo: $AA ; (dec): lo:170, Hi:  1
+la0   = $01C3 ;   27,50Hz NTSC (hex): hi: $01, lo: $C3 ; (dec): lo:195, Hi:  1
+lad0  = $01DE ;   29,14Hz NTSC (hex): hi: $01, lo: $DE ; (dec): lo:222, Hi:  1
+si0   = $01FA ;   30,87Hz NTSC (hex): hi: $01, lo: $FA ; (dec): lo:250, Hi:  1
 ; ----------------------------------------------------------------------------
 ; Octave 1
 ; ----------------------------------------------------------------------------
-do1     = $010C ; NTSC (hex): high: $01, low: $0C ; (dec): low: 12, High:  1
-dod1    = $011C ; NTSC (hex): high: $01, low: $1C ; (dec): low: 28, High:  1
-re1     = $012D ; NTSC (hex): high: $01, low: $2D ; (dec): low: 45, High:  1
-red1    = $013F ; NTSC (hex): high: $01, low: $3F ; (dec): low: 63, High:  1
-mi1     = $0151 ; NTSC (hex): high: $01, low: $51 ; (dec): low: 81, High:  1
-fa1     = $0166 ; NTSC (hex): high: $01, low: $66 ; (dec): low:102, High:  1
-fad1    = $017B ; NTSC (hex): high: $01, low: $7B ; (dec): low:123, High:  1
-sol1    = $0191 ; NTSC (hex): high: $01, low: $91 ; (dec): low:145, High:  1
-sold1   = $01A9 ; NTSC (hex): high: $01, low: $A9 ; (dec): low:169, High:  1
-la1     = $01C3 ; NTSC (hex): high: $01, low: $C3 ; (dec): low:195, High:  1
-lad1    = $01DD ; NTSC (hex): high: $01, low: $DD ; (dec): low:221, High:  1
-si1     = $01FA ; NTSC (hex): high: $01, low: $FA ; (dec): low:250, High:  1
+do1   = $0219 ;   32,71Hz NTSC (hex): hi: $02, lo: $19 ; (dec): lo: 25, Hi:  2
+dod1  = $0238 ;   34,65Hz NTSC (hex): hi: $02, lo: $38 ; (dec): lo: 56, Hi:  2
+re1   = $025A ;   36,71Hz NTSC (hex): hi: $02, lo: $5A ; (dec): lo: 90, Hi:  2
+red1  = $027E ;   38,89Hz NTSC (hex): hi: $02, lo: $7E ; (dec): lo:126, Hi:  2
+mi1   = $02A4 ;   41,21Hz NTSC (hex): hi: $02, lo: $A4 ; (dec): lo:164, Hi:  2
+fa1   = $02CC ;   43,66Hz NTSC (hex): hi: $02, lo: $CC ; (dec): lo:204, Hi:  2
+fad1  = $02F7 ;   46,25Hz NTSC (hex): hi: $02, lo: $F7 ; (dec): lo:247, Hi:  2
+sol1  = $0324 ;   49,00Hz NTSC (hex): hi: $03, lo: $24 ; (dec): lo: 36, Hi:  3
+sold1 = $0354 ;   51,91Hz NTSC (hex): hi: $03, lo: $54 ; (dec): lo: 84, Hi:  3
+la1   = $0386 ;   55,00Hz NTSC (hex): hi: $03, lo: $86 ; (dec): lo:134, Hi:  3
+lad1  = $03BC ;   58,28Hz NTSC (hex): hi: $03, lo: $BC ; (dec): lo:188, Hi:  3
+si1   = $03F5 ;   61,74Hz NTSC (hex): hi: $03, lo: $F5 ; (dec): lo:245, Hi:  3
 ; ----------------------------------------------------------------------------
 ; Octave 2
 ; ----------------------------------------------------------------------------
-do2     = $0218 ; NTSC (hex): high: $02, low: $18 ; (dec): low: 24, High:  2
-dod2    = $0238 ; NTSC (hex): high: $02, low: $38 ; (dec): low: 56, High:  2
-re2     = $025A ; NTSC (hex): high: $02, low: $5A ; (dec): low: 90, High:  2
-red2    = $027E ; NTSC (hex): high: $02, low: $7E ; (dec): low:126, High:  2
-mi2     = $02A3 ; NTSC (hex): high: $02, low: $A3 ; (dec): low:163, High:  2
-fa2     = $02CC ; NTSC (hex): high: $02, low: $CC ; (dec): low:204, High:  2
-fad2    = $02F6 ; NTSC (hex): high: $02, low: $F6 ; (dec): low:246, High:  2
-sol2    = $0323 ; NTSC (hex): high: $03, low: $23 ; (dec): low: 35, High:  3
-sold2   = $0353 ; NTSC (hex): high: $03, low: $53 ; (dec): low: 83, High:  3
-la2     = $0386 ; NTSC (hex): high: $03, low: $86 ; (dec): low:134, High:  3
-lad2    = $03BB ; NTSC (hex): high: $03, low: $BB ; (dec): low:187, High:  3
-si2     = $03F4 ; NTSC (hex): high: $03, low: $F4 ; (dec): low:244, High:  3
+do2   = $0431 ;   65,41Hz NTSC (hex): hi: $04, lo: $31 ; (dec): lo: 49, Hi:  4
+dod2  = $0471 ;   69,30Hz NTSC (hex): hi: $04, lo: $71 ; (dec): lo:113, Hi:  4
+re2   = $04B4 ;   73,41Hz NTSC (hex): hi: $04, lo: $B4 ; (dec): lo:180, Hi:  4
+red2  = $04FC ;   77,79Hz NTSC (hex): hi: $04, lo: $FC ; (dec): lo:252, Hi:  4
+mi2   = $0548 ;   82,41Hz NTSC (hex): hi: $05, lo: $48 ; (dec): lo: 72, Hi:  5
+fa2   = $0598 ;   87,31Hz NTSC (hex): hi: $05, lo: $98 ; (dec): lo:152, Hi:  5
+fad2  = $05ED ;   92,50Hz NTSC (hex): hi: $05, lo: $ED ; (dec): lo:237, Hi:  5
+sol2  = $0648 ;   98,00Hz NTSC (hex): hi: $06, lo: $48 ; (dec): lo: 72, Hi:  6
+sold2 = $06A7 ;  103,83Hz NTSC (hex): hi: $06, lo: $A7 ; (dec): lo:167, Hi:  6
+la2   = $070C ;  110,00Hz NTSC (hex): hi: $07, lo: $0C ; (dec): lo: 12, Hi:  7
+lad2  = $0778 ;  116,55Hz NTSC (hex): hi: $07, lo: $78 ; (dec): lo:120, Hi:  7
+si2   = $07EA ;  123,48Hz NTSC (hex): hi: $07, lo: $EA ; (dec): lo:234, Hi:  7
 ; ----------------------------------------------------------------------------
 ; Octave 3
 ; ----------------------------------------------------------------------------
-do3     = $0431 ; NTSC (hex): high: $04, low: $31 ; (dec): low: 49, High:  4
-dod3    = $0470 ; NTSC (hex): high: $04, low: $70 ; (dec): low:112, High:  4
-re3     = $04B4 ; NTSC (hex): high: $04, low: $B4 ; (dec): low:180, High:  4
-red3    = $04FC ; NTSC (hex): high: $04, low: $FC ; (dec): low:252, High:  4
-mi3     = $0547 ; NTSC (hex): high: $05, low: $47 ; (dec): low: 71, High:  5
-fa3     = $0598 ; NTSC (hex): high: $05, low: $98 ; (dec): low:152, High:  5
-fad3    = $05ED ; NTSC (hex): high: $05, low: $ED ; (dec): low:237, High:  5
-sol3    = $0647 ; NTSC (hex): high: $06, low: $47 ; (dec): low: 71, High:  6
-sold3   = $06A7 ; NTSC (hex): high: $06, low: $A7 ; (dec): low:167, High:  6
-la3     = $070C ; NTSC (hex): high: $07, low: $0C ; (dec): low: 12, High:  7
-lad3    = $0777 ; NTSC (hex): high: $07, low: $77 ; (dec): low:119, High:  7
-si3     = $07E9 ; NTSC (hex): high: $07, low: $E9 ; (dec): low:233, High:  7
+do3   = $0862 ;  130,83Hz NTSC (hex): hi: $08, lo: $62 ; (dec): lo: 98, Hi:  8
+dod3  = $08E2 ;  138,60Hz NTSC (hex): hi: $08, lo: $E2 ; (dec): lo:226, Hi:  8
+re3   = $0969 ;  146,83Hz NTSC (hex): hi: $09, lo: $69 ; (dec): lo:105, Hi:  9
+red3  = $09F8 ;  155,58Hz NTSC (hex): hi: $09, lo: $F8 ; (dec): lo:248, Hi:  9
+mi3   = $0A90 ;  164,83Hz NTSC (hex): hi: $0A, lo: $90 ; (dec): lo:144, Hi: 10
+fa3   = $0B31 ;  174,63Hz NTSC (hex): hi: $0B, lo: $31 ; (dec): lo: 49, Hi: 11
+fad3  = $0BDB ;  185,00Hz NTSC (hex): hi: $0B, lo: $DB ; (dec): lo:219, Hi: 11
+sol3  = $0C8F ;  196,00Hz NTSC (hex): hi: $0C, lo: $8F ; (dec): lo:143, Hi: 12
+sold3 = $0D4E ;  207,65Hz NTSC (hex): hi: $0D, lo: $4E ; (dec): lo: 78, Hi: 13
+la3   = $0E19 ;  220,00Hz NTSC (hex): hi: $0E, lo: $19 ; (dec): lo: 25, Hi: 14
+lad3  = $0EF0 ;  233,10Hz NTSC (hex): hi: $0E, lo: $F0 ; (dec): lo:240, Hi: 14
+si3   = $0FD3 ;  246,95Hz NTSC (hex): hi: $0F, lo: $D3 ; (dec): lo:211, Hi: 15
 ; ----------------------------------------------------------------------------
 ; Octave 4
 ; ----------------------------------------------------------------------------
-do4     = $0862 ; NTSC (hex): high: $08, low: $62 ; (dec): low: 98, High:  8
-dod4    = $08E1 ; NTSC (hex): high: $08, low: $E1 ; (dec): low:225, High:  8
-re4     = $0968 ; NTSC (hex): high: $09, low: $68 ; (dec): low:104, High:  9
-red4    = $09F8 ; NTSC (hex): high: $09, low: $F8 ; (dec): low:248, High:  9
-mi4     = $0A8F ; NTSC (hex): high: $0A, low: $8F ; (dec): low:143, High: 10
-fa4     = $0B30 ; NTSC (hex): high: $0B, low: $30 ; (dec): low: 48, High: 11
-fad4    = $0BDA ; NTSC (hex): high: $0B, low: $DA ; (dec): low:218, High: 11
-sol4    = $0C8F ; NTSC (hex): high: $0C, low: $8F ; (dec): low:143, High: 12
-sold4   = $0D4E ; NTSC (hex): high: $0D, low: $4E ; (dec): low: 78, High: 13
-la4     = $0E18 ; NTSC (hex): high: $0E, low: $18 ; (dec): low: 24, High: 14
-lad4    = $0EEF ; NTSC (hex): high: $0E, low: $EF ; (dec): low:239, High: 14
-si4     = $0FD3 ; NTSC (hex): high: $0F, low: $D3 ; (dec): low:211, High: 15
+do4   = $10C4 ;  261,65Hz NTSC (hex): hi: $10, lo: $C4 ; (dec): lo:196, Hi: 16
+dod4  = $11C3 ;  277,20Hz NTSC (hex): hi: $11, lo: $C3 ; (dec): lo:195, Hi: 17
+re4   = $12D1 ;  293,65Hz NTSC (hex): hi: $12, lo: $D1 ; (dec): lo:209, Hi: 18
+red4  = $13F0 ;  311,15Hz NTSC (hex): hi: $13, lo: $F0 ; (dec): lo:240, Hi: 19
+mi4   = $1520 ;  329,65Hz NTSC (hex): hi: $15, lo: $20 ; (dec): lo: 32, Hi: 21
+fa4   = $1661 ;  349,25Hz NTSC (hex): hi: $16, lo: $61 ; (dec): lo: 97, Hi: 22
+fad4  = $17B6 ;  370,00Hz NTSC (hex): hi: $17, lo: $B6 ; (dec): lo:182, Hi: 23
+sol4  = $191F ;  392,00Hz NTSC (hex): hi: $19, lo: $1F ; (dec): lo: 31, Hi: 25
+sold4 = $1A9D ;  415,30Hz NTSC (hex): hi: $1A, lo: $9D ; (dec): lo:157, Hi: 26
+la4   = $1C32 ;  440,00Hz NTSC (hex): hi: $1C, lo: $32 ; (dec): lo: 50, Hi: 28
+lad4  = $1DE0 ;  466,20Hz NTSC (hex): hi: $1D, lo: $E0 ; (dec): lo:224, Hi: 29
+si4   = $1FA6 ;  493,90Hz NTSC (hex): hi: $1F, lo: $A6 ; (dec): lo:166, Hi: 31
 ; ----------------------------------------------------------------------------
 ; Octave 5
 ; ----------------------------------------------------------------------------
-do5     = $10C4 ; NTSC (hex): high: $10, low: $C4 ; (dec): low:196, High: 16
-dod5    = $11C3 ; NTSC (hex): high: $11, low: $C3 ; (dec): low:195, High: 17
-re5     = $12D1 ; NTSC (hex): high: $12, low: $D1 ; (dec): low:209, High: 18
-red5    = $13F0 ; NTSC (hex): high: $13, low: $F0 ; (dec): low:240, High: 19
-mi5     = $151F ; NTSC (hex): high: $15, low: $1F ; (dec): low: 31, High: 21
-fa5     = $1661 ; NTSC (hex): high: $16, low: $61 ; (dec): low: 97, High: 22
-fad5    = $17B5 ; NTSC (hex): high: $17, low: $B5 ; (dec): low:181, High: 23
-sol5    = $191E ; NTSC (hex): high: $19, low: $1E ; (dec): low: 30, High: 25
-sold5   = $1A9C ; NTSC (hex): high: $1A, low: $9C ; (dec): low:156, High: 26
-la5     = $1C31 ; NTSC (hex): high: $1C, low: $31 ; (dec): low: 49, High: 28
-lad5    = $1DDF ; NTSC (hex): high: $1D, low: $DF ; (dec): low:223, High: 29
-si5     = $1FA6 ; NTSC (hex): high: $1F, low: $A6 ; (dec): low:166, High: 31
+do5   = $2188 ;  523,30Hz NTSC (hex): hi: $21, lo: $88 ; (dec): lo:136, Hi: 33
+dod5  = $2387 ;  554,40Hz NTSC (hex): hi: $23, lo: $87 ; (dec): lo:135, Hi: 35
+re5   = $25A2 ;  587,30Hz NTSC (hex): hi: $25, lo: $A2 ; (dec): lo:162, Hi: 37
+red5  = $27E0 ;  622,30Hz NTSC (hex): hi: $27, lo: $E0 ; (dec): lo:224, Hi: 39
+mi5   = $2A3F ;  659,30Hz NTSC (hex): hi: $2A, lo: $3F ; (dec): lo: 63, Hi: 42
+fa5   = $2CC2 ;  698,50Hz NTSC (hex): hi: $2C, lo: $C2 ; (dec): lo:194, Hi: 44
+fad5  = $2F6B ;  740,00Hz NTSC (hex): hi: $2F, lo: $6B ; (dec): lo:107, Hi: 47
+sol5  = $323D ;  784,00Hz NTSC (hex): hi: $32, lo: $3D ; (dec): lo: 61, Hi: 50
+sold5 = $3539 ;  830,60Hz NTSC (hex): hi: $35, lo: $39 ; (dec): lo: 57, Hi: 53
+la5   = $3864 ;  880,00Hz NTSC (hex): hi: $38, lo: $64 ; (dec): lo:100, Hi: 56
+lad5  = $3BBF ;  932,40Hz NTSC (hex): hi: $3B, lo: $BF ; (dec): lo:191, Hi: 59
+si5   = $3F4C ;  987,80Hz NTSC (hex): hi: $3F, lo: $4C ; (dec): lo: 76, Hi: 63
 ; ----------------------------------------------------------------------------
 ; Octave 6
 ; ----------------------------------------------------------------------------
-do6     = $2188 ; NTSC (hex): high: $21, low: $88 ; (dec): low:136, High: 33
-dod6    = $2386 ; NTSC (hex): high: $23, low: $86 ; (dec): low:134, High: 35
-re6     = $25A2 ; NTSC (hex): high: $25, low: $A2 ; (dec): low:162, High: 37
-red6    = $27E0 ; NTSC (hex): high: $27, low: $E0 ; (dec): low:224, High: 39
-mi6     = $2A3F ; NTSC (hex): high: $2A, low: $3F ; (dec): low: 63, High: 42
-fa6     = $2CC2 ; NTSC (hex): high: $2C, low: $C2 ; (dec): low:194, High: 44
-fad6    = $2F6B ; NTSC (hex): high: $2F, low: $6B ; (dec): low:107, High: 47
-sol6    = $323D ; NTSC (hex): high: $32, low: $3D ; (dec): low: 61, High: 50
-sold6   = $3539 ; NTSC (hex): high: $35, low: $39 ; (dec): low: 57, High: 53
-la6     = $3863 ; NTSC (hex): high: $38, low: $63 ; (dec): low: 99, High: 56
-lad6    = $3BBF ; NTSC (hex): high: $3B, low: $BF ; (dec): low:191, High: 59
-si6     = $3F4C ; NTSC (hex): high: $3F, low: $4C ; (dec): low: 76, High: 63
+do6   = $4311 ; 1046,60Hz NTSC (hex): hi: $43, lo: $11 ; (dec): lo: 17, Hi: 67
+dod6  = $470D ; 1108,80Hz NTSC (hex): hi: $47, lo: $0D ; (dec): lo: 13, Hi: 71
+re6   = $4B45 ; 1174,60Hz NTSC (hex): hi: $4B, lo: $45 ; (dec): lo: 69, Hi: 75
+red6  = $4FC1 ; 1244,60Hz NTSC (hex): hi: $4F, lo: $C1 ; (dec): lo:193, Hi: 79
+mi6   = $547F ; 1318,60Hz NTSC (hex): hi: $54, lo: $7F ; (dec): lo:127, Hi: 84
+fa6   = $5985 ; 1397,00Hz NTSC (hex): hi: $59, lo: $85 ; (dec): lo:133, Hi: 89
+fad6  = $5ED7 ; 1480,00Hz NTSC (hex): hi: $5E, lo: $D7 ; (dec): lo:215, Hi: 94
+sol6  = $647A ; 1568,00Hz NTSC (hex): hi: $64, lo: $7A ; (dec): lo:122, Hi:100
+sold6 = $6A73 ; 1661,20Hz NTSC (hex): hi: $6A, lo: $73 ; (dec): lo:115, Hi:106
+la6   = $70C8 ; 1760,00Hz NTSC (hex): hi: $70, lo: $C8 ; (dec): lo:200, Hi:112
+lad6  = $777F ; 1864,80Hz NTSC (hex): hi: $77, lo: $7F ; (dec): lo:127, Hi:119
+si6   = $7E99 ; 1975,60Hz NTSC (hex): hi: $7E, lo: $99 ; (dec): lo:153, Hi:126
 ; ----------------------------------------------------------------------------
 ; Octave 7
 ; ----------------------------------------------------------------------------
-do7     = $4310 ; NTSC (hex): high: $43, low: $10 ; (dec): low: 16, High: 67
-dod7    = $470D ; NTSC (hex): high: $47, low: $0D ; (dec): low: 13, High: 71
-re7     = $4B44 ; NTSC (hex): high: $4B, low: $44 ; (dec): low: 68, High: 75
-red7    = $4FC0 ; NTSC (hex): high: $4F, low: $C0 ; (dec): low:192, High: 79
-mi7     = $547E ; NTSC (hex): high: $54, low: $7E ; (dec): low:126, High: 84
-fa7     = $5984 ; NTSC (hex): high: $59, low: $84 ; (dec): low:132, High: 89
-fad7    = $5ED6 ; NTSC (hex): high: $5E, low: $D6 ; (dec): low:214, High: 94
-sol7    = $647A ; NTSC (hex): high: $64, low: $7A ; (dec): low:122, High:100
-sold7   = $6A72 ; NTSC (hex): high: $6A, low: $72 ; (dec): low:114, High:106
-la7     = $70C7 ; NTSC (hex): high: $70, low: $C7 ; (dec): low:199, High:112
-lad7    = $777E ; NTSC (hex): high: $77, low: $7E ; (dec): low:126, High:119
-si7     = $7E98 ; NTSC (hex): high: $7E, low: $98 ; (dec): low:152, High:126
-; ----------------------------------------------------------------------------
-; Octave 8
-; ----------------------------------------------------------------------------
-do8     = $8621 ; NTSC (hex): high: $86, low: $21 ; (dec): low: 33, High:134
-dod8    = $8E1A ; NTSC (hex): high: $8E, low: $1A ; (dec): low: 26, High:142
-re8     = $9689 ; NTSC (hex): high: $96, low: $89 ; (dec): low:137, High:150
-red8    = $9F81 ; NTSC (hex): high: $9F, low: $81 ; (dec): low:129, High:159
-mi8     = $A8FD ; NTSC (hex): high: $A8, low: $FD ; (dec): low:253, High:168
-fa8     = $B309 ; NTSC (hex): high: $B3, low: $09 ; (dec): low:  9, High:179
-fad8    = $BDAD ; NTSC (hex): high: $BD, low: $AD ; (dec): low:173, High:189
-sol8    = $C8F4 ; NTSC (hex): high: $C8, low: $F4 ; (dec): low:244, High:200
-sold8   = $D4E5 ; NTSC (hex): high: $D4, low: $E5 ; (dec): low:229, High:212
-la8     = $E18F ; NTSC (hex): high: $E1, low: $8F ; (dec): low:143, High:225
-lad8    = $EEFD ; NTSC (hex): high: $EE, low: $FD ; (dec): low:253, High:238
-si8     = $FD31 ; NTSC (hex): high: $FD, low: $31 ; (dec): low: 49, High:253
+do7   = $8622 ; 2093,20Hz NTSC (hex): hi: $86, lo: $22 ; (dec): lo: 34, Hi:134
+dod7  = $8E1A ; 2217,60Hz NTSC (hex): hi: $8E, lo: $1A ; (dec): lo: 26, Hi:142
+re7   = $9689 ; 2349,20Hz NTSC (hex): hi: $96, lo: $89 ; (dec): lo:137, Hi:150
+red7  = $9F82 ; 2489,20Hz NTSC (hex): hi: $9F, lo: $82 ; (dec): lo:130, Hi:159
+mi7   = $A8FE ; 2637,20Hz NTSC (hex): hi: $A8, lo: $FE ; (dec): lo:254, Hi:168
+fa7   = $B30A ; 2794,00Hz NTSC (hex): hi: $B3, lo: $0A ; (dec): lo: 10, Hi:179
+fad7  = $BDAD ; 2960,00Hz NTSC (hex): hi: $BD, lo: $AD ; (dec): lo:173, Hi:189
+sol7  = $C8F4 ; 3136,00Hz NTSC (hex): hi: $C8, lo: $F4 ; (dec): lo:244, Hi:200
+sold7 = $D4E6 ; 3322,40Hz NTSC (hex): hi: $D4, lo: $E6 ; (dec): lo:230, Hi:212
+la7   = $E18F ; 3520,00Hz NTSC (hex): hi: $E1, lo: $8F ; (dec): lo:143, Hi:225
+lad7  = $EEFE ; 3729,60Hz NTSC (hex): hi: $EE, lo: $FE ; (dec): lo:254, Hi:238
+si7   = $FD31 ; 3951,20Hz NTSC (hex): hi: $FD, lo: $31 ; (dec): lo: 49, Hi:253

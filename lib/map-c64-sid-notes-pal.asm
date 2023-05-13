@@ -1,129 +1,130 @@
 ; ----------------------------------------------------------------------------
 ; SID note frequency calculated for a PAL system with a 985248 Hz Christal.
+; Values are limited to the humain audible frequencies (20hx to 20000hz) and 
+; to the maximum frequency register value of the sid II ($ffff : 65535)
+;
+; doN=C, dodN=C#, reN=D, redN=D#, miN=E ,faN=F, 
+; fadN=F#, solN=G, soldN=G#, laN=A ,ladN=A#, siN=B
+; 
+; Where N is the octave number from 0 to 7
 ; ----------------------------------------------------------------------------
 silence     = $0000 ; Silence (no frequency)
 ; ----------------------------------------------------------------------------
 ; Octave 0
 ; ----------------------------------------------------------------------------
-la0     = $00EA ; PAL (hex): high: $00, low: $EA ; (dec): low:234, High:  0
-lad0    = $00F8 ; PAL (hex): high: $00, low: $F8 ; (dec): low:248, High:  0
-si0     = $0106 ; PAL (hex): high: $01, low: $06 ; (dec): low:  6, High:  1
+do0   = $0116 ;   16,35Hz PAL (hex): hi: $01, lo: $16 ; (dec): lo: 22, Hi:  1
+dod0  = $0127 ;   17,33Hz PAL (hex): hi: $01, lo: $27 ; (dec): lo: 39, Hi:  1
+re0   = $0139 ;   18,35Hz PAL (hex): hi: $01, lo: $39 ; (dec): lo: 57, Hi:  1
+red0  = $014B ;   19,45Hz PAL (hex): hi: $01, lo: $4B ; (dec): lo: 75, Hi:  1
+mi0   = $015F ;   20,60Hz PAL (hex): hi: $01, lo: $5F ; (dec): lo: 95, Hi:  1
+fa0   = $0174 ;   21,83Hz PAL (hex): hi: $01, lo: $74 ; (dec): lo:116, Hi:  1
+fad0  = $018A ;   23,13Hz PAL (hex): hi: $01, lo: $8A ; (dec): lo:138, Hi:  1
+sol0  = $01A1 ;   24,50Hz PAL (hex): hi: $01, lo: $A1 ; (dec): lo:161, Hi:  1
+sold0 = $01BA ;   25,96Hz PAL (hex): hi: $01, lo: $BA ; (dec): lo:186, Hi:  1
+la0   = $01D4 ;   27,50Hz PAL (hex): hi: $01, lo: $D4 ; (dec): lo:212, Hi:  1
+lad0  = $01F0 ;   29,14Hz PAL (hex): hi: $01, lo: $F0 ; (dec): lo:240, Hi:  1
+si0   = $020E ;   30,87Hz PAL (hex): hi: $02, lo: $0E ; (dec): lo: 14, Hi:  2
 ; ----------------------------------------------------------------------------
 ; Octave 1
 ; ----------------------------------------------------------------------------
-do1     = $0116 ; PAL (hex): high: $01, low: $16 ; (dec): low: 22, High:  1
-dod1    = $0127 ; PAL (hex): high: $01, low: $27 ; (dec): low: 39, High:  1
-re1     = $0138 ; PAL (hex): high: $01, low: $38 ; (dec): low: 56, High:  1
-red1    = $014B ; PAL (hex): high: $01, low: $4B ; (dec): low: 75, High:  1
-mi1     = $015E ; PAL (hex): high: $01, low: $5E ; (dec): low: 94, High:  1
-fa1     = $0173 ; PAL (hex): high: $01, low: $73 ; (dec): low:115, High:  1
-fad1    = $0189 ; PAL (hex): high: $01, low: $89 ; (dec): low:137, High:  1
-sol1    = $01A1 ; PAL (hex): high: $01, low: $A1 ; (dec): low:161, High:  1
-sold1   = $01B9 ; PAL (hex): high: $01, low: $B9 ; (dec): low:185, High:  1
-la1     = $01D4 ; PAL (hex): high: $01, low: $D4 ; (dec): low:212, High:  1
-lad1    = $01F0 ; PAL (hex): high: $01, low: $F0 ; (dec): low:240, High:  1
-si1     = $020D ; PAL (hex): high: $02, low: $0D ; (dec): low: 13, High:  2
+do1   = $022D ;   32,71Hz PAL (hex): hi: $02, lo: $2D ; (dec): lo: 45, Hi:  2
+dod1  = $024E ;   34,65Hz PAL (hex): hi: $02, lo: $4E ; (dec): lo: 78, Hi:  2
+re1   = $0271 ;   36,71Hz PAL (hex): hi: $02, lo: $71 ; (dec): lo:113, Hi:  2
+red1  = $0296 ;   38,89Hz PAL (hex): hi: $02, lo: $96 ; (dec): lo:150, Hi:  2
+mi1   = $02BE ;   41,21Hz PAL (hex): hi: $02, lo: $BE ; (dec): lo:190, Hi:  2
+fa1   = $02E7 ;   43,66Hz PAL (hex): hi: $02, lo: $E7 ; (dec): lo:231, Hi:  2
+fad1  = $0314 ;   46,25Hz PAL (hex): hi: $03, lo: $14 ; (dec): lo: 20, Hi:  3
+sol1  = $0342 ;   49,00Hz PAL (hex): hi: $03, lo: $42 ; (dec): lo: 66, Hi:  3
+sold1 = $0374 ;   51,91Hz PAL (hex): hi: $03, lo: $74 ; (dec): lo:116, Hi:  3
+la1   = $03A9 ;   55,00Hz PAL (hex): hi: $03, lo: $A9 ; (dec): lo:169, Hi:  3
+lad1  = $03E0 ;   58,28Hz PAL (hex): hi: $03, lo: $E0 ; (dec): lo:224, Hi:  3
+si1   = $041B ;   61,74Hz PAL (hex): hi: $04, lo: $1B ; (dec): lo: 27, Hi:  4
 ; ----------------------------------------------------------------------------
 ; Octave 2
 ; ----------------------------------------------------------------------------
-do2     = $022C ; PAL (hex): high: $02, low: $2C ; (dec): low: 44, High:  2
-dod2    = $024E ; PAL (hex): high: $02, low: $4E ; (dec): low: 78, High:  2
-re2     = $0271 ; PAL (hex): high: $02, low: $71 ; (dec): low:113, High:  2
-red2    = $0296 ; PAL (hex): high: $02, low: $96 ; (dec): low:150, High:  2
-mi2     = $02BD ; PAL (hex): high: $02, low: $BD ; (dec): low:189, High:  2
-fa2     = $02E7 ; PAL (hex): high: $02, low: $E7 ; (dec): low:231, High:  2
-fad2    = $0313 ; PAL (hex): high: $03, low: $13 ; (dec): low: 19, High:  3
-sol2    = $0342 ; PAL (hex): high: $03, low: $42 ; (dec): low: 66, High:  3
-sold2   = $0373 ; PAL (hex): high: $03, low: $73 ; (dec): low:115, High:  3
-la2     = $03A8 ; PAL (hex): high: $03, low: $A8 ; (dec): low:168, High:  3
-lad2    = $03E0 ; PAL (hex): high: $03, low: $E0 ; (dec): low:224, High:  3
-si2     = $041B ; PAL (hex): high: $04, low: $1B ; (dec): low: 27, High:  4
+do2   = $045A ;   65,41Hz PAL (hex): hi: $04, lo: $5A ; (dec): lo: 90, Hi:  4
+dod2  = $049C ;   69,30Hz PAL (hex): hi: $04, lo: $9C ; (dec): lo:156, Hi:  4
+re2   = $04E2 ;   73,41Hz PAL (hex): hi: $04, lo: $E2 ; (dec): lo:226, Hi:  4
+red2  = $052D ;   77,79Hz PAL (hex): hi: $05, lo: $2D ; (dec): lo: 45, Hi:  5
+mi2   = $057B ;   82,41Hz PAL (hex): hi: $05, lo: $7B ; (dec): lo:123, Hi:  5
+fa2   = $05CF ;   87,31Hz PAL (hex): hi: $05, lo: $CF ; (dec): lo:207, Hi:  5
+fad2  = $0627 ;   92,50Hz PAL (hex): hi: $06, lo: $27 ; (dec): lo: 39, Hi:  6
+sol2  = $0685 ;   98,00Hz PAL (hex): hi: $06, lo: $85 ; (dec): lo:133, Hi:  6
+sold2 = $06E8 ;  103,83Hz PAL (hex): hi: $06, lo: $E8 ; (dec): lo:232, Hi:  6
+la2   = $0751 ;  110,00Hz PAL (hex): hi: $07, lo: $51 ; (dec): lo: 81, Hi:  7
+lad2  = $07C1 ;  116,55Hz PAL (hex): hi: $07, lo: $C1 ; (dec): lo:193, Hi:  7
+si2   = $0837 ;  123,48Hz PAL (hex): hi: $08, lo: $37 ; (dec): lo: 55, Hi:  8
 ; ----------------------------------------------------------------------------
 ; Octave 3
 ; ----------------------------------------------------------------------------
-do3     = $0459 ; PAL (hex): high: $04, low: $59 ; (dec): low: 89, High:  4
-dod3    = $049C ; PAL (hex): high: $04, low: $9C ; (dec): low:156, High:  4
-re3     = $04E2 ; PAL (hex): high: $04, low: $E2 ; (dec): low:226, High:  4
-red3    = $052C ; PAL (hex): high: $05, low: $2C ; (dec): low: 44, High:  5
-mi3     = $057B ; PAL (hex): high: $05, low: $7B ; (dec): low:123, High:  5
-fa3     = $05CE ; PAL (hex): high: $05, low: $CE ; (dec): low:206, High:  5
-fad3    = $0627 ; PAL (hex): high: $06, low: $27 ; (dec): low: 39, High:  6
-sol3    = $0684 ; PAL (hex): high: $06, low: $84 ; (dec): low:132, High:  6
-sold3   = $06E7 ; PAL (hex): high: $06, low: $E7 ; (dec): low:231, High:  6
-la3     = $0751 ; PAL (hex): high: $07, low: $51 ; (dec): low: 81, High:  7
-lad3    = $07C0 ; PAL (hex): high: $07, low: $C0 ; (dec): low:192, High:  7
-si3     = $0836 ; PAL (hex): high: $08, low: $36 ; (dec): low: 54, High:  8
+do3   = $08B4 ;  130,83Hz PAL (hex): hi: $08, lo: $B4 ; (dec): lo:180, Hi:  8
+dod3  = $0938 ;  138,60Hz PAL (hex): hi: $09, lo: $38 ; (dec): lo: 56, Hi:  9
+re3   = $09C4 ;  146,83Hz PAL (hex): hi: $09, lo: $C4 ; (dec): lo:196, Hi:  9
+red3  = $0A59 ;  155,58Hz PAL (hex): hi: $0A, lo: $59 ; (dec): lo: 89, Hi: 10
+mi3   = $0AF7 ;  164,83Hz PAL (hex): hi: $0A, lo: $F7 ; (dec): lo:247, Hi: 10
+fa3   = $0B9E ;  174,63Hz PAL (hex): hi: $0B, lo: $9E ; (dec): lo:158, Hi: 11
+fad3  = $0C4E ;  185,00Hz PAL (hex): hi: $0C, lo: $4E ; (dec): lo: 78, Hi: 12
+sol3  = $0D0A ;  196,00Hz PAL (hex): hi: $0D, lo: $0A ; (dec): lo: 10, Hi: 13
+sold3 = $0DD0 ;  207,65Hz PAL (hex): hi: $0D, lo: $D0 ; (dec): lo:208, Hi: 13
+la3   = $0EA2 ;  220,00Hz PAL (hex): hi: $0E, lo: $A2 ; (dec): lo:162, Hi: 14
+lad3  = $0F81 ;  233,10Hz PAL (hex): hi: $0F, lo: $81 ; (dec): lo:129, Hi: 15
+si3   = $106D ;  246,95Hz PAL (hex): hi: $10, lo: $6D ; (dec): lo:109, Hi: 16
 ; ----------------------------------------------------------------------------
 ; Octave 4
 ; ----------------------------------------------------------------------------
-do4     = $08B3 ; PAL (hex): high: $08, low: $B3 ; (dec): low:179, High:  8
-dod4    = $0938 ; PAL (hex): high: $09, low: $38 ; (dec): low: 56, High:  9
-re4     = $09C4 ; PAL (hex): high: $09, low: $C4 ; (dec): low:196, High:  9
-red4    = $0A59 ; PAL (hex): high: $0A, low: $59 ; (dec): low: 89, High: 10
-mi4     = $0AF6 ; PAL (hex): high: $0A, low: $F6 ; (dec): low:246, High: 10
-fa4     = $0B9D ; PAL (hex): high: $0B, low: $9D ; (dec): low:157, High: 11
-fad4    = $0C4E ; PAL (hex): high: $0C, low: $4E ; (dec): low: 78, High: 12
-sol4    = $0D09 ; PAL (hex): high: $0D, low: $09 ; (dec): low:  9, High: 13
-sold4   = $0DCF ; PAL (hex): high: $0D, low: $CF ; (dec): low:207, High: 13
-la4     = $0EA2 ; PAL (hex): high: $0E, low: $A2 ; (dec): low:162, High: 14
-lad4    = $0F81 ; PAL (hex): high: $0F, low: $81 ; (dec): low:129, High: 15
-si4     = $106D ; PAL (hex): high: $10, low: $6D ; (dec): low:109, High: 16
+do4   = $1167 ;  261,65Hz PAL (hex): hi: $11, lo: $67 ; (dec): lo:103, Hi: 17
+dod4  = $1270 ;  277,20Hz PAL (hex): hi: $12, lo: $70 ; (dec): lo:112, Hi: 18
+re4   = $1388 ;  293,65Hz PAL (hex): hi: $13, lo: $88 ; (dec): lo:136, Hi: 19
+red4  = $14B2 ;  311,15Hz PAL (hex): hi: $14, lo: $B2 ; (dec): lo:178, Hi: 20
+mi4   = $15ED ;  329,65Hz PAL (hex): hi: $15, lo: $ED ; (dec): lo:237, Hi: 21
+fa4   = $173B ;  349,25Hz PAL (hex): hi: $17, lo: $3B ; (dec): lo: 59, Hi: 23
+fad4  = $189D ;  370,00Hz PAL (hex): hi: $18, lo: $9D ; (dec): lo:157, Hi: 24
+sol4  = $1A13 ;  392,00Hz PAL (hex): hi: $1A, lo: $13 ; (dec): lo: 19, Hi: 26
+sold4 = $1BA0 ;  415,30Hz PAL (hex): hi: $1B, lo: $A0 ; (dec): lo:160, Hi: 27
+la4   = $1D45 ;  440,00Hz PAL (hex): hi: $1D, lo: $45 ; (dec): lo: 69, Hi: 29
+lad4  = $1F03 ;  466,20Hz PAL (hex): hi: $1F, lo: $03 ; (dec): lo:  3, Hi: 31
+si4   = $20DA ;  493,90Hz PAL (hex): hi: $20, lo: $DA ; (dec): lo:218, Hi: 32
 ; ----------------------------------------------------------------------------
 ; Octave 5
 ; ----------------------------------------------------------------------------
-do5     = $1167 ; PAL (hex): high: $11, low: $67 ; (dec): low:103, High: 17
-dod5    = $1270 ; PAL (hex): high: $12, low: $70 ; (dec): low:112, High: 18
-re5     = $1388 ; PAL (hex): high: $13, low: $88 ; (dec): low:136, High: 19
-red5    = $14B2 ; PAL (hex): high: $14, low: $B2 ; (dec): low:178, High: 20
-mi5     = $15ED ; PAL (hex): high: $15, low: $ED ; (dec): low:237, High: 21
-fa5     = $173B ; PAL (hex): high: $17, low: $3B ; (dec): low: 59, High: 23
-fad5    = $189C ; PAL (hex): high: $18, low: $9C ; (dec): low:156, High: 24
-sol5    = $1A13 ; PAL (hex): high: $1A, low: $13 ; (dec): low: 19, High: 26
-sold5   = $1B9F ; PAL (hex): high: $1B, low: $9F ; (dec): low:159, High: 27
-la5     = $1D44 ; PAL (hex): high: $1D, low: $44 ; (dec): low: 68, High: 29
-lad5    = $1F02 ; PAL (hex): high: $1F, low: $02 ; (dec): low:  2, High: 31
-si5     = $20DA ; PAL (hex): high: $20, low: $DA ; (dec): low:218, High: 32
+do5   = $22CF ;  523,30Hz PAL (hex): hi: $22, lo: $CF ; (dec): lo:207, Hi: 34
+dod5  = $24E1 ;  554,40Hz PAL (hex): hi: $24, lo: $E1 ; (dec): lo:225, Hi: 36
+re5   = $2711 ;  587,30Hz PAL (hex): hi: $27, lo: $11 ; (dec): lo: 17, Hi: 39
+red5  = $2965 ;  622,30Hz PAL (hex): hi: $29, lo: $65 ; (dec): lo:101, Hi: 41
+mi5   = $2BDB ;  659,30Hz PAL (hex): hi: $2B, lo: $DB ; (dec): lo:219, Hi: 43
+fa5   = $2E76 ;  698,50Hz PAL (hex): hi: $2E, lo: $76 ; (dec): lo:118, Hi: 46
+fad5  = $3139 ;  740,00Hz PAL (hex): hi: $31, lo: $39 ; (dec): lo: 57, Hi: 49
+sol5  = $3426 ;  784,00Hz PAL (hex): hi: $34, lo: $26 ; (dec): lo: 38, Hi: 52
+sold5 = $3740 ;  830,60Hz PAL (hex): hi: $37, lo: $40 ; (dec): lo: 64, Hi: 55
+la5   = $3A89 ;  880,00Hz PAL (hex): hi: $3A, lo: $89 ; (dec): lo:137, Hi: 58
+lad5  = $3E05 ;  932,40Hz PAL (hex): hi: $3E, lo: $05 ; (dec): lo:  5, Hi: 62
+si5   = $41B5 ;  987,80Hz PAL (hex): hi: $41, lo: $B5 ; (dec): lo:181, Hi: 65
 ; ----------------------------------------------------------------------------
 ; Octave 6
 ; ----------------------------------------------------------------------------
-do6     = $22CE ; PAL (hex): high: $22, low: $CE ; (dec): low:206, High: 34
-dod6    = $24E0 ; PAL (hex): high: $24, low: $E0 ; (dec): low:224, High: 36
-re6     = $2710 ; PAL (hex): high: $27, low: $10 ; (dec): low: 16, High: 39
-red6    = $2964 ; PAL (hex): high: $29, low: $64 ; (dec): low:100, High: 41
-mi6     = $2BDA ; PAL (hex): high: $2B, low: $DA ; (dec): low:218, High: 43
-fa6     = $2E76 ; PAL (hex): high: $2E, low: $76 ; (dec): low:118, High: 46
-fad6    = $3139 ; PAL (hex): high: $31, low: $39 ; (dec): low: 57, High: 49
-sol6    = $3426 ; PAL (hex): high: $34, low: $26 ; (dec): low: 38, High: 52
-sold6   = $373F ; PAL (hex): high: $37, low: $3F ; (dec): low: 63, High: 55
-la6     = $3A89 ; PAL (hex): high: $3A, low: $89 ; (dec): low:137, High: 58
-lad6    = $3E05 ; PAL (hex): high: $3E, low: $05 ; (dec): low:  5, High: 62
-si6     = $41B4 ; PAL (hex): high: $41, low: $B4 ; (dec): low:180, High: 65
+do6   = $459E ; 1046,60Hz PAL (hex): hi: $45, lo: $9E ; (dec): lo:158, Hi: 69
+dod6  = $49C1 ; 1108,80Hz PAL (hex): hi: $49, lo: $C1 ; (dec): lo:193, Hi: 73
+re6   = $4E22 ; 1174,60Hz PAL (hex): hi: $4E, lo: $22 ; (dec): lo: 34, Hi: 78
+red6  = $52CA ; 1244,60Hz PAL (hex): hi: $52, lo: $CA ; (dec): lo:202, Hi: 82
+mi6   = $57B6 ; 1318,60Hz PAL (hex): hi: $57, lo: $B6 ; (dec): lo:182, Hi: 87
+fa6   = $5CED ; 1397,00Hz PAL (hex): hi: $5C, lo: $ED ; (dec): lo:237, Hi: 92
+fad6  = $6272 ; 1480,00Hz PAL (hex): hi: $62, lo: $72 ; (dec): lo:114, Hi: 98
+sol6  = $684D ; 1568,00Hz PAL (hex): hi: $68, lo: $4D ; (dec): lo: 77, Hi:104
+sold6 = $6E80 ; 1661,20Hz PAL (hex): hi: $6E, lo: $80 ; (dec): lo:128, Hi:110
+la6   = $7512 ; 1760,00Hz PAL (hex): hi: $75, lo: $12 ; (dec): lo: 18, Hi:117
+lad6  = $7C0B ; 1864,80Hz PAL (hex): hi: $7C, lo: $0B ; (dec): lo: 11, Hi:124
+si6   = $8369 ; 1975,60Hz PAL (hex): hi: $83, lo: $69 ; (dec): lo:105, Hi:131
 ; ----------------------------------------------------------------------------
 ; Octave 7
 ; ----------------------------------------------------------------------------
-do7     = $459D ; PAL (hex): high: $45, low: $9D ; (dec): low:157, High: 69
-dod7    = $49C1 ; PAL (hex): high: $49, low: $C1 ; (dec): low:193, High: 73
-re7     = $4E21 ; PAL (hex): high: $4E, low: $21 ; (dec): low: 33, High: 78
-red7    = $52C9 ; PAL (hex): high: $52, low: $C9 ; (dec): low:201, High: 82
-mi7     = $57B5 ; PAL (hex): high: $57, low: $B5 ; (dec): low:181, High: 87
-fa7     = $5CEC ; PAL (hex): high: $5C, low: $EC ; (dec): low:236, High: 92
-fad7    = $6272 ; PAL (hex): high: $62, low: $72 ; (dec): low:114, High: 98
-sol7    = $684C ; PAL (hex): high: $68, low: $4C ; (dec): low: 76, High:104
-sold7   = $6E7F ; PAL (hex): high: $6E, low: $7F ; (dec): low:127, High:110
-la7     = $7512 ; PAL (hex): high: $75, low: $12 ; (dec): low: 18, High:117
-lad7    = $7C0A ; PAL (hex): high: $7C, low: $0A ; (dec): low: 10, High:124
-si7     = $8369 ; PAL (hex): high: $83, low: $69 ; (dec): low:105, High:131
-; ----------------------------------------------------------------------------
-; Octave 8
-; ----------------------------------------------------------------------------
-do8     = $8B3B ; PAL (hex): high: $8B, low: $3B ; (dec): low: 59, High:139
-dod8    = $9382 ; PAL (hex): high: $93, low: $82 ; (dec): low:130, High:147
-re8     = $9C43 ; PAL (hex): high: $9C, low: $43 ; (dec): low: 67, High:156
-red8    = $A593 ; PAL (hex): high: $A5, low: $93 ; (dec): low:147, High:165
-mi8     = $AF6B ; PAL (hex): high: $AF, low: $6B ; (dec): low:107, High:175
-fa8     = $B9D9 ; PAL (hex): high: $B9, low: $D9 ; (dec): low:217, High:185
-fad8    = $C4E4 ; PAL (hex): high: $C4, low: $E4 ; (dec): low:228, High:196
-sol8    = $D099 ; PAL (hex): high: $D0, low: $99 ; (dec): low:153, High:208
-sold8   = $DCFF ; PAL (hex): high: $DC, low: $FF ; (dec): low:255, High:220
-la8     = $EA24 ; PAL (hex): high: $EA, low: $24 ; (dec): low: 36, High:234
-lad8    = $F815 ; PAL (hex): high: $F8, low: $15 ; (dec): low: 21, High:248
+do7   = $8B3C ; 2093,20Hz PAL (hex): hi: $8B, lo: $3C ; (dec): lo: 60, Hi:139
+dod7  = $9382 ; 2217,60Hz PAL (hex): hi: $93, lo: $82 ; (dec): lo:130, Hi:147
+re7   = $9C43 ; 2349,20Hz PAL (hex): hi: $9C, lo: $43 ; (dec): lo: 67, Hi:156
+red7  = $A593 ; 2489,20Hz PAL (hex): hi: $A5, lo: $93 ; (dec): lo:147, Hi:165
+mi7   = $AF6B ; 2637,20Hz PAL (hex): hi: $AF, lo: $6B ; (dec): lo:107, Hi:175
+fa7   = $B9D9 ; 2794,00Hz PAL (hex): hi: $B9, lo: $D9 ; (dec): lo:217, Hi:185
+fad7  = $C4E4 ; 2960,00Hz PAL (hex): hi: $C4, lo: $E4 ; (dec): lo:228, Hi:196
+sol7  = $D099 ; 3136,00Hz PAL (hex): hi: $D0, lo: $99 ; (dec): lo:153, Hi:208
+sold7 = $DCFF ; 3322,40Hz PAL (hex): hi: $DC, lo: $FF ; (dec): lo:255, Hi:220
+la7   = $EA24 ; 3520,00Hz PAL (hex): hi: $EA, lo: $24 ; (dec): lo: 36, Hi:234
+lad7  = $F815 ; 3729,60Hz PAL (hex): hi: $F8, lo: $15 ; (dec): lo: 21, Hi:248
