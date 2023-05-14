@@ -3,7 +3,7 @@
 # ======== P R O J E C T   S E C T I O N ========
 # ===============================================
 # The basename of your project main file ((no extension) .asm is presumed).
-SOURCENAME=deek
+SOURCENAME=irqtune3channel
 # The lowest common project shared directory complete path.
 # for thingds like librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -54,11 +54,15 @@ PRGDIR=dir-00-64tass-bin
 # This section is to transfer the resulting files to the Ultimite cartridge II ...
 # ... the ftpserver enabeled.
 # FTP SERVER CONFIG
-FTPSVRIP=10.0.1.10
+FTPSVRIP=192.168.2.200
 FTPCMDPATH=/usr/local/bin/lftp 
-FTPPRGARG=cd /Usb0/d-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
-FTPD64ARG=cd /Usb0/d-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
-FTPCRTARG=cd /Usb0/d-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
+FTPASMARG=cd /Usb0/dir-00-64tass-bin/asm; put $(SOURCENAME).asm; bye
+FTPTXTARG=cd /Usb0/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; bye
+FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
+FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
+FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
+FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
+FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)
 FTPPRGCMD=$(FTPCMDPATH) -e "$(FTPPRGARG)" $(FTPSVRIP)
 FTPD64CMD=$(FTPCMDPATH) -e "$(FTPD64ARG)" $(FTPSVRIP)
 FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
@@ -71,9 +75,16 @@ all: 	$(SOURCENAME).d64
 		$(VICE) $(AUTOSTART) $(TMPSEP06)
 
 ftp:	
+#		echo $(FTPASMCMD)
+#		echo $(FTPTXTCMD)
+#		echo $(FTPPRGCMD)
+#		echo $(FTPD64CMD)
+#		echo $(FTPCRTCMD)
+		$(FTPASMCMD)
+		$(FTPTXTCMD)
 		$(FTPPRGCMD)
-		$(FTPD64CMD)
-		$(FTPCRTCMD)
+#		$(FTPD64CMD)
+#		$(FTPCRTCMD)
 
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 -write $(SOURCENAME).prg $(SOURCENAME) 
