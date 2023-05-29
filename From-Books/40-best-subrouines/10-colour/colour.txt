@@ -1,7 +1,7 @@
 
-; 64tass Turbo Assembler Macro V1.52.1237? listing file
+; 64tass Turbo Assembler Macro V1.54.1900 listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib -i -L colour.txt -o colour.prg colour.asm
-; Wed Mar 29 14:34:14 2023
+; Thu May 25 22:40:50 2023
 
 ;Offset	;Hex		;Source
 
@@ -136,8 +136,50 @@
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-kernal.asm
 
-=$14			linnum          =       $14     ; 20
-=$2b			txttab          =       $2b     ; 43
+=$00			u6510ddr        =       $00     ;   0 6510 port data dir. reg. (def: %xx101111)
+=$01			u6510map        =       $01     ;   1 6510 port used as memory map reg.
+=$02			unused2         =       $02     ;   2 unused.
+=$03			adray1          =       $03     ; 3-4 Vector to routine to convert a number ...
+=$05			adray2          =       $05     ; 5-6 Vector to routine to convert a number ...
+=$07			b_charac        =       $07     ;   7 Search character for scanning ...
+=$08			b_endchr        =       $08     ;   8 Search character for scanning ...
+=$09			b_trmpos        =       $09     ;   9 Cursor column position before the ...
+=$0a			verck           =       $0a     ;  10 Flag: 0=Load or 1=Check
+=$0b			b_count         =       $0b     ;  11 Index into the Text Input Buffer ...
+=$0c			dimflg          =       $0c     ;  12 Flags for routine that locate or build array.
+=$0d			valtyp          =       $0d     ;  13 Flag: Type of data ($ff=string or $00=numeric)
+=$0e			intflg          =       $0e     ;  14 Numeric data Type ($80=Integer or $00=Float)
+=$0f			garbfl          =       $0f     ;  15 Flag for list, Garbage collection, ...
+=$10			subflg          =       $10     ;  16 Flag: Subscript reference to an array or ...
+=$11			inpflg          =       $11     ;  17 Flag: Is data input to GET, READ or INPUT.
+=$12			tansgn          =       $12     ;  18 Flag: Sign of result of TAN or SIN.
+=$13			channl          =       $13     ;  19 Current i/o channel # (CMD logical file).
+=$14			linnum          =       $14     ;  20-21 Integer line number value.
+=$16			temppt          =       $16     ;  22 Ptr to next space in temp. string stack.
+=$17			lastpt          =       $17     ;  23-24 Ptr to last string in temp. string stack.
+=$2b			txttab          =       $2b     ;  43-44 Ptr to start of BASIC Program text.
+=$2d			vartab          =       $2d     ;  45-46 Ptr to start of BASIC Variable area.
+=$2f			arytab          =       $2f     ;  47-48 Ptr to start of BASIC Array area.
+=$31			strebd          =       $31     ;  49-50 Ptr to END of BASIC Array area(+1) ...
+=$33			fretop          =       $33     ;  51-52 Ptr to bottom of string text area.
+=$35			frespc          =       $35     ;  53-54 Temp. ptr for string.
+=$37			memsiz          =       $37     ;  55-56 Ptr to highest address used by BASIC.
+=$39			curlib          =       $39     ;  57-58 Current BASIC line number.
+=$3b			oldlin          =       $3b     ;  59-60 Previous BASIC line number.
+=$3d			oldtxt          =       $3d     ;  61-62 Ptr to current BASIC statement address.
+=$3f			datlin          =       $3f     ;  63-64 Current DATA line number.
+=$41			datptr          =       $41     ;  65-66 Current DATA item address ptr.
+=$43			impptr          =       $43     ;  67-68 GET, READ or INPUT info. source ptr.
+=$45			varnam          =       $45     ;  69-70 Current BASIC variable name.
+=$47			varpnt          =       $47     ;  71-72 Ptr to current BASIC variable value.
+=$49			forpnt          =       $49     ;  73-74 Temp Ptr to index variable used by FOR.
+=$4b			opptr           =       $4b     ;  75-76 Math operator table displacement.
+=$4d			opmask          =       $4d     ;  77 Mask for comparison operation.
+=$4e			defpnt          =       $4e     ;  78-79 Pointer to current FN descriptor.
+=$50			dscpnt          =       $50     ;  80-82 Tmp ptr to current string descriptor.
+=$53			four6           =       $53     ;  83 Constant of garbage collector.
+=$54			jmper           =       $54     ;  84-86 Jump to function Instruction.
+=$61			fac1            =       $61     ; 97-102 Floating point Accumulator #1
 =$73			chrget          =       $73     ; 115
 =$79			chrgot          =       $79     ; 121
 =$90			kiostatus       =       $90     ; 144 Kernal I/O status word (st) (byte)
@@ -158,7 +200,7 @@
 =$28d			shflag          =       $28d    ; 653
 =$30a			ieval           =       $30a
 =$314			cinv            =       $314    ; $314-$315 brk instruction interupt
-=$33c			tbuffer         =       $33c    ; 828
+=$33c			tbuffer         =       $33c    ; 828-1019 Cassette i/o buffer
 =$326			ibsout          =       $326    ; 806
 =$33c			tpbuff          =       $33c    ; $033c-$03fb (828-1019)
 =$400			scrnram         =       $400    ; 1024 video character ram
@@ -175,7 +217,39 @@
 =$da00			colram2         =       $da00   ; 55808
 =$db00			colram3         =       $db00   ; 56064
 =$dc00			cia1            =       $dc00   ; 56320 cia1 base address
+=$dc00			cia1pra         =       $dc00   ; 56320 cia1 dataport A (keyboard column Write)
+=$dc01			cia1prb         =       $dc01   ; 56321 cia1 dataport B (keyboard row read)
+=$dc02			cia1ddra        =       $dc02   ; 56322 cia1 data direction A
+=$dc03			cia1ddrb        =       $dc03   ; 56323 cia1 data direction B
+=$dc04			cia1tmalo       =       $dc04   ; 56324 cia1 timer A low byte
+=$dc05			cia1tmahi       =       $dc05   ; 56325 cia1 timer A high byte
+=$dc06			cia1tmblo       =       $dc06   ; 56326 cia1 timer B low byte
+=$dc07			cia1tmbhi       =       $dc07   ; 56327 cia1 timer B high byte
+=$dc08			cia1todten      =       $dc08   ; 56328 cia1 time of day clock seconds/10
+=$dc09			cia1todsec      =       $dc09   ; 56329 cia1 time of day clock seconds
+=$dc0a			cia1todmin      =       $dc0a   ; 56330 cia1 time of day clock minutes
+=$dc0b			cia1todhrs      =       $dc0b   ; 56331 cia1 time of day clock hours
+=$dc0c			cia1sdr         =       $dc0c   ; 56332 cia1 serial data port
+=$dc0d			cia1icr         =       $dc0d   ; 56333 cia1 Interupt control register
+=$dc0e			cia1cra         =       $dc0e   ; 56334 cia1 control register A
+=$dc0f			cia1crb         =       $dc0f   ; 56335 cia1 control register B
 =$dd00			cia2            =       $dd00   ; 56576 cia2 base address
+=$dd00			cia2pra         =       $dd00   ; 56576 cia2 dataport A
+=$dd01			cia2prb         =       $dd01   ; 56577 cia2 dataport B
+=$dd02			cia2ddra        =       $dd02   ; 56578 cia2 data direction A
+=$dd03			cia2ddrb        =       $dd03   ; 56579 cia2 data direction B
+=$dd04			cia2tmalo       =       $dd04   ; 56580 cia2 timer A low byte
+=$dd05			cia2tmahi       =       $dd05   ; 56581 cia2 timer A high byte
+=$dd06			cia2tmblo       =       $dd06   ; 56582 cia2 timer B low byte
+=$dd07			cia2tmbhi       =       $dd07   ; 56583 cia2 timer B high byte
+=$dd08			cia2todten      =       $dd08   ; 56584 cia2 time of day clock seconds/10
+=$dd09			cia2todsec      =       $dd09   ; 56585 cia2 time of day clock seconds
+=$dd0a			cia2todmin      =       $dd0a   ; 56586 cia2 time of day clock minutes
+=$dd0b			cia2todhrs      =       $dd0b   ; 56587 cia2 time of day clock hours
+=$dd0c			cia2sdr         =       $dd0c   ; 56588 cia2 serial data port
+=$dd0d			cia2icr         =       $dd0d   ; 56589 cia2 Interupt control register
+=$dd0e			cia2cra         =       $dd0e   ; 56590 cia2 control register A
+=$dd0f			cia2crb         =       $dd0f   ; 56501 cia2 control register B
 =$e000			kernalrom       =       $e000   ; 57344 start of kernal rom
 =$ea31			irq             =       $ea31   ; 59953 irq entry point
 =$03			bstop           =       $03     ;  03 [STOP]
@@ -508,59 +582,59 @@
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-basic2.asm
 
-=$a3bb			b_opentxtspc  = $a3bb ;  1) Open space in BASIC text.   ;a-y;---; Array top $yyaa
-=$a408			b_chkavailmem = $a408 ;  2) Check available Memory. *1  ;a-y;---; Array top $yyaa
-=$a435			b_outofmem    = $a435 ;  3) ?Out of memory.             ;---;---;
-=$a437			b_errormesg   = $a437 ;  4) Send BASIC error message.   ;a--;---; a = errno
-=$a474			b_warmstart   = $a474 ;  5) Basic warm start.           ;---;---;
-=$a48a			b_chrget      = $a48a ;  6) Main CHRGET entry.          ;---;---;
-=$a49c			b_newline     = $a49c ;  7) Crunch tokens, insert line. ;-x-;---; x = buff len
-=$a52a			b_clrready    = $a52a ;  8) Fix chaining CLR and READY. ;---;---;
-=$a533			b_fixchaining = $a533 ;  9) Fix chaining.               ;---;---;
-=$a560			b_kbgetline   = $a560 ; 10) Recieve line from keyboard.
-=$a579			b_crunchtkns  = $a579 ; 11) Crunch token. *7            ;-x-;---: x = buff len
-=$a613			b_findline    = $a613 ; 12) Find line in BASIC.         ;ax-;---; strBAS = $xxaa
-=$a642			b_new         = $a642 ; 13) Do NEW                      ;---;---;
-=$a659			b_resetclr    = $a659 ; 14) Reset BASIC and do CLR      ;---;---;
-=$a65e			b_clr         = $a65e ; 15) Do CLR                      ;---;---;
-=$a68e			b_rstchrget   = $a68e ; 17) Rst CHRGET to BASIC start   ;---;a--; strBAS hi
-=$a857			b_continue    = $a857 ; 18) Do CONTINUE.                ;a-y;---; curline $yyaa
-=$a96b			b_getint      = $a96b ; 19) Get int from BASIX text.    ;---;---;
-=$aad3			b_sndcr       = $aad3 ; 20) Send RETURN, LF in scr mode.;---;a--; a = LF
-=$aad7			b_sndcrlf     = $aad7 ; 21) Send RETURN, LINEFEED.      ;---;a--; a = LF
-=$ab1e			b_outstr_ay   = $ab1e ; 22) Print string from $yyaa.    ;a-y;---; sptr = $yyaa
+=$a3bb			b_opentxtspc  = $a3bb ; Open space in BASIC text.   ;a-y;---; Array top $yyaa
+=$a408			b_chkavailmem = $a408 ; Check available Memory. *1  ;a-y;---; Array top $yyaa
+=$a435			b_outofmem    = $a435 ; ?Out of memory.             ;---;---;
+=$a437			b_errormesg   = $a437 ; Send BASIC error message.   ;a--;---; a = errno
+=$a474			b_warmstart   = $a474 ; Basic warm start.           ;---;---;
+=$a48a			b_chrget      = $a48a ; Main CHRGET entry.          ;---;---;
+=$a49c			b_newline     = $a49c ; Crunch tokens, insert line. ;-x-;---; x = buff len
+=$a52a			b_clrready    = $a52a ; Fix chaining CLR and READY. ;---;---;
+=$a533			b_fixchaining = $a533 ; Fix chaining.               ;---;---;
+=$a560			b_kbgetline   = $a560 ; Recieve line from keyboard.
+=$a579			b_crunchtkns  = $a579 ; Crunch token. *7            ;-x-;---: x = buff len
+=$a613			b_findline    = $a613 ; Find line in BASIC.         ;ax-;---; strBAS = $xxaa
+=$a642			b_new         = $a642 ; Do NEW                      ;---;---;
+=$a659			b_resetclr    = $a659 ; Reset BASIC and do CLR      ;---;---;
+=$a65e			b_clr         = $a65e ; Do CLR                      ;---;---;
+=$a68e			b_rstchrget   = $a68e ; Rst CHRGET to BASIC start   ;---;a--; strBAS hi
+=$a857			b_continue    = $a857 ; Do CONTINUE.                ;a-y;---; curline $yyaa
+=$a96b			b_getint      = $a96b ; Get int from BASIX text.    ;---;---;
+=$aad3			b_sndcr       = $aad3 ; Send RETURN, LF in scr mode.;---;a--; a = LF
+=$aad7			b_sndcrlf     = $aad7 ; Send RETURN, LINEFEED.      ;---;a--; a = LF
+=$ab1e			b_outstr_ay   = $ab1e ; Print string from $yyaa.    ;a-y;---; sptr = $yyaa
 =$ab1e			b_puts        = b_outstr_ay
-=$ab24			b_outstrprep  = $ab24 ; 23) Print precomputated string. ;a--;---; a = strlen
-=$ab45			b_printqm     = $ab45 ; 24) Print '?'.                  ;---;---;
-=$ab47			b_sendchar    = $ab47 ; 25) Send char in a to device.   ;a--;a--; a = char
+=$ab24			b_outstrprep  = $ab24 ; Print precomputated string. ;a--;---; a = strlen
+=$ab45			b_printqm     = $ab45 ; Print '?'.                  ;---;---;
+=$ab47			b_sendchar    = $ab47 ; Send char in a to device.   ;a--;a--; a = char
 =$ad8a			b_frmnum      = $ad8a ; Evaluate numeric expression and/or check for data type mismatch
-=$ad9e			b_evalexpr    = $ad9e ; 26) Evaluate expression.
-=$aefd			b_chk4comma   = $aefd ; 27) Check for coma.             ;---;a--; a = char
-=$aefa			b_chk4lpar    = $aefa ; 28) check for '('.              ;---;a--; a = char
-=$aef7			b_chk4rpar    = $aef7 ; 29) check for ')'.              ;---;a--; a = char
-=$af08			b_syntaxerr   = $af08 ; 30) send 'SYNTAX ERROR'.        ;---;---;
-=$b0e7			b_fndfloatvar = $b0e7 ; 31) find float var by name.     ;---;a-y; addr = $yyaa
-=$b185			b_bumpvaraddr = $b185 ; 32) Bumb var addr by 2. *31     ;---;a-y; addr = $yyaa
-=$b1bf			b_float2int   = $b1bf ; 33) Float to int in Acc#1.      ;---;---;
+=$ad9e			b_evalexpr    = $ad9e ; Evaluate expression.
+=$aefd			b_chk4comma   = $aefd ; Check for coma.             ;---;a--; a = char
+=$aefa			b_chk4lpar    = $aefa ; check for '('.              ;---;a--; a = char
+=$aef7			b_chk4rpar    = $aef7 ; check for ')'.              ;---;a--; a = char
+=$af08			b_syntaxerr   = $af08 ; send 'SYNTAX ERROR'.        ;---;---;
+=$b0e7			b_fndfloatvar = $b0e7 ; find float var by name.     ;---;a-y; addr = $yyaa
+=$b185			b_bumpvaraddr = $b185 ; Bumb var addr by 2. *31     ;---;a-y; addr = $yyaa
+=$b1bf			b_float2int   = $b1bf ; Float to int in Acc#1.      ;---;---;
 =$b248			b_fcerr       = $b248 ; Print ILLEGAL QUANTITY error message.
-=$b391			b_int2float   = $b391 ; 34) Int to float in Acc#1.      ;---;---;
-=$b79e			b_getacc1lsb  = $b79e ; 35) Get Acc#1 LSB in x.         ;---;-x-; x = Acc#1 LSB
-=$b7b5			b_str2float   = $b7b5 ; 36) Evaluate str to float (VAL) ;---;---;
-=$b7b9			b_strxy2float = $b7b9 ; 37) Eval. float from str in xy. ;---;-xy; strptr = $yyxx
-=$b7eb			b_getpokeprms = $b7eb ; 38) Get 2 params for POKE, WAIT.;---;-x-; x = Param2
+=$b391			b_int2float   = $b391 ; Int to float in Acc#1.      ;---;---;
+=$b79e			b_getacc1lsb  = $b79e ; Get Acc#1 LSB in x.         ;---;-x-; x = Acc#1 LSB
+=$b7b5			b_str2float   = $b7b5 ; Evaluate str to float (VAL) ;---;---;
+=$b7b9			b_strxy2float = $b7b9 ; Eval. float from str in xy. ;---;-xy; strptr = $yyxx
+=$b7eb			b_getpokeprms = $b7eb ; Get 2 params for POKE, WAIT.;---;-x-; x = Param2
 =$b7f7			b_getadr      = $b7f7 ; Convert Floating point number to an Unsighed TwoByte Integer.
-=$b867			b_memfloatadd = $b867 ; 39) Add from memory.            ;a-y;---; ptr = $yyaa
-=$ba28			b_memfloatmul = $ba28 ; 40) Multiply from memory.       ;a-y;---; ptr = $yyaa
-=$bae2			b_acc1mul10   = $bae2 ; 41) Multiply Acc#1 by 10.       ;---;---; ptr = $yyaa
-=$bba2			b_memvar2acc1 = $bba2 ; 42) Unpack mem var to Acc#1.    ;a-y;---; ptr = $yyaa
-=$bbd7			b_copyacc12xy = $bbd7 ; 43) Copy Acc#1 to mem location. ;-xy;---; ptr = $yyxx
-=$bbfc			b_acc2toacc1  = $bbfc ; 44) Move Acc#2 to Acc#1.        ;---;---;
-=$bc0c			b_rndac1ac2   = $bc0c ; 45) Move rnd Acc#1 to Acc#2.    ;---;---;
-=$bc0f			b_urndac1ac2  = $bc0f ; 46) Move unrnd Acc#1 to Acc#2.  ;---;---;
-=$bc1b			b_rndac1      = $bc1b ; 47) Round Acc#1.                ;---;---;
-=$bdcd			b_putint      = $bdcd ; 48) Print fix point value.      ;ax-;---; Value = $xxaa
-=$bdd7			b_putfloat    = $bdd7 ; 49) Print Acc#1 float.          ;---;---;
-=$bddd			b_num2str     = $bddd ; 50) Cnv num to str at $0100. *48;a-y;---; a=#$00, y=#$01
+=$b867			b_memfloatadd = $b867 ; Add from memory.            ;a-y;---; ptr = $yyaa
+=$ba28			b_memfloatmul = $ba28 ; Multiply from memory.       ;a-y;---; ptr = $yyaa
+=$bae2			b_acc1mul10   = $bae2 ; Multiply Acc#1 by 10.       ;---;---; ptr = $yyaa
+=$bba2			b_memvar2acc1 = $bba2 ; Unpack mem var to Acc#1.    ;a-y;---; ptr = $yyaa
+=$bbd7			b_copyacc12xy = $bbd7 ; Copy Acc#1 to mem location. ;-xy;---; ptr = $yyxx
+=$bbfc			b_acc2toacc1  = $bbfc ; Move Acc#2 to Acc#1.        ;---;---;
+=$bc0c			b_rndac1ac2   = $bc0c ; Move rnd Acc#1 to Acc#2.    ;---;---;
+=$bc0f			b_urndac1ac2  = $bc0f ; Move unrnd Acc#1 to Acc#2.  ;---;---;
+=$bc1b			b_rndac1      = $bc1b ; Round Acc#1.                ;---;---;
+=$bdcd			b_putint      = $bdcd ; Print fix point value.      ;ax-;---; Value = $xxaa
+=$bdd7			b_putfloat    = $bdd7 ; Print Acc#1 float.          ;---;---;
+=$bddd			b_num2str     = $bddd ; Cnv num to str at $0100. *48;a-y;---; a=#$00, y=#$01
 
 ;******  Return to file: colour.asm
 

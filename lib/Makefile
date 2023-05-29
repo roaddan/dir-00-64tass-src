@@ -3,7 +3,7 @@
 # ======== P R O J E C T   S E C T I O N ========
 # ===============================================
 # The basename of your project main file ((no extension) .asm is presumed).
-SOURCENAME=irqtune3channel
+SOURCENAME=graph
 # The lowest common project shared directory complete path.
 # for thingds like librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go

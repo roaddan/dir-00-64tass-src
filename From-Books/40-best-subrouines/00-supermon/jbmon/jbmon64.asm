@@ -1,6 +1,7 @@
 ; ********************************
 ; * supermon+ 64 jim butterfield *
 ; * v1.2   august 20 1985        *
+; * Assembled mai 25 2023        *
 ; ********************************
 
 ; reformatted and annotated in late 2016/early 2017 by j.b. langston.

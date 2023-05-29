@@ -15,7 +15,19 @@ nokey           lda 203
                 pla
                 plp
                 rts
-                .bend                
+                .bend
+
+releasekey      .block
+                php
+                pha 
+keypressed      lda 203
+                cmp #64
+                bne keypressed
+                pla
+                plp
+                rts
+                .bend
+
 
 getkey          .block
                 jsr     push

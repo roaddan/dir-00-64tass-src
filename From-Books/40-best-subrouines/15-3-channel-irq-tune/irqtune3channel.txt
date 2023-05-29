@@ -1,13 +1,13 @@
 
-; 64tass Turbo Assembler Macro V1.52.1237? listing file
+; 64tass Turbo Assembler Macro V1.54.1900 listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib -i -L irqtune3channel.txt -o irqtune3channel.prg irqtune3channel.asm
-; Sat May 13 09:59:40 2023
+; Sat May 27 22:14:50 2023
 
 ;Offset	;Hex		;Source
 
 ;******  Processing input file: irqtune3channel.asm
 
-="20230511-082548"	                Version = "20230511-082548"
+="20230527-220500"	                Version = "20230527-220500"
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/header-c64.asm
 
@@ -25,30 +25,30 @@
 ;******  Return to file: irqtune3channel.asm
 
 .080d			main
-.080d	20 b0 61	                jsr scrmaninit
+.080d	20 d5 0b	                jsr scrmaninit
 .0810	20 19 08	                jsr help
-.0813	20 00 60	                jsr irqtune3channel
+.0813	20 f7 09	                jsr irqtune3channel
 .0816	4c 74 a4	                jmp b_warmstart
 .0819			help
-.0819	20 d1 61	                jsr cls
+.0819	20 f6 0b	                jsr cls
 .081c	a2 a3		                ldx  #<line
 .081e	a0 09		                ldy  #>line
-.0820	20 e6 61	                jsr  puts
+.0820	20 0b 0c	                jsr  puts
 .0823	a2 47		                ldx  #<headera
 .0825	a0 08		                ldy  #>headera
-.0827	20 e6 61	                jsr  puts
+.0827	20 0b 0c	                jsr  puts
 .082a	a2 c9		                ldx  #<headerb
 .082c	a0 08		                ldy  #>headerb
-.082e	20 e6 61	                jsr  puts
+.082e	20 0b 0c	                jsr  puts
 .0831	a2 4f		                ldx  #<shortcuts
 .0833	a0 09		                ldy  #>shortcuts
-.0835	20 e6 61	                jsr  puts
+.0835	20 0b 0c	                jsr  puts
 .0838	a2 cc		                ldx  #<helptext
 .083a	a0 09		                ldy  #>helptext
-.083c	20 e6 61	                jsr  puts
+.083c	20 0b 0c	                jsr  puts
 .083f	a2 a3		                ldx  #<line
 .0841	a0 09		                ldy  #>line
-.0843	20 e6 61	                jsr  puts
+.0843	20 0b 0c	                jsr  puts
 .0846	60		                rts
 .0847			headera
 >0847	20 20 20 20	                .text          "     40 BEST MACHINE CODE ROUTINES"
@@ -81,7 +81,7 @@
 >092b	0d		          .byte   $0d
 >092c	20 20 20 20	                .text   format("        Version: %s.",Version)
 >0930	20 20 20 20 d6 45 52 53 49 4f 4e 3a 20 32 30 32
->0940	33 30 35 31 31 2d 30 38 32 35 34 38 2e
+>0940	33 30 35 32 37 2d 32 32 30 35 30 30 2e
 >094d	0d 00		          .byte   $0d,0
 >094f	20 2d 2d 2d	shortcuts .text          " -------- S H O R T - C U T S ---------"
 >0953	2d 2d 2d 2d 2d 20 d3 20 c8 20 cf 20 d2 20 d4 20
@@ -93,7 +93,7 @@
 >098b	d3 d9 d3 20 32 30 37 33
 >0993	0d		          .byte   $0d
 >0994	20 43 4c 53	          .text   format(" cls=SYS%5d",cls)
->0998	3d d3 d9 d3 32 35 30 34 31
+>0998	3d d3 d9 d3 20 33 30 36 32
 >09a1	0d 00		          .byte   $0d,0
 >09a3	20 2d 2d 2d	line      .text          " --------------------------------------"
 >09a7	2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d
@@ -102,223 +102,243 @@
 >09ca	0d 00		          .byte   $0d,0
 >09cc	20 49 52 51	helptext  .text   format(" irqtune3channel: SYS%5d",irqtune3channel)
 >09d0	54 55 4e 45 33 43 48 41 4e 4e 45 4c 3a 20 d3 d9
->09e0	d3 32 34 35 37 36
+>09e0	d3 20 32 35 35 31
 >09e6	0d		          .byte   $0d
 >09e7	20 45 58 2e	          .text   format(" ex.: SYS%5d",irqtune3channel)
->09eb	3a 20 d3 d9 d3 32 34 35 37 36
+>09eb	3a 20 d3 d9 d3 20 32 35 35 31
 >09f5	0d 00		          .byte   $0d,0
-.6000			irqtune3channel
-.6000	78		                sei
-.6001	a9 3d		                lda #<main
-.6003	8d 14 03	                sta 788
-.6006	a9 60		                lda #>main
-.6008	8d 15 03	                sta 789
-.600b	a9 0a		                lda #%00001010  ; #0-15 $00-$0f
-.600d	8d 18 d4	                sta sidsigvol   ; $d418 ; 54296 - Volume and Filter selectv register.
-.6010	a9 21		                lda #%00100001
-.6012	8d 04 d4	                sta sidv1control; $d404 ; 54276 - Voice 1 Voice control register.
-.6015	a9 11		                lda #%00010001
-.6017	8d 0b d4	                sta sidv2control; $d40b ; 54283 - Voice 2 Voice control register.
-.601a	a9 41		                lda #%01000001
-.601c	8d 12 d4	                sta sidv3control; $d412 ; 54290 - Voice 3 Voice control register.
-.601f	a9 40		                lda #64
-.6021	8d 05 d4	                sta sidv1atkdec ; $d405 ; 54277 - Voice 1 0-3: Decay duration, 4-7: Attack duration.
-.6024	8d 06 d4	                sta sidv1stnrel ; $d406 ; 54278 - Voice 1 0-3: Rel. duration, 4-7: Sustain duration.
-.6027	8d 0c d4	                sta sidv2atkdec ; $d40c ; 54284 - Voice 2 0-3: Decay duration, 4-7: Attack duration.
-.602a	8d 0d d4	                sta sidv2stnrel ; $d40d ; 54285 - Voice 2 0-3: Rel. duration, 4-7: Sustain duration.
-.602d	8d 13 d4	                sta sidv3atkdec ; $d413 ; 54291 - Voice 3 0-3: Decay duration, 4-7: Attack duration.
-.6030	8d 14 d4	                sta sidv3stnrel ; $d414 ; 54292 - Voice 3 0-3: Rel. duration, 4-7: Sustain duration.
-.6033	a9 00		                lda #0
-.6035	85 fb		                sta 251
-.6037	85 fc		                sta 252
-.6039	85 fd		                sta 253
-.603b	58		                cli
-.603c	60		                rts
-.603d	a6 fb		main            ldx 251
-.603f	a4 fc		                ldy 252
-.6041	bd 8b 60	                lda tune1,x
-.6044	8d 00 d4	                sta sidv1flow   ; $d400 ; 54272 - Voice 1 Low freq register low byte.
-.6047	bd 8c 60	                lda tune1+1,x
-.604a	8d 01 d4	                sta sidv1fhigh  ; $d401 ; 54273 - Voice 1 High freq register high byte.
-.604d	bd 93 60	                lda tune2,x
-.6050	8d 07 d4	                sta sidv2flow   ; $d407 ; 54279 - Voice 2 Low freq register low byte.
-.6053	bd 94 60	                lda tune2+1,x
-.6056	8d 08 d4	                sta sidv2fhigh  ; $d408 ; 54280 - Voice 2 High freq register high byte.
-.6059	bd 9b 60	                lda tune3,x
-.605c	8d 0e d4	                sta sidv3flow   ; $d40e ; 54286 - Voice 3 Low freq register low byte.
-.605f	bd 9c 60	                lda tune3+1,x
-.6062	8d 0f d4	                sta sidv3fhigh  ; $d40f ; 54287 - Voice 3 High freq register high byte.
-.6065	a5 fd		                lda 253
-.6067	c9 20		delval          cmp #32
-.6069	b0 05		                bcs nextdelay
-.606b	e6 fd		                inc 253
-.606d	4c 31 ea	                jmp irq     ; $ea31
-.6070	a9 00		nextdelay       lda #0
-.6072	85 fd		                sta 253
-.6074	e8		                inx
-.6075	e8		                inx
-.6076	c8		                iny
-.6077	86 fb		                stx 251
-.6079	84 fc		                sty 252
-.607b	e0 3c		                cpx #60
-.607d	b0 03		                bcs re
-.607f	4c 31 ea	                jmp irq     ; $ea31
-.6082	a2 00		re              ldx #0
-.6084	85 fb		                sta 251
-.6086	85 fc		                sta 252
-.6088	4c 31 ea	                jmp irq     ; $ea31
-.608b			tune1
->608b	c4 10		          .word     do5
->608d	00 00		          .word     silence
->608f	d1 12		          .word     re5
->6091	00 00		          .word     silence
-.6093			tune2
->6093	1f 15		          .word     mi5
->6095	00 00		          .word     silence
->6097	61 16		          .word     fa5
->6099	00 00		          .word     silence
-.609b			tune3
->609b	1e 19		          .word     sol5
->609d	00 00		          .word     silence
->609f	31 1c		          .word     la5
->60a1	00 00		          .word     silence
->60a3	a6 1f		          .word     si5
->60a5	00 00		          .word     silence
->60a7	88 21		          .word     do6
->60a9	00 00		          .word     silence
->60ab	a6 1f		          .word     si5
->60ad	00 00		          .word     silence
->60af	31 1c		          .word     la5
->60b1	00 00		          .word     silence
->60b3	1e 19		          .word     sol5
->60b5	00 00		          .word     silence
->60b7	61 16		          .word     fa5
->60b9	00 00		          .word     silence
->60bb	1f 15		          .word     mi5
->60bd	00 00		          .word     silence
->60bf	d1 12		          .word     re5
->60c1	00 00		          .word     silence
->60c3	c4 10		          .word     do5
->60c5	00 00		          .word     silence
->60c7	c4 10		          .word     do5
->60c9	00 00		          .word     silence
->60cb	d1 12		          .word     re5
->60cd	00 00		          .word     silence
->60cf	c4 10		          .word     do5
->60d1	00 00		          .word     silence
->60d3	d1 12		          .word     re5
->60d5	00 00		          .word     silence
-.60d7			tune6
->60d7	31 1c		          .word     la5
->60d9	df 1d		          .word     lad5
->60db	a6 1f		          .word     si5
->60dd	c4 10		          .word     do5
->60df	c3 11		          .word     dod5
->60e1	d1 12		          .word     re5
->60e3	f0 13		          .word     red5
->60e5	1f 15		          .word     mi5
->60e7	61 16		          .word     fa5
->60e9	b5 17		          .word     fad5
->60eb	1e 19		          .word     sol5
->60ed	9c 1a		          .word     sold5
->60ef	63 38		          .word     la6
->60f1	bf 3b		          .word     lad6
->60f3	4c 3f		          .word     si6
->60f5	88 21		          .word     do6
->60f7	86 23		          .word     dod6
->60f9	a2 25		          .word     re6
->60fb	e0 27		          .word     red6
->60fd	3f 2a		          .word     mi6
->60ff	c2 2c		          .word     fa6
->6101	6b 2f		          .word     fad6
->6103	3d 32		          .word     sol6
->6105	39 35		          .word     sold6
->6107	c7 70		          .word     la7
->6109	7e 77		          .word     lad7
->610b	00 00		          .word     0
->610d	00 00		          .word     0
->610f	00 00		          .word     0
->6111	00 00		          .word     0
->6113	c2 2c		tune7      .word fa6
->6115	00 00		          .word silence
->6117	c2 2c		          .word fa6
->6119	3f 2a		          .word mi6
->611b	a2 25		          .word re6
->611d	00 00		          .word silence
->611f	a2 25		          .word re6
->6121	88 21		          .word do6
->6123	a2 25		          .word re6
->6125	88 21		          .word do6
->6127	8d 1e		          .byte 141, 30
->6129	d6 1c		          .byte 214, 28
->612b	00 00		          .byte   0,  0
->612d	d6 1c		          .byte 214, 28
->612f	8d 1e		          .byte 141, 30
->6131	88 21		          .word do6
->6133	e3 16		          .byte 227, 22
->6135	b1 19		          .byte 177, 25
->6137	8d 1e		          .byte 141, 30
->6139	d6 1c		          .byte 214, 28
->613b	b1 19		          .byte 177, 25
->613d	e3 16		          .byte 227, 22
->613f	00 00		          .byte   0,  0
->6141	00 00		          .byte   0,  0
->6143	00 00		          .byte   0,  0
->6145	00 00		          .byte   0,  0
-.6147			tune4
->6147	72 0b		          .byte 114, 11
->6149	00 00		          .byte   0,  0
->614b	72 0b		          .byte 114, 11
->614d	cd 0a		          .byte 205, 10
->614f	9f 09		          .byte 159,  9
->6151	00 00		          .byte   0,  0
->6153	9f 09		          .byte 159,  9
->6155	93 08		          .byte 147,  8
->6157	9f 09		          .byte 159,  9
->6159	93 08		          .byte 147,  8
->615b	a3 07		          .byte 163,  7
->615d	35 07		          .byte  53,  7
->615f	00 00		          .byte   0,  0
->6161	35 07		          .byte  53,  7
->6163	a3 07		          .byte 163,  7
->6165	93 08		          .byte 147,  8
->6167	b9 05		          .byte 185,  5
->6169	6c 06		          .byte 108,  6
->616b	a3 07		          .byte 163,  7
->616d	35 07		          .byte  53,  7
->616f	6c 06		          .byte 108,  6
->6171	b9 05		          .byte 185,  5
->6173	00 00		          .byte   0,  0
->6175	00 00		          .byte   0,  0
->6177	00 00		          .byte   0,  0
->6179	00 00		          .byte   0,  0
->617b	00 00		tune5           .byte   0,  0
->617d	00 00		          .byte   0,  0
->617f	00 00		          .byte   0,  0
->6181	00 00		          .byte   0,  0
->6183	00 00		          .byte   0,  0
->6185	00 00		          .byte   0,  0
->6187	00 00		          .byte   0,  0
->6189	00 00		          .byte   0,  0
->618b	00 00		          .byte   0,  0
->618d	00 00		          .byte   0,  0
->618f	00 00		          .byte   0,  0
->6191	00 00		          .byte   0,  0
->6193	00 00		          .byte   0,  0
->6195	00 00		          .byte   0,  0
->6197	00 00		          .byte   0,  0
->6199	00 00		          .byte   0,  0
->619b	00 00		          .byte   0,  0
->619d	00 00		          .byte   0,  0
->619f	00 00		          .byte   0,  0
->61a1	00 00		          .byte   0,  0
->61a3	00 00		          .byte   0,  0
->61a5	00 00		          .byte   0,  0
->61a7	00 00		          .byte   0,  0
->61a9	00 00		          .byte   0,  0
->61ab	00 00		          .byte   0,  0
->61ad	00 00		          .byte   0,  0
->61af	00		byte            .byte 0
+.09f7			irqtune3channel
+.09f7	78		                sei
+.09f8	a9 34		                lda #<main
+.09fa	8d 14 03	                sta 788
+.09fd	a9 0a		                lda #>main
+.09ff	8d 15 03	                sta 789
+.0a02	a9 0a		                lda #%00001010  ; #0-15 $00-$0f
+.0a04	8d 18 d4	                sta sidsigvol   ; $d418 ; 54296 - Volume and Filter selectv register.
+.0a07	a9 21		                lda #%00100001
+.0a09	8d 04 d4	                sta sidv1control; $d404 ; 54276 - Voice 1 Voice control register.
+.0a0c	a9 11		                lda #%00010001
+.0a0e	8d 0b d4	                sta sidv2control; $d40b ; 54283 - Voice 2 Voice control register.
+.0a11	a9 41		                lda #%01000001
+.0a13	8d 12 d4	                sta sidv3control; $d412 ; 54290 - Voice 3 Voice control register.
+.0a16	a9 40		                lda #64
+.0a18	8d 05 d4	                sta sidv1atkdec ; $d405 ; 54277 - Voice 1 0-3: Decay duration, 4-7: Attack duration.
+.0a1b	8d 06 d4	                sta sidv1stnrel ; $d406 ; 54278 - Voice 1 0-3: Rel. duration, 4-7: Sustain duration.
+.0a1e	8d 0c d4	                sta sidv2atkdec ; $d40c ; 54284 - Voice 2 0-3: Decay duration, 4-7: Attack duration.
+.0a21	8d 0d d4	                sta sidv2stnrel ; $d40d ; 54285 - Voice 2 0-3: Rel. duration, 4-7: Sustain duration.
+.0a24	8d 13 d4	                sta sidv3atkdec ; $d413 ; 54291 - Voice 3 0-3: Decay duration, 4-7: Attack duration.
+.0a27	8d 14 d4	                sta sidv3stnrel ; $d414 ; 54292 - Voice 3 0-3: Rel. duration, 4-7: Sustain duration.
+.0a2a	a9 00		                lda #0
+.0a2c	85 fb		                sta 251
+.0a2e	85 fc		                sta 252
+.0a30	85 fd		                sta 253
+.0a32	58		                cli
+.0a33	60		                rts
+.0a34	a6 fb		main            ldx 251
+.0a36	a4 fc		                ldy 252
+.0a38	bd 82 0a	                lda tune1,x
+.0a3b	8d 00 d4	                sta sidv1flow   ; $d400 ; 54272 - Voice 1 Low freq register low byte.
+.0a3e	bd 83 0a	                lda tune1+1,x
+.0a41	8d 01 d4	                sta sidv1fhigh  ; $d401 ; 54273 - Voice 1 High freq register high byte.
+.0a44	bd be 0a	                lda tune2,x
+.0a47	8d 07 d4	                sta sidv2flow   ; $d407 ; 54279 - Voice 2 Low freq register low byte.
+.0a4a	bd bf 0a	                lda tune2+1,x
+.0a4d	8d 08 d4	                sta sidv2fhigh  ; $d408 ; 54280 - Voice 2 High freq register high byte.
+.0a50	bd 9e 0a	                lda tune3,x
+.0a53	8d 0e d4	                sta sidv3flow   ; $d40e ; 54286 - Voice 3 Low freq register low byte.
+.0a56	bd 9f 0a	                lda tune3+1,x
+.0a59	8d 0f d4	                sta sidv3fhigh  ; $d40f ; 54287 - Voice 3 High freq register high byte.
+.0a5c	a5 fd		                lda 253
+.0a5e	c9 04		delval          cmp #4
+.0a60	b0 05		                bcs nextdelay
+.0a62	e6 fd		                inc 253
+.0a64	4c 31 ea	                jmp irq     ; $ea31
+.0a67	a9 00		nextdelay       lda #0
+.0a69	85 fd		                sta 253
+.0a6b	e8		                inx
+.0a6c	e8		                inx
+.0a6d	c8		                iny
+.0a6e	86 fb		                stx 251
+.0a70	84 fc		                sty 252
+.0a72	e0 3c		                cpx #60
+.0a74	b0 03		                bcs re
+.0a76	4c 31 ea	                jmp irq     ; $ea31
+.0a79	a2 00		re              ldx #0
+.0a7b	85 fb		                sta 251
+.0a7d	85 fc		                sta 252
+.0a7f	4c 31 ea	                jmp irq     ; $ea31
+.0a82			tune1
+>0a82	88 21		          .word     do5
+>0a84	00 00		          .word     silence
+>0a86	a2 25		          .word     re5
+>0a88	00 00		          .word     silence
+>0a8a	3f 2a		          .word     mi5
+>0a8c	00 00		          .word     silence
+>0a8e	c2 2c		          .word     fa5
+>0a90	00 00		          .word     silence
+>0a92	3d 32		          .word     sol5
+>0a94	00 00		          .word     silence
+>0a96	64 38		          .word     la5
+>0a98	00 00		          .word     silence
+>0a9a	4c 3f		          .word     si5
+>0a9c	00 00		          .word     silence
+>0a9e	11 43		tune3     .word     do6
+>0aa0	00 00		          .word     silence
+>0aa2	4c 3f		          .word     si5
+>0aa4	00 00		          .word     silence
+>0aa6	64 38		          .word     la5
+>0aa8	00 00		          .word     silence
+>0aaa	3d 32		          .word     sol5
+>0aac	00 00		          .word     silence
+>0aae	c2 2c		          .word     fa5
+>0ab0	00 00		          .word     silence
+>0ab2	3f 2a		          .word     mi5
+>0ab4	00 00		          .word     silence
+>0ab6	a2 25		          .word     re5
+>0ab8	00 00		          .word     silence
+>0aba	88 21		          .word     do5
+>0abc	00 00		          .word     silence
+>0abe	11 43		tune2     .word     do6
+>0ac0	00 00		          .word     silence
+>0ac2	45 4b		          .word     re6
+>0ac4	00 00		          .word     silence
+>0ac6	7f 54		          .word     mi6
+>0ac8	00 00		          .word     silence
+>0aca	85 59		          .word     fa6
+>0acc	00 00		          .word     silence
+>0ace	7a 64		          .word     sol6
+>0ad0	00 00		          .word     silence
+>0ad2	c8 70		          .word     la6
+>0ad4	00 00		          .word     silence
+>0ad6	99 7e		          .word     si6
+>0ad8	00 00		          .word     silence
+>0ada	22 86		          .word     do7
+>0adc	00 00		          .word     silence
+>0ade	99 7e		          .word     si6
+>0ae0	00 00		          .word     silence
+>0ae2	c8 70		          .word     la6
+>0ae4	00 00		          .word     silence
+>0ae6	7a 64		          .word     sol6
+>0ae8	00 00		          .word     silence
+>0aea	85 59		          .word     fa6
+>0aec	00 00		          .word     silence
+>0aee	7f 54		          .word     mi6
+>0af0	00 00		          .word     silence
+>0af2	45 4b		          .word     re6
+>0af4	00 00		          .word     silence
+>0af6	11 43		          .word     do6
+>0af8	00 00		          .word     silence
+>0afa	39 35		          .word     sold5
+>0afc	00 00		          .word     silence
+>0afe	c8 70		          .word     la6
+>0b00	00 00		          .word     silence
+>0b02	7f 77		          .word     lad6
+>0b04	00 00		          .word     silence
+>0b06	99 7e		          .word     si6
+>0b08	00 00		          .word     silence
+>0b0a	11 43		          .word     do6
+>0b0c	00 00		          .word     silence
+>0b0e	0d 47		          .word     dod6
+>0b10	00 00		          .word     silence
+>0b12	45 4b		          .word     re6
+>0b14	00 00		          .word     silence
+>0b16	c1 4f		          .word     red6
+>0b18	00 00		          .word     silence
+>0b1a	7f 54		          .word     mi6
+>0b1c	00 00		          .word     silence
+>0b1e	85 59		          .word     fa6
+>0b20	00 00		          .word     silence
+>0b22	d7 5e		          .word     fad6
+>0b24	00 00		          .word     silence
+>0b26	7a 64		          .word     sol6
+>0b28	00 00		          .word     silence
+>0b2a	73 6a		          .word     sold6
+>0b2c	8f e1		          .word     la7
+>0b2e	fe ee		          .word     lad7
+>0b30	00 00		          .word     0
+>0b32	00 00		          .word     0
+>0b34	00 00		          .word     0
+>0b36	00 00		          .word     0
+>0b38	85 59		tune7      .word fa6
+>0b3a	00 00		          .word silence
+>0b3c	85 59		          .word fa6
+>0b3e	7f 54		          .word mi6
+>0b40	45 4b		          .word re6
+>0b42	00 00		          .word silence
+>0b44	45 4b		          .word re6
+>0b46	11 43		          .word do6
+>0b48	45 4b		          .word re6
+>0b4a	11 43		          .word do6
+>0b4c	8d 1e		          .byte 141, 30
+>0b4e	d6 1c		          .byte 214, 28
+>0b50	00 00		          .byte   0,  0
+>0b52	d6 1c		          .byte 214, 28
+>0b54	8d 1e		          .byte 141, 30
+>0b56	11 43		          .word do6
+>0b58	e3 16		          .byte 227, 22
+>0b5a	b1 19		          .byte 177, 25
+>0b5c	8d 1e		          .byte 141, 30
+>0b5e	d6 1c		          .byte 214, 28
+>0b60	b1 19		          .byte 177, 25
+>0b62	e3 16		          .byte 227, 22
+>0b64	00 00		          .byte   0,  0
+>0b66	00 00		          .byte   0,  0
+>0b68	00 00		          .byte   0,  0
+>0b6a	00 00		          .byte   0,  0
+.0b6c			tune4
+>0b6c	72 0b		          .byte 114, 11
+>0b6e	00 00		          .byte   0,  0
+>0b70	72 0b		          .byte 114, 11
+>0b72	cd 0a		          .byte 205, 10
+>0b74	9f 09		          .byte 159,  9
+>0b76	00 00		          .byte   0,  0
+>0b78	9f 09		          .byte 159,  9
+>0b7a	93 08		          .byte 147,  8
+>0b7c	9f 09		          .byte 159,  9
+>0b7e	93 08		          .byte 147,  8
+>0b80	a3 07		          .byte 163,  7
+>0b82	35 07		          .byte  53,  7
+>0b84	00 00		          .byte   0,  0
+>0b86	35 07		          .byte  53,  7
+>0b88	a3 07		          .byte 163,  7
+>0b8a	93 08		          .byte 147,  8
+>0b8c	b9 05		          .byte 185,  5
+>0b8e	6c 06		          .byte 108,  6
+>0b90	a3 07		          .byte 163,  7
+>0b92	35 07		          .byte  53,  7
+>0b94	6c 06		          .byte 108,  6
+>0b96	b9 05		          .byte 185,  5
+>0b98	00 00		          .byte   0,  0
+>0b9a	00 00		          .byte   0,  0
+>0b9c	00 00		          .byte   0,  0
+>0b9e	00 00		          .byte   0,  0
+>0ba0	00 00		tune5           .byte   0,  0
+>0ba2	00 00		          .byte   0,  0
+>0ba4	00 00		          .byte   0,  0
+>0ba6	00 00		          .byte   0,  0
+>0ba8	00 00		          .byte   0,  0
+>0baa	00 00		          .byte   0,  0
+>0bac	00 00		          .byte   0,  0
+>0bae	00 00		          .byte   0,  0
+>0bb0	00 00		          .byte   0,  0
+>0bb2	00 00		          .byte   0,  0
+>0bb4	00 00		          .byte   0,  0
+>0bb6	00 00		          .byte   0,  0
+>0bb8	00 00		          .byte   0,  0
+>0bba	00 00		          .byte   0,  0
+>0bbc	00 00		          .byte   0,  0
+>0bbe	00 00		          .byte   0,  0
+>0bc0	00 00		          .byte   0,  0
+>0bc2	00 00		          .byte   0,  0
+>0bc4	00 00		          .byte   0,  0
+>0bc6	00 00		          .byte   0,  0
+>0bc8	00 00		          .byte   0,  0
+>0bca	00 00		          .byte   0,  0
+>0bcc	00 00		          .byte   0,  0
+>0bce	00 00		          .byte   0,  0
+>0bd0	00 00		          .byte   0,  0
+>0bd2	00 00		          .byte   0,  0
+>0bd4	00		byte            .byte 0
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-kernal.asm
 
@@ -701,7 +721,7 @@
 =8			kerr08 = 8      ; file name is missing.
 =9			kerr09 = 9      ; illegal device number.
 =240			kerrf0 = 240    ; top-of-memory change rs-232 buffer allocation.
-.61b0			libtart
+.0bd5			libtart
 
 ;******  Return to file: irqtune3channel.asm
 
@@ -863,105 +883,102 @@
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-sid-notes-ntsc.asm
 
 =$0000			silence     = $0000 ; Silence (no frequency)
-=$00e1			la0     = $00E1 ; NTSC (hex): high: $00, low: $E1 ; (dec): low:225, High:  0
-=$00ee			lad0    = $00EE ; NTSC (hex): high: $00, low: $EE ; (dec): low:238, High:  0
-=$00fd			si0     = $00FD ; NTSC (hex): high: $00, low: $FD ; (dec): low:253, High:  0
-=$010c			do1     = $010C ; NTSC (hex): high: $01, low: $0C ; (dec): low: 12, High:  1
-=$011c			dod1    = $011C ; NTSC (hex): high: $01, low: $1C ; (dec): low: 28, High:  1
-=$012d			re1     = $012D ; NTSC (hex): high: $01, low: $2D ; (dec): low: 45, High:  1
-=$013f			red1    = $013F ; NTSC (hex): high: $01, low: $3F ; (dec): low: 63, High:  1
-=$0151			mi1     = $0151 ; NTSC (hex): high: $01, low: $51 ; (dec): low: 81, High:  1
-=$0166			fa1     = $0166 ; NTSC (hex): high: $01, low: $66 ; (dec): low:102, High:  1
-=$017b			fad1    = $017B ; NTSC (hex): high: $01, low: $7B ; (dec): low:123, High:  1
-=$0191			sol1    = $0191 ; NTSC (hex): high: $01, low: $91 ; (dec): low:145, High:  1
-=$01a9			sold1   = $01A9 ; NTSC (hex): high: $01, low: $A9 ; (dec): low:169, High:  1
-=$01c3			la1     = $01C3 ; NTSC (hex): high: $01, low: $C3 ; (dec): low:195, High:  1
-=$01dd			lad1    = $01DD ; NTSC (hex): high: $01, low: $DD ; (dec): low:221, High:  1
-=$01fa			si1     = $01FA ; NTSC (hex): high: $01, low: $FA ; (dec): low:250, High:  1
-=$0218			do2     = $0218 ; NTSC (hex): high: $02, low: $18 ; (dec): low: 24, High:  2
-=$0238			dod2    = $0238 ; NTSC (hex): high: $02, low: $38 ; (dec): low: 56, High:  2
-=$025a			re2     = $025A ; NTSC (hex): high: $02, low: $5A ; (dec): low: 90, High:  2
-=$027e			red2    = $027E ; NTSC (hex): high: $02, low: $7E ; (dec): low:126, High:  2
-=$02a3			mi2     = $02A3 ; NTSC (hex): high: $02, low: $A3 ; (dec): low:163, High:  2
-=$02cc			fa2     = $02CC ; NTSC (hex): high: $02, low: $CC ; (dec): low:204, High:  2
-=$02f6			fad2    = $02F6 ; NTSC (hex): high: $02, low: $F6 ; (dec): low:246, High:  2
-=$0323			sol2    = $0323 ; NTSC (hex): high: $03, low: $23 ; (dec): low: 35, High:  3
-=$0353			sold2   = $0353 ; NTSC (hex): high: $03, low: $53 ; (dec): low: 83, High:  3
-=$0386			la2     = $0386 ; NTSC (hex): high: $03, low: $86 ; (dec): low:134, High:  3
-=$03bb			lad2    = $03BB ; NTSC (hex): high: $03, low: $BB ; (dec): low:187, High:  3
-=$03f4			si2     = $03F4 ; NTSC (hex): high: $03, low: $F4 ; (dec): low:244, High:  3
-=$0431			do3     = $0431 ; NTSC (hex): high: $04, low: $31 ; (dec): low: 49, High:  4
-=$0470			dod3    = $0470 ; NTSC (hex): high: $04, low: $70 ; (dec): low:112, High:  4
-=$04b4			re3     = $04B4 ; NTSC (hex): high: $04, low: $B4 ; (dec): low:180, High:  4
-=$04fc			red3    = $04FC ; NTSC (hex): high: $04, low: $FC ; (dec): low:252, High:  4
-=$0547			mi3     = $0547 ; NTSC (hex): high: $05, low: $47 ; (dec): low: 71, High:  5
-=$0598			fa3     = $0598 ; NTSC (hex): high: $05, low: $98 ; (dec): low:152, High:  5
-=$05ed			fad3    = $05ED ; NTSC (hex): high: $05, low: $ED ; (dec): low:237, High:  5
-=$0647			sol3    = $0647 ; NTSC (hex): high: $06, low: $47 ; (dec): low: 71, High:  6
-=$06a7			sold3   = $06A7 ; NTSC (hex): high: $06, low: $A7 ; (dec): low:167, High:  6
-=$070c			la3     = $070C ; NTSC (hex): high: $07, low: $0C ; (dec): low: 12, High:  7
-=$0777			lad3    = $0777 ; NTSC (hex): high: $07, low: $77 ; (dec): low:119, High:  7
-=$07e9			si3     = $07E9 ; NTSC (hex): high: $07, low: $E9 ; (dec): low:233, High:  7
-=$0862			do4     = $0862 ; NTSC (hex): high: $08, low: $62 ; (dec): low: 98, High:  8
-=$08e1			dod4    = $08E1 ; NTSC (hex): high: $08, low: $E1 ; (dec): low:225, High:  8
-=$0968			re4     = $0968 ; NTSC (hex): high: $09, low: $68 ; (dec): low:104, High:  9
-=$09f8			red4    = $09F8 ; NTSC (hex): high: $09, low: $F8 ; (dec): low:248, High:  9
-=$0a8f			mi4     = $0A8F ; NTSC (hex): high: $0A, low: $8F ; (dec): low:143, High: 10
-=$0b30			fa4     = $0B30 ; NTSC (hex): high: $0B, low: $30 ; (dec): low: 48, High: 11
-=$0bda			fad4    = $0BDA ; NTSC (hex): high: $0B, low: $DA ; (dec): low:218, High: 11
-=$0c8f			sol4    = $0C8F ; NTSC (hex): high: $0C, low: $8F ; (dec): low:143, High: 12
-=$0d4e			sold4   = $0D4E ; NTSC (hex): high: $0D, low: $4E ; (dec): low: 78, High: 13
-=$0e18			la4     = $0E18 ; NTSC (hex): high: $0E, low: $18 ; (dec): low: 24, High: 14
-=$0eef			lad4    = $0EEF ; NTSC (hex): high: $0E, low: $EF ; (dec): low:239, High: 14
-=$0fd3			si4     = $0FD3 ; NTSC (hex): high: $0F, low: $D3 ; (dec): low:211, High: 15
-=$10c4			do5     = $10C4 ; NTSC (hex): high: $10, low: $C4 ; (dec): low:196, High: 16
-=$11c3			dod5    = $11C3 ; NTSC (hex): high: $11, low: $C3 ; (dec): low:195, High: 17
-=$12d1			re5     = $12D1 ; NTSC (hex): high: $12, low: $D1 ; (dec): low:209, High: 18
-=$13f0			red5    = $13F0 ; NTSC (hex): high: $13, low: $F0 ; (dec): low:240, High: 19
-=$151f			mi5     = $151F ; NTSC (hex): high: $15, low: $1F ; (dec): low: 31, High: 21
-=$1661			fa5     = $1661 ; NTSC (hex): high: $16, low: $61 ; (dec): low: 97, High: 22
-=$17b5			fad5    = $17B5 ; NTSC (hex): high: $17, low: $B5 ; (dec): low:181, High: 23
-=$191e			sol5    = $191E ; NTSC (hex): high: $19, low: $1E ; (dec): low: 30, High: 25
-=$1a9c			sold5   = $1A9C ; NTSC (hex): high: $1A, low: $9C ; (dec): low:156, High: 26
-=$1c31			la5     = $1C31 ; NTSC (hex): high: $1C, low: $31 ; (dec): low: 49, High: 28
-=$1ddf			lad5    = $1DDF ; NTSC (hex): high: $1D, low: $DF ; (dec): low:223, High: 29
-=$1fa6			si5     = $1FA6 ; NTSC (hex): high: $1F, low: $A6 ; (dec): low:166, High: 31
-=$2188			do6     = $2188 ; NTSC (hex): high: $21, low: $88 ; (dec): low:136, High: 33
-=$2386			dod6    = $2386 ; NTSC (hex): high: $23, low: $86 ; (dec): low:134, High: 35
-=$25a2			re6     = $25A2 ; NTSC (hex): high: $25, low: $A2 ; (dec): low:162, High: 37
-=$27e0			red6    = $27E0 ; NTSC (hex): high: $27, low: $E0 ; (dec): low:224, High: 39
-=$2a3f			mi6     = $2A3F ; NTSC (hex): high: $2A, low: $3F ; (dec): low: 63, High: 42
-=$2cc2			fa6     = $2CC2 ; NTSC (hex): high: $2C, low: $C2 ; (dec): low:194, High: 44
-=$2f6b			fad6    = $2F6B ; NTSC (hex): high: $2F, low: $6B ; (dec): low:107, High: 47
-=$323d			sol6    = $323D ; NTSC (hex): high: $32, low: $3D ; (dec): low: 61, High: 50
-=$3539			sold6   = $3539 ; NTSC (hex): high: $35, low: $39 ; (dec): low: 57, High: 53
-=$3863			la6     = $3863 ; NTSC (hex): high: $38, low: $63 ; (dec): low: 99, High: 56
-=$3bbf			lad6    = $3BBF ; NTSC (hex): high: $3B, low: $BF ; (dec): low:191, High: 59
-=$3f4c			si6     = $3F4C ; NTSC (hex): high: $3F, low: $4C ; (dec): low: 76, High: 63
-=$4310			do7     = $4310 ; NTSC (hex): high: $43, low: $10 ; (dec): low: 16, High: 67
-=$470d			dod7    = $470D ; NTSC (hex): high: $47, low: $0D ; (dec): low: 13, High: 71
-=$4b44			re7     = $4B44 ; NTSC (hex): high: $4B, low: $44 ; (dec): low: 68, High: 75
-=$4fc0			red7    = $4FC0 ; NTSC (hex): high: $4F, low: $C0 ; (dec): low:192, High: 79
-=$547e			mi7     = $547E ; NTSC (hex): high: $54, low: $7E ; (dec): low:126, High: 84
-=$5984			fa7     = $5984 ; NTSC (hex): high: $59, low: $84 ; (dec): low:132, High: 89
-=$5ed6			fad7    = $5ED6 ; NTSC (hex): high: $5E, low: $D6 ; (dec): low:214, High: 94
-=$647a			sol7    = $647A ; NTSC (hex): high: $64, low: $7A ; (dec): low:122, High:100
-=$6a72			sold7   = $6A72 ; NTSC (hex): high: $6A, low: $72 ; (dec): low:114, High:106
-=$70c7			la7     = $70C7 ; NTSC (hex): high: $70, low: $C7 ; (dec): low:199, High:112
-=$777e			lad7    = $777E ; NTSC (hex): high: $77, low: $7E ; (dec): low:126, High:119
-=$7e98			si7     = $7E98 ; NTSC (hex): high: $7E, low: $98 ; (dec): low:152, High:126
-=$8621			do8     = $8621 ; NTSC (hex): high: $86, low: $21 ; (dec): low: 33, High:134
-=$8e1a			dod8    = $8E1A ; NTSC (hex): high: $8E, low: $1A ; (dec): low: 26, High:142
-=$9689			re8     = $9689 ; NTSC (hex): high: $96, low: $89 ; (dec): low:137, High:150
-=$9f81			red8    = $9F81 ; NTSC (hex): high: $9F, low: $81 ; (dec): low:129, High:159
-=$a8fd			mi8     = $A8FD ; NTSC (hex): high: $A8, low: $FD ; (dec): low:253, High:168
-=$b309			fa8     = $B309 ; NTSC (hex): high: $B3, low: $09 ; (dec): low:  9, High:179
-=$bdad			fad8    = $BDAD ; NTSC (hex): high: $BD, low: $AD ; (dec): low:173, High:189
-=$c8f4			sol8    = $C8F4 ; NTSC (hex): high: $C8, low: $F4 ; (dec): low:244, High:200
-=$d4e5			sold8   = $D4E5 ; NTSC (hex): high: $D4, low: $E5 ; (dec): low:229, High:212
-=$e18f			la8     = $E18F ; NTSC (hex): high: $E1, low: $8F ; (dec): low:143, High:225
-=$eefd			lad8    = $EEFD ; NTSC (hex): high: $EE, low: $FD ; (dec): low:253, High:238
-=$fd31			si8     = $FD31 ; NTSC (hex): high: $FD, low: $31 ; (dec): low: 49, High:253
+=$010c			do0   = $010C ;   16,35Hz NTSC (hex): hi: $01, lo: $0C ; (dec): lo: 12, Hi:  1
+=$011c			dod0  = $011C ;   17,33Hz NTSC (hex): hi: $01, lo: $1C ; (dec): lo: 28, Hi:  1
+=$012d			re0   = $012D ;   18,35Hz NTSC (hex): hi: $01, lo: $2D ; (dec): lo: 45, Hi:  1
+=$013f			red0  = $013F ;   19,45Hz NTSC (hex): hi: $01, lo: $3F ; (dec): lo: 63, Hi:  1
+=$0152			mi0   = $0152 ;   20,60Hz NTSC (hex): hi: $01, lo: $52 ; (dec): lo: 82, Hi:  1
+=$0166			fa0   = $0166 ;   21,83Hz NTSC (hex): hi: $01, lo: $66 ; (dec): lo:102, Hi:  1
+=$017b			fad0  = $017B ;   23,13Hz NTSC (hex): hi: $01, lo: $7B ; (dec): lo:123, Hi:  1
+=$0192			sol0  = $0192 ;   24,50Hz NTSC (hex): hi: $01, lo: $92 ; (dec): lo:146, Hi:  1
+=$01aa			sold0 = $01AA ;   25,96Hz NTSC (hex): hi: $01, lo: $AA ; (dec): lo:170, Hi:  1
+=$01c3			la0   = $01C3 ;   27,50Hz NTSC (hex): hi: $01, lo: $C3 ; (dec): lo:195, Hi:  1
+=$01de			lad0  = $01DE ;   29,14Hz NTSC (hex): hi: $01, lo: $DE ; (dec): lo:222, Hi:  1
+=$01fa			si0   = $01FA ;   30,87Hz NTSC (hex): hi: $01, lo: $FA ; (dec): lo:250, Hi:  1
+=$0219			do1   = $0219 ;   32,71Hz NTSC (hex): hi: $02, lo: $19 ; (dec): lo: 25, Hi:  2
+=$0238			dod1  = $0238 ;   34,65Hz NTSC (hex): hi: $02, lo: $38 ; (dec): lo: 56, Hi:  2
+=$025a			re1   = $025A ;   36,71Hz NTSC (hex): hi: $02, lo: $5A ; (dec): lo: 90, Hi:  2
+=$027e			red1  = $027E ;   38,89Hz NTSC (hex): hi: $02, lo: $7E ; (dec): lo:126, Hi:  2
+=$02a4			mi1   = $02A4 ;   41,21Hz NTSC (hex): hi: $02, lo: $A4 ; (dec): lo:164, Hi:  2
+=$02cc			fa1   = $02CC ;   43,66Hz NTSC (hex): hi: $02, lo: $CC ; (dec): lo:204, Hi:  2
+=$02f7			fad1  = $02F7 ;   46,25Hz NTSC (hex): hi: $02, lo: $F7 ; (dec): lo:247, Hi:  2
+=$0324			sol1  = $0324 ;   49,00Hz NTSC (hex): hi: $03, lo: $24 ; (dec): lo: 36, Hi:  3
+=$0354			sold1 = $0354 ;   51,91Hz NTSC (hex): hi: $03, lo: $54 ; (dec): lo: 84, Hi:  3
+=$0386			la1   = $0386 ;   55,00Hz NTSC (hex): hi: $03, lo: $86 ; (dec): lo:134, Hi:  3
+=$03bc			lad1  = $03BC ;   58,28Hz NTSC (hex): hi: $03, lo: $BC ; (dec): lo:188, Hi:  3
+=$03f5			si1   = $03F5 ;   61,74Hz NTSC (hex): hi: $03, lo: $F5 ; (dec): lo:245, Hi:  3
+=$0431			do2   = $0431 ;   65,41Hz NTSC (hex): hi: $04, lo: $31 ; (dec): lo: 49, Hi:  4
+=$0471			dod2  = $0471 ;   69,30Hz NTSC (hex): hi: $04, lo: $71 ; (dec): lo:113, Hi:  4
+=$04b4			re2   = $04B4 ;   73,41Hz NTSC (hex): hi: $04, lo: $B4 ; (dec): lo:180, Hi:  4
+=$04fc			red2  = $04FC ;   77,79Hz NTSC (hex): hi: $04, lo: $FC ; (dec): lo:252, Hi:  4
+=$0548			mi2   = $0548 ;   82,41Hz NTSC (hex): hi: $05, lo: $48 ; (dec): lo: 72, Hi:  5
+=$0598			fa2   = $0598 ;   87,31Hz NTSC (hex): hi: $05, lo: $98 ; (dec): lo:152, Hi:  5
+=$05ed			fad2  = $05ED ;   92,50Hz NTSC (hex): hi: $05, lo: $ED ; (dec): lo:237, Hi:  5
+=$0648			sol2  = $0648 ;   98,00Hz NTSC (hex): hi: $06, lo: $48 ; (dec): lo: 72, Hi:  6
+=$06a7			sold2 = $06A7 ;  103,83Hz NTSC (hex): hi: $06, lo: $A7 ; (dec): lo:167, Hi:  6
+=$070c			la2   = $070C ;  110,00Hz NTSC (hex): hi: $07, lo: $0C ; (dec): lo: 12, Hi:  7
+=$0778			lad2  = $0778 ;  116,55Hz NTSC (hex): hi: $07, lo: $78 ; (dec): lo:120, Hi:  7
+=$07ea			si2   = $07EA ;  123,48Hz NTSC (hex): hi: $07, lo: $EA ; (dec): lo:234, Hi:  7
+=$0862			do3   = $0862 ;  130,83Hz NTSC (hex): hi: $08, lo: $62 ; (dec): lo: 98, Hi:  8
+=$08e2			dod3  = $08E2 ;  138,60Hz NTSC (hex): hi: $08, lo: $E2 ; (dec): lo:226, Hi:  8
+=$0969			re3   = $0969 ;  146,83Hz NTSC (hex): hi: $09, lo: $69 ; (dec): lo:105, Hi:  9
+=$09f8			red3  = $09F8 ;  155,58Hz NTSC (hex): hi: $09, lo: $F8 ; (dec): lo:248, Hi:  9
+=$0a90			mi3   = $0A90 ;  164,83Hz NTSC (hex): hi: $0A, lo: $90 ; (dec): lo:144, Hi: 10
+=$0b31			fa3   = $0B31 ;  174,63Hz NTSC (hex): hi: $0B, lo: $31 ; (dec): lo: 49, Hi: 11
+=$0bdb			fad3  = $0BDB ;  185,00Hz NTSC (hex): hi: $0B, lo: $DB ; (dec): lo:219, Hi: 11
+=$0c8f			sol3  = $0C8F ;  196,00Hz NTSC (hex): hi: $0C, lo: $8F ; (dec): lo:143, Hi: 12
+=$0d4e			sold3 = $0D4E ;  207,65Hz NTSC (hex): hi: $0D, lo: $4E ; (dec): lo: 78, Hi: 13
+=$0e19			la3   = $0E19 ;  220,00Hz NTSC (hex): hi: $0E, lo: $19 ; (dec): lo: 25, Hi: 14
+=$0ef0			lad3  = $0EF0 ;  233,10Hz NTSC (hex): hi: $0E, lo: $F0 ; (dec): lo:240, Hi: 14
+=$0fd3			si3   = $0FD3 ;  246,95Hz NTSC (hex): hi: $0F, lo: $D3 ; (dec): lo:211, Hi: 15
+=$10c4			do4   = $10C4 ;  261,65Hz NTSC (hex): hi: $10, lo: $C4 ; (dec): lo:196, Hi: 16
+=$11c3			dod4  = $11C3 ;  277,20Hz NTSC (hex): hi: $11, lo: $C3 ; (dec): lo:195, Hi: 17
+=$12d1			re4   = $12D1 ;  293,65Hz NTSC (hex): hi: $12, lo: $D1 ; (dec): lo:209, Hi: 18
+=$13f0			red4  = $13F0 ;  311,15Hz NTSC (hex): hi: $13, lo: $F0 ; (dec): lo:240, Hi: 19
+=$1520			mi4   = $1520 ;  329,65Hz NTSC (hex): hi: $15, lo: $20 ; (dec): lo: 32, Hi: 21
+=$1661			fa4   = $1661 ;  349,25Hz NTSC (hex): hi: $16, lo: $61 ; (dec): lo: 97, Hi: 22
+=$17b6			fad4  = $17B6 ;  370,00Hz NTSC (hex): hi: $17, lo: $B6 ; (dec): lo:182, Hi: 23
+=$191f			sol4  = $191F ;  392,00Hz NTSC (hex): hi: $19, lo: $1F ; (dec): lo: 31, Hi: 25
+=$1a9d			sold4 = $1A9D ;  415,30Hz NTSC (hex): hi: $1A, lo: $9D ; (dec): lo:157, Hi: 26
+=$1c32			la4   = $1C32 ;  440,00Hz NTSC (hex): hi: $1C, lo: $32 ; (dec): lo: 50, Hi: 28
+=$1de0			lad4  = $1DE0 ;  466,20Hz NTSC (hex): hi: $1D, lo: $E0 ; (dec): lo:224, Hi: 29
+=$1fa6			si4   = $1FA6 ;  493,90Hz NTSC (hex): hi: $1F, lo: $A6 ; (dec): lo:166, Hi: 31
+=$2188			do5   = $2188 ;  523,30Hz NTSC (hex): hi: $21, lo: $88 ; (dec): lo:136, Hi: 33
+=$2387			dod5  = $2387 ;  554,40Hz NTSC (hex): hi: $23, lo: $87 ; (dec): lo:135, Hi: 35
+=$25a2			re5   = $25A2 ;  587,30Hz NTSC (hex): hi: $25, lo: $A2 ; (dec): lo:162, Hi: 37
+=$27e0			red5  = $27E0 ;  622,30Hz NTSC (hex): hi: $27, lo: $E0 ; (dec): lo:224, Hi: 39
+=$2a3f			mi5   = $2A3F ;  659,30Hz NTSC (hex): hi: $2A, lo: $3F ; (dec): lo: 63, Hi: 42
+=$2cc2			fa5   = $2CC2 ;  698,50Hz NTSC (hex): hi: $2C, lo: $C2 ; (dec): lo:194, Hi: 44
+=$2f6b			fad5  = $2F6B ;  740,00Hz NTSC (hex): hi: $2F, lo: $6B ; (dec): lo:107, Hi: 47
+=$323d			sol5  = $323D ;  784,00Hz NTSC (hex): hi: $32, lo: $3D ; (dec): lo: 61, Hi: 50
+=$3539			sold5 = $3539 ;  830,60Hz NTSC (hex): hi: $35, lo: $39 ; (dec): lo: 57, Hi: 53
+=$3864			la5   = $3864 ;  880,00Hz NTSC (hex): hi: $38, lo: $64 ; (dec): lo:100, Hi: 56
+=$3bbf			lad5  = $3BBF ;  932,40Hz NTSC (hex): hi: $3B, lo: $BF ; (dec): lo:191, Hi: 59
+=$3f4c			si5   = $3F4C ;  987,80Hz NTSC (hex): hi: $3F, lo: $4C ; (dec): lo: 76, Hi: 63
+=$4311			do6   = $4311 ; 1046,60Hz NTSC (hex): hi: $43, lo: $11 ; (dec): lo: 17, Hi: 67
+=$470d			dod6  = $470D ; 1108,80Hz NTSC (hex): hi: $47, lo: $0D ; (dec): lo: 13, Hi: 71
+=$4b45			re6   = $4B45 ; 1174,60Hz NTSC (hex): hi: $4B, lo: $45 ; (dec): lo: 69, Hi: 75
+=$4fc1			red6  = $4FC1 ; 1244,60Hz NTSC (hex): hi: $4F, lo: $C1 ; (dec): lo:193, Hi: 79
+=$547f			mi6   = $547F ; 1318,60Hz NTSC (hex): hi: $54, lo: $7F ; (dec): lo:127, Hi: 84
+=$5985			fa6   = $5985 ; 1397,00Hz NTSC (hex): hi: $59, lo: $85 ; (dec): lo:133, Hi: 89
+=$5ed7			fad6  = $5ED7 ; 1480,00Hz NTSC (hex): hi: $5E, lo: $D7 ; (dec): lo:215, Hi: 94
+=$647a			sol6  = $647A ; 1568,00Hz NTSC (hex): hi: $64, lo: $7A ; (dec): lo:122, Hi:100
+=$6a73			sold6 = $6A73 ; 1661,20Hz NTSC (hex): hi: $6A, lo: $73 ; (dec): lo:115, Hi:106
+=$70c8			la6   = $70C8 ; 1760,00Hz NTSC (hex): hi: $70, lo: $C8 ; (dec): lo:200, Hi:112
+=$777f			lad6  = $777F ; 1864,80Hz NTSC (hex): hi: $77, lo: $7F ; (dec): lo:127, Hi:119
+=$7e99			si6   = $7E99 ; 1975,60Hz NTSC (hex): hi: $7E, lo: $99 ; (dec): lo:153, Hi:126
+=$8622			do7   = $8622 ; 2093,20Hz NTSC (hex): hi: $86, lo: $22 ; (dec): lo: 34, Hi:134
+=$8e1a			dod7  = $8E1A ; 2217,60Hz NTSC (hex): hi: $8E, lo: $1A ; (dec): lo: 26, Hi:142
+=$9689			re7   = $9689 ; 2349,20Hz NTSC (hex): hi: $96, lo: $89 ; (dec): lo:137, Hi:150
+=$9f82			red7  = $9F82 ; 2489,20Hz NTSC (hex): hi: $9F, lo: $82 ; (dec): lo:130, Hi:159
+=$a8fe			mi7   = $A8FE ; 2637,20Hz NTSC (hex): hi: $A8, lo: $FE ; (dec): lo:254, Hi:168
+=$b30a			fa7   = $B30A ; 2794,00Hz NTSC (hex): hi: $B3, lo: $0A ; (dec): lo: 10, Hi:179
+=$bdad			fad7  = $BDAD ; 2960,00Hz NTSC (hex): hi: $BD, lo: $AD ; (dec): lo:173, Hi:189
+=$c8f4			sol7  = $C8F4 ; 3136,00Hz NTSC (hex): hi: $C8, lo: $F4 ; (dec): lo:244, Hi:200
+=$d4e6			sold7 = $D4E6 ; 3322,40Hz NTSC (hex): hi: $D4, lo: $E6 ; (dec): lo:230, Hi:212
+=$e18f			la7   = $E18F ; 3520,00Hz NTSC (hex): hi: $E1, lo: $8F ; (dec): lo:143, Hi:225
+=$eefe			lad7  = $EEFE ; 3729,60Hz NTSC (hex): hi: $EE, lo: $FE ; (dec): lo:254, Hi:238
+=$fd31			si7   = $FD31 ; 3951,20Hz NTSC (hex): hi: $FD, lo: $31 ; (dec): lo: 49, Hi:253
 
 ;******  Return to file: irqtune3channel.asm
 
@@ -973,652 +990,652 @@
 =0			bkcol1=0
 =0			bkcol2=0
 =0			bkcol3=0
-.61b0			scrmaninit
-.61b0	20 d7 62	               jsr  push
-.61b3	a9 06		               lda  #vbleu
-.61b5	8d 21 d0	               sta  vicbackcol
-.61b8	a9 05		               lda  #vvert
-.61ba	8d 20 d0	               sta  vicbordcol
-.61bd	a9 01		               lda  #vblanc
-.61bf	8d 86 02	               sta  bascol
-.61c2	ad 00 04	               lda  scrnram
-.61c5	29 fd		               and  #%11111101
-.61c7	8d 00 04	               sta  scrnram
-.61ca	20 d1 61	               jsr  cls
-.61cd	20 16 63	               jsr  pop
-.61d0	60		               rts
-.61d1			cls
-.61d1	08		               php
-.61d2	48		               pha
-.61d3	a9 93		               lda  #$93
-.61d5	20 e0 61	               jsr  putch
-.61d8	a9 0e		               lda  #$0e
-.61da	20 e0 61	               jsr  putch
-.61dd	68		               pla
-.61de	28		               plp
-.61df	60		               rts
-.61e0			putch
-.61e0	08		               php
-.61e1	20 d2 ff	               jsr  $ffd2
-.61e4	28		               plp
-.61e5	60		               rts
-.61e6			puts
-.61e6	20 d7 62	               jsr  push
-.61e9	86 fb		               stx  zpage1
-.61eb	84 fc		               sty  zpage1+1
-.61ed	a0 00		               ldy  #0
-.61ef	b1 fb		next           lda  (zpage1),y
-.61f1	f0 09		               beq  exit
-.61f3	20 e0 61	               jsr  putch
-.61f6	20 de 63	               jsr  inczp1
-.61f9	4c ef 61	               jmp  next
-.61fc	20 16 63	exit           jsr  pop
-.61ff	60		               rts
-.6200			gotoxy
-.6200	08		               php
-.6201	18		               clc
-.6202	8a		               txa
-.6203	48		               pha
-.6204	98		               tya
-.6205	aa		               tax
-.6206	68		               pla
-.6207	a8		               tay
-.6208	20 f0 ff	               jsr  kplot
-.620b	28		               plp
-.620c	60		               rts
-.620d			cursor
+.0bd5			scrmaninit
+.0bd5	20 fc 0c	               jsr  push
+.0bd8	a9 06		               lda  #vbleu
+.0bda	8d 21 d0	               sta  vicbackcol
+.0bdd	a9 05		               lda  #vvert
+.0bdf	8d 20 d0	               sta  vicbordcol
+.0be2	a9 01		               lda  #vblanc
+.0be4	8d 86 02	               sta  bascol
+.0be7	ad 00 04	               lda  scrnram
+.0bea	29 fd		               and  #%11111101
+.0bec	8d 00 04	               sta  scrnram
+.0bef	20 f6 0b	               jsr  cls
+.0bf2	20 3b 0d	               jsr  pop
+.0bf5	60		               rts
+.0bf6			cls
+.0bf6	08		               php
+.0bf7	48		               pha
+.0bf8	a9 93		               lda  #$93
+.0bfa	20 05 0c	               jsr  putch
+.0bfd	a9 0e		               lda  #$0e
+.0bff	20 05 0c	               jsr  putch
+.0c02	68		               pla
+.0c03	28		               plp
+.0c04	60		               rts
+.0c05			putch
+.0c05	08		               php
+.0c06	20 d2 ff	               jsr  $ffd2
+.0c09	28		               plp
+.0c0a	60		               rts
+.0c0b			puts
+.0c0b	20 fc 0c	               jsr  push
+.0c0e	86 fb		               stx  zpage1
+.0c10	84 fc		               sty  zpage1+1
+.0c12	a0 00		               ldy  #0
+.0c14	b1 fb		next           lda  (zpage1),y
+.0c16	f0 09		               beq  exit
+.0c18	20 05 0c	               jsr  putch
+.0c1b	20 03 0e	               jsr  inczp1
+.0c1e	4c 14 0c	               jmp  next
+.0c21	20 3b 0d	exit           jsr  pop
+.0c24	60		               rts
+.0c25			gotoxy
+.0c25	08		               php
+.0c26	18		               clc
+.0c27	8a		               txa
+.0c28	48		               pha
+.0c29	98		               tya
+.0c2a	aa		               tax
+.0c2b	68		               pla
+.0c2c	a8		               tay
+.0c2d	20 f0 ff	               jsr  kplot
+.0c30	28		               plp
+.0c31	60		               rts
+.0c32			cursor
 =$0286			bascol    =    $0286
-.620d	08		               php
-.620e	48		               pha
-.620f	90 12		               bcc  restore
-.6211	20 f0 ff	               jsr  kplot
-.6214	8c 35 62	               sty  cx
-.6217	8e 36 62	               stx  cy
-.621a	ad 86 02	               lda  bascol
-.621d	8d 37 62	               sta  bcol
-.6220	4c 32 62	               jmp  out
-.6223	ae 36 62	restore        ldx  cy
-.6226	ac 35 62	               ldy  cx
-.6229	20 f0 ff	               jsr  kplot
-.622c	ad 37 62	               lda  bcol
-.622f	8d 86 02	               sta  bascol
-.6232	68		out            pla
-.6233	28		               plp
-.6234	60		               rts
->6235	00		cx   .byte     $00
->6236	00		cy   .byte     $00
->6237	00		bcol .byte     $00
-.6238			cursave
-.6238	08		               php
-.6239	38		               sec
-.623a	20 0d 62	               jsr  cursor
-.623d	28		               plp
-.623e	60		               rts
-.623f			curput
-.623f	08		               php
-.6240	18		               clc
-.6241	20 0d 62	               jsr  cursor
-.6244	28		               plp
-.6245	60		               rts
-.6246			putsxy
-.6246	20 d7 62	               jsr  push
-.6249	86 fb		               stx  zpage1
-.624b	84 fc		               sty  zpage1+1
-.624d	a0 00		               ldy  #$00
-.624f	b1 fb		               lda  (zpage1),y
-.6251	aa		               tax
-.6252	20 de 63	               jsr  inczp1
-.6255	b1 fb		               lda  (zpage1),y
-.6257	a8		               tay
-.6258	20 00 62	               jsr  gotoxy
-.625b	20 de 63	               jsr  inczp1
-.625e	a6 fb		               ldx  zpage1
-.6260	a4 fc		               ldy  zpage1+1
-.6262	20 e6 61	               jsr  puts
-.6265	20 16 63	               jsr  pop
-.6268	60		               rts
->6269	00 00		straddr   .word     $00
->626b	00		px        .byte     $00
->626c	00		py        .byte     $00
->626d	00 00		zp1       .word     $00
-.626f			putscxy
-.626f	20 d7 62	               jsr  push
-.6272	84 fc		               sty  zpage1+1
-.6274	86 fb		               stx  zpage1
-.6276	ad 86 02	               lda  bascol
-.6279	8d 99 62	               sta  bc
-.627c	a0 00		               ldy #$00
-.627e	b1 fb		               lda  (zpage1),y
-.6280	8d 86 02	               sta  bascol
-.6283	20 de 63	               jsr  inczp1
-.6286	a6 fb		               ldx  zpage1
-.6288	a4 fc		               ldy  zpage1+1
-.628a	20 46 62	               jsr  putsxy
-.628d	ad 99 62	               lda  bc
-.6290	8d 86 02	               sta  bascol
-.6293	20 16 63	               jsr  pop
-.6296	60		               rts
->6297	00 00		straddr  .word      $00
->6299	00		bc       .byte      $00
->629a	00 00		zp1      .word      $00
-.629c			putrahex
-.629c	08		               php
-.629d	48		               pha
-.629e	20 e4 64	               jsr  a2hex
-.62a1	a9 90		               lda  #<a2hexstr
-.62a3	a0 64		               ldy  #>a2hexstr
-.62a5	20 e6 61	               jsr  puts
-.62a8	68		               pla
-.62a9	28		               plp
-.62aa	60		               rts
-.62ab			kputrahexxy
-.62ab			bputrahexxy
-.62ab			putrahexxy
-.62ab	08		               php
-.62ac	20 e4 64	               jsr  a2hex
-.62af	a9 8d		               lda  #<a2hexpos
-.62b1	a0 64		               ldy  #>a2hexpos
-.62b3	20 46 62	               jsr  putsxy
-.62b6	68		               pla
-.62b7	28		               plp
-.62b8	60		               rts
-.62b9			putrahexcxy
-.62b9	08		               php
-.62ba	20 e4 64	               jsr  a2hex
-.62bd	a9 8d		               lda  #<a2hexpos
-.62bf	a0 64		               ldy  #>a2hexpos
-.62c1	20 6f 62	               jsr  putscxy
-.62c4	68		               pla
-.62c5	28		               plp
-.62c6	60		               rts
-.62c7			setinverse
-.62c7	48		               pha
-.62c8	a9 12		               lda  #$12
-.62ca	20 d2 ff	               jsr  $ffd2
-.62cd	68		               pla
-.62ce	60		               rts
-.62cf			clrinverse
-.62cf	48		               pha
-.62d0	a9 92		               lda  #$92
-.62d2	20 d2 ff	               jsr  $ffd2
-.62d5	68		               pla
-.62d6	60		               rts
+.0c32	08		               php
+.0c33	48		               pha
+.0c34	90 12		               bcc  restore
+.0c36	20 f0 ff	               jsr  kplot
+.0c39	8c 5a 0c	               sty  cx
+.0c3c	8e 5b 0c	               stx  cy
+.0c3f	ad 86 02	               lda  bascol
+.0c42	8d 5c 0c	               sta  bcol
+.0c45	4c 57 0c	               jmp  out
+.0c48	ae 5b 0c	restore        ldx  cy
+.0c4b	ac 5a 0c	               ldy  cx
+.0c4e	20 f0 ff	               jsr  kplot
+.0c51	ad 5c 0c	               lda  bcol
+.0c54	8d 86 02	               sta  bascol
+.0c57	68		out            pla
+.0c58	28		               plp
+.0c59	60		               rts
+>0c5a	00		cx   .byte     $00
+>0c5b	00		cy   .byte     $00
+>0c5c	00		bcol .byte     $00
+.0c5d			cursave
+.0c5d	08		               php
+.0c5e	38		               sec
+.0c5f	20 32 0c	               jsr  cursor
+.0c62	28		               plp
+.0c63	60		               rts
+.0c64			curput
+.0c64	08		               php
+.0c65	18		               clc
+.0c66	20 32 0c	               jsr  cursor
+.0c69	28		               plp
+.0c6a	60		               rts
+.0c6b			putsxy
+.0c6b	20 fc 0c	               jsr  push
+.0c6e	86 fb		               stx  zpage1
+.0c70	84 fc		               sty  zpage1+1
+.0c72	a0 00		               ldy  #$00
+.0c74	b1 fb		               lda  (zpage1),y
+.0c76	aa		               tax
+.0c77	20 03 0e	               jsr  inczp1
+.0c7a	b1 fb		               lda  (zpage1),y
+.0c7c	a8		               tay
+.0c7d	20 25 0c	               jsr  gotoxy
+.0c80	20 03 0e	               jsr  inczp1
+.0c83	a6 fb		               ldx  zpage1
+.0c85	a4 fc		               ldy  zpage1+1
+.0c87	20 0b 0c	               jsr  puts
+.0c8a	20 3b 0d	               jsr  pop
+.0c8d	60		               rts
+>0c8e	00 00		straddr   .word     $00
+>0c90	00		px        .byte     $00
+>0c91	00		py        .byte     $00
+>0c92	00 00		zp1       .word     $00
+.0c94			putscxy
+.0c94	20 fc 0c	               jsr  push
+.0c97	84 fc		               sty  zpage1+1
+.0c99	86 fb		               stx  zpage1
+.0c9b	ad 86 02	               lda  bascol
+.0c9e	8d be 0c	               sta  bc
+.0ca1	a0 00		               ldy #$00
+.0ca3	b1 fb		               lda  (zpage1),y
+.0ca5	8d 86 02	               sta  bascol
+.0ca8	20 03 0e	               jsr  inczp1
+.0cab	a6 fb		               ldx  zpage1
+.0cad	a4 fc		               ldy  zpage1+1
+.0caf	20 6b 0c	               jsr  putsxy
+.0cb2	ad be 0c	               lda  bc
+.0cb5	8d 86 02	               sta  bascol
+.0cb8	20 3b 0d	               jsr  pop
+.0cbb	60		               rts
+>0cbc	00 00		straddr  .word      $00
+>0cbe	00		bc       .byte      $00
+>0cbf	00 00		zp1      .word      $00
+.0cc1			putrahex
+.0cc1	08		               php
+.0cc2	48		               pha
+.0cc3	20 09 0f	               jsr  a2hex
+.0cc6	a9 b5		               lda  #<a2hexstr
+.0cc8	a0 0e		               ldy  #>a2hexstr
+.0cca	20 0b 0c	               jsr  puts
+.0ccd	68		               pla
+.0cce	28		               plp
+.0ccf	60		               rts
+.0cd0			kputrahexxy
+.0cd0			bputrahexxy
+.0cd0			putrahexxy
+.0cd0	08		               php
+.0cd1	20 09 0f	               jsr  a2hex
+.0cd4	a9 b2		               lda  #<a2hexpos
+.0cd6	a0 0e		               ldy  #>a2hexpos
+.0cd8	20 6b 0c	               jsr  putsxy
+.0cdb	68		               pla
+.0cdc	28		               plp
+.0cdd	60		               rts
+.0cde			putrahexcxy
+.0cde	08		               php
+.0cdf	20 09 0f	               jsr  a2hex
+.0ce2	a9 b2		               lda  #<a2hexpos
+.0ce4	a0 0e		               ldy  #>a2hexpos
+.0ce6	20 94 0c	               jsr  putscxy
+.0ce9	68		               pla
+.0cea	28		               plp
+.0ceb	60		               rts
+.0cec			setinverse
+.0cec	48		               pha
+.0ced	a9 12		               lda  #$12
+.0cef	20 d2 ff	               jsr  $ffd2
+.0cf2	68		               pla
+.0cf3	60		               rts
+.0cf4			clrinverse
+.0cf4	48		               pha
+.0cf5	a9 92		               lda  #$92
+.0cf7	20 d2 ff	               jsr  $ffd2
+.0cfa	68		               pla
+.0cfb	60		               rts
 
 ;******  Return to file: irqtune3channel.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-pushpop.asm
 
-.62d7			push
-.62d7	08		          php            ; stack : flg, pcl, pch
-.62d8	78		          sei
-.62d9	8d 13 63	          sta  ra        ; save a
-.62dc	68		          pla            ; stack : pcl, pch
-.62dd	8d 12 63	          sta  rp        ; save rp
-.62e0	68		          pla            ; stack : pch
-.62e1	8d 14 63	          sta  pc        ; save pcl
-.62e4	68		          pla            ; stack : -
-.62e5	8d 15 63	          sta  pc+1      ; save pch
-.62e8	a5 fb		          lda  zpage1    ; get zpage1 low byte
-.62ea	48		          pha            ; stack : zp1l
-.62eb	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
-.62ed	48		          pha            ; stack : zp1h, zp1l
-.62ee	a5 fd		          lda  zpage2    ; get zpage2 low byte
-.62f0	48		          pha            ; stack : zp2l, zp1h, zp1l
-.62f1	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
-.62f3	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
-.62f4	ad 12 63	          lda  rp        ; get rp
-.62f7	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
-.62f8	ad 13 63	          lda  ra        ; get a
-.62fb	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
-.62fc	8a		          txa            ; get x
-.62fd	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
-.62fe	98		          tya            ; get y
-.62ff	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.6300	ad 15 63	          lda  pc+1      ; get pch
-.6303	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.6304	ad 14 63	          lda  pc        ; get pcl
-.6307	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.6308	ad 12 63	          lda  rp        ; get rp
-.630b	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.630c	ad 13 63	          lda  ra        ; get a
-.630f	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.6310	58		          cli
-.6311	60		          rts
->6312	00		rp        .byte     0
->6313	00		ra        .byte     0
->6314	00 00		pc        .word     0
-.6316			pull
-.6316			pop
-.6316	78		          sei
-.6317	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.6318	8d 4b 63	          sta  pc        ; save pcl
-.631b	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.631c	8d 4c 63	          sta  pc+1      ; save pch
-.631f	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
-.6320	a8		          tay            ; set y
-.6321	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
-.6322	aa		          tax            ; set x
-.6323	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
-.6324	8d 4a 63	          sta  ra        ; save a
-.6327	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
-.6328	8d 49 63	          sta  rp        ; save rp
-.632b	68		          pla            ; stack : zp2l, zp1h, zp1l
-.632c	85 fe		          sta  zpage2+1  ; get zpage1 low byte
-.632e	68		          pla            ; stack : zp1h, zp1l
-.632f	85 fd		          sta  zpage2    ; get zpage2 High byte
-.6331	68		          pla            ; stack : zp1l
-.6332	85 fc		          sta  zpage1+1  ; get zpage2 low byte
-.6334	68		          pla            ; stack :
-.6335	85 fb		          sta  zpage1    ; get zpage1 High byte
-.6337	ad 4c 63	          lda  pc+1      ; get pch
-.633a	48		          pha            ; stack : pch
-.633b	ad 4b 63	          lda  pc
-.633e	48		          pha            ; stack : pcl, pch
-.633f	ad 49 63	          lda  rp        ; get rp
-.6342	48		          pha            ; stack : rp, pcl, pch
-.6343	ad 4a 63	          lda  ra        ; set ra
-.6346	58		          cli
-.6347	28		          plp            ; stack : pcl, pch
-.6348	60		          rts
->6349	00		rp        .byte     0
->634a	00		ra        .byte     0
->634b	00 00		pc        .word     0
+.0cfc			push
+.0cfc	08		          php            ; stack : flg, pcl, pch
+.0cfd	78		          sei
+.0cfe	8d 38 0d	          sta  ra        ; save a
+.0d01	68		          pla            ; stack : pcl, pch
+.0d02	8d 37 0d	          sta  rp        ; save rp
+.0d05	68		          pla            ; stack : pch
+.0d06	8d 39 0d	          sta  pc        ; save pcl
+.0d09	68		          pla            ; stack : -
+.0d0a	8d 3a 0d	          sta  pc+1      ; save pch
+.0d0d	a5 fb		          lda  zpage1    ; get zpage1 low byte
+.0d0f	48		          pha            ; stack : zp1l
+.0d10	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
+.0d12	48		          pha            ; stack : zp1h, zp1l
+.0d13	a5 fd		          lda  zpage2    ; get zpage2 low byte
+.0d15	48		          pha            ; stack : zp2l, zp1h, zp1l
+.0d16	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
+.0d18	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
+.0d19	ad 37 0d	          lda  rp        ; get rp
+.0d1c	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
+.0d1d	ad 38 0d	          lda  ra        ; get a
+.0d20	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.0d21	8a		          txa            ; get x
+.0d22	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d23	98		          tya            ; get y
+.0d24	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d25	ad 3a 0d	          lda  pc+1      ; get pch
+.0d28	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d29	ad 39 0d	          lda  pc        ; get pcl
+.0d2c	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d2d	ad 37 0d	          lda  rp        ; get rp
+.0d30	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d31	ad 38 0d	          lda  ra        ; get a
+.0d34	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d35	58		          cli
+.0d36	60		          rts
+>0d37	00		rp        .byte     0
+>0d38	00		ra        .byte     0
+>0d39	00 00		pc        .word     0
+.0d3b			pull
+.0d3b			pop
+.0d3b	78		          sei
+.0d3c	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d3d	8d 70 0d	          sta  pc        ; save pcl
+.0d40	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d41	8d 71 0d	          sta  pc+1      ; save pch
+.0d44	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d45	a8		          tay            ; set y
+.0d46	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.0d47	aa		          tax            ; set x
+.0d48	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
+.0d49	8d 6f 0d	          sta  ra        ; save a
+.0d4c	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
+.0d4d	8d 6e 0d	          sta  rp        ; save rp
+.0d50	68		          pla            ; stack : zp2l, zp1h, zp1l
+.0d51	85 fe		          sta  zpage2+1  ; get zpage1 low byte
+.0d53	68		          pla            ; stack : zp1h, zp1l
+.0d54	85 fd		          sta  zpage2    ; get zpage2 High byte
+.0d56	68		          pla            ; stack : zp1l
+.0d57	85 fc		          sta  zpage1+1  ; get zpage2 low byte
+.0d59	68		          pla            ; stack :
+.0d5a	85 fb		          sta  zpage1    ; get zpage1 High byte
+.0d5c	ad 71 0d	          lda  pc+1      ; get pch
+.0d5f	48		          pha            ; stack : pch
+.0d60	ad 70 0d	          lda  pc
+.0d63	48		          pha            ; stack : pcl, pch
+.0d64	ad 6e 0d	          lda  rp        ; get rp
+.0d67	48		          pha            ; stack : rp, pcl, pch
+.0d68	ad 6f 0d	          lda  ra        ; set ra
+.0d6b	58		          cli
+.0d6c	28		          plp            ; stack : pcl, pch
+.0d6d	60		          rts
+>0d6e	00		rp        .byte     0
+>0d6f	00		ra        .byte     0
+>0d70	00 00		pc        .word     0
 
 ;******  Return to file: irqtune3channel.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-mem.asm
 
-.634d			blkfill
-.634d	20 d7 62	bf0            jsr  push
-.6350	20 0b 64	               jsr  savezp1
-.6353	84 fc		               sty  zpage1+1
-.6355	a0 00		               ldy  #$00
-.6357	84 fb		               sty  zpage1
-.6359	91 fb		bf1            sta  (zpage1),y
-.635b	c8		               iny
-.635c	d0 fb		               bne  bf1
-.635e	20 1a 64	               jsr  restzp1
-.6361	20 16 63	               jsr  pop
-.6364	60		               rts
-.6365			memfill
-.6365	20 d7 62	               jsr  push
-.6368	20 4d 63	mf1            jsr  blkfill
-.636b	c8		               iny
-.636c	ca		               dex
-.636d	d0 f9		               bne  mf1
-.636f	20 16 63	               jsr  pop
-.6372	60		               rts
-.6373			memmove
-.6373	20 d7 62	               jsr  push
-.6376	ba		               tsx            ; On se crée un pointeur ...
-.6377	8a		               txa
-.6378	18		               clc
-.6379	69 0b		               adc  #11
-.637b	a8		               tay
-.637c	a2 06		               ldx  #$06
-.637e	b9 00 01	nextbyte       lda  $0100,y
-.6381	99 cd 63	               sta  words,y
-.6384	c8		               iny
-.6385	ca		               dex
-.6386	d0 f6		               bne  nextbyte
-.6388	ad cd 63	               lda  s
-.638b	8d a4 63	               sta  source+1
-.638e	ad ce 63	               lda  s+1
-.6391	8d a5 63	               sta  source+2
-.6394	ad cf 63	               lda  d
-.6397	8d a1 63	               sta  destin+1
-.639a	ad d0 63	               lda  d+1
-.639d	8d a2 63	               sta  destin+2
-.63a0	ad ff ff	destin         lda  $ffff
-.63a3	8d ff ff	source         sta  $ffff
-.63a6	ee a1 63	               inc  destin+1
-.63a9	d0 03		               bne  src
-.63ab	ee a2 63	               inc  destin+2
-.63ae	ee a4 63	src            inc  source+1
-.63b1	d0 03		               bne  cnt
-.63b3	ee a5 63	               inc  source+2
-.63b6	ad d1 63	cnt            lda  compte
-.63b9	d0 08		               bne  decit
-.63bb	ad d2 63	               lda  compte+1
-.63be	f0 09		               beq  fini
-.63c0	ce d2 63	               dec  compte+1
-.63c3	ce d1 63	decit          dec  compte
-.63c6	4c a0 63	               jmp  destin
-.63c9	20 16 63	fini           jsr  pop
-.63cc	60		               rts
-.63cd			words
->63cd	00 00		s         .word     $0000
->63cf	00 00		d         .word     $0000
->63d1	00 00		compte    .word     $0000
-.63d3			decword
-.63d3	20 d7 62	               jsr  push
-.63d6	86 fd		               stx  zpage2
-.63d8	84 fe		               sty  zpage2+1
-.63da	20 16 63	               jsr  pop
-.63dd	60		               rts
-.63de			inczp1
-.63de	08		               php
-.63df	e6 fb		               inc  zpage1
-.63e1	d0 02		               bne  nopage
-.63e3	e6 fc		               inc  zpage1+1
-.63e5	28		nopage         plp
-.63e6	60		               rts
-.63e7			deczp1
-.63e7	08		                php
-.63e8	48		                pha
-.63e9	c6 fb		                dec  zpage1
-.63eb	d0 02		                bne  nopage
-.63ed	c6 fc		                dec  zpage1+1
-.63ef	c6 fb		nopage          dec  zpage1
-.63f1	68		                pla
-.63f2	28		                plp
-.63f3	60		                rts
-.63f4			inczp2
-.63f4	08		               php
-.63f5	48		               pha
-.63f6	e6 fd		               inc  zpage2
-.63f8	d0 02		               bne  nopage
-.63fa	e6 fe		               inc  zpage2+1
-.63fc	68		nopage         pla
-.63fd	28		               plp
-.63fe	60		               rts
-.63ff			deczp2
-.63ff	08		               php
-.6400	48		               pha
-.6401	a5 fd		               lda  zpage2
-.6403	d0 02		               bne  nopage
-.6405	c6 fe		               dec  zpage2+1
-.6407	c6 fd		nopage         dec  zpage2
-.6409	28		               plp
-.640a	60		               rts
-.640b			savezp1
-.640b	08		               php
-.640c	48		               pha
-.640d	a5 fb		               lda  zpage1
-.640f	8d 87 64	               sta  zp1
-.6412	a5 fc		               lda  zpage1+1
-.6414	8d 88 64	               sta  zp1+1
-.6417	68		               pla
-.6418	28		               plp
-.6419	60		               rts
-.641a			restzp1
-.641a	08		               php
-.641b	48		               pha
-.641c	ad 87 64	               lda zp1
-.641f	85 fb		               sta zpage1
-.6421	ad 88 64	               lda zp1+1
-.6424	85 fc		               sta zpage1+1
-.6426	68		               pla
-.6427	28		               plp
-.6428	60		               rts
-.6429			savezp2
-.6429	08		         php
-.642a	48		         pha
-.642b	a5 fd		         lda zpage2
-.642d	8d 89 64	         sta zp2
-.6430	a5 fe		         lda zpage2+1
-.6432	8d 8a 64	         sta zp2+1
-.6435	68		         pla
-.6436	28		         plp
-.6437	60		         rts
-.6438			restzp2
-.6438	08		                php
-.6439	48		                pha
-.643a	ad 89 64	                lda  zp2
-.643d	85 fd		                sta  zpage2
-.643f	ad 8a 64	                lda  zp2+1
-.6442	85 fe		                sta  zpage2+1
-.6444	68		                pla
-.6445	28		                plp
-.6446	60		                rts
-.6447			xy2addr
-.6447	08		                php
-.6448	48		                pha
-.6449	8a		                txa
-.644a	48		                pha
-.644b	98		                tya
-.644c	48		                pha
-.644d	ad 82 64	                lda     addr1+1
-.6450	8d 84 64	                sta     addr2+1
-.6453	ad 81 64	                lda     addr1
-.6456	8d 83 64	                sta     addr2
-.6459	c0 00		                cpy     #$00
-.645b	f0 0f		                beq     addx
-.645d	18		moreline        clc
-.645e	6d 80 64	                adc     ymult
-.6461	90 03		                bcc     norepy
-.6463	ee 84 64	                inc     addr2+1
-.6466	8d 83 64	norepy          sta     addr2
-.6469	88		                dey
-.646a	d0 f1		                bne     moreline
-.646c	8a		addx            txa
-.646d	18		                clc
-.646e	6d 83 64	                adc     addr2
-.6471	90 03		                bcc     thatsit
-.6473	ee 84 64	                inc     addr2+1
-.6476	8d 83 64	thatsit         sta     addr2
-.6479	68		                pla
-.647a	a8		                tay
-.647b	68		                pla
-.647c	aa		                tax
-.647d	68		                pla
-.647e	28		                plp
-.647f	60		                rts
->6480	28		ymult          .byte     40
->6481	00 00		addr1          .word     $0000
->6483	00 00		addr2          .word     $0000
->6485	00 00		bytecnt        .word     $0000
->6487	00 00		zp1        .word   $0000
->6489	00 00		zp2        .word   $0000
+.0d72			blkfill
+.0d72	20 fc 0c	bf0            jsr  push
+.0d75	20 30 0e	               jsr  savezp1
+.0d78	84 fc		               sty  zpage1+1
+.0d7a	a0 00		               ldy  #$00
+.0d7c	84 fb		               sty  zpage1
+.0d7e	91 fb		bf1            sta  (zpage1),y
+.0d80	c8		               iny
+.0d81	d0 fb		               bne  bf1
+.0d83	20 3f 0e	               jsr  restzp1
+.0d86	20 3b 0d	               jsr  pop
+.0d89	60		               rts
+.0d8a			memfill
+.0d8a	20 fc 0c	               jsr  push
+.0d8d	20 72 0d	mf1            jsr  blkfill
+.0d90	c8		               iny
+.0d91	ca		               dex
+.0d92	d0 f9		               bne  mf1
+.0d94	20 3b 0d	               jsr  pop
+.0d97	60		               rts
+.0d98			memmove
+.0d98	20 fc 0c	               jsr  push
+.0d9b	ba		               tsx            ; On se crée un pointeur ...
+.0d9c	8a		               txa
+.0d9d	18		               clc
+.0d9e	69 0b		               adc  #11
+.0da0	a8		               tay
+.0da1	a2 06		               ldx  #$06
+.0da3	b9 00 01	nextbyte       lda  $0100,y
+.0da6	99 f2 0d	               sta  words,y
+.0da9	c8		               iny
+.0daa	ca		               dex
+.0dab	d0 f6		               bne  nextbyte
+.0dad	ad f2 0d	               lda  s
+.0db0	8d c9 0d	               sta  source+1
+.0db3	ad f3 0d	               lda  s+1
+.0db6	8d ca 0d	               sta  source+2
+.0db9	ad f4 0d	               lda  d
+.0dbc	8d c6 0d	               sta  destin+1
+.0dbf	ad f5 0d	               lda  d+1
+.0dc2	8d c7 0d	               sta  destin+2
+.0dc5	ad ff ff	destin         lda  $ffff
+.0dc8	8d ff ff	source         sta  $ffff
+.0dcb	ee c6 0d	               inc  destin+1
+.0dce	d0 03		               bne  src
+.0dd0	ee c7 0d	               inc  destin+2
+.0dd3	ee c9 0d	src            inc  source+1
+.0dd6	d0 03		               bne  cnt
+.0dd8	ee ca 0d	               inc  source+2
+.0ddb	ad f6 0d	cnt            lda  compte
+.0dde	d0 08		               bne  decit
+.0de0	ad f7 0d	               lda  compte+1
+.0de3	f0 09		               beq  fini
+.0de5	ce f7 0d	               dec  compte+1
+.0de8	ce f6 0d	decit          dec  compte
+.0deb	4c c5 0d	               jmp  destin
+.0dee	20 3b 0d	fini           jsr  pop
+.0df1	60		               rts
+.0df2			words
+>0df2	00 00		s         .word     $0000
+>0df4	00 00		d         .word     $0000
+>0df6	00 00		compte    .word     $0000
+.0df8			decword
+.0df8	20 fc 0c	               jsr  push
+.0dfb	86 fd		               stx  zpage2
+.0dfd	84 fe		               sty  zpage2+1
+.0dff	20 3b 0d	               jsr  pop
+.0e02	60		               rts
+.0e03			inczp1
+.0e03	08		               php
+.0e04	e6 fb		               inc  zpage1
+.0e06	d0 02		               bne  nopage
+.0e08	e6 fc		               inc  zpage1+1
+.0e0a	28		nopage         plp
+.0e0b	60		               rts
+.0e0c			deczp1
+.0e0c	08		                php
+.0e0d	48		                pha
+.0e0e	c6 fb		                dec  zpage1
+.0e10	d0 02		                bne  nopage
+.0e12	c6 fc		                dec  zpage1+1
+.0e14	c6 fb		nopage          dec  zpage1
+.0e16	68		                pla
+.0e17	28		                plp
+.0e18	60		                rts
+.0e19			inczp2
+.0e19	08		               php
+.0e1a	48		               pha
+.0e1b	e6 fd		               inc  zpage2
+.0e1d	d0 02		               bne  nopage
+.0e1f	e6 fe		               inc  zpage2+1
+.0e21	68		nopage         pla
+.0e22	28		               plp
+.0e23	60		               rts
+.0e24			deczp2
+.0e24	08		               php
+.0e25	48		               pha
+.0e26	a5 fd		               lda  zpage2
+.0e28	d0 02		               bne  nopage
+.0e2a	c6 fe		               dec  zpage2+1
+.0e2c	c6 fd		nopage         dec  zpage2
+.0e2e	28		               plp
+.0e2f	60		               rts
+.0e30			savezp1
+.0e30	08		               php
+.0e31	48		               pha
+.0e32	a5 fb		               lda  zpage1
+.0e34	8d ac 0e	               sta  zp1
+.0e37	a5 fc		               lda  zpage1+1
+.0e39	8d ad 0e	               sta  zp1+1
+.0e3c	68		               pla
+.0e3d	28		               plp
+.0e3e	60		               rts
+.0e3f			restzp1
+.0e3f	08		               php
+.0e40	48		               pha
+.0e41	ad ac 0e	               lda zp1
+.0e44	85 fb		               sta zpage1
+.0e46	ad ad 0e	               lda zp1+1
+.0e49	85 fc		               sta zpage1+1
+.0e4b	68		               pla
+.0e4c	28		               plp
+.0e4d	60		               rts
+.0e4e			savezp2
+.0e4e	08		         php
+.0e4f	48		         pha
+.0e50	a5 fd		         lda zpage2
+.0e52	8d ae 0e	         sta zp2
+.0e55	a5 fe		         lda zpage2+1
+.0e57	8d af 0e	         sta zp2+1
+.0e5a	68		         pla
+.0e5b	28		         plp
+.0e5c	60		         rts
+.0e5d			restzp2
+.0e5d	08		                php
+.0e5e	48		                pha
+.0e5f	ad ae 0e	                lda  zp2
+.0e62	85 fd		                sta  zpage2
+.0e64	ad af 0e	                lda  zp2+1
+.0e67	85 fe		                sta  zpage2+1
+.0e69	68		                pla
+.0e6a	28		                plp
+.0e6b	60		                rts
+.0e6c			xy2addr
+.0e6c	08		                php
+.0e6d	48		                pha
+.0e6e	8a		                txa
+.0e6f	48		                pha
+.0e70	98		                tya
+.0e71	48		                pha
+.0e72	ad a7 0e	                lda     addr1+1
+.0e75	8d a9 0e	                sta     addr2+1
+.0e78	ad a6 0e	                lda     addr1
+.0e7b	8d a8 0e	                sta     addr2
+.0e7e	c0 00		                cpy     #$00
+.0e80	f0 0f		                beq     addx
+.0e82	18		moreline        clc
+.0e83	6d a5 0e	                adc     ymult
+.0e86	90 03		                bcc     norepy
+.0e88	ee a9 0e	                inc     addr2+1
+.0e8b	8d a8 0e	norepy          sta     addr2
+.0e8e	88		                dey
+.0e8f	d0 f1		                bne     moreline
+.0e91	8a		addx            txa
+.0e92	18		                clc
+.0e93	6d a8 0e	                adc     addr2
+.0e96	90 03		                bcc     thatsit
+.0e98	ee a9 0e	                inc     addr2+1
+.0e9b	8d a8 0e	thatsit         sta     addr2
+.0e9e	68		                pla
+.0e9f	a8		                tay
+.0ea0	68		                pla
+.0ea1	aa		                tax
+.0ea2	68		                pla
+.0ea3	28		                plp
+.0ea4	60		                rts
+>0ea5	28		ymult          .byte     40
+>0ea6	00 00		addr1          .word     $0000
+>0ea8	00 00		addr2          .word     $0000
+>0eaa	00 00		bytecnt        .word     $0000
+>0eac	00 00		zp1        .word   $0000
+>0eae	00 00		zp2        .word   $0000
 
 ;******  Return to file: irqtune3channel.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-hex.asm
 
->648b	01		a2hexcol       .byte     1              ; pour aputscxy
->648c	00		a2hexbkcol     .byte     %00000000
-.648d			a2hexpos
->648d	00		a2hexpx        .byte     0              ; pour aputsxy
->648e	00		a2hexpy        .byte     0
->648f	24		a2hexprefix    .byte     "$"            ; pour aputs
->6490	00 00		a2hexstr       .word     $00
->6492	00 00		               .word     $00
->6494	00		               .byte     0              ; 0 end string
-.6495			putahexfmtxy
-.6495	20 d7 62	               jsr  push
-.6498	20 e4 64	               jsr  a2hex
-.649b	ae 8d 64	               ldx  a2hexpx
-.649e	ac 8e 64	               ldy  a2hexpy
-.64a1	20 00 62	               jsr  gotoxy
-.64a4	a2 8f		               ldx  #<a2hexprefix
-.64a6	a0 64		               ldy  #>a2hexprefix
-.64a8	20 e6 61	               jsr  puts
-.64ab	20 16 63	               jsr  pop
-.64ae	60		               rts
-.64af			putahexfmt
-.64af	20 d7 62	               jsr  push
-.64b2	20 e4 64	               jsr  a2hex
-.64b5	a2 8f		               ldx  #<a2hexprefix
-.64b7	a0 64		               ldy  #>a2hexprefix
-.64b9	20 e6 61	               jsr  puts
-.64bc	20 16 63	               jsr  pop
-.64bf	60		               rts
-.64c0			putahex
-.64c0	20 d7 62	               jsr  push
-.64c3	20 e4 64	               jsr  a2hex
-.64c6	a2 90		               ldx  #<a2hexstr
-.64c8	a0 64		               ldy  #>a2hexstr
-.64ca	20 e6 61	               jsr  puts
-.64cd	20 16 63	               jsr  pop
-.64d0	60		               rts
-.64d1			nib2hex
-.64d1	08		               php
-.64d2	29 0f		               and  #$0f
-.64d4	f8		               sed
-.64d5	18		               clc
-.64d6	69 90		               adc  #$90
-.64d8	69 40		               adc  #$40
-.64da	d8		               cld
-.64db	28		               plp
-.64dc	60		               rts
-.64dd			lsra4bits
-.64dd	08		               php
-.64de	4a		               lsr
-.64df	4a		               lsr
-.64e0	4a		               lsr
-.64e1	4a		               lsr
-.64e2	28		               plp
-.64e3	60		               rts
-.64e4			a2hex
-.64e4	08		               php
-.64e5	48		               pha
-.64e6	48		               pha
-.64e7	20 dd 64	               jsr  lsra4bits
-.64ea	20 d1 64	               jsr  nib2hex
-.64ed	8d 90 64	               sta  a2hexstr
-.64f0	68		               pla
-.64f1	20 d1 64	               jsr  nib2hex
-.64f4	8d 91 64	               sta  a2hexstr+1
-.64f7	a9 00		               lda  #$00                ; set end of string
-.64f9	8d 92 64	               sta  a2hexstr+2
-.64fc	68		               pla
-.64fd	28		               plp
-.64fe	60		               rts
-.64ff			xy2hex
-.64ff	20 d7 62	               jsr  push
-.6502	20 e4 64	               jsr  a2hex
-.6505	8a		               txa
-.6506	48		               pha
-.6507	20 dd 64	               jsr  lsra4bits
-.650a	20 d1 64	               jsr  nib2hex
-.650d	8d 90 64	               sta  a2hexstr
-.6510	68		               pla
-.6511	20 d1 64	               jsr  nib2hex
-.6514	8d 91 64	               sta  a2hexstr+1
-.6517	98		               tya
-.6518	48		               pha
-.6519	20 dd 64	               jsr  lsra4bits
-.651c	20 d1 64	               jsr  nib2hex
-.651f	8d 92 64	               sta  a2hexstr+2
-.6522	68		               pla
-.6523	20 d1 64	               jsr  nib2hex
-.6526	8d 93 64	               sta  a2hexstr+3
-.6529	a9 00		               lda  #$00                ; 0 ended string
-.652b	8d 94 64	               sta  a2hexstr+4
-.652e	20 16 63	               jsr  pop
-.6531			atobin
-.6531	20 d7 62	               jsr     push
-.6534	a2 08		               ldx     #8
-.6536	a0 00		               ldy     #0
-.6538	2a		nextbit        rol
-.6539	48		               pha
-.653a	69 00		               adc     #$00
-.653c	29 01		               and     #$01
-.653e	20 d1 64	               jsr     nib2hex
-.6541	99 52 65	               sta     abin,y
-.6544	68		               pla
-.6545	c8		               iny
-.6546	ca		               dex
-.6547	d0 ef		               bne     nextbit
-.6549	a9 00		               lda     #0
-.654b	99 52 65	               sta     abin,y
-.654e	20 16 63	               jsr     pull
-.6551	60		               rts
->6552	30 30 30 30	abin           .null   "00000000"
->6556	30 30 30 30 00
-.655b			putabin
-.655b	20 31 65	               jsr     atobin
-.655e	20 d7 62	               jsr     push
-.6561	a2 52		               ldx     #<abin
-.6563	a0 65		               ldy     #>abin
-.6565	20 e6 61	               jsr     puts
-.6568	20 16 63	               jsr     pop
-.656b	60		               rts
-.656c			putabinfmt
-.656c	08		               php
-.656d	48		               pha
-.656e	a9 25		               lda     #"%"
-.6570	20 e0 61	               jsr     putch
-.6573	68		               pla
-.6574	20 5b 65	               jsr     putabin
-.6577	28		               plp
-.6578	60		               rts
-.6579			putabinxy
-.6579	20 00 62	               jsr     gotoxy
-.657c	20 5b 65	               jsr     putabin
-.657f	60		               rts
-.6580			putabinfmtxy
-.6580	20 00 62	               jsr     gotoxy
-.6583	20 6c 65	               jsr     putabinfmt
-.6586	60		               rts
+>0eb0	01		a2hexcol       .byte     1              ; pour aputscxy
+>0eb1	00		a2hexbkcol     .byte     %00000000
+.0eb2			a2hexpos
+>0eb2	00		a2hexpx        .byte     0              ; pour aputsxy
+>0eb3	00		a2hexpy        .byte     0
+>0eb4	24		a2hexprefix    .byte     "$"            ; pour aputs
+>0eb5	00 00		a2hexstr       .word     $00
+>0eb7	00 00		               .word     $00
+>0eb9	00		               .byte     0              ; 0 end string
+.0eba			putahexfmtxy
+.0eba	20 fc 0c	               jsr  push
+.0ebd	20 09 0f	               jsr  a2hex
+.0ec0	ae b2 0e	               ldx  a2hexpx
+.0ec3	ac b3 0e	               ldy  a2hexpy
+.0ec6	20 25 0c	               jsr  gotoxy
+.0ec9	a2 b4		               ldx  #<a2hexprefix
+.0ecb	a0 0e		               ldy  #>a2hexprefix
+.0ecd	20 0b 0c	               jsr  puts
+.0ed0	20 3b 0d	               jsr  pop
+.0ed3	60		               rts
+.0ed4			putahexfmt
+.0ed4	20 fc 0c	               jsr  push
+.0ed7	20 09 0f	               jsr  a2hex
+.0eda	a2 b4		               ldx  #<a2hexprefix
+.0edc	a0 0e		               ldy  #>a2hexprefix
+.0ede	20 0b 0c	               jsr  puts
+.0ee1	20 3b 0d	               jsr  pop
+.0ee4	60		               rts
+.0ee5			putahex
+.0ee5	20 fc 0c	               jsr  push
+.0ee8	20 09 0f	               jsr  a2hex
+.0eeb	a2 b5		               ldx  #<a2hexstr
+.0eed	a0 0e		               ldy  #>a2hexstr
+.0eef	20 0b 0c	               jsr  puts
+.0ef2	20 3b 0d	               jsr  pop
+.0ef5	60		               rts
+.0ef6			nib2hex
+.0ef6	08		               php
+.0ef7	29 0f		               and  #$0f
+.0ef9	f8		               sed
+.0efa	18		               clc
+.0efb	69 90		               adc  #$90
+.0efd	69 40		               adc  #$40
+.0eff	d8		               cld
+.0f00	28		               plp
+.0f01	60		               rts
+.0f02			lsra4bits
+.0f02	08		               php
+.0f03	4a		               lsr
+.0f04	4a		               lsr
+.0f05	4a		               lsr
+.0f06	4a		               lsr
+.0f07	28		               plp
+.0f08	60		               rts
+.0f09			a2hex
+.0f09	08		               php
+.0f0a	48		               pha
+.0f0b	48		               pha
+.0f0c	20 02 0f	               jsr  lsra4bits
+.0f0f	20 f6 0e	               jsr  nib2hex
+.0f12	8d b5 0e	               sta  a2hexstr
+.0f15	68		               pla
+.0f16	20 f6 0e	               jsr  nib2hex
+.0f19	8d b6 0e	               sta  a2hexstr+1
+.0f1c	a9 00		               lda  #$00                ; set end of string
+.0f1e	8d b7 0e	               sta  a2hexstr+2
+.0f21	68		               pla
+.0f22	28		               plp
+.0f23	60		               rts
+.0f24			xy2hex
+.0f24	20 fc 0c	               jsr  push
+.0f27	20 09 0f	               jsr  a2hex
+.0f2a	8a		               txa
+.0f2b	48		               pha
+.0f2c	20 02 0f	               jsr  lsra4bits
+.0f2f	20 f6 0e	               jsr  nib2hex
+.0f32	8d b5 0e	               sta  a2hexstr
+.0f35	68		               pla
+.0f36	20 f6 0e	               jsr  nib2hex
+.0f39	8d b6 0e	               sta  a2hexstr+1
+.0f3c	98		               tya
+.0f3d	48		               pha
+.0f3e	20 02 0f	               jsr  lsra4bits
+.0f41	20 f6 0e	               jsr  nib2hex
+.0f44	8d b7 0e	               sta  a2hexstr+2
+.0f47	68		               pla
+.0f48	20 f6 0e	               jsr  nib2hex
+.0f4b	8d b8 0e	               sta  a2hexstr+3
+.0f4e	a9 00		               lda  #$00                ; 0 ended string
+.0f50	8d b9 0e	               sta  a2hexstr+4
+.0f53	20 3b 0d	               jsr  pop
+.0f56			atobin
+.0f56	20 fc 0c	               jsr     push
+.0f59	a2 08		               ldx     #8
+.0f5b	a0 00		               ldy     #0
+.0f5d	2a		nextbit        rol
+.0f5e	48		               pha
+.0f5f	69 00		               adc     #$00
+.0f61	29 01		               and     #$01
+.0f63	20 f6 0e	               jsr     nib2hex
+.0f66	99 77 0f	               sta     abin,y
+.0f69	68		               pla
+.0f6a	c8		               iny
+.0f6b	ca		               dex
+.0f6c	d0 ef		               bne     nextbit
+.0f6e	a9 00		               lda     #0
+.0f70	99 77 0f	               sta     abin,y
+.0f73	20 3b 0d	               jsr     pull
+.0f76	60		               rts
+>0f77	30 30 30 30	abin           .null   "00000000"
+>0f7b	30 30 30 30 00
+.0f80			putabin
+.0f80	20 56 0f	               jsr     atobin
+.0f83	20 fc 0c	               jsr     push
+.0f86	a2 77		               ldx     #<abin
+.0f88	a0 0f		               ldy     #>abin
+.0f8a	20 0b 0c	               jsr     puts
+.0f8d	20 3b 0d	               jsr     pop
+.0f90	60		               rts
+.0f91			putabinfmt
+.0f91	08		               php
+.0f92	48		               pha
+.0f93	a9 25		               lda     #"%"
+.0f95	20 05 0c	               jsr     putch
+.0f98	68		               pla
+.0f99	20 80 0f	               jsr     putabin
+.0f9c	28		               plp
+.0f9d	60		               rts
+.0f9e			putabinxy
+.0f9e	20 25 0c	               jsr     gotoxy
+.0fa1	20 80 0f	               jsr     putabin
+.0fa4	60		               rts
+.0fa5			putabinfmtxy
+.0fa5	20 25 0c	               jsr     gotoxy
+.0fa8	20 91 0f	               jsr     putabinfmt
+.0fab	60		               rts
 
 ;******  Return to file: irqtune3channel.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-keyb.asm
 
-.6587			waitstop
-.6587	20 d7 62	                jsr     push
-.658a	20 ed f6	wait            jsr     k_stop
-.658d	d0 fb		                bne     wait
-.658f	20 16 63	                jsr     pop
-.6592	60		                rts
-.6593			anykey
-.6593	08		                php
-.6594	48		                pha
-.6595	a5 cb		nokey           lda 203
-.6597	c9 40		                cmp #64
-.6599	f0 fa		                beq nokey
-.659b	68		                pla
-.659c	28		                plp
-.659d	60		                rts
-.659e			getkey
-.659e	20 d7 62	                jsr     push
-.65a1	20 cf ff	again           jsr     chrin
-.65a4	4c a1 65	                jmp     again
-.65a7	20 16 63	                jsr     pop
-.65aa	60		                rts
-.65ab			waitkey
-.65ab	20 d7 62	                jsr     push
-.65ae	8d c3 65	                sta     thekey
-.65b1	20 e4 ff	nope            jsr     getin
-.65b4	20 d2 ff	                jsr     chrout
-.65b7	cd c3 65	                cmp     thekey
-.65ba	d0 f5		                bne     nope
-.65bc	20 d2 ff	                jsr     chrout
-.65bf	20 16 63	                jsr     pop
-.65c2	60		                rts
->65c3	00		thekey          .byte   0
-.65c4			waitspace
-.65c4	20 d7 62	                jsr     push
-.65c7	a9 7f		wait            lda     #$7f  ;%01111111
-.65c9	8d 00 dc	                sta     $dc00
-.65cc	ad 01 dc	                lda     $dc01
-.65cf	29 10		                and     #$10  ;mask %00010000
-.65d1	d0 f4		                bne     wait
-.65d3	20 16 63	                jsr     pop
-.65d6			waitsstop
-.65d6	20 d7 62	                jsr     push
-.65d9	20 ed f6	wait            jsr     k_stop  ;%01111111
-.65dc	d0 fb		                bne     wait
-.65de	20 16 63	                jsr     pop
-.65e1			waitreturn
-.65e1	20 d7 62	                jsr     push
-.65e4	ad 00 66	                lda     thecount
-.65e7	8d 00 04	                sta     scrnram
-.65ea	a9 02		                lda     #$02
-.65ec	8d 00 d8	                sta     colorram
-.65ef	20 e4 ff	nope            jsr     getin
-.65f2	20 d2 ff	                jsr     chrout
-.65f5	c9 0d		                cmp     #$0d
-.65f7	d0 f6		                bne     nope
-.65f9	ee 00 66	                inc     thecount
-.65fc	20 16 63	                jsr     pop
-.65ff	60		                rts
->6600	01		thecount        .byte   $01
+.0fac			waitstop
+.0fac	20 fc 0c	                jsr     push
+.0faf	20 ed f6	wait            jsr     k_stop
+.0fb2	d0 fb		                bne     wait
+.0fb4	20 3b 0d	                jsr     pop
+.0fb7	60		                rts
+.0fb8			anykey
+.0fb8	08		                php
+.0fb9	48		                pha
+.0fba	a5 cb		nokey           lda 203
+.0fbc	c9 40		                cmp #64
+.0fbe	f0 fa		                beq nokey
+.0fc0	68		                pla
+.0fc1	28		                plp
+.0fc2	60		                rts
+.0fc3			getkey
+.0fc3	20 fc 0c	                jsr     push
+.0fc6	20 cf ff	again           jsr     chrin
+.0fc9	4c c6 0f	                jmp     again
+.0fcc	20 3b 0d	                jsr     pop
+.0fcf	60		                rts
+.0fd0			waitkey
+.0fd0	20 fc 0c	                jsr     push
+.0fd3	8d e8 0f	                sta     thekey
+.0fd6	20 e4 ff	nope            jsr     getin
+.0fd9	20 d2 ff	                jsr     chrout
+.0fdc	cd e8 0f	                cmp     thekey
+.0fdf	d0 f5		                bne     nope
+.0fe1	20 d2 ff	                jsr     chrout
+.0fe4	20 3b 0d	                jsr     pop
+.0fe7	60		                rts
+>0fe8	00		thekey          .byte   0
+.0fe9			waitspace
+.0fe9	20 fc 0c	                jsr     push
+.0fec	a9 7f		wait            lda     #$7f  ;%01111111
+.0fee	8d 00 dc	                sta     $dc00
+.0ff1	ad 01 dc	                lda     $dc01
+.0ff4	29 10		                and     #$10  ;mask %00010000
+.0ff6	d0 f4		                bne     wait
+.0ff8	20 3b 0d	                jsr     pop
+.0ffb			waitsstop
+.0ffb	20 fc 0c	                jsr     push
+.0ffe	20 ed f6	wait            jsr     k_stop  ;%01111111
+.1001	d0 fb		                bne     wait
+.1003	20 3b 0d	                jsr     pop
+.1006			waitreturn
+.1006	20 fc 0c	                jsr     push
+.1009	ad 25 10	                lda     thecount
+.100c	8d 00 04	                sta     scrnram
+.100f	a9 02		                lda     #$02
+.1011	8d 00 d8	                sta     colorram
+.1014	20 e4 ff	nope            jsr     getin
+.1017	20 d2 ff	                jsr     chrout
+.101a	c9 0d		                cmp     #$0d
+.101c	d0 f6		                bne     nope
+.101e	ee 25 10	                inc     thecount
+.1021	20 3b 0d	                jsr     pop
+.1024	60		                rts
+>1025	01		thecount        .byte   $01
 
 ;******  Return to file: irqtune3channel.asm
 

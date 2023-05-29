@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20230511-082548"
+                Version = "20230527-220500"
 ;-------------------------------------------------------------------------------            
                 .include    "header-c64.asm"
                 .include    "macros-64tass.asm"
@@ -56,7 +56,7 @@ helptext  .text   format(" irqtune3channel: SYS%5d",irqtune3channel)
           .text   format(" ex.: SYS%5d",irqtune3channel)
           .byte   $0d,0
                 .bend
-*=$6000
+;*=$6000
 
 irqtune3channel .block
                 sei
@@ -108,7 +108,7 @@ main            ldx 251
                 lda tune3+1,x
                 sta sidv3fhigh  ; $d40f ; 54287 - Voice 3 High freq register high byte.
                 lda 253
-delval          cmp #32
+delval          cmp #4
                 bcs nextdelay
                 inc 253
                 jmp irq     ; $ea31
@@ -133,19 +133,17 @@ tune1
           .word     silence
           .word     re5
           .word     silence
-tune2
           .word     mi5
           .word     silence
           .word     fa5
           .word     silence
-tune3          
           .word     sol5
           .word     silence
           .word     la5
           .word     silence
           .word     si5
           .word     silence
-          .word     do6
+tune3     .word     do6
           .word     silence
           .word     si5
           .word     silence
@@ -162,40 +160,63 @@ tune3
           .word     do5
           .word     silence
 
-          .word     do5
-          .word     silence
-          .word     re5
-          .word     silence
 
-          .word     do5
-          .word     silence
-          .word     re5
-          .word     silence
 
-tune6
-          .word     la5
-          .word     lad5
-          .word     si5
-          .word     do5
-          .word     dod5
-          .word     re5
-          .word     red5
-          .word     mi5
-          .word     fa5
-          .word     fad5
-          .word     sol5
-          .word     sold5
-          .word     la6
-          .word     lad6
-          .word     si6
-          .word     do6
-          .word     dod6
+
+tune2     .word     do6
+          .word     silence
           .word     re6
-          .word     red6
+          .word     silence
           .word     mi6
+          .word     silence
           .word     fa6
-          .word     fad6
+          .word     silence
           .word     sol6
+          .word     silence
+          .word     la6
+          .word     silence
+          .word     si6
+          .word     silence
+          .word     do7
+          .word     silence
+          .word     si6
+          .word     silence
+          .word     la6
+          .word     silence
+          .word     sol6
+          .word     silence
+          .word     fa6
+          .word     silence
+          .word     mi6
+          .word     silence
+          .word     re6
+          .word     silence
+          .word     do6
+          .word     silence
+          .word     sold5
+          .word     silence
+          .word     la6
+          .word     silence
+          .word     lad6
+          .word     silence
+          .word     si6
+          .word     silence
+          .word     do6
+          .word     silence
+          .word     dod6
+          .word     silence
+          .word     re6
+          .word     silence
+          .word     red6
+          .word     silence
+          .word     mi6
+          .word     silence
+          .word     fa6
+          .word     silence
+          .word     fad6
+          .word     silence
+          .word     sol6
+          .word     silence
           .word     sold6
           .word     la7
           .word     lad7
