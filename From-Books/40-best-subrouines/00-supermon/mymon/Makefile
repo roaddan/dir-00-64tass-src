@@ -9,21 +9,22 @@ SOURCENAME=mymon
 BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project ...
 # ... the following detail is used to specify where the resulting ...
-# ... files will be placed. # Complete path where the compiled files will be deposited. 
+# ... files will be placed. # Completße path where the compiled files will be 
+# ... deposited. 
 OUTDIR=/Users/Locals/temp/Vice
 # ===============================================
 # =========== V I C E   S E C T I O N ===========
 # ===============================================
 # Complete path to the Vic20 emulator program.
-V20=/usr/bin/xvic
+V20=/Applications/VICE/xvic.app/Contents/MacOS/xvic
 # Complete path to the C64 emulator program.
-X64=/usr/bin/x64
+X64=/Applications/VICE/x64.app/Contents/MacOS/x64
 # Complete path to the C64sc emulator program.
-X64SC=/usr/bin//x64sc
+X64SC=/Applications/VICE/x64sc.app/Contents/MacOS/x64sc
 # Complete path to the c1541 disk creation program.
-C1541=/usr/bin/c1541
+C1541=/Users/daniel/bin/c1541
 # Complete path to the cartconv cartridge converter program.
-CARTCONV=/usr/bin//cartconv
+CARTCONV=/Users/daniel/bin/cartconv
 # Complete path to some other emulators emulator program.
 X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
 X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
@@ -32,16 +33,16 @@ X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
 # ===============================================
 # Tis can be change to any assembler od your liking.
 # Complete path to the 64tass assembler program.
-TASS=/usr/bin//64tass
+TASS=/Users/daniel/bin/64tass_dir/64tass
 # The Complete path to the library directory.
 TASSLIB=$(BASEDIR)/dir-00-64tass-src/lib
 # ===============================================
 # ===== C B M   D R I V E S   S E C T I O N =====
 # ===============================================
 # These options enable you to mount utility disquette in drive 9.
-# Complete path to the c64 Utility disk you would like to be moiunted on drive 9.
+# Complete path to the c64 Utility disk you like to be mounted on drive 9.
 TMPSEP06=-9 $(BASEDIR)/dir-tmp-dskimg/turbo-macro-pro-sep06.d64
-# Complete path to the Vic20 Utility disk you would like to be moiunted on drive 9.
+# Complete path to the Vic20 Utility disk you like to be mounted on drive 9.
 V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # Complete local path to be mounted as a disk on drive 8 and/or 9.  
 # **** tests noy yet conclusive.
@@ -51,8 +52,8 @@ PRGDIR=dir-00-64tass-bin
 # ===============================================
 # ============ F T P   S E C T I O N ============
 # ===============================================
-# This section is to transfer the resulting files to the Ultimite cartridge II ...
-# ... the ftpserver enabeled.
+# This section is to transfer the resulting files to the Ultimite cartridge II+
+# ... ftpserver.
 # FTP SERVER CONFIG
 FTPSVRIP=192.168.2.200
 FTPCMDPATH=/usr/local/bin/lftp 
@@ -83,7 +84,7 @@ ftp:
 		$(FTPASMCMD)
 		$(FTPTXTCMD)
 		$(FTPPRGCMD)
-#		$(FTPD64CMD)
+		$(FTPD64CMD)
 #		$(FTPCRTCMD)
 
 $(SOURCENAME).d64: $(SOURCENAME).prg

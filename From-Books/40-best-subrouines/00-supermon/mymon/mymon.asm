@@ -107,7 +107,7 @@ getin           = $ffe4             ; get a character
 ; set up origin
 
                 .weak
-org             = $c000
+org             = $c3e0 - 144
                 .endweak
 
 
@@ -144,11 +144,11 @@ super           jsr setcolors
 setcolors       .block
                 php
                 pha   
-                lda     #$0d ;#$05
+                lda     #$0b ;#$05
                 sta     screen
-                lda     #$0d - 8
+                lda     #$0c ; - 8
                 sta     border
-                lda     #$00
+                lda     #$01
                 sta     texte
                 lda     #147
                 jsr     $ffd2
@@ -1456,13 +1456,19 @@ greet           ldy     #txt1-txtptr
                 ldy     #txt2-txtptr
                 jsr     sndtxt
 
-                ldy     #txt0-txtptr
+                ldy     #txt01-txtptr
                 jsr     sndtxt
 
                 ldy     #txt3-txtptr
                 jsr     sndtxt
 
-                ldy     #txt0-txtptr
+                ldy     #txt01-txtptr
+                jsr     sndtxt
+
+                ldy     #txt4-txtptr
+                jsr     sndtxt
+
+                ldy     #txt01-txtptr
                 jsr     sndtxt
 
                 pla
@@ -1487,18 +1493,27 @@ msg8            .text "  "              ; pad non-existent byte: skip 3 spaces
 txtptr  =*
                 ;            "0123456789012345678901234567890123456789" 
 txt0            .byte $0d
+                .text        " ======================================"
+                .byte $80
+
+txt01           .byte $0d
                 .text        " --------------------------------------"
                 .byte $80
 
 txt1            .byte $0d
-                .text        "     < < < < < supermon > > > > >      "
+                .text        "      < < < < < supermon > > > > >     "
                 .byte $80
 
 txt2            .byte $0d
-                .text        "  by jim butterfield (r.i.p. 1936-2007)"
+                .text        "  by jim butterfield (r.i.p.1936-2007)"
                 .byte $80
+
 txt3            .byte $0d
-                .text format("       type [sys%05d] to launch.",org)           ; sys call to enter monitor        
+                .text format("   type [sys%05d] to launch. ($%04x)",org, org)           ; sys call to enter monitor        
+                .byte $80
+
+txt4            .byte $0d
+                .text format("    (range $c000-$%04x is available) ",org-1)
                 .byte $80
 ; -----------------------------------------------------------------------------
 ; addressing mode table - nybbles provide index into mode2 table
