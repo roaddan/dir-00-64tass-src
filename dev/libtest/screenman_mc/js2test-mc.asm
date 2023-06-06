@@ -1,4 +1,4 @@
-                VERSION="20230327-091500"
+                VERSION="20230527-091500"
 
                 .include "header-c64.asm"
                 .include "macros-64tass.asm"
@@ -39,7 +39,6 @@ goagain         jsr setinverse
                 #printcxy js_status4
                 #printcxy js_status5
                 #printcxy js_status6
- ;               rts
                 ldx #$00
                 ldy #$0f
                 jsr gotoxy
@@ -47,49 +46,15 @@ goagain         jsr setinverse
                 jsr setcurcol
                 ldx #$00
                 jsr setbkcol
-;                lda #$00
-;nextcar         jsr putch
-;                clc
-;                adc #$01
-;                cmp #64
-;                bne nextcar
-                
-looper          ;jsr showregs
-                jsr js_scan
+looper          jsr js_scan
+                jsr putjs2val
                 jsr js_showvals
 ;                jsr js_updatecurs
                 jsr sprt_move
-loopit           
-;                jsr showregs
-                ldx #$16
-                ldy #$11
-                jsr gotoxy
-                lda #3
-                jsr setcurcol
-                inc onebyte
-                lda onebyte
+loopit          pha
                 lda js_2fire
-                jsr putabinfmt
-;                jsr showregs
-;                jsr putabin
-;                jmp loopit
-;                rts
-;                lda #$0
-;                sta c64u_addr1+1
-;                lda #$00
-;                sta c64u_addr1
-;                ldy #10
-;                ldx #05
-;                jsr c64u_xy2addr
-;                ldy c64u_addr2
-;                ldx c64u_addr2+1
-;                ldx js_2pixx+1
-;                ldy js_2pixx
-;                lda js_2fire
-;                jsr showregs
-                pha
-                lda js_2fire
-                beq nochange     
+                beq nochange  
+                jsr putjs2val                  
                 lda vicbordcol
                 clc
                 adc #$0
@@ -105,13 +70,11 @@ loopit
                 bpl toborder
                 inc sprt_ptr
                 lda sprt_ptr
-                jsr showregs
                 cmp #9         
                 bcc drawsptr
                 lda #$00
 drawsptr        sta sprt_ptr
                 jsr sprt_init
-;                jsr showregs    
 toborder        lda vicbordcol
                 sec
                 adc #0
@@ -119,13 +82,27 @@ toborder        lda vicbordcol
                 sta $d029
                 lda #$00
                 sta js_2fire    
-nochange        ;jsr showregs
-                inx 
+nochange        inx 
                 pla
                 jsr kstop
                 bne looper
+                jmp looper
                 jsr k_warmboot
 out             rts
+
+putjs2val       php
+                pha
+                ldx #$16
+                ldy #$11
+                jsr gotoxy
+                lda #vvert1
+                jsr setcurcol
+                lda js_2status
+                jsr putabinfmt
+                pla 
+                plp
+                rts 
+
 onebyte         .byte   0    
                 .enc    screen
 bstring1        .byte   vblanc,bkcol0,0,0        

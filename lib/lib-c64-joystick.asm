@@ -33,6 +33,10 @@ js_1scan       .block
                jsr  push
                lda  js_1port 
                and  #$1f
+               pha
+               eor  #$1f
+               sta  js_1status
+               pla
                cmp  #$00
                bne  p1scan
                jmp  port1_out
@@ -174,13 +178,17 @@ out             jsr     pop
 js_2scan         .block
                 jsr     push
 port2           lda     js_2port 
-                and     #$1f 
+                and     #$1f
+                pha 
+                eor     #$1f
+                sta js_2status
+                pla 
                 cmp	#$1f
                 bne     p2scan
                 ;jsr     showregs
                 jmp     port2_out
 p2scan          eor     #$1f
-                ldx     #$02
+                ;ldx     #$02
                 ;jsr     showregs          
                 clc
 ;------------------------
@@ -627,5 +635,7 @@ js_2val16       .byte   js_txtcol,js_txtbak,16,12
                 .text   "(x,y):($0000,$0000)"
                 .byte   0
 
+js_1status     .byte 0
+js_2status     .byte 0
 
                 
