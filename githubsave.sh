@@ -5,6 +5,9 @@ case $1 in
 		echo ${unedate}
 		git status
 		;;
+	pull)
+		git pull origin main
+		;;
 	*)
 		git add .
 		git commit -m $(/bin/date "+%Y%m%d-%H%M%S")
