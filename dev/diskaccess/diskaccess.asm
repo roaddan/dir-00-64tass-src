@@ -1,18 +1,38 @@
                 .include "header-c64.asm"
                 .include "macros-64tass.asm"
-                .enc    screen
-main            lda #$00
-                sta data_start
-                lda #$04
-                sta data_start+1
+                .enc    none
+
+main            .block
                 lda #$00
-                sta data_end
+                sta dsk_data_s
+                lda #$04
+                sta dsk_data_s+1
+                lda #$00
+                sta dsk_data_e
                 lda #$08
-                sta data_end+1
-                sta driveno
+                sta dsk_data_e+1
+                lda #$08
+                sta dsk_dev
+                lda #$00
+                sta dsk_lfsno
+                lda #<fname
+                sta dsk_fnptr
+                lda #>fname
+                sta dsk_fnptr+1
+                lda #fname_end-fname
+                sta dsk_fnlen    
                 jsr memtofile
+                lda #$0d
+                jsr putch
+                jsr diskerror
                 jsr diskdir
-                rts                
+                jsr filetomem
+                
+                rts 
+fname           .byte 64
+                .text "0:daniel"      
+fname_end       .byte 0
+                .bend 
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------

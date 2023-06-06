@@ -10,7 +10,7 @@
 ;---------;---------;---------;---------;---------;---------;---------;---------
 diskerror      .block
                jsr  push
-               lda  driveno   ; Select device 8
+               lda  dsk_dev   ; Select device 8
                sta  $ba       ;
                jsr  talk      ; $ffb4 |a  , iec-cmd dev parle
                lda  #$6f
@@ -35,7 +35,7 @@ diskdir        .block
                sta  $bc       ; L0136 - Current filename lsb.
                lda  #$01      ; L0138 - set ...
                sta  $b7       ; L013A - ... length of current filename
-               lda  driveno   ; L013C - set 8 as ... 
+               lda  dsk_dev   ; L013C - set 8 as ... 
                sta  $ba       ; L013E - ... current serial sevice.
                lda  #$60      ; L0140 - set $60 to ...
                sta  $b9       ; L0142 - ... secondary address
@@ -87,66 +87,99 @@ directory      .block
                jsr  diskerror
                rts
                .bend
-memtofile      .block
-               jsr savemesg
-               jsr push
-               lda #fname_end-fname
-               ldx #<fname
-               ldy #>fname
-               jsr setnam      ; call setnam
-               lda lfsno
-               ldx driveno    ; default to device 8
-skip           ldy #$00
-               jsr setlfs      ; call setlfs
-               lda data_start  ; put data start lbyte in stal
-               sta stal
-               lda data_start+1; put data start hbyte in stal
-               sta stal+1
-               ldx data_end    ; put data end lbyte in x
-               ldy data_end+1  ; put data end hbyte in y
-               lda #stal       ; start address located in $c1/$c2
-               jsr save        ; call save
-               ;bcc noerror     ; if carry set, a load error has happened
-               lda #$0d
-               jsr putch
-               jsr diskerror
-noerror        jsr pop
-               rts 
 
-error1         ldx #<errorMsg1         
-               ldy #>errorMsg1   
-               jsr puts
+memtofile      .block
+               jsr  dsk_putmesg
+               jsr  push
+               lda  dsk_fnlen
+               ldx  dsk_fnptr      ; load fname addr. lbyte 
+               ldy  dsk_fnptr+1
+               jsr  setnam         ; call setnam
+               lda  dsk_lfsno
+               ldx  dsk_dev        ; specified device
+skip           ldy  #$00
+               jsr  setlfs         ; call setlfs
+               lda  dsk_data_s     ; put data start lbyte in stal
+               sta  stal
+               lda  dsk_data_s+1   ; put data start hbyte in stal
+               sta  stal+1
+               ldx  dsk_data_e     ; put data end lbyte in x
+               ldy  dsk_data_e+1   ; put data end hbyte in y
+               lda  #stal          ; start address located in $c1/$c2
+               jsr  save           ; call save
+               bcc  noerror        ; if carry set, a load error has happened
+noerror        jsr  pop
+               rts 
+               .bend
+
+filetomem      .block
+               jsr push
+               lda dsk_fnlen
+               ldx dsk_fnptr
+               ldy dsk_fnptr+1
+               jsr setnam     ; call setnam
+               lda dsk_lfsno
+               ldx dsk_dev    ; default to device 8
+               ldy #$01       ; not $01 means: load to address stored in file
+               jsr setlfs     ; call setlfs
+
+               lda #$00       ; $00 means: load to memory (not verify)
+               jsr load       ; call load
+               bcc noerror      ; if carry set, a load error has happened
+               jsr  error       
+noerror        jsr pop
                rts
-error2         ldx #<errorMsg2         
-               ldy #>errorMsg2   
+               .bend
+error          .block
+               ; accumulator contains basic error code
+
+               ; most likely errors:
+               ; a = $05 (device not present)
+               ; a = $04 (file not found)
+               ; a = $1d (load error)
+               ; a = $00 (break, run/stop has been pressed during loading)
+
+               ; ... error handling ...
+               rts
+
+error1         ldx  #<dsk_emsg1         
+               ldy  #>dsk_emsg1   
+               jsr  puts
+               rts
+
+error2         ldx #<dsk_emsg2         
+               ldy #>dsk_emsg2   
                jsr puts    
                rts
-savemesg       jsr push
-               ldx #<message0         
-               ldy #>message0   
+               .bend
+
+dsk_putmesg    .block
+               jsr push
+               ldx #<dsk_msg0         
+               ldy #>dsk_msg0   
                jsr puts    
                lda #$20
                jsr putch
-               ldx #<fbasename         
-               ldy #>fbasename   
+               ldx dsk_fnptr         
+               ldy dsk_fnptr+1   
                jsr puts
-               lda lfsno
+               lda dsk_lfsno
                jsr close    
                jsr pop
-               rts      
+               rts    
                .bend      
-data_start     .word   $0000    ; example addresses
-data_end       .word   $2000
-driveno        .byte   $08
-lfsno          .byte   $00
-fname          .text   "@0:"
-fbasename      .text   "SCREEN1"
-fname_end      .byte   0
-message0       .byte   141 
-               .null   "SAVING"
-message1       .byte   141
-               .null   "SUCCESS" 
-errorMsg1      .byte   141
-               .null   "FILE NOT OPENED"
-errorMsg2      .byte   17
-               .null   "WRITE ERROR"
+
+dsk_data_s     .word     $0000    ; example addresses
+dsk_data_e     .word     $2000
+dsk_dev        .byte     $08
+dsk_lfsno      .byte     $00     
+dsk_fnptr      .word     $00
+dsk_fnlen      .byte     0
+dsk_msg0       .byte     141 
+               .null     "saving"
+dsk_msg1       .byte     141
+               .null     "succes" 
+dsk_emsg1      .byte     141
+               .null     "fichier non ouvert"
+dsk_emsg2      .byte     17
+               .null     "erreur d'ecriture"
