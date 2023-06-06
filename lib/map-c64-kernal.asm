@@ -86,7 +86,7 @@ dscpnt          =       $50     ;  80-82 Tmp ptr to current string descriptor.
                                 ;        82    string length
 four6           =       $53     ;  83 Constant of garbage collector.
 jmper           =       $54     ;  84-86 Jump to function Instruction.
-fac1            =       $61     ; 97-102 Floating point Accumulator #1
+fac1            =       $61     ;  97-102 Floating point Accumulator #1
 ;ICI
 chrget          =       $73     ; 115
 chrgot          =       $79     ; 121
@@ -94,7 +94,8 @@ kiostatus       =       $90     ; 144 Kernal I/O status word (st) (byte)
 curfnlen        =       $b7     ; 183 Current filename length (byte)
 cursecadd       =       $b9     ; 185 Current secondary address (byte)
 curdevno        =       $ba     ; 186 Current device number (byte)
-curfptr         =       $bb     ; 187 Current file pointer (word)  
+curfptr         =       $bb     ; 187 Current file pointer (word)
+stal            =       $c1     ; $c1-$c2 (193-194) ptr to ram address to load/save
 lstx            =       $c5     ; 197 matrix coordinate of last key pressed
 ndx             =       $c6     ; 198 Number of character in keyboard buffer
 zpage1          =       $fb     ; 251 zero page 1 address (word)
@@ -1081,21 +1082,22 @@ save    = $ffd8 ; jmp $f5dd Save memory to a device.
                 ; - Load a program into memory.
                 ;prog   lda #$08
                 ;       jsr setlfs
-                ;       lda #$0c
-                ;       ldx #<name
-                ;       ldy #>name
-                ;       jsr setnam
-                ;       lda prog
-                ;       sta txttab
-                ;       lda prog+1
-                ;       sta txttab+1
-                ;       ldx #<prgend
+                ;       lda #fnend-fname     ; filename lenght calculation.
+                ;       ldx #<name           ; fname string addr. low byte.
+                ;       ldy #>name           ; fname string addr. high byte.
+                ;       jsr setnam           ; set filename to kernal.
+                ;       lda prog             ; load prog addr. low byte.
+                ;       sta stal             ; save to stal $c1
+                ;       lda prog+1           ; load prog addr. high byte.
+                ;       sta stal+1           ; save to stal+1 $c2
+                ;       ldx #<prgend         ; 
                 ;       ldy #>prgend
-                ;       ldy #$20
-                ;       lda #<txttab
+                ;       ldy #$20             ; 
+                ;       lda #<stal           ; a contains page 0 to pointer
                 ;       jsr save
                 ;       rts
-                ;       name .byte 'progfile.prg'
+                ;       fname .byte 'progfile.prg'
+                ;       fnend ; pointer to calculate filename lenght
                 ;prgend
                 ;---------------------------------------------------------------
                 ; Note.:

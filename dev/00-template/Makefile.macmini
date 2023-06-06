@@ -3,7 +3,7 @@
 # ======== P R O J E C T   S E C T I O N ========
 # ===============================================
 # The basename of your project main file ((no extension) .asm is presumed).
-SOURCENAME=diskaccess
+SOURCENAME=graph
 # The lowest common project shared directory complete path.
 # for thingds like librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -61,25 +61,18 @@ FTPTXTARG=cd /Usb0/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; bye
 FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
 FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
 FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
-FTPTMPARG=cd /Usb0/dir-temp; put $(SOURCENAME).prg; put $(SOURCENAME).d64; bye
 FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
 FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)
 FTPPRGCMD=$(FTPCMDPATH) -e "$(FTPPRGARG)" $(FTPSVRIP)
 FTPD64CMD=$(FTPCMDPATH) -e "$(FTPD64ARG)" $(FTPSVRIP)
 FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
-FTPTMPCMD=$(FTPCMDPATH) -e "$(FTPTMPARG)" $(FTPSVRIP)
 
 # SOME OTHER VARIABLES JUST TO REDUCE THE LINE LENGTH.
 VICE=$(X64)
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 
 all: 	$(SOURCENAME).d64
-#		$(VICE) $(AUTOSTART) $(TMPSEP06)
-		$(FTPTMPCMD)
-		$(FTPASMCMD)
-		$(FTPTXTCMD)
-		$(FTPPRGCMD)
-		$(FTPD64CMD)
+		$(VICE) $(AUTOSTART) $(TMPSEP06)
 
 ftp:	
 #		echo $(FTPASMCMD)
@@ -90,7 +83,7 @@ ftp:
 		$(FTPASMCMD)
 		$(FTPTXTCMD)
 		$(FTPPRGCMD)
-		$(FTPD64CMD)
+#		$(FTPD64CMD)
 #		$(FTPCRTCMD)
 
 $(SOURCENAME).d64: $(SOURCENAME).prg
