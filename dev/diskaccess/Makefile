@@ -21,9 +21,9 @@ X64=/Applications/VICE/x64.app/Contents/MacOS/x64
 # Complete path to the C64sc emulator program.
 X64SC=/Applications/VICE/x64sc.app/Contents/MacOS/x64sc
 # Complete path to the c1541 disk creation program.
-C1541=/Users/daniel/bin/c1541
+C1541=/Applications/vice-x86-64-gtk3-3.7.1/bin/c1541
 # Complete path to the cartconv cartridge converter program.
-CARTCONV=/Users/daniel/bin/cartconv
+CARTCONV=/Applications/vice-x86-64-gtk3-3.7.1/bin/cartconv
 # Complete path to some other emulators emulator program.
 X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
 X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
@@ -74,12 +74,12 @@ VICE=$(X64)
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 
 all: 	$(SOURCENAME).d64
-#		$(VICE) $(AUTOSTART) $(TMPSEP06)
-		$(FTPTMPCMD)
-		$(FTPASMCMD)
-		$(FTPTXTCMD)
-		$(FTPPRGCMD)
-		$(FTPD64CMD)
+		$(VICE) $(AUTOSTART) $(TMPSEP06)
+#		$(FTPTMPCMD)
+#		$(FTPASMCMD)
+#		$(FTPTXTCMD)
+#		$(FTPPRGCMD)
+#		$(FTPD64CMD)
 
 ftp:	
 #		echo $(FTPASMCMD)
