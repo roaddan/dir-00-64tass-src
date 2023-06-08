@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.52.1237? listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib -i -L charset2disk.txt -o charset2disk.prg charset2disk.asm
-; Wed Jun  7 20:30:52 2023
+; Wed Jun  7 23:24:13 2023
 
 ;Offset	;Hex		;Source
 
@@ -24,35 +24,88 @@
 ;******  Return to file: charset2disk.asm
 
 .080d			main
-.080d	a9 00		                lda #$00
-.080f	8d 5a 0d	                sta dsk_data_s
-.0812	a9 04		                lda #$04
-.0814	8d 5b 0d	                sta dsk_data_s+1
-.0817	a9 00		                lda #$00
-.0819	8d 5c 0d	                sta dsk_data_e
-.081c	a9 08		                lda #$08
-.081e	8d 5d 0d	                sta dsk_data_e+1
-.0821	a9 08		                lda #$08
-.0823	8d 5e 0d	                sta dsk_dev
-.0826	a9 00		                lda #$00
-.0828	8d 5f 0d	                sta dsk_lfsno
-.082b	a9 4c		                lda #<fname
-.082d	8d 60 0d	                sta dsk_fnptr
-.0830	a9 08		                lda #>fname
-.0832	8d 61 0d	                sta dsk_fnptr+1
-.0835	a9 09		                lda #fname_end-fname
-.0837	8d 62 0d	                sta dsk_fnlen
-.083a	20 c7 0c	                jsr memtofile
-.083d	a9 0d		                lda #$0d
-.083f	20 86 08	                jsr putch
-.0842	20 2d 0c	                jsr diskerror
-.0845	20 50 0c	                jsr diskdir
-.0848	20 ff 0c	                jsr filetomem
-.084b	60		                rts
->084c	40		fname           .byte 64
->084d	30 3a 44 41	                .text "0:daniel"
->0851	4e 49 45 4c
->0855	00		fname_end       .byte 0
+.080d	20 f6 09	               jsr  push
+.0810	a9 93		               lda  #147
+.0812	20 ff 08	               jsr  putch
+.0815	20 24 08	               jsr  rom2ram
+.0818	20 78 08	               jsr  savetodisk
+.081b	a9 18		               lda  #%00011000     ;#24
+.081d	8d 18 d0	               sta  $d018          ;53272
+.0820	20 35 0a	               jsr  pop
+.0823	60		               rts
+.0824			rom2ram
+.0824	20 f6 09	               jsr  push
+.0827	ad 0e dc	               lda  $dc0e          ;56334
+.082a	29 fe		               and  #%11111110     ;$fe ou 254
+.082c	8d 0e dc	               sta  $dc0e          ;56334
+.082f	a5 01		               lda  $01
+.0831	29 fb		               and  #%11111011     ;$fb ou 251
+.0833	85 01		               sta  $01
+.0835	ad 74 08	               lda  chrom_s
+.0838	85 fb		               sta  zpage1
+.083a	ad 75 08	               lda  chrom_s+1
+.083d	85 fc		               sta  zpage1+1
+.083f	ad 76 08	               lda  chram_s
+.0842	85 fd		               sta  zpage2
+.0844	ad 77 08	               lda  chram_s+1
+.0847	85 fe		               sta  zpage2+1
+.0849	a2 10		               ldx  #$10           ; copie 8 page de 256 char.
+.084b	a0 00		               ldy  #$00
+.084d	78		               sei
+.084e	b1 fb		nexty          lda  (zpage1),y
+.0850	49 55		skip           eor  #%01010101
+.0852	91 fd		save           sta  (zpage2),y
+.0854	c8		               iny
+.0855	d0 f7		               bne  nexty
+.0857	ca		               dex
+.0858	f0 07		               beq  out
+.085a	e6 fc		               inc  zpage1+1
+.085c	e6 fe		               inc  zpage2+1
+.085e	4c 4e 08	               jmp  nexty
+.0861			out
+.0861	58		               cli
+.0862	a5 01		               lda  $01
+.0864	09 04		               ora  #%00000100     ;#$04
+.0866	85 01		               sta  $01
+.0868	ad 0e dc	               lda  $dc0e          ;56334
+.086b	09 01		               ora  #%00000001     ;$01
+.086d	8d 0e dc	               sta  $dc0e          ;56334
+.0870	20 35 0a	               jsr  pop
+.0873	60		               rts
+>0874	00 d0		chrom_s        .word     $d000     ;$d000 a $d800 53284
+>0876	00 20		chram_s        .word     $2000     ;$2000 a $2800 8192
+.0878			savetodisk
+.0878	20 f6 09	               jsr  push
+.087b	a9 00		               lda  #$00
+.087d	8d d3 0d	               sta  dsk_data_s
+.0880	a9 20		               lda  #$20
+.0882	8d d4 0d	               sta  dsk_data_s+1
+.0885	a9 00		               lda  #$00
+.0887	8d d5 0d	               sta  dsk_data_e
+.088a	a9 30		               lda  #$30
+.088c	8d d6 0d	               sta  dsk_data_e+1
+.088f	a9 08		               lda  #$08
+.0891	8d d7 0d	               sta  dsk_dev
+.0894	a9 00		               lda  #$00
+.0896	8d d8 0d	               sta  dsk_lfsno
+.0899	a9 bd		               lda  #<fname
+.089b	8d d9 0d	               sta  dsk_fnptr
+.089e	a9 08		               lda  #>fname
+.08a0	8d da 0d	               sta  dsk_fnptr+1
+.08a3	a9 11		               lda  #fname_end-fname
+.08a5	8d db 0d	               sta  dsk_fnlen
+.08a8	20 40 0d	               jsr  memtofile
+.08ab	a9 0d		               lda  #$0d
+.08ad	20 ff 08	               jsr  putch
+.08b0	20 a6 0c	               jsr  diskerror
+.08b3	20 c9 0c	               jsr  diskdir
+.08b6	20 78 0d	               jsr  filetomem
+.08b9	20 35 0a	               jsr  pop
+.08bc	60		               rts
+>08bd	40		fname          .byte 64
+>08be	30 3a 43 48	               .text "0:charset-fucked"
+>08c2	41 52 53 45 54 2d 46 55 43 4b 45 44
+>08ce	00		fname_end      .byte 0
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-kernal.asm
 
@@ -436,7 +489,7 @@
 =8			kerr08 = 8      ; file name is missing.
 =9			kerr09 = 9      ; illegal device number.
 =240			kerrf0 = 240    ; top-of-memory change rs-232 buffer allocation.
-.0856			libtart
+.08cf			libtart
 
 ;******  Return to file: charset2disk.asm
 
@@ -567,743 +620,743 @@
 =0			bkcol1=0
 =0			bkcol2=0
 =0			bkcol3=0
-.0856			scrmaninit
-.0856	20 7d 09	               jsr  push
-.0859	a9 06		               lda  #vbleu
-.085b	8d 21 d0	               sta  vicbackcol
-.085e	a9 05		               lda  #vvert
-.0860	8d 20 d0	               sta  vicbordcol
-.0863	a9 01		               lda  #vblanc
-.0865	8d 86 02	               sta  bascol
-.0868	ad 00 04	               lda  scrnram
-.086b	29 fd		               and  #%11111101
-.086d	8d 00 04	               sta  scrnram
-.0870	20 77 08	               jsr  cls
-.0873	20 bc 09	               jsr  pop
-.0876	60		               rts
-.0877			cls
-.0877	08		               php
-.0878	48		               pha
-.0879	a9 93		               lda  #$93
-.087b	20 86 08	               jsr  putch
-.087e	a9 0e		               lda  #$0e
-.0880	20 86 08	               jsr  putch
-.0883	68		               pla
-.0884	28		               plp
-.0885	60		               rts
-.0886			putch
-.0886	08		               php
-.0887	20 d2 ff	               jsr  $ffd2
-.088a	28		               plp
-.088b	60		               rts
-.088c			puts
-.088c	20 7d 09	               jsr  push
-.088f	86 fb		               stx  zpage1
-.0891	84 fc		               sty  zpage1+1
-.0893	a0 00		               ldy  #0
-.0895	b1 fb		next           lda  (zpage1),y
-.0897	f0 09		               beq  exit
-.0899	20 86 08	               jsr  putch
-.089c	20 84 0a	               jsr  inczp1
-.089f	4c 95 08	               jmp  next
-.08a2	20 bc 09	exit           jsr  pop
-.08a5	60		               rts
-.08a6			gotoxy
-.08a6	08		               php
-.08a7	18		               clc
-.08a8	8a		               txa
-.08a9	48		               pha
-.08aa	98		               tya
-.08ab	aa		               tax
-.08ac	68		               pla
-.08ad	a8		               tay
-.08ae	20 f0 ff	               jsr  kplot
-.08b1	28		               plp
-.08b2	60		               rts
-.08b3			cursor
+.08cf			scrmaninit
+.08cf	20 f6 09	               jsr  push
+.08d2	a9 06		               lda  #vbleu
+.08d4	8d 21 d0	               sta  vicbackcol
+.08d7	a9 05		               lda  #vvert
+.08d9	8d 20 d0	               sta  vicbordcol
+.08dc	a9 01		               lda  #vblanc
+.08de	8d 86 02	               sta  bascol
+.08e1	ad 00 04	               lda  scrnram
+.08e4	29 fd		               and  #%11111101
+.08e6	8d 00 04	               sta  scrnram
+.08e9	20 f0 08	               jsr  cls
+.08ec	20 35 0a	               jsr  pop
+.08ef	60		               rts
+.08f0			cls
+.08f0	08		               php
+.08f1	48		               pha
+.08f2	a9 93		               lda  #$93
+.08f4	20 ff 08	               jsr  putch
+.08f7	a9 0e		               lda  #$0e
+.08f9	20 ff 08	               jsr  putch
+.08fc	68		               pla
+.08fd	28		               plp
+.08fe	60		               rts
+.08ff			putch
+.08ff	08		               php
+.0900	20 d2 ff	               jsr  $ffd2
+.0903	28		               plp
+.0904	60		               rts
+.0905			puts
+.0905	20 f6 09	               jsr  push
+.0908	86 fb		               stx  zpage1
+.090a	84 fc		               sty  zpage1+1
+.090c	a0 00		               ldy  #0
+.090e	b1 fb		next           lda  (zpage1),y
+.0910	f0 09		               beq  exit
+.0912	20 ff 08	               jsr  putch
+.0915	20 fd 0a	               jsr  inczp1
+.0918	4c 0e 09	               jmp  next
+.091b	20 35 0a	exit           jsr  pop
+.091e	60		               rts
+.091f			gotoxy
+.091f	08		               php
+.0920	18		               clc
+.0921	8a		               txa
+.0922	48		               pha
+.0923	98		               tya
+.0924	aa		               tax
+.0925	68		               pla
+.0926	a8		               tay
+.0927	20 f0 ff	               jsr  kplot
+.092a	28		               plp
+.092b	60		               rts
+.092c			cursor
 =$0286			bascol    =    $0286
-.08b3	08		               php
-.08b4	48		               pha
-.08b5	90 12		               bcc  restore
-.08b7	20 f0 ff	               jsr  kplot
-.08ba	8c db 08	               sty  cx
-.08bd	8e dc 08	               stx  cy
-.08c0	ad 86 02	               lda  bascol
-.08c3	8d dd 08	               sta  bcol
-.08c6	4c d8 08	               jmp  out
-.08c9	ae dc 08	restore        ldx  cy
-.08cc	ac db 08	               ldy  cx
-.08cf	20 f0 ff	               jsr  kplot
-.08d2	ad dd 08	               lda  bcol
-.08d5	8d 86 02	               sta  bascol
-.08d8	68		out            pla
-.08d9	28		               plp
-.08da	60		               rts
->08db	00		cx   .byte     $00
->08dc	00		cy   .byte     $00
->08dd	00		bcol .byte     $00
-.08de			cursave
-.08de	08		               php
-.08df	38		               sec
-.08e0	20 b3 08	               jsr  cursor
-.08e3	28		               plp
-.08e4	60		               rts
-.08e5			curput
-.08e5	08		               php
-.08e6	18		               clc
-.08e7	20 b3 08	               jsr  cursor
-.08ea	28		               plp
-.08eb	60		               rts
-.08ec			putsxy
-.08ec	20 7d 09	               jsr  push
-.08ef	86 fb		               stx  zpage1
-.08f1	84 fc		               sty  zpage1+1
-.08f3	a0 00		               ldy  #$00
-.08f5	b1 fb		               lda  (zpage1),y
-.08f7	aa		               tax
-.08f8	20 84 0a	               jsr  inczp1
-.08fb	b1 fb		               lda  (zpage1),y
-.08fd	a8		               tay
-.08fe	20 a6 08	               jsr  gotoxy
-.0901	20 84 0a	               jsr  inczp1
-.0904	a6 fb		               ldx  zpage1
-.0906	a4 fc		               ldy  zpage1+1
-.0908	20 8c 08	               jsr  puts
-.090b	20 bc 09	               jsr  pop
-.090e	60		               rts
->090f	00 00		straddr   .word     $00
->0911	00		px        .byte     $00
->0912	00		py        .byte     $00
->0913	00 00		zp1       .word     $00
-.0915			putscxy
-.0915	20 7d 09	               jsr  push
-.0918	84 fc		               sty  zpage1+1
-.091a	86 fb		               stx  zpage1
-.091c	ad 86 02	               lda  bascol
-.091f	8d 3f 09	               sta  bc
-.0922	a0 00		               ldy #$00
-.0924	b1 fb		               lda  (zpage1),y
-.0926	8d 86 02	               sta  bascol
-.0929	20 84 0a	               jsr  inczp1
-.092c	a6 fb		               ldx  zpage1
-.092e	a4 fc		               ldy  zpage1+1
-.0930	20 ec 08	               jsr  putsxy
-.0933	ad 3f 09	               lda  bc
-.0936	8d 86 02	               sta  bascol
-.0939	20 bc 09	               jsr  pop
-.093c	60		               rts
->093d	00 00		straddr  .word      $00
->093f	00		bc       .byte      $00
->0940	00 00		zp1      .word      $00
-.0942			putrahex
-.0942	08		               php
-.0943	48		               pha
-.0944	20 8a 0b	               jsr  a2hex
-.0947	a9 36		               lda  #<a2hexstr
-.0949	a0 0b		               ldy  #>a2hexstr
-.094b	20 8c 08	               jsr  puts
-.094e	68		               pla
-.094f	28		               plp
-.0950	60		               rts
-.0951			kputrahexxy
-.0951			bputrahexxy
-.0951			putrahexxy
-.0951	08		               php
-.0952	20 8a 0b	               jsr  a2hex
-.0955	a9 33		               lda  #<a2hexpos
-.0957	a0 0b		               ldy  #>a2hexpos
-.0959	20 ec 08	               jsr  putsxy
-.095c	68		               pla
-.095d	28		               plp
-.095e	60		               rts
-.095f			putrahexcxy
-.095f	08		               php
-.0960	20 8a 0b	               jsr  a2hex
-.0963	a9 33		               lda  #<a2hexpos
-.0965	a0 0b		               ldy  #>a2hexpos
-.0967	20 15 09	               jsr  putscxy
-.096a	68		               pla
-.096b	28		               plp
-.096c	60		               rts
-.096d			setinverse
-.096d	48		               pha
-.096e	a9 12		               lda  #$12
-.0970	20 d2 ff	               jsr  $ffd2
-.0973	68		               pla
-.0974	60		               rts
-.0975			clrinverse
-.0975	48		               pha
-.0976	a9 92		               lda  #$92
-.0978	20 d2 ff	               jsr  $ffd2
-.097b	68		               pla
-.097c	60		               rts
+.092c	08		               php
+.092d	48		               pha
+.092e	90 12		               bcc  restore
+.0930	20 f0 ff	               jsr  kplot
+.0933	8c 54 09	               sty  cx
+.0936	8e 55 09	               stx  cy
+.0939	ad 86 02	               lda  bascol
+.093c	8d 56 09	               sta  bcol
+.093f	4c 51 09	               jmp  out
+.0942	ae 55 09	restore        ldx  cy
+.0945	ac 54 09	               ldy  cx
+.0948	20 f0 ff	               jsr  kplot
+.094b	ad 56 09	               lda  bcol
+.094e	8d 86 02	               sta  bascol
+.0951	68		out            pla
+.0952	28		               plp
+.0953	60		               rts
+>0954	00		cx   .byte     $00
+>0955	00		cy   .byte     $00
+>0956	00		bcol .byte     $00
+.0957			cursave
+.0957	08		               php
+.0958	38		               sec
+.0959	20 2c 09	               jsr  cursor
+.095c	28		               plp
+.095d	60		               rts
+.095e			curput
+.095e	08		               php
+.095f	18		               clc
+.0960	20 2c 09	               jsr  cursor
+.0963	28		               plp
+.0964	60		               rts
+.0965			putsxy
+.0965	20 f6 09	               jsr  push
+.0968	86 fb		               stx  zpage1
+.096a	84 fc		               sty  zpage1+1
+.096c	a0 00		               ldy  #$00
+.096e	b1 fb		               lda  (zpage1),y
+.0970	aa		               tax
+.0971	20 fd 0a	               jsr  inczp1
+.0974	b1 fb		               lda  (zpage1),y
+.0976	a8		               tay
+.0977	20 1f 09	               jsr  gotoxy
+.097a	20 fd 0a	               jsr  inczp1
+.097d	a6 fb		               ldx  zpage1
+.097f	a4 fc		               ldy  zpage1+1
+.0981	20 05 09	               jsr  puts
+.0984	20 35 0a	               jsr  pop
+.0987	60		               rts
+>0988	00 00		straddr   .word     $00
+>098a	00		px        .byte     $00
+>098b	00		py        .byte     $00
+>098c	00 00		zp1       .word     $00
+.098e			putscxy
+.098e	20 f6 09	               jsr  push
+.0991	84 fc		               sty  zpage1+1
+.0993	86 fb		               stx  zpage1
+.0995	ad 86 02	               lda  bascol
+.0998	8d b8 09	               sta  bc
+.099b	a0 00		               ldy #$00
+.099d	b1 fb		               lda  (zpage1),y
+.099f	8d 86 02	               sta  bascol
+.09a2	20 fd 0a	               jsr  inczp1
+.09a5	a6 fb		               ldx  zpage1
+.09a7	a4 fc		               ldy  zpage1+1
+.09a9	20 65 09	               jsr  putsxy
+.09ac	ad b8 09	               lda  bc
+.09af	8d 86 02	               sta  bascol
+.09b2	20 35 0a	               jsr  pop
+.09b5	60		               rts
+>09b6	00 00		straddr  .word      $00
+>09b8	00		bc       .byte      $00
+>09b9	00 00		zp1      .word      $00
+.09bb			putrahex
+.09bb	08		               php
+.09bc	48		               pha
+.09bd	20 03 0c	               jsr  a2hex
+.09c0	a9 af		               lda  #<a2hexstr
+.09c2	a0 0b		               ldy  #>a2hexstr
+.09c4	20 05 09	               jsr  puts
+.09c7	68		               pla
+.09c8	28		               plp
+.09c9	60		               rts
+.09ca			kputrahexxy
+.09ca			bputrahexxy
+.09ca			putrahexxy
+.09ca	08		               php
+.09cb	20 03 0c	               jsr  a2hex
+.09ce	a9 ac		               lda  #<a2hexpos
+.09d0	a0 0b		               ldy  #>a2hexpos
+.09d2	20 65 09	               jsr  putsxy
+.09d5	68		               pla
+.09d6	28		               plp
+.09d7	60		               rts
+.09d8			putrahexcxy
+.09d8	08		               php
+.09d9	20 03 0c	               jsr  a2hex
+.09dc	a9 ac		               lda  #<a2hexpos
+.09de	a0 0b		               ldy  #>a2hexpos
+.09e0	20 8e 09	               jsr  putscxy
+.09e3	68		               pla
+.09e4	28		               plp
+.09e5	60		               rts
+.09e6			setinverse
+.09e6	48		               pha
+.09e7	a9 12		               lda  #$12
+.09e9	20 d2 ff	               jsr  $ffd2
+.09ec	68		               pla
+.09ed	60		               rts
+.09ee			clrinverse
+.09ee	48		               pha
+.09ef	a9 92		               lda  #$92
+.09f1	20 d2 ff	               jsr  $ffd2
+.09f4	68		               pla
+.09f5	60		               rts
 
 ;******  Return to file: charset2disk.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-pushpop.asm
 
-.097d			push
-.097d	08		          php            ; stack : flg, pcl, pch
-.097e	78		          sei
-.097f	8d b9 09	          sta  ra        ; save a
-.0982	68		          pla            ; stack : pcl, pch
-.0983	8d b8 09	          sta  rp        ; save rp
-.0986	68		          pla            ; stack : pch
-.0987	8d ba 09	          sta  pc        ; save pcl
-.098a	68		          pla            ; stack : -
-.098b	8d bb 09	          sta  pc+1      ; save pch
-.098e	a5 fb		          lda  zpage1    ; get zpage1 low byte
-.0990	48		          pha            ; stack : zp1l
-.0991	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
-.0993	48		          pha            ; stack : zp1h, zp1l
-.0994	a5 fd		          lda  zpage2    ; get zpage2 low byte
-.0996	48		          pha            ; stack : zp2l, zp1h, zp1l
-.0997	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
-.0999	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
-.099a	ad b8 09	          lda  rp        ; get rp
-.099d	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
-.099e	ad b9 09	          lda  ra        ; get a
-.09a1	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
-.09a2	8a		          txa            ; get x
-.09a3	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
-.09a4	98		          tya            ; get y
-.09a5	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.09a6	ad bb 09	          lda  pc+1      ; get pch
-.09a9	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.09aa	ad ba 09	          lda  pc        ; get pcl
-.09ad	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.09ae	ad b8 09	          lda  rp        ; get rp
-.09b1	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.09b2	ad b9 09	          lda  ra        ; get a
-.09b5	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.09b6	58		          cli
-.09b7	60		          rts
->09b8	00		rp        .byte     0
->09b9	00		ra        .byte     0
->09ba	00 00		pc        .word     0
-.09bc			pull
-.09bc			pop
-.09bc	78		          sei
-.09bd	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.09be	8d f1 09	          sta  pc        ; save pcl
-.09c1	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.09c2	8d f2 09	          sta  pc+1      ; save pch
-.09c5	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
-.09c6	a8		          tay            ; set y
-.09c7	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
-.09c8	aa		          tax            ; set x
-.09c9	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
-.09ca	8d f0 09	          sta  ra        ; save a
-.09cd	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
-.09ce	8d ef 09	          sta  rp        ; save rp
-.09d1	68		          pla            ; stack : zp2l, zp1h, zp1l
-.09d2	85 fe		          sta  zpage2+1  ; get zpage1 low byte
-.09d4	68		          pla            ; stack : zp1h, zp1l
-.09d5	85 fd		          sta  zpage2    ; get zpage2 High byte
-.09d7	68		          pla            ; stack : zp1l
-.09d8	85 fc		          sta  zpage1+1  ; get zpage2 low byte
-.09da	68		          pla            ; stack :
-.09db	85 fb		          sta  zpage1    ; get zpage1 High byte
-.09dd	ad f2 09	          lda  pc+1      ; get pch
-.09e0	48		          pha            ; stack : pch
-.09e1	ad f1 09	          lda  pc
-.09e4	48		          pha            ; stack : pcl, pch
-.09e5	ad ef 09	          lda  rp        ; get rp
-.09e8	48		          pha            ; stack : rp, pcl, pch
-.09e9	ad f0 09	          lda  ra        ; set ra
-.09ec	58		          cli
-.09ed	28		          plp            ; stack : pcl, pch
-.09ee	60		          rts
->09ef	00		rp        .byte     0
->09f0	00		ra        .byte     0
->09f1	00 00		pc        .word     0
+.09f6			push
+.09f6	08		          php            ; stack : flg, pcl, pch
+.09f7	78		          sei
+.09f8	8d 32 0a	          sta  ra        ; save a
+.09fb	68		          pla            ; stack : pcl, pch
+.09fc	8d 31 0a	          sta  rp        ; save rp
+.09ff	68		          pla            ; stack : pch
+.0a00	8d 33 0a	          sta  pc        ; save pcl
+.0a03	68		          pla            ; stack : -
+.0a04	8d 34 0a	          sta  pc+1      ; save pch
+.0a07	a5 fb		          lda  zpage1    ; get zpage1 low byte
+.0a09	48		          pha            ; stack : zp1l
+.0a0a	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
+.0a0c	48		          pha            ; stack : zp1h, zp1l
+.0a0d	a5 fd		          lda  zpage2    ; get zpage2 low byte
+.0a0f	48		          pha            ; stack : zp2l, zp1h, zp1l
+.0a10	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
+.0a12	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
+.0a13	ad 31 0a	          lda  rp        ; get rp
+.0a16	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
+.0a17	ad 32 0a	          lda  ra        ; get a
+.0a1a	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.0a1b	8a		          txa            ; get x
+.0a1c	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0a1d	98		          tya            ; get y
+.0a1e	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0a1f	ad 34 0a	          lda  pc+1      ; get pch
+.0a22	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0a23	ad 33 0a	          lda  pc        ; get pcl
+.0a26	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0a27	ad 31 0a	          lda  rp        ; get rp
+.0a2a	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0a2b	ad 32 0a	          lda  ra        ; get a
+.0a2e	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0a2f	58		          cli
+.0a30	60		          rts
+>0a31	00		rp        .byte     0
+>0a32	00		ra        .byte     0
+>0a33	00 00		pc        .word     0
+.0a35			pull
+.0a35			pop
+.0a35	78		          sei
+.0a36	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0a37	8d 6a 0a	          sta  pc        ; save pcl
+.0a3a	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0a3b	8d 6b 0a	          sta  pc+1      ; save pch
+.0a3e	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0a3f	a8		          tay            ; set y
+.0a40	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.0a41	aa		          tax            ; set x
+.0a42	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
+.0a43	8d 69 0a	          sta  ra        ; save a
+.0a46	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
+.0a47	8d 68 0a	          sta  rp        ; save rp
+.0a4a	68		          pla            ; stack : zp2l, zp1h, zp1l
+.0a4b	85 fe		          sta  zpage2+1  ; get zpage1 low byte
+.0a4d	68		          pla            ; stack : zp1h, zp1l
+.0a4e	85 fd		          sta  zpage2    ; get zpage2 High byte
+.0a50	68		          pla            ; stack : zp1l
+.0a51	85 fc		          sta  zpage1+1  ; get zpage2 low byte
+.0a53	68		          pla            ; stack :
+.0a54	85 fb		          sta  zpage1    ; get zpage1 High byte
+.0a56	ad 6b 0a	          lda  pc+1      ; get pch
+.0a59	48		          pha            ; stack : pch
+.0a5a	ad 6a 0a	          lda  pc
+.0a5d	48		          pha            ; stack : pcl, pch
+.0a5e	ad 68 0a	          lda  rp        ; get rp
+.0a61	48		          pha            ; stack : rp, pcl, pch
+.0a62	ad 69 0a	          lda  ra        ; set ra
+.0a65	58		          cli
+.0a66	28		          plp            ; stack : pcl, pch
+.0a67	60		          rts
+>0a68	00		rp        .byte     0
+>0a69	00		ra        .byte     0
+>0a6a	00 00		pc        .word     0
 
 ;******  Return to file: charset2disk.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-mem.asm
 
-.09f3			blkfill
-.09f3	20 7d 09	bf0            jsr  push
-.09f6	20 b1 0a	               jsr  savezp1
-.09f9	84 fc		               sty  zpage1+1
-.09fb	a0 00		               ldy  #$00
-.09fd	84 fb		               sty  zpage1
-.09ff	91 fb		bf1            sta  (zpage1),y
-.0a01	c8		               iny
-.0a02	d0 fb		               bne  bf1
-.0a04	20 c0 0a	               jsr  restzp1
-.0a07	20 bc 09	               jsr  pop
-.0a0a	60		               rts
-.0a0b			memfill
-.0a0b	20 7d 09	               jsr  push
-.0a0e	20 f3 09	mf1            jsr  blkfill
-.0a11	c8		               iny
-.0a12	ca		               dex
-.0a13	d0 f9		               bne  mf1
-.0a15	20 bc 09	               jsr  pop
-.0a18	60		               rts
-.0a19			memmove
-.0a19	20 7d 09	               jsr  push
-.0a1c	ba		               tsx            ; On se crée un pointeur ...
-.0a1d	8a		               txa
-.0a1e	18		               clc
-.0a1f	69 0b		               adc  #11
-.0a21	a8		               tay
-.0a22	a2 06		               ldx  #$06
-.0a24	b9 00 01	nextbyte       lda  $0100,y
-.0a27	99 73 0a	               sta  words,y
-.0a2a	c8		               iny
-.0a2b	ca		               dex
-.0a2c	d0 f6		               bne  nextbyte
-.0a2e	ad 73 0a	               lda  s
-.0a31	8d 4a 0a	               sta  source+1
-.0a34	ad 74 0a	               lda  s+1
-.0a37	8d 4b 0a	               sta  source+2
-.0a3a	ad 75 0a	               lda  d
-.0a3d	8d 47 0a	               sta  destin+1
-.0a40	ad 76 0a	               lda  d+1
-.0a43	8d 48 0a	               sta  destin+2
-.0a46	ad ff ff	destin         lda  $ffff
-.0a49	8d ff ff	source         sta  $ffff
-.0a4c	ee 47 0a	               inc  destin+1
-.0a4f	d0 03		               bne  src
-.0a51	ee 48 0a	               inc  destin+2
-.0a54	ee 4a 0a	src            inc  source+1
-.0a57	d0 03		               bne  cnt
-.0a59	ee 4b 0a	               inc  source+2
-.0a5c	ad 77 0a	cnt            lda  compte
-.0a5f	d0 08		               bne  decit
-.0a61	ad 78 0a	               lda  compte+1
-.0a64	f0 09		               beq  fini
-.0a66	ce 78 0a	               dec  compte+1
-.0a69	ce 77 0a	decit          dec  compte
-.0a6c	4c 46 0a	               jmp  destin
-.0a6f	20 bc 09	fini           jsr  pop
-.0a72	60		               rts
-.0a73			words
->0a73	00 00		s         .word     $0000
->0a75	00 00		d         .word     $0000
->0a77	00 00		compte    .word     $0000
-.0a79			decword
-.0a79	20 7d 09	               jsr  push
-.0a7c	86 fd		               stx  zpage2
-.0a7e	84 fe		               sty  zpage2+1
-.0a80	20 bc 09	               jsr  pop
+.0a6c			blkfill
+.0a6c	20 f6 09	bf0            jsr  push
+.0a6f	20 2a 0b	               jsr  savezp1
+.0a72	84 fc		               sty  zpage1+1
+.0a74	a0 00		               ldy  #$00
+.0a76	84 fb		               sty  zpage1
+.0a78	91 fb		bf1            sta  (zpage1),y
+.0a7a	c8		               iny
+.0a7b	d0 fb		               bne  bf1
+.0a7d	20 39 0b	               jsr  restzp1
+.0a80	20 35 0a	               jsr  pop
 .0a83	60		               rts
-.0a84			inczp1
-.0a84	08		               php
-.0a85	e6 fb		               inc  zpage1
-.0a87	d0 02		               bne  nopage
-.0a89	e6 fc		               inc  zpage1+1
-.0a8b	28		nopage         plp
-.0a8c	60		               rts
-.0a8d			deczp1
-.0a8d	08		                php
-.0a8e	48		                pha
-.0a8f	c6 fb		                dec  zpage1
-.0a91	d0 02		                bne  nopage
-.0a93	c6 fc		                dec  zpage1+1
-.0a95	c6 fb		nopage          dec  zpage1
-.0a97	68		                pla
-.0a98	28		                plp
-.0a99	60		                rts
-.0a9a			inczp2
-.0a9a	08		               php
-.0a9b	48		               pha
-.0a9c	e6 fd		               inc  zpage2
-.0a9e	d0 02		               bne  nopage
-.0aa0	e6 fe		               inc  zpage2+1
-.0aa2	68		nopage         pla
-.0aa3	28		               plp
-.0aa4	60		               rts
-.0aa5			deczp2
-.0aa5	08		               php
-.0aa6	48		               pha
-.0aa7	a5 fd		               lda  zpage2
-.0aa9	d0 02		               bne  nopage
-.0aab	c6 fe		               dec  zpage2+1
-.0aad	c6 fd		nopage         dec  zpage2
-.0aaf	28		               plp
-.0ab0	60		               rts
-.0ab1			savezp1
-.0ab1	08		               php
-.0ab2	48		               pha
-.0ab3	a5 fb		               lda  zpage1
-.0ab5	8d 2d 0b	               sta  zp1
-.0ab8	a5 fc		               lda  zpage1+1
-.0aba	8d 2e 0b	               sta  zp1+1
-.0abd	68		               pla
-.0abe	28		               plp
-.0abf	60		               rts
-.0ac0			restzp1
-.0ac0	08		               php
-.0ac1	48		               pha
-.0ac2	ad 2d 0b	               lda zp1
-.0ac5	85 fb		               sta zpage1
-.0ac7	ad 2e 0b	               lda zp1+1
-.0aca	85 fc		               sta zpage1+1
-.0acc	68		               pla
-.0acd	28		               plp
-.0ace	60		               rts
-.0acf			savezp2
-.0acf	08		         php
-.0ad0	48		         pha
-.0ad1	a5 fd		         lda zpage2
-.0ad3	8d 2f 0b	         sta zp2
-.0ad6	a5 fe		         lda zpage2+1
-.0ad8	8d 30 0b	         sta zp2+1
-.0adb	68		         pla
-.0adc	28		         plp
-.0add	60		         rts
-.0ade			restzp2
-.0ade	08		                php
-.0adf	48		                pha
-.0ae0	ad 2f 0b	                lda  zp2
-.0ae3	85 fd		                sta  zpage2
-.0ae5	ad 30 0b	                lda  zp2+1
-.0ae8	85 fe		                sta  zpage2+1
-.0aea	68		                pla
-.0aeb	28		                plp
-.0aec	60		                rts
-.0aed			xy2addr
-.0aed	08		                php
-.0aee	48		                pha
-.0aef	8a		                txa
-.0af0	48		                pha
-.0af1	98		                tya
-.0af2	48		                pha
-.0af3	ad 28 0b	                lda     addr1+1
-.0af6	8d 2a 0b	                sta     addr2+1
-.0af9	ad 27 0b	                lda     addr1
-.0afc	8d 29 0b	                sta     addr2
-.0aff	c0 00		                cpy     #$00
-.0b01	f0 0f		                beq     addx
-.0b03	18		moreline        clc
-.0b04	6d 26 0b	                adc     ymult
-.0b07	90 03		                bcc     norepy
-.0b09	ee 2a 0b	                inc     addr2+1
-.0b0c	8d 29 0b	norepy          sta     addr2
-.0b0f	88		                dey
-.0b10	d0 f1		                bne     moreline
-.0b12	8a		addx            txa
-.0b13	18		                clc
-.0b14	6d 29 0b	                adc     addr2
-.0b17	90 03		                bcc     thatsit
-.0b19	ee 2a 0b	                inc     addr2+1
-.0b1c	8d 29 0b	thatsit         sta     addr2
-.0b1f	68		                pla
-.0b20	a8		                tay
-.0b21	68		                pla
-.0b22	aa		                tax
-.0b23	68		                pla
-.0b24	28		                plp
-.0b25	60		                rts
->0b26	28		ymult          .byte     40
->0b27	00 00		addr1          .word     $0000
->0b29	00 00		addr2          .word     $0000
->0b2b	00 00		bytecnt        .word     $0000
->0b2d	00 00		zp1        .word   $0000
->0b2f	00 00		zp2        .word   $0000
+.0a84			memfill
+.0a84	20 f6 09	               jsr  push
+.0a87	20 6c 0a	mf1            jsr  blkfill
+.0a8a	c8		               iny
+.0a8b	ca		               dex
+.0a8c	d0 f9		               bne  mf1
+.0a8e	20 35 0a	               jsr  pop
+.0a91	60		               rts
+.0a92			memmove
+.0a92	20 f6 09	               jsr  push
+.0a95	ba		               tsx            ; On se crée un pointeur ...
+.0a96	8a		               txa
+.0a97	18		               clc
+.0a98	69 0b		               adc  #11
+.0a9a	a8		               tay
+.0a9b	a2 06		               ldx  #$06
+.0a9d	b9 00 01	nextbyte       lda  $0100,y
+.0aa0	99 ec 0a	               sta  words,y
+.0aa3	c8		               iny
+.0aa4	ca		               dex
+.0aa5	d0 f6		               bne  nextbyte
+.0aa7	ad ec 0a	               lda  s
+.0aaa	8d c3 0a	               sta  source+1
+.0aad	ad ed 0a	               lda  s+1
+.0ab0	8d c4 0a	               sta  source+2
+.0ab3	ad ee 0a	               lda  d
+.0ab6	8d c0 0a	               sta  destin+1
+.0ab9	ad ef 0a	               lda  d+1
+.0abc	8d c1 0a	               sta  destin+2
+.0abf	ad ff ff	destin         lda  $ffff
+.0ac2	8d ff ff	source         sta  $ffff
+.0ac5	ee c0 0a	               inc  destin+1
+.0ac8	d0 03		               bne  src
+.0aca	ee c1 0a	               inc  destin+2
+.0acd	ee c3 0a	src            inc  source+1
+.0ad0	d0 03		               bne  cnt
+.0ad2	ee c4 0a	               inc  source+2
+.0ad5	ad f0 0a	cnt            lda  compte
+.0ad8	d0 08		               bne  decit
+.0ada	ad f1 0a	               lda  compte+1
+.0add	f0 09		               beq  fini
+.0adf	ce f1 0a	               dec  compte+1
+.0ae2	ce f0 0a	decit          dec  compte
+.0ae5	4c bf 0a	               jmp  destin
+.0ae8	20 35 0a	fini           jsr  pop
+.0aeb	60		               rts
+.0aec			words
+>0aec	00 00		s         .word     $0000
+>0aee	00 00		d         .word     $0000
+>0af0	00 00		compte    .word     $0000
+.0af2			decword
+.0af2	20 f6 09	               jsr  push
+.0af5	86 fd		               stx  zpage2
+.0af7	84 fe		               sty  zpage2+1
+.0af9	20 35 0a	               jsr  pop
+.0afc	60		               rts
+.0afd			inczp1
+.0afd	08		               php
+.0afe	e6 fb		               inc  zpage1
+.0b00	d0 02		               bne  nopage
+.0b02	e6 fc		               inc  zpage1+1
+.0b04	28		nopage         plp
+.0b05	60		               rts
+.0b06			deczp1
+.0b06	08		                php
+.0b07	48		                pha
+.0b08	c6 fb		                dec  zpage1
+.0b0a	d0 02		                bne  nopage
+.0b0c	c6 fc		                dec  zpage1+1
+.0b0e	c6 fb		nopage          dec  zpage1
+.0b10	68		                pla
+.0b11	28		                plp
+.0b12	60		                rts
+.0b13			inczp2
+.0b13	08		               php
+.0b14	48		               pha
+.0b15	e6 fd		               inc  zpage2
+.0b17	d0 02		               bne  nopage
+.0b19	e6 fe		               inc  zpage2+1
+.0b1b	68		nopage         pla
+.0b1c	28		               plp
+.0b1d	60		               rts
+.0b1e			deczp2
+.0b1e	08		               php
+.0b1f	48		               pha
+.0b20	a5 fd		               lda  zpage2
+.0b22	d0 02		               bne  nopage
+.0b24	c6 fe		               dec  zpage2+1
+.0b26	c6 fd		nopage         dec  zpage2
+.0b28	28		               plp
+.0b29	60		               rts
+.0b2a			savezp1
+.0b2a	08		               php
+.0b2b	48		               pha
+.0b2c	a5 fb		               lda  zpage1
+.0b2e	8d a6 0b	               sta  zp1
+.0b31	a5 fc		               lda  zpage1+1
+.0b33	8d a7 0b	               sta  zp1+1
+.0b36	68		               pla
+.0b37	28		               plp
+.0b38	60		               rts
+.0b39			restzp1
+.0b39	08		               php
+.0b3a	48		               pha
+.0b3b	ad a6 0b	               lda zp1
+.0b3e	85 fb		               sta zpage1
+.0b40	ad a7 0b	               lda zp1+1
+.0b43	85 fc		               sta zpage1+1
+.0b45	68		               pla
+.0b46	28		               plp
+.0b47	60		               rts
+.0b48			savezp2
+.0b48	08		         php
+.0b49	48		         pha
+.0b4a	a5 fd		         lda zpage2
+.0b4c	8d a8 0b	         sta zp2
+.0b4f	a5 fe		         lda zpage2+1
+.0b51	8d a9 0b	         sta zp2+1
+.0b54	68		         pla
+.0b55	28		         plp
+.0b56	60		         rts
+.0b57			restzp2
+.0b57	08		                php
+.0b58	48		                pha
+.0b59	ad a8 0b	                lda  zp2
+.0b5c	85 fd		                sta  zpage2
+.0b5e	ad a9 0b	                lda  zp2+1
+.0b61	85 fe		                sta  zpage2+1
+.0b63	68		                pla
+.0b64	28		                plp
+.0b65	60		                rts
+.0b66			xy2addr
+.0b66	08		                php
+.0b67	48		                pha
+.0b68	8a		                txa
+.0b69	48		                pha
+.0b6a	98		                tya
+.0b6b	48		                pha
+.0b6c	ad a1 0b	                lda     addr1+1
+.0b6f	8d a3 0b	                sta     addr2+1
+.0b72	ad a0 0b	                lda     addr1
+.0b75	8d a2 0b	                sta     addr2
+.0b78	c0 00		                cpy     #$00
+.0b7a	f0 0f		                beq     addx
+.0b7c	18		moreline        clc
+.0b7d	6d 9f 0b	                adc     ymult
+.0b80	90 03		                bcc     norepy
+.0b82	ee a3 0b	                inc     addr2+1
+.0b85	8d a2 0b	norepy          sta     addr2
+.0b88	88		                dey
+.0b89	d0 f1		                bne     moreline
+.0b8b	8a		addx            txa
+.0b8c	18		                clc
+.0b8d	6d a2 0b	                adc     addr2
+.0b90	90 03		                bcc     thatsit
+.0b92	ee a3 0b	                inc     addr2+1
+.0b95	8d a2 0b	thatsit         sta     addr2
+.0b98	68		                pla
+.0b99	a8		                tay
+.0b9a	68		                pla
+.0b9b	aa		                tax
+.0b9c	68		                pla
+.0b9d	28		                plp
+.0b9e	60		                rts
+>0b9f	28		ymult          .byte     40
+>0ba0	00 00		addr1          .word     $0000
+>0ba2	00 00		addr2          .word     $0000
+>0ba4	00 00		bytecnt        .word     $0000
+>0ba6	00 00		zp1        .word   $0000
+>0ba8	00 00		zp2        .word   $0000
 
 ;******  Return to file: charset2disk.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-hex.asm
 
->0b31	01		a2hexcol       .byte     1              ; pour aputscxy
->0b32	00		a2hexbkcol     .byte     %00000000
-.0b33			a2hexpos
->0b33	00		a2hexpx        .byte     0              ; pour aputsxy
->0b34	00		a2hexpy        .byte     0
->0b35	24		a2hexprefix    .byte     "$"            ; pour aputs
->0b36	00 00		a2hexstr       .word     $00
->0b38	00 00		               .word     $00
->0b3a	00		               .byte     0              ; 0 end string
-.0b3b			putahexfmtxy
-.0b3b	20 7d 09	               jsr  push
-.0b3e	20 8a 0b	               jsr  a2hex
-.0b41	ae 33 0b	               ldx  a2hexpx
-.0b44	ac 34 0b	               ldy  a2hexpy
-.0b47	20 a6 08	               jsr  gotoxy
-.0b4a	a2 35		               ldx  #<a2hexprefix
-.0b4c	a0 0b		               ldy  #>a2hexprefix
-.0b4e	20 8c 08	               jsr  puts
-.0b51	20 bc 09	               jsr  pop
-.0b54	60		               rts
-.0b55			putahexfmt
-.0b55	20 7d 09	               jsr  push
-.0b58	20 8a 0b	               jsr  a2hex
-.0b5b	a2 35		               ldx  #<a2hexprefix
-.0b5d	a0 0b		               ldy  #>a2hexprefix
-.0b5f	20 8c 08	               jsr  puts
-.0b62	20 bc 09	               jsr  pop
-.0b65	60		               rts
-.0b66			putahex
-.0b66	20 7d 09	               jsr  push
-.0b69	20 8a 0b	               jsr  a2hex
-.0b6c	a2 36		               ldx  #<a2hexstr
-.0b6e	a0 0b		               ldy  #>a2hexstr
-.0b70	20 8c 08	               jsr  puts
-.0b73	20 bc 09	               jsr  pop
-.0b76	60		               rts
-.0b77			nib2hex
-.0b77	08		               php
-.0b78	29 0f		               and  #$0f
-.0b7a	f8		               sed
-.0b7b	18		               clc
-.0b7c	69 90		               adc  #$90
-.0b7e	69 40		               adc  #$40
-.0b80	d8		               cld
-.0b81	28		               plp
-.0b82	60		               rts
-.0b83			lsra4bits
-.0b83	08		               php
-.0b84	4a		               lsr
-.0b85	4a		               lsr
-.0b86	4a		               lsr
-.0b87	4a		               lsr
-.0b88	28		               plp
-.0b89	60		               rts
-.0b8a			a2hex
-.0b8a	08		               php
-.0b8b	48		               pha
-.0b8c	48		               pha
-.0b8d	20 83 0b	               jsr  lsra4bits
-.0b90	20 77 0b	               jsr  nib2hex
-.0b93	8d 36 0b	               sta  a2hexstr
-.0b96	68		               pla
-.0b97	20 77 0b	               jsr  nib2hex
-.0b9a	8d 37 0b	               sta  a2hexstr+1
-.0b9d	a9 00		               lda  #$00                ; set end of string
-.0b9f	8d 38 0b	               sta  a2hexstr+2
-.0ba2	68		               pla
-.0ba3	28		               plp
-.0ba4	60		               rts
-.0ba5			xy2hex
-.0ba5	20 7d 09	               jsr  push
-.0ba8	20 8a 0b	               jsr  a2hex
-.0bab	8a		               txa
-.0bac	48		               pha
-.0bad	20 83 0b	               jsr  lsra4bits
-.0bb0	20 77 0b	               jsr  nib2hex
-.0bb3	8d 36 0b	               sta  a2hexstr
-.0bb6	68		               pla
-.0bb7	20 77 0b	               jsr  nib2hex
-.0bba	8d 37 0b	               sta  a2hexstr+1
-.0bbd	98		               tya
-.0bbe	48		               pha
-.0bbf	20 83 0b	               jsr  lsra4bits
-.0bc2	20 77 0b	               jsr  nib2hex
-.0bc5	8d 38 0b	               sta  a2hexstr+2
-.0bc8	68		               pla
-.0bc9	20 77 0b	               jsr  nib2hex
-.0bcc	8d 39 0b	               sta  a2hexstr+3
-.0bcf	a9 00		               lda  #$00                ; 0 ended string
-.0bd1	8d 3a 0b	               sta  a2hexstr+4
-.0bd4	20 bc 09	               jsr  pop
-.0bd7			atobin
-.0bd7	20 7d 09	               jsr     push
-.0bda	a2 08		               ldx     #8
-.0bdc	a0 00		               ldy     #0
-.0bde	2a		nextbit        rol
-.0bdf	48		               pha
-.0be0	69 00		               adc     #$00
-.0be2	29 01		               and     #$01
-.0be4	20 77 0b	               jsr     nib2hex
-.0be7	99 f8 0b	               sta     abin,y
-.0bea	68		               pla
-.0beb	c8		               iny
-.0bec	ca		               dex
-.0bed	d0 ef		               bne     nextbit
-.0bef	a9 00		               lda     #0
-.0bf1	99 f8 0b	               sta     abin,y
-.0bf4	20 bc 09	               jsr     pull
-.0bf7	60		               rts
->0bf8	30 30 30 30	abin           .null   "00000000"
->0bfc	30 30 30 30 00
-.0c01			putabin
-.0c01	20 d7 0b	               jsr     atobin
-.0c04	20 7d 09	               jsr     push
-.0c07	a2 f8		               ldx     #<abin
-.0c09	a0 0b		               ldy     #>abin
-.0c0b	20 8c 08	               jsr     puts
-.0c0e	20 bc 09	               jsr     pop
-.0c11	60		               rts
-.0c12			putabinfmt
-.0c12	08		               php
-.0c13	48		               pha
-.0c14	a9 25		               lda     #"%"
-.0c16	20 86 08	               jsr     putch
-.0c19	68		               pla
-.0c1a	20 01 0c	               jsr     putabin
-.0c1d	28		               plp
-.0c1e	60		               rts
-.0c1f			putabinxy
-.0c1f	20 a6 08	               jsr     gotoxy
-.0c22	20 01 0c	               jsr     putabin
-.0c25	60		               rts
-.0c26			putabinfmtxy
-.0c26	20 a6 08	               jsr     gotoxy
-.0c29	20 12 0c	               jsr     putabinfmt
-.0c2c	60		               rts
+>0baa	01		a2hexcol       .byte     1              ; pour aputscxy
+>0bab	00		a2hexbkcol     .byte     %00000000
+.0bac			a2hexpos
+>0bac	00		a2hexpx        .byte     0              ; pour aputsxy
+>0bad	00		a2hexpy        .byte     0
+>0bae	24		a2hexprefix    .byte     "$"            ; pour aputs
+>0baf	00 00		a2hexstr       .word     $00
+>0bb1	00 00		               .word     $00
+>0bb3	00		               .byte     0              ; 0 end string
+.0bb4			putahexfmtxy
+.0bb4	20 f6 09	               jsr  push
+.0bb7	20 03 0c	               jsr  a2hex
+.0bba	ae ac 0b	               ldx  a2hexpx
+.0bbd	ac ad 0b	               ldy  a2hexpy
+.0bc0	20 1f 09	               jsr  gotoxy
+.0bc3	a2 ae		               ldx  #<a2hexprefix
+.0bc5	a0 0b		               ldy  #>a2hexprefix
+.0bc7	20 05 09	               jsr  puts
+.0bca	20 35 0a	               jsr  pop
+.0bcd	60		               rts
+.0bce			putahexfmt
+.0bce	20 f6 09	               jsr  push
+.0bd1	20 03 0c	               jsr  a2hex
+.0bd4	a2 ae		               ldx  #<a2hexprefix
+.0bd6	a0 0b		               ldy  #>a2hexprefix
+.0bd8	20 05 09	               jsr  puts
+.0bdb	20 35 0a	               jsr  pop
+.0bde	60		               rts
+.0bdf			putahex
+.0bdf	20 f6 09	               jsr  push
+.0be2	20 03 0c	               jsr  a2hex
+.0be5	a2 af		               ldx  #<a2hexstr
+.0be7	a0 0b		               ldy  #>a2hexstr
+.0be9	20 05 09	               jsr  puts
+.0bec	20 35 0a	               jsr  pop
+.0bef	60		               rts
+.0bf0			nib2hex
+.0bf0	08		               php
+.0bf1	29 0f		               and  #$0f
+.0bf3	f8		               sed
+.0bf4	18		               clc
+.0bf5	69 90		               adc  #$90
+.0bf7	69 40		               adc  #$40
+.0bf9	d8		               cld
+.0bfa	28		               plp
+.0bfb	60		               rts
+.0bfc			lsra4bits
+.0bfc	08		               php
+.0bfd	4a		               lsr
+.0bfe	4a		               lsr
+.0bff	4a		               lsr
+.0c00	4a		               lsr
+.0c01	28		               plp
+.0c02	60		               rts
+.0c03			a2hex
+.0c03	08		               php
+.0c04	48		               pha
+.0c05	48		               pha
+.0c06	20 fc 0b	               jsr  lsra4bits
+.0c09	20 f0 0b	               jsr  nib2hex
+.0c0c	8d af 0b	               sta  a2hexstr
+.0c0f	68		               pla
+.0c10	20 f0 0b	               jsr  nib2hex
+.0c13	8d b0 0b	               sta  a2hexstr+1
+.0c16	a9 00		               lda  #$00                ; set end of string
+.0c18	8d b1 0b	               sta  a2hexstr+2
+.0c1b	68		               pla
+.0c1c	28		               plp
+.0c1d	60		               rts
+.0c1e			xy2hex
+.0c1e	20 f6 09	               jsr  push
+.0c21	20 03 0c	               jsr  a2hex
+.0c24	8a		               txa
+.0c25	48		               pha
+.0c26	20 fc 0b	               jsr  lsra4bits
+.0c29	20 f0 0b	               jsr  nib2hex
+.0c2c	8d af 0b	               sta  a2hexstr
+.0c2f	68		               pla
+.0c30	20 f0 0b	               jsr  nib2hex
+.0c33	8d b0 0b	               sta  a2hexstr+1
+.0c36	98		               tya
+.0c37	48		               pha
+.0c38	20 fc 0b	               jsr  lsra4bits
+.0c3b	20 f0 0b	               jsr  nib2hex
+.0c3e	8d b1 0b	               sta  a2hexstr+2
+.0c41	68		               pla
+.0c42	20 f0 0b	               jsr  nib2hex
+.0c45	8d b2 0b	               sta  a2hexstr+3
+.0c48	a9 00		               lda  #$00                ; 0 ended string
+.0c4a	8d b3 0b	               sta  a2hexstr+4
+.0c4d	20 35 0a	               jsr  pop
+.0c50			atobin
+.0c50	20 f6 09	               jsr     push
+.0c53	a2 08		               ldx     #8
+.0c55	a0 00		               ldy     #0
+.0c57	2a		nextbit        rol
+.0c58	48		               pha
+.0c59	69 00		               adc     #$00
+.0c5b	29 01		               and     #$01
+.0c5d	20 f0 0b	               jsr     nib2hex
+.0c60	99 71 0c	               sta     abin,y
+.0c63	68		               pla
+.0c64	c8		               iny
+.0c65	ca		               dex
+.0c66	d0 ef		               bne     nextbit
+.0c68	a9 00		               lda     #0
+.0c6a	99 71 0c	               sta     abin,y
+.0c6d	20 35 0a	               jsr     pull
+.0c70	60		               rts
+>0c71	30 30 30 30	abin           .null   "00000000"
+>0c75	30 30 30 30 00
+.0c7a			putabin
+.0c7a	20 50 0c	               jsr     atobin
+.0c7d	20 f6 09	               jsr     push
+.0c80	a2 71		               ldx     #<abin
+.0c82	a0 0c		               ldy     #>abin
+.0c84	20 05 09	               jsr     puts
+.0c87	20 35 0a	               jsr     pop
+.0c8a	60		               rts
+.0c8b			putabinfmt
+.0c8b	08		               php
+.0c8c	48		               pha
+.0c8d	a9 25		               lda     #"%"
+.0c8f	20 ff 08	               jsr     putch
+.0c92	68		               pla
+.0c93	20 7a 0c	               jsr     putabin
+.0c96	28		               plp
+.0c97	60		               rts
+.0c98			putabinxy
+.0c98	20 1f 09	               jsr     gotoxy
+.0c9b	20 7a 0c	               jsr     putabin
+.0c9e	60		               rts
+.0c9f			putabinfmtxy
+.0c9f	20 1f 09	               jsr     gotoxy
+.0ca2	20 8b 0c	               jsr     putabinfmt
+.0ca5	60		               rts
 
 ;******  Return to file: charset2disk.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-disk.asm
 
-.0c2d			diskerror
-.0c2d	20 7d 09	               jsr  push
-.0c30	ad 5e 0d	               lda  dsk_dev   ; Select device 8
-.0c33	85 ba		               sta  $ba       ;
-.0c35	20 b4 ff	               jsr  talk      ; $ffb4 |a  , iec-cmd dev parle
-.0c38	a9 6f		               lda  #$6f
-.0c3a	85 b9		               sta  $b9       ;
-.0c3c	20 96 ff	               jsr  tksa      ; $ff96 |a  , talk adresse sec.
-.0c3f	20 a5 ff	nextchar       jsr  acptr     ; $ffa5 |a  , rx serie.
-.0c42	20 d2 ff	               jsr  chrout    ; $ffd2 |a  , sort un car.
-.0c45	c9 0d		               cmp  #$0d      ; Is it CR ?
-.0c47	d0 f6		               bne  nextchar  ; No, get next char
-.0c49	20 ab ff	               jsr  untlk     ;$ffab      , iec-cmc stop talk
-.0c4c	20 bc 09	               jsr  pop
-.0c4f	60		               rts
-.0c50			diskdir
-.0c50	20 7d 09	               jsr  push
-.0c53	a9 24		               lda  #$24      ; L012C - Filename is "$"
-.0c55	85 fb		               sta  $fb       ; L012E - Zpage1 msb
-.0c57	a9 fb		               lda  #$fb      ; L0130 - Set current filename
-.0c59	85 bb		               sta  $bb       ; L0132 - Current filename msb.
-.0c5b	a9 00		               lda  #$00      ; L0134 - to Zpage 1
-.0c5d	85 bc		               sta  $bc       ; L0136 - Current filename lsb.
-.0c5f	a9 01		               lda  #$01      ; L0138 - set ...
-.0c61	85 b7		               sta  $b7       ; L013A - ... length of current filename
-.0c63	ad 5e 0d	               lda  dsk_dev   ; L013C - set 8 as ...
-.0c66	85 ba		               sta  $ba       ; L013E - ... current serial sevice.
-.0c68	a9 60		               lda  #$60      ; L0140 - set $60 to ...
-.0c6a	85 b9		               sta  $b9       ; L0142 - ... secondary address
-.0c6c	20 d5 f3	               jsr  sfopen    ; L0144 - $f3d5 Serial file open.
-.0c6f	a5 ba		               lda  $ba       ; L0147 - Command device $ba ($08) ...%10111010
-.0c71	20 b4 ff	               jsr  talk      ; L0149 - $ffb4 ... to talk.
-.0c74	a5 b9		               lda  $b9       ; L014C - Command sec. device ($60) ...
-.0c76	20 96 ff	               jsr  tksa      ; L014E - $ff96 ... to talk.
-.0c79	a9 00		               lda  #$00      ; L0151 - put $00 in ...
-.0c7b	85 90		               sta  $90       ; L0153 - ... kernal status word.
-.0c7d	a0 03		               ldy  #$03      ; L0155 - To read 3 bytes, put $03 in
-.0c7f	84 fb		loop1          sty  $fb       ; L0157 - Zpage 1 Msb
-.0c81	20 a5 ff	               jsr  acptr     ; L0159 - $ffa5 Recoit un byte du port serie.
-.0c84	85 fc		               sta  $fc       ; L015C - Store byte in zpage 1 lsb
-.0c86	a4 90		               ldy  $90       ; L015E - Load kernal status word.
-.0c88	d0 2f		               bne  exit      ; L0160 - If any error, EXIT.
-.0c8a	20 a5 ff	               jsr  $ffa5     ; L0162 - jsr acptr
-.0c8d	a4 90		               ldy  $90       ; L0165 - Load byte counter,
-.0c8f	d0 28		               bne  exit      ; L0167
-.0c91	a4 fb		               ldy  $fb       ; L0169
-.0c93	88		               dey            ; L016b
-.0c94	d0 e9		               bne  loop1     ; L016C - If not last, loop
-.0c96	a6 fc		               ldx  $fc       ; L016E - Load the recieved byte in X.
-.0c98	20 cd bd	               jsr  b_putint  ; L0170 - $bdcd print file size
-.0c9b	a9 20		               lda  #$20      ; L0173 - Load space character and ...
-.0c9d	20 d2 ff	               jsr  chrout    ; L0175 - $ffd2 ... print it.
-.0ca0	20 a5 ff	loop3          jsr  acptr     ; L0178 - $ffa5 Recoit un byte du port serie.
-.0ca3	a6 90		               ldx  $90       ; L017B - Load kernal status word.
-.0ca5	d0 12		               bne  exit      ; L017D - If any error, EXIT.
-.0ca7	aa		               tax            ; L017F - tfr a in x
-.0ca8	f0 06		               beq  loop2     ; L0180 - Byte is 0 loop1
-.0caa	20 d2 ff	               jsr  chrout    ; L0182 - $ffd2 ... print it.
-.0cad	4c a0 0c	               jmp  loop3     ; L0185 - get another byte
-.0cb0	a9 0d		loop2          lda  #$0d      ; L0188  - Load CR in a
-.0cb2	20 d2 ff	               jsr  chrout    ; L018A - $ffd2 ... print it.
-.0cb5	a0 02		               ldy  #$02      ; L018D - set Y to 2
-.0cb7	d0 c6		               bne  loop1     ; L018f - Loop to next dir entry.
-.0cb9	20 42 f6	exit           jsr  sfclose   ; L0191 - $f642 ... close file.
-.0cbc	20 bc 09	               jsr  pop
-.0cbf	60		               rts            ; L0194
-.0cc0			directory
-.0cc0	20 50 0c	               jsr  diskdir
-.0cc3	20 2d 0c	               jsr  diskerror
-.0cc6	60		               rts
-.0cc7			memtofile
-.0cc7	20 38 0d	               jsr  dsk_putmesg
-.0cca	20 7d 09	               jsr  push
-.0ccd	ad 62 0d	               lda  dsk_fnlen
-.0cd0	ae 60 0d	               ldx  dsk_fnptr      ; load fname addr. lbyte
-.0cd3	ac 61 0d	               ldy  dsk_fnptr+1
-.0cd6	20 bd ff	               jsr  setnam         ; call setnam
-.0cd9	ad 5f 0d	               lda  dsk_lfsno
-.0cdc	ae 5e 0d	               ldx  dsk_dev        ; specified device
-.0cdf	a0 00		skip           ldy  #$00
-.0ce1	20 ba ff	               jsr  setlfs         ; call setlfs
-.0ce4	ad 5a 0d	               lda  dsk_data_s     ; put data start lbyte in stal
-.0ce7	85 c1		               sta  stal
-.0ce9	ad 5b 0d	               lda  dsk_data_s+1   ; put data start hbyte in stal
-.0cec	85 c2		               sta  stal+1
-.0cee	ae 5c 0d	               ldx  dsk_data_e     ; put data end lbyte in x
-.0cf1	ac 5d 0d	               ldy  dsk_data_e+1   ; put data end hbyte in y
-.0cf4	a9 c1		               lda  #stal          ; start address located in $c1/$c2
-.0cf6	20 d8 ff	               jsr  save           ; call save
-.0cf9	90 00		               bcc  noerror        ; if carry set, a load error has happened
-.0cfb	20 bc 09	noerror        jsr  pop
-.0cfe	60		               rts
-.0cff			filetomem
-.0cff	20 7d 09	               jsr push
-.0d02	ad 62 0d	               lda dsk_fnlen
-.0d05	ae 60 0d	               ldx dsk_fnptr
-.0d08	ac 61 0d	               ldy dsk_fnptr+1
-.0d0b	20 bd ff	               jsr setnam     ; call setnam
-.0d0e	ad 5f 0d	               lda dsk_lfsno
-.0d11	ae 5e 0d	               ldx dsk_dev    ; default to device 8
-.0d14	a0 01		               ldy #$01       ; not $01 means: load to address stored in file
-.0d16	20 ba ff	               jsr setlfs     ; call setlfs
-.0d19	a9 00		               lda #$00       ; $00 means: load to memory (not verify)
-.0d1b	20 d5 ff	               jsr load       ; call load
-.0d1e	90 03		               bcc noerror      ; if carry set, a load error has happened
-.0d20	20 27 0d	               jsr  error
-.0d23	20 bc 09	noerror        jsr pop
-.0d26	60		               rts
-.0d27			error
-.0d27	60		               rts
-.0d28	a2 73		error1         ldx  #<dsk_emsg1
-.0d2a	a0 0d		               ldy  #>dsk_emsg1
-.0d2c	20 8c 08	               jsr  puts
-.0d2f	60		               rts
-.0d30	a2 87		error2         ldx #<dsk_emsg2
-.0d32	a0 0d		               ldy #>dsk_emsg2
-.0d34	20 8c 08	               jsr puts
-.0d37	60		               rts
-.0d38			dsk_putmesg
-.0d38	20 7d 09	               jsr push
-.0d3b	a2 63		               ldx #<dsk_msg0
-.0d3d	a0 0d		               ldy #>dsk_msg0
-.0d3f	20 8c 08	               jsr puts
-.0d42	a9 20		               lda #$20
-.0d44	20 86 08	               jsr putch
-.0d47	ae 60 0d	               ldx dsk_fnptr
-.0d4a	ac 61 0d	               ldy dsk_fnptr+1
-.0d4d	20 8c 08	               jsr puts
-.0d50	ad 5f 0d	               lda dsk_lfsno
-.0d53	20 c3 ff	               jsr close
-.0d56	20 bc 09	               jsr pop
-.0d59	60		               rts
->0d5a	00 00		dsk_data_s     .word     $0000    ; example addresses
->0d5c	00 20		dsk_data_e     .word     $2000
->0d5e	08		dsk_dev        .byte     $08
->0d5f	00		dsk_lfsno      .byte     $00
->0d60	00 00		dsk_fnptr      .word     $00
->0d62	00		dsk_fnlen      .byte     0
->0d63	8d		dsk_msg0       .byte     141
->0d64	53 41 56 49	               .null     "saving"
->0d68	4e 47 00
->0d6b	8d		dsk_msg1       .byte     141
->0d6c	53 55 43 43	               .null     "succes"
->0d70	45 53 00
->0d73	8d		dsk_emsg1      .byte     141
->0d74	46 49 43 48	               .null     "fichier non ouvert"
->0d78	49 45 52 20 4e 4f 4e 20 4f 55 56 45 52 54 00
->0d87	11		dsk_emsg2      .byte     17
->0d88	45 52 52 45	               .null     "erreur d'ecriture"
->0d8c	55 52 20 44 27 45 43 52 49 54 55 52 45 00
+.0ca6			diskerror
+.0ca6	20 f6 09	               jsr  push
+.0ca9	ad d7 0d	               lda  dsk_dev   ; Select device 8
+.0cac	85 ba		               sta  $ba       ;
+.0cae	20 b4 ff	               jsr  talk      ; $ffb4 |a  , iec-cmd dev parle
+.0cb1	a9 6f		               lda  #$6f
+.0cb3	85 b9		               sta  $b9       ;
+.0cb5	20 96 ff	               jsr  tksa      ; $ff96 |a  , talk adresse sec.
+.0cb8	20 a5 ff	nextchar       jsr  acptr     ; $ffa5 |a  , rx serie.
+.0cbb	20 d2 ff	               jsr  chrout    ; $ffd2 |a  , sort un car.
+.0cbe	c9 0d		               cmp  #$0d      ; Is it CR ?
+.0cc0	d0 f6		               bne  nextchar  ; No, get next char
+.0cc2	20 ab ff	               jsr  untlk     ;$ffab      , iec-cmc stop talk
+.0cc5	20 35 0a	               jsr  pop
+.0cc8	60		               rts
+.0cc9			diskdir
+.0cc9	20 f6 09	               jsr  push
+.0ccc	a9 24		               lda  #$24      ; L012C - Filename is "$"
+.0cce	85 fb		               sta  $fb       ; L012E - Zpage1 msb
+.0cd0	a9 fb		               lda  #$fb      ; L0130 - Set current filename
+.0cd2	85 bb		               sta  $bb       ; L0132 - Current filename msb.
+.0cd4	a9 00		               lda  #$00      ; L0134 - to Zpage 1
+.0cd6	85 bc		               sta  $bc       ; L0136 - Current filename lsb.
+.0cd8	a9 01		               lda  #$01      ; L0138 - set ...
+.0cda	85 b7		               sta  $b7       ; L013A - ... length of current filename
+.0cdc	ad d7 0d	               lda  dsk_dev   ; L013C - set 8 as ...
+.0cdf	85 ba		               sta  $ba       ; L013E - ... current serial sevice.
+.0ce1	a9 60		               lda  #$60      ; L0140 - set $60 to ...
+.0ce3	85 b9		               sta  $b9       ; L0142 - ... secondary address
+.0ce5	20 d5 f3	               jsr  sfopen    ; L0144 - $f3d5 Serial file open.
+.0ce8	a5 ba		               lda  $ba       ; L0147 - Command device $ba ($08) ...%10111010
+.0cea	20 b4 ff	               jsr  talk      ; L0149 - $ffb4 ... to talk.
+.0ced	a5 b9		               lda  $b9       ; L014C - Command sec. device ($60) ...
+.0cef	20 96 ff	               jsr  tksa      ; L014E - $ff96 ... to talk.
+.0cf2	a9 00		               lda  #$00      ; L0151 - put $00 in ...
+.0cf4	85 90		               sta  $90       ; L0153 - ... kernal status word.
+.0cf6	a0 03		               ldy  #$03      ; L0155 - To read 3 bytes, put $03 in
+.0cf8	84 fb		loop1          sty  $fb       ; L0157 - Zpage 1 Msb
+.0cfa	20 a5 ff	               jsr  acptr     ; L0159 - $ffa5 Recoit un byte du port serie.
+.0cfd	85 fc		               sta  $fc       ; L015C - Store byte in zpage 1 lsb
+.0cff	a4 90		               ldy  $90       ; L015E - Load kernal status word.
+.0d01	d0 2f		               bne  exit      ; L0160 - If any error, EXIT.
+.0d03	20 a5 ff	               jsr  $ffa5     ; L0162 - jsr acptr
+.0d06	a4 90		               ldy  $90       ; L0165 - Load byte counter,
+.0d08	d0 28		               bne  exit      ; L0167
+.0d0a	a4 fb		               ldy  $fb       ; L0169
+.0d0c	88		               dey            ; L016b
+.0d0d	d0 e9		               bne  loop1     ; L016C - If not last, loop
+.0d0f	a6 fc		               ldx  $fc       ; L016E - Load the recieved byte in X.
+.0d11	20 cd bd	               jsr  b_putint  ; L0170 - $bdcd print file size
+.0d14	a9 20		               lda  #$20      ; L0173 - Load space character and ...
+.0d16	20 d2 ff	               jsr  chrout    ; L0175 - $ffd2 ... print it.
+.0d19	20 a5 ff	loop3          jsr  acptr     ; L0178 - $ffa5 Recoit un byte du port serie.
+.0d1c	a6 90		               ldx  $90       ; L017B - Load kernal status word.
+.0d1e	d0 12		               bne  exit      ; L017D - If any error, EXIT.
+.0d20	aa		               tax            ; L017F - tfr a in x
+.0d21	f0 06		               beq  loop2     ; L0180 - Byte is 0 loop1
+.0d23	20 d2 ff	               jsr  chrout    ; L0182 - $ffd2 ... print it.
+.0d26	4c 19 0d	               jmp  loop3     ; L0185 - get another byte
+.0d29	a9 0d		loop2          lda  #$0d      ; L0188  - Load CR in a
+.0d2b	20 d2 ff	               jsr  chrout    ; L018A - $ffd2 ... print it.
+.0d2e	a0 02		               ldy  #$02      ; L018D - set Y to 2
+.0d30	d0 c6		               bne  loop1     ; L018f - Loop to next dir entry.
+.0d32	20 42 f6	exit           jsr  sfclose   ; L0191 - $f642 ... close file.
+.0d35	20 35 0a	               jsr  pop
+.0d38	60		               rts            ; L0194
+.0d39			directory
+.0d39	20 c9 0c	               jsr  diskdir
+.0d3c	20 a6 0c	               jsr  diskerror
+.0d3f	60		               rts
+.0d40			memtofile
+.0d40	20 b1 0d	               jsr  dsk_putmesg
+.0d43	20 f6 09	               jsr  push
+.0d46	ad db 0d	               lda  dsk_fnlen
+.0d49	ae d9 0d	               ldx  dsk_fnptr      ; load fname addr. lbyte
+.0d4c	ac da 0d	               ldy  dsk_fnptr+1
+.0d4f	20 bd ff	               jsr  setnam         ; call setnam
+.0d52	ad d8 0d	               lda  dsk_lfsno
+.0d55	ae d7 0d	               ldx  dsk_dev        ; specified device
+.0d58	a0 00		skip           ldy  #$00
+.0d5a	20 ba ff	               jsr  setlfs         ; call setlfs
+.0d5d	ad d3 0d	               lda  dsk_data_s     ; put data start lbyte in stal
+.0d60	85 c1		               sta  stal
+.0d62	ad d4 0d	               lda  dsk_data_s+1   ; put data start hbyte in stal
+.0d65	85 c2		               sta  stal+1
+.0d67	ae d5 0d	               ldx  dsk_data_e     ; put data end lbyte in x
+.0d6a	ac d6 0d	               ldy  dsk_data_e+1   ; put data end hbyte in y
+.0d6d	a9 c1		               lda  #stal          ; start address located in $c1/$c2
+.0d6f	20 d8 ff	               jsr  save           ; call save
+.0d72	90 00		               bcc  noerror        ; if carry set, a load error has happened
+.0d74	20 35 0a	noerror        jsr  pop
+.0d77	60		               rts
+.0d78			filetomem
+.0d78	20 f6 09	               jsr push
+.0d7b	ad db 0d	               lda dsk_fnlen
+.0d7e	ae d9 0d	               ldx dsk_fnptr
+.0d81	ac da 0d	               ldy dsk_fnptr+1
+.0d84	20 bd ff	               jsr setnam     ; call setnam
+.0d87	ad d8 0d	               lda dsk_lfsno
+.0d8a	ae d7 0d	               ldx dsk_dev    ; default to device 8
+.0d8d	a0 01		               ldy #$01       ; not $01 means: load to address stored in file
+.0d8f	20 ba ff	               jsr setlfs     ; call setlfs
+.0d92	a9 00		               lda #$00       ; $00 means: load to memory (not verify)
+.0d94	20 d5 ff	               jsr load       ; call load
+.0d97	90 03		               bcc noerror      ; if carry set, a load error has happened
+.0d99	20 a0 0d	               jsr  error
+.0d9c	20 35 0a	noerror        jsr pop
+.0d9f	60		               rts
+.0da0			error
+.0da0	60		               rts
+.0da1	a2 ec		error1         ldx  #<dsk_emsg1
+.0da3	a0 0d		               ldy  #>dsk_emsg1
+.0da5	20 05 09	               jsr  puts
+.0da8	60		               rts
+.0da9	a2 00		error2         ldx #<dsk_emsg2
+.0dab	a0 0e		               ldy #>dsk_emsg2
+.0dad	20 05 09	               jsr puts
+.0db0	60		               rts
+.0db1			dsk_putmesg
+.0db1	20 f6 09	               jsr push
+.0db4	a2 dc		               ldx #<dsk_msg0
+.0db6	a0 0d		               ldy #>dsk_msg0
+.0db8	20 05 09	               jsr puts
+.0dbb	a9 20		               lda #$20
+.0dbd	20 ff 08	               jsr putch
+.0dc0	ae d9 0d	               ldx dsk_fnptr
+.0dc3	ac da 0d	               ldy dsk_fnptr+1
+.0dc6	20 05 09	               jsr puts
+.0dc9	ad d8 0d	               lda dsk_lfsno
+.0dcc	20 c3 ff	               jsr close
+.0dcf	20 35 0a	               jsr pop
+.0dd2	60		               rts
+>0dd3	00 00		dsk_data_s     .word     $0000    ; example addresses
+>0dd5	00 20		dsk_data_e     .word     $2000
+>0dd7	08		dsk_dev        .byte     $08
+>0dd8	00		dsk_lfsno      .byte     $00
+>0dd9	00 00		dsk_fnptr      .word     $00
+>0ddb	00		dsk_fnlen      .byte     0
+>0ddc	8d		dsk_msg0       .byte     141
+>0ddd	53 41 56 49	               .null     "saving"
+>0de1	4e 47 00
+>0de4	8d		dsk_msg1       .byte     141
+>0de5	53 55 43 43	               .null     "succes"
+>0de9	45 53 00
+>0dec	8d		dsk_emsg1      .byte     141
+>0ded	46 49 43 48	               .null     "fichier non ouvert"
+>0df1	49 45 52 20 4e 4f 4e 20 4f 55 56 45 52 54 00
+>0e00	11		dsk_emsg2      .byte     17
+>0e01	45 52 52 45	               .null     "erreur d'ecriture"
+>0e05	55 52 20 44 27 45 43 52 49 54 55 52 45 00
 
 ;******  Return to file: charset2disk.asm
 
