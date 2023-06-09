@@ -15,15 +15,16 @@ OUTDIR=/Users/Locals/temp/Vice
 # =========== V I C E   S E C T I O N ===========
 # ===============================================
 # Complete path to the Vic20 emulator program.
-V20=/Applications/VICE/xvic.app/Contents/MacOS/xvic
+VICEPATH=/Applications/VICE
+V20=$(VICEPATH)/xvic.app/Contents/MacOS/xvic
 # Complete path to the C64 emulator program.
-X64=/Applications/VICE/x64.app/Contents/MacOS/x64
+X64=$(VICEPATH)/x64.app/Contents/MacOS/x64
 # Complete path to the C64sc emulator program.
-X64SC=/Applications/VICE/x64sc.app/Contents/MacOS/x64sc
+X64SC=$(VICEPATH)/x64sc.app/Contents/MacOS/x64sc
 # Complete path to the c1541 disk creation program.
-C1541=/Users/daniel/bin/c1541
+C1541=$(VICEPATH)/tools/c1541
 # Complete path to the cartconv cartridge converter program.
-CARTCONV=/Users/daniel/bin/cartconv
+CARTCONV=$(VICEPATH)/tools/cartconv
 # Complete path to some other emulators emulator program.
 X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
 X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
@@ -74,19 +75,13 @@ VICE=$(X64)
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 
 all: 	$(SOURCENAME).d64
-#		$(VICE) $(AUTOSTART) $(TMPSEP06)
+		$(VICE) $(AUTOSTART) $(TMPSEP06)
 		$(FTPTMPCMD)
-		$(FTPASMCMD)
-		$(FTPTXTCMD)
-		$(FTPPRGCMD)
-		$(FTPD64CMD)
-
+#		$(FTPASMCMD)
+#		$(FTPTXTCMD)
+#		$(FTPPRGCMD)
+#		$(FTPD64CMD)
 ftp:	
-#		echo $(FTPASMCMD)
-#		echo $(FTPTXTCMD)
-#		echo $(FTPPRGCMD)
-#		echo $(FTPD64CMD)
-#		echo $(FTPCRTCMD)
 		$(FTPASMCMD)
 		$(FTPTXTCMD)
 		$(FTPPRGCMD)

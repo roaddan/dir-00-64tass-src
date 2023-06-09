@@ -5,14 +5,14 @@
 main           .block
                jsr  push
                lda  #$31
-               sta  fname+10
-               lda  #$ff
+               sta  fname+10    ; File suffix = 1 
+               lda  #$ff        ; We reverse everythinh
                sta  xor
-               jsr  rom2ram
-               lda  #$00
+               jsr  rom2ram     ; Copy reversed charset to ram
+               lda  #$00        ; Set charcolor (Background) to black
                sta  646
-               sta  vicbordcol
-               lda  #$01
+               sta  vicbordcol  ; set the border to black
+               lda  #$01        ; Background (character) 
                sta  vicbackcol
                lda  #%00011000     ;#24
                sta  $d018          ;53272
@@ -29,8 +29,11 @@ main           .block
                #println  mesg03b
                #println  mesg04
                #println  mesg04b
-               #println  mesg05
-               #println  mesg05b
+               #print    mesg05
+               #print    mesg05b
+               #println  mesg05c
+               #println  mesg05d
+               #println  mesg05e
                #println  mesg00
                jsr  pop
                rts
@@ -42,8 +45,11 @@ mesg03         .null     151," 2) The background colour selects the  ",144
 mesg03b        .null     151,"    character colour and vice-versa.   ",144
 mesg04         .null     152," 3) Cons : Only one character colour at",144
 mesg04b        .null     152,"    the time per screen is available.  ",144
-mesg05         .null     155," 4) pros : ",158,"i",28,"n",30,"d",31,"i",129,"v",144,"i",149,"d",150,"u",151,"a",153,"l",155," character back-  ",144
-mesg05b        .null     155,"    ground colour is now available.    ",144
+mesg05         .null     151," 4) pros : ",158,"i",28,"n",30,"d",31,"i",129
+mesg05b        .null     129,"v",144,"i",149,"d",150,"u",151,"a",153,"l",155
+mesg05c        .null     151," character back-  ",144
+mesg05d        .null     151,"    ground colour is now available in  ",144
+mesg05e        .null     151,"    normal text mode.                  ",144
                .bend
 rom2ram        .block
                jsr  push
