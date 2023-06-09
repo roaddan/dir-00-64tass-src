@@ -4,45 +4,47 @@
 
 main           .block
                jsr  push
-               lda  #147
-               jsr  putch
-
-               lda  #$30
-               sta  fname+10
-               lda  #$00
-               sta  xor
-               jsr  rom2ram
-               jsr  savetodisk
-
-               lda  #%00011000     ;#24
-               sta  $d018          ;53272
-
-               lda  #$32
-               sta  fname+10
-               lda  #%10000000
-               sta  xor
-               jsr  rom2ram
-               jsr  savetodisk
-               
-               lda  #$33
-               sta  fname+10
-               lda  #%01111111
-               sta  xor
-               jsr  rom2ram
-               jsr  savetodisk
-               
                lda  #$31
                sta  fname+10
                lda  #$ff
                sta  xor
                jsr  rom2ram
-               jsr  savetodisk
+               lda  #$00
+               sta  646
+               sta  vicbordcol
                lda  #$01
                sta  vicbackcol
+               lda  #%00011000     ;#24
+               sta  $d018          ;53272
+               lda  #147
+               jsr  putch
+               lda  #14
+               jsr  putch
+               #println  mesg00
+               #println  mesg01
+               #println  mesg00
+               #println  mesg02
+               #println  mesg02b
+               #println  mesg03
+               #println  mesg03b
+               #println  mesg04
+               #println  mesg04b
+               #println  mesg05
+               #println  mesg05b
+               #println  mesg00
                jsr  pop
                rts
+mesg00         .null       5," ------------------------------------- ",144
+mesg01         .null      31,"      Change made by this program.     ",144
+mesg02         .null     144," 1) Obviously the lowercase character  ",144
+mesg02b        .null     144,"    set is now selected.               ",144               
+mesg03         .null     151," 2) The background colour selects the  ",144
+mesg03b        .null     151,"    character colour and vice-versa.   ",144
+mesg04         .null     152," 3) Cons : Only one character colour at",144
+mesg04b        .null     152,"    the time per screen is available.  ",144
+mesg05         .null     155," 4) pros : ",158,"i",28,"n",30,"d",31,"i",129,"v",144,"i",149,"d",150,"u",151,"a",153,"l",155," character back-  ",144
+mesg05b        .null     155,"    ground colour is now available.    ",144
                .bend
-
 rom2ram        .block
                jsr  push
                ;get access to charrom

@@ -27,6 +27,14 @@ print           .macro pointer
                 jsr  puts
                 .endm
 
+println         .macro pointer
+                ldx  #<\pointer
+                ldy  #>\pointer
+                jsr  puts
+                lda  #$0d
+                jsr  putch
+                .endm
+
 printxy        .macro pointer
                 ldx #<\pointer 
                 ldy #>\pointer
