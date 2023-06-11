@@ -1,10 +1,23 @@
-;---------------------------------------------------------------------
-; Librarie utilisant les Fonctions d'écran du Basic 2.0
-;---------------------------------------------------------------------
-;---------------------------------------------------------------------
+;--------------------------------------------------------------------------------
+; lib-c64-basic2.asm - Carthographie memoire et declaration de constantes pour
+; le Basic 2.0 du commodores 64 et 64c
+;--------------------------------------------------------------------------------
+; Scripteur...: daniel lafrance, G9B0S5, canada.
+; Version.....: 20230610-223618
+;--------------------------------------------------------------------------------
+; Segmentation principales de la mémoire
+;--------------------------------------------------------------------------------
+; Pour l'utilisation de ce fichier dans turbo-macro-pro ou avec 64tass utilisez
+; la syntaxes ...
+;
+;         .include "lib-c64-basic2.asm"
+;
+; ... en prenant soin de placer le fichier dans le meme disque ou répertoire que
+; votre programme.
+;--------------------------------------------------------------------------------
 ; Initialisation des paramêtres de base pour la gestion de l'écran 
 ; virtuelle.
-;---------------------------------------------------------------------
+;--------------------------------------------------------------------------------
 bkcol=0
 bkcol0=0
 bkcol1=0

@@ -20,36 +20,46 @@ main           .block
                jsr  putch
                lda  #14
                jsr  putch
-               #println  mesg00
-               #println  mesg01
-               #println  mesg00
-               #println  mesg02
+               #locate 0,24
+               #println  mesg00a
+               #println  mesg00b
+               #println  mesg00a
+               #println  mesg01a
+               #println  mesg01b
+               #println  mesg02a
                #println  mesg02b
-               #println  mesg03
+               #println  mesg02c
+               #println  mesg03a
                #println  mesg03b
-               #println  mesg04
-               #println  mesg04b
-               #print    mesg05
-               #print    mesg05b
-               #println  mesg05c
-               #println  mesg05d
-               #println  mesg05e
-               #println  mesg00
+               #println  mesg03c
+               #print    mesg04a
+               #print    mesg04b
+               #println  mesg04c
+               #println  mesg04d
+               #println  mesg04e
+               #println  mesg05a
+               #println  mesg05b
+               #print    mesg00a
+               locate 0,0
                jsr  pop
                rts
-mesg00         .null       5," ------------------------------------- ",144
-mesg01         .null      31,"      Change made by this program.     ",144
-mesg02         .null     144," 1) Obviously the lowercase character  ",144
-mesg02b        .null     144,"    set is now selected.               ",144               
-mesg03         .null     151," 2) The background colour selects the  ",144
-mesg03b        .null     151,"    character colour and vice-versa.   ",144
-mesg04         .null     152," 3) Cons : Only one character colour at",144
-mesg04b        .null     152,"    the time per screen is available.  ",144
-mesg05         .null     151," 4) pros : ",158,"i",28,"n",30,"d",31,"i",129
-mesg05b        .null     129,"v",144,"i",149,"d",150,"u",151,"a",153,"l",155
-mesg05c        .null     151," character back-  ",144
-mesg05d        .null     151,"    ground colour is now available in  ",144
-mesg05e        .null     151,"    normal text mode.                  ",144
+mesg00a        .null     b_ltblue, " ------------------------------------- ",b_black
+mesg00b        .null     b_ltblue, "      Change made by this program.     ",b_black
+mesg01a        .null     b_blue,   " 1) Obviously the lowercase character  ",b_black
+mesg01b        .null     b_blue,   "    set is now selected.               ",b_black
+mesg02a        .null     b_purple, " 2) The characterset has been modified ",b_black
+mesg02b        .null     b_purple, "    so that the reverse characters are ",b_black
+mesg02c        .null     b_purple, "    now displayed by default.          ",b_black
+mesg03a        .null     b_ltred,  " 3) The background colour now selects  ",b_black
+mesg03b        .null     b_ltred,  "    the character colour and vice-     ",b_black
+mesg03c        .null     b_ltred,  "    versa.                             ",b_black
+mesg04a        .null     b_orange, " 4) Pros: ",158,"i",28,"n",30,"d",31,"i",129
+mesg04b        .null     b_orange, "v",144,"i",149,"d",150,"u",151,"a",153,"l",155
+mesg04c        .null     b_orange, " character back-   ",b_black
+mesg04d        .null     b_orange, "    ground colour is now available as  ",b_black
+mesg04e        .null     b_orange, "    normal text mode.                  ",b_black
+mesg05a        .null     b_red,    " 5) Cons: Only one character colour at ",b_black
+mesg05b        .null     b_red,    "    the time per screen is available.  ",b_black
                .bend
 rom2ram        .block
                jsr  push

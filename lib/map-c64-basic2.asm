@@ -1,21 +1,74 @@
 ;--------------------------------------------------------------------------------
-; c64_bas2map.asm - Carthographie memoire et declaration de constantes pour les
+; map-c64-basic2.asm - Carthographie memoire et declaration de constantes pour
 ; le Basic 2.0 du commodores 64 et 64c
 ;--------------------------------------------------------------------------------
-; Scripteur...: daniel lafrance, j5w 1w5, canada.
-; Version.....: 20191223.1
+; Scripteur...: daniel lafrance, G9B0S5, Canada.
+; Version.....: 20230610-223618
 ; Inspiration.: isbn 0-9692086-0-X
 ; Auteur......: Karl J.H. Hildon
 ;--------------------------------------------------------------------------------
 ; Segmentation principales de la mémoire
 ;--------------------------------------------------------------------------------
-; Pour l'utilisation de ce fichier dans turbo-macro-pro ou sans 64tass utilisez
+; Pour l'utilisation de ce fichier dans turbo-macro-pro ou avec 64tass utilisez
 ; la syntaxes ...
 ;
-;         .include "c64_bas2map.s"
+;         .include "map-c64-basic2.asm"
 ;
 ; ... en prenant soin de placer le fichier dans le meme disque ou répertoire que
 ; votre programme.
+;--------------------------------------------------------------------------------
+; Screen commands to run with basic print or call to $ffd2 in machine language.
+;--------------------------------------------------------------------------------
+b_black        =    144  ;0,  ctrl-1
+b_white        =    5    ;1,  ctrl-2
+b_red          =    28   ;2,  ctrl-3
+b_cyan         =    159  ;3,  ctrl-4
+b_purple       =    156  ;4,  ctrl-5
+b_green        =    30   ;5,  ctrl-6
+b_blue         =    31   ;6,  ctrl-7
+b_yellow       =    158  ;7,  ctrl-8
+b_orange       =    129  ;8,  C=-1
+b_brown        =    149  ;9,  C=-2
+b_ltred        =    150  ;10, C=-3
+b_gray3        =    155  ;11, C=-4
+b_grey3        =    155  ;11, C=-4
+b_gray2        =    152  ;12, C=-5
+b_grey2        =    152  ;13, C=-5
+b_ltgreen      =    153  ;13, C=-6
+b_ltblue       =    154  ;14, C=-7
+b_gray1        =    151  ;15, C=-8
+b_grey1        =    151  ;15, C=-8
+
+b_rvs_on       =    18   ;    ctrl-9
+b_rvs_off      =    146  ;    ctrl-0
+
+b_crsr_up      =    145
+b_crsr_down    =    17
+b_crsr_left    =    157
+b_crsr_right   =    29
+
+b_dis_cmd      =    8
+b_ena_cmd      =    9
+
+b_lowercase    =    14
+b_uppercase    =    142
+
+b_home         =    19
+b_clr_home     =    147
+
+b_insert       =    20
+b_shft_ret     =    141
+b_delete       =    148
+
+b_f1           =    133
+b_f2           =    137
+b_f3           =    134
+b_f4           =    138
+b_f5           =    135
+b_f6           =    139
+b_f7           =    136
+b_f8           =    140
+
 ;--------------------------------------------------------------------------------
 ; Macro sur les elements importants (* = called by)
 ;--------------------------------------------------------------------------------
