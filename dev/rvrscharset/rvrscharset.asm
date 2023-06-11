@@ -40,7 +40,10 @@ main           .block
                #println  mesg05a
                #println  mesg05b
                #print    mesg00a
-               locate 0,0
+               locate    0,0
+               #println  mesg06a
+               #print    mesg06b
+               #print    mesg06c
                jsr  pop
                rts
 mesg00a        .null     b_ltblue, " ------------------------------------- ",b_black
@@ -60,6 +63,9 @@ mesg04d        .null     b_orange, "    ground colour is now available as  ",b_b
 mesg04e        .null     b_orange, "    normal text mode.                  ",b_black
 mesg05a        .null     b_red,    " 5) Cons: Only one character colour at ",b_black
 mesg05b        .null     b_red,    "    the time per screen is available.  ",b_black
+mesg06a        .null     b_black,  "Change character color with:           ",b_black
+mesg06b        .null     b_black,  "poke 53281,13                          ",b_black
+mesg06c        .null     b_crsr_up,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right
                .bend
 rom2ram        .block
                jsr  push
@@ -102,6 +108,7 @@ out            ; return charrom to normal use
                lda  $dc0e          ;56334
                ora  #%00000001     ;$01
                sta  $dc0e          ;56334
+
                jsr  pop
                rts
                .bend
