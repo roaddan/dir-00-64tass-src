@@ -1,4 +1,4 @@
-               VERSION="20230611-201549"
+               VERSION="20230611-222455"
                .include "header-c64.asm"
                .include "macros-64tass.asm"
 ;-------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ main           .block
                sta curcol
                lda #0
                sta vicbackcol
-               lda #vbleu
+               lda #vvert
                sta vicbordcol
                jsr cls
                lda #$20
@@ -127,7 +127,7 @@ js_status4     .byte   vjaune,bkcol0,19,19
                .null   "right <-8---> droite"
 js_status5     .byte   vblanc,bkcol0,19,18
                .null   " Fire <1----> Feu"
-js_status6     .byte   vbleu1,bkcol0,1,23
+js_status6     .byte   vgray2,bkcol0,1,23
                .null   "+-> Etat de JS2:     %---FRLDU EOR #$1F"
 version        .byte   vnoir,bkcol3,0,24
                .null   format("        Version: %s        ",VERSION)
