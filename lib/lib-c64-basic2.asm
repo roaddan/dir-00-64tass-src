@@ -52,6 +52,20 @@ cls            .block
                plp
                rts
                .bend
+
+;---------------------------------------------------------------------
+; Place le caractère A à la position du curseur X fois.
+;---------------------------------------------------------------------
+putnch         .block
+               php
+               cpx  #$00
+               beq  out
+again          jsr  $ffd2
+               dex
+               bne  again
+out            plp
+               rts
+               .bend
 ;---------------------------------------------------------------------
 ; Place le caractère A à la position du
 ; curseur.

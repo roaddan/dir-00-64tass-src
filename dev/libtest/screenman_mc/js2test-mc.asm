@@ -9,6 +9,7 @@ main            .block
  ;               jsr initnmi        ; À utiliser avec TMPreu
  ;               jsr setmyint
  ;               rts
+               jsr  screendis
                 jsr scrmaninit
                 jsr js_init
                 lda #$80
@@ -46,6 +47,7 @@ goagain         jsr setinverse
                 jsr setcurcol
                 ldx #$00
                 jsr setbkcol
+                jsr screenena
 looper          jsr js_scan
                 jsr putjs2val
                 jsr js_showvals
@@ -111,7 +113,7 @@ bstring1        .byte   vblanc,bkcol0,0,0
                 .text   "      Visualisation du port jeu #2      "
                 .byte   0
 bstring2        .byte   vrose,bkcol1,0,1
-                .text   " Programme assembleur pour 6502 sur C64 "
+                .text   " Programme assembleur pour 6510 sur C64 "
                 .byte   0
 bstring3        .byte   vvert1,bkcol2,0,2
                 .text   "      par Daniel Lafrance (c) 2021      "
@@ -143,6 +145,7 @@ js_status6      .byte   vcyan,bkcol0,1,23
 ;-------------------------------------------------------------------------------
                 .include "map-c64-kernal.asm"
                 .include "map-c64-vicii.asm" 
+                .include "lib-c64-vicii.asm" 
                 .include "lib-cbm-pushpop.asm"
                 .include "lib-cbm-mem.asm"
                 .include "lib-cbm-hex.asm"

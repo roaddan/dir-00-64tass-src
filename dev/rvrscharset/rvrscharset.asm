@@ -4,23 +4,22 @@
 
 main           .block
                jsr  push
-               lda  #$31
-               sta  fname+10    ; File suffix = 1 
-               lda  #$ff        ; We reverse everythinh
+               jsr  screendis
+               lda  #$ff           ; We reverse everything
                sta  xor
-               jsr  rom2ram     ; Copy reversed charset to ram
-               lda  #$00        ; Set charcolor (Background) to black
+               jsr  rom2ram        ; Copy reversed charset to ram
+               lda  #$00           ; Set char colour (i.e. Background) to black.
                sta  646
-               sta  vicbordcol  ; set the border to black
-               lda  #$01        ; Background (character) 
+               sta  vicbordcol     ; set the border to black
+               lda  #$01           ; Background (character) 
                sta  vicbackcol
-               lda  #%00011000     ;#24
-               sta  $d018          ;53272
-               lda  #147
+               lda  #%00011000     ;#24 Points the vicII to the 
+               sta  $d018          ;53272 ram character set.
+               lda  #b_clr_home    ; Clear the screen
                jsr  putch
-               lda  #14
+               lda  #b_lowercase   ; Set lowercase characterset
                jsr  putch
-               #locate 0,24
+               #locate 0,8
                #println  mesg00a
                #println  mesg00b
                #println  mesg00a
@@ -40,10 +39,19 @@ main           .block
                #println  mesg05a
                #println  mesg05b
                #print    mesg00a
-               locate    0,0
+               lda  #b_home   ; Goto home position
+               jsr  putch
+               lda  #183
+               ldx  #39
+               jsr  putnch    ; Print Acc X times
                #println  mesg06a
-               #print    mesg06b
-               #print    mesg06c
+               #println  mesg06b
+               lda  #175
+               ldx  #39
+               jsr  putnch
+               lda  #13       ; a simple LF
+               jsr  putch
+               jsr  screenena
                jsr  pop
                rts
 mesg00a        .null     b_ltblue, " ------------------------------------- ",b_black
@@ -63,9 +71,8 @@ mesg04d        .null     b_orange, "    ground colour is now available as  ",b_b
 mesg04e        .null     b_orange, "    normal text mode.                  ",b_black
 mesg05a        .null     b_red,    " 5) Cons: Only one character colour at ",b_black
 mesg05b        .null     b_red,    "    the time per screen is available.  ",b_black
-mesg06a        .null     b_black,  "Change character color with:           ",b_black
-mesg06b        .null     b_black,  "poke 53281,13                          ",b_black
-mesg06c        .null     b_crsr_up,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right
+mesg06a        .null  13,b_black,  "Try to change character colour with:   ",b_black
+mesg06b        .null     b_black,  "   poke 53281,# (where # is 0 to 15)   ",b_black
                .bend
 rom2ram        .block
                jsr  push
@@ -116,44 +123,13 @@ chrom_s        .word     $d000     ;$d000 a $d800 53284
 chram_s        .word     $2000     ;$2000 a $2800 8192 
 xor            .byte     $00
 
-savetodisk     .block
-               jsr  push
-               lda  #$00
-               sta  dsk_data_s
-               lda  #$20
-               sta  dsk_data_s+1
-               lda  #$00
-               sta  dsk_data_e
-               lda  #$30
-               sta  dsk_data_e+1
-               lda  #$08
-               sta  dsk_dev
-               lda  #$00
-               sta  dsk_lfsno
-               lda  #<fname
-               sta  dsk_fnptr
-               lda  #>fname
-               sta  dsk_fnptr+1
-               lda  #fname_end-fname
-               sta  dsk_fnlen    
-               jsr  memtofile
-               lda  #$0d
-               jsr  putch
-               jsr  diskerror
-               jsr  diskdir
-               jsr  filetomem
-               jsr  pop 
-               rts   
-               .bend 
-fname          .byte 64
-               .text "0:charset0"      
-fname_end      .byte 0
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
                .include "map-c64-kernal.asm"
                .include "map-c64-vicii.asm"
                .include "map-c64-basic2.asm"
+               .include "lib-c64-vicii.asm"
                .include "lib-c64-basic2.asm" 
                .include "lib-cbm-pushpop.asm"
                .include "lib-cbm-mem.asm"
