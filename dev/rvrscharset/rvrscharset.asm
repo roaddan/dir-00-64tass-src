@@ -4,7 +4,7 @@
 
 main           .block
                jsr  push
-               jsr  screendis
+reload         jsr  screendis
                lda  #$ff           ; We reverse everything
                sta  xor
                jsr  rom2ram        ; Copy reversed charset to ram
@@ -46,14 +46,62 @@ main           .block
                jsr  putnch    ; Print Acc X times
                #println  mesg06a
                #println  mesg06b
+               #println  mesg06c
                lda  #175
                ldx  #39
                jsr  putnch
                lda  #13       ; a simple LF
                jsr  putch
                jsr  screenena
+again          jsr  getin
+               cmp  #$00
+               beq  again
+               cmp  #b_f1
+               beq  dof1
+               cmp  #b_f2
+               beq  dof2
+               cmp  #b_f3
+               beq  dof3
+               cmp  #b_f4
+               beq  dof4
+               cmp  #b_f8
+               beq  out
+               cmp  #b_f7
+               bne  printit
+               jmp  reload
+printit        jsr  putch
+               jmp  again
+out            jsr  cls
                jsr  pop
                rts
+
+dof3           pha
+               inc  couleur
+               lda  couleur
+               jmp  doout
+
+dof1           pha
+               dec  couleur
+               lda  couleur
+doout          sta  $d021
+               pla
+               jmp  again
+
+dof4           pha
+               inc  backgnd
+               lda  backgnd
+               jmp  goout
+
+dof2           pha
+               dec  backgnd
+               lda  backgnd
+goout          sta  $d020
+               sta  646
+               pla
+               jmp  again
+
+couleur        .byte     $01
+backgnd        .byte     $00
 mesg00a        .null     b_ltblue, " ------------------------------------- ",b_black
 mesg00b        .null     b_ltblue, "      Change made by this program.     ",b_black
 mesg01a        .null     b_blue,   " 1) Obviously the lowercase character  ",b_black
@@ -71,8 +119,10 @@ mesg04d        .null     b_orange, "    ground colour is now available as  ",b_b
 mesg04e        .null     b_orange, "    normal text mode.                  ",b_black
 mesg05a        .null     b_red,    " 5) Cons: Only one character colour at ",b_black
 mesg05b        .null     b_red,    "    the time per screen is available.  ",b_black
-mesg06a        .null  13,b_black,  "Try to change character colour with:   ",b_black
-mesg06b        .null     b_black,  "   poke 53281,# (where # is 0 to 15)   ",b_black
+
+mesg06a        .null  13,b_black,  "  Try changing character colour with:  ",b_black
+mesg06b        .null     b_black,  " Character F1=Dec <> F3=Inc, F7=Reload ",b_black
+mesg06c        .null     b_black,  " Char-Back F2=Dec <> F4=Inc, F8=Exit   ",b_black
                .bend
 rom2ram        .block
                jsr  push

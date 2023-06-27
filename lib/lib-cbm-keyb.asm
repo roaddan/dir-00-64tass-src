@@ -30,10 +30,8 @@ keypressed      lda 203
 
 
 getkey          .block
-                jsr     push
 again           jsr     chrin
-                jmp     again
-                jsr     pop
+                bne     again
                 rts
                 .bend
 
