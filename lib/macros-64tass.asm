@@ -1,10 +1,30 @@
+setborder      .macro x
+               pha
+               lda  #\x
+               sta  $d020
+               pla
+               .endm
+
+setbackground  .macro x
+               pha
+               lda  #\x
+               sta  $d021
+               pla
+               .endm
+
 
 locate          .macro x,y
-                jsr push
+                txa
+                pha
+                tya
+                pha
                 ldx  #\x
                 ldy  #\y
                 jsr  gotoxy
-                jsr pop
+                pla
+                tay
+                pla
+                tax
                 .endm
 
 scrcolors       .macro fg, bg         

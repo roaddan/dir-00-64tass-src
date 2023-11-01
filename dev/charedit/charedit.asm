@@ -1,22 +1,32 @@
-               .include "header-c64.asm"
-               .include "macros-64tass.asm"
-               .enc    none
+                .include "header-c64.asm"
+                .include "macros-64tass.asm"
+                .enc    none
 
-main           .block
-               jsr  push
-reload         jsr  screendis
-               lda  #$0f
-               sta  $d020
-               lda  #24
-               sta  53272
-               lda  #152
-               sta  53270
-               jsr  screenena
-               jsr  pop
-               rts
+main            .block
+                jsr push
+reload          jsr screendis
+                jsr scrmaninit
+;                lda #$0f
+;                sta $d020
+;                lda #24
+;                sta 53272
+;                lda #152
+;                sta 53270
+                #printcxy data
+                #printcxy data2
+                #setborder vvert
+                #setbackground vvert
+                #locate 1,20
+                jsr screenena
+                jsr pop
+                rts
                .bend
-data           .byte %00111100,%00011000,%11011011,%00011000
-               .byte %00100100,%00100100,%00100100,%11000011
+data           .byte 1,0,0
+               .text "allo"
+               .byte 0
+data2          .byte 3,3,4
+               .text "allo"
+               .byte 0
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------

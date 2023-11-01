@@ -34,6 +34,7 @@ bkcol3         =         %11000000
 ;---------------------------------------------------------------------------
 ; Initialise le pointeur et efface l'ecran.
 ;---------------------------------------------------------------------------
+screeninit
 scrmaninit  .block
                php            ; On sauvegarde les registres
                pha
@@ -439,6 +440,7 @@ putsxy         .block              ; Voir Ordinogramme F
 ; dans la couleus C, à la position X, Y 
 ; qui sont les trois premier octets de 
 ; ladresse X = MSB, Y = LSB
+; Utilisation : Carcol, backno, x, y, texte, 0
 ;---------------------------------------------------------------------------
 putscxy        .block
                jsr  push           ; On Sauvegarde registres et zp2         

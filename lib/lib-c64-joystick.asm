@@ -1,7 +1,6 @@
-;***************************************
-; lecture de la des manettes de commande
-; numériques.
-;***************************************
+; ----------------------------------------------------------------------------
+; Lecture de la des manettes de commande numériques.
+; ----------------------------------------------------------------------------
 js_2port       =    $dc00
 js_1port       =    $dc01
 js_2dir        =    $dc02
@@ -9,8 +8,11 @@ js_1dir        =    $dc03
 js_xoffset     =    2
 js_yoffset     =    2
 js_location    =    0
+
+; ----------------------------------------------------------------------------
 js_init        .block
-               jsr  push
+; ----------------------------------------------------------------------------
+jsr  push
                lda  js_1dir
                and  #$e0
                sta  js_1dir
@@ -21,14 +23,16 @@ js_init        .block
                rts
                .bend
                 
+; ----------------------------------------------------------------------------
 js_scan        .block
-               jsr  js_1scan
+; ----------------------------------------------------------------------------
+jsr  js_1scan
                jsr  js_2scan
                rts
                .bend
-;***************************************
+; ----------------------------------------------------------------------------
 ; Port 1 js_1= %000FRLDU
-;***************************************
+; ----------------------------------------------------------------------------
 js_1scan       .block
                jsr  push
                lda  js_1port 
@@ -44,28 +48,28 @@ p1scan         eor  #$1f
                ;ldx     #$01
                ;jsr     showregs
                clc
-     ;------------------------
-     ; BOUTON EN-HAUT
-     ;------------------------
-     ;On decale js_2 bit 0 dans C
+               ;------------------------
+               ; BOUTON EN-HAUT
+               ;------------------------
+               ;On decale js_2 bit 0 dans C
 js_1b0         lsr                     
-     ;Est-ce vers le haut (U)
+               ;Est-ce vers le haut (U)
                bcc  js_1b1          
-     ;On stack la valeur
+               ;On stack la valeur
                pha
                inc  js_1flag
-     ;Oui!
+               ;Oui!
                lda  js_1pixy
-     ;On place la carry a 1
+               ;On place la carry a 1
                sec
-     ;On reduit
+               ;On reduit
                sbc  #js_yoffset
                cmp  #$f0
                bcc  sto1ym
                lda  #$00
-     ; le y 
+               ; le y 
 sto1ym         sta  js_1pixy
-     ;On recupere la valeur
+               ;On recupere la valeur
                pla                     
      ;------------------------
      ; BOUTON EN-BAS
