@@ -41,6 +41,7 @@ scrmaninit     .block
 ;---------------------------------------------------------------------
 ; Place le curseur à la position HOME et efface l'écran.
 ;---------------------------------------------------------------------
+characterset   .byte b_uppercase
 cls            .block
                php
                pha

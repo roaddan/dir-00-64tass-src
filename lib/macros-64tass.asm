@@ -1,38 +1,54 @@
-setborder      .macro x
+lowercase      .macro
                pha
-               lda  #\x
+               lda  #b_lowercase
+               sta  characterset
+               jsr  $ffd2
+               pla
+               .endm
+               
+uppercase      .macro
+               pha
+               lda  #b_uppercase
+               sta  characterset
+               jsr  $ffd2
+               pla
+               .endm
+
+changebord     .macro c
+               pha
+               lda  #\c
                sta  $d020
                pla
                .endm
 
-setbackground  .macro x
+changeback     .macro c
                pha
-               lda  #\x
+               lda  #\c
                sta  $d021
                pla
                .endm
 
 
-locate          .macro x,y
-                txa
-                pha
-                tya
-                pha
-                ldx  #\x
-                ldy  #\y
-                jsr  gotoxy
-                pla
-                tay
-                pla
-                tax
-                .endm
+locate         .macro x,y
+               txa
+               pha
+               tya
+               pha
+               ldx  #\x
+               ldy  #\y
+               jsr  gotoxy
+               pla
+               tay
+               pla
+               tax
+               .endm
 
-scrcolors       .macro fg, bg         
-                pha
-                lda #(\bg*16+(\fg|8))
-                sta  vicscrbrd
-                pla
-                .endm
+scrcolors      .macro fg, bg         
+               pha
+               lda #(\bg*16+(\fg|8))
+               sta  vicscrbrd
+               pla
+               .endm
 
 color           .macro    col
                 pha

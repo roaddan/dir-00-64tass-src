@@ -12,6 +12,7 @@ anykey          .block
 nokey           lda 203
                 cmp #64
                 beq nokey
+                jsr releasekey
                 pla
                 plp
                 rts
@@ -47,6 +48,7 @@ nope            jsr     getin
                 rts
 thekey          .byte   0
                 .bend
+
 waitspace       .block
                 jsr     push
 wait            lda     #$7f  ;%01111111 
@@ -56,12 +58,14 @@ wait            lda     #$7f  ;%01111111
                 bne     wait
                 jsr     pop
                 .bend
+
 waitsstop       .block
                 jsr     push
 wait            jsr     k_stop  ;%01111111 
                 bne     wait
                 jsr     pop
                 .bend
+
 waitreturn      .block
                 jsr     push
                 lda     thecount

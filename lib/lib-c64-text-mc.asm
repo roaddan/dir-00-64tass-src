@@ -34,8 +34,7 @@ bkcol3         =         %11000000
 ;---------------------------------------------------------------------------
 ; Initialise le pointeur et efface l'ecran.
 ;---------------------------------------------------------------------------
-screeninit
-scrmaninit  .block
+scrmaninit     .block
                php            ; On sauvegarde les registres
                pha
                lda  #%00010101; Selectionne la plage memoire video
@@ -127,7 +126,7 @@ scrmaninit  .block
 ;---------------------------------------------------------------------------
 ; Replace le curseur virtuel au coin supperieur gauche.
 ;---------------------------------------------------------------------------
-curshome    .block          
+curshome       .block          
                php                      ; Sauvegarde flags ...
                pha                      ; ... et accumulateur
                lda  virtaddr            ; In replace le pointeur ... 
@@ -150,7 +149,7 @@ curshome    .block
 ;---------------------------------------------------------------------------
 ; Incremente le pointeur d'ecran de une position.
 ;---------------------------------------------------------------------------
-incscrptr   .block
+incscrptr      .block
                php                      ; Sauvegarde flags ...
                pha                      ; ... et accumulateur
                inc  scrptr              ; Incremente le pointeur
@@ -166,7 +165,7 @@ pasdereport    jsr  synccolptr          ; On synchronise le ptr couleur.
 ; Synchronise les pointeurs d'ecran et 
 ; de couleur.
 ;---------------------------------------------------------------------------
-synccolptr  .block
+synccolptr     .block
                php                      ; Sauvegarde flags ...
                pha                      ; ... et accumulateur
      ;---------------------------------------
@@ -300,7 +299,7 @@ setborder      .block
 ; Place le flag de l'inverse video pour 
 ; le prochain caracteere à afficher.
 ;---------------------------------------------------------------------------
-setinverse  .block
+setinverse     .block
                php
                pha
      ;---------------------------------------
@@ -494,7 +493,7 @@ setvicbkcol    .block
 ; Place A dans le registre de couleur de
 ; l'arriere plan du VIC. 
 ;---------------------------------------------------------------------------
-setbkcol    .block
+setbkcol       .block
                php
                pha
                asl
@@ -513,7 +512,7 @@ setbkcol    .block
 ; Deplace le pointeur du caractere
 ; virtuel de A position. 
 ;---------------------------------------------------------------------------
-saddscrptr  .block
+saddscrptr     .block
                php
                pha
                clc
@@ -529,7 +528,7 @@ norep          pla
 ; Conversion de l'adresse SCRPTR en 
 ; hexadecimal.
 ;---------------------------------------------------------------------------
-scrptr2str  .block
+scrptr2str     .block
      ;----------------------------------
      ; on sauvegarde tout
      ;----------------------------------
@@ -581,7 +580,7 @@ scrptr2str  .block
 ;---------------------------------------------------------------------------
 ; Copie scrptr dans zp1
 ;---------------------------------------------------------------------------
-scrptr2zp1  .block
+scrptr2zp1     .block
                php
                pha
                lda  scrptr
@@ -595,7 +594,7 @@ scrptr2zp1  .block
 ;---------------------------------------------------------------------------
 ; Copie colptr dans zp1
 ;---------------------------------------------------------------------------
-colptr2zp1   .block
+colptr2zp1     .block
                php
                pha
                lda  colptr
@@ -609,7 +608,7 @@ colptr2zp1   .block
 ;---------------------------------------------------------------------------
 ; Copie scrptr dans zp2
 ;---------------------------------------------------------------------------
-scrptr2zp2   .block
+scrptr2zp2     .block
                php
                pha
                lda  scrptr
@@ -623,7 +622,7 @@ scrptr2zp2   .block
 ;---------------------------------------------------------------------------
 ; Copie colptr dans zp2
 ;---------------------------------------------------------------------------
-colptr2zp2   .block
+colptr2zp2     .block
                php
                pha
                lda  colptr
@@ -642,7 +641,7 @@ colptr2zp2   .block
 ; Sortie : Valeur hexadecimale à la 
 ;          position du curseur.
 ;---------------------------------------------------------------------------
-putrahex    .block
+putrahex       .block
                php
                pha
                jsr     a2hex
@@ -663,7 +662,7 @@ putrahex    .block
 ; **Note : a2hexpx et a2hexpy doivent 
 ;          etre modifiees avant l'appel.
 ;---------------------------------------------------------------------------
-putrahexxy  .block
+putrahexxy     .block
                php
                pha
                jsr  a2hex
@@ -686,7 +685,7 @@ putrahexxy  .block
 ;          doivent etre modifiees avant 
 ;          l'appel.
 ;---------------------------------------------------------------------------
-putrahexcxy .block
+putrahexcxy    .block
                php
                pla
                jsr  a2hex
