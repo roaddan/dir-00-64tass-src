@@ -5,15 +5,9 @@
 
 main           .block
                jsr push
-reload         jsr screendis
+               jsr screendis
                jsr scrmaninit
-;                lda #$0f
-;                sta $d020
-;                lda #24
-;                sta 53272
-;                lda #152
-;                sta 53270
-               jsr  staticscreen
+               jsr staticscreen
                jsr screenena
                #affichemesg edit_msg       
                jsr  anykey
@@ -46,7 +40,7 @@ reload         jsr screendis
                #affichemesg save_fname_msg
                jsr  anykey
                #affichemesg load_fname_msg
-               #locate 1,7
+               #locate 0,7
                jsr pop
                rts
                .bend
@@ -57,9 +51,27 @@ staticscreen   .block
                #uppercase
                jsr  showlines
                jsr  showallchars
+               jsr  showgrid
+               jsr  showfkeys
+               #locate   0,7
                rts
                .bend
-
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+showfkeys      .block
+               jsr  push
+               #printcxy f1abutton
+               #printcxy f2abutton
+               #printcxy f3abutton
+               #printcxy f4abutton
+               #printcxy f5abutton
+               #printcxy f6abutton
+               #printcxy f7abutton
+               #printcxy f8abutton
+               jsr  pop
+               rts
+               .bend
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -75,22 +87,102 @@ nextc          txa
                jsr  pop
                rts
                .bend
-
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
 showlines      .block
+hline1=4
+hline2=6
+hline3=18
+vlinepos=16
+vzplit=scrnram+(6*40)+8
                jsr  push
-               #locate   0,4
                ldx  #40
-               lda  #(192-128)
-nextl          sta  scrnram+(40*4)-1,x
-               sta  scrnram+(40*6)-1,x
+               lda  #64
+nextl          sta  scrnram+(40*hline1)-1,x  ;On imprime les deux grande
+               sta  scrnram+(40*hline2)-1,x  ; lignes horizontales
                dex
-               cpx  #$00
-
+hline          cpx  #vlinepos
+               bpl  notyet
+               sta  scrnram+(40*hline3),x    ;On imprime la demiligne horz.
+notyet         cpx  #$00
                bne  nextl
+               ; on imprime le caractere de jonction (t) au dessus de la 
+               ; ligne vert
+               lda  #<scrnram+(40*(hline2))+vlinepos
+               sta  zpage1
+               lda  #>scrnram+(40*(hline2))+vlinepos
+               sta  zpage1+1
+               ldy  #0
+               lda  #114
+               sta  (zpage1),y
+               jsr  zp1add40
+               ; on imprime ensuite les characteres de la ligne vert
+               ldx  #24-hline2
+               lda  #93
+another93      sta  (zpage1),y
+               jsr  zp1add40
+               dex
+               bne  another93
+               ; on imprime le joint se la ligne vert et la demi 
+               ; ligne horz
+               lda  #<scrnram+(40*(hline3))+vlinepos
+               sta  zpage1
+               lda  #>scrnram+(40*(hline3))+vlinepos
+               sta  zpage1+1
+               ldy  #0
+               lda  #115
+               sta  (zpage1),y
                jsr  pop
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+showgrid      .block
+gligne=8
+gcol=1
+               jsr  push
+               lda  #<scrnram+(40*(gligne))+gcol
+               sta  zpage1
+               lda  #>scrnram+(40*(gligne))+gcol
+               sta  zpage1+1
+               ldx  #8
+nextbox        lda  #101
+               ldy  #9
+               sta  (zpage1),y
+               dey
+               lda  #79
+nextcol        sta  (zpage1),y
+               dey  
+               bne  nextcol
+               jsr  zp1add40
+               dex
+               bne  nextbox
+               ldy  #8
+               lda  #119
+nextlin        sta  (zpage1),y
+               dey  
+               bne  nextlin
+               jsr  pop
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+zp1add40       .block
+               php
+               pha
+               clc
+               lda  zpage1
+               adc  #40
+               bcc  nocarry
+               inc  zpage1+1
+nocarry        sta  zpage1
+               pla
+               plp
                rts
                .bend
 
