@@ -14,7 +14,7 @@ affichemesg    .macro msgptr
                pla
                tax
                .endm
-
+flashcol = vvert1
 flashfkey      .macro fkeyptr
                php
                pha
@@ -24,7 +24,7 @@ flashfkey      .macro fkeyptr
                pha
                lda  #146
                sta  \fkeyptr+15
-               lda  #vvert1
+               lda  #flashcol
                sta  \fkeyptr
                ldx  #<\fkeyptr
                ldy  #>\fkeyptr

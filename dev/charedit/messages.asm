@@ -1,4 +1,4 @@
-mesgcol = mesgcol
+mesgcol = vjaune
 
 blankmsg       .byte     mesgcol,0,5,146
                .null     "                                      "
