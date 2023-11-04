@@ -2,7 +2,6 @@
                 .include "macros-64tass.asm"
                 .include "localmacro.asm"
                 .enc     none
-
 main           .block
                jsr push
                jsr screendis
@@ -13,41 +12,73 @@ main           .block
                jsr  anykey
                #affichemesg save_msg
                jsr  anykey
-               #affichemesg load_msg
-               jsr  anykey
-               #affichemesg copy_msg
-               jsr  anykey
-               #affichemesg clear_msg 
-               jsr  anykey
-               #affichemesg fill_msg
-               jsr  anykey
-               #affichemesg work_msg
-               jsr  anykey
+;               #affichemesg load_msg
+;               jsr  anykey
+;               #affichemesg copy_msg
+;               jsr  anykey
+;               #affichemesg clear_msg 
+;               jsr  anykey
+;               #affichemesg fill_msg
+;               jsr  anykey
+;               #affichemesg work_msg
+;               jsr  anykey
                #affichemesg rvrs_msg
                jsr  anykey
-               #affichemesg invr_msg
+;               #affichemesg invr_msg
+;               jsr  anykey
+;               #affichemesg flip_msg
+;               jsr  anykey
+;               #affichemesg scrollr_msg
+;               jsr  anykey
+;               #affichemesg scrolll_msg
+;               jsr  anykey
+;               #affichemesg scrollu_msg
+;               jsr  anykey
+;               #affichemesg scrolld_msg
+;               jsr  anykey
+;               #affichemesg save_fname_msg
+;               jsr  anykey
+;               #affichemesg load_fname_msg
+               lda  #$ff
+               sta  fkeyset
+               jsr  showfkeys
                jsr  anykey
-               #affichemesg flip_msg
+               #flashfkey     f8bbutton
                jsr  anykey
-               #affichemesg scrollr_msg
+               lda  fkeyset
+               eor  #$ff
+               sta  fkeyset
+               jsr  showfkeys
                jsr  anykey
-               #affichemesg scrolll_msg
-               jsr  anykey
-               #affichemesg scrollu_msg
-               jsr  anykey
-               #affichemesg scrolld_msg
-               jsr  anykey
-               #affichemesg save_fname_msg
-               jsr  anykey
-               #affichemesg load_fname_msg
-               #locate 0,7
+               #flashfkey     f4abutton
+               #locate 0,20
+               jsr  getkey
+               jsr  putch
                jsr pop
                rts
                .bend
+fkeyset        .byte     0
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+setscreenptr   .block
+               jsr  push
 
+
+               jsr  pop
+               rts
+               .bend
+
+
+
+
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 staticscreen   .block
-               #changebord vmauve
-               #changeback vrose
+               #changebord vgris1
+               #changeback vgris
                #uppercase
                jsr  showlines
                jsr  showallchars
@@ -61,6 +92,9 @@ staticscreen   .block
 ;-------------------------------------------------------------------------------
 showfkeys      .block
                jsr  push
+               lda  fkeyset
+               cmp  #$0
+               bne  secondks
                #printcxy f1abutton
                #printcxy f2abutton
                #printcxy f3abutton
@@ -69,7 +103,16 @@ showfkeys      .block
                #printcxy f6abutton
                #printcxy f7abutton
                #printcxy f8abutton
-               jsr  pop
+               jmp end
+secondks       #printcxy f1bbutton
+               #printcxy f2bbutton
+               #printcxy f3bbutton
+               #printcxy f4bbutton
+               #printcxy f5bbutton
+               #printcxy f6bbutton
+               #printcxy f7bbutton
+               #printcxy f8bbutton
+end            jsr  pop
                rts
                .bend
 ;-------------------------------------------------------------------------------
@@ -144,6 +187,7 @@ showgrid      .block
 gligne=8
 gcol=1
                jsr  push
+               jsr  screendis
                lda  #<scrnram+(40*(gligne))+gcol
                sta  zpage1
                lda  #>scrnram+(40*(gligne))+gcol
@@ -165,6 +209,7 @@ nextcol        sta  (zpage1),y
 nextlin        sta  (zpage1),y
                dey  
                bne  nextlin
+               jsr screenena
                jsr  pop
                rts
                .bend
@@ -186,6 +231,23 @@ nocarry        sta  zpage1
                rts
                .bend
 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+delay          .block
+               jsr  push
+               lda  #$0
+               tax
+               tay
+xagain         dex
+yagain         dey
+               cpy  #$00
+               bne  yagain
+               cpx  #$00
+               bne  xagain
+               jsr  pop
+               rts
+               .bend
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
