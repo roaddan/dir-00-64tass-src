@@ -1,38 +1,38 @@
-mesgcol = vjaune
+mesgcol = mesgcol
 
-blankmsg       .byte     vjaune,0,5,146
+blankmsg       .byte     mesgcol,0,5,146
                .null     "                                      "
-edit_msg       .byte     vjaune,0,5,18
+edit_msg       .byte     mesgcol,0,5,18
                .null     " entry mode: chr$(   )",146
-save_msg       .byte     vjaune,0,5,146
+save_msg       .byte     mesgcol,0,5,146
                .null     " save on cassette or disk? (c/d):"
-load_msg       .byte     vjaune,0,5
+load_msg       .byte     mesgcol,0,5
                .null     " load on cassette or disk? (c/d):"
-copy_msg       .byte     vjaune,0,5
+copy_msg       .byte     mesgcol,0,5
                .null     " enter character to copy:"
-clear_msg      .byte     vjaune,0,5
+clear_msg      .byte     mesgcol,0,5
                .null     " clear char: chr$(   )"
-fill_msg       .byte     vjaune,0,5
+fill_msg       .byte     mesgcol,0,5
                .null     " fill char:  chr$(   )"
-work_msg       .byte     vjaune,0,5
+work_msg       .byte     mesgcol,0,5
                .null     " enable work space"
-rvrs_msg       .byte     vjaune,0,5
+rvrs_msg       .byte     mesgcol,0,5
                .null     " reverse character:"
-invr_msg       .byte     vjaune,0,5
+invr_msg       .byte     mesgcol,0,5
                .null     " inverting character:"
-flip_msg       .byte     vjaune,0,5
+flip_msg       .byte     mesgcol,0,5
                .null     " flipping character:"
-scrollr_msg    .byte     vjaune,0,5
+scrollr_msg    .byte     mesgcol,0,5
                .null     " scrolling right:"
-scrolll_msg    .byte     vjaune,0,5
+scrolll_msg    .byte     mesgcol,0,5
                .null     " scrolling left:"
-scrollu_msg    .byte     vjaune,0,5
+scrollu_msg    .byte     mesgcol,0,5
                .null     " scrolling up:"
-scrolld_msg    .byte     vjaune,0,5
+scrolld_msg    .byte     mesgcol,0,5
                .null     " scrolling down:"
-save_fname_msg .byte     vjaune,0,5
+save_fname_msg .byte     mesgcol,0,5
                .null     " save: file name ------.chr"
-load_fname_msg .byte     vjaune,0,5
+load_fname_msg .byte     mesgcol,0,5
                .null     " load: file name ------.chr"
 fkeyleft=18
 f1top=8
