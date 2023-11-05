@@ -30,17 +30,11 @@ changeback     .macro c
 
 
 locate         .macro x,y
-               txa
-               pha
-               tya
-               pha
+               jsr  push
                ldx  #\x
                ldy  #\y
                jsr  gotoxy
-               pla
-               tay
-               pla
-               tax
+               jsr  pop
                .endm
 
 scrcolors      .macro fg, bg         

@@ -37,6 +37,14 @@ setscreenptr   .block
 keyaction      .block
                jsr  push
 loop           jsr  getkey
+               #locate 0,20
+               jsr  putch
+               #locate 0,21
+               pha
+               lda  #'$'
+               jsr  putch
+               pla
+               jsr  putahex
                cmp  #key_f1
                beq  f1
                cmp  #key_f2
