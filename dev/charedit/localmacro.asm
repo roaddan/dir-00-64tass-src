@@ -1,18 +1,12 @@
 affichemesg    .macro msgptr
-               txa
-               pha
-               tya
-               pha
+               jsr  push
                ldx  #<blankmsg
                ldy  #>blankmsg
                jsr  putscxy
                ldx  #<\msgptr
                ldy  #>\msgptr
                jsr  putscxy
-               pla
-               tay
-               pla
-               tax
+               jsr  pop
                .endm
 flashcol = vvert1
 flashfkey      .macro fkeyptr

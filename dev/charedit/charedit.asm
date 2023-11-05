@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-; version : 20231103-23550021
+; version : 20231104-22550021
 ;-------------------------------------------------------------------------------
                 .include "header-c64.asm"
                 .include "macros-64tass.asm"
@@ -12,52 +12,12 @@ main           .block
                jsr staticscreen
                jsr screenena
                #affichemesg edit_msg       
-               jsr  anykey
-               #affichemesg save_msg
-               jsr  anykey
-;               #affichemesg load_msg
-;               jsr  anykey
-;               #affichemesg copy_msg
-;               jsr  anykey
-;               #affichemesg clear_msg 
-;               jsr  anykey
-;               #affichemesg fill_msg
-;               jsr  anykey
-;               #affichemesg work_msg
-;               jsr  anykey
-               #affichemesg rvrs_msg
-               jsr  anykey
-;               #affichemesg invr_msg
-;               jsr  anykey
-;               #affichemesg flip_msg
-;               jsr  anykey
-;               #affichemesg scrollr_msg
-;               jsr  anykey
-;               #affichemesg scrolll_msg
-;               jsr  anykey
-;               #affichemesg scrollu_msg
-;               jsr  anykey
-;               #affichemesg scrolld_msg
-;               jsr  anykey
-;               #affichemesg save_fname_msg
-;               jsr  anykey
-;               #affichemesg load_fname_msg
-               lda  #$ff
+               lda  #$00
                sta  fkeyset
                jsr  showfkeys
-               jsr  anykey
-               #flashfkey     f8bbutton
-               jsr  anykey
-               lda  fkeyset
-               eor  #$ff
-               sta  fkeyset
-               jsr  showfkeys
-               jsr  anykey
-               #flashfkey     f4abutton
-               #locate 0,20
-               jsr  getkey
-               jsr  putch
-               jsr pop
+again          #locate 0,24
+               jsr  pop
+               jsr  keyaction
                rts
                .bend
 fkeyset        .byte     0
@@ -66,16 +26,64 @@ fkeyset        .byte     0
 ;-------------------------------------------------------------------------------
 setscreenptr   .block
                jsr  push
-
-
                jsr  pop
                rts
                .bend
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+keyaction      .block
+               jsr  push
+loop           jsr  getkey
+               cmp  #key_f1
+               beq  f1
+               cmp  #key_f8
+               beq  f8
+               cmp  #ctrl_x
+               beq  quit
+               jmp  loop
+f1             jsr  f1action
+               jmp  loop
+f8             jsr  f8action
+               jmp  loop
+quit           jsr  pop
+               rts
+               .bend
+               
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+f1action       .block
+               pha
+               lda  fkeyset
+               bne  menub  
+               #flashfkey f1abutton
+               #affichemesg edit_msg
+               jmp  out
+menub          #flashfkey f1bbutton               
+               #affichemesg rvrs_msg
+out            pla
+               rts
+               .bend
 
-
-
-
-
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+f8action       .block
+               pha
+               lda  fkeyset
+               bne  menub  
+               #flashfkey f8abutton
+               #affichemesg   menub_msg
+               jmp  swapit
+menub          #flashfkey f8bbutton               
+               #affichemesg   menua_msg
+swapit         eor  #$ff
+               sta  fkeyset
+               jsr  showfkeys
+               pla
+               rts
+               .bend
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------

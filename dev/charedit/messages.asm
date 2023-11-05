@@ -2,38 +2,57 @@ mesgcol = vjaune
 
 blankmsg       .byte     mesgcol,0,5,146
                .null     "                                      "
+;f1a
 edit_msg       .byte     mesgcol,0,5,18
                .null     " entry mode: chr$(   )",146
+;f2a
 save_msg       .byte     mesgcol,0,5,146
                .null     " save on cassette or disk? (c/d):"
+;f3a
 load_msg       .byte     mesgcol,0,5
                .null     " load on cassette or disk? (c/d):"
+;f4a
 copy_msg       .byte     mesgcol,0,5
                .null     " enter character to copy:"
+;f5a
 clear_msg      .byte     mesgcol,0,5
                .null     " clear char: chr$(   )"
+;f6a
 fill_msg       .byte     mesgcol,0,5
                .null     " fill char:  chr$(   )"
+;f7a
 work_msg       .byte     mesgcol,0,5
                .null     " enable work space"
+
+;f1b
 rvrs_msg       .byte     mesgcol,0,5
                .null     " reverse character:"
+;f2b
 invr_msg       .byte     mesgcol,0,5
                .null     " inverting character:"
+;f3b
 flip_msg       .byte     mesgcol,0,5
                .null     " flipping character:"
+;f4b
 scrollr_msg    .byte     mesgcol,0,5
                .null     " scrolling right:"
+;f5b
 scrolll_msg    .byte     mesgcol,0,5
                .null     " scrolling left:"
+;f6b
 scrollu_msg    .byte     mesgcol,0,5
                .null     " scrolling up:"
+;f7b
 scrolld_msg    .byte     mesgcol,0,5
                .null     " scrolling down:"
 save_fname_msg .byte     mesgcol,0,5
                .null     " save: file name ------.chr"
 load_fname_msg .byte     mesgcol,0,5
                .null     " load: file name ------.chr"
+menua_msg      .byte     mesgcol,0,5
+               .null     " you are now in menu a."
+menub_msg      .byte     mesgcol,0,5
+               .null     " you are now in menu b."
 fkeyleft=18
 f1top=8
 ;--------- first function key set ------------------               
