@@ -15,9 +15,11 @@ main           .block
                lda  #$00
                sta  fkeyset
                jsr  showfkeys
-again          #locate 0,24
                jsr  pop
                jsr  keyaction
+               jsr  cls
+               #affichemesg bye_msg       
+               #locate 0,0
                rts
                .bend
 fkeyset        .byte     0
@@ -37,6 +39,18 @@ keyaction      .block
 loop           jsr  getkey
                cmp  #key_f1
                beq  f1
+               cmp  #key_f2
+               beq  f2
+               cmp  #key_f3
+               beq  f3
+               cmp  #key_f4
+               beq  f4
+               cmp  #key_f5
+               beq  f5
+               cmp  #key_f6
+               beq  f6
+               cmp  #key_f7
+               beq  f7
                cmp  #key_f8
                beq  f8
                cmp  #ctrl_x
@@ -44,9 +58,22 @@ loop           jsr  getkey
                jmp  loop
 f1             jsr  f1action
                jmp  loop
+f2             jsr  f2action
+               jmp  loop
+f3             jsr  f3action
+               jmp  loop
+f4             jsr  f4action
+               jmp  loop
+f5             jsr  f5action
+               jmp  loop
+f6             jsr  f6action
+               jmp  loop
+f7             jsr  f7action
+               jmp  loop
 f8             jsr  f8action
                jmp  loop
-quit           jsr  pop
+quit           
+               jsr  pop
                rts
                .bend
                
@@ -58,10 +85,105 @@ f1action       .block
                lda  fkeyset
                bne  menub  
                #flashfkey f1abutton
-               #affichemesg edit_msg
+               #affichemesg f1a_msg
                jmp  out
 menub          #flashfkey f1bbutton               
-               #affichemesg rvrs_msg
+               #affichemesg f1b_msg
+out            pla
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+f2action       .block
+               pha
+               lda  fkeyset
+               bne  menub  
+               #flashfkey f2abutton
+               #affichemesg f2a_msg
+               jmp  out
+menub          #flashfkey f2bbutton               
+               #affichemesg f2b_msg
+out            pla
+               rts
+               .bend
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+f3action       .block
+               pha
+               lda  fkeyset
+               bne  menub  
+               #flashfkey f3abutton
+               #affichemesg f3a_msg
+               jmp  out
+menub          #flashfkey f3bbutton               
+               #affichemesg f3b_msg
+out            pla
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+f4action       .block
+               pha
+               lda  fkeyset
+               bne  menub  
+               #flashfkey f4abutton
+               #affichemesg f4a_msg
+               jmp  out
+menub          #flashfkey f4bbutton               
+               #affichemesg f4b_msg
+out            pla
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+f5action       .block
+               pha
+               lda  fkeyset
+               bne  menub  
+               #flashfkey f5abutton
+               #affichemesg f5a_msg
+               jmp  out
+menub          #flashfkey f5bbutton               
+               #affichemesg f5b_msg
+out            pla
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+f6action       .block
+               pha
+               lda  fkeyset
+               bne  menub  
+               #flashfkey f6abutton
+               #affichemesg f6a_msg
+               jmp  out
+menub          #flashfkey f6bbutton               
+               #affichemesg f6b_msg
+out            pla
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+f7action       .block
+               pha
+               lda  fkeyset
+               bne  menub  
+               #flashfkey f7abutton
+               #affichemesg f7a_msg
+               jmp  out
+menub          #flashfkey f7bbutton               
+               #affichemesg f7b_msg
 out            pla
                rts
                .bend
@@ -95,9 +217,11 @@ staticscreen   .block
                jsr  showallchars
                jsr  showgrid
                jsr  showfkeys
+               #affichemesg quit_msg
                #locate   0,7
                rts
                .bend
+
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------

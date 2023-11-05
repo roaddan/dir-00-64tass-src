@@ -2,47 +2,47 @@ mesgcol = vjaune
 
 blankmsg       .byte     mesgcol,0,5,146
                .null     "                                      "
-;f1a
+f1a_msg
 edit_msg       .byte     mesgcol,0,5,18
                .null     " entry mode: chr$(   )",146
-;f2a
+f2a_msg
 save_msg       .byte     mesgcol,0,5,146
                .null     " save on cassette or disk? (c/d):"
-;f3a
+f3a_msg
 load_msg       .byte     mesgcol,0,5
-               .null     " load on cassette or disk? (c/d):"
-;f4a
+               .null     " load from cassette or disk? (c/d):"
+f4a_msg
 copy_msg       .byte     mesgcol,0,5
                .null     " enter character to copy:"
-;f5a
+f5a_msg
 clear_msg      .byte     mesgcol,0,5
                .null     " clear char: chr$(   )"
-;f6a
+f6a_msg
 fill_msg       .byte     mesgcol,0,5
                .null     " fill char:  chr$(   )"
-;f7a
+f7a_msg
 work_msg       .byte     mesgcol,0,5
                .null     " enable work space"
 
-;f1b
+f1b_msg
 rvrs_msg       .byte     mesgcol,0,5
                .null     " reverse character:"
-;f2b
+f2b_msg
 invr_msg       .byte     mesgcol,0,5
                .null     " inverting character:"
-;f3b
+f3b_msg
 flip_msg       .byte     mesgcol,0,5
                .null     " flipping character:"
-;f4b
+f4b_msg
 scrollr_msg    .byte     mesgcol,0,5
                .null     " scrolling right:"
-;f5b
+f5b_msg
 scrolll_msg    .byte     mesgcol,0,5
                .null     " scrolling left:"
-;f6b
+f6b_msg
 scrollu_msg    .byte     mesgcol,0,5
                .null     " scrolling up:"
-;f7b
+f7b_msg
 scrolld_msg    .byte     mesgcol,0,5
                .null     " scrolling down:"
 save_fname_msg .byte     mesgcol,0,5
@@ -53,6 +53,15 @@ menua_msg      .byte     mesgcol,0,5
                .null     " you are now in menu a."
 menub_msg      .byte     mesgcol,0,5
                .null     " you are now in menu b."
+quit_msg       .byte     vblue1,22,24,18
+               .text     "ctrl-x",146
+               .null     " to quit."     
+
+bye_msg        .byte     vrose,6,12,18
+               .null     " Thanks and have a good day ",146
+        
+
+
 fkeyleft=18
 f1top=8
 ;--------- first function key set ------------------               
