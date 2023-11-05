@@ -41,10 +41,21 @@ loop           jsr  getkey
                jsr  putch
                #locate 0,21
                pha
+               pha
                lda  #'$'
                jsr  putch
                pla
+               tax
+               lda  asciitorom,x
                jsr  putahex
+               #print txt1
+               #locate 0,22
+               lda  #'$'
+               jsr  putch
+               pla
+               ;and  #$7f
+               jsr  putahex
+               #print txt2
                cmp  #key_f1
                beq  f1
                cmp  #key_f2
@@ -83,6 +94,8 @@ f8             jsr  f8action
 quit           
                jsr  pop
                rts
+txt1           .null     " rom pos."
+txt2           .null     " key value"
                .bend
                
 ;-------------------------------------------------------------------------------

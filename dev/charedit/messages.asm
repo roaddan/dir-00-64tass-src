@@ -53,7 +53,7 @@ menua_msg      .byte     mesgcol,0,5
                .null     " you are now in menu a."
 menub_msg      .byte     mesgcol,0,5
                .null     " you are now in menu b."
-quit_msg       .byte     vblue1,22,24,18
+quit_msg       .byte     vblue1,21,24,18
                .text     "ctrl-x",146
                .null     " to quit."     
 
