@@ -1,16 +1,21 @@
 ;-------------------------------------------------------------------------------
-; version : 20231104-22550021
+; version : 20231105-22550021
 ;-------------------------------------------------------------------------------
-                .include "header-c64.asm"
-                .include "macros-64tass.asm"
-                .include "localmacro.asm"
-                .enc     none
+               .include "header-c64.asm"
+               .include "macros-64tass.asm"
+               .include "localmacro.asm"
+
+               .enc     none
 main           .block
-               jsr push
-               jsr screendis
-               jsr scrmaninit
-               jsr staticscreen
-               jsr screenena
+               jsr  push
+               jsr  screendis
+               jsr  scrmaninit
+
+               jsr  setscreenptr
+;              jsr  copycharset
+               jsr  staticscreen
+               jsr  screenena
+
                #affichemesg edit_msg       
                lda  #$00
                sta  fkeyset
@@ -22,15 +27,117 @@ main           .block
                #locate 0,0
                rts
                .bend
-fkeyset        .byte     0
+
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
+scrnnewram     =  $0400
 setscreenptr   .block
                jsr  push
+
+               ; BASIC -> print chr$(8)
+               lda  #$08      ; basic commande to disable ...
+               jsr  chrout    ; ... character set change.
+               
+               ; BASIC -> poke 56578,peek(56578) or 3
+               lda  cia2ddra  ;$dd02, 56578 cia2 data direction A
+               ora  #$00000011
+               sta  cia2ddra  ;$dd02, 56578 cia2 data direction A
+               
+               ; BASIC -> poke 56576, (peek(56576)and252) or 0
+               lda  cia2pra   ;$dd00, 56576 cia2 dataport A
+               and  #%11111100
+               ora  #%00000000
+               sta  cia2pra   ;$dd00, 56576 cia2 dataport A
+               
+               ; BASIC -> poke 53272, (peek(53272) and 240) or 2
+               lda  vicmemptr ;$d018, 53272               
+               ; vicmemptr
+               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
+               ;  |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0   |
+               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
+               ;  |  txt  |  txt  |  txt  |  txt  | chars | chars | chars |       | 
+               ;  |  scr  |  scr  |  scr  |  scr  |  def  |  def  |  def  |   X   |
+               ;  | bit 3 | bit 2 | bit 1 | bit 0 | bit 2 | bit 1 | bit 0 |       |
+               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
+               and  #%11110000
+               ora  #%00000010
+               sta  vicmemptr; $d018, 53272
+
+               ; BASIC -> poke 648, 196               
+               lda  #%11000100     ;196
+               sta  $0288 ;648 - top page of screen memory
+
                jsr  pop
                rts
                .bend
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+copycharset    .block
+               jsr  push
+
+               ; BASIC -> poke 56334, peek(56334) and 254
+               lda  cia1cra        ;$dc0e, 56334 cia1 control register A
+               and  #%11111110     ;254
+               sta  cia1cra        ;$dc0e, 56334 cia1 control register A
+
+               ; BASIC -> poke 1, peek(1) and 251
+               lda  u6510map       ;$01
+               and  #%11111011     ;251
+               sta  u6510map       ;$01
+
+               ; ici on copy le character-map
+               jsr  memcopy
+
+               ; BASIC -> poke 1, peek(1) or 4
+               lda  u6510map       ;$01
+               ora  #%00000100
+               sta  u6510map       ;$01
+
+               ; BASIC -> poke 56334, peek(56334) or 1
+               lda  cia1cra        ;$dc0e, 56334 cia1 control register A
+               ora  #%00000001     ;254
+               sta  cia1cra        ;$dc0e, 56334 cia1 control register A
+
+               jsr  pop
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+memcopy        .block
+               jsr  push
+               
+onemore        lda  startaddr
+               sta  zpage1
+               lda  startaddr+1
+               sta  zpage1+1
+               lda  destaddr
+               sta  zpage2
+               lda  destaddr+1
+               sta  zpage2+1
+               ldy  #$00
+               lda  (zpage1),y
+               sta  (zpage2),y
+               jsr  inczp1
+               jsr  inczp2
+
+               lda  zpage1+1
+               cmp  stopaddr+1
+               bne  onemore
+
+               lda  zpage1
+               cmp  stopaddr
+               bne  onemore
+
+               jsr  pop
+               rts
+               .bend
+startaddr      .word     53248
+destaddr       .word     53248-2048
+stopaddr       .word     55296
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -97,6 +204,7 @@ quit
 txt1           .null     " rom pos."
 txt2           .null     " key value"
                .bend
+fkeyset        .byte     0
                
 ;-------------------------------------------------------------------------------
 ;
@@ -279,7 +387,7 @@ showallchars   .block
                #locate   0,0
                ldx  #$00
 nextc          txa  
-               sta  scrnram,x
+               sta  scrnnewram,x
                inx
                cpx  #$80
                bne  nextc
@@ -294,23 +402,23 @@ hline1=4
 hline2=6
 hline3=18
 vlinepos=16
-vzplit=scrnram+(6*40)+8
+vzplit=scrnnewram+(6*40)+8
                jsr  push
                ldx  #40
                lda  #64
-nextl          sta  scrnram+(40*hline1)-1,x  ;On imprime les deux grande
-               sta  scrnram+(40*hline2)-1,x  ; lignes horizontales
+nextl          sta  scrnnewram+(40*hline1)-1,x  ;On imprime les deux grande
+               sta  scrnnewram+(40*hline2)-1,x  ; lignes horizontales
                dex
 hline          cpx  #vlinepos
                bpl  notyet
-               sta  scrnram+(40*hline3),x    ;On imprime la demiligne horz.
+               sta  scrnnewram+(40*hline3),x    ;On imprime la demiligne horz.
 notyet         cpx  #$00
                bne  nextl
                ; on imprime le caractere de jonction (t) au dessus de la 
                ; ligne vert
-               lda  #<scrnram+(40*(hline2))+vlinepos
+               lda  #<scrnnewram+(40*(hline2))+vlinepos
                sta  zpage1
-               lda  #>scrnram+(40*(hline2))+vlinepos
+               lda  #>scrnnewram+(40*(hline2))+vlinepos
                sta  zpage1+1
                ldy  #0
                lda  #114
@@ -325,9 +433,9 @@ another93      sta  (zpage1),y
                bne  another93
                ; on imprime le joint se la ligne vert et la demi 
                ; ligne horz
-               lda  #<scrnram+(40*(hline3))+vlinepos
+               lda  #<scrnnewram+(40*(hline3))+vlinepos
                sta  zpage1
-               lda  #>scrnram+(40*(hline3))+vlinepos
+               lda  #>scrnnewram+(40*(hline3))+vlinepos
                sta  zpage1+1
                ldy  #0
                lda  #115
@@ -344,9 +452,9 @@ gligne=8
 gcol=1
                jsr  push
                jsr  screendis
-               lda  #<scrnram+(40*(gligne))+gcol
+               lda  #<scrnnewram+(40*(gligne))+gcol
                sta  zpage1
-               lda  #>scrnram+(40*(gligne))+gcol
+               lda  #>scrnnewram+(40*(gligne))+gcol
                sta  zpage1+1
                ldx  #8
 nextbox        lda  #101
@@ -401,6 +509,14 @@ yagain         dey
                bne  yagain
                cpx  #$00
                bne  xagain
+               jsr  pop
+               rts
+               .bend
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+template       .block
+               jsr  push
                jsr  pop
                rts
                .bend

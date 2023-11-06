@@ -91,10 +91,13 @@ decword        .block
 ;---------------------------------------------------------------------
 inczp1         .block
                php
+               pha
                inc  zpage1
+               lda  zpage1
                bne  nopage
                inc  zpage1+1
-nopage         plp         
+nopage         pla
+               plp         
                rts
                .bend
 ;---------------------------------------------------------------------
@@ -105,9 +108,8 @@ deczp1          .block
                 pha
                 dec  zpage1
                 bne  nopage
-                dec  zpage1+1
-nopage          dec  zpage1       
-                pla
+                dec  zpage1+1     
+nopage          pla
                 plp         
                 rts
                .bend
@@ -118,7 +120,7 @@ inczp2         .block
                php
                pha
                inc  zpage2
-               ;lda  zpage2
+               lda  zpage2
                bne  nopage
                inc  zpage2+1
 nopage         pla        
@@ -134,7 +136,7 @@ deczp2         .block
                lda  zpage2
                bne  nopage
                dec  zpage2+1
-nopage         dec  zpage2       
+nopage         pla       
                plp         
                rts
                .bend
