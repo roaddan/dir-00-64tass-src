@@ -12,22 +12,22 @@ main           .block
 
                jsr  copycharset
 
-               ; BASIC -> poke 53272, (peek(53272) and 240) or 12
-               lda  vicmemptr      ;$d018, 53272               
-               ; vicmemptr
-               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
-               ;  |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0   |
-               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
-               ;  |  txt  |  txt  |  txt  |  txt  | chars | chars | chars |       | 
-               ;  |  scr  |  scr  |  scr  |  scr  |  def  |  def  |  def  |   X   |
-               ;  | bit 3 | bit 2 | bit 1 | bit 0 | bit 2 | bit 1 | bit 0 |       |
-               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
-               and  #%11110000     ; On conserve les bits 7654 de ce registre ...
-                                   ; ... afin de conserver la mémoire vidéo à $0400.
-               ora  #charsdef      ; on place les bits 3210 à %xxxx001x ce qui ...
-                                   ; ... sélectionne la mémoire du bitmap des ...
-                                   ; ... charactères à $0800. 
-               sta  vicmemptr      ; $d018, 53272
+;               ; BASIC -> poke 53272, (peek(53272) and 240) or 12
+;               lda  vicmemptr      ;$d018, 53272               
+;               ; vicmemptr
+;               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
+;               ;  |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0   |
+;               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
+;               ;  |  txt  |  txt  |  txt  |  txt  | chars | chars | chars |       | 
+;               ;  |  scr  |  scr  |  scr  |  scr  |  def  |  def  |  def  |   X   |
+;               ;  | bit 3 | bit 2 | bit 1 | bit 0 | bit 2 | bit 1 | bit 0 |       |
+;               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
+;               and  #%11110000     ; On conserve les bits 7654 de ce registre ...
+;                                   ; ... afin de conserver la mémoire vidéo à $0400.
+;               ora  #charsdef      ; on place les bits 3210 à %xxxx001x ce qui ...
+;                                   ; ... sélectionne la mémoire du bitmap des ...
+;                                   ; ... charactères à $0800. 
+;               sta  vicmemptr      ; $d018, 53272
 
 
 
@@ -35,43 +35,54 @@ main           .block
                jsr  scrmaninit
 
 
-;               jsr  setscreenptr
+               jsr  setscreenptr
 
                jsr  staticscreen
                jsr  screenena
 
-               #affichemesg edit_msg       
                lda  #$00
                sta  fkeyset
                jsr  showfkeys
                jsr  pop
+               jsr  f1action       
                jsr  keyaction
                jsr  cls
-               #affichemesg bye_msg       
+               #affichemesg bye_msg
                #locate 0,0
+               jsr  getkey
+               jsr  k_warmboot       
+
+
                rts
                .bend
-
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+editor       .block
+               jsr  push
+               jsr  pop
+               rts
+               .bend
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
 setscreenptr   .block
                jsr  push
 
-               ; BASIC -> print chr$(8)
-               lda  #$08      ; basic commande to disable ...
-               jsr  chrout    ; ... character set change.
+;               ; BASIC -> print chr$(8)
+;               lda  #$08      ; basic commande to disable ...
+;               jsr  chrout    ; ... character set change.
                
-               ; BASIC -> poke 56578,peek(56578) or 3
-               lda  cia2ddra  ;$dd02, 56578 cia2 data direction A
-               ora  #$00000011
-               sta  cia2ddra  ;$dd02, 56578 cia2 data direction A
-               
-               ; BASIC -> poke 56576, (peek(56576) and 252) or 0
-               lda  cia2pra   ;$dd00, 56576 cia2 dataport A
-               and  #%11111100
-               ora  #%00000000
-               sta  cia2pra   ;$dd00, 56576 cia2 dataport A
+;               ; BASIC -> poke 56578,peek(56578) or 3
+;               lda  cia2ddra  ;$dd02, 56578 cia2 data direction A
+;               ora  #$00000011
+;               sta  cia2ddra  ;$dd02, 56578 cia2 data direction A
+;               
+;               ; BASIC -> poke 56576, (peek(56576) and 252) or 0
+;               lda  cia2pra   ;$dd00, 56576 cia2 dataport A
+;               and  #%11111100
+;               ora  #%00000000
+;               sta  cia2pra   ;$dd00, 56576 cia2 dataport A
                
                ; BASIC -> poke 53272, (peek(53272) and 240) or 12
                lda  vicmemptr      ;$d018, 53272               
@@ -90,18 +101,17 @@ setscreenptr   .block
                                    ; ... charactères à $0800. 
                sta  vicmemptr      ; $d018, 53272
 
-               ; BASIC -> poke 648, 196               
-               lda  #%00000100     ;%11000100 ; 196
-
-               sta  $0288          ; On indique au kernal que la mémoire video ...
-                                   ; ... commence à 4 * 256 = 1024
-                                   ; 648 - top page of screen memory
+;               ; BASIC -> poke 648, 196               
+;               lda  #%00000100     ;%11000100 ; 196
+;               sta  $0288          ; On indique au kernal que la mémoire video ...
+;                                   ; ... commence à 4 * 256 = 1024
+;                                   ; 648 - top page of screen memory
 
                jsr  pop
                rts
                .bend
 scrnnewram     = $0400 
-charsdef       = 12
+charsdef       = 14
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -172,10 +182,10 @@ onemore        lda  (zpage1),y
                rts
                .bend
 
-bitmapmem =    charsdef * 1024
-startaddr      .word     $d000     ; 53248
-destaddr       .word     bitmapmem ; 12288     
-stopaddr       .word     $d800     ; 55296 
+bitmapmem =    charsdef * 1024     ;Calcul de la position ram des caracteres.
+startaddr      .word     $d000               ; 53248
+destaddr       .word     bitmapmem           ; $3000, 12288     
+stopaddr       .word     startaddr+(4*$800)  ; 55296 
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -345,6 +355,7 @@ delay          .block
                tax
                tay
 xagain         dex
+               dex
 yagain         dey
                cpy  #$00
                bne  yagain
@@ -404,7 +415,19 @@ loop           jsr  getkey
                beq  f8
                cmp  #ctrl_x
                beq  quit
-               jmp  loop
+               ldx  editmode  ; Sommes nous en mode edition?
+               bne  mainloop  ; Non, on branche vers le menu principale
+               cmp  #cursu    ; 
+               beq  toeditor
+               cmp  #cursd
+               beq  toeditor
+               cmp  #cursl
+               beq  toeditor
+               cmp  #cursr
+               beq  toeditor
+               cmp  #$20
+               beq  toeditor
+mainloop       jmp  loop
 f1             jsr  f1action
                jmp  loop
 f2             jsr  f2action
@@ -421,12 +444,14 @@ f7             jsr  f7action
                jmp  loop
 f8             jsr  f8action
                jmp  loop
-quit           
+toeditor       jsr  editor
+quit           jmp  loop
                jsr  pop
                rts
 txt1           .null     " rom pos."
 txt2           .null     " key value"
                .bend
+editmode       .byte     0
 fkeyset        .byte     0
                
 ;-------------------------------------------------------------------------------
@@ -434,13 +459,18 @@ fkeyset        .byte     0
 ;-------------------------------------------------------------------------------
 f1action       .block
                pha
+               lda  #$ff
+               sta  editmode
                lda  fkeyset
                bne  menub  
-               #flashfkey f1abutton
                #affichemesg f1a_msg
+               #flashfkey f1abutton
                jmp  out
-menub          #flashfkey f1bbutton               
+menub
+               lda  #$0
+               sta  editmode
                #affichemesg f1b_msg
+               #flashfkey f1bbutton               
 out            pla
                rts
                .bend
@@ -450,13 +480,16 @@ out            pla
 ;-------------------------------------------------------------------------------
 f2action       .block
                pha
+               lda  #$0
+               sta  editmode
                lda  fkeyset
                bne  menub  
-               #flashfkey f2abutton
                #affichemesg f2a_msg
+               #flashfkey f2abutton
                jmp  out
-menub          #flashfkey f2bbutton               
+menub
                #affichemesg f2b_msg
+               #flashfkey f2bbutton               
 out            pla
                rts
                .bend
@@ -465,13 +498,16 @@ out            pla
 ;-------------------------------------------------------------------------------
 f3action       .block
                pha
+               lda  #$0
+               sta  editmode
                lda  fkeyset
                bne  menub  
-               #flashfkey f3abutton
                #affichemesg f3a_msg
+               #flashfkey f3abutton
                jmp  out
-menub          #flashfkey f3bbutton               
+menub
                #affichemesg f3b_msg
+               #flashfkey f3bbutton               
 out            pla
                rts
                .bend
@@ -481,13 +517,16 @@ out            pla
 ;-------------------------------------------------------------------------------
 f4action       .block
                pha
+               lda  #$0
+               sta  editmode
                lda  fkeyset
                bne  menub  
-               #flashfkey f4abutton
                #affichemesg f4a_msg
+               #flashfkey f4abutton
                jmp  out
-menub          #flashfkey f4bbutton               
+menub
                #affichemesg f4b_msg
+               #flashfkey f4bbutton               
 out            pla
                rts
                .bend
@@ -497,13 +536,16 @@ out            pla
 ;-------------------------------------------------------------------------------
 f5action       .block
                pha
+               lda  #$0
+               sta  editmode
                lda  fkeyset
                bne  menub  
-               #flashfkey f5abutton
                #affichemesg f5a_msg
+               #flashfkey f5abutton
                jmp  out
-menub          #flashfkey f5bbutton               
+menub
                #affichemesg f5b_msg
+               #flashfkey f5bbutton               
 out            pla
                rts
                .bend
@@ -513,13 +555,16 @@ out            pla
 ;-------------------------------------------------------------------------------
 f6action       .block
                pha
+               lda  #$0
+               sta  editmode
                lda  fkeyset
                bne  menub  
-               #flashfkey f6abutton
                #affichemesg f6a_msg
+               #flashfkey f6abutton
                jmp  out
-menub          #flashfkey f6bbutton               
+menub
                #affichemesg f6b_msg
+               #flashfkey f6bbutton               
 out            pla
                rts
                .bend
@@ -529,13 +574,16 @@ out            pla
 ;-------------------------------------------------------------------------------
 f7action       .block
                pha
+               lda  #$0
+               sta  editmode
                lda  fkeyset
                bne  menub  
-               #flashfkey f7abutton
                #affichemesg f7a_msg
+               #flashfkey f7abutton
                jmp  out
-menub          #flashfkey f7bbutton               
+menub
                #affichemesg f7b_msg
+               #flashfkey f7bbutton               
 out            pla
                rts
                .bend
@@ -545,13 +593,16 @@ out            pla
 ;-------------------------------------------------------------------------------
 f8action       .block
                pha
+               lda  #$0
+               sta  editmode
                lda  fkeyset
                bne  menub  
+               #affichemesg menub_msg
                #flashfkey f8abutton
-               #affichemesg   menub_msg
                jmp  swapit
-menub          #flashfkey f8bbutton               
-               #affichemesg   menua_msg
+menub
+               #affichemesg menua_msg
+               #flashfkey f8bbutton               
 swapit         eor  #$ff
                sta  fkeyset
                jsr  showfkeys

@@ -4,7 +4,7 @@ blankmsg       .byte     mesgcol,0,5,146
                .null     "                                      "
 f1a_msg
 edit_msg       .byte     mesgcol,0,5,18
-               .null     " entry mode: chr$(   )",146
+               .null     " edit mode: chr$(   )",146
 f2a_msg
 save_msg       .byte     mesgcol,0,5,146
                .null     " save on cassette or disk? (c/d):"
