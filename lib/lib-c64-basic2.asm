@@ -32,7 +32,8 @@ scrmaninit     .block
                lda  #vblanc
                sta  bascol
                lda  scrnram
-               and  #%11111101
+               ; and  #%11111101   ; entre en conflit avec les ... 
+                                   ; ... autres manipulations.
                sta  scrnram
                jsr  cls
                jsr  pop

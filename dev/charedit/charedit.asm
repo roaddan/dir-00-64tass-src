@@ -1,17 +1,18 @@
 ;-------------------------------------------------------------------------------
-; version : 20231105-22550021
+; version : 20231107-222128
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
                .include "localmacro.asm"
+scrnnewram     = $0400 
+charsdef       = 14
 
-               .enc     none
+               .enc     none 
 main           .block
                jsr  push
                jsr  screendis
-
+               jsr  scrmaninit
                jsr  copycharset
-
 ;               ; BASIC -> poke 53272, (peek(53272) and 240) or 12
 ;               lda  vicmemptr      ;$d018, 53272               
 ;               ; vicmemptr
@@ -26,14 +27,8 @@ main           .block
 ;                                   ; ... afin de conserver la mémoire vidéo à $0400.
 ;               ora  #charsdef      ; on place les bits 3210 à %xxxx001x ce qui ...
 ;                                   ; ... sélectionne la mémoire du bitmap des ...
-;                                   ; ... charactères à $0800. 
+;                                   ; ... charactères à charsdef * $0800. 
 ;               sta  vicmemptr      ; $d018, 53272
-
-
-
-
-               jsr  scrmaninit
-
 
                jsr  setscreenptr
 
@@ -42,12 +37,19 @@ main           .block
 
                lda  #$00
                sta  fkeyset
+;               #locate 0,21
+;               lda  53272
+;               jsr putabin
                jsr  showfkeys
                jsr  pop
-               jsr  f1action       
+               jsr  f8action       
+               jsr  f8action       
                jsr  keyaction
+               #locate 0,0
+               rts
                jsr  cls
                #affichemesg bye_msg
+               #affichemesg any_msg
                #locate 0,0
                jsr  getkey
                jsr  k_warmboot       
@@ -55,13 +57,163 @@ main           .block
 
                rts
                .bend
+
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-editor       .block
+template       .block
                jsr  push
                jsr  pop
                rts
+               .bend
+               
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+showkeyval     .block
+               jsr  push
+               #locate 0,20
+               jsr  putch
+               #locate 0,21
+               pha            ;1
+               lda  #'$'
+               jsr  putch
+               pla            ;0
+               pha            ;1
+               tax
+               lda  asciitorom,x
+               jsr  putahex
+               pla            ;0
+               #print txt1
+               #locate 0,22
+               pha            ;1
+               lda  #'$'
+               jsr  putch
+               pla            ;0
+               ;and  #$7f
+               jsr  putahex
+               #print txt2
+               #locate 0,24
+               pha            ;1
+               #print txt3
+               lda  #'%'
+               jsr  putch
+               tsx
+               txa
+               jsr  putabin
+               pla            ;0
+               jsr  pop
+               rts
+txt1           .null     " petscii code"
+txt2           .null     " getkey  code"
+txt3           .null     "stack: "
+               .bend
+               
+
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+keyaction      .block
+               jsr  push
+loop
+               ;#affichemesg keyaction_msg
+               jsr  getkey
+               jsr  showkeyval
+               cmp  #key_f1
+               beq  f1
+               cmp  #key_f2
+               beq  f2
+               cmp  #key_f3
+               beq  f3
+               cmp  #key_f4
+               beq  f4
+               cmp  #key_f5
+               beq  f5
+               cmp  #key_f6
+               beq  f6
+               cmp  #key_f7
+               beq  f7
+               cmp  #key_f8
+               beq  f8
+               cmp  #ctrl_x
+               beq  quit
+               jmp  loop
+f1             jsr  f1action
+               jmp  loop
+f2             jsr  f2action
+               jmp  loop
+f3             jsr  f3action
+               jmp  loop
+f4             jsr  f4action
+               jmp  loop
+f5             jsr  f5action
+               jmp  loop
+f6             jsr  f6action
+               jmp  loop
+f7             jsr  f7action
+               jmp  loop
+f8             jsr  f8action
+               jmp  loop
+quit           jsr  pop
+               rts
+keyaction_msg  .byte vrose,1,5
+               .null     "[keyaction]"
+               .bend
+editmode       .byte     0
+fkeyset        .byte     0
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+currentchar    .byte     0
+editor         .block
+               jsr  push
+               #affichemesg exit_msg
+               #affichemesg edit_msg
+ed_loop           
+               ;#affichemesg editor_msg
+               jsr  getkey
+               jsr  showkeyval
+               cmp  #cursu
+               beq  do_up
+               cmp  #cursd
+               beq  do_down
+               cmp  #cursl
+               beq  do_left
+               cmp  #cursr
+               beq  do_right
+               cmp  #$20
+               beq  do_swap
+               cmp  #ctrl_x
+               beq  do_ctrlx
+;               cmp  #$20
+;               bmi  ed_loop
+
+               ; ici on traite le changement de caractere
+;               tax
+;               lda  asciitorom,x
+               #locate 11,17
+               jsr putch
+
+
+               jmp  ed_loop
+do_up          
+               jmp  ed_loop
+do_down        
+               jmp  ed_loop
+do_left        
+               jmp  ed_loop
+do_right       
+               jmp  ed_loop
+do_swap        
+               jmp  ed_loop
+do_ctrlx       
+               #affichemesg quit_msg
+               jsr  pop
+               rts
+editor_msg     .byte vrose,1,5
+               .null     "[editor]"
                .bend
 ;-------------------------------------------------------------------------------
 ;
@@ -106,12 +258,9 @@ setscreenptr   .block
 ;               sta  $0288          ; On indique au kernal que la mémoire video ...
 ;                                   ; ... commence à 4 * 256 = 1024
 ;                                   ; 648 - top page of screen memory
-
                jsr  pop
                rts
                .bend
-scrnnewram     = $0400 
-charsdef       = 14
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -183,16 +332,17 @@ onemore        lda  (zpage1),y
                .bend
 
 bitmapmem =    charsdef * 1024     ;Calcul de la position ram des caracteres.
+mstopaddr =    $d000+(4*$800)
 startaddr      .word     $d000               ; 53248
+stopaddr       .word     mstopaddr           ; 55296 
 destaddr       .word     bitmapmem           ; $3000, 12288     
-stopaddr       .word     startaddr+(4*$800)  ; 55296 
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
 staticscreen   .block
                #changebord vgris1
                #changeback vgris
-               #uppercase
+               ;#uppercase
                jsr  showlines
                jsr  showallchars
                jsr  showgrid
@@ -218,7 +368,7 @@ showfkeys      .block
                #printcxy f6abutton
                #printcxy f7abutton
                #printcxy f8abutton
-               jmp end
+               jmp end 
 secondks       #printcxy f1bbutton
                #printcxy f2bbutton
                #printcxy f3bbutton
@@ -367,96 +517,6 @@ yagain         dey
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-template       .block
-               jsr  push
-               jsr  pop
-               rts
-               .bend
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-keyaction      .block
-               jsr  push
-loop           jsr  getkey
-               #locate 0,20
-               jsr  putch
-               #locate 0,21
-               pha
-               pha
-               lda  #'$'
-               jsr  putch
-               pla
-               tax
-               lda  asciitorom,x
-               jsr  putahex
-               #print txt1
-               #locate 0,22
-               lda  #'$'
-               jsr  putch
-               pla
-               ;and  #$7f
-               jsr  putahex
-               #print txt2
-               cmp  #key_f1
-               beq  f1
-               cmp  #key_f2
-               beq  f2
-               cmp  #key_f3
-               beq  f3
-               cmp  #key_f4
-               beq  f4
-               cmp  #key_f5
-               beq  f5
-               cmp  #key_f6
-               beq  f6
-               cmp  #key_f7
-               beq  f7
-               cmp  #key_f8
-               beq  f8
-               cmp  #ctrl_x
-               beq  quit
-               ldx  editmode  ; Sommes nous en mode edition?
-               bne  mainloop  ; Non, on branche vers le menu principale
-               cmp  #cursu    ; 
-               beq  toeditor
-               cmp  #cursd
-               beq  toeditor
-               cmp  #cursl
-               beq  toeditor
-               cmp  #cursr
-               beq  toeditor
-               cmp  #$20
-               beq  toeditor
-mainloop       jmp  loop
-f1             jsr  f1action
-               jmp  loop
-f2             jsr  f2action
-               jmp  loop
-f3             jsr  f3action
-               jmp  loop
-f4             jsr  f4action
-               jmp  loop
-f5             jsr  f5action
-               jmp  loop
-f6             jsr  f6action
-               jmp  loop
-f7             jsr  f7action
-               jmp  loop
-f8             jsr  f8action
-               jmp  loop
-toeditor       jsr  editor
-quit           jmp  loop
-               jsr  pop
-               rts
-txt1           .null     " rom pos."
-txt2           .null     " key value"
-               .bend
-editmode       .byte     0
-fkeyset        .byte     0
-               
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
 f1action       .block
                pha
                lda  #$ff
@@ -465,14 +525,21 @@ f1action       .block
                bne  menub  
                #affichemesg f1a_msg
                #flashfkey f1abutton
+               jsr  editor
+               #affichemesg f1a_msg
                jmp  out
 menub
                lda  #$0
                sta  editmode
                #affichemesg f1b_msg
-               #flashfkey f1bbutton               
+               #flashfkey f1bbutton    
+
+
 out            pla
                rts
+
+test_msg       .byte     vblanc,1,5
+               .null     "[f1-action]"
                .bend
 
 ;-------------------------------------------------------------------------------

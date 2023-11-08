@@ -53,12 +53,20 @@ menua_msg      .byte     mesgcol,0,5
                .null     " you are now in menu a."
 menub_msg      .byte     mesgcol,0,5
                .null     " you are now in menu b."
+               
 quit_msg       .byte     vblue1,21,24,18
                .text     "ctrl-x",146
                .null     " to quit."     
 
-bye_msg        .byte     vrose,6,12,18
-               .null     " Thanks and have a good day ",146
+exit_msg       .byte     vvert1,21,24,18
+               .text     "ctrl-x",146
+               .null     " to menu."     
+
+bye_msg        .byte     vcyan,6,12,18
+               .null     " thanks and have a good day ",146
+
+any_msg        .byte     vjaune,10,24,18
+               .null         " any key to continue ",146
         
 
 
