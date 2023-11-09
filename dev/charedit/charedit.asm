@@ -5,56 +5,30 @@
                .include "macros-64tass.asm"
                .include "localmacro.asm"
 scrnnewram     = $0400 
-charsdef       = 14
-
+charsdef       = 12
                .enc     none 
 main           .block
                jsr  push
                jsr  screendis
                jsr  scrmaninit
                jsr  copycharset
-;               ; BASIC -> poke 53272, (peek(53272) and 240) or 12
-;               lda  vicmemptr      ;$d018, 53272               
-;               ; vicmemptr
-;               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
-;               ;  |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0   |
-;               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
-;               ;  |  txt  |  txt  |  txt  |  txt  | chars | chars | chars |       | 
-;               ;  |  scr  |  scr  |  scr  |  scr  |  def  |  def  |  def  |   X   |
-;               ;  | bit 3 | bit 2 | bit 1 | bit 0 | bit 2 | bit 1 | bit 0 |       |
-;               ;  +-------+-------+-------+-------+-------+-------+-------+-------+
-;               and  #%11110000     ; On conserve les bits 7654 de ce registre ...
-;                                   ; ... afin de conserver la mémoire vidéo à $0400.
-;               ora  #charsdef      ; on place les bits 3210 à %xxxx001x ce qui ...
-;                                   ; ... sélectionne la mémoire du bitmap des ...
-;                                   ; ... charactères à charsdef * $0800. 
-;               sta  vicmemptr      ; $d018, 53272
-
                jsr  setscreenptr
-
                jsr  staticscreen
                jsr  screenena
-
                lda  #$00
                sta  fkeyset
-;               #locate 0,21
-;               lda  53272
-;               jsr putabin
                jsr  showfkeys
                jsr  pop
                jsr  f8action       
                jsr  f8action       
                jsr  keyaction
                #locate 0,0
-               rts
                jsr  cls
                #affichemesg bye_msg
                #affichemesg any_msg
                #locate 0,0
                jsr  getkey
                jsr  k_warmboot       
-
-
                rts
                .bend
 
@@ -72,9 +46,11 @@ template       .block
 ;-------------------------------------------------------------------------------
 showkeyval     .block
                jsr  push
-               #locate 0,20
+               #locate 0,19
                jsr  putch
-               #locate 0,21
+
+
+               #locate 0,20
                pha            ;1
                lda  #'$'
                jsr  putch
@@ -85,7 +61,8 @@ showkeyval     .block
                jsr  putahex
                pla            ;0
                #print txt1
-               #locate 0,22
+
+               #locate 0,21
                pha            ;1
                lda  #'$'
                jsr  putch
@@ -93,8 +70,9 @@ showkeyval     .block
                ;and  #$7f
                jsr  putahex
                #print txt2
-               #locate 0,24
+
                pha            ;1
+               #locate 0,24
                #print txt3
                lda  #'%'
                jsr  putch
@@ -102,6 +80,7 @@ showkeyval     .block
                txa
                jsr  putabin
                pla            ;0
+               jsr  delay
                jsr  pop
                rts
 txt1           .null     " petscii code"
@@ -109,8 +88,6 @@ txt2           .null     " getkey  code"
 txt3           .null     "stack: "
                .bend
                
-
-
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -167,6 +144,7 @@ fkeyset        .byte     0
 ;
 ;-------------------------------------------------------------------------------
 currentchar    .byte     0
+bitmapoffset   .byte     0
 editor         .block
                jsr  push
                #affichemesg exit_msg
@@ -187,15 +165,14 @@ ed_loop
                beq  do_swap
                cmp  #ctrl_x
                beq  do_ctrlx
-;               cmp  #$20
-;               bmi  ed_loop
-
-               ; ici on traite le changement de caractere
-;               tax
-;               lda  asciitorom,x
-               #locate 11,17
+               cmp  #$20
+               bmi  ed_loop
+               #locate 13,12
                jsr putch
-
+               tax
+               lda  asciitorom,x
+               sta  bitmapoffset
+               jsr  drawbitmap
 
                jmp  ed_loop
 do_up          
@@ -218,12 +195,78 @@ editor_msg     .byte vrose,1,5
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
+gligne=8
+gcol=1
+drawbitmap     .block
+               jsr  push
+               
+               lda  #<letext
+               sta  zpage2
+               lda  #<letext+1
+               sta  zpage2+1
+
+               lda  #gcol
+               sta  textline+1
+               lda  #gligne
+               sta  textline+2
+               
+               lda  bitmapaddr
+               sta  zpage1
+               lda  bitmapaddr+1
+               sta  zpage1+1
+               ; on ajuste l'offset du pointeur de bitmap
+               ldx  bitmapoffset
+               beq  drawchar
+addagain       lda  #8
+               jsr  zp1addnum
+               dex
+               bne  addagain
+
+               ; On affiche les 8 lignes du caractere
+
+drawchar       ldx  #0        ; 8 bytes to draw
+               ldy  #0
+nextline       txa
+               tay        
+               lda  (zpage1),y               ; premier byte           
+               ldy  #$0
+nextbit        asl
+               pha
+               bcs  bitset
+bitclear       lda  #$04
+               jmp  putbit
+bitset         lda  #$a0
+putbit         sta  (zpage2),y
+               pla  ; pop pour le prochain asl
+               iny
+               cpy  #$8
+               bmi  nextbit
+oktoprint      #printxy textline
+               ; on passe a la prochaine ligne
+               ; on ajuste le pointeur
+               clc
+               inc  textline+2 
+norep          inx
+               cpx  #$8
+               bmi  nextline
+               ; la ligne est fini on ajoute 40 au scrptr
+               jsr  pop
+               rts
+textline       .byte vblanc,gcol,gligne
+letext         .null "        "
+               .bend
+
+
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 setscreenptr   .block
                jsr  push
 
 ;               ; BASIC -> print chr$(8)
-;               lda  #$08      ; basic commande to disable ...
-;               jsr  chrout    ; ... character set change.
+               lda  #$08      ; basic commande to disable ...
+               jsr  chrout    ; ... character set change.
                
 ;               ; BASIC -> poke 56578,peek(56578) or 3
 ;               lda  cia2ddra  ;$dd02, 56578 cia2 data direction A
@@ -308,9 +351,9 @@ memcopy        .block
                sta  zpage1
                lda  startaddr+1
                sta  zpage1+1
-               lda  destaddr
+               lda  bitmapaddr
                sta  zpage2
-               lda  destaddr+1
+               lda  bitmapaddr+1
                sta  zpage2+1
                ldy  #$00
 
@@ -335,7 +378,7 @@ bitmapmem =    charsdef * 1024     ;Calcul de la position ram des caracteres.
 mstopaddr =    $d000+(4*$800)
 startaddr      .word     $d000               ; 53248
 stopaddr       .word     mstopaddr           ; 55296 
-destaddr       .word     bitmapmem           ; $3000, 12288     
+bitmapaddr     .word     bitmapmem           ; $3000, 12288     
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -449,8 +492,7 @@ another93      sta  (zpage1),y
 ;
 ;-------------------------------------------------------------------------------
 showgrid      .block
-gligne=8
-gcol=1
+
                jsr  push
                jsr  screendis
                lda  #<scrnnewram+(40*(gligne))+gcol
@@ -474,11 +516,45 @@ nextcol        sta  (zpage1),y
 nextlin        sta  (zpage1),y
                dey  
                bne  nextlin
+               lda  #$3e
+               sta  scrnnewram+(40*(12))+11
+               lda  #$70                     ;+
+               sta  scrnnewram+(40*(11))+12
+               lda  #$43                    ;-
+               sta  scrnnewram+(40*(11))+13  
+               lda  #$6e                     ;+
+               sta  scrnnewram+(40*(11))+14
+               lda  #$5d                     ;|
+               sta  scrnnewram+(40*(12))+12
+               lda  #$5d                     ;|
+               sta  scrnnewram+(40*(12))+14
+               lda  #$6d                     ;+
+               sta  scrnnewram+(40*(13))+12
+               lda  #$43                     ;-
+               sta  scrnnewram+(40*(13))+13  
+               lda  #$7d                     ;+
+               sta  scrnnewram+(40*(13))+14
+
                jsr screenena
                jsr  pop
                rts
                .bend
 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+zp1addnum       .block
+               php
+               pha
+               clc
+               adc  zpage1
+               bcc  nocarry
+               inc  zpage1+1
+nocarry        sta  zpage1
+               pla
+               plp
+               rts
+               .bend
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
