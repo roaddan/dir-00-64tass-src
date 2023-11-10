@@ -1,9 +1,9 @@
-mesgcol = vjaune
+
 
 blankmsg       .byte     mesgcol,0,5,146
                .null     "                                      "
 f1a_msg
-edit_msg       .byte     mesgcol,0,5,18
+edit_msg       .byte     mesgcol,0,5,146     ;18
                .null     " edit mode: chr$(   )",146
 f2a_msg
 save_msg       .byte     mesgcol,0,5,146
@@ -53,7 +53,7 @@ menua_msg      .byte     mesgcol,0,5
                .null     " you are now in menu a."
 menub_msg      .byte     mesgcol,0,5
                .null     " you are now in menu b."
-               
+
 quit_msg       .byte     vblue1,21,24,18
                .text     "ctrl-x",146
                .null     " to quit."     

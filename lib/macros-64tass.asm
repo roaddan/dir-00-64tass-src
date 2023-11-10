@@ -53,8 +53,8 @@ color          .macro    col
 
 print          .macro pointer
                jsr  push
-               ldx  #<\pointer
-               ldy  #>\pointer
+isx            ldx  #<\pointer
+isy            ldy  #>\pointer
                jsr  puts
                jsr  pull
                .endm

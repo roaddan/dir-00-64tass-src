@@ -17,6 +17,8 @@ a2hexprefix    .byte     "$"            ; pour aputs
 a2hexstr       .word     $00
                .word     $00
                .byte     0              ; 0 end string
+abin           .null     "00000000"
+adec           .null     "   "
 putahexfmtxy   .block
                jsr  push
                jsr  a2hex
@@ -143,31 +145,43 @@ xy2hex         .block
 ; binaire dans abin. 
 ;***************************************
 atobin         .block
-               jsr     push
-               ldx     #8
-               ldy     #0
+               jsr  push
+               ldx  #8
+               ldy  #0
+               clc
 nextbit        rol
                pha
-               adc     #$00
-               and     #$01
-               jsr     nib2hex
-               sta     abin,y
+               adc  #$00
+               and  #$01
+               jsr  nib2hex
+               sta  abin,y
                pla
                iny
                dex
-               bne     nextbit
-               lda     #0
-               sta     abin,y
-               jsr     pull
+               bne  nextbit
+               lda  #0
+               sta  abin,y
+               jsr  pull
                rts
                .bend          
-abin           .null   "00000000"
 ;***************************************
 ; affiche le contenu de abin à la 
 ; position du curseur.
 ;***************************************
 putabin        .block
                jsr     atobin
+               jsr     push
+               ldx     #<abin
+               ldy     #>abin
+               jsr     puts
+               jsr     pop
+               rts
+               .bend
+;***************************************
+; affiche le contenu de abin à la 
+; position du curseur.
+;***************************************
+printabin      .block
                jsr     push
                ldx     #<abin
                ldy     #>abin
@@ -209,3 +223,39 @@ putabinfmtxy   .block
                jsr     putabinfmt
                rts
                .bend
+;***************************************
+; Converti le contenu de A en chaine 
+; decimale dans adec. 
+;***************************************
+atodec         .block
+               jsr  push
+               sed
+               tax
+               ldy  #$00
+               lda  #$00
+nextbit        clc
+               adc  #$01
+               bcc  decx
+               iny
+decx           dex
+               bne  nextbit
+               pha  
+               tya
+               jsr  nib2hex
+               sta  adec
+               pla
+               pha
+               jsr  nib2hex
+               sta  adec+2
+               pla
+               ror
+               ror
+               ror
+               ror
+               jsr  nib2hex
+               sta  adec+1
+               cld
+               jsr  pull
+               rts
+buffer         .byte     0,0,0
+               .bend          
