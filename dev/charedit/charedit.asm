@@ -28,7 +28,10 @@ main           .block
                jsr  showfkeys
                jsr  pop
                jsr  f8action       
-               jsr  f8action       
+               jsr  f8action
+               lda  #$00
+;               lda  #'A'
+;               sta  scrnnewram,x      
                jsr  keyaction
                #locate 0,0
                jsr  cls
@@ -55,10 +58,12 @@ template       .block
 showkeyval     .block
                jsr  push
 
-               lda  currentkey
+
                #locate 1,19
-               #print txt0
-               jsr  putch
+               ;#print txt0
+               ;lda  currentkey
+               jsr  putabin
+               ;jsr  putch
 
                #locate 1,20
                #print txt1
@@ -94,12 +99,12 @@ showkeyval     .block
                lda  mapaddr
                jsr  putahex
 
-               #locate 1,23
+               #locate 1,24
                #print txt5
-               lda  #'$'
-               jsr  putch
                lda  curscl
                jsr  putahex
+               lda  #$da
+               jsr  putch
                lda  cursln
                jsr  putahex
 
@@ -111,7 +116,7 @@ txt1           .null     "key code: "
 txt2           .null     "bitmap..: "
 txt3           .null     "offset..:   "
 txt4           .null     "mapaddr.: "
-txt5           .null     "pixaddr.: "
+txt5           .null     "cursval.: "
 txt6           .null     "stack......:"
                .bend
                
@@ -173,27 +178,45 @@ editor         .block
                jsr  push
                #affichemesg exit_msg
                #affichemesg edit_msg
-ed_loop           
-               ;#affichemesg editor_msg
+               lda  #'@'
+               sta  currentkey
+               #locate   13,12
+               jsr  putch
+               tax
+               ldy  asciitorom,x
+               sty  bitmapoffset
+               ;jsr  showkeyval
+               jsr  drawbitmap
+               jsr  setcurs
+ed_loop        ;#affichemesg editor_msg
                jsr  getkey
                sta  currentkey
                tax
                ldy  asciitorom,x
                sty  bitmapoffset
-               cmp  #cursu
-               beq  do_up
-               cmp  #cursd
-               beq  do_down
-               cmp  #cursl
-               beq  do_left
-               cmp  #cursr
-               beq  do_right
-               cmp  #$20
-               beq  do_swap
-               cmp  #ctrl_x
-               beq  do_ctrlx
-               ;cmp  #$20
+; --- gestion des touches ---
+cu             cmp  #cursu
+               bne  cd
+               jmp  do_up
+cd             cmp  #cursd
+               bne  cl
+               jmp  do_down
+cl             cmp  #cursl
+               bne  cr
+               jmp  do_left
+cr             cmp  #cursr
+               bne  sp
+               jmp  do_right
+sp             cmp  #$20
+               bne  cx
+               jmp  do_swap
+cx             cmp  #ctrl_x
+               bne  rest
+               jmp  do_ctrlx
+rest           ;cmp  #$20
                ;bmi  ed_loop
+               
+
                #locate   13,12
                jsr  putch
                #locate   17,5
@@ -239,16 +262,42 @@ do_right       lda  curscl
                inc  curscl
                jsr  setcurs
                jmp  totop
-do_swap        
-
-totop          jsr  showkeyval
+do_swap        jsr  do_eor
+               jmp  totop
+totop          ;jsr  showkeyval
                jmp  ed_loop
-do_ctrlx       
+do_ctrlx       jsr  clrcurs
                #affichemesg quit_msg
                jsr  pop
                rts
 editor_msg     .byte vrose,1,5
                .null     "[editor]"
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+; use     byteaddr,cursln,curscl
+do_eor         .block
+               jsr  push
+               lda  #<mapaddr
+               sta  zpage2
+               lda  #>mapaddr+1
+               sta  zpage2+1
+
+               ldx  cursln     ; calcul de 
+               dex            ; l'offset de 
+               txa            ; la 
+               and  #$f7      ; ligne
+               tay
+               ldx  curscl
+               dex
+               lda  eorval,x
+               eor  (zpage2),y
+               jsr  showkeyval
+               sta  (zpage2),y
+               jsr  pop
+               rts
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -308,25 +357,26 @@ drawbitmap     .block
                lda  #grid_top
                sta  textline+2
                
-               lda  bitmapaddr     ; on pointe sur la table des bitmaps
-               sta  zpage1
-               lda  bitmapaddr+1
-               sta  zpage1+1
+               jsr  calcmapaddr              
 
-               ; on ajuste l'offset du pointeur de bitmap
-               ldx  bitmapoffset
-               cpx  #$00
-               beq  drawchar       ; sommes nous déja à 0
-addagain       lda  #8
-               jsr  zp1addnum      ; on augmente de 8 byte ...
-               dex                 ; pour chaque caracteres
-               bne  addagain
-               pha
-               lda  zpage1
-               sta  mapaddr
-               lda  zpage1+1
-               sta  mapaddr+1
-               pla
+               lda  mapaddr     ; on pointe sur la table des bitmaps
+               sta  zpage1
+               lda  mapaddr+1
+               sta  zpage1+1
+;               ; on ajuste l'offset du pointeur de bitmap
+;               ldx  bitmapoffset
+;               cpx  #$00
+;               beq  thesame       ; sommes nous déja à 0
+;addagain       lda  #8
+;               jsr  zp1addnum      ; on augmente de 8 byte ...
+;               dex                 ; pour chaque caracteres
+;               bne  addagain
+;thesame        pha
+;               lda  zpage1
+;               sta  mapaddr
+;               lda  zpage1+1
+;               sta  mapaddr+1
+;               pla
                ; On affiche les 8 lignes du caractere
 drawchar       ldy  #$00      
                ldx  #grid_top      ;on replace la ...
@@ -344,12 +394,39 @@ isy            ldy  #$00      ; la ligne (autoinc)
                iny
                cpy  #$08
                bmi  nextline
-
                jsr  pop
                rts
 textline       .byte vblanc,grid_left,grid_top
 letext         .null "        "
                .bend
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+calcmapaddr    .block
+               jsr  push
+               lda  bitmapaddr     ; on pointe sur la table des bitmaps
+               sta  zpage1
+               lda  bitmapaddr+1
+               sta  zpage1+1
+               ; on ajuste l'offset du pointeur de bitmap
+               ldx  bitmapoffset
+               cpx  #$00
+               beq  thesame         ; sommes nous déja à 0
+addagain       lda  #8
+               jsr  zp1addnum      ; on augmente de 8 byte ...
+               dex                 ; pour chaque caracteres
+               bne  addagain
+thesame        pha
+               lda  zpage1
+               sta  mapaddr
+               lda  zpage1+1
+               sta  mapaddr+1
+               pla
+               jsr  showkeyval
+out            jsr  pop
+               rts
+               .bend
+
 
 ;-------------------------------------------------------------------------------
 ;
@@ -862,6 +939,7 @@ swapit         eor  #$ff
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
+eorval         .byte     $80,$40,$20,$10,$08,$04,$02,$01
 editmode       .byte     0
 fkeyset        .byte     0
 currentchar    .byte     0
