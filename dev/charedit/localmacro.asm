@@ -8,7 +8,7 @@ affichemesg    .macro msgptr
                jsr  putscxy
                jsr  pop
                .endm
-flashcol = vvert1
+
 flashfkey      .macro fkeyptr
                php
                pha

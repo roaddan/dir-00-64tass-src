@@ -1,4 +1,6 @@
 
+editor_msg     .byte vrose,1,5
+               .null     "[editor]"
 
 blankmsg       .byte     mesgcol,0,5,146
                .null     "                                      "
@@ -62,12 +64,38 @@ exit_msg       .byte     vvert1,21,24,18
                .text     "ctrl-x",146
                .null     " to menu."     
 
-bye_msg        .byte     vcyan,6,12,18
+bye_msg        .byte     vcyan,6,20,18
                .null     " thanks and have a good day ",146
 
-any_msg        .byte     vjaune,10,24,18
-               .null         " any key to continue ",146
+any_msg        .byte     vvert1,10,24,18
+               .null         "  any key to basic  ",146
         
+whoami0        .byte     vmauve,4,6,18
+               .null     "                               "
+
+whoami1        .byte     vmauve,4,7,18
+               .null     "           charedit            "
+ 
+whoami2        .byte     vmauve,4,8,18
+               .null     "                               "
+
+whoami3        .byte     vmauve,4,9,18
+               .null     "  inspired from john heilborn  "
+
+whoami4        .byte     vmauve,4,10,18
+               .null     "      isbn: 0-942386-29-9      "
+
+whoami5        .byte     vmauve,4,11,18
+               .null     "                               "
+
+whoami6        .byte     vmauve,4,12,18
+               .null     " coded in assembly language by "
+
+whoami7        .byte     vmauve,4,13,18
+               .null     "     daniel lafrance 2023      "
+
+whoami8        .byte     vmauve,4,14,18
+               .null     "                               "
 
 
 fkeyleft=18
@@ -110,7 +138,7 @@ f7abutton      .byte     menu1col,fkeyleft,f1top+12    ;136
                .text     "   f7   "
                .byte     146,0
 f8abutton      .byte     menu1col,fkeyleft,f1top+14
-               .text     "function.... "
+               .text     "function...."
                .byte     18             ; position 15
                .text     "   f8   "
                .byte     146,0
@@ -151,7 +179,7 @@ f7bbutton      .byte     menu2col,fkeyleft,f1top+12
                .text     "   f7   "
                .byte     146,0
 f8bbutton      .byte     menu2col,fkeyleft,f1top+14
-               .text     "function.... "
+               .text     "function...."
                .byte     18             ; position 15
                .text     "   f8   "
                .byte     146,0
