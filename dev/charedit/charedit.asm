@@ -1,19 +1,21 @@
 ;-------------------------------------------------------------------------------
-; version : 20231107-222128 
+; version : 20231107-222128
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
                .include "localmacro.asm"
                .enc     none 
 
-scrnnewram     = $0400 
-charsdef       = 14
-mesgrid_left   = vvert1
-grid_top       =         9
-grid_left      =         1
-grid_bot       =         grid_top + 7
-grid_right     =         grid_left + 7
-mesgcol        =         vvert1    
+scrnnewram     =    $0400 
+charsdef       =    14
+mesgrid_left   =    vvert1
+grid_top       =    9
+grid_left      =    1
+grid_bot       =    grid_top + 7
+grid_right     =    grid_left + 7
+mesgcol        =    vcyan
+menu1col       =    vjaune
+menu2col       =    vvert1      
 
 main           .block
                jsr  push
@@ -22,6 +24,7 @@ main           .block
                jsr  copycharset
                jsr  setscreenptr
                jsr  staticscreen
+               jsr  setdefaultchar
                jsr  screenena
                lda  #$00
                sta  fkeyset
@@ -51,19 +54,79 @@ template       .block
                jsr  pop
                rts
                .bend
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+setdefaultchar .block
+               jsr  push
+               lda  #$40
+               sta  currentkey
+               tax
+               ldy  asciitorom,x
+               sty  bitmapoffset
+               jsr  showkeyval
+               jsr  drawbitmap
+               #locate   13,12
+               jsr  putch
+               #locate   17,5
+               jsr  atodec
+               #print    adec
+               jsr  pop
+               rts
+               .bend
+
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+setmenuacolor  .block
+               jsr  push
+               sta  f1abutton
+               sta  f2abutton
+               sta  f3abutton
+               sta  f4abutton
+               sta  f5abutton
+               sta  f6abutton
+               sta  f7abutton
+               sta  f8abutton
+               ;jsr  showfkeys
+               jsr  pop
+               rts
+               .bend
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+setmenubcolor  .block
+               jsr  push
+               sta  f1bbutton
+               sta  f2bbutton
+               sta  f3bbutton
+               sta  f4bbutton
+               sta  f5bbutton
+               sta  f6bbutton
+               sta  f7bbutton
+               sta  f8bbutton
+               ;jsr  showfkeys
+               jsr  pop
+               rts
+               .bend
                
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
 showkeyval     .block
                jsr  push
-
-
                #locate 1,19
                ;#print txt0
-               ;lda  currentkey
+               lda  currentkey
+               jsr  putch
+               pha
+               lda  #'='
+               jsr  putch
+               lda  #'%'
+               jsr  putch
+               pla
                jsr  putabin
-               ;jsr  putch
 
                #locate 1,20
                #print txt1
@@ -129,43 +192,65 @@ loop
                ;#affichemesg keyaction_msg
                jsr  getkey
                sta  currentkey
-               ;jsr  showkeyval
-               cmp  #key_f1
-               beq  f1
-               cmp  #key_f2
-               beq  f2
-               cmp  #key_f3
-               beq  f3
-               cmp  #key_f4
-               beq  f4
-               cmp  #key_f5
-               beq  f5
-               cmp  #key_f6
-               beq  f6
-               cmp  #key_f7
-               beq  f7
-               cmp  #key_f8
-               beq  f8
-               cmp  #ctrl_x
-               beq  quit
+               jsr  showkeyval
+f1             cmp  #key_f1
+               bne  f2
+               jmp  dof1
+f2             cmp  #key_f2
+               bne  f3
+               jmp  dof2
+f3             cmp  #key_f3
+               bne  f4
+               jmp  dof3
+f4             cmp  #key_f4
+               bne  f5
+               jmp  dof4
+f5             cmp  #key_f5
+               bne  f6
+               jmp  dof5
+f6             cmp  #key_f6
+               bne  f7
+               jmp  dof6
+f7             cmp  #key_f7
+               bne  f8
+               jmp  dof7
+f8             cmp  #key_f8
+               bne  ctrlx
+               jmp  dof8
+ctrlx          cmp  #ctrl_x
+               bne  reste
+               jmp  doquit
+reste          #locate   13,12
+               jsr  putch
+               sta  currentkey
+               tax
+               ldy  asciitorom,x
+               sty  bitmapoffset
+               jsr  showkeyval
+               jsr  drawbitmap
+               #locate   13,12
+               jsr  putch
+               #locate   17,5
+               jsr  atodec
+               #print    adec
                jmp  loop
-f1             jsr  f1action
+dof1           jsr  f1action  ;edit/reverse
                jmp  loop
-f2             jsr  f2action
+dof2           jsr  f2action  ;save/flip vert
                jmp  loop
-f3             jsr  f3action
+dof3           jsr  f3action  ;load/flip horz
                jmp  loop
-f4             jsr  f4action
+dof4           jsr  f4action  ;copy/scroll r
                jmp  loop
-f5             jsr  f5action
+dof5           jsr  f5action  ;clear/scroll l
                jmp  loop
-f6             jsr  f6action
+dof6           jsr  f6action  ;fill;/scroll up
                jmp  loop
-f7             jsr  f7action
+dof7           jsr  f7action  ;clear;/scroll down
                jmp  loop
-f8             jsr  f8action
+dof8           jsr  f8action  ; function
                jmp  loop
-quit           jsr  pop
+doquit         jsr  pop
                rts
 
 keyaction_msg  .byte vrose,1,5
@@ -174,26 +259,19 @@ keyaction_msg  .byte vrose,1,5
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-editor         .block
+editor         .block 
                jsr  push
                #affichemesg exit_msg
                #affichemesg edit_msg
+               lda  #vgris1
+               jsr  setmenuacolor
+               lda  #vvert1
+               sta  f1abutton
+               jsr  showfkeys
                lda  #'@'
-               sta  currentkey
-               #locate   13,12
-               jsr  putch
-               tax
-               ldy  asciitorom,x
-               sty  bitmapoffset
-               ;jsr  showkeyval
-               jsr  drawbitmap
-               jsr  setcurs
-ed_loop        ;#affichemesg editor_msg
+ed_loop        jsr  setcurs
                jsr  getkey
-               sta  currentkey
-               tax
-               ldy  asciitorom,x
-               sty  bitmapoffset
+               ;#affichemesg editor_msg
 ; --- gestion des touches ---
 cu             cmp  #cursu
                bne  cd
@@ -205,24 +283,27 @@ cl             cmp  #cursl
                bne  cr
                jmp  do_left
 cr             cmp  #cursr
-               bne  sp
-               jmp  do_right
-sp             cmp  #$20
                bne  cx
-               jmp  do_swap
+               jmp  do_right
 cx             cmp  #ctrl_x
-               bne  rest
+               bne  sp
                jmp  do_ctrlx
-rest           ;cmp  #$20
-               ;bmi  ed_loop
-               
-
+sp             cmp  #$20
+               bne  rest
+               jmp  do_swap
+rest           #locate   13,12
+               jsr  putch
+               sta  currentkey
+               tax
+               ldy  asciitorom,x
+               sty  bitmapoffset
+               jsr  showkeyval
+               jsr  drawbitmap
                #locate   13,12
                jsr  putch
                #locate   17,5
                jsr  atodec
                #print    adec
-               jsr  drawbitmap
                jmp  totop
 ;-------------------------------------------------------------------------------
 ; specific actions for certain keys
@@ -263,11 +344,10 @@ do_right       lda  curscl
                jsr  setcurs
                jmp  totop
 do_swap        jsr  do_eor
+               jsr  drawbitmap
                jmp  totop
-totop          ;jsr  showkeyval
-               jmp  ed_loop
+totop          jmp  ed_loop
 do_ctrlx       jsr  clrcurs
-               #affichemesg quit_msg
                jsr  pop
                rts
 editor_msg     .byte vrose,1,5
@@ -280,9 +360,9 @@ editor_msg     .byte vrose,1,5
 ; use     byteaddr,cursln,curscl
 do_eor         .block
                jsr  push
-               lda  #<mapaddr
+               lda  mapaddr
                sta  zpage2
-               lda  #>mapaddr+1
+               lda  mapaddr+1
                sta  zpage2+1
 
                ldx  cursln     ; calcul de 
@@ -352,14 +432,14 @@ drawbitmap     .block
                lda  #<letext+1
                sta  zpage2+1
 
-               lda  #grid_left          ; la position
+               lda  #grid_left     ; la position
                sta  textline+1
                lda  #grid_top
                sta  textline+2
                
                jsr  calcmapaddr              
 
-               lda  mapaddr     ; on pointe sur la table des bitmaps
+               lda  mapaddr        ; on pointe sur la table des bitmaps
                sta  zpage1
                lda  mapaddr+1
                sta  zpage1+1
@@ -368,8 +448,8 @@ drawbitmap     .block
 ;               cpx  #$00
 ;               beq  thesame       ; sommes nous déja à 0
 ;addagain       lda  #8
-;               jsr  zp1addnum      ; on augmente de 8 byte ...
-;               dex                 ; pour chaque caracteres
+;               jsr  zp1addnum     ; on augmente de 8 byte ...
+;               dex                ; pour chaque caracteres
 ;               bne  addagain
 ;thesame        pha
 ;               lda  zpage1
@@ -796,16 +876,39 @@ f1action       .block
                #affichemesg f1a_msg
                #flashfkey f1abutton
                jsr  editor
-               #affichemesg f1a_msg
+               #affichemesg quit_msg
+               #affichemesg menua_msg
+               lda  #menu1col
+               jsr  setmenuacolor
+               jsr  showfkeys
                jmp  out
 menub          lda  #$0
                sta  editmode
                #affichemesg f1b_msg
-               #flashfkey f1bbutton    
+               #flashfkey f1bbutton
+               jsr  reverse
+               jsr  drawbitmap   
 out            pla
                rts
 test_msg       .byte     vblanc,1,5
                .null     "[f1-action]"
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+reverse        .block
+               jsr  push
+               #setzpage2     mapaddr
+               ldy  #$00
+again          lda  (zpage2),y
+               eor  #$ff
+               sta  (zpage2),y
+               iny
+               cpy  #$08
+               bne  again
+               jsr  pop
+               rts
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -821,10 +924,35 @@ f2action       .block
                #flashfkey f2abutton
                jmp  out
 menub          #affichemesg f2b_msg
-               #flashfkey f2bbutton               
+               #flashfkey f2bbutton
+               jsr  flipvert
+               jsr  drawbitmap 
 out            pla
                rts
                .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+flipvert       .block
+               jsr  push
+               #setzpage2     mapaddr
+               ldy  #$00
+tostack        lda  (zpage2),y
+               pha
+               iny
+               cpy  #$08
+               bne  tostack
+               ldy  #$00
+fromstack      pla
+               sta  (zpage2),y
+               iny
+               cpy  #$08
+               bne  fromstack
+               jsr  pop
+               rts
+               .bend
+
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -838,9 +966,35 @@ f3action       .block
                #flashfkey f3abutton
                jmp  out
 menub          #affichemesg f3b_msg
-               #flashfkey f3bbutton               
+               #flashfkey f3bbutton
+               jsr  fliphorz
+               jsr  drawbitmap                
 out            pla
                rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+fliphorz       .block
+               jsr  push
+               #setzpage2     mapaddr
+               ldy  #$00
+nextbyte       lda  (zpage2),y
+               ldx  #$00
+rolagain       rol
+               ror  tmpbyte
+               inx
+               cpx  #$08
+               bmi  rolagain
+               lda  tmpbyte
+               sta  (zpage2),y     
+               iny
+               cpy  #$08
+               bmi  nextbyte
+               jsr  pop
+               rts
+tmpbyte        .byte     $00
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -872,10 +1026,36 @@ f5action       .block
                bne  menub  
                #affichemesg f5a_msg
                #flashfkey f5abutton
+               jsr  clearchar
+               jsr  drawbitmap  
                jmp  out
 menub          #affichemesg f5b_msg
                #flashfkey f5bbutton               
 out            pla
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+clearchar      .block
+               jsr  push
+               lda  #$00
+               jsr  allsame
+               jsr  pop
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+allsame        .block
+               #setzpage2     mapaddr
+               ldy  #$00
+again          sta  (zpage2),y
+               iny
+               cpy  #$08
+               bne  again
                rts
                .bend
 
@@ -890,12 +1070,52 @@ f6action       .block
                bne  menub  
                #affichemesg f6a_msg
                #flashfkey f6abutton
+               jsr  fillchar
+               jsr  drawbitmap 
                jmp  out
 menub          #affichemesg f6b_msg
-               #flashfkey f6bbutton               
+               #flashfkey f6bbutton
+               jsr  scrollup               
+               jsr  drawbitmap 
 out            pla
                rts
                .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+fillchar      .block
+               jsr  push
+               lda  #$ff
+               jsr  allsame
+               jsr  pop
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+scrollup       .block
+               jsr  push
+               #setzpage1     mapaddr
+               #setzpage2     mapaddr
+               jsr  inczp2
+               ldy  #$00
+               lda  (zpage1),y
+               sta  tmpbyte
+again          lda  (zpage2),y
+               sta  (zpage1),y
+               iny
+               cpy  #$07
+               bne  again
+               lda  tmpbyte
+               sta  (zpage1),y  
+               jsr  pop
+               rts
+tmpbyte        .byte     $00
+               .bend
+
+
 
 ;-------------------------------------------------------------------------------
 ;
@@ -910,9 +1130,34 @@ f7action       .block
                #flashfkey f7abutton
                jmp  out
 menub          #affichemesg f7b_msg
-               #flashfkey f7bbutton               
+               #flashfkey f7bbutton
+               jsr  scrolldown 
+               jsr  drawbitmap               
 out            pla
                rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+scrolldown     .block
+               jsr  push
+               #setzpage1     mapaddr
+               #setzpage2     mapaddr
+               jsr  deczp2
+               ldy  #$07
+               lda  (zpage1),y
+               sta  tmpbyte
+again          dey
+               lda  (zpage1),y
+               sta  (zpage2),y
+               cpy  #$01
+               bne  again
+               lda  tmpbyte
+               sta  (zpage2),y  
+               jsr  pop
+               rts
+tmpbyte        .byte     $00
                .bend
 
 ;-------------------------------------------------------------------------------

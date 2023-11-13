@@ -29,10 +29,10 @@ rvrs_msg       .byte     mesgcol,0,5
                .null     " reverse character:"
 f2b_msg
 invr_msg       .byte     mesgcol,0,5
-               .null     " inverting character:"
+               .null     " flipping vertically:"
 f3b_msg
 flip_msg       .byte     mesgcol,0,5
-               .null     " flipping character:"
+               .null     " flipping horizontally:"
 f4b_msg
 scrollr_msg    .byte     mesgcol,0,5
                .null     " scrolling right:"
@@ -73,86 +73,85 @@ any_msg        .byte     vjaune,10,24,18
 fkeyleft=18
 f1top=8
 ;--------- first function key set ------------------               
-menu1col = 1
-menu2col = 3
+
 f1abutton      .byte     menu1col,fkeyleft,f1top       ;133
-               .text     "edit....... "
+               .text     "edit........"
                .byte     18             ; position 15
                .text     "   f1   "
                .byte     146,0
 f2abutton      .byte     menu1col,fkeyleft,f1top+2     ;137
-               .text     "save....... " 
+               .text     "save........" 
                .byte     18            ; position 15
                .text     "   f2   "
                .byte     146,0
 f3abutton      .byte     menu1col,fkeyleft,f1top+4     ;134
-               .text     "load....... "
+               .text     "load........"
                .byte     18             ; position 15
                .text     "   f3   "
                .byte     146,0
 f4abutton      .byte     menu1col,fkeyleft,f1top+6     ;138
-               .text     "copy....... "
+               .text     "copy........"
                .byte     18             ; position 15
                .text     "   f4   "
                .byte     146,0
 f5abutton      .byte     menu1col,fkeyleft,f1top+8     ;135
-               .text     "clear...... "
+               .text     "clear......."
                .byte     18             ; position 15
                .text     "   f5   "
                .byte     146,0     
 f6abutton      .byte     menu1col,fkeyleft,f1top+10    ;139
-               .text     "fill....... "
+               .text     "fill........"
                .byte     18             ; position 15
                .text     "   f6   "
                .byte     146,0
 f7abutton      .byte     menu1col,fkeyleft,f1top+12    ;136
-               .text     "work....... "
+               .text     "work........"
                .byte     18             ; position 15
                .text     "   f7   "
                .byte     146,0
-f8abutton      .byte     menu1col,fkeyleft,f1top+14    ;140
-               .text     "function... "
+f8abutton      .byte     menu1col,fkeyleft,f1top+14
+               .text     "function.... "
                .byte     18             ; position 15
                .text     "   f8   "
                .byte     146,0
 ;-------- second function key set ------------------               
 f1bbutton      .byte     menu2col,fkeyleft,f1top
-               .text     "reverse.... "
+               .text     "reverse....."
                .byte     18             ; position 15
                .text     "   f1   "
                .byte     146,0
 f2bbutton      .byte     menu2col,fkeyleft,f1top+2
-               .text     "invert..... " 
+               .text     "flip vert..." 
                .byte     18             ; position 15
                .text     "   f2   "
                .byte     146,0
 f3bbutton      .byte     menu2col,fkeyleft,f1top+4
-               .text     "flip....... "
+               .text     "flip horz..."
                .byte     18             ; position 15
                .text     "   f3   "
                .byte     146,0
 f4bbutton      .byte     menu2col,fkeyleft,f1top+6
-               .text     "scroll r... "
+               .text     "scroll r...."
                .byte     18             ; position 15
                .text     "   f4   "
                .byte     146,0
 f5bbutton      .byte     menu2col,fkeyleft,f1top+8
-               .text     "scroll l... "
+               .text     "scroll l...."
                .byte     18             ; position 15
                .text     "   f5   "
                .byte     146,0
 f6bbutton      .byte     menu2col,fkeyleft,f1top+10
-               .text     "scroll u... "
+               .text     "scroll u...."
                .byte     18             ; position 15
                .text     "   f6   "
                .byte     146,0
 f7bbutton      .byte     menu2col,fkeyleft,f1top+12
-               .text     "scroll d... "
+               .text     "scroll d...."
                .byte     18             ; position 15
                .text     "   f7   "
                .byte     146,0
 f8bbutton      .byte     menu2col,fkeyleft,f1top+14
-               .text     "function... "
+               .text     "function.... "
                .byte     18             ; position 15
                .text     "   f8   "
                .byte     146,0

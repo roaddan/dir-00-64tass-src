@@ -21,6 +21,24 @@ changebord     .macro c
                pla
                .endm
 
+setzpage1      .macro addr
+               pha
+               lda  \addr
+               sta  $fb
+               lda  \addr+1
+               sta  $fc
+               pla
+               .endm
+
+setzpage2      .macro addr
+               pha
+               lda  \addr
+               sta  $fd
+               lda  \addr+1
+               sta  $fe
+               pla
+               .endm
+
 changeback     .macro c
                pha
                lda  #\c
