@@ -27,26 +27,27 @@ work_msg       .byte     mesgcol,0,5
                .null     " enable work space"
 
 f1b_msg
-rvrs_msg       .byte     mesgcol,0,5
-               .null     " reverse character:"
-f2b_msg
 invr_msg       .byte     mesgcol,0,5
                .null     " flipping vertically:"
-f3b_msg
+f2b_msg
 flip_msg       .byte     mesgcol,0,5
                .null     " flipping horizontally:"
-f4b_msg
+f3b_msg
 scrollr_msg    .byte     mesgcol,0,5
                .null     " scrolling right:"
-f5b_msg
+f4b_msg
 scrolll_msg    .byte     mesgcol,0,5
                .null     " scrolling left:"
-f6b_msg
+f5b_msg
 scrollu_msg    .byte     mesgcol,0,5
                .null     " scrolling up:"
-f7b_msg
+f6b_msg
 scrolld_msg    .byte     mesgcol,0,5
                .null     " scrolling down:"
+f7b_msg
+rvrs_msg       .byte     mesgcol,0,5
+               .null     " reverse character:"
+
 save_fname_msg .byte     mesgcol,0,5
                .null     " save: file name ------.chr"
 load_fname_msg .byte     mesgcol,0,5
@@ -64,39 +65,41 @@ exit_msg       .byte     vvert1,21,24,18
                .text     "ctrl-x",146
                .null     " to menu."     
 
-bye_msg        .byte     vcyan,6,20,18
+
+whoamicol       =    vjaune        
+
+whoami0        .byte     whoamicol,4,6,18
+               .null     "                               "
+
+whoami1        .byte     whoamicol,4,7,18
+               .null     "           charedit            "
+ 
+whoami2        .byte     whoamicol,4,8,18
+               .null     "                               "
+
+whoami3        .byte     whoamicol,4,9,18
+               .null     "  inspired from john heilborn  "
+
+whoami4        .byte     whoamicol,4,10,18
+               .null     "      isbn: 0-942386-29-9      "
+
+whoami5        .byte     whoamicol,4,11,18
+               .null     "                               "
+
+whoami6        .byte     whoamicol,4,12,18
+               .null     " coded in assembly language by "
+
+whoami7        .byte     whoamicol,4,13,18
+               .null     "     daniel lafrance 2023      "
+
+whoami8        .byte     whoamicol,4,14,18
+               .null     "                               "
+
+bye_msg        .byte     vcyan,6,16,18
                .null     " thanks and have a good day ",146
 
 any_msg        .byte     vvert1,10,24,18
                .null         "  any key to basic  ",146
-        
-whoami0        .byte     vmauve,4,6,18
-               .null     "                               "
-
-whoami1        .byte     vmauve,4,7,18
-               .null     "           charedit            "
- 
-whoami2        .byte     vmauve,4,8,18
-               .null     "                               "
-
-whoami3        .byte     vmauve,4,9,18
-               .null     "  inspired from john heilborn  "
-
-whoami4        .byte     vmauve,4,10,18
-               .null     "      isbn: 0-942386-29-9      "
-
-whoami5        .byte     vmauve,4,11,18
-               .null     "                               "
-
-whoami6        .byte     vmauve,4,12,18
-               .null     " coded in assembly language by "
-
-whoami7        .byte     vmauve,4,13,18
-               .null     "     daniel lafrance 2023      "
-
-whoami8        .byte     vmauve,4,14,18
-               .null     "                               "
-
 
 fkeyleft=18
 f1top=8
@@ -105,80 +108,80 @@ f1top=8
 f1abutton      .byte     menu1col,fkeyleft,f1top       ;133
                .text     "edit........"
                .byte     18             ; position 15
-               .text     "   f1   "
+               .text     $a9,"  f1  ",223
                .byte     146,0
-f2abutton      .byte     menu1col,fkeyleft,f1top+2     ;137
+f2abutton      .byte     menu1col,fkeyleft,f1top+1     ;137
                .text     "save........" 
                .byte     18            ; position 15
                .text     "   f2   "
                .byte     146,0
-f3abutton      .byte     menu1col,fkeyleft,f1top+4     ;134
+f3abutton      .byte     menu1col,fkeyleft,f1top+3     ;134
                .text     "load........"
                .byte     18             ; position 15
-               .text     "   f3   "
+               .text     $a9,"  f3  ",223
                .byte     146,0
-f4abutton      .byte     menu1col,fkeyleft,f1top+6     ;138
+f4abutton      .byte     menu1col,fkeyleft,f1top+4     ;138
                .text     "copy........"
                .byte     18             ; position 15
                .text     "   f4   "
                .byte     146,0
-f5abutton      .byte     menu1col,fkeyleft,f1top+8     ;135
+f5abutton      .byte     menu1col,fkeyleft,f1top+6     ;135
                .text     "clear......."
                .byte     18             ; position 15
-               .text     "   f5   "
+               .text     $a9,"  f5  ",223
                .byte     146,0     
-f6abutton      .byte     menu1col,fkeyleft,f1top+10    ;139
+f6abutton      .byte     menu1col,fkeyleft,f1top+7    ;139
                .text     "fill........"
                .byte     18             ; position 15
                .text     "   f6   "
                .byte     146,0
-f7abutton      .byte     menu1col,fkeyleft,f1top+12    ;136
+f7abutton      .byte     menu1col,fkeyleft,f1top+9    ;136
                .text     "work........"
                .byte     18             ; position 15
-               .text     "   f7   "
+               .text     $a9,"  f7  ",223
                .byte     146,0
-f8abutton      .byte     menu1col,fkeyleft,f1top+14
+f8abutton      .byte     menu1col,fkeyleft,f1top+10
                .text     "function...."
                .byte     18             ; position 15
                .text     "   f8   "
                .byte     146,0
 ;-------- second function key set ------------------               
 f1bbutton      .byte     menu2col,fkeyleft,f1top
-               .text     "reverse....."
-               .byte     18             ; position 15
-               .text     "   f1   "
-               .byte     146,0
-f2bbutton      .byte     menu2col,fkeyleft,f1top+2
                .text     "flip vert..." 
+               .byte     18             ; position 15
+               .text     $a9,"  f1  ",223
+               .byte     146,0
+f2bbutton      .byte     menu2col,fkeyleft,f1top+1
+               .text     "flip horz..."
                .byte     18             ; position 15
                .text     "   f2   "
                .byte     146,0
-f3bbutton      .byte     menu2col,fkeyleft,f1top+4
-               .text     "flip horz..."
-               .byte     18             ; position 15
-               .text     "   f3   "
-               .byte     146,0
-f4bbutton      .byte     menu2col,fkeyleft,f1top+6
+f3bbutton      .byte     menu2col,fkeyleft,f1top+3
                .text     "scroll r...."
+               .byte     18             ; position 15
+               .text     $a9,"  f3  ",223
+               .byte     146,0
+f4bbutton      .byte     menu2col,fkeyleft,f1top+4
+               .text     "scroll l...."
                .byte     18             ; position 15
                .text     "   f4   "
                .byte     146,0
-f5bbutton      .byte     menu2col,fkeyleft,f1top+8
-               .text     "scroll l...."
-               .byte     18             ; position 15
-               .text     "   f5   "
-               .byte     146,0
-f6bbutton      .byte     menu2col,fkeyleft,f1top+10
+f5bbutton      .byte     menu2col,fkeyleft,f1top+6
                .text     "scroll u...."
+               .byte     18             ; position 15
+               .text     $a9,"  f5  ",223
+               .byte     146,0
+f6bbutton      .byte     menu2col,fkeyleft,f1top+7
+               .text     "scroll d...."
                .byte     18             ; position 15
                .text     "   f6   "
                .byte     146,0
-f7bbutton      .byte     menu2col,fkeyleft,f1top+12
-               .text     "scroll d...."
+f7bbutton      .byte     menu2col,fkeyleft,f1top+9
+               .text     "reverse....."
                .byte     18             ; position 15
-               .text     "   f7   "
+               .text     $a9,"  f7  ",223
                .byte     146,0
-f8bbutton      .byte     menu2col,fkeyleft,f1top+14
+f8bbutton      .byte     menu2col,fkeyleft,f1top+10
                .text     "function...."
                .byte     18             ; position 15
                .text     "   f8   "
