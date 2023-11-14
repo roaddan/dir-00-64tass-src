@@ -60,7 +60,7 @@ menub_msg      .byte     mesgcol,0,5
 quit_msg       .byte     vblue1,21,24,18
                .text     "ctrl-x",146
                .null     " to quit."     
-
+menu_msg
 exit_msg       .byte     vvert1,21,24,18
                .text     "ctrl-x",146
                .null     " to menu."     
@@ -69,40 +69,40 @@ exit_msg       .byte     vvert1,21,24,18
 whoamicol       =    vjaune        
 
 whoami0        .byte     whoamicol,4,6,18
-               .null     "                               "
+               .null     "                               ",146
 
 whoami1        .byte     whoamicol,4,7,18
-               .null     "           charedit            "
+               .null     "          ",146," charedit ",18,"           ",146
  
 whoami2        .byte     whoamicol,4,8,18
-               .null     "                               "
+               .null     "                               ",146
 
 whoami3        .byte     whoamicol,4,9,18
-               .null     "  inspired from john heilborn  "
+               .null     "  inspired from john heilborn  ",146
 
 whoami4        .byte     whoamicol,4,10,18
-               .null     "      isbn: 0-942386-29-9      "
+               .null     "      isbn: 0-942386-29-9      ",146
 
 whoami5        .byte     whoamicol,4,11,18
-               .null     "                               "
+               .null     "                               ",146
 
 whoami6        .byte     whoamicol,4,12,18
-               .null     " coded in assembly language by "
+               .null     " coded in assembly language by ",146
 
 whoami7        .byte     whoamicol,4,13,18
-               .null     "     daniel lafrance 2023      "
+               .null     "     daniel lafrance 2023      ",146
 
 whoami8        .byte     whoamicol,4,14,18
-               .null     "    version:",version,"    "
+               .null     "    version:",version,"    ",146
 
 whoami9        .byte     whoamicol,4,15,18
-               .null     "                               "
+               .null     "                               ",146
 
 bye_msg        .byte     vcyan,6,16,20
                .null     " thanks and have a good day ",146
 
-any_msg        .byte     vvert1,10,24,18
-               .null         "  any key to basic  ",146
+any_msg        .byte     vvert1,5,24,18
+               .null         "  use the [anykey] to basic  ",146
 
 fkeyleft=18
 f1top=8

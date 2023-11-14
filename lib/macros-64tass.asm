@@ -1,17 +1,39 @@
+enable         .macro
+               php
+               pha
+               lda  #$09
+               jsr  $ffd2
+               pla
+               plp
+               .endm
+
+disable        .macro
+               php
+               pha
+               lda  #$08
+               jsr  $ffd2
+               pla
+               plp
+               .endm
+
 lowercase      .macro
+               php
                pha
                lda  #b_lowercase
                sta  characterset
                jsr  $ffd2
                pla
+               plp
                .endm
                
 uppercase      .macro
+               php
                pha
                lda  #b_uppercase
                sta  characterset
                jsr  $ffd2
                pla
+               plp
                .endm
 
 changebord     .macro c

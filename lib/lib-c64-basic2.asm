@@ -48,8 +48,6 @@ cls            .block
                pha
                lda  #$93
                jsr  putch
-               lda  #$0e
-               jsr  putch
                pla
                plp
                rts

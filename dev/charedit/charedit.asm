@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-version  = "20231113-164208"
+version  = "20231113-164208" 
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
@@ -19,12 +19,20 @@ flashcol       =    vblanc
  
 main           .block
                jsr  push
-               jsr  screendis
                jsr  scrmaninit
+               #disable
+               jsr  splashscreen
+               #printcxy menu_msg
+wait           jsr  getkey
+               cmp  #ctrl_x
+               bne  wait
+               jsr  cls
+               jsr  screendis
                jsr  copycharset
                jsr  setscreenptr
                jsr  setdefaultchar
                jsr  staticscreen
+               jsr  drawbitmap
                lda  #$00
                sta  fkeyset
                jsr  showfkeys
@@ -33,44 +41,13 @@ main           .block
                lda  #$00
                jsr  screenena
                jsr  keyaction
-               #locate 0,0
                jsr  cls
+               #lowercase
+               jsr  splashscreen
                #printcxy bye_msg
                #printcxy any_msg
-               #printcxy whoami0
-               #printcxy whoami1
-               #printcxy whoami2
-               #printcxy whoami3
-               #printcxy whoami4
-               #printcxy whoami5
-               #printcxy whoami6
-               #printcxy whoami7
-               #printcxy whoami8
-               #printcxy whoami9
-               #locate 0,0
                jsr  getkey
-;               jsr  k_warmboot       
-               jsr  pop
-               rts
-               .bend
-
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-scrollright     .block
-               jsr  push
-               #setzpage1     mapaddr
-               ldy  #$00
-again          lda  (zpage1),y
-               clc
-               ror
-               bcc  zero
-               clc
-one            adc  #$80
-zero           sta  (zpage1),y
-               iny
-               cpy  #$08
-               bne  again 
+               jsr  k_warmboot       
                jsr  pop
                rts
                .bend
