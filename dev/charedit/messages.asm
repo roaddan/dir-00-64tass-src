@@ -8,14 +8,14 @@ f1a_msg
 edit_msg       .byte     mesgcol,0,5,146     ;18
                .null     " edit mode: chr$(   )",146
 f2a_msg
-save_msg       .byte     mesgcol,0,5,146
-               .null     " save on cassette or disk? (c/d):"
-f3a_msg
-load_msg       .byte     mesgcol,0,5
-               .null     " load from cassette or disk? (c/d):"
-f4a_msg
 copy_msg       .byte     mesgcol,0,5
                .null     " enter character to copy:"
+f3a_msg
+save_msg       .byte     mesgcol,0,5,146
+               .null     " save on cassette or disk? (c/d):"
+f4a_msg
+load_msg       .byte     mesgcol,0,5
+               .null     " load from cassette or disk? (c/d):"
 f5a_msg
 clear_msg      .byte     mesgcol,0,5
                .null     " clear char: chr$(   )"
@@ -24,7 +24,7 @@ fill_msg       .byte     mesgcol,0,5
                .null     " fill char:  chr$(   )"
 f7a_msg
 work_msg       .byte     mesgcol,0,5
-               .null     " enable work space"
+               .null     " restoring all characters."
 
 f1b_msg
 invr_msg       .byte     mesgcol,0,5
@@ -93,9 +93,12 @@ whoami7        .byte     whoamicol,4,13,18
                .null     "     daniel lafrance 2023      "
 
 whoami8        .byte     whoamicol,4,14,18
+               .null     "    version:",version,"    "
+
+whoami9        .byte     whoamicol,4,15,18
                .null     "                               "
 
-bye_msg        .byte     vcyan,6,16,18
+bye_msg        .byte     vcyan,6,16,20
                .null     " thanks and have a good day ",146
 
 any_msg        .byte     vvert1,10,24,18
@@ -110,18 +113,18 @@ f1abutton      .byte     menu1col,fkeyleft,f1top       ;133
                .byte     18             ; position 15
                .text     $a9,"  f1  ",223
                .byte     146,0
-f2abutton      .byte     menu1col,fkeyleft,f1top+1     ;137
-               .text     "save........" 
-               .byte     18            ; position 15
+f2abutton      .byte     vgris1,fkeyleft,f1top+1     ;138
+               .text     "copy........"
+               .byte     18             ; position 15
                .text     "   f2   "
                .byte     146,0
-f3abutton      .byte     menu1col,fkeyleft,f1top+3     ;134
-               .text     "load........"
-               .byte     18             ; position 15
+f3abutton      .byte     vgris1,fkeyleft,f1top+3     ;137
+               .text     "save........" 
+               .byte     18            ; position 15
                .text     $a9,"  f3  ",223
                .byte     146,0
-f4abutton      .byte     menu1col,fkeyleft,f1top+4     ;138
-               .text     "copy........"
+f4abutton      .byte     vgris1,fkeyleft,f1top+4     ;134
+               .text     "load........"
                .byte     18             ; position 15
                .text     "   f4   "
                .byte     146,0
@@ -136,7 +139,7 @@ f6abutton      .byte     menu1col,fkeyleft,f1top+7    ;139
                .text     "   f6   "
                .byte     146,0
 f7abutton      .byte     menu1col,fkeyleft,f1top+9    ;136
-               .text     "work........"
+               .text     "restore all."
                .byte     18             ; position 15
                .text     $a9,"  f7  ",223
                .byte     146,0

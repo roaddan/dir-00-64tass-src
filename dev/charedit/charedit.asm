@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-; version : 20231107-222128
+version  = "20231113-164208"
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
@@ -13,8 +13,8 @@ grid_left      =    1
 grid_bot       =    grid_top + 7
 grid_right     =    grid_left + 7
 mesgcol        =    vcyan
-menu1col       =    vjaune
-menu2col       =    vvert1
+menu1col       =    vvert1
+menu2col       =    vrose
 flashcol       =    vblanc      
  
 main           .block
@@ -46,6 +46,7 @@ main           .block
                #printcxy whoami6
                #printcxy whoami7
                #printcxy whoami8
+               #printcxy whoami9
                #locate 0,0
                jsr  getkey
 ;               jsr  k_warmboot       

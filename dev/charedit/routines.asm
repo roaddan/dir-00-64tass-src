@@ -141,8 +141,6 @@ txt6           .null     "stack......:"
 keyaction      .block
                jsr  push
 loop           jsr  getkey
-               ;sta  currentkey
-               jsr  showkeyval
 f1             cmp  #key_f1
                bne  f2
                jmp  dof1
@@ -168,9 +166,12 @@ f8             cmp  #key_f8
                bne  ctrlx
                jmp  dof8
 ctrlx          cmp  #ctrl_x
-               bne  is18
+               bne  ishex14
                jmp  doquit
-is18           cmp  #18
+ishex14        cmp  #$14
+               bne  ishex12
+               jmp  loop               
+ishex12        cmp  #$12
                bne  reste
                jmp  loop               
 reste          #locate   13,12
@@ -242,6 +243,12 @@ cx             cmp  #ctrl_x
                bne  sp
                jmp  do_ctrlx
 sp             cmp  #$20
+               bne  ishex14
+               jmp  do_swap
+ishex14        cmp  #$14
+               bne  ishex12
+               jmp  do_swap
+ishex12        cmp  #$12
                bne  rest
                jmp  do_swap
 rest           #locate   13,12
@@ -375,22 +382,10 @@ clrcurs        .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-
 drawbitmap     .block
                jsr  push
                ; prépare le text 
-               lda  #<letext       ; le pointeur
-               sta  zpage2
-               lda  #<letext+1
-               sta  zpage2+1
-
-               lda  #grid_left     ; la position
-               sta  textline+1
-               lda  #grid_top
-               sta  textline+2
-               
                jsr  calcmapaddr              
-
                lda  mapaddr        ; on pointe sur la table des bitmaps
                sta  zpage1
                lda  mapaddr+1
@@ -414,8 +409,6 @@ isy            ldy  #$00      ; la ligne (autoinc)
                bmi  nextline
                jsr  pop
                rts
-textline       .byte vblanc,grid_left,grid_top
-letext         .null "        "
                .bend
 ;-------------------------------------------------------------------------------
 ;
@@ -462,7 +455,7 @@ nextbit        lda  (zpage1),y
 itsone         lda  #$d1
                sta  (zpage1),y
                jmp  next
-itszero        lda  #$20
+itszero        lda  #$2e
                sta  (zpage1),y
 next           iny
                cpy  #$08       
@@ -716,7 +709,7 @@ nextbox        lda  #101
                ldy  #9
                sta  (zpage1),y
                dey
-               lda  #79
+               lda  #$2e
 nextcol        sta  (zpage1),y
                dey  
                bne  nextcol
@@ -732,7 +725,7 @@ nextlin        sta  (zpage1),y
                sta  scrnnewram+(40*(12))+11
                lda  #$70                     ;+
                sta  scrnnewram+(40*(11))+12
-               lda  #$43                    ;-
+               lda  #$43                     ;-
                sta  scrnnewram+(40*(11))+13  
                lda  #$6e                     ;+
                sta  scrnnewram+(40*(11))+14
@@ -945,6 +938,8 @@ f7action       .block
                bne  menub  
                #affichemesg f7a_msg
                #flashfkey f7abutton
+               jsr  copycharset
+               jsr  drawbitmap
                jmp  out
 menub          lda  #$0
                sta  editmode
