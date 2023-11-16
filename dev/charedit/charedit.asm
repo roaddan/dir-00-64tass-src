@@ -20,6 +20,8 @@ menu2col2      =    vgris2
 flashcol       =    vblanc
 whoamicol      =    vjaune
 charcolor      =    vvert1      
+charscolor     =    vgris1
+
  
 main           .block
                jsr  push
@@ -40,7 +42,7 @@ wait
                jsr  drawbitmap
                lda  #$00
                sta  fkeyset
-               jsr  showfkeys
+               jsr  drawfkeys
                jsr  f8action       
                jsr  f8action
                lda  #$00
@@ -160,13 +162,13 @@ editmode       .byte     0
 fkeyset        .byte     0
 currentchar    .byte     0
 currentkey     .byte     0
+previouskey    .byte     0
 bitmapoffset   .byte     0
 mapaddr        .word     0
 byteaddr       .word     0
 gridaddr       .word     0 
 cursln         .byte     grid_top
 curscl         .byte     grid_left
-
 ;-------------------------------------------------------------------------------
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
@@ -184,6 +186,6 @@ curscl         .byte     grid_left
 ;               .include "lib-cbm-disk.asm"
 ;               .include "lib-c64-text-sd.asm"
 ;               .include "lib-c64-text-mc.asm"
-;               .include "lib-c64-showregs.asm"                
+;               .include "lib-c64-drawregs.asm"                
 ;               .include "lib-c64-joystick.asm"
 ;               .include "lib-c64-spriteman.asm"

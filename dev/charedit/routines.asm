@@ -42,7 +42,7 @@ setdefaultchar .block
                tax
                ldy  asciitorom,x
                sty  bitmapoffset
-               jsr  showkeyval
+               jsr  drawkeyval
                jsr  drawbitmap
                #locate   13,12
                jsr  putch
@@ -68,7 +68,7 @@ resetmenuacolor  .block
                sta  f4abutton
                sta  f6abutton
                sta  f8abutton
-               ;jsr  showfkeys
+               ;jsr  drawfkeys
                jsr  pop
                rts
                .bend
@@ -88,7 +88,7 @@ resetmenubcolor  .block
                sta  f4bbutton
                sta  f6bbutton
                sta  f8bbutton
-               ;jsr  showfkeys
+               ;jsr  drawfkeys
                jsr  pop
                rts
                .bend
@@ -105,7 +105,7 @@ setmenuacolor  .block
                sta  f6abutton
                sta  f7abutton
                sta  f8abutton
-               ;jsr  showfkeys
+               ;jsr  drawfkeys
                jsr  pop
                rts
                .bend
@@ -123,7 +123,7 @@ setmenubcolor  .block
                sta  f6bbutton
                sta  f7bbutton
                sta  f8bbutton
-               ;jsr  showfkeys
+               ;jsr  drawfkeys
                jsr  pop
                rts
                .bend
@@ -131,7 +131,7 @@ setmenubcolor  .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-showkeyval     .block
+drawkeyval     .block
                jsr  push
                #locate 1,19
                ;#print txt0
@@ -241,11 +241,15 @@ ishex12        cmp  #$12
                jmp  loop               
 reste          #locate   13,12
                jsr  putch
+               pha
+               lda  currentkey
+               sta  previouskey
+               pla
                sta  currentkey
                tax
-               ldy  asciitorom,x
+               ldy  asciitorom,x               
                sty  bitmapoffset
-               jsr  showkeyval
+               jsr  drawkeyval
                jsr  drawbitmap
 ;               #locate   13,12
 ;               jsr  putch
@@ -284,7 +288,7 @@ editor         .block
                jsr  setmenuacolor
                lda  #menu1col1
                sta  f1abutton
-               jsr  showfkeys
+               jsr  drawfkeys
                jsr  setcurs
                lda  currentkey
                #locate   17,5
@@ -319,11 +323,15 @@ ishex12        cmp  #$12
                jmp  do_swap
 rest           #locate   13,12
                jsr  putch
+               pha
+               lda  currentkey
+               sta  previouskey
+               pla
                sta  currentkey
                tax
                ldy  asciitorom,x
                sty  bitmapoffset
-               jsr  showkeyval
+               jsr  drawkeyval
                jsr  drawbitmap
                #locate   13,12
                jsr  putch
@@ -399,7 +407,7 @@ do_eor         .block
                dex
                lda  eorval,x
                eor  (zpage2),y
-               jsr  showkeyval
+               jsr  drawkeyval
                sta  (zpage2),y
                jsr  pop
                rts
@@ -450,7 +458,7 @@ clrcurs        .block
 ;-------------------------------------------------------------------------------
 drawbitmap     .block
                jsr  push
-               ; prépare le text 
+               ; prépare le text
                jsr  calcmapaddr              
                lda  mapaddr        ; on pointe sur la table des bitmaps
                sta  zpage1
@@ -473,9 +481,27 @@ isy            ldy  #$00      ; la ligne (autoinc)
                iny
                cpy  #$08
                bmi  nextline
+               jsr  highlight
                jsr  pop
                rts
                .bend
+
+highlight      .block
+               jsr  push
+               ldx  previouskey
+               lda  asciitorom,x
+               tax
+               lda  #charscolor
+               sta  colorram,x
+               ldx  currentkey
+               lda  asciitorom,x
+               tax
+               lda  #charcolor
+               sta  colorram,x 
+               jsr  pop
+               rts
+               .bend
+
 
 ;-------------------------------------------------------------------------------
 ;
@@ -500,7 +526,7 @@ thesame        pha
                lda  zpage1+1
                sta  mapaddr+1
                pla
-               jsr  showkeyval
+               jsr  drawkeyval
 out            jsr  pop
                rts
                .bend
@@ -659,10 +685,10 @@ staticscreen   .block
                #changebord vgris1
                #changeback vgris
                ;#uppercase
-               jsr  showlines
-               jsr  showallchars
-               jsr  showgrid
-               jsr  showfkeys
+               jsr  drawlines
+               jsr  drawallchars
+               jsr  drawgrid
+               jsr  drawfkeys
                #affichemesg quit_msg
                #locate   0,7
                rts
@@ -671,7 +697,7 @@ staticscreen   .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-showfkeys      .block
+drawfkeys      .block
                jsr  push
                lda  fkeyset
                cmp  #$0
@@ -700,13 +726,13 @@ end            jsr  pop
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-showallchars   .block
+drawallchars   .block
                jsr push
                #locate   0,0
                ldx  #$00
 nextc          txa  
                sta  scrnnewram,x
-               lda  #charcolor
+               lda  #charscolor
                sta  colorram,x
                inx
                cpx  #$80
@@ -718,7 +744,7 @@ nextc          txa
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-showlines      .block
+drawlines      .block
 hline1=4
 hline2=6
 hline3=18
@@ -768,7 +794,7 @@ another93      sta  (zpage1),y
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-showgrid      .block
+drawgrid      .block
 
                jsr  push
                jsr  screendis
@@ -882,7 +908,7 @@ f1action       .block
                #affichemesg quit_msg
                #affichemesg menua_msg
                jsr  resetmenuacolor
-               jsr  showfkeys
+               jsr  drawfkeys
                jmp  out
 menub          #affichemesg f1b_msg
                #flashfkey f1bbutton
@@ -1064,7 +1090,7 @@ menub          #affichemesg menua_msg
                #flashfkey f8bbutton               
 swapit         eor  #$ff
                sta  fkeyset
-               jsr  showfkeys
+               jsr  drawfkeys
                pla
                #affichemesg prompt_msg
                rts
