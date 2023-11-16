@@ -2,6 +2,7 @@
 # ===============================================
 # ======== P R O J E C T   S E C T I O N ========
 # ===============================================
+# /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/dev/charedit
 # The basename of your project main file ((no extension) .asm is presumed).
 SOURCENAME=charedit
 # The lowest common project shared directory complete path.
@@ -57,13 +58,12 @@ PRGDIR=dir-00-64tass-bin
 # FTP SERVER CONFIG
 FTPSVRIP=192.168.2.200
 FTPCMDPATH=/usr/local/bin/lftp 
-FTPASMARG=cd /Usb0/dir-00-64tass-bin/asm; put $(SOURCENAME).asm; cd /Usb1/dir-00-64tass-bin/asm; put $(SOURCENAME).asm; bye
-FTPTXTARG=cd /Usb0/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; cd /Usb1/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; bye
-FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; cd /Usb1/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
-FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; cd /Usb1/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
-FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; cd /Usb1/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
-FTPTMPARG=cd /Usb0/dir-temp; put $(SOURCENAME).prg; put $(SOURCENAME).d64;cd /Usb1/dir-temp
-#; put $(SOURCENAME).prg; put $(SOURCENAME).d64; bye
+FTPASMARG=cd /Usb0/dir-00-64tass-bin/asm; put $(SOURCENAME).asm; bye
+FTPTXTARG=cd /Usb0/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; bye
+FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
+FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
+FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
+FTPTMPARG=cd /Usb0/dir-temp; put $(SOURCENAME).prg; put $(SOURCENAME).d64; bye
 FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
 FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)
 FTPPRGCMD=$(FTPCMDPATH) -e "$(FTPPRGARG)" $(FTPSVRIP)
@@ -76,14 +76,19 @@ VICE=$(X64)
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 
 all: 	$(SOURCENAME).d64
-#		$(VICE) $(AUTOSTART) $(TMPSEP06)
-		$(FTPTMPCMD)
+		$(VICE) $(AUTOSTART) $(TMPSEP06)
+#		$(FTPTMPCMD)
 #		$(FTPASMCMD)
 #		$(FTPTXTCMD)
 #		$(FTPPRGCMD)
 #		$(FTPD64CMD)
 
-ftp:		$(FTPTMPCMD)
+ftp:	
+#		echo $(FTPASMCMD)
+#		echo $(FTPTXTCMD)
+#		echo $(FTPPRGCMD)
+#		echo $(FTPD64CMD)
+#		echo $(FTPCRTCMD)
 		$(FTPASMCMD)
 		$(FTPTXTCMD)
 		$(FTPPRGCMD)
