@@ -62,7 +62,7 @@ FTPTXTARG=cd /Usb0/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; cd /Usb1/dir-00
 FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; cd /Usb1/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
 FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; cd /Usb1/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
 FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; cd /Usb1/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
-FTPTMPARG=cd /Usb0/dir-temp; put $(SOURCENAME).prg# ; put $(SOURCENAME).d64;cd /Usb1/dir-temp
+FTPTMPARG=cd /Usb0/dir-temp; put $(SOURCENAME).prg; put $(SOURCENAME).d64;cd /Usb1/dir-temp
 #; put $(SOURCENAME).prg; put $(SOURCENAME).d64; bye
 FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
 FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)

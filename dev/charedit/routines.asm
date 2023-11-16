@@ -23,6 +23,11 @@ splashscreen   .block
                #printcxy whoami7
                #printcxy whoami8
                #printcxy whoami9
+               jsr  delay
+               jsr  delay
+               jsr  delay
+               jsr  delay
+               jsr  delay
                jsr  pop
                rts
                .bend
@@ -48,6 +53,45 @@ setdefaultchar .block
                rts
                .bend
 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+resetmenuacolor  .block
+               jsr  push
+               lda  #menu1col1
+               sta  f1abutton
+               sta  f3abutton
+               sta  f5abutton
+               sta  f7abutton
+               lda  #menu2col2
+               sta  f2abutton
+               sta  f4abutton
+               sta  f6abutton
+               sta  f8abutton
+               ;jsr  showfkeys
+               jsr  pop
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+resetmenubcolor  .block
+               jsr  push
+               lda  #menu2col1
+               sta  f1bbutton
+               sta  f3bbutton
+               sta  f5bbutton
+               sta  f7bbutton
+               lda  #menu2col1
+               sta  f2bbutton
+               sta  f4bbutton
+               sta  f6bbutton
+               sta  f8bbutton
+               ;jsr  showfkeys
+               jsr  pop
+               rts
+               .bend
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -238,7 +282,7 @@ editor         .block
                #affichemesg edit_msg
                lda  #vgris1
                jsr  setmenuacolor
-               lda  #vvert1
+               lda  #menu1col1
                sta  f1abutton
                jsr  showfkeys
                jsr  setcurs
@@ -446,7 +490,7 @@ calcmapaddr    .block
                ldx  bitmapoffset
                cpx  #$00
                beq  thesame         ; sommes nous déja à 0
-addagain       lda  #8
+addagain       lda  #$08
                jsr  zp1addnum      ; on augmente de 8 byte ...
                dex                 ; pour chaque caracteres
                bne  addagain
@@ -662,6 +706,8 @@ showallchars   .block
                ldx  #$00
 nextc          txa  
                sta  scrnnewram,x
+               lda  #charcolor
+               sta  colorram,x
                inx
                cpx  #$80
                bne  nextc
@@ -835,8 +881,7 @@ f1action       .block
                jsr  editor
                #affichemesg quit_msg
                #affichemesg menua_msg
-               lda  #menu1col
-               jsr  setmenuacolor
+               jsr  resetmenuacolor
                jsr  showfkeys
                jmp  out
 menub          #affichemesg f1b_msg
@@ -844,6 +889,7 @@ menub          #affichemesg f1b_msg
                jsr  flipvert
                jsr  drawbitmap 
 out            pla
+               #affichemesg prompt_msg
                rts
                .bend
 
@@ -858,12 +904,15 @@ f2action       .block
                bne  menub  
                #affichemesg f2a_msg
                #flashfkey f2abutton
+               jsr  copychar
+               jsr  drawbitmap
                jmp  out
 menub          #affichemesg f2b_msg
                #flashfkey f2bbutton
                jsr  fliphorz
                jsr  drawbitmap           
 out            pla
+               #affichemesg prompt_msg
                rts
                .bend
 
@@ -877,14 +926,24 @@ f3action       .block
                sta  editmode
                lda  fkeyset
                bne  menub  
-               #affichemesg f3a_msg
                #flashfkey f3abutton
+               #affichemesg f3a_msg
+getagain       jsr  getkey
+               cmp  #$43
+               beq  devok
+               cmp  #$44
+               beq  devok
+               jmp  getagain
+devok          sta  device
+               jsr  putch
+               jsr  getfname
                jmp  out
 menub          #affichemesg f3b_msg
                #flashfkey f3bbutton
                jsr  scrollright
                jsr  drawbitmap                
 out            pla
+               #affichemesg prompt_msg
                rts
                .bend
 
@@ -897,14 +956,24 @@ f4action       .block
                sta  editmode
                lda  fkeyset
                bne  menub  
-               #affichemesg f4a_msg
                #flashfkey f4abutton
+               #affichemesg f4a_msg
+getagain       jsr  getkey
+               cmp  #$43
+               beq  devok
+               cmp  #$44
+               beq  devok
+               jmp  getagain
+devok          sta  device
+               jsr  putch
+               jsr  getfname
                jmp  out
 menub          #affichemesg f4b_msg
                #flashfkey f4bbutton
                jsr  scrollleft
                jsr  drawbitmap               
 out            pla
+               #affichemesg prompt_msg
                rts
                .bend
 
@@ -927,6 +996,7 @@ menub          #affichemesg f5b_msg
                jsr  scrollup               
                jsr  drawbitmap 
 out            pla
+               #affichemesg prompt_msg
                rts
                .bend
 
@@ -949,6 +1019,7 @@ menub          #affichemesg f6b_msg
                jsr  scrolldown 
                jsr  drawbitmap               
 out            pla
+               #affichemesg prompt_msg
                rts
                .bend
 
@@ -973,6 +1044,7 @@ menub          lda  #$0
                jsr  reverse
                jsr  drawbitmap            
 out            pla
+               #affichemesg prompt_msg
                rts
                .bend
 
@@ -994,6 +1066,7 @@ swapit         eor  #$ff
                sta  fkeyset
                jsr  showfkeys
                pla
+               #affichemesg prompt_msg
                rts
                .bend
 
