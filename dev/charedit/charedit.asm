@@ -5,9 +5,9 @@ version  = "20231116-100400"
                .include "macros-64tass.asm"
                .include "localmacro.asm"
                .enc     none
-  
-fkeyleft=18
-f1top=10 
+
+fkeyleft       =    18
+f1top          =    9 
 scrnnewram     =    $0400 
 charsdef       =    12
 grid_top       =    9
@@ -31,12 +31,11 @@ main           .block
                #disable
                jsr  drawcredits
                ;#printcxy menu_msg
-wait           
-               ;jsr  getkey
+wait           ;jsr  getkey
                ;cmp  #ctrl_x
                ;bne  wait
-               jsr  copycharset
                jsr  screendis
+               jsr  copycharset
                jsr  cls
                jsr  setscreenptr
                jsr  setdefaultchar
@@ -45,22 +44,19 @@ wait
                lda  #$00
                sta  fkeyset
                jsr  drawfkeys
-               ;jsr  f8action       
-               ;jsr  f8action
                lda  #$00
                jsr  screenena 
                jsr  keyaction
                jsr  cls
                jsr  drawcredits
-               ;#printcxy bye_msg
-               ;#printcxy any_msg
-               ;jsr  getkey
+               #printcxy bye_msg
+               #printcxy any_msg
+               jsr  getkey
                ;jsr  k_warmboot
                jsr  cls       
                jsr  pop
                rts
                .bend
-
 
 savefile       .block
                #pushall
@@ -68,40 +64,6 @@ savefile       .block
                #popall
                rts
                .bend
-
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-getfname       .block
-               jsr  push
-               #affichemesg fname_msg
-               ldx  #$00
-               stx  count
-getanother     jsr  getalphanum              
-;               jsr  getkey
-;               cmp  #$30      ; 0
-;               bmi  getanother
-;               cmp  #$3a      ; 9+1
-;               bmi  goodone          
-;isitletter     cmp  #$41      ; A
-;               bmi  getanother
-;               cmp  #$5b      ; Z+1
-;               bmi  goodone
-;               jmp  getanother
-goodone        jsr  putch
-               ldx  count
-               sta  name,x
-               inc  count
-               ldx  count
-               cpx  #$06
-               beq  finish
-               jmp  getanother
-finish         #affichemesg pfname
-               jsr  pop
-               rts
-count          .byte     0
-               .bend
-
 
 pfname         .byte     vvert,27,3,18     
 fname          .text     "@0:"
@@ -128,7 +90,7 @@ curscl         .byte     grid_left
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
                .include "routines.asm"
-               .include "messages_fr.asm"
+               .include "messages_en.asm"
                .include "map-c64-kernal.asm"
                .include "map-c64-vicii.asm"
                .include "map-c64-basic2.asm"

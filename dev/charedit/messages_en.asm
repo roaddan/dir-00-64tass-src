@@ -1,4 +1,3 @@
-
 editor_msg     .byte vrose,1,5
                .null     "[editor]"
 
@@ -7,7 +6,6 @@ blankmsg       .byte     mesgcol,0,5,146
 
 prompt_msg     .byte     mesgcol,0,5,146
                .null     " enter f-key command :"
-
 f1a_msg
 edit_msg       .byte     mesgcol,0,5,146     ;18
                .null     " edit mode: chr$(   )",146
@@ -29,7 +27,6 @@ fill_msg       .byte     mesgcol,0,5
 f7a_msg
 work_msg       .byte     mesgcol,0,5
                .null     " restoring all characters."
-
 f1b_msg
 invr_msg       .byte     mesgcol,0,5
                .null     " flipping vertically:"
@@ -53,16 +50,15 @@ rvrs_msg       .byte     mesgcol,0,5
                .null     " reverse character:"
 
 menua_msg      .byte     mesgcol,0,5
-               .null     " you are now in menu a."
+               .null     " you are being moved to menu 1."
 menub_msg      .byte     mesgcol,0,5
-               .null     " you are now in menu b."
+               .null     " you are being moved to menu 2."
 
 copychar_msg   .byte     vjaune,0,5
                .null     " enter character to copy from (?).",157,157,157
 
 fname_msg      .byte     vjaune,0,5
                .null     " enter a 6 letter filename : ",$a4,$a4,$a4,$a4,$a4,$a4,".chr",157,157,157,157,157,157,157,157,157,157
-
 
 quit_msg       .byte     vblue1,21,24,18
                .text     "ctrl-x",146
@@ -71,9 +67,6 @@ menu_msg
 exit_msg       .byte     vvert1,21,24,18
                .text     "ctrl-x",146
                .null     " to menu."     
-
-
-      
 
 whoami0        .byte     whoamicol,4,6,18
                .null     "                               ",146
@@ -111,76 +104,76 @@ bye_msg        .byte     vcyan,6,16,20
 any_msg        .byte     vvert1,5,24,18
                .null         "  use the [anykey] to basic  ",146
 
-fkeyleft=18
-f1top=8
 ;--------- first function key set ------------------               
 
-
-
+titremenu1     .byte     menu1col1,fkeyleft,f1top-2       ;133
+               .null     18,"   function set #1   ",146
+titremenu2     .byte     menu2col1,fkeyleft,f1top-2       ;133
+               .null     18,"   function set #2   ",146
 
 f1abutton      .byte     menu1col1,fkeyleft,f1top       ;133
-               .text     "edit char....."
+               .text     "edit character."
                .byte     18             ; position 15
                .null     $a9," f1 ",223,146
 f2abutton      .byte     menu1col2,fkeyleft,f1top+1     ;138
-               .text     "copy from....."
+               .text     "copy from......"
                .byte     18   ; position 15
                .null     "  f2  ",146
 f3abutton      .byte     menu1col1,fkeyleft,f1top+3     ;137
-               .text     "save to......." 
+               .text     "save to........" 
                .byte     18            ; position 15
                .null     $a9," f3 ",223,146
 f4abutton      .byte     menu1col2,fkeyleft,f1top+4     ;134
-               .text     "load from....."
+               .text     "load from......"
                .byte     18             ; position 15
                .null     "  f4  ",146
 f5abutton      .byte     menu1col1,fkeyleft,f1top+6     ;135
-               .text     "clear........."
+               .text     "clear.........."
                .byte     18             ; position 15
                .null     $a9," f5 ",223,146
 f6abutton      .byte     menu1col2,fkeyleft,f1top+7    ;139
-               .text     "fill.........."
+               .text     "fill..........."
                .byte     18             ; position 15
                .null     "  f6  ",146
 f7abutton      .byte     menu1col1,fkeyleft,f1top+9    ;136
-               .text     "restore all..."
+               .text     "restore all...."
                .byte     18             ; position 15
                .null     $a9," f7 ",223,146
 f8abutton      .byte     menu1col2,fkeyleft,f1top+10
-               .text     "function      "
+               .text     "go to menu #2.."
                .byte     18             ; position 15
                .null     "  f8  ", 146
 ;-------- second function key set ------------------               
 f1bbutton      .byte     menu2col1,fkeyleft,f1top
-               .text     "flip vert....." 
+               .text     "vertical flip.." 
                .byte     18             ; position 15
                .null     $a9," f1 ",223,146
 f2bbutton      .byte     menu2col2,fkeyleft,f1top+1
-               .text     "flip horz....."
+               .text     "horzontal flip."
                .byte     18             ; position 15
                .null     "  f2  ",146
 f3bbutton      .byte     menu2col1,fkeyleft,f1top+3
-               .text     "scroll right.."
+               .text     "scroll to right"
                .byte     18             ; position 15
                .null     $a9," f3 ",223,146
 f4bbutton      .byte     menu2col2,fkeyleft,f1top+4
-               .text     "scroll left..."
+               .text     "scroll to left."
                .byte     18             ; position 15
                .null     "  f4  ",146
 f5bbutton      .byte     menu2col1,fkeyleft,f1top+6
-               .text     "scroll up....."
+               .text     "scroll up......"
                .byte     18             ; position 15
                .null     $a9," f5 ",223,146
 f6bbutton      .byte     menu2col2,fkeyleft,f1top+7
-               .text     "scroll down..."
+               .text     "scroll down...."
                .byte     18             ; position 15
                .null     "  f6  ",146
 f7bbutton      .byte     menu2col1,fkeyleft,f1top+9
-               .text     "reverse bits.."
+               .text     "reverse bits..."
                .byte     18             ; position 15
                .null     $a9," f7 ",223,146
 f8bbutton      .byte     menu2col2,fkeyleft,f1top+10
-               .text     "function      "
+               .text     "go to menu #1.."
                .byte     18             ; position 15
                .null     "  f8  ", 146
  

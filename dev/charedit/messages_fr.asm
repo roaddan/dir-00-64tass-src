@@ -1,4 +1,3 @@
-
 editor_msg     .byte vrose,1,5
                .null     "[editeur]"
 
@@ -7,7 +6,6 @@ blankmsg       .byte     mesgcol,0,5,146
 
 prompt_msg     .byte     mesgcol,0,5,146
                .null     " utilisez les clefs de fonction :"
-
 f1a_msg
 edit_msg       .byte     mesgcol,0,5,146     ;18
                .null     " mode edit: chr$(   )",146
@@ -29,7 +27,6 @@ fill_msg       .byte     mesgcol,0,5
 f7a_msg
 work_msg       .byte     mesgcol,0,5
                .null     " recuperer les caracteres."
-
 f1b_msg
 invr_msg       .byte     mesgcol,0,5
                .null     " basculer verticalement:"
@@ -63,7 +60,6 @@ copychar_msg   .byte     vjaune,0,5
 fname_msg      .byte     vjaune,0,5
                .null     " nom du fichier (6 lettres): ",$a4,$a4,$a4,$a4,$a4,$a4,".chr",157,157,157,157,157,157,157,157,157,157
 
-
 quit_msg       .byte     vblue1,21,24,18
                .text     "ctrl-x",146
                .null     "-quitter."     
@@ -71,9 +67,6 @@ menu_msg
 exit_msg       .byte     vvert1,21,24,18
                .text     "ctrl-x",146
                .null     " au menu."     
-
-
-      
 
 whoami0        .byte     whoamicol,4,6,18
                .null     "                               ",146
@@ -94,7 +87,7 @@ whoami5        .byte     whoamicol,4,11,18
                .null     "                               ",146
 
 whoami6        .byte     whoamicol,4,12,18 
-               .null     "      code assembleur par      ",146
+               .null     "     code en assembleur par    ",146
 
 whoami7        .byte     whoamicol,4,13,18
                .null     " daniel lafrance quebec/canada ",146
@@ -111,7 +104,6 @@ bye_msg        .byte     vcyan,6,16,20
 any_msg        .byte     vvert1,5,24,18
                .null     " appuyez une cle pour basic ",146
 
-
 ;--------- first function key set ------------------               
 
 titremenu1     .byte     menu1col1,fkeyleft,f1top-2       ;133
@@ -119,13 +111,12 @@ titremenu1     .byte     menu1col1,fkeyleft,f1top-2       ;133
 titremenu2     .byte     menu2col1,fkeyleft,f1top-2       ;133
                .null     18," jeu de fonctions #2 ",146
 
-
 f1abutton      .byte     menu1col1,fkeyleft,f1top       ;133
                .text     "editer carac..."
                .byte     18             ; position 15
                .null     $a9," f1 ",223,146
 f2abutton      .byte     menu1col2,fkeyleft,f1top+1     ;138
-               .text     "copy du car...."
+               .text     "copier un carac"
                .byte     18   ; position 15
                .null     "  f2  ",146
 f3abutton      .byte     menu1col1,fkeyleft,f1top+3     ;137
@@ -137,11 +128,11 @@ f4abutton      .byte     menu1col2,fkeyleft,f1top+4     ;134
                .byte     18             ; position 15
                .null     "  f4  ",146
 f5abutton      .byte     menu1col1,fkeyleft,f1top+6     ;135
-               .text     "effacer........"
+               .text     "mettre tout a 0"
                .byte     18             ; position 15
                .null     $a9," f5 ",223,146
 f6abutton      .byte     menu1col2,fkeyleft,f1top+7    ;139
-               .text     "remplir........"
+               .text     "mettre tout a 1"
                .byte     18             ; position 15
                .null     "  f6  ",146
 f7abutton      .byte     menu1col1,fkeyleft,f1top+9    ;136
@@ -149,7 +140,7 @@ f7abutton      .byte     menu1col1,fkeyleft,f1top+9    ;136
                .byte     18             ; position 15
                .null     $a9," f7 ",223,146
 f8abutton      .byte     menu1col2,fkeyleft,f1top+10
-               .text     "afficher menu2."
+               .text     "aller au menu2."
                .byte     18             ; position 15
                .null     "  f8  ", 146
 ;-------- second function key set ------------------               
@@ -162,19 +153,19 @@ f2bbutton      .byte     menu2col2,fkeyleft,f1top+1
                .byte     18             ; position 15
                .null     "  f2  ",146
 f3bbutton      .byte     menu2col1,fkeyleft,f1top+3
-               .text     "defil. droite.."
+               .text     "defiler droite."
                .byte     18             ; position 15
                .null     $a9," f3 ",223,146
 f4bbutton      .byte     menu2col2,fkeyleft,f1top+4
-               .text     "defil. gauche.."
+               .text     "defiler gauche."
                .byte     18             ; position 15
                .null     "  f4  ",146
 f5bbutton      .byte     menu2col1,fkeyleft,f1top+6
-               .text     "defil. haut...."
+               .text     "defiler haut..."
                .byte     18             ; position 15
                .null     $a9," f5 ",223,146
 f6bbutton      .byte     menu2col2,fkeyleft,f1top+7
-               .text     "defil. bas....."
+               .text     "defiler bas...."
                .byte     18             ; position 15
                .null     "  f6  ",146
 f7bbutton      .byte     menu2col1,fkeyleft,f1top+9
@@ -182,7 +173,7 @@ f7bbutton      .byte     menu2col1,fkeyleft,f1top+9
                .byte     18             ; position 15
                .null     $a9," f7 ",223,146
 f8bbutton      .byte     menu2col2,fkeyleft,f1top+10
-               .text     "afficher menu1."
+               .text     "aller au menu1."
                .byte     18             ; position 15
                .null     "  f8  ", 146
  

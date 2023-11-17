@@ -10,6 +10,29 @@ template       .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
+getfname       .block
+               jsr  push
+               #affichemesg fname_msg
+               ldx  #$00
+               stx  count
+getanother     jsr  getalphanum              
+               jsr  putch
+               ldx  count
+               sta  name,x
+               inc  count
+               ldx  count
+               cpx  #$06
+               beq  finish
+               jmp  getanother
+finish         #affichemesg pfname
+               jsr  pop
+               rts
+count          .byte     0
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 getalphanum    .block
                jsr  push
 getanother     jsr  getkey
@@ -320,7 +343,10 @@ ishex12        cmp  #$12
                bne  reste
                jmp  loop               
 reste          #locate   13,12
-               jsr  putch
+               cmp  #32
+               bpl  ok
+               jmp  loop
+ok             jsr  putch
                pha
                lda  currentkey
                sta  previouskey
