@@ -19,7 +19,7 @@ menu2col1      =    vblanc
 menu2col2      =    vgris2
 flashcol       =    vblanc
 whoamicol      =    vjaune
-charcolor      =    vvert1      
+charcolor      =    vblanc    
 charscolor     =    vgris1
 
  
