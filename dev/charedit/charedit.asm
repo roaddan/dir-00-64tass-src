@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-version  = "20231115-164208"
+version  = "20231116-100400"
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
@@ -27,7 +27,7 @@ main           .block
                jsr  push
                jsr  scrmaninit
                #disable
-               jsr  splashscreen
+               jsr  drawcredits
                ;#printcxy menu_msg
 wait           
                ;jsr  getkey
@@ -49,7 +49,7 @@ wait
                jsr  screenena 
                jsr  keyaction
                jsr  cls
-               jsr  splashscreen
+               jsr  drawcredits
                ;#printcxy bye_msg
                ;#printcxy any_msg
                ;jsr  getkey
@@ -126,16 +126,17 @@ getfname       .block
                #affichemesg fname_msg
                ldx  #$00
                stx  count
-getanother     jsr  getkey
-               cmp  #$30      ; 0
-               bmi  getanother
-               cmp  #$3a      ; 9+1
-               bmi  goodone          
-isitletter     cmp  #$41      ; A
-               bmi  getanother
-               cmp  #$5b      ; Z+1
-               bmi  goodone
-               jmp  getanother              
+getanother     jsr  getalphanum              
+;               jsr  getkey
+;               cmp  #$30      ; 0
+;               bmi  getanother
+;               cmp  #$3a      ; 9+1
+;               bmi  goodone          
+;isitletter     cmp  #$41      ; A
+;               bmi  getanother
+;               cmp  #$5b      ; Z+1
+;               bmi  goodone
+;               jmp  getanother
 goodone        jsr  putch
                ldx  count
                sta  name,x
@@ -149,11 +150,36 @@ finish         #affichemesg pfname
                rts
 count          .byte     0
                .bend
+
+
 pfname         .byte     1,1,5     
 fname          .text     "@0:"
 name           .text     "??????"
 ext            .null     ".chr"
 device         .byte     0
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+getalphanum    .block
+               jsr  push
+getanother     jsr  getkey
+               cmp  #$30      ; 0
+               bmi  getanother
+               cmp  #$3a      ; 9+1
+               bmi  goodone          
+isitletter     cmp  #$41      ; A
+               bmi  getanother
+               cmp  #$5b      ; Z+1
+               bmi  goodone
+               jmp  getanother              
+goodone        lda  tempbyte
+               jsr  pop
+               lda  tempbyte
+               rts
+tempbyte       .byte     0
+               .bend
+
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
