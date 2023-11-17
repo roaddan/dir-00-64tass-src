@@ -5,7 +5,7 @@ version  = "20231116-100400"
                .include "macros-64tass.asm"
                .include "localmacro.asm"
                .enc     none
- 
+  
 fkeyleft=18
 f1top=10 
 scrnnewram     =    $0400 
