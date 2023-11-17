@@ -115,84 +115,72 @@ fkeyleft=18
 f1top=8
 ;--------- first function key set ------------------               
 
+
+
+
 f1abutton      .byte     menu1col1,fkeyleft,f1top       ;133
-               .text     "edit char..."
+               .text     "edit char....."
                .byte     18             ; position 15
-               .text     $a9,"  f1  ",223
-               .byte     146,0
+               .null     $a9," f1 ",223,146
 f2abutton      .byte     menu1col2,fkeyleft,f1top+1     ;138
-               .text     "copy from..."
+               .text     "copy from....."
                .byte     18   ; position 15
-               .text     "   f2   "
-               .byte     146,0
+               .null     "  f2  ",146
 f3abutton      .byte     menu1col1,fkeyleft,f1top+3     ;137
-               .text     "save to....." 
+               .text     "save to......." 
                .byte     18            ; position 15
-               .text     $a9,"  f3  ",223
-               .byte     146,0
+               .null     $a9," f3 ",223,146
 f4abutton      .byte     menu1col2,fkeyleft,f1top+4     ;134
-               .text     "load from..."
+               .text     "load from....."
                .byte     18             ; position 15
-               .text     "   f4   "
-               .byte     146,0
+               .null     "  f4  ",146
 f5abutton      .byte     menu1col1,fkeyleft,f1top+6     ;135
-               .text     "clear......."
+               .text     "clear........."
                .byte     18             ; position 15
-               .text     $a9,"  f5  ",223
-               .byte     146,0     
+               .null     $a9," f5 ",223,146
 f6abutton      .byte     menu1col2,fkeyleft,f1top+7    ;139
-               .text     "fill........"
+               .text     "fill.........."
                .byte     18             ; position 15
-               .text     "   f6   "
-               .byte     146,0
+               .null     "  f6  ",146
 f7abutton      .byte     menu1col1,fkeyleft,f1top+9    ;136
-               .text     "restore all."
+               .text     "restore all..."
                .byte     18             ; position 15
-               .text     $a9,"  f7  ",223
-               .byte     146,0
+               .null     $a9," f7 ",223,146
 f8abutton      .byte     menu1col2,fkeyleft,f1top+10
-               .text     "function...."
+               .text     "function      "
                .byte     18             ; position 15
-               .text     "   f8   "
-               .byte     146,0
+               .null     "  f8  ", 146
 ;-------- second function key set ------------------               
 f1bbutton      .byte     menu2col1,fkeyleft,f1top
-               .text     "flip vert..." 
+               .text     "flip vert....." 
                .byte     18             ; position 15
-               .text     $a9,"  f1  ",223
-               .byte     146,0
+               .null     $a9," f1 ",223,146
 f2bbutton      .byte     menu2col2,fkeyleft,f1top+1
-               .text     "flip horz..."
+               .text     "flip horz....."
                .byte     18             ; position 15
-               .text     "   f2   "
-               .byte     146,0
+               .null     "  f2  ",146
 f3bbutton      .byte     menu2col1,fkeyleft,f1top+3
-               .text     "scroll right"
+               .text     "scroll right.."
                .byte     18             ; position 15
-               .text     $a9,"  f3  ",223
-               .byte     146,0
+               .null     $a9," f3 ",223,146
 f4bbutton      .byte     menu2col2,fkeyleft,f1top+4
-               .text     "scroll left."
+               .text     "scroll left..."
                .byte     18             ; position 15
-               .text     "   f4   "
-               .byte     146,0
+               .null     "  f4  ",146
 f5bbutton      .byte     menu2col1,fkeyleft,f1top+6
-               .text     "scroll up..."
+               .text     "scroll up....."
                .byte     18             ; position 15
-               .text     $a9,"  f5  ",223
-               .byte     146,0
+               .null     $a9," f5 ",223,146
 f6bbutton      .byte     menu2col2,fkeyleft,f1top+7
-               .text     "scroll down."
+               .text     "scroll down..."
                .byte     18             ; position 15
-               .text     "   f6   "
-               .byte     146,0
+               .null     "  f6  ",146
 f7bbutton      .byte     menu2col1,fkeyleft,f1top+9
-               .text     "reverse bits"
+               .text     "reverse bits.."
                .byte     18             ; position 15
-               .text     $a9,"  f7  ",223
-               .byte     146,0
+               .null     $a9," f7 ",223,146
 f8bbutton      .byte     menu2col2,fkeyleft,f1top+10
-               .text     "function...."
+               .text     "function      "
                .byte     18             ; position 15
-               .text     "   f8   "
-               .byte     146,0
+               .null     "  f8  ", 146
+ 

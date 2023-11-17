@@ -1,28 +1,30 @@
 ;-------------------------------------------------------------------------------
-version  = "20231116-100400"
+version  = "20231116-100400"  
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
                .include "localmacro.asm"
                .enc     none
-
+ 
+fkeyleft=18
+f1top=10 
 scrnnewram     =    $0400 
-charsdef       =    14
+charsdef       =    12
 grid_top       =    9
 grid_left      =    1
 grid_bot       =    grid_top + 7
 grid_right     =    grid_left + 7
+bordure        =    vgris
+fond           =    vnoir
 mesgcol        =    vcyan
-menu1col1      =    vblanc   ;vvert1
-menu1col2      =    vgris2     ;vvert
-menu2col1      =    vblanc
-menu2col2      =    vgris2
+menu1col1      =    vcyan
+menu1col2      =    vbleu1
+menu2col1      =    vvert1
+menu2col2      =    vvert
 flashcol       =    vblanc
 whoamicol      =    vjaune
-charcolor      =    vblanc    
-charscolor     =    vgris1
-
- 
+charcolor      =    vblanc   
+charscolor     =    vgris2
 main           .block
                jsr  push
                jsr  scrmaninit
@@ -43,8 +45,8 @@ wait
                lda  #$00
                sta  fkeyset
                jsr  drawfkeys
-               jsr  f8action       
-               jsr  f8action
+               ;jsr  f8action       
+               ;jsr  f8action
                lda  #$00
                jsr  screenena 
                jsr  keyaction
@@ -59,69 +61,18 @@ wait
                rts
                .bend
 
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-copychar       .block
-               jsr  push
-               jsr  getvalidkey
-               lda  bitmapaddr     ; on pointe sur la table des bitmaps
-               sta  zpage1
-               lda  bitmapaddr+1
-               sta  zpage1+1
-               ; on ajuste l'offset du pointeur de bitmap
-               ldx  copykey
-               lda  asciitorom,x
-               tax
-               cpx  #$00
-               beq  no_offset      ; sommes nous déja à 0
-addagain       lda  #$08
-               jsr  zp1addnum      ; on augmente de 8 byte ...
-               dex                 ; pour chaque caracteres
-               bne  addagain
-               ; on place les pointeurs pour faire la copie
-no_offset      lda  mapaddr        ; le caractere actuel
-               sta  zpage2         ;
-               lda  mapaddr+1      ;
-               sta  zpage2+1       ;
-               ; on effectue la copie des 8 octets
-               ldy  #$00
-nextbyte       lda  (zpage1),y
-               sta  (zpage2),y
-               iny
-               cpy  #$08
-               bne  nextbyte               
-out            jsr  pop
+
+savefile       .block
+               #pushall
+
+               #popall
                rts
-thismapaddr
                .bend
 
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-getvalidkey    .block
-               jsr  push
-               #affichemesg copychar_msg
-getgoodkey     jsr  getkey
-               sta  copykey
-               tax
-               ldy  asciitorom,x
-               cpy  $00
-               bne  goodone
-               ldx  copykey
-               cpx  #$40
-               beq  goodone
-               jmp  getgoodkey
-goodone        jsr  putch
-               jsr  pop
-               rts
-               .bend
-copykey        .byte 0   
-
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-getfname       .block 
+getfname       .block
                jsr  push
                #affichemesg fname_msg
                ldx  #$00
@@ -152,33 +103,11 @@ count          .byte     0
                .bend
 
 
-pfname         .byte     1,1,5     
+pfname         .byte     vvert,27,3,18     
 fname          .text     "@0:"
 name           .text     "??????"
 ext            .null     ".chr"
-device         .byte     0
-
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-getalphanum    .block
-               jsr  push
-getanother     jsr  getkey
-               cmp  #$30      ; 0
-               bmi  getanother
-               cmp  #$3a      ; 9+1
-               bmi  goodone          
-isitletter     cmp  #$41      ; A
-               bmi  getanother
-               cmp  #$5b      ; Z+1
-               bmi  goodone
-               jmp  getanother              
-goodone        lda  tempbyte
-               jsr  pop
-               lda  tempbyte
-               rts
-tempbyte       .byte     0
-               .bend
+device         .byte     146,0
 
 ;-------------------------------------------------------------------------------
 ;
@@ -199,7 +128,7 @@ curscl         .byte     grid_left
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
                .include "routines.asm"
-               .include "messages.asm"
+               .include "messages_fr.asm"
                .include "map-c64-kernal.asm"
                .include "map-c64-vicii.asm"
                .include "map-c64-basic2.asm"

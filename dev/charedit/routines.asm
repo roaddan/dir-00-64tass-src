@@ -10,6 +10,86 @@ template       .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
+getalphanum    .block
+               jsr  push
+getanother     jsr  getkey
+               cmp  #$30      ; 0
+               bmi  getanother
+               cmp  #$3a      ; 9+1
+               bmi  goodone          
+isitletter     cmp  #$41      ; A
+               bmi  getanother
+               cmp  #$5b      ; Z+1
+               bmi  goodone
+               jmp  getanother              
+goodone        sta  tempbyte
+               jsr  pop
+               lda  tempbyte
+               rts
+tempbyte       .byte     0
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+copychar       .block
+               jsr  push
+               jsr  getvalidkey
+               lda  bitmapaddr     ; on pointe sur la table des bitmaps
+               sta  zpage1
+               lda  bitmapaddr+1
+               sta  zpage1+1
+               ; on ajuste l'offset du pointeur de bitmap
+               ldx  copykey
+               lda  asciitorom,x
+               tax
+               cpx  #$00
+               beq  no_offset      ; sommes nous déja à 0
+addagain       lda  #$08
+               jsr  zp1addnum      ; on augmente de 8 byte ...
+               dex                 ; pour chaque caracteres
+               bne  addagain
+               ; on place les pointeurs pour faire la copie
+no_offset      lda  mapaddr        ; le caractere actuel
+               sta  zpage2         ;
+               lda  mapaddr+1      ;
+               sta  zpage2+1       ;
+               ; on effectue la copie des 8 octets
+               ldy  #$00
+nextbyte       lda  (zpage1),y
+               sta  (zpage2),y
+               iny
+               cpy  #$08
+               bne  nextbyte               
+out            jsr  pop
+               rts
+               .bend 
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+getvalidkey    .block
+               jsr  push
+               #affichemesg copychar_msg
+getgoodkey     jsr  getkey
+               sta  copykey
+               tax
+               ldy  asciitorom,x
+               cpy  $00
+               bne  goodone
+               ldx  copykey
+               cpx  #$40
+               beq  goodone
+               jmp  getgoodkey
+goodone        jsr  putch
+               jsr  pop
+               rts
+               .bend
+copykey        .byte 0   
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 drawcredits   .block
                jsr  push
                jsr  cls
@@ -63,7 +143,7 @@ resetmenuacolor  .block
                sta  f3abutton
                sta  f5abutton
                sta  f7abutton
-               lda  #menu2col2
+               lda  #menu1col2
                sta  f2abutton
                sta  f4abutton
                sta  f6abutton
@@ -284,11 +364,7 @@ editor         .block
                jsr  push
                #affichemesg exit_msg
                #affichemesg edit_msg
-               lda  #vgris1
-               jsr  setmenuacolor
-               lda  #menu1col1
-               sta  f1abutton
-               jsr  drawfkeys
+
                jsr  setcurs
                lda  currentkey
                #locate   17,5
@@ -297,6 +373,9 @@ editor         .block
                jsr  drawbitmap
 ed_loop        jsr  getkey
 ; --- gestion des touches ---
+f1             cmp  #f1key
+               bne  cu
+               jmp  do_ctrlx
 cu             cmp  #cursu
                bne  cd
                jmp  do_up
@@ -682,8 +761,8 @@ bitmapaddr     .word     bitmapmem           ; $3000, 12288
 ;
 ;-------------------------------------------------------------------------------
 staticscreen   .block
-               #changebord vgris1
-               #changeback vgris
+               #changebord bordure
+               #changeback fond
                ;#uppercase
                jsr  drawlines
                jsr  drawallchars
@@ -702,6 +781,7 @@ drawfkeys      .block
                lda  fkeyset
                cmp  #$0
                bne  secondks
+               #printcxy titremenu1
                #printcxy f1abutton
                #printcxy f2abutton
                #printcxy f3abutton
@@ -711,7 +791,8 @@ drawfkeys      .block
                #printcxy f7abutton
                #printcxy f8abutton
                jmp end 
-secondks       #printcxy f1bbutton
+secondks       #printcxy titremenu2
+               #printcxy f1bbutton
                #printcxy f2bbutton
                #printcxy f3bbutton
                #printcxy f4bbutton
@@ -901,9 +982,15 @@ f1action       .block
                lda  #$ff
                sta  editmode
                lda  fkeyset
-               bne  menub  
-               #affichemesg f1a_msg
+               beq  menua
+               jmp  menub  
+menua          #affichemesg f1a_msg
                #flashfkey f1abutton
+               lda  #vgris
+               jsr  setmenuacolor
+               lda  #menu1col1
+               sta  f1abutton
+               jsr  drawfkeys
                jsr  editor
                #affichemesg quit_msg
                #affichemesg menua_msg
@@ -941,7 +1028,6 @@ out            pla
                #affichemesg prompt_msg
                rts
                .bend
-
 
 ;-------------------------------------------------------------------------------
 ;

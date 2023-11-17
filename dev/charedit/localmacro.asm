@@ -17,7 +17,7 @@ flashfkey      .macro fkeyptr
                lda  \fkeyptr
                pha
                lda  #146
-               sta  \fkeyptr+15
+               sta  \fkeyptr+18
                lda  #flashcol
                sta  \fkeyptr
                ldx  #<\fkeyptr
@@ -25,7 +25,7 @@ flashfkey      .macro fkeyptr
                jsr  putscxy
                jsr  delay
                lda  #18
-               sta  \fkeyptr+15
+               sta  \fkeyptr+18
                pla
                sta  \fkeyptr
                ldx  #<\fkeyptr
