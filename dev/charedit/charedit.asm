@@ -9,7 +9,7 @@ version  = "20231116-100400"
 fkeyleft       =    18
 f1top          =    9 
 scrnnewram     =    $0400 
-charsdef       =    12
+charsdef       =    10
 grid_top       =    9
 grid_left      =    1
 grid_bot       =    grid_top + 7
@@ -19,8 +19,8 @@ fond           =    vnoir
 mesgcol        =    vcyan
 menu1col1      =    vcyan
 menu1col2      =    vbleu1
-menu2col1      =    vvert1
-menu2col2      =    vvert
+menu2col1      =    vgris2
+menu2col2      =    vgris1
 flashcol       =    vblanc
 whoamicol      =    vjaune
 charcolor      =    vblanc   
@@ -45,6 +45,7 @@ wait           ;jsr  getkey
                sta  fkeyset
                jsr  drawfkeys
                lda  #$00
+               #affichemesg prompt_msg
                jsr  screenena 
                jsr  keyaction
                jsr  cls
@@ -52,28 +53,67 @@ wait           ;jsr  getkey
                #printcxy bye_msg
                #printcxy any_msg
                jsr  getkey
-               ;jsr  k_warmboot
+               jsr  k_warmboot
                jsr  cls       
                jsr  pop
                rts
                .bend
 
-savefile       .block
+savetofile     .block
                #pushall
-
+               lda  #<fname
+               sta  dsk_fnptr
+               lda  #>fname
+               sta  dsk_fnptr+1
+               lda  #13
+               sta  dsk_fnlen
+               lda  device
+               sta  dsk_lfsno
+               lda  #<bitmapmem
+               sta  dsk_data_s
+               lda  #>bitmapmem
+               sta  dsk_data_s+1
+               lda  #<endofaddr
+               sta  dsk_data_e
+               lda  #>endofaddr
+               sta  dsk_data_e+1
+               #locate 1,5
+               jsr  memtofile
                #popall
                rts
                .bend
-
-pfname         .byte     vvert,27,3,18     
-fname          .text     "@0:"
-name           .text     "??????"
-ext            .null     ".chr"
-device         .byte     146,0
-
+loadfromfile   .block
+               #pushall
+               lda  #<fname
+               sta  dsk_fnptr
+               lda  #>fname
+               sta  dsk_fnptr+1
+               lda  #13
+               sta  dsk_fnlen
+               lda  device
+               sta  dsk_lfsno
+               lda  #<bitmapmem
+               sta  dsk_data_s
+               lda  #>bitmapmem
+               sta  dsk_data_s+1
+               lda  #<endofaddr
+               sta  dsk_data_e
+               lda  #>endofaddr
+               sta  dsk_data_e+1
+               #locate 1,5
+               jsr  filetomem
+               #popall
+               rts
+               .bend
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
+bitmapmem      =         charsdef * 1024     ;Calcul position ram des caracteres.
+endofaddr      =         (charsdef * 1024) + (4*$800)
+mstopaddr      =         $d000+(4*$800)
+startaddr      .word     $d000               ; 53248
+stopaddr       .word     mstopaddr           ; 55296 
+bitmapaddr     .word     bitmapmem           ; $3000, 12288     
 eorval         .byte     $80,$40,$20,$10,$08,$04,$02,$01
 editmode       .byte     0
 fkeyset        .byte     0
@@ -86,11 +126,16 @@ byteaddr       .word     0
 gridaddr       .word     0 
 cursln         .byte     grid_top
 curscl         .byte     grid_left
+pfname         .byte     vvert,27,3,18     
+fname          .text     "@0:"
+name           .text     "??????"
+ext            .null     ".chr",148
+device         .byte     0
 ;-------------------------------------------------------------------------------
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
                .include "routines.asm"
-               .include "messages_en.asm"
+               .include "messages_fr.asm"
                .include "map-c64-kernal.asm"
                .include "map-c64-vicii.asm"
                .include "map-c64-basic2.asm"
@@ -100,7 +145,7 @@ curscl         .byte     grid_left
                .include "lib-cbm-mem.asm"
                .include "lib-cbm-hex.asm"
                .include "lib-cbm-keyb.asm"
-;               .include "lib-cbm-disk.asm"
+               .include "lib-cbm-disk.asm"
 ;               .include "lib-c64-text-sd.asm"
 ;               .include "lib-c64-text-mc.asm"
 ;               .include "lib-c64-drawregs.asm"                

@@ -343,10 +343,7 @@ ishex12        cmp  #$12
                bne  reste
                jmp  loop               
 reste          #locate   13,12
-               cmp  #32
-               bpl  ok
-               jmp  loop
-ok             jsr  putch
+               jsr  putch
                pha
                lda  currentkey
                sta  previouskey
@@ -357,8 +354,6 @@ ok             jsr  putch
                sty  bitmapoffset
                jsr  drawkeyval
                jsr  drawbitmap
-;               #locate   13,12
-;               jsr  putch
 ;               #locate   17,5
 ;               jsr  atodec
 ;               #print    adec
@@ -777,11 +772,6 @@ onemore        lda  (zpage1),y
                rts
                .bend
 
-bitmapmem =    charsdef * 1024     ;Calcul de la position ram des caracteres.
-mstopaddr =    $d000+(4*$800)
-startaddr      .word     $d000               ; 53248
-stopaddr       .word     mstopaddr           ; 55296 
-bitmapaddr     .word     bitmapmem           ; $3000, 12288     
 
 ;-------------------------------------------------------------------------------
 ;
@@ -1067,14 +1057,17 @@ f3action       .block
                #flashfkey f3abutton
                #affichemesg f3a_msg
 getagain       jsr  getkey
-               cmp  #$43
+               cmp  #$31
                beq  devok
-               cmp  #$44
+               cmp  #$38
+               beq  devok
+               cmp  #$39
                beq  devok
                jmp  getagain
 devok          sta  device
                jsr  putch
                jsr  getfname
+               jsr  loadfromfile
                jmp  out
 menub          #affichemesg f3b_msg
                #flashfkey f3bbutton

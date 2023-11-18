@@ -14,10 +14,10 @@ copy_msg       .byte     mesgcol,0,5
                .null     " enter character to copy:"
 f3a_msg
 save_msg       .byte     mesgcol,0,5,146
-               .null     " save on cassette or disk? (c/d): "
+               .null     " save on witch device? (1/8/9): "
 f4a_msg
 load_msg       .byte     mesgcol,0,5,146
-               .null     " load from cassette or disk? (c/d): "
+               .null     " load from witch device? (1/8/9): "
 f5a_msg
 clear_msg      .byte     mesgcol,0,5
                .null     " clear char: chr$(   )"

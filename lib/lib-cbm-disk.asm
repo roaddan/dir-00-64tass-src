@@ -153,6 +153,27 @@ error2         ldx #<dsk_emsg2
                rts
                .bend
 
+;mem2file_usage jsr  push
+;               lda  #<fname
+;               sta  dsk_fnptr
+;               lda  #<fname
+;               sta  dsk_fnptr+1
+;               lda  #12
+;               sta  dsk_fn_len
+;               lda  device
+;               sta  dsk_lfsno
+;               lda  #<datastart
+;               sta  dsk_data_s
+;               lda  #>datastart
+;               sta  dsk_data_s+1
+;               lda  #<dataend
+;               sta  dsk_data_e
+;               lda  #>dataend
+;               sta  dsk_data_e+1
+;               jsr  memtofile
+;               jsr  pop
+;               rts
+
 dsk_putmesg    .block
                jsr push
                ldx #<dsk_msg0         
@@ -183,3 +204,5 @@ dsk_emsg1      .byte     141
                .null     "fichier non ouvert"
 dsk_emsg2      .byte     17
                .null     "erreur d'ecriture"
+
+
