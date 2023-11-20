@@ -53,7 +53,7 @@ wait           ;jsr  getkey
                #printcxy bye_msg
                #printcxy any_msg
                jsr  getkey
-               jsr  k_warmboot
+               ;jsr  k_warmboot
                jsr  cls       
                jsr  pop
                rts
@@ -65,9 +65,10 @@ savetofile     .block
                sta  dsk_fnptr
                lda  #>fname
                sta  dsk_fnptr+1
-               lda  #13
+               lda  #(device-fname-1)
                sta  dsk_fnlen
                lda  device
+               and  #$0f
                sta  dsk_lfsno
                lda  #<bitmapmem
                sta  dsk_data_s
@@ -77,7 +78,8 @@ savetofile     .block
                sta  dsk_data_e
                lda  #>endofaddr
                sta  dsk_data_e+1
-               #locate 1,5
+               #printcxy blankmsg
+               #locate 1,4
                jsr  memtofile
                #popall
                rts
@@ -88,9 +90,10 @@ loadfromfile   .block
                sta  dsk_fnptr
                lda  #>fname
                sta  dsk_fnptr+1
-               lda  #13
+               lda  #(device-fname-1)
                sta  dsk_fnlen
                lda  device
+               and  #$0f
                sta  dsk_lfsno
                lda  #<bitmapmem
                sta  dsk_data_s
@@ -100,11 +103,13 @@ loadfromfile   .block
                sta  dsk_data_e
                lda  #>endofaddr
                sta  dsk_data_e+1
-               #locate 1,5
+               #printcxy blankmsg
+               #locate 1,4
                jsr  filetomem
                #popall
                rts
                .bend
+
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -129,7 +134,7 @@ curscl         .byte     grid_left
 pfname         .byte     vvert,27,3,18     
 fname          .text     "@0:"
 name           .text     "??????"
-ext            .null     ".chr",148
+ext            .null     ".chr"
 device         .byte     0
 ;-------------------------------------------------------------------------------
 ; Including my self written libraries.

@@ -1065,7 +1065,7 @@ getagain       jsr  getkey
                beq  devok
                jmp  getagain
 devok          sta  device
-               jsr  putch
+               ;jsr  putch
                jsr  getfname
                jsr  loadfromfile
                jmp  out
@@ -1096,7 +1096,7 @@ getagain       jsr  getkey
                beq  devok
                jmp  getagain
 devok          sta  device
-               jsr  putch
+               ;jsr  putch
                jsr  getfname
                jmp  out
 menub          #affichemesg f4b_msg
