@@ -28,16 +28,18 @@ charscolor     =    vgris2
 main           .block
                jsr  push
                jsr  scrmaninit
-               #disable
-               jsr  drawcredits
+               ;#disable
+               ;jsr  drawcredits
                ;#printcxy menu_msg
 wait           ;jsr  getkey
                ;cmp  #ctrl_x
                ;bne  wait
-               jsr  screendis
+               ;jsr  screendis
                jsr  copycharset
                jsr  cls
                jsr  setscreenptr
+               jsr  savetofile
+               jmp  endmain           
                jsr  setdefaultchar
                jsr  staticscreen
                jsr  drawbitmap
@@ -55,7 +57,7 @@ wait           ;jsr  getkey
                jsr  getkey
                ;jsr  k_warmboot
                jsr  cls       
-               jsr  pop
+endmain        jsr  pop
                rts
                .bend
 
@@ -131,9 +133,9 @@ cursln         .byte     grid_top
 curscl         .byte     grid_left
 pfname         .byte     vvert,27,3,18     
 fname          .text     "@0:"
-name           .text     "??????"
+name           .text     "rester"
 ext            .null     ".chr"
-device         .byte     0
+device         .byte     8
 ;-------------------------------------------------------------------------------
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
