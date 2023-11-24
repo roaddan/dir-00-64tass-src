@@ -66,10 +66,12 @@ savetofile     .block
                sta  dsk_fnptr
                lda  #>fname
                sta  dsk_fnptr+1
-               lda  #(device-fname-1)
+               lda  #(device-fname-1)               
                sta  dsk_fnlen
                lda  device
+               and  #$0f
                sta  dsk_lfsno
+               sta  dsk_dev
                lda  #<bitmapmem
                sta  dsk_data_s
                lda  #>bitmapmem
@@ -93,6 +95,8 @@ loadfromfile   .block
                lda  #(device-fname-1)
                sta  dsk_fnlen
                lda  device
+               and  #$0f
+               sta  dsk_dev
                sta  dsk_lfsno
                lda  #<bitmapmem
                sta  dsk_data_s
