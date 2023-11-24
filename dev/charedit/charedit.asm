@@ -5,7 +5,6 @@ version  = "20231116-100400"
                .include "macros-64tass.asm"
                .include "localmacro.asm"
                .enc     none
-
 fkeyleft       =    18
 f1top          =    9 
 scrnnewram     =    $0400 
@@ -28,18 +27,18 @@ charscolor     =    vgris2
 main           .block
                jsr  push
                jsr  scrmaninit
-               ;#disable
-               ;jsr  drawcredits
-               ;#printcxy menu_msg
+               #disable
+               jsr  drawcredits
+               #printcxy menu_msg
 wait           ;jsr  getkey
                ;cmp  #ctrl_x
                ;bne  wait
-               ;jsr  screendis
+               jsr  screendis
                jsr  copycharset
                jsr  cls
                jsr  setscreenptr
                jsr  savetofile
-               jmp  endmain           
+               ;jmp  endmain           
                jsr  setdefaultchar
                jsr  staticscreen
                jsr  drawbitmap
@@ -133,7 +132,7 @@ cursln         .byte     grid_top
 curscl         .byte     grid_left
 pfname         .byte     vvert,27,3,18     
 fname          .text     "@0:"
-name           .text     "rester"
+name           .text     "origin"
 ext            .null     ".chr"
 device         .byte     8
 ;-------------------------------------------------------------------------------
