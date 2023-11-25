@@ -2,7 +2,6 @@
 # ===============================================
 # ======== P R O J E C T   S E C T I O N ========
 # ===============================================
-# /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/dev/charedit
 # The basename of your project main file ((no extension) .asm is presumed).
 SOURCENAME=charedit
 # The lowest common project shared directory complete path.
@@ -16,16 +15,15 @@ OUTDIR=/Users/Locals/temp/Vice
 # =========== V I C E   S E C T I O N ===========
 # ===============================================
 # Complete path to the Vic20 emulator program.
-VICEPATH=/Applications/VICE
-V20=$(VICEPATH)/xvic.app/Contents/MacOS/xvic
+V20=/usr/bin/xvic
 # Complete path to the C64 emulator program.
-X64=$(VICEPATH)/x64.app/Contents/MacOS/x64
+X64=/usr/bin/x64
 # Complete path to the C64sc emulator program.
-X64SC=$(VICEPATH)/x64sc.app/Contents/MacOS/x64sc
+X64SC=/usr/bin//x64sc
 # Complete path to the c1541 disk creation program.
-C1541=$(VICEPATH)/tools/c1541
+C1541=/usr/bin/c1541
 # Complete path to the cartconv cartridge converter program.
-CARTCONV=$(VICEPATH)/tools/cartconv
+CARTCONV=/usr/bin//cartconv
 # Complete path to some other emulators emulator program.
 X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
 X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
@@ -34,7 +32,7 @@ X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
 # ===============================================
 # Tis can be change to any assembler od your liking.
 # Complete path to the 64tass assembler program.
-TASS=/Users/daniel/bin/64tass_dir/64tass
+TASS=/usr/bin//64tass
 # The Complete path to the library directory.
 TASSLIB=$(BASEDIR)/dir-00-64tass-src/lib
 # ===============================================
@@ -84,11 +82,16 @@ all: 	$(SOURCENAME).d64
 #		$(FTPD64CMD)
 
 ftp:	
+#		echo $(FTPASMCMD)
+#		echo $(FTPTXTCMD)
+#		echo $(FTPPRGCMD)
+#		echo $(FTPD64CMD)
+#		echo $(FTPCRTCMD)
 		$(FTPASMCMD)
 		$(FTPTXTCMD)
 		$(FTPPRGCMD)
 		$(FTPD64CMD)
-		$(FTPCRTCMD)
+#		$(FTPCRTCMD)
 
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 -write $(SOURCENAME).prg $(SOURCENAME) 
