@@ -116,6 +116,22 @@ loadfromfile   .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
+screenredraw   .block
+               #pushall
+               jsr  screendis
+               jsr  cls
+               jsr  staticscreen
+               jsr  drawbitmap
+               jsr  drawfkeys
+               #affichemesg prompt_msg
+               jsr  screenena
+               #popall
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 bitmapmem      =         charsdef * 1024     ;Calcul position ram des caracteres.
 endofaddr      =         (charsdef * 1024) + (4*$800)
 mstopaddr      =         $d000+(4*$800)

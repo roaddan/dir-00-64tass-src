@@ -334,8 +334,12 @@ f8             cmp  #key_f8
                bne  ctrlx
                jmp  dof8
 ctrlx          cmp  #ctrl_x
-               bne  ishex14
+               bne  ctrlr
                jmp  doquit
+ctrlr          cmp  #ctrl_r
+               bne  ishex14
+               jsr  screenredraw
+               jmp  loop
 ishex14        cmp  #$14
                bne  ishex12
                jmp  loop               
