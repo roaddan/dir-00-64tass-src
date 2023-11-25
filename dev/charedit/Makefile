@@ -15,24 +15,26 @@ OUTDIR=/Users/Locals/temp/Vice
 # =========== V I C E   S E C T I O N ===========
 # ===============================================
 # Complete path to the Vic20 emulator program.
-V20=/usr/bin/xvic
+VICEPATH=/Applications/VICE
+V20=$(VICEPATH)/xvic.app/Contents/MacOS/xvic
 # Complete path to the C64 emulator program.
-X64=/usr/bin/x64
+X64=$(VICEPATH)/x64.app/Contents/MacOS/x64
 # Complete path to the C64sc emulator program.
-X64SC=/usr/bin//x64sc
+X64SC=$(VICEPATH)/x64sc.app/Contents/MacOS/x64sc
 # Complete path to the c1541 disk creation program.
-C1541=/usr/bin/c1541
+C1541=$(VICEPATH)/tools/c1541
 # Complete path to the cartconv cartridge converter program.
-CARTCONV=/usr/bin//cartconv
+CARTCONV=$(VICEPATH)/tools/cartconv
 # Complete path to some other emulators emulator program.
-X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
+X64SCSDL=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
 X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
+VIRTUAL64=/Applications/VirtualC64_4.app/Contents/MacOS/VirtualC64
 # ===============================================
 # ========= 6 4 T A S S   S E C T I O N =========
 # ===============================================
 # Tis can be change to any assembler od your liking.
 # Complete path to the 64tass assembler program.
-TASS=/usr/bin//64tass
+TASS=/Users/daniel/bin/64tass_dir/64tass
 # The Complete path to the library directory.
 TASSLIB=$(BASEDIR)/dir-00-64tass-src/lib
 # ===============================================
@@ -56,12 +58,13 @@ PRGDIR=dir-00-64tass-bin
 # FTP SERVER CONFIG
 FTPSVRIP=192.168.2.200
 FTPCMDPATH=/usr/local/bin/lftp 
-FTPASMARG=cd /Usb0/dir-00-64tass-bin/asm; put $(SOURCENAME).asm; bye
-FTPTXTARG=cd /Usb0/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; bye
-FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
-FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
-FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
-FTPTMPARG=cd /Usb0/dir-temp; put $(SOURCENAME).prg; put $(SOURCENAME).d64; bye
+FTPASMARG=cd /Usb0/dir-00-64tass-bin/asm; put $(SOURCENAME).asm; cd /Usb1/dir-00-64tass-bin/asm; put $(SOURCENAME).asm; bye
+FTPTXTARG=cd /Usb0/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; cd /Usb1/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; bye
+FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; cd /Usb1/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
+FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; cd /Usb1/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
+FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; cd /Usb1/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
+FTPTMPARG=cd /Usb0/dir-temp; put $(SOURCENAME).prg; put $(SOURCENAME).d64;cd /Usb1/dir-temp
+#; put $(SOURCENAME).prg; put $(SOURCENAME).d64; bye
 FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
 FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)
 FTPPRGCMD=$(FTPCMDPATH) -e "$(FTPPRGARG)" $(FTPSVRIP)
@@ -70,28 +73,23 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 FTPTMPCMD=$(FTPCMDPATH) -e "$(FTPTMPARG)" $(FTPSVRIP)
 
 # SOME OTHER VARIABLES JUST TO REDUCE THE LINE LENGTH.
-VICE=$(X64)
+VICE=$(X64SCSDL)
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 
 all: 	$(SOURCENAME).d64
-		$(VICE) $(AUTOSTART) $(TMPSEP06)
-#		$(FTPTMPCMD)
+#		$(VICE) $(AUTOSTART) $(TMPSEP06)
+		$(FTPTMPCMD)
 #		$(FTPASMCMD)
 #		$(FTPTXTCMD)
 #		$(FTPPRGCMD)
 #		$(FTPD64CMD)
 
-ftp:	
-#		echo $(FTPASMCMD)
-#		echo $(FTPTXTCMD)
-#		echo $(FTPPRGCMD)
-#		echo $(FTPD64CMD)
-#		echo $(FTPCRTCMD)
+ftp:		$(FTPTMPCMD)
 		$(FTPASMCMD)
 		$(FTPTXTCMD)
 		$(FTPPRGCMD)
 		$(FTPD64CMD)
-#		$(FTPCRTCMD)
+		$(FTPCRTCMD)
 
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 -write $(SOURCENAME).prg $(SOURCENAME) 

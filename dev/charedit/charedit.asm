@@ -37,7 +37,7 @@ wait           ;jsr  getkey
                jsr  copycharset
                jsr  cls
                jsr  setscreenptr
-               jsr  savetofile
+               ;jsr  savetofile
                ;jmp  endmain           
                jsr  setdefaultchar
                jsr  staticscreen

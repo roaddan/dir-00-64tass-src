@@ -1067,7 +1067,7 @@ getagain       jsr  getkey
 devok          sta  device
                ;jsr  putch
                jsr  getfname
-               jsr  loadfromfile
+               jsr  savetofile
                jmp  out
 menub          #affichemesg f3b_msg
                #flashfkey f3bbutton
@@ -1090,14 +1090,17 @@ f4action       .block
                #flashfkey f4abutton
                #affichemesg f4a_msg
 getagain       jsr  getkey
-               cmp  #$43
+               cmp  #$31
                beq  devok
-               cmp  #$44
+               cmp  #$38
+               beq  devok
+               cmp  #$39
                beq  devok
                jmp  getagain
 devok          sta  device
                ;jsr  putch
                jsr  getfname
+               jsr  loadfromfile
                jmp  out
 menub          #affichemesg f4b_msg
                #flashfkey f4bbutton
