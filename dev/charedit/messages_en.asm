@@ -6,6 +6,9 @@ blankmsg       .byte     mesgcol,0,5,146
 
 prompt_msg     .byte     mesgcol,0,5,146
                .null     " enter f-key command :"
+
+wait_msg       .byte     mesgcol,0,5,146
+               .null     " one moment please ... "
 f1a_msg
 edit_msg       .byte     mesgcol,0,5,146     ;18
                .null     " edit mode: chr$(   )",146
@@ -60,9 +63,13 @@ copychar_msg   .byte     vjaune,0,5
 fname_msg      .byte     vjaune,0,5
                .null     " enter a 6 letter filename : ",$a4,$a4,$a4,$a4,$a4,$a4,".chr",157,157,157,157,157,157,157,157,157,157
 
-quit_msg       .byte     vblue1,21,24,18
+quit_msg       .byte     vmauve,21,24,18
                .text     "ctrl-x",146
                .null     " to quit."     
+
+redraw_msg     .byte     vrose,20,22,18
+               .text     "ctrl-r",146
+               .null     " to redraw."     
 menu_msg
 exit_msg       .byte     vvert1,21,24,18
                .text     "ctrl-x",146
@@ -78,10 +85,10 @@ whoami2        .byte     whoamicol,4,8,18
                .null     "                               ",146
 
 whoami3        .byte     whoamicol,4,9,18
-               .null     "  inspired from john heilborn  ",146
+               .null     "   from isbn : 0-942386-29-9   ",146
 
 whoami4        .byte     whoamicol,4,10,18
-               .null     "      isbn: 0-942386-29-9      ",146
+               .null     "        by john heilborn       ",146
 
 whoami5        .byte     whoamicol,4,11,18
                .null     "                               ",146
@@ -90,7 +97,7 @@ whoami6        .byte     whoamicol,4,12,18
                .null     " coded in assembly language by ",146
 
 whoami7        .byte     whoamicol,4,13,18
-               .null     "     daniel lafrance 2023      ",146
+               .null     " daniel lafrance quebec/canada ",146
 
 whoami8        .byte     whoamicol,4,14,18
                .null     "    version:",version,"    ",146

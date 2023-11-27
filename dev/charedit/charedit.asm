@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-version  = "20231116-100400"  
+version  = "20231126-235848"  
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
@@ -30,15 +30,10 @@ main           .block
                #disable
                jsr  drawcredits
                #printcxy menu_msg
-wait           ;jsr  getkey
-               ;cmp  #ctrl_x
-               ;bne  wait
                jsr  screendis
                jsr  copycharset
                jsr  cls
                jsr  setscreenptr
-               ;jsr  savetofile
-               ;jmp  endmain           
                jsr  setdefaultchar
                jsr  staticscreen
                jsr  drawbitmap
@@ -54,9 +49,9 @@ wait           ;jsr  getkey
                #printcxy bye_msg
                #printcxy any_msg
                jsr  getkey
-               ;jsr  k_warmboot
                jsr  cls       
 endmain        jsr  pop
+               jsr  k_warmboot
                rts
                .bend
 
@@ -81,6 +76,7 @@ savetofile     .block
                lda  #>endofaddr
                sta  dsk_data_e+1
                #printcxy blankmsg
+               #printcxy wait_msg
                #locate 1,4
                jsr  memtofile
                #popall
@@ -107,24 +103,9 @@ loadfromfile   .block
                lda  #>endofaddr
                sta  dsk_data_e+1
                #printcxy blankmsg
+               #printcxy wait_msg
                #locate 1,4
                jsr  filetomem
-               #popall
-               rts
-               .bend
-
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-screenredraw   .block
-               #pushall
-               jsr  screendis
-               jsr  cls
-               jsr  staticscreen
-               jsr  drawbitmap
-               jsr  drawfkeys
-               #affichemesg prompt_msg
-               jsr  screenena
                #popall
                rts
                .bend
@@ -159,6 +140,7 @@ device         .byte     8
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
                .include "routines.asm"
+;               .include "messages_fr.asm"
                .include "messages_en.asm"
                .include "map-c64-kernal.asm"
                .include "map-c64-vicii.asm"

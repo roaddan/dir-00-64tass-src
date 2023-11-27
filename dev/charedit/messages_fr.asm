@@ -6,6 +6,9 @@ blankmsg       .byte     mesgcol,0,5,146
 
 prompt_msg     .byte     mesgcol,0,5,146
                .null     " utilisez les clefs de fonction :"
+
+wait_msg       .byte     mesgcol,0,5,146
+               .null     " un instant s.v.p. ... "
 f1a_msg
 edit_msg       .byte     mesgcol,0,5,146     ;18
                .null     " mode edit: chr$(   )",146
@@ -60,9 +63,13 @@ copychar_msg   .byte     vjaune,0,5
 fname_msg      .byte     vjaune,0,5
                .null     " nom du fichier (6 lettres): ",$a4,$a4,$a4,$a4,$a4,$a4,".chr",157,157,157,157,157,157,157,157,157,157
 
-quit_msg       .byte     vblue1,21,24,18
+quit_msg       .byte     vmauve,21,24,18
                .text     "ctrl-x",146
                .null     "-quitter."     
+
+redraw_msg     .byte     vrose,18,22,18
+               .text     "ctrl-r",146
+               .null     " rafraichir."     
 menu_msg
 exit_msg       .byte     vvert1,21,24,18
                .text     "ctrl-x",146
@@ -78,10 +85,10 @@ whoami2        .byte     whoamicol,4,8,18
                .null     "                               ",146
 
 whoami3        .byte     whoamicol,4,9,18
-               .null     "    inspire de john heilborn   ",146
+               .null     " tirez de isbn : 0-942386-29-9 ",146
 
 whoami4        .byte     whoamicol,4,10,18
-               .null     "      isbn: 0-942386-29-9      ",146
+               .null     "       par john heilborn       ",146
 
 whoami5        .byte     whoamicol,4,11,18
                .null     "                               ",146

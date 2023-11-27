@@ -10,6 +10,25 @@ template       .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
+screenredraw   .block
+               #pushall
+               jsr  screendis
+               jsr  cls
+               jsr  staticscreen
+               jsr  drawbitmap
+               jsr  drawfkeys
+               #locate   13,12
+               lda  currentkey
+               jsr  putch
+               #affichemesg prompt_msg
+               jsr  screenena
+               #popall
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 getfname       .block
                jsr  push
                #affichemesg fname_msg
@@ -389,7 +408,6 @@ editor         .block
                jsr  push
                #affichemesg exit_msg
                #affichemesg edit_msg
-
                jsr  setcurs
                lda  currentkey
                #locate   17,5
@@ -788,6 +806,9 @@ staticscreen   .block
                jsr  drawallchars
                jsr  drawgrid
                jsr  drawfkeys
+               lda  #vrose
+               sta  redraw_msg  
+               #affichemesg redraw_msg
                #affichemesg quit_msg
                #locate   0,7
                rts
@@ -896,7 +917,6 @@ another93      sta  (zpage1),y
 ;
 ;-------------------------------------------------------------------------------
 drawgrid      .block
-
                jsr  push
                jsr  screendis
                lda  #<scrnnewram+(40*(grid_top))+grid_left
@@ -1011,7 +1031,13 @@ menua          #affichemesg f1a_msg
                lda  #menu1col1
                sta  f1abutton
                jsr  drawfkeys
+               lda  #vgris
+               sta  redraw_msg  
+               #affichemesg redraw_msg
                jsr  editor
+               lda  #vrose
+               sta  redraw_msg  
+               #affichemesg redraw_msg
                #affichemesg quit_msg
                #affichemesg menua_msg
                jsr  resetmenuacolor
@@ -1069,8 +1095,8 @@ getagain       jsr  getkey
                beq  devok
                jmp  getagain
 devok          sta  device
-               ;jsr  putch
                jsr  getfname
+               #affichemesg wait_msg
                jsr  savetofile
                jmp  out
 menub          #affichemesg f3b_msg
@@ -1102,9 +1128,10 @@ getagain       jsr  getkey
                beq  devok
                jmp  getagain
 devok          sta  device
-               ;jsr  putch
                jsr  getfname
+               #affichemesg wait_msg
                jsr  loadfromfile
+               jsr  screenredraw 
                jmp  out
 menub          #affichemesg f4b_msg
                #flashfkey f4bbutton
