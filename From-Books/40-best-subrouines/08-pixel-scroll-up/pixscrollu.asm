@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-Version = "20230325-153900-a"
+Version = "20240618-213900-a"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                 .include    "header-c64.asm"
                 .include    "macros-64tass.asm"
@@ -9,6 +9,8 @@ Version = "20230325-153900-a"
                 .enc    none
 main            .block
                 jsr scrmaninit
+                lda #14
+                jsr putch
                 jsr help
                 jsr anykey
                 jmp b_warmstart

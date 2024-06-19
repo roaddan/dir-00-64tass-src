@@ -1,6 +1,6 @@
 ; sets env colors
 ;-------------------------------------------------------------------------------
-            Version = "20230516-080814"
+            Version = "20240619-080814"
 ;-------------------------------------------------------------------------------
             .include    "header-c64.asm"
             .include    "macros-64tass.asm"
@@ -37,6 +37,8 @@ setsenvcolors
                  
 help            .block      
                 jsr cls
+                lda #14
+                jsr $ffd2
                 #print line
                 #print headera
                 #print headerb

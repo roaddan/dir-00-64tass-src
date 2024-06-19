@@ -1,7 +1,6 @@
 ;-------------------------------------------------------------------------------
-                Version = "20230528-210325"
-;-------------------------------------------------------------------------------                .include    "header-c64.asm"
-                
+                Version = "20240620-222425"
+;-------------------------------------------------------------------------------
                 .include    "header-c64.asm"
                 .include    "macros-64tass.asm"
 ;-------------------------------------------------------------------------------
@@ -24,10 +23,13 @@ main            .block
 ;                jsr anykey
 ;                jsr releasekey
                 jsr scrmaninit
+                jsr help
                 rts
                 .bend
 help            .block      
                 jsr cls
+                lda #14
+                jsr putch
                 #print line
                 #print headera
                 #print headerb
@@ -157,7 +159,7 @@ loop1           sta $4000,x
                 rts
                 .bend
 fin             .byte 0
-colour          .byte 0
+colour          .byte 2
 
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut

@@ -3,7 +3,7 @@
 # ======== P R O J E C T   S E C T I O N ========
 # ===============================================
 # The basename of your project main file ((no extension) .asm is presumed).
-SOURCENAME=jbmon64
+SOURCENAME=jbmon64cart
 # The lowest common project shared directory complete path.
 # for thingds like librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -72,7 +72,12 @@ VICE=$(X64)
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 
 all: 	$(SOURCENAME).d64
-		$(VICE) $(AUTOSTART) $(TMPSEP06)
+#		$(VICE) $(AUTOSTART) $(TMPSEP06)
+		$(FTPASMCMD)
+		$(FTPTXTCMD)
+		$(FTPPRGCMD)
+		$(FTPD64CMD)
+		$(FTPCRTCMD)
 
 ftp:	
 #		echo $(FTPASMCMD)
@@ -84,7 +89,7 @@ ftp:
 		$(FTPTXTCMD)
 		$(FTPPRGCMD)
 		$(FTPD64CMD)
-#		$(FTPCRTCMD)
+		$(FTPCRTCMD)
 
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 -write $(SOURCENAME).prg $(SOURCENAME) 

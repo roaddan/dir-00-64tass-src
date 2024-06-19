@@ -15,15 +15,15 @@ OUTDIR=/Users/Locals/temp/Vice
 # =========== V I C E   S E C T I O N ===========
 # ===============================================
 # Complete path to the Vic20 emulator program.
-V20=/usr/bin/xvic
+V20=/Applications/VICE/xvic.app/Contents/MacOS/xvic
 # Complete path to the C64 emulator program.
-X64=/usr/bin/x64
+X64=/Applications/VICE/x64.app/Contents/MacOS/x64
 # Complete path to the C64sc emulator program.
-X64SC=/usr/bin//x64sc
+X64SC=/Applications/VICE/x64sc.app/Contents/MacOS/x64sc
 # Complete path to the c1541 disk creation program.
-C1541=/usr/bin/c1541
+C1541=/Users/daniel/bin/c1541
 # Complete path to the cartconv cartridge converter program.
-CARTCONV=/usr/bin//cartconv
+CARTCONV=/Users/daniel/bin/cartconv
 # Complete path to some other emulators emulator program.
 X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
 X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
@@ -32,7 +32,7 @@ X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
 # ===============================================
 # Tis can be change to any assembler od your liking.
 # Complete path to the 64tass assembler program.
-TASS=/usr/bin//64tass
+TASS=/Users/daniel/bin/64tass_dir/64tass
 # The Complete path to the library directory.
 TASSLIB=$(BASEDIR)/dir-00-64tass-src/lib
 # ===============================================
@@ -72,8 +72,12 @@ VICE=$(X64)
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 
 all: 	$(SOURCENAME).d64
-		$(VICE) $(AUTOSTART) $(TMPSEP06)
-
+		#$(VICE) $(AUTOSTART) $(TMPSEP06)
+		$(FTPASMCMD)
+		$(FTPTXTCMD)
+		$(FTPPRGCMD)
+		$(FTPD64CMD)
+		
 ftp:	
 #		echo $(FTPASMCMD)
 #		echo $(FTPTXTCMD)
@@ -83,7 +87,7 @@ ftp:
 		$(FTPASMCMD)
 		$(FTPTXTCMD)
 		$(FTPPRGCMD)
-#		$(FTPD64CMD)
+		$(FTPD64CMD)
 #		$(FTPCRTCMD)
 
 $(SOURCENAME).d64: $(SOURCENAME).prg

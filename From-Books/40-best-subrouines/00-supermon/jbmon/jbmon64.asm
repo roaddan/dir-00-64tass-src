@@ -101,17 +101,18 @@ getin   = $ffe4             ; get a character
 ; set up origin
 
         .weak
-org     = 36000;$9519
+org     = $8000 ;36000;$9519
         .endweak
 
 *       = org
 
 ; -----------------------------------------------------------------------------
 ; initial entry point
+        
 super   jsr setcolors
-        ldy #msg9-msgbas    ; display "..sys "
+        ldy #msg9-msgbas    ; display "      < < < < < supermon > > > > >"
         jsr sndmsg
-        ldy #msga-msgbas    ; display "..sys "
+        ldy #msga-msgbas    ; display " by jim butterfield  (r.i.p. 1936-2007)"
         jsr sndmsg
         jsr crlf
         ldy #msg4-msgbas    ; display "..sys "
@@ -344,7 +345,7 @@ dmemgo  lda (tmp2),y        ; load byte from start address + y
 dchar   lda (tmp2),y        ; load byte at start address + y
         tax                 ; stash in x
         and #$bf            ; clear 6th bit
-        cmp #$22            ; is it a quote (")?
+        cmp #$22            ; is it a quote ("")?
         beq ddot            ; if so, print . instead
         txa                 ; if not, restore character
         and #$7f            ; clear top bit
