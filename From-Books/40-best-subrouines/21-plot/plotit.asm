@@ -64,20 +64,86 @@ helptext        .text   format(" Prepare to plotit  : SYS%5d",plotit)
                .byte   $0d,0
                .bend
 *=$c08a
-
+;-------------------------------------------------------------------------------
+xcoord    =    $14
+ycoord    =    $15
+temp      =    $fd
+pscreen   =    $6000
+checkcom  =    $aefd
+coord     =    $b7eb
+false     =    255
+true      =    0
+n         =    320
+;-------------------------------------------------------------------------------
 plotit         .block
-               pha
-               lda  vicbordcol
-               sta  byte
-               lda  #$10
-               sta  vicbordcol
-               jsr  anykey
-               lda  byte
-               sta  vicbordcol
-               pla
+set            lda  #true
+set1           sta  rsflag
+               jsr  checkcom
+               jsr  coord
+               cpx  #200
+               bcs  toobig
+               lda  xcoord
+               cmp  #<320
+               lda  xcoord
+               sbc  #>320
+               bcs  toobig
+               txa
+               lsr
+               lsr
+               lsr
+               asl
+               tay
+               lda  table,y
+               sta  temp
+               lda  table+1,y
+               sta  temp+1
+               txa
+               and  #%00000111
+               clc
+               adc  temp
+               sta  temp
+               lda  temp+1
+               adc  #0
+               sta  temp+1
+               lda  xcoord
+               and  #%00000111
+               tay
+               lda  xcoord
+               and  #%11111000
+               clc
+               adc  temp
+               sta  temp
+               lda  temp+1
+               adc  xcoord+1
+               sta  temp+1
+               lda  temp
+               clc
+               adc  #<pscreen
+               sta  temp
+               lda  temp+1
+               adc  #>pscreen
+               sta  temp+1
+               ldx  #0
+               lda  (temp,x)
+               bit  rsflag
+               bpl  set2
+               and  andmask,y
+               jmp  set3
+set2           ora  ormask,y
+set3           sta  (temp,x)
                rts
+toobig         rts
+table          .word      0*n,  1*n,  2*n,  3*n,  4*n
+               .word      5*n,  6*n,  7*n,  8*n,  9*n
+               .word     10*n, 11*n, 12*n, 13*n, 14*n
+               .word     15*n, 16*n, 17*n, 18*n, 19*n
+               .word     20*n, 21*n, 22*n, 23*n, 24*n
+ormask         .byte     $80, $40, $20, $10, $08, $04, $02, $01
+andmask        .byte     $7f, $bf, $df, $ef, $f7, $fb, $fd, $fe
+rsflag         .byte     $0 
                .bend
-byte            .byte 0
+
+byte           .byte     0
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
