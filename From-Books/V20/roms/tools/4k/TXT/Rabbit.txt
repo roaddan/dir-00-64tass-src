@@ -1,0 +1,27 @@
+The tape format of Vic Rabbit
+reverse engineered and documented by Marko Mäkelä, September 22, 2002
+
+The Vic Rabbit format appears to use three different pulse widths.
+The pulse widths vary surprisingly much, and there doesn't seem to be
+too much error tolerance.  The difference of the widest short pulse
+and the narrowest medium pulse I observed is only 24 microseconds.
+The difference between the widest medium pulse and the narrowest long
+pulse is 32 microseconds.  I wonder if this format tolerates any tape
+speed variations.
+
+The initial sync is CDBBBDBDDBBBBBBBBBBBBBBBBB repeated 1200
+times. (B=short pulse, C=medium, D=long).  CD appears to mark the
+start of a byte.  The tape header is 26 times CDxxxxxxxx where each x
+is either B=0 or D=1.  This header is followed by a C (medium) pulse
+and 80 times CDBBBDBDDBBBBBBBBBBBBBBBBB again, followed by one copy of
+the program, again followed by a C pulse.  Unlike in the normal
+format, the data bytes are recorded most significant bit first.
+
+Each block seems to start with a $0f byte.  The last two bytes of a
+block are a 16-bit sum of the data bytes, excluding the $0f byte and
+the checksum bytes themselves.
+
+In the tape header, the file name (16 bytes) comes first.  Then are
+two or three unknown bytes followed by the start and end address of
+the program block.  The program block contains just the raw program
+data between the $0f byte and the checksum.
