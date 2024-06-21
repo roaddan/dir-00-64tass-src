@@ -43,9 +43,13 @@ LIBDIR=$(BASEDIR)/dir-00-64tass-src/lib
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
 # -----------------------------------------------------------------------------
+# Note:
+# 	On my system (MacOS) home dir I have a bin folder containing lins to ...
+# 	the Vice emulator and utility commands.
+# -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
 VICEBIN=/Users/daniel/bin
-#
+# Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
 X64=$(VICEBIN)/x64
@@ -62,7 +66,7 @@ X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
 #-------------------------------------------------------------------------------
-# These options enable you to mount utility disquette in drive 9.
+# These options enable you to mount utility disk image in drive 9.
 # Complete path to the c64 Utility disk to be mounted on drive 9.
 TMPSEP06=-9 $(BASEDIR)/dir-tmp-dskimg/turbo-macro-pro-sep06.d64
 # Complete path to the Vic20 Utility disk to be mounted on drive 9.
@@ -120,12 +124,12 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # ** Using comment, you can mask or enable anny action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
-		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+#		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
+#		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
 #		$(FTPASMCMD)	# To transfer the source ASM file.
 #		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
-#		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
+		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
 
 # -----------------------------------------------------------------------------
 # When called with "make ftp". 

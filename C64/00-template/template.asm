@@ -18,6 +18,8 @@ main            .block
                  
 help            .block      
                 jsr cls
+                lda #14
+                jsr putch
                 #print line
                 #print headera
                 #print headerb
