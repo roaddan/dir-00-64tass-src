@@ -16,6 +16,49 @@
 #	   Drive name should be specified under windows. (ex: C:\path...)
 # 
 # -----------------------------------------------------------------------------
+# ----------------------- P R O J E C T   S E C T I O N -----------------------
+# -----------------------------------------------------------------------------
+# The basename of your project main file ((no extension) .asm is presumed).
+# Could be different for every project.
+SOURCENAME=colour
+# The lowest common project shared directory complete path.
+# for things like librairies, data files, images, etc.
+BASEDIR=/Users/Locals/C64/00-usbkey32go
+# Since the make file will be executed from within your project ...
+# ... the following detail is used to specify where the resulting ...
+# ... files will be placed. 
+# Complete path where the compiled files will be deposited. 
+OUTDIR=/Users/Locals/temp/Output
+#
+# ===============================================
+# ========= 6 4 T A S S   S E C T I O N =========
+# ===============================================
+# Tis can be change to any assembler od your liking.
+# Complete path to the 64tass assembler program.
+TASS=/Users/daniel/bin/64tass_dir/64tass
+# The Complete path to the library directory.
+TASSLIB=$(BASEDIR)/dir-00-64tass-src/lib
+#
+# ===============================================
+# =========== V I C E   S E C T I O N ===========
+# ===============================================
+# Complete path to the Vic20 emulator's programs.
+VICEBIN=/Users/daniel/bin
+#
+V20=$(VICEBIN)/xvic
+# Complete path to the C64 emulator program.
+X64=$(VICEBIN)/x64
+# Complete path to the C64sc emulator program.
+X64SC=$(VICEBIN)/x64sc
+# Complete path to the c1541 disk creation program.
+C1541=$(VICEBIN)/c1541
+# Complete path to the cartconv cartridge converter program.
+CARTCONV=$(VICEBIN)/cartconv
+# Complete path to some other emulator programs.
+X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
+X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
+#
+# -----------------------------------------------------------------------------
 # --------------------- O P T I O N N A L   S E C T I O N ---------------------
 # -----------------------------------------------------------------------------
 #
@@ -44,46 +87,6 @@ FTPPRGCMD=$(FTPCMDPATH) -e "$(FTPPRGARG)" $(FTPSVRIP)
 FTPD64CMD=$(FTPCMDPATH) -e "$(FTPD64ARG)" $(FTPSVRIP)
 FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 #
-# -----------------------------------------------------------------------------
-# ----------------------- P R O J E C T   S E C T I O N -----------------------
-# -----------------------------------------------------------------------------
-# The basename of your project main file ((no extension) .asm is presumed).
-# Could be different for every project.
-SOURCENAME=colour
-# The lowest common project shared directory complete path.
-# for things like librairies, data files, images, etc.
-BASEDIR=/Users/Locals/C64/00-usbkey32go
-# Since the make file will be executed from within your project ...
-# ... the following detail is used to specify where the resulting ...
-# ... files will be placed. 
-# Complete path where the compiled files will be deposited. 
-OUTDIR=/Users/Locals/temp/Output
-# ===============================================
-# =========== V I C E   S E C T I O N ===========
-# ===============================================
-# Complete path to the Vic20 emulator's programs.
-VICEBIN=/Users/daniel/bin
-#
-V20=$(VICEBIN)/xvic
-# Complete path to the C64 emulator program.
-X64=$(VICEBIN)/x64
-# Complete path to the C64sc emulator program.
-X64SC=$(VICEBIN)/x64sc
-# Complete path to the c1541 disk creation program.
-C1541=$(VICEBIN)/c1541
-# Complete path to the cartconv cartridge converter program.
-CARTCONV=$(VICEBIN)/cartconv
-# Complete path to some other emulator programs.
-X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
-X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
-# ===============================================
-# ========= 6 4 T A S S   S E C T I O N =========
-# ===============================================
-# Tis can be change to any assembler od your liking.
-# Complete path to the 64tass assembler program.
-TASS=/Users/daniel/bin/64tass_dir/64tass
-# The Complete path to the library directory.
-TASSLIB=$(BASEDIR)/dir-00-64tass-src/lib
 # ===============================================
 # ===== C B M   D R I V E S   S E C T I O N =====
 # ===============================================
