@@ -3,7 +3,7 @@
 # ----------------- a n d   F T P   u t i l i t i e s . -----------------------
 # -----------------------------------------------------------------------------
 # Note:  
-# 	A) 64tass can be dounloaded from :
+# 	A) 64tass can be downloaded from :
 #		https://sourceforge.net/projects/tass64/ 
 #
 #	B) 64tass documentation can be found at :
@@ -20,7 +20,7 @@
 # -----------------------------------------------------------------------------
 # Tis can be change to any assembler of your liking.
 # Complete path to the 64tass assembler program.
-TASS=/Users/daniel/bin/64tass_dir/64tass
+TASS=/Users/Locals/bin/64tass_dir/64tass
 #
 # -----------------------------------------------------------------------------
 # ----------------------- P R O J E C T   S E C T I O N -----------------------
@@ -48,7 +48,7 @@ LIBDIR=$(BASEDIR)/dir-00-64tass-src/lib
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-VICEBIN=/Users/daniel/bin
+VICEBIN=/Users/Locals/bin
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
