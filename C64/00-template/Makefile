@@ -18,7 +18,7 @@
 # -----------------------------------------------------------------------------
 # ----------------------- 6 4 T A S S   S E C T I O N -------------------------
 # -----------------------------------------------------------------------------
-# Tis can be change to any assembler od your liking.
+# Tis can be change to any assembler of your liking.
 # Complete path to the 64tass assembler program.
 TASS=/Users/daniel/bin/64tass_dir/64tass
 #
