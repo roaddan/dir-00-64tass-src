@@ -10,7 +10,9 @@ L'assembleur 64Tass est utilisé pour sa similarité avec le turbo assembleur or
 
 Le fichier "makefile" est structuré par des variables en entête pour l'environnement MACOS 10.15.7 et utilise les utilitaires l’émulateur Vice pour la création d'image de disquette *.d64 et l'exécution du programme. 
 
-d'autre version du makefile sont aussi disponnibles.
+De toutes évidences, vous devrez modifier le fichier "Makefile" en fonction de votre configuration.
+
+D'autre version du makefile sont aussi disponnibles.
 
 English version.
 ----------------
@@ -21,5 +23,7 @@ Those files where created to experiment assembly programming for the Commodore 6
 The 64tass was chosen for its similarity with the turbo assembler running on cbm64 machines.
 
 The "makefile" is structured by variables in it's header for the MACOS 10.15.7 environment and uses the Vice emulator to create the *.d64 disk image and to run the program.
+
+You must evidently modify the "Makefile" to reflect your work environnement.
 
 Other versions of the makefile are also available.
