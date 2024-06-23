@@ -22,6 +22,8 @@
 # Tis can be change to any assembler of your liking.
 # Complete path to the 64tass assembler program.
 TASS=/Users/Locals/bin/64tass_dir/64tass
+# Final location where the assembled files must be copied. 
+PRGDIR=dir-00-64tass-bin
 #
 # -----------------------------------------------------------------------------
 # ----------------------- P R O J E C T   S E C T I O N -----------------------
@@ -76,7 +78,6 @@ V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # **** tests not yet conclusive.
 DISK8DIR=
 DISK9DIR=
-PRGDIR=dir-00-64tass-bin
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
 #-------------------------------------------------------------------------------
