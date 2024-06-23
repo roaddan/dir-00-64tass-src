@@ -155,6 +155,9 @@ clean:
 		rm $(BASEDIR)/$(PRGDIR)/prg/$(SOURCENAME).prg
 		rm $(BASEDIR)/$(PRGDIR)/txt/$(SOURCENAME).txt
 		rm $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64
+		rm $(OUTDIR)/$(SOURCENAME).prg
+		rm $(OUTDIR)/$(SOURCENAME).txt
+		rm $(OUTDIR)/$(SOURCENAME).d64
 
 # -----------------------------------------------------------------------------
 # Rule to compile the source file.
@@ -168,7 +171,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 
 # Assembling and distributing resulting files.
 $(SOURCENAME).prg: $(SOURCENAME).asm
-		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
+		$(TASS) -C -m -a -I $(TASSLIB) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)
 		cp -f  $(SOURCENAME).txt $(BASEDIR)/$(PRGDIR)/txt
