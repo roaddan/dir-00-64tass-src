@@ -1,6 +1,6 @@
 ;-----------------------------------------------------------
 ; Entete de programme assembleur pour demarrage à partir du
-; sur un Vic20 avec expantion de RAM.
+; BASIC 2.0 DU Commodore Vic20 avec expantion de RAM.
 ;-----------------------------------------------------------
 *= $1201
 .word (+), 10       ;$1201 : Debut + 10 =$120b, $0010

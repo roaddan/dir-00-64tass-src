@@ -1,6 +1,6 @@
 ;-----------------------------------------------------------
 ; Entete de programme assembleur pour demarrage à partir du
-; sur un COMMODORE C64.
+; BASIC 2.0 du COMMODORE C64.
 ;-----------------------------------------------------------
 *= $801
 .word (+), 10
