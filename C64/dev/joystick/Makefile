@@ -30,7 +30,7 @@ PRGDIR=dir-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=template
+SOURCENAME=j2tester
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -51,7 +51,7 @@ LIBDIR=$(BASEDIR)/dir-00-64tass-src/lib
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-VICEBIN=/Users/Locals/bin
+VICEBIN=/Users/Daniel/bin
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
@@ -63,8 +63,9 @@ C1541=$(VICEBIN)/c1541
 # Complete path to the cartconv cartridge converter program.
 CARTCONV=$(VICEBIN)/cartconv
 # Complete path to some other emulator programs.
-X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
+X64SCSDL=/Applications/vice-x86-64-sdl2-3.6.1/x64sc.app/Contents/MacOS/x64sc
 X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
+MYX64=/Users/daniel/Applications/Vice Cocoa 3.1/x64.app
 #
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====

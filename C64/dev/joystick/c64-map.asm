@@ -3,7 +3,7 @@
 ; commodores 64 et 64c
 ;--------------------------------------------------------------------------------
 ; Scripteur...: daniel lafrance, j5w 1w5, canada.
-; Version.....: 20191223.1
+; Version.....: 20240623.1
 ; Inspiration.: isbn 0-87455-082-3
 ;--------------------------------------------------------------------------------
 ; Pour utilisation inscrire la ligne [.include "c64map.asm"] dans votre fichier 

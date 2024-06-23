@@ -1,20 +1,8 @@
-*= $801
-.word (+), 10
-.null $9e, "2061"
-+ .word 0
 ;-------------------------------------------------------------------------------
-;
+; Révision : 20240623-002251
 ;-------------------------------------------------------------------------------
-               .include  "c64_map_kernal.asm"
-               .include  "c64_map_vicii.asm" 
-               .include  "c64_lib_pushpop.asm"
-               .include  "c64_lib_mem.asm"
-               .include  "c64_lib_hex.asm"
-;               .include  "c64_lib_text_sd_new.asm"
-               .include  "c64_lib_text_mc.asm"
-               .include  "c64_lib_showregs.asm"                
-               .include  "c64_lib_joystick.asm"
-               .include  "c64_lib_spriteman.asm"
+               .include    "header-c64.asm"
+               .include    "macros-64tass.asm"
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -110,14 +98,14 @@ loopit
 ;               jmp       loopit
 ;               rts
 ;               lda       #$0
-;               sta       c64u_addr1+1
+;               sta       c64u-addr1+1
 ;               lda       #$00
-;               sta       c64u_addr1
+;               sta       c64u-addr1
 ;               ldy       #10
 ;               ldx       #05
-;               jsr       c64u_xy2addr
-;               ldy       c64u_addr2
-;               ldx       c64u_addr2+1
+;               jsr       c64u-xy2addr
+;               ldy       c64u-addr2
+;               ldx       c64u-addr2+1
 ;               ldx       js_2pixx+1
 ;               ldy       js_2pixx
 ;               lda       js_2fire
@@ -172,7 +160,7 @@ bstring2       .byte     vgris,bkcol2,0,1
                .text     " Programme assembleur pour 6502 sur C64 "
                .byte     0
 bstring3       .byte     vrose,bkcol3,0,2
-               .text     "      par Daniel Lafrance (2021) C      "
+               .text     "     par Daniel Lafrance (2024-06) C    "
                .byte     0
 bstring4       .byte     vjaune,bkcol3,11,4
                .text     " Changer pointeur "
@@ -196,4 +184,17 @@ js_status6     .byte     vcyan,bkcol0,1,23
                .text     "+-> Etat de JS2:     %---FRLDU EOR #$1F"
                .byte     0
                .bend
+;-------------------------------------------------------------------------------
+; Includes
+;-------------------------------------------------------------------------------
+               .include  "map-c64-kernal.asm"
+               .include  "map-c64-vicii.asm" 
+               .include  "lib-cbm-pushpop.asm"
+               .include  "lib-cbm-mem.asm"
+               .include  "lib-cbm-hex.asm"
+;               .include  "lib-c64-text-sd-new.asm"
+               .include  "lib-c64-text-mc.asm"
+               .include  "lib-c64-showregs.asm"                
+               .include  "lib-c64-joystick.asm"
+               .include  "lib-c64-spriteman.asm"
                 
