@@ -20,7 +20,7 @@ CBM C64 and Vic20 development using 64tass.
 ===========================================
 Those files where created to experiment assembly programming for the Commodore 64 and Vic20 using a simple text editor and the make utility. 
 
-The 64tass cross assembler was chosen for its similarity with the Turbo-Macro-Pro assembler running on cbm64 machines.
+The 64tass cross assembler was chosen for its similarity with the Turbo-Macro-Pro assembler running under the CBM64 machines.
 
 The "makefile" is structured by variables in it's header for the MACOS 10.15.7 environment and uses the Vice emulator to create the *.d64 disk image and to run the program.
 
