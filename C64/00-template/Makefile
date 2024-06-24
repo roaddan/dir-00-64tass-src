@@ -66,8 +66,8 @@ C1541=$(VICEBIN)/c1541
 # Complete path to the cartconv cartridge converter program.
 CARTCONV=$(VICEBIN)/cartconv
 # Complete path to some other emulator programs.
-X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
-X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
+X64SCSDL=/Applications/vice-x86-64-sdl2-3.6.1/x64sc.app/Contents/MacOS/x64sc
+X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
 #
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
@@ -88,7 +88,7 @@ JBMON64=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/C64/From-Books/40-best
 # Some other variables just to reduce command line length.
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
-VICE=$(X64)
+VICE=$(X64SCGTK)
 # The Vice autostart parameters. 
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # -----------------------------------------------------------------------------
