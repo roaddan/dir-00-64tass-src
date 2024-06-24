@@ -174,7 +174,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 
 # Assembling and distributing resulting files.
 $(SOURCENAME).prg: $(SOURCENAME).asm
-		$(TASS) -C -m -a -I $(TASSLIB) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
+		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)
 		cp -f  $(SOURCENAME).txt $(BASEDIR)/$(PRGDIR)/txt
