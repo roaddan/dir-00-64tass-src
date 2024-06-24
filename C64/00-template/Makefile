@@ -40,7 +40,7 @@ BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project the following
 # detail is used to specify where the resulting files will be placed. 
 # >> Complete path where the compiled files will be placed. 
-OUTDIR=/Users/Locals/temp/Output
+OUTDIR=/Users/Locals/temp/Output/C64
 #
 # 64tass allows to include libraries of code and routines of your making.
 # The Complete path to your library directory.
