@@ -15,7 +15,7 @@ main           jsr scrmaninit
                #locate 1,21
                #print string3
                #color vred               
-               #locate BINCOLM-4,TITLELINE
+               #locate 1,0
                #print string1
                #color vgreen               
                #locate BINCOLM-5,BINLINE-3
@@ -33,11 +33,11 @@ main           jsr scrmaninit
                #locate BINCOLM,BINLINE+3
                #print string7
                #color vjaune              
-               #locate BINCOLM,BINLINE+5
+               #locate 0,12
                #print string8
                #locate 2,9
-               #color vwhite               
-               #printwordbin adresse
+;               #color vwhite               
+;               #printwordbin adresse
                lda #XVAL   ; initialise ... 
                sta count   ; ...le compteur
 next           lda count
@@ -56,19 +56,32 @@ next           lda count
                #color vyellow               
                #printfmtxy BINCOLM, BINLINE+1, "%", abin
                txa
+               pha
                jsr a2hex
                #color vcyan               
-               #printfmtxy BINCOLM+2, BINLINE+3, "$", a2hexstr
-               #printfmtxy BINCOLM, BINLINE+5, "$", a2hexstr
+               #printfmtxy 2, 12, "$", a2hexstr
+               pla
+               jsr atobin
+               #color vcyan               
+               #printfmtxy 7, 12, "%", abin
                lda tstval
+               pha
                jsr a2hex
                #color vcyan               
-;               #printfmtxy BINCOLM+11, BINLINE+3, "$", a2hexstr
-               #printfmtxy BINCOLM+6, BINLINE+5, "$", a2hexstr
+               #printfmtxy 2, 13, "$", a2hexstr
+               pla
+               jsr atobin
+               #color vcyan               
+               #printfmtxy 7, 13, "%", abin
                lda result
+               pha
                jsr a2hex
                #color vcyan               
-               #printfmtxy BINCOLM+11, BINLINE+5, "$", a2hexstr
+               #printfmtxy 2, 15, "$", a2hexstr
+               pla
+               jsr atobin
+               #color vcyan               
+               #printfmtxy 7, 15, "%", abin
                pla
                jsr a2hex
                #color vcyan               
@@ -79,10 +92,13 @@ next           lda count
                adc #DIFF
                sta tstval
                #locate 1,25
-               jsr anykey
+               pha
+               jsr getkey
+               cmp  #'q'
+               beq out
                jmp next
 ;ici            jmp ici
-               rts 
+out            rts 
 
 delay65536     .block
                jsr push
@@ -96,20 +112,23 @@ waitx          dex
                rts
                .bend
 
-string1        .null    "TEST DRAPEAUX CPU"
-string2        .null    "FLAGS:NV-BDIZC"
-string3        .null    "Par: Daniel Lafrance"
-string4        .null    "(   )"
-string5        .byte    94,94,32,94,94,94,94,94,0
-string6        .byte    125,125,'?',125,125,125,125,125,0
-string7        .null    "X=$   CPX #$"  
-string8        .null    "$   - $   = $"  
-count          .byte    XVAL
-tstval         .byte    XCPX
-result         .byte    0
-row            .byte    0
-lin            .byte    0
-adresse        .word     $1234     
+string1        .null     "Test de Drapeaux CPU"
+string2        .null     "FLAGS:NV-BDIZC"
+string3        .null     "Par: Daniel Lafrance"
+string4        .null     "(   )"
+string5        .byte     94,94,32,94,94,94,94,94,0
+string6        .byte     125,125,'?',125,125,125,125,125,0
+string7        .null     "X=$    CPX #$"  
+string8        .byte     32,32,'$',13,32,'-','$',32,32,32,'-'
+               .byte     13,32,32,45,45,45,32,32,45,45,45,45,45,45,45,45,45,13
+               .byte     32
+               .null     "=$   ="  
+count          .byte     XVAL
+tstval         .byte     XCPX
+result         .byte     0
+row            .byte     0
+lin            .byte     0
+adresse        .word     main     
      
   
 .include       "map-vic20-kernal.asm"
