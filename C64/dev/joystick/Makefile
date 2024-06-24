@@ -34,6 +34,9 @@ SOURCENAME=j2tester
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
+# Since the make file will be executed from within your project ...
+# ... the following detail is used to specify where the resulting ...
+# ... files will be placed. # Complete path where the compiled files will be deposited. 
 # Since the make file will be executed from within your project the following
 # detail is used to specify where the resulting files will be placed. 
 # >> Complete path where the compiled files will be placed. 
@@ -79,6 +82,9 @@ V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # **** tests not yet conclusive.
 DISK8DIR=
 DISK9DIR=
+DBC=/Users/Locals/C64/00-usbkey32go/dbc.prg
+JBMON64=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/C64/From-Books/40-best-subrouines/00-supermon/jbmon/jbmon64.prg
+#
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
 #-------------------------------------------------------------------------------
