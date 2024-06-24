@@ -73,13 +73,13 @@ out            jsr  pop
 ;---------------------------------------------------------------------
 gotoxy         .block
                jsr  push
-               clc
                tya
                pha
                txa
                tay
                pla
                tax
+               clc
                jsr  kplot
                jsr  pop
                rts

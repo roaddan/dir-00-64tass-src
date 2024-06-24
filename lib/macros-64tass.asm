@@ -16,6 +16,24 @@ disable        .macro
                plp
                .endm
 
+tolower        .macro
+               php
+               pha
+               lda  #14
+               jsr  $ffd2
+               pla
+               plp
+               .endm
+
+toupper        .macro
+               php
+               pha
+               lda  #142
+               jsr  $ffd2
+               pla
+               plp
+               .endm
+
 lowercase      .macro
                php
                pha
