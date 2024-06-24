@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20240621-163719-a"
+                Version = "20240623-163719-B"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -45,21 +45,22 @@ headerb        .text          "            template (pxx)"
                .text   format("        Version: %s.",Version)
                .byte   $0d,0
 
-shortcuts      .text          " -------- S H O R T - C U T S ---------"
+shortcuts      .byte   $0d
+               .text          " -------- S H O R T - C U T S ---------"
+               .byte   $0d, $0d
+               .text   format(" template: SYS%05d ($%04X)",main, main)
                .byte   $0d
-               .text   format(" run=SYS%5d, help=SYS%5d",main, help)
+               .text   format(" help: SYS%05d ($%04X)",help, help)
                .byte   $0d
-               .text   format(" cls=SYS%5d",cls)
+               .text   format(" cls: SYS%05d ($%04X)",cls, cls)
+               .byte   $0d,0
+helptext       .text   format(" First run: SYS%05d ($%04X)",template, template)
+               .byte   $0d, $0d
+               .text   format(" ex.: SYS%05d",template)
+               .byte   $0d
+               .text   format("      for i=0to100:SYS%05d:next",template)
                .byte   $0d,0
 line           .text          " --------------------------------------"
-               .byte   $0d,0
-helptext       .text   format(" Prepare to template  : SYS%5d",template)
-               .byte   $0d
-               .text   format(" template: SYS%5d",template)
-               .byte   $0d
-               .text   format(" ex.: SYS%5d",template)
-               .byte   $0d
-               .text   format("      for i=0to100:SYS%5d:next",template)
                .byte   $0d,0
                .bend
 ;*=$4000
