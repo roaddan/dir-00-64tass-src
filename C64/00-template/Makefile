@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # --------- 6 4 t a s s   m a k e   f i l e   w i t h   V i c e ---------------
 # ----------------- a n d   F T P   u t i l i t i e s . -----------------------
-# ---------------------- L I N U X   V E R S I O N ----------------------------
+# ---------------------- M A C O S   V E R S I O N ----------------------------
 # -----------------------------------------------------------------------------
 # Note:  
 # 	A) 64tass can be downloaded from :
@@ -21,7 +21,7 @@
 # -----------------------------------------------------------------------------
 # Tis can be change to any assembler of your liking.
 # Complete path to the 64tass assembler program.
-TASS=/usr/bin//64tass
+TASS=/Users/Locals/bin/64tass_dir/64tass
 # Final location where the assembled files must be copied. 
 PRGDIR=dir-00-64tass-bin
 #
@@ -44,7 +44,7 @@ OUTDIR=/Users/Locals/temp/Output
 #
 # 64tass allows to include libraries of code and routines of your making.
 # The Complete path to your library directory.
-TASSLIB=$(BASEDIR)/dir-00-64tass-src/lib
+LIBDIR=$(BASEDIR)/dir-00-64tass-src/lib
 #
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
@@ -54,7 +54,7 @@ TASSLIB=$(BASEDIR)/dir-00-64tass-src/lib
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-VICEBIN=/usr/bin
+VICEBIN=/Users/Locals/bin
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
@@ -78,7 +78,7 @@ TMPSEP06=-9 $(BASEDIR)/dir-tmp-dskimg/turbo-macro-pro-sep06.d64
 # Complete path to the Vic20 Utility disk to be mounted on drive 9.
 V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # Complete local path to be mounted as a disk on drive 8 and/or 9.  
-# **** Tests not yet conclusive depending on emulator version's.
+# **** tests not yet conclusive.
 DISK8DIR=
 DISK9DIR=
 DBC=/Users/Locals/C64/00-usbkey32go/dbc.prg
@@ -89,8 +89,8 @@ JBMON64=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/C64/From-Books/40-best
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
 VICE=$(X64)
+# The Vice autostart parameters. 
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
-#
 # -----------------------------------------------------------------------------
 # --------------------- O P T I O N N A L   S E C T I O N ---------------------
 # -----------------------------------------------------------------------------
@@ -111,7 +111,7 @@ AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # FTP SERVER CONFIG
 FTPSVRIP=192.168.2.200 # Check cartridge root menu for your address.
 # FTP CLI client full path.
-FTPCMDPATH=/usr/local/bin/lftp 
+FTPCMDPATH=/usr/local/bin/lftp
 # List of commands by filetype intended to the FTP server.
 # Note:  The following path must exist on the Ultimate II+ cartridge usb ...
 #        disks.
