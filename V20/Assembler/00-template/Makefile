@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # --------- 6 4 t a s s   m a k e   f i l e   w i t h   V i c e ---------------
 # ----------------- a n d   F T P   u t i l i t i e s . -----------------------
-# ---------------------- L I N U X   V E R S I O N ----------------------------
+# ---------------------- M A C O S   V E R S I O N ----------------------------
 # -----------------------------------------------------------------------------
 # Note:  
 # 	A) 64tass can be downloaded from :
@@ -21,7 +21,7 @@
 # -----------------------------------------------------------------------------
 # Tis can be change to any assembler of your liking.
 # Complete path to the 64tass assembler program.
-TASS=/usr/bin/64tass
+TASS=/Users/Locals/bin/64tass_dir/64tass
 # Final location where the assembled files must be copied. 
 PRGDIR=dir-00-64tass-bin
 #
@@ -54,7 +54,7 @@ LIBDIR=$(BASEDIR)/dir-00-64tass-src/lib
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-VICEBIN=/usr/bin
+VICEBIN=/Users/Locals/bin
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
@@ -67,7 +67,9 @@ C1541=$(VICEBIN)/c1541
 CARTCONV=$(VICEBIN)/cartconv
 # Complete path to some other emulator programs.
 X64SCSDL=/Applications/vice-x86-64-sdl2-3.6.1/x64sc.app/Contents/MacOS/x64sc
+VIC20SDL=/Applications/vice-x86-64-sdl2-3.6.1/xvic.app/Contents/MacOS/xvic
 X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
+VIC20GTK=/Applications/vice-x86-64-gtk3-3.6.1/xvic.app/Contents/MacOS/xvic
 #
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
@@ -76,7 +78,7 @@ X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
 # Complete path to the c64 Utility disk to be mounted on drive 9.
 TMPSEP06=-9 $(BASEDIR)/dir-tmp-dskimg/turbo-macro-pro-sep06.d64
 # Complete path to the Vic20 Utility disk to be mounted on drive 9.
-V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
+V20MKASM=-9 $(BASEDIR)/dir-00-64tass-src/V20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # Complete local path to be mounted as a disk on drive 8 and/or 9.  
 # **** tests not yet conclusive.
 DISK8DIR=
@@ -88,7 +90,7 @@ JBMON64=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/C64/From-Books/40-best
 # Some other variables just to reduce command line length.
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
-VICE=$(V20)
+VICE=$(VIC20GTK)
 # The Vice autostart parameters. 
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # -----------------------------------------------------------------------------
@@ -137,7 +139,9 @@ all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 #		$(FTPASMCMD)	# To transfer the source ASM file.
 #		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
-		$(VICE) $(AUTOSTART) $(V20MKASM) # to load vice with arguments.
+#		echo $(VICE) $(AUTOSTART) $(V20MKASM)
+		# to load vice with arguments.
+		$(VICE) $(V20MKASM) $(AUTOSTART) 
 
 # -----------------------------------------------------------------------------
 # When called with "make ftp". 

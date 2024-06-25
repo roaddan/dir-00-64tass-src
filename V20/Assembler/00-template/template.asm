@@ -33,7 +33,7 @@ main           jsr scrmaninit
                #locate BINCOLM+9,BINLINE+1
                #print string4
                #color vjaune              
-               #locate BINCOLM,BINLINE+3
+               #locate 4,18
                #print string7
                #color vjaune              
                #locate 0,12
@@ -99,6 +99,11 @@ next           lda count
                jsr getkey
                cmp  #'q'
                beq out
+               pha
+               #locate 6,18
+               pla
+               jsr a2hex
+               #printfmtxy 15, 18, "$", a2hexstr
                jmp next
 ;ici            jmp ici
 out            rts 
@@ -121,7 +126,7 @@ string3        .null     "Par: Daniel Lafrance"
 string4        .null     "(   )"
 string5        .byte     94,94,32,94,94,94,94,94,0
 string6        .byte     125,125,'?',125,125,125,125,125,0
-string7        .null     "X=$    CPX #$"  
+string7        .null     "Getkey() = $"  
 string8        .byte     32,32,'$',13,32,'-','$',32,32,32,'-'
                .byte     13,32,32,45,45,45,32,32,45,45,45,45,45,45,45,45,45,13
                .byte     32
