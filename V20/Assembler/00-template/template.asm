@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------
-; Version 20240624-171100-a
+; Version 20240704-234304-b
 ;-----------------------------------------------------------
 .include       "header-v20ex.asm"
 .include       "macros-64tass.asm"
@@ -17,10 +17,10 @@ main           jsr scrmaninit
                #color vblanc
                #locate 1,21
                #print string3
-               #color vred               
+               #color vmauve               
                #locate 1,0
                #print string1
-               #color vgreen               
+               #color vwhite              
                #locate BINCOLM-5,BINLINE-3
                #print string2
                #color vgreen               

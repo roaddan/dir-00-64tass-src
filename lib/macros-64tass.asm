@@ -1,3 +1,4 @@
+; Enable character case chamge with [C=]+[SHIFT]
 enable         .macro
                php
                pha
@@ -6,7 +7,7 @@ enable         .macro
                pla
                plp
                .endm
-
+; Disable character case chamge with [C=]+[SHIFT]
 disable        .macro
                php
                pha
