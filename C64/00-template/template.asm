@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20240623-163719-a"
+                Version = "20240704-235234-a"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -9,16 +9,20 @@
                .enc    none
 main           .block
                jsr scrmaninit
+               #disable
                jsr help
                jsr anykey
                jsr template
-               jmp b_warmstart
+               #enable
+               #uppercase
+               jsr  cls
+               #graycolor
+;               jmp b_warmstart
                .bend
                  
 help           .block      
+               #lowercase
                jsr cls
-               lda #14
-               jsr putch
                #print line
                #print headera
                #print headerb

@@ -1,4 +1,6 @@
+; ------------------------------------------------------------------------------
 ; Enable character case chamge with [C=]+[SHIFT]
+; ------------------------------------------------------------------------------
 enable         .macro
                php
                pha
@@ -7,7 +9,9 @@ enable         .macro
                pla
                plp
                .endm
+; ------------------------------------------------------------------------------
 ; Disable character case chamge with [C=]+[SHIFT]
+; ------------------------------------------------------------------------------
 disable        .macro
                php
                pha
@@ -17,19 +21,25 @@ disable        .macro
                plp
                .endm
 
+; ------------------------------------------------------------------------------
+; Select lowercase character set.
+; ------------------------------------------------------------------------------
 tolower        .macro
                php
                pha
-               lda  #14
+               lda  #b_lowercase
                jsr  $ffd2
                pla
                plp
                .endm
 
+; ------------------------------------------------------------------------------
+; Select UPPERCASE character set.
+; ------------------------------------------------------------------------------
 toupper        .macro
                php
                pha
-               lda  #142
+               lda  #b_uppercase
                jsr  $ffd2
                pla
                plp
@@ -62,6 +72,31 @@ changebord     .macro c
                pla
                .endm
 
+changeback     .macro c
+               pha
+               lda  #\c
+               sta  $d021
+               pla
+               .endm
+
+c64color       .macro
+               #changebord cbleupale
+               #changeback cbleu
+               #color cbleupale
+               .endm
+
+mycolor        .macro
+               #changebord cbleupale
+               #changeback cbleu
+               #color cblanc
+               .endm
+
+graycolor      .macro
+               #changebord cgrismoyen
+               #changeback cgrisfonce
+               #color cgrispale
+               .endm
+
 setzpage1      .macro addr
                pha
                lda  \addr
@@ -79,14 +114,6 @@ setzpage2      .macro addr
                sta  $fe
                pla
                .endm
-
-changeback     .macro c
-               pha
-               lda  #\c
-               sta  $d021
-               pla
-               .endm
-
 
 locate         .macro x,y
                jsr  push
