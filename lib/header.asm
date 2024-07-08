@@ -1,6 +1,6 @@
 ;-----------------------------------------------------------
 ; Entete de programme assembleur pour demarrage à partir du
-; sur un COMMODORE C64.
+; Basic 2 sur un COMMODORE C64.
 ;-----------------------------------------------------------
 ;*= $801
 ;.word (+), 10
@@ -8,7 +8,7 @@
 ;+ .word 0
 ;-----------------------------------------------------------
 ; Entete de programme assembleur pour demarrage à partir du
-; sur un Vic20 avec expantion de RAM.
+; Basic 2 sur un Vic20 sans expantion de RAM.
 ;-----------------------------------------------------------
 ;*= $1001
 ;.word (+), 10       ;$1001 : Debut + 10 =$100b, $0010
@@ -17,7 +17,7 @@
                     ;$100d : Adresse suivante    
 ;-----------------------------------------------------------
 ; Entete de programme assembleur pour demarrage à partir du
-; sur un Vic20 avec expantion de RAM.
+; BASIC 2 sur un Vic20 avec expantion de RAM.
 ;-----------------------------------------------------------
 *= $1201
 .word (+), 10       ;$1201 : Debut + 10 =$120b, $0010
