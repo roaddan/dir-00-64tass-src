@@ -39,19 +39,19 @@ help           .block
                #print line
                rts                                
 headera                              ;0123456789012345678901234567890123456789
-               .text     $0d,        " Top-Down assembly language programming"
+               .text     $0d,        " TOP-DOWN ASSEMBLY LANGUAGE PROGRAMMING"
                .text     $0d,        "     For the Commodore Vic20 and 64"
-               .text     $0d,        "           Book by Ken Skier."
+               .text     $0d,        "           Book by KEN SKIER."
                .null     $0d,        "         ISBN 0-07-057864-8 PBK"
 headerb        .text     $0d,        "             ch3ex11 (p27)"
                .text     $0d,        "            (c) McGraw-hill"
                .text     $0d,        "     programmed by Daniel Lafrance."
                .null     $0d, format("       Version: %s.",Version)
 shortcuts      .text     $0d,        " -------- S H O R T - C U T S ---------"
-               .text     $0d, format(" Main Run......: SYS%05d ($%04X)",main, main)
+;               .text     $0d, format(" Main Run......: SYS%05d ($%04X)",main, main)
                .text     $0d, format(" This help.....: SYS%05d ($%04X)",help, help)
-               .text     $0d, format(" Run ch3ex11...: SYS%05d ($%04X)",ch3ex11, ch3ex11)
-               .null     $0D, format(" Clear screen..: SYS%05d ($%04X)",cls, cls)
+               .null     $0d, format(" Run ch3ex11...: SYS%05d ($%04X)",ch3ex11, ch3ex11),$0d
+;               .null     $0D, format(" Clear screen..: SYS%05d ($%04X)",cls, cls)
 helptext       .null     $0d, format(" Basic Example.: SYS%05d",ch3ex11), $0d
 line           .null                 " --------------------------------------"
                .bend
