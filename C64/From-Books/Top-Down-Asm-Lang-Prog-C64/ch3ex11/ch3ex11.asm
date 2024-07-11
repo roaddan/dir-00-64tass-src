@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20240710-181424-a"
+                Version = "20240710-235419"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -11,7 +11,7 @@
                jsr  main
                jsr  pop
                rts                                         
-*=$c000
+*=10000 ;$c000
 main           .block
                jsr scrmaninit
                #disable
@@ -27,6 +27,7 @@ main           .block
 mainout        rts
                .bend
                  
+*=20000
 help           .block      
                #lowercase
                jsr cls
@@ -37,43 +38,25 @@ help           .block
                #print helptext
                #print line
                rts                                
-headera                       ;0123456789012345678901234567890123456789
-               .text          " Top-Down assembly language programming"
-               .byte   $0d
-               .text          "     For the Commodore Vic20 and 64"
-               .byte   $0d
-               .text          "           Book by Ken Skier."
-               .byte   $0d
-               .text          "         ISBN 0-07-057864-8 PBK"
-               .byte   $0d,0
-
-headerb        .text          "             ch3ex11 (p26)"
-               .byte   $0d
-               .text          "        (c) 1979 Brad Templeton"
-               .byte   $0d
-               .text          "     programmed by Daniel Lafrance."
-               .byte   $0d
-               .text   format("        Version: %s.",Version)
-               .byte   $0d,0
-
-shortcuts      .byte   $0d
-               .text          " -------- S H O R T - C U T S ---------"
-               .byte   $0d, $0d
-               .text   format(" Main Run.....: SYS%05d ($%04X)",main, main)
-               .byte   $0d
-               .text   format(" This help....: SYS%05d ($%04X)",help, help)
-               .byte   $0d
-               .text   format(" Clear screen.: SYS%05d ($%04X)",cls, cls)
-               .byte   $0d,0
-helptext       .text   format(" Run ch3ex11..: SYS%05d ($%04X)",ch3ex11, ch3ex11)
-               .byte   $0d, $0d
-               .text   format(" Example......: SYS%05d",ch3ex11)
-               .byte   $0d,0
-line           .text          " --------------------------------------"
-               .byte   $0d,0
+headera                              ;0123456789012345678901234567890123456789
+               .text     $0d,        " Top-Down assembly language programming"
+               .text     $0d,        "     For the Commodore Vic20 and 64"
+               .text     $0d,        "           Book by Ken Skier."
+               .null     $0d,        "         ISBN 0-07-057864-8 PBK"
+headerb        .text     $0d,        "             ch3ex11 (p27)"
+               .text     $0d,        "            (c) McGraw-hill"
+               .text     $0d,        "     programmed by Daniel Lafrance."
+               .null     $0d, format("       Version: %s.",Version)
+shortcuts      .text     $0d,        " -------- S H O R T - C U T S ---------"
+               .text     $0d, format(" Main Run......: SYS%05d ($%04X)",main, main)
+               .text     $0d, format(" This help.....: SYS%05d ($%04X)",help, help)
+               .text     $0d, format(" Run ch3ex11...: SYS%05d ($%04X)",ch3ex11, ch3ex11)
+               .null     $0D, format(" Clear screen..: SYS%05d ($%04X)",cls, cls)
+helptext       .null     $0d, format(" Basic Example.: SYS%05d",ch3ex11), $0d
+line           .null                 " --------------------------------------"
                .bend
 
-*=50000 ;$c400+24        ;To place the function at a specific place in memory.
+*=30000 ;$c400+24        ;To place the function at a specific place in memory.
 ;-------------------------------------------------------------------------------
 ; This function prints 8 'Z' characters at the cursor position using an indirect 
 ; pointer.
@@ -95,7 +78,6 @@ load           lda  #'Z'
 useptr         jmp  (pointer)
 ; anything that would be inserted here will be jumped over by the pointer.
                .byte 00,00,00,00,00,00,00,00
-
 printit        jsr  $ffd2
 adhust         inx
 test           cpx #9
@@ -113,7 +95,7 @@ byte           .byte 0
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
-*=$c800        
+*=$c800-1232     
                .include "map-c64-kernal.asm"
                .include "map-c64-vicii.asm" 
                .include "map-c64-basic2.asm"
