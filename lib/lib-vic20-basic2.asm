@@ -1,9 +1,9 @@
 ;---------------------------------------------------------------------
-; Librarie utilisant les Fonctions d'écran du Basic 2.0
+; Librarie utilisant les Routines d'écran du Basic 2.0.
 ;---------------------------------------------------------------------
 ;---------------------------------------------------------------------
-; Initialisation des paramêtres de base pour la gestion de l'écran 
-; virtuelle.
+; Routine qui Initialisation des paramêtres de base pour la gestion 
+; de l'écran virtuelle.
 ;---------------------------------------------------------------------
 scrmaninit     .block  
                jsr  push  
@@ -24,7 +24,7 @@ scrmaninit     .block
                rts
                .bend  
 ;---------------------------------------------------------------------
-; Place le curseur à la position HOME et efface l'écran.
+; Routine qui place le curseur à la position HOME et efface l'écran.
 ;---------------------------------------------------------------------
 cls            .block
                php
@@ -42,8 +42,7 @@ cls            .block
                rts
                .bend
 ;---------------------------------------------------------------------
-; Place le caractère A à la position du
-; curseur.
+; Routine qui place le caractère A à la position du curseur.
 ;---------------------------------------------------------------------
 putch          .block
                php
@@ -52,7 +51,7 @@ putch          .block
                rts
                .bend
 ;---------------------------------------------------------------------
-; Affiche la chaine0 pointée par $YYAA
+; Routine qui affiche la chaine0 pointée par $YYAA
 ;---------------------------------------------------------------------
 puts           .block
                jsr  push
@@ -68,8 +67,7 @@ out            jsr  pop
                rts
                .bend
 ;---------------------------------------------------------------------
-; Positionne le curseyr à la position
-; Ligne X, Colonne Y 
+; Routine qui positionne le curseur à la position rX=Ligne, rY=Colonne. 
 ;---------------------------------------------------------------------
 gotoxy         .block
                jsr  push
@@ -85,8 +83,8 @@ gotoxy         .block
                rts
                .bend
 ;---------------------------------------------------------------------
-; Positionne C=1 ou Sauvegarde C=0 
-; le curseur et la couleur par défaut.
+; Routine qui positionne C=1 ou Sauvegarde C=0 le curseur et la 
+; couleur par défaut.
 ;---------------------------------------------------------------------
 cursor         .block
 bascol    =    $0286
@@ -112,7 +110,7 @@ cy   .byte     $00
 bcol .byte     $00
                .bend
 ;---------------------------------------------------------------------
-;
+; Routine qui sauvegarde la position actuelle du curseur.
 ;---------------------------------------------------------------------
 cursave        .block
                php
@@ -122,7 +120,8 @@ cursave        .block
                rts
                .bend
 ;---------------------------------------------------------------------
-;
+; Routine qui positionne le curseur à la dernière position 
+; sauvegardée. (cursave)
 ;---------------------------------------------------------------------
 curput         .block
                php
@@ -132,77 +131,43 @@ curput         .block
                rts
                .bend
 ;---------------------------------------------------------------------
+; Routine qui affiche et positionne une chaine de caractères se 
+; terminant par 0 et précédée par sa position comme suit:
+; x,y,"chaine",0
 ;
+; Exemple chaine    .null     2,10,"bonjour!"
+;         chaine2   .text     2,11,"au revoir!",0
+;                   ldx #<chaine
+;                   ldy #>chaine
+;                   jsr putsxy    
 ;---------------------------------------------------------------------
 putsxy         .block
                php
-     ;-------------------------------------------- 
-     ; Save start addr
-     ;-------------------------------------------- 
-               stx  straddr
+               stx  straddr        ; Save start addr
                sty  straddr+1
-     ;-------------------------------------------- 
-     ; Save a,y,x
-     ;-------------------------------------------- 
-               pha
-               tya
-               pha
-               txa
-               pha
-     ;-------------------------------------------- 
-     ;save zpage1
-     ;-------------------------------------------- 
-               lda  zpage1
+               pha                 ; Sauvegarde rA 
+               tya                 ; Prepare la ...
+               pha                 ; ... sauvegarde de rY.
+               txa                 ; Prepare la ...
+               pha                 ; ... sauvegarde de rX.
+               lda  zpage1         ; Save zpage1
                sta  zp1
                lda  zpage1+1
                sta  zp1+1
-     ;-------------------------------------------- 
-     ;set zpage1
-     ;-------------------------------------------- 
-               lda  straddr+1
+               lda  straddr+1      ; Set zpage1
                sta  zpage1+1
                lda  straddr
                sta  zpage1
-     ;-------------------------------------------- 
-     ; set z to zptr offset 0
-     ;-------------------------------------------- 
-               ldy  #$00
-     ;-------------------------------------------- 
-     ; load x param
-     ;-------------------------------------------- 
-               lda  (zpage1),y
-     ;-------------------------------------------- 
-     ; and save it
-     ;-------------------------------------------- 
-               sta  px
-     ;-------------------------------------------- 
-     ; next param
-     ;-------------------------------------------- 
-               iny
-     ;-------------------------------------------- 
-     ; looad y param
-     ;-------------------------------------------- 
-               lda  (zpage1),y
-     ;-------------------------------------------- 
-     ; and save it
-     ;-------------------------------------------- 
-               sta  py
-     ;-------------------------------------------- 
-     ; tfr a in x reg
-     ;-------------------------------------------- 
-               tax
-     ;-------------------------------------------- 
-     ; load x param in y
-     ;-------------------------------------------- 
-               ldy  px
-     ;-------------------------------------------- 
-     ; position cursor
-     ;-------------------------------------------- 
-               jsr  gotoxy
-     ;-------------------------------------------- 
-     ; adjusting start addr
-     ;-------------------------------------------- 
-               clc
+               ldy  #$00           ; Set z to zptr offset 0 ...
+               lda  (zpage1),y     ; Load x param
+               sta  px             ; and save it
+               iny                 ; next param
+               lda  (zpage1),y     ; load y param
+               sta  py             ; and save it
+               tax                 ; tfr a in x reg
+               ldy  px             ; load x param in y
+               jsr  gotoxy         ; position cursor
+               clc                 ; adjusting start addr
                inc  straddr
                lda  straddr
                sta  straddr
@@ -231,77 +196,49 @@ py        .byte     $00
 zp1       .word     $00
                .bend
 ;---------------------------------------------------------------------
+; Routine qui affiche et positionne une chaine de caractères se 
+; terminant par 0 et précédée par sa couleur et sa position comme 
+; suit:
+;              c, x, y,"chaine",0
 ;
+; Exemple chaine    .null     1,2,10,"bonjour!"
+;         chaine2   .text     4,2,11,"au revoir!",0
+;                   ldx #<chaine2
+;                   ldy #>chaine2
+;                   jsr putsxy    
 ;---------------------------------------------------------------------
 putscxy        .block
                php
-     ;-------------------------------------------- 
-     ;save start addr
-     ;-------------------------------------------- 
-               stx  straddr
+               stx  straddr        ;save start addr
                sty  straddr+1
-     ;-------------------------------------------- 
-     ;save a,y,x
-     ;-------------------------------------------- 
-               pha
+               pha                 ;save a,y,x
                tya
                pha
                txa
                pha
-     ;-------------------------------------------- 
-     ;save zpage1
-     ;-------------------------------------------- 
-               lda  zpage1
+               lda  zpage1         ;save zpage1
                sta  zp1
                lda  zpage1+1
                sta  zp1+1
-     ;-------------------------------------------- 
-     ;set zpage1
-     ;-------------------------------------------- 
-               lda  straddr+1
+               lda  straddr+1      ;set zpage1
                sta  zpage1+1
                lda  straddr
                sta  zpage1
-     ;-------------------------------------------- 
-     ; set z to zptr offset 0
-     ; save  current basiccolor
-     ;-------------------------------------------- 
-               lda  bascol
+               lda  bascol         ; save  current basiccolor
                sta  bc
-               ldy #$00
-     ;-------------------------------------------- 
-     ; load color param
-     ;-------------------------------------------- 
-               lda  (zpage1),y
-     ;-------------------------------------------- 
-     ; and set it
-     ;-------------------------------------------- 
-               sta  bascol
-     ;-------------------------------------------- 
-     ; adjusting start addr
-     ;-------------------------------------------- 
-               clc
+               ldy  #$00           ; set y to zptr offset 0
+               lda  (zpage1),y     ; load color param
+               sta  bascol         ; and set it
+               clc                 ; adjusting start addr
                inc  straddr
                bcc  norep1
                inc  straddr+1
-     ;-------------------------------------------- 
-     ; get address of remainder
-     ;-------------------------------------------- 
-norep1         lda  straddr
+norep1         lda  straddr        ; get address of remainder
                ldy  straddr+1
-     ;-------------------------------------------- 
-     ; print string at x,y pos.
-     ;-------------------------------------------- 
-               jsr  putsxy
-     ;-------------------------------------------- 
-     ; restoring basic color
-     ;-------------------------------------------- 
-               lda  bc
+               jsr  putsxy         ; print string at x,y pos.
+               lda  bc             ; restoring basic color 
                sta  bascol
-     ;-------------------------------------------- 
-     ; replacing zpage1 for basic
-     ;-------------------------------------------- 
-               lda  zp1+1
+               lda  zp1+1          ; replacing zpage1 for basic
                sta  zpage1+1
                lda  zp1
                sta  zpage1
@@ -312,17 +249,15 @@ norep1         lda  straddr
                pla
                plp
                rts
-straddr  .word      $00
-bc       .byte      $00
-zp1      .word      $00
-         .bend
+straddr        .word      $00
+bc             .byte      $00
+zp1            .word      $00
+               .bend
 ;---------------------------------------------------------------------
-; Transforme le contenu du registre A en
-; hexadécimal et retourne l'adresse de
-; la chaine dans X-(lsb) et Y-(msb).
+; Routine qui transforme le contenu du registre A en hexadécimal et
+; retourne l'adresse de la chaine dans X-(lsb) et Y-(msb).
 ; Entrée : A
-; Sortie : Valeur hexadécimale à la 
-;          position du curseur.
+; Sortie : Valeur hexadécimale à la position du curseur.
 ;---------------------------------------------------------------------
 putrahex       .block
                php
@@ -336,15 +271,11 @@ putrahex       .block
                rts
                .bend
 ;---------------------------------------------------------------------
-; Transforme le contenu du registre A en
-; hexadécimal et retourne 
-; l'adresse de la chaine dans X-(lsb) et
-; Y-(msb).
+; Routine qui transforme le contenu du registre A en hexadécimal et 
+; retourne l'adresse de la chaine dans X-(lsb) et Y-(msb).
 ; Entrée : A
-; Sortie : Valeur hexadécimale à la
-;          position (a2hexpx,a2hexpy).
-; **Note : a2hexpx et a2hexpy doivent
-;          être modifiées avant l'appel.
+; Sortie : Valeur hexadécimale à la position (a2hexpx,a2hexpy).
+; **Note : a2hexpx et a2hexpy doivent être modifiées avant l'appel.
 ;---------------------------------------------------------------------
 kputrahexxy
 bputrahexxy    
@@ -359,16 +290,12 @@ putrahexxy     .block
                rts
                .bend
 ;---------------------------------------------------------------------
-; Transforme le contenu du registre A en
-; hexadécimal et retourne 
-; l'adresse de la chaine dans X-(lsb) et
-; Y-(msb).
+; Routine qui transforme le contenu du registre A en hexadécimal et
+; retourne l'adresse de la chaine dans X-(lsb) et Y-(msb).
 ; Entrée : A
-; Sortie : Valeur hexadécimale à la
-;          position (a2hexpx,a2hexpy) et
+; Sortie : Valeur hexadécimale à la position (a2hexpx,a2hexpy) et
 ;          dans la couleur a2hexcol.
-; **Note : a2hexcol, a2hexpx et a2hexpy
-;          doivent être modifiées avant 
+; **Note : a2hexcol, a2hexpx et a2hexpy doivent être modifiées avant 
 ;          l'appel.
 ;---------------------------------------------------------------------
 putrahexcxy    .block
@@ -381,6 +308,10 @@ putrahexcxy    .block
                plp
                rts
                .bend
+
+;---------------------------------------------------------------------
+; Routine qui place le drapeau d'inversion de caractère.
+;---------------------------------------------------------------------
 setinverse     .block
                pha
                lda  #$12
@@ -388,6 +319,10 @@ setinverse     .block
                pla
                rts
                .bend
+
+;---------------------------------------------------------------------
+; Routine qui annule le drapeau d'inversion de caractère.
+;---------------------------------------------------------------------
 clrinverse     .block
                pha
                lda  #$92

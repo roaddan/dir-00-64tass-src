@@ -5,10 +5,10 @@
 # -----------------------------------------------------------------------------
 # Note:  
 # 	A) 64tass can be downloaded from :
-#		https://sourceforge.net/projects/tass64/ 
+#			https://sourceforge.net/projects/tass64/ 
 #
 #	B) 64tass documentation can be found at :
-#		https://tass64.sourceforge.net/
+#			https://tass64.sourceforge.net/
 #
 # 	C) Vice emulator utility is mandatory and available at : 
 #			"https://vice-emu.sourceforge.io"
@@ -30,7 +30,7 @@ PRGDIR=dir-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=template
+SOURCENAME=v20start
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
