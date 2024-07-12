@@ -139,56 +139,46 @@ curput         .block
 ; terminant par 0 et précédée par sa position comme suit:
 ; x,y,"chaine",0
 ;
-; Exemple chaine    .null     2,10,"bonjour!"
-;         chaine2   .text     2,11,"au revoir!",0
-;                   ldx #<chaine
-;                   ldy #>chaine
-;                   jsr putsxy    
+; Exemple 
+; chaine        .null     2,10,"bonjour!"
+; chaine2       .text     2,11,"au revoir!",0
+;               ldx #<chaine
+;               ldy #>chaine
+;               jsr putsxy    
 ;---------------------------------------------------------------------
 putsxy         .block
                php
-               stx  straddr        ; Save start addr
+               stx  straddr         ; Save start addr
                sty  straddr+1
-               pha                 ; Sauvegarde rA 
-               tya                 ; Prepare la ...
-               pha                 ; ... sauvegarde de rY.
-               txa                 ; Prepare la ...
-               pha                 ; ... sauvegarde de rX.
-               lda  zpage1         ; Save zpage1
-               sta  zp1
-               lda  zpage1+1
-               sta  zp1+1
-
-               lda  straddr+1      ; Set zpage1
+               pha                  ; Sauvegarde rA 
+               tya                  ; Prepare la ...
+               pha                  ; ... sauvegarde de rY.
+               txa                  ; Prepare la ...
+               pha                  ; ... sauvegarde de rX.
+               jsr  savezp1         ; Save zpage1
+               lda  straddr+1       ; Set zpage1
                sta  zpage1+1
                lda  straddr
                sta  zpage1
-
-               ldy  #$00           ; Set z to zptr offset 0 ...
-               lda  (zpage1),y     ; Load x param
-               sta  px             ; and save it
-               iny                 ; next param
-               lda  (zpage1),y     ; load y param
-               sta  py             ; and save it
-               tax                 ; tfr a in x reg
-               ldy  px             ; load x param in y
-               jsr  gotoxy         ; position cursor
-               clc                 ; adjusting start addr
-               inc  straddr
-               lda  straddr
+               ldy  #$00            ; Set z to zptr offset 0 ...
+               lda  (zpage1),y      ; Load x param
+               pha                  ; and save it
+               iny                  ; next param
+               lda  (zpage1),y      ; load y param
+               tay                  ; and save it
+               pla
+               tax                  ; load x param
+               jsr  gotoxy          ; position cursor
+               lda  straddr         ; adjusting start addr for
+               clc                  ; puts call.
+               adc  #$02
                sta  straddr
                bcc  norep1
                inc  straddr+1
-norep1         inc  straddr
-               bcc  norep2
-               inc  straddr+1
-norep2         ldx  straddr
+norep1         ldx  straddr        ; adjusting start addr
                ldy  straddr+1
                jsr  puts
-               lda  zp1+1
-               sta  zpage1+1
-               lda  zp1
-               sta  zpage1
+               jsr  restzp1
                pla
                tax
                pla
