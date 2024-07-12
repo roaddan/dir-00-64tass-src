@@ -2,8 +2,11 @@
 ; Librarie utilisant les Routines d'écran du Basic 2.0.
 ;---------------------------------------------------------------------
 ;---------------------------------------------------------------------
-; Routine qui Initialisation des paramêtres de base pour la gestion 
+; Routine qui initialisation des paramêtres de base pour la gestion 
 ; de l'écran virtuelle.
+;
+; Cette routine place la bordure de l'écran en vert, le fond d'écran 
+; en bleu et les caractères en blanc. 
 ;---------------------------------------------------------------------
 scrmaninit     .block  
                jsr  push  
@@ -12,17 +15,18 @@ scrmaninit     .block
                rol
                rol
                rol
-               ora  #vvert
-               ora  #%00001000
-               sta  vicbackcol
-               lda  #vblanc
-               sta  bascol
-               lda  #%00000010
-               sta  vichorcnt
-               jsr  cls
+               ora  #vvert         ; Du vert pour ... 
+               ora  #%00001000     ; ???
+               sta  vicbackcol     ; ... le fond d'écran.
+               lda  #vblanc        ; Du blanc pour ...
+               sta  bascol         ; les caractères.
+               lda  #%00000010     ; ???
+               sta  vichorcnt      ; ???
+               jsr  cls            ; On efface l'écran
                jsr  pop
                rts
-               .bend  
+               .bend
+
 ;---------------------------------------------------------------------
 ; Routine qui place le curseur à la position HOME et efface l'écran.
 ;---------------------------------------------------------------------
@@ -154,10 +158,12 @@ putsxy         .block
                sta  zp1
                lda  zpage1+1
                sta  zp1+1
+
                lda  straddr+1      ; Set zpage1
                sta  zpage1+1
                lda  straddr
                sta  zpage1
+
                ldy  #$00           ; Set z to zptr offset 0 ...
                lda  (zpage1),y     ; Load x param
                sta  px             ; and save it
@@ -176,7 +182,7 @@ putsxy         .block
 norep1         inc  straddr
                bcc  norep2
                inc  straddr+1
-norep2         lda  straddr
+norep2         ldx  straddr
                ldy  straddr+1
                jsr  puts
                lda  zp1+1
@@ -253,6 +259,7 @@ straddr        .word      $00
 bc             .byte      $00
 zp1            .word      $00
                .bend
+
 ;---------------------------------------------------------------------
 ; Routine qui transforme le contenu du registre A en hexadécimal et
 ; retourne l'adresse de la chaine dans X-(lsb) et Y-(msb).
@@ -270,6 +277,7 @@ putrahex       .block
                plp
                rts
                .bend
+
 ;---------------------------------------------------------------------
 ; Routine qui transforme le contenu du registre A en hexadécimal et 
 ; retourne l'adresse de la chaine dans X-(lsb) et Y-(msb).
@@ -289,6 +297,7 @@ putrahexxy     .block
                plp
                rts
                .bend
+
 ;---------------------------------------------------------------------
 ; Routine qui transforme le contenu du registre A en hexadécimal et
 ; retourne l'adresse de la chaine dans X-(lsb) et Y-(msb).

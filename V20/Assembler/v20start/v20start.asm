@@ -1,4 +1,6 @@
-.include  "header-v20ex.asm"
+version = "20240711-a"
+.include        "header-v20ex.asm"
+.include        "macros-64tass.asm"
 ;-----------------------------------------------------------
 TITLELINE=1
 BINLINE=6
@@ -9,6 +11,7 @@ DIFF=$03
 main            jsr scrmaninit
                 #scrcolors vbleu, vnoir
                 #color vblanc
+                #tolower
                 #printxy string3
 ;                #color vred               
 ;                #printxy string1
@@ -87,7 +90,7 @@ waitx           dex
 
 string1        .null    BINCOLM-4,TITLELINE,"test drapeaux cpu"
 string2        .null    BINCOLM-5,BINLINE-3,"flags:nv-bdizc"
-string3        .null    1,21,"par: daniel lafrance"
+string3        .null    1,1,"PAR: DANIEL LAFRANCE"
 string4        .null    BINCOLM+9,BINLINE+1, "(   )"
 string5        .byte    BINCOLM+1,BINLINE-2,94,94,94,94,94,94,94,94,0
 string6        .byte    BINCOLM+1,BINLINE-1,125,125,125,125,125,125,125,125,0
@@ -100,7 +103,6 @@ row            .byte    0
 lin            .byte    0
 adresse        .word     $1234     
      
-.include       "macros-64tass.asm"
 .include       "map-vic20-kernal.asm"
 .include       "map-vic20-vic.asm"
 .include       "map-Vic20-basic2.asm"

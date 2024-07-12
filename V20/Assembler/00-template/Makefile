@@ -90,7 +90,7 @@ JBMON64=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/C64/From-Books/40-best
 # Some other variables just to reduce command line length.
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
-VICE=$(VIC20GTK)
+VICE=$(V20)
 # The Vice autostart parameters. 
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # -----------------------------------------------------------------------------

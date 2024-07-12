@@ -15,31 +15,32 @@ main           jsr scrmaninit
                #tolower
                #scrcolors vbleu, vnoir
                #color vblanc
-               #locate 1,21
-               #print string3
-               #color vmauve               
-               #locate 1,0
-               #print string1
-               #color vwhite              
-               #locate BINCOLM-5,BINLINE-3
-               #print string2
-               #color vgreen               
-               #locate BINCOLM+1,BINLINE-2,
-               #print string5
-               #color vgreen               
-               #locate BINCOLM+1,BINLINE-1
-               #print string6
-               #color vmauve              
-               #locate BINCOLM+9,BINLINE+1
-               #print string4
-               #color vjaune              
-               #locate 4,18
-               #print string7
-               #color vjaune              
-               #locate 0,12
-               #print string8
-               #locate 2,9
-;               #color vwhite               
+               #printxy string0
+;               #locate 1,21
+;               #print string3
+;               #color vmauve               
+;               #locate 1,0
+;               #print string1
+;               #color vwhite              
+;               #locate BINCOLM-5,BINLINE-3
+;               #print string2
+;               #color vgreen               
+;               #locate BINCOLM+1,BINLINE-2,
+;               #print string5
+;               #color vgreen               
+;               #locate BINCOLM+1,BINLINE-1
+;               #print string6
+;               #color vmauve              
+;               #locate BINCOLM+9,BINLINE+1
+;               #print string4
+;               #color vjaune              
+;               #locate 4,18
+;               #print string7
+;               #color vjaune              
+;               #locate 0,12
+;               #print string8
+;               #locate 2,9
+;;               #color vwhite               
 ;               #printwordbin adresse
                lda #XVAL   ; initialise ... 
                sta count   ; ...le compteur
@@ -120,23 +121,24 @@ waitx          dex
                rts
                .bend
 
-string1        .null     "Test de Drapeaux CPU"
-string2        .null     "FLAGS:NV-BDIZC"
-string3        .null     "Par: Daniel Lafrance"
-string4        .null     "(   )"
-string5        .byte     94,94,32,94,94,94,94,94,0
-string6        .byte     125,125,'?',125,125,125,125,125,0
-string7        .null     "Getkey() = $"  
-string8        .byte     32,32,'$',13,32,'-','$',32,32,32,'-'
-               .byte     13,32,32,45,45,45,32,32,45,45,45,45,45,45,45,45,45,13
-               .byte     32
-               .null     "=$   ="  
-count          .byte     XVAL
-tstval         .byte     XCPX
-result         .byte     0
-row            .byte     0
-lin            .byte     0
-adresse        .word     main     
+string0        .text    1,1,"Par: Daniel Lafrance",0
+string1        .null    "Test de Drapeaux CPU"
+string2        .null    "FLAGS:NV-BDIZC"
+string3        .null    "Par: Daniel Lafrance"
+string4        .null    "(   )"
+string5        .byte    94,94,32,94,94,94,94,94,0
+string6        .byte    125,125,'?',125,125,125,125,125,0
+string7        .null    "Getkey() = $"  
+string8        .byte    32,32,'$',13,32,'-','$',32,32,32,'-'
+               .byte    13,32,32,45,45,45,32,32,45,45,45,45,45,45,45,45,45,13
+               .byte    32
+               .null    "=$   ="  
+count          .byte    XVAL
+tstval         .byte    XCPX
+result         .byte    0
+row            .byte    0
+lin            .byte    0
+adresse        .word    main     
      
   
 .include       "map-vic20-kernal.asm"
