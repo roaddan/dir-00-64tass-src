@@ -86,6 +86,7 @@ branch         bne useptr
 ; Example stops here
 ;===============================================================================
                jsr anykey
+               jsr putch
                lda byte
                sta vicbordcol
                pla
