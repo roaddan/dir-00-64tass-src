@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------
-; Version 20240704-234304-b
+; Version 20240704-234304-c
 ;-----------------------------------------------------------
 .include       "header-v20ex.asm"
 .include       "macros-64tass.asm"
@@ -15,42 +15,33 @@ main           jsr scrmaninit
                #tolower
                #scrcolors vbleu, vnoir
                #color vblanc
-               #locate 1,21
-               #print string3
+               #printxy string3
                #color vmauve               
-               #locate 1,0
-               #print string1
+               #printxy string1
                #color vwhite              
-               #locate BINCOLM-5,BINLINE-3
-               #print string2
+               #printxy string2
                #color vgreen               
-               #locate BINCOLM+1,BINLINE-2,
-               #print string5
+               #printxy string5
                #color vgreen               
-               #locate BINCOLM+1,BINLINE-1
-               #print string6
+               #printxy string6
                #color vmauve              
-               #locate BINCOLM+9,BINLINE+1
-               #print string4
+               #printxy string4
                #color vjaune              
-               #locate 4,18
-               #print string7
+               #printxy string7
                #color vjaune              
-               #locate 0,12
-               #print string8
-               #locate 2,9
-;               #color vwhite               
-;               #printwordbin adresse
-               lda #XVAL   ; initialise ... 
-               sta count   ; ...le compteur
-next           lda count
+               #printxy string8
+               #color vwhite               
+               #printwordbin adresse
+               lda #XVAL            ; initialise ... 
+               sta count            ; ...le compteur
+next           lda count            ; Charge le compteur
                sec
                sbc tstval
                sta result
                ldx count
                lda #$00
-               pha
-               plp
+               pha                  ;s=a
+               plp                  
                cpx tstval
                php
                pla
@@ -105,7 +96,6 @@ next           lda count
                jsr a2hex
                #printfmtxy 15, 18, "$", a2hexstr
                jmp next
-;ici            jmp ici
 out            rts 
 
 delay65536     .block
@@ -120,23 +110,24 @@ waitx          dex
                rts
                .bend
 
-string1        .null     "Test de Drapeaux CPU"
-string2        .null     "FLAGS:NV-BDIZC"
-string3        .null     "Par: Daniel Lafrance"
-string4        .null     "(   )"
-string5        .byte     94,94,32,94,94,94,94,94,0
-string6        .byte     125,125,'?',125,125,125,125,125,0
-string7        .null     "Getkey() = $"  
-string8        .byte     32,32,'$',13,32,'-','$',32,32,32,'-'
-               .byte     13,32,32,45,45,45,32,32,45,45,45,45,45,45,45,45,45,13
-               .byte     32
-               .null     "=$   ="  
-count          .byte     XVAL
-tstval         .byte     XCPX
-result         .byte     0
-row            .byte     0
-lin            .byte     0
-adresse        .word     main     
+string0        .text    1,1,"Par: Daniel Lafrance",0
+string1        .text    1,0,"Test de Drapeaux CPU",0
+string2        .text    BINCOLM-5,BINLINE-3,"FLAGS:NV-BDIZC",0
+string3        .text    1,21,"Par: Daniel Lafrance",0
+string4        .text    BINCOLM+9,BINLINE+1,"(   )",0
+string5        .byte    BINCOLM+1,BINLINE-2,94,94,32,94,94,94,94,94,0
+string6        .byte    BINCOLM+1,BINLINE-1,125,125,'?',125,125,125,125,125,0
+string7        .text    4,18,"Getkey() = $",0  
+string8        .byte    32,32,'$',13,32,'-','$',32,32,32,'-'
+               .byte    13,32,32,45,45,45,32,32,45,45,45,45,45,45,45,45,45,13
+               .byte    32
+               .null    "=$   ="  
+count          .byte    XVAL
+tstval         .byte    XCPX
+result         .byte    0
+row            .byte    0
+lin            .byte    0
+adresse        .word    main     
      
   
 .include       "map-vic20-kernal.asm"
