@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20240710-235419"
+                Version = "20240715-221204"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -64,10 +64,13 @@ line           .null                 " --------------------------------------"
 
 ch3ex11       .block
                pha
-               lda vicbordcol
-               sta byte
-               lda #$10
-               sta vicbordcol
+               jsr  cls
+               #print qhelp
+               lda  vicbordcol
+               sta  byte
+               lda  #$10
+               sta  vicbordcol
+               jmp  another
 ;===============================================================================
 ; Example 11 on page 27 starts here
 ;-------------------------------------------------------------------------------
@@ -85,14 +88,46 @@ branch         bne useptr
 ;-------------------------------------------------------------------------------
 ; Example stops here
 ;===============================================================================
-               jsr anykey
-               jsr putch
-               lda byte
-               sta vicbordcol
+another        lda  #13
+               jsr  putch
+               jsr  getkey
+               jsr  putch
+               pha
+               lda  #' '
+               jsr  putch
+               lda  #'%'
+               jsr  putch
+               pla
+               jsr  putabin
+               pha
+               lda  #' '
+               jsr  putch
+               lda  #'$'
+               jsr  putch
+               pla
+               jsr  putahex
+               pha
+               lda  #' '
+               jsr  putch
+               pla
+               jsr  putadec
+               cmp  #'$'
+               bne  isithelp
+               jsr  cls
+               #print qhelp
+isithelp       cmp  #'?'
+               bne  isitq
+               jsr  help
+isitq          cmp  #'Q'
+               bne  another
+               lda  byte
+               sta  vicbordcol
                pla
                rts
                .bend
-byte           .byte 0
+byte           .byte     0
+qhelp          .text     "Type a key to see char, bin, hex, dec.", 13
+               .text     "? main help, $ this help and Q to quit.", 13, 0
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------

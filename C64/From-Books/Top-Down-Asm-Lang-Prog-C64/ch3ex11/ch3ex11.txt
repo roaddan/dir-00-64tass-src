@@ -1,13 +1,13 @@
 
 ; 64tass Turbo Assembler Macro V1.52.1237? listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib -i -L ch3ex11.txt -o ch3ex11.prg ch3ex11.asm
-; Mon Jul 15 21:44:50 2024
+; Mon Jul 15 22:28:03 2024
 
 ;Offset	;Hex		;Source
 
 ;******  Processing input file: ch3ex11.asm
 
-="20240710-235419"	                Version = "20240710-235419"
+="20240715-221204"	                Version = "20240715-221204"
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/header-c64.asm
 
@@ -38,7 +38,7 @@
 .271b	28		               plp
 .271c	20 20 4e	               jsr help
 .271f	4c 55 27	               jmp  mainout
-.2722	20 65 c8	               jsr anykey
+.2722	20 76 c8	               jsr anykey
 .2725	20 30 75	               jsr ch3ex11
 .2728	08		               php
 .2729	48		               pha
@@ -70,7 +70,7 @@
 .4e20			help
 .4e20	08		               php
 .4e21	48		               pha
-.4e22	a9 0e		               lda  #b_lowercase
+.4e22	a9 0e		               lda  #14
 .4e24	8d 4f c3	               sta  characterset
 .4e27	20 d2 ff	               jsr  $ffd2
 .4e2a	68		               pla
@@ -132,7 +132,7 @@
 >4f54	c4 41 4e 49 45 4c 20 cc 41 46 52 41 4e 43 45 2e
 >4f64	0d 20 20 20	               .null     $0d, format("       Version: %s.",Version)
 >4f68	20 20 20 20 d6 45 52 53 49 4f 4e 3a 20 32 30 32
->4f78	34 30 37 31 30 2d 32 33 35 34 31 39 2e 00
+>4f78	34 30 37 31 35 2d 32 32 31 32 30 34 2e 00
 >4f86	0d 20 2d 2d	shortcuts      .text     $0d,        " -------- S H O R T - C U T S ---------"
 >4f8a	2d 2d 2d 2d 2d 2d 20 d3 20 c8 20 cf 20 d2 20 d4
 >4f9a	20 2d 20 c3 20 d5 20 d4 20 d3 20 2d 2d 2d 2d 2d
@@ -152,28 +152,77 @@
 >5034	2d 2d 2d 00
 .7530			ch3ex11
 .7530	48		               pha
-.7531	ad 20 d0	               lda vicbordcol
-.7534	8d 66 75	               sta byte
-.7537	a9 10		               lda #$10
-.7539	8d 20 d0	               sta vicbordcol
-.753c	4c 41 75	               jmp  init
->753f	50 75		pointer   .word     printit
-.7541	a2 00		init           ldx  #0
-.7543	a9 da		load           lda  #'Z'
-.7545	6c 3f 75	useptr         jmp  (pointer)
->7548	00 00 00 00	               .byte 00,00,00,00,00,00,00,00
->754c	00 00 00 00
-.7550	20 d2 ff	printit        jsr  $ffd2
-.7553	e8		adhust         inx
-.7554	e0 09		test           cpx #9
-.7556	d0 ed		branch         bne useptr
-.7558	20 65 c8	               jsr anykey
-.755b	20 67 c3	               jsr putch
-.755e	ad 66 75	               lda byte
-.7561	8d 20 d0	               sta vicbordcol
-.7564	68		               pla
-.7565	60		               rts
->7566	00		byte           .byte 0
+.7531	20 50 c3	               jsr  cls
+.7534	20 5e c4	               jsr  push
+.7537	a2 c6		isx            ldx  #<qhelp
+.7539	a0 75		isy            ldy  #>qhelp
+.753b	20 6d c3	               jsr  puts
+.753e	20 9d c4	               jsr  pull
+.7541	ad 20 d0	               lda  vicbordcol
+.7544	8d c5 75	               sta  byte
+.7547	a9 10		               lda  #$10
+.7549	8d 20 d0	               sta  vicbordcol
+.754c	4c 6b 75	               jmp  another
+.754f	4c 54 75	               jmp  init
+>7552	63 75		pointer   .word     printit
+.7554	a2 00		init           ldx  #0
+.7556	a9 da		load           lda  #'Z'
+.7558	6c 52 75	useptr         jmp  (pointer)
+>755b	00 00 00 00	               .byte 00,00,00,00,00,00,00,00
+>755f	00 00 00 00
+.7563	20 d2 ff	printit        jsr  $ffd2
+.7566	e8		adhust         inx
+.7567	e0 09		test           cpx #9
+.7569	d0 ed		branch         bne useptr
+.756b	a9 0d		another        lda  #13
+.756d	20 67 c3	               jsr  putch
+.7570	20 8f c8	               jsr  getkey
+.7573	20 67 c3	               jsr  putch
+.7576	48		               pha
+.7577	a9 20		               lda  #' '
+.7579	20 67 c3	               jsr  putch
+.757c	a9 25		               lda  #'%'
+.757e	20 67 c3	               jsr  putch
+.7581	68		               pla
+.7582	20 ea c6	               jsr  putabin
+.7585	48		               pha
+.7586	a9 20		               lda  #' '
+.7588	20 67 c3	               jsr  putch
+.758b	a9 24		               lda  #'$'
+.758d	20 67 c3	               jsr  putch
+.7590	68		               pla
+.7591	20 57 c6	               jsr  putahex
+.7594	48		               pha
+.7595	a9 20		               lda  #' '
+.7597	20 67 c3	               jsr  putch
+.759a	68		               pla
+.759b	20 59 c7	               jsr  putadec
+.759e	c9 24		               cmp  #'$'
+.75a0	d0 10		               bne  isithelp
+.75a2	20 50 c3	               jsr  cls
+.75a5	20 5e c4	               jsr  push
+.75a8	a2 c6		isx            ldx  #<qhelp
+.75aa	a0 75		isy            ldy  #>qhelp
+.75ac	20 6d c3	               jsr  puts
+.75af	20 9d c4	               jsr  pull
+.75b2	c9 3f		isithelp       cmp  #'?'
+.75b4	d0 03		               bne  isitq
+.75b6	20 20 4e	               jsr  help
+.75b9	c9 d1		isitq          cmp  #'Q'
+.75bb	d0 ae		               bne  another
+.75bd	ad c5 75	               lda  byte
+.75c0	8d 20 d0	               sta  vicbordcol
+.75c3	68		               pla
+.75c4	60		               rts
+>75c5	00		byte           .byte     0
+>75c6	d4 59 50 45	qhelp          .text     "Type a key to see char, bin, hex, dec.", 13
+>75ca	20 41 20 4b 45 59 20 54 4f 20 53 45 45 20 43 48
+>75da	41 52 2c 20 42 49 4e 2c 20 48 45 58 2c 20 44 45
+>75ea	43 2e 0d
+>75ed	3f 20 4d 41	               .text     "? main help, $ this help and Q to quit.", 13, 0
+>75f1	49 4e 20 48 45 4c 50 2c 20 24 20 54 48 49 53 20
+>7601	48 45 4c 50 20 41 4e 44 20 d1 20 54 4f 20 51 55
+>7611	49 54 2e 0d 00
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-kernal.asm
 
@@ -1370,6 +1419,14 @@
 .c752	20 9d c4	               jsr  pull
 .c755	60		               rts
 >c756	00 00 00	buffer         .byte     0,0,0
+.c759			putadec
+.c759	20 5e c4	               jsr  push
+.c75c	20 24 c7	               jsr  atodec
+.c75f	a2 28		               ldx  #<adec
+.c761	a0 c6		               ldy  #>adec+1
+.c763	20 6d c3	               jsr  puts
+.c766	20 9d c4	               jsr  pop
+.c769	60		               rts
 
 ;******  Return to file: ch3ex11.asm
 
@@ -1505,105 +1562,105 @@
 =$bd			comd_x         =    $bd
 =$b7			comd_y         =    $b7
 =$ad			comd_z         =    $ad
->c759	00 00 00 00	asciitorom     .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$0d,$00,$00  ;$00
->c75d	00 00 00 00 00 00 00 00 00 0d 00 00
->c769	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$10
->c76d	00 00 00 00 00 00 00 00 00 00 00 00
->c779	20 21 22 23	               .byte     $20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$2a,$2b,$2c,$2d,$2e,$2f  ;$20
->c77d	24 25 26 27 28 29 2a 2b 2c 2d 2e 2f
->c789	30 31 32 33	               .byte     $30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$3a,$3b,$3c,$3d,$3e,$3f  ;$30
->c78d	34 35 36 37 38 39 3a 3b 3c 3d 3e 3f
->c799	00 01 02 03	               .byte     $00,$01,$02,$03,$04,$05,$06,$07,$08,$09,$0a,$0b,$0c,$0d,$0e,$0f  ;$40
->c79d	04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
->c7a9	10 11 12 13	               .byte     $10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$1a,$1b,$1c,$1d,$1e,$1f  ;$50
->c7ad	14 15 16 17 18 19 1a 1b 1c 1d 1e 1f
->c7b9	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$60
->c7bd	00 00 00 00 00 00 00 00 00 00 00 00
->c7c9	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$70
->c7cd	00 00 00 00 00 00 00 00 00 00 00 00
->c7d9	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$80
->c7dd	00 00 00 00 00 00 00 00 00 00 00 00
->c7e9	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$90
->c7ed	00 00 00 00 00 00 00 00 00 00 00 00
->c7f9	60 61 62 63	               .byte     $60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$6a,$6b,$6c,$6d,$6e,$6f  ;$a0
->c7fd	64 65 66 67 68 69 6a 6b 6c 6d 6e 6f
->c809	70 71 72 73	               .byte     $70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$7a,$7b,$7c,$7d,$7e,$7f  ;$b0
->c80d	74 75 76 77 78 79 7a 7b 7c 7d 7e 7f
->c819	40 41 42 43	               .byte     $40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$4a,$4b,$4c,$4d,$4e,$4f  ;$c0
->c81d	44 45 46 47 48 49 4a 4b 4c 4d 4e 4f
->c829	50 51 52 53	               .byte     $50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$5a,$5b,$5c,$5d,$5e,$5f  ;$d0
->c82d	54 55 56 57 58 59 5a 5b 5c 5d 5e 5f
->c839	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$e0
->c83d	00 00 00 00 00 00 00 00 00 00 00 00
->c849	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$f0
->c84d	00 00 00 00 00 00 00 00 00 00 00 00
-.c859			waitstop
-.c859	20 5e c4	               jsr  push
-.c85c	20 ed f6	wait           jsr  k_stop
-.c85f	d0 fb		               bne  wait
-.c861	20 9d c4	               jsr  pop
-.c864	60		               rts
-.c865			anykey
-.c865	08		               php
-.c866	48		               pha
-.c867	a5 cb		nokey          lda 203
-.c869	c9 40		               cmp #64
-.c86b	f0 fa		               beq nokey
-.c86d	20 73 c8	               jsr releasekey
-.c870	68		               pla
-.c871	28		               plp
-.c872	60		               rts
-.c873			releasekey
-.c873	08		               php
-.c874	48		               pha
-.c875	a5 cb		keypressed     lda 203
-.c877	c9 40		               cmp #64
-.c879	d0 fa		               bne keypressed
-.c87b	68		               pla
-.c87c	28		               plp
-.c87d	60		               rts
-.c87e			getkey
-.c87e	20 e4 ff	again          jsr  getin
-.c881	c9 00		               cmp  #0
-.c883	f0 f9		               beq  again
-.c885	60		               rts
-.c886			waitkey
-.c886	20 5e c4	               jsr  push
-.c889	8d d7 c8	               sta  thekey
-.c88c	20 e4 ff	nope           jsr  getin
-.c88f	20 d2 ff	               jsr  chrout
-.c892	cd d7 c8	               cmp  thekey
-.c895	d0 f5		               bne  nope
-.c897	20 d2 ff	               jsr  chrout
-.c89a	20 9d c4	               jsr  pop
-.c89d	60		               rts
-.c89e			waitspace
-.c89e	20 5e c4	               jsr  push
-.c8a1	a9 7f		wait           lda  #$7f  ;%01111111
-.c8a3	8d 00 dc	               sta  $dc00
-.c8a6	ad 01 dc	               lda  $dc01
-.c8a9	29 10		               and  #$10  ;mask %00010000
-.c8ab	d0 f4		               bne  wait
-.c8ad	20 9d c4	               jsr  pop
-.c8b0			waitsstop
-.c8b0	20 5e c4	               jsr  push
-.c8b3	20 ed f6	wait           jsr  k_stop  ;%01111111
-.c8b6	d0 fb		               bne  wait
-.c8b8	20 9d c4	               jsr  pop
-.c8bb			waitreturn
-.c8bb	20 5e c4	               jsr  push
-.c8be	ad d8 c8	               lda  thecount
-.c8c1	8d 00 04	               sta  scrnram
-.c8c4	a9 02		               lda  #$02
-.c8c6	8d 00 d8	               sta  colorram
-.c8c9	20 e4 ff	nope           jsr  getin
-.c8cc	c9 0d		nohex          cmp  #$0d
-.c8ce	d0 f9		               bne  nope
-.c8d0	ee d8 c8	               inc  thecount
-.c8d3	20 9d c4	               jsr  pop
-.c8d6	60		               rts
->c8d7	00		thekey         .byte   0
->c8d8	01		thecount       .byte   $01
+>c76a	00 00 00 00	asciitorom     .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$0d,$00,$00  ;$00
+>c76e	00 00 00 00 00 00 00 00 00 0d 00 00
+>c77a	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$10
+>c77e	00 00 00 00 00 00 00 00 00 00 00 00
+>c78a	20 21 22 23	               .byte     $20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$2a,$2b,$2c,$2d,$2e,$2f  ;$20
+>c78e	24 25 26 27 28 29 2a 2b 2c 2d 2e 2f
+>c79a	30 31 32 33	               .byte     $30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$3a,$3b,$3c,$3d,$3e,$3f  ;$30
+>c79e	34 35 36 37 38 39 3a 3b 3c 3d 3e 3f
+>c7aa	00 01 02 03	               .byte     $00,$01,$02,$03,$04,$05,$06,$07,$08,$09,$0a,$0b,$0c,$0d,$0e,$0f  ;$40
+>c7ae	04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+>c7ba	10 11 12 13	               .byte     $10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$1a,$1b,$1c,$1d,$1e,$1f  ;$50
+>c7be	14 15 16 17 18 19 1a 1b 1c 1d 1e 1f
+>c7ca	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$60
+>c7ce	00 00 00 00 00 00 00 00 00 00 00 00
+>c7da	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$70
+>c7de	00 00 00 00 00 00 00 00 00 00 00 00
+>c7ea	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$80
+>c7ee	00 00 00 00 00 00 00 00 00 00 00 00
+>c7fa	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$90
+>c7fe	00 00 00 00 00 00 00 00 00 00 00 00
+>c80a	60 61 62 63	               .byte     $60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$6a,$6b,$6c,$6d,$6e,$6f  ;$a0
+>c80e	64 65 66 67 68 69 6a 6b 6c 6d 6e 6f
+>c81a	70 71 72 73	               .byte     $70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$7a,$7b,$7c,$7d,$7e,$7f  ;$b0
+>c81e	74 75 76 77 78 79 7a 7b 7c 7d 7e 7f
+>c82a	40 41 42 43	               .byte     $40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$4a,$4b,$4c,$4d,$4e,$4f  ;$c0
+>c82e	44 45 46 47 48 49 4a 4b 4c 4d 4e 4f
+>c83a	50 51 52 53	               .byte     $50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$5a,$5b,$5c,$5d,$5e,$5f  ;$d0
+>c83e	54 55 56 57 58 59 5a 5b 5c 5d 5e 5f
+>c84a	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$e0
+>c84e	00 00 00 00 00 00 00 00 00 00 00 00
+>c85a	00 00 00 00	               .byte     $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;$f0
+>c85e	00 00 00 00 00 00 00 00 00 00 00 00
+.c86a			waitstop
+.c86a	20 5e c4	               jsr  push
+.c86d	20 ed f6	wait           jsr  k_stop
+.c870	d0 fb		               bne  wait
+.c872	20 9d c4	               jsr  pop
+.c875	60		               rts
+.c876			anykey
+.c876	08		               php
+.c877	48		               pha
+.c878	a5 cb		nokey          lda 203
+.c87a	c9 40		               cmp #64
+.c87c	f0 fa		               beq nokey
+.c87e	20 84 c8	               jsr releasekey
+.c881	68		               pla
+.c882	28		               plp
+.c883	60		               rts
+.c884			releasekey
+.c884	08		               php
+.c885	48		               pha
+.c886	a5 cb		keypressed     lda 203
+.c888	c9 40		               cmp #64
+.c88a	d0 fa		               bne keypressed
+.c88c	68		               pla
+.c88d	28		               plp
+.c88e	60		               rts
+.c88f			getkey
+.c88f	20 e4 ff	again          jsr  getin
+.c892	c9 00		               cmp  #0
+.c894	f0 f9		               beq  again
+.c896	60		               rts
+.c897			waitkey
+.c897	20 5e c4	               jsr  push
+.c89a	8d e8 c8	               sta  thekey
+.c89d	20 e4 ff	nope           jsr  getin
+.c8a0	20 d2 ff	               jsr  chrout
+.c8a3	cd e8 c8	               cmp  thekey
+.c8a6	d0 f5		               bne  nope
+.c8a8	20 d2 ff	               jsr  chrout
+.c8ab	20 9d c4	               jsr  pop
+.c8ae	60		               rts
+.c8af			waitspace
+.c8af	20 5e c4	               jsr  push
+.c8b2	a9 7f		wait           lda  #$7f  ;%01111111
+.c8b4	8d 00 dc	               sta  $dc00
+.c8b7	ad 01 dc	               lda  $dc01
+.c8ba	29 10		               and  #$10  ;mask %00010000
+.c8bc	d0 f4		               bne  wait
+.c8be	20 9d c4	               jsr  pop
+.c8c1			waitsstop
+.c8c1	20 5e c4	               jsr  push
+.c8c4	20 ed f6	wait           jsr  k_stop  ;%01111111
+.c8c7	d0 fb		               bne  wait
+.c8c9	20 9d c4	               jsr  pop
+.c8cc			waitreturn
+.c8cc	20 5e c4	               jsr  push
+.c8cf	ad e9 c8	               lda  thecount
+.c8d2	8d 00 04	               sta  scrnram
+.c8d5	a9 02		               lda  #$02
+.c8d7	8d 00 d8	               sta  colorram
+.c8da	20 e4 ff	nope           jsr  getin
+.c8dd	c9 0d		nohex          cmp  #$0d
+.c8df	d0 f9		               bne  nope
+.c8e1	ee e9 c8	               inc  thecount
+.c8e4	20 9d c4	               jsr  pop
+.c8e7	60		               rts
+>c8e8	00		thekey         .byte   0
+>c8e9	01		thecount       .byte   $01
 
 ;******  Return to file: ch3ex11.asm
 
