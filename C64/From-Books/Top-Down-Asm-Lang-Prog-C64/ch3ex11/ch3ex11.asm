@@ -11,7 +11,7 @@
                jsr  main
                jsr  pop
                rts                                         
-*=10000 ;$c000
+;*=10000 ;$c000
 main           .block
                jsr scrmaninit
                #disable
@@ -27,7 +27,7 @@ main           .block
 mainout        rts
                .bend
                  
-*=20000
+;*=20000
 help           .block      
                #lowercase
                jsr cls
@@ -56,7 +56,7 @@ helptext       .null     $0d, format(" Basic Example.: SYS%05d",ch3ex11), $0d
 line           .null                 " --------------------------------------"
                .bend
 
-*=30000 ;$c400+24        ;To place the function at a specific place in memory.
+;*=30000 ;$c400+24        ;To place the function at a specific place in memory.
 ;-------------------------------------------------------------------------------
 ; This function prints 8 'Z' characters at the cursor position using an indirect 
 ; pointer.
@@ -70,6 +70,7 @@ ch3ex11       .block
                sta  byte
                lda  #$10
                sta  vicbordcol
+               #print header
                jmp  another
 ;===============================================================================
 ; Example 11 on page 27 starts here
@@ -88,11 +89,27 @@ branch         bne useptr
 ;-------------------------------------------------------------------------------
 ; Example stops here
 ;===============================================================================
-another        lda  #13
+another        jsr  getkey
+               pha
+               sec
+               jsr  plot
+               cpx  #24
+               bne  nohead
+               ;jsr  cls
+               #locate 0,0
+               #print qhelp
+               #print header
+nohead         lda  #13
                jsr  putch
-               jsr  getkey
+               lda  #' '
+               jsr  putch
+               lda  #' '
+               jsr  putch
+               pla
                jsr  putch
                pha
+               lda  #' '
+               jsr  putch
                lda  #' '
                jsr  putch
                lda  #'%'
@@ -111,23 +128,29 @@ another        lda  #13
                jsr  putch
                pla
                jsr  putadec
-               cmp  #'$'
-               bne  isithelp
+               cmp  #8             ; Is it CTRL]+[H]
+               bne  isitqhelp
                jsr  cls
                #print qhelp
-isithelp       cmp  #'?'
+               #print header
+isitqhelp      cmp  #$14           
                bne  isitq
                jsr  help
-isitq          cmp  #'Q'
-               bne  another
-               lda  byte
+isitq          cmp  #$11           ; Is it [CTRL]+[Q]
+               beq  doquit
+               jmp  another
+doquit         lda  byte
                sta  vicbordcol
                pla
+               jsr  cls
+               jsr  help
                rts
                .bend
 byte           .byte     0
-qhelp          .text     "Type a key to see char, bin, hex, dec.", 13
-               .text     "? main help, $ this help and Q to quit.", 13, 0
+qhelp          .text     " Type a key to see char, bin, hex, dec.", 13
+               .text     "   [CTRL]+[H] help, [CTRL]+[Q] quit.", 13, 0
+header         .text     " chr %[binary] Hex Dec",13
+               .null     "+---+---------+---+---+"               
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
