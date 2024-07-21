@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.52.1237? listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib -i -L ch3ex11.txt -o ch3ex11.prg ch3ex11.asm
-; Sun Jul 21 00:11:00 2024
+; Sun Jul 21 00:37:51 2024
 
 ;Offset	;Hex		;Source
 
@@ -154,16 +154,16 @@
 .0a75	48		               pha
 .0a76	20 50 c3	               jsr  cls
 .0a79	20 5e c4	               jsr  push
-.0a7c	a2 6e		isx            ldx  #<qhelp
+.0a7c	a2 93		isx            ldx  #<qhelp
 .0a7e	a0 0b		isy            ldy  #>qhelp
 .0a80	20 6d c3	               jsr  puts
 .0a83	20 9d c4	               jsr  pull
 .0a86	ad 20 d0	               lda  vicbordcol
-.0a89	8d 6d 0b	               sta  byte
+.0a89	8d 92 0b	               sta  byte
 .0a8c	a9 10		               lda  #$10
 .0a8e	8d 20 d0	               sta  vicbordcol
 .0a91	20 5e c4	               jsr  push
-.0a94	a2 bc		isx            ldx  #<header
+.0a94	a2 e3		isx            ldx  #<header
 .0a96	a0 0b		isy            ldy  #>header
 .0a98	20 6d c3	               jsr  puts
 .0a9b	20 9d c4	               jsr  pull
@@ -191,12 +191,12 @@
 .0ad0	20 87 c3	               jsr  gotoxy
 .0ad3	20 9d c4	               jsr  pop
 .0ad6	20 5e c4	               jsr  push
-.0ad9	a2 6e		isx            ldx  #<qhelp
+.0ad9	a2 93		isx            ldx  #<qhelp
 .0adb	a0 0b		isy            ldy  #>qhelp
 .0add	20 6d c3	               jsr  puts
 .0ae0	20 9d c4	               jsr  pull
 .0ae3	20 5e c4	               jsr  push
-.0ae6	a2 bc		isx            ldx  #<header
+.0ae6	a2 e3		isx            ldx  #<header
 .0ae8	a0 0b		isy            ldy  #>header
 .0aea	20 6d c3	               jsr  puts
 .0aed	20 9d c4	               jsr  pull
@@ -229,46 +229,64 @@
 .0b29	20 67 c3	               jsr  putch
 .0b2c	68		               pla
 .0b2d	20 59 c7	               jsr  putadec
-.0b30	c9 08		               cmp  #8             ; Is it CTRL]+[H]
-.0b32	d0 1d		               bne  isitqhelp
-.0b34	20 50 c3	               jsr  cls
-.0b37	20 5e c4	               jsr  push
-.0b3a	a2 6e		isx            ldx  #<qhelp
-.0b3c	a0 0b		isy            ldy  #>qhelp
-.0b3e	20 6d c3	               jsr  puts
-.0b41	20 9d c4	               jsr  pull
-.0b44	20 5e c4	               jsr  push
-.0b47	a2 bc		isx            ldx  #<header
-.0b49	a0 0b		isy            ldy  #>header
-.0b4b	20 6d c3	               jsr  puts
-.0b4e	20 9d c4	               jsr  pull
-.0b51	c9 14		isitqhelp      cmp  #$14
-.0b53	d0 03		               bne  isitq
-.0b55	20 5d 08	               jsr  help
-.0b58	c9 11		isitq          cmp  #$11           ; Is it [CTRL]+[Q]
-.0b5a	f0 03		               beq  doquit
-.0b5c	4c bd 0a	               jmp  another
-.0b5f	ad 6d 0b	doquit         lda  byte
-.0b62	8d 20 d0	               sta  vicbordcol
-.0b65	68		               pla
-.0b66	20 50 c3	               jsr  cls
-.0b69	20 5d 08	               jsr  help
-.0b6c	60		               rts
->0b6d	00		byte           .byte     0
->0b6e	20 d4 59 50	qhelp          .text     " Type a key to see char, bin, hex, dec.", 13
->0b72	45 20 41 20 4b 45 59 20 54 4f 20 53 45 45 20 43
->0b82	48 41 52 2c 20 42 49 4e 2c 20 48 45 58 2c 20 44
->0b92	45 43 2e 0d
->0b96	20 20 20 5b	               .text     "   [CTRL]+[H] help, [CTRL]+[Q] quit.", 13, 0
->0b9a	c3 d4 d2 cc 5d 2b 5b c8 5d 20 48 45 4c 50 2c 20
->0baa	5b c3 d4 d2 cc 5d 2b 5b d1 5d 20 51 55 49 54 2e
->0bba	0d 00
->0bbc	20 43 48 52	header         .text     " chr %[binary] Hex Dec",13
->0bc0	20 25 5b 42 49 4e 41 52 59 5d 20 c8 45 58 20 c4
->0bd0	45 43 0d
->0bd3	2b 2d 2d 2d	               .null     "+---+---------+---+---+"
->0bd7	2b 2d 2d 2d 2d 2d 2d 2d 2d 2d 2b 2d 2d 2d 2b 2d
->0be7	2d 2d 2b 00
+.0b30	c9 1b		isitspecial    cmp  #27
+.0b32	10 14		               bpl  isitctrlh
+.0b34	20 5e c4	               jsr  push
+.0b37	a2 12		isx            ldx  #<special
+.0b39	a0 0c		isy            ldy  #>special
+.0b3b	20 6d c3	               jsr  puts
+.0b3e	20 9d c4	               jsr  pull
+.0b41	48		               pha
+.0b42	09 c0		               ora  #%11000000
+.0b44	20 67 c3	               jsr  putch
+.0b47	68		               pla
+.0b48	c9 08		isitctrlh      cmp  #8             ; Is it CTRL]+[H]
+.0b4a	d0 2a		               bne  isitctrln
+.0b4c	20 50 c3	               jsr  cls
+.0b4f	20 5e c4	               jsr  push
+.0b52	a2 00		               ldx  #0
+.0b54	a0 00		               ldy  #0
+.0b56	20 87 c3	               jsr  gotoxy
+.0b59	20 9d c4	               jsr  pop
+.0b5c	20 5e c4	               jsr  push
+.0b5f	a2 93		isx            ldx  #<qhelp
+.0b61	a0 0b		isy            ldy  #>qhelp
+.0b63	20 6d c3	               jsr  puts
+.0b66	20 9d c4	               jsr  pull
+.0b69	20 5e c4	               jsr  push
+.0b6c	a2 e3		isx            ldx  #<header
+.0b6e	a0 0b		isy            ldy  #>header
+.0b70	20 6d c3	               jsr  puts
+.0b73	20 9d c4	               jsr  pull
+.0b76	c9 14		isitctrln      cmp  #$14           ; Is it CTRL]+[N]
+.0b78	d0 03		               bne  isitctrlq
+.0b7a	20 5d 08	               jsr  help
+.0b7d	c9 11		isitctrlq      cmp  #$11           ; Is it [CTRL]+[Q]
+.0b7f	f0 03		               beq  doquit
+.0b81	4c bd 0a	               jmp  another
+.0b84	ad 92 0b	doquit         lda  byte
+.0b87	8d 20 d0	               sta  vicbordcol
+.0b8a	68		               pla
+.0b8b	20 50 c3	               jsr  cls
+.0b8e	20 5d 08	               jsr  help
+.0b91	60		               rts
+>0b92	00		byte           .byte     0
+>0b93	20 d4 59 50	qhelp          .text     " Type a key to see char, bin, hex, dec.", 13
+>0b97	45 20 41 20 4b 45 59 20 54 4f 20 53 45 45 20 43
+>0ba7	48 41 52 2c 20 42 49 4e 2c 20 48 45 58 2c 20 44
+>0bb7	45 43 2e 0d
+>0bbb	20 20 c3 d4	               .text     "  CTRL+H help, CTRL+Q quit, CTRL+L cls", 13, 0
+>0bbf	d2 cc 2b c8 20 48 45 4c 50 2c 20 c3 d4 d2 cc 2b
+>0bcf	d1 20 51 55 49 54 2c 20 c3 d4 d2 cc 2b cc 20 43
+>0bdf	4c 53 0d 00
+>0be3	20 43 48 52	header         .text     " chr %[binary] Hex Dec",13
+>0be7	20 25 5b 42 49 4e 41 52 59 5d 20 c8 45 58 20 c4
+>0bf7	45 43 0d
+>0bfa	2b 2d 2d 2d	               .null     "+---+---------+---+---+"
+>0bfe	2b 2d 2d 2d 2d 2d 2d 2d 2d 2d 2b 2d 2d 2d 2b 2d
+>0c0e	2d 2d 2b 00
+>0c12	20 20 c3 d4	special        .null     "  CTRL+"
+>0c16	d2 cc 2b 00
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-kernal.asm
 

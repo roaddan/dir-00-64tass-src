@@ -128,15 +128,28 @@ nohead         lda  #13
                jsr  putch
                pla
                jsr  putadec
-               cmp  #8             ; Is it CTRL]+[H]
-               bne  isitqhelp
+               ;pha
+               ;lda  #' '
+               ;jsr  putch
+               ;pla
+isitspecial    cmp  #27
+               bpl  isitctrlh
+               #print special
+               pha
+               ora  #%11000000
+               jsr  putch
+               pla     
+               ;cmp  #$0c           ; Is it CTRL]+[L]
+isitctrlh      cmp  #8             ; Is it CTRL]+[H]
+               bne  isitctrln
                jsr  cls
+               #locate 0,0
                #print qhelp
                #print header
-isitqhelp      cmp  #$14           
-               bne  isitq
+isitctrln      cmp  #$14           ; Is it CTRL]+[N]    
+               bne  isitctrlq
                jsr  help
-isitq          cmp  #$11           ; Is it [CTRL]+[Q]
+isitctrlq      cmp  #$11           ; Is it [CTRL]+[Q]
                beq  doquit
                jmp  another
 doquit         lda  byte
@@ -148,9 +161,10 @@ doquit         lda  byte
                .bend
 byte           .byte     0
 qhelp          .text     " Type a key to see char, bin, hex, dec.", 13
-               .text     "   [CTRL]+[H] help, [CTRL]+[Q] quit.", 13, 0
+               .text     "  CTRL+H help, CTRL+Q quit, CTRL+L cls", 13, 0
 header         .text     " chr %[binary] Hex Dec",13
-               .null     "+---+---------+---+---+"               
+               .null     "+---+---------+---+---+"
+special        .null     "  CTRL+"                              
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
