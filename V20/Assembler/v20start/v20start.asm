@@ -1,6 +1,6 @@
-.include  "header-v20ex.asm"
-;.include  "header-c64.asm"
-
+version = "20240711-a"
+.include        "header-v20ex.asm"
+.include        "macros-64tass.asm"
 ;-----------------------------------------------------------
 TITLELINE=1
 BINLINE=6
@@ -11,24 +11,25 @@ DIFF=$03
 main            jsr scrmaninit
                 #scrcolors vbleu, vnoir
                 #color vblanc
-                #printxy 1,21,string3
-                #color vred               
-                #printxy BINCOLM-4,TITLELINE,string1
-                #color vgreen               
-                #printxy BINCOLM-5,BINLINE-3,string2
-                #color vgreen               
-                #printxy BINCOLM+1,BINLINE-2,string5
-                #color vgreen               
-                #printxy BINCOLM+1,BINLINE-1,string6
-                #color vmauve              
-                #printxy BINCOLM+9,BINLINE+1, string4
-                #color vjaune              
-                #printxy BINCOLM,BINLINE+3, string7
-                #color vjaune              
-                #printxy BINCOLM,BINLINE+5, string8
-                ;#locate 2,9
-                ;#color vwhite               
-                ;#printwordbin adresse
+                #tolower
+                #printxy string3
+;                #color vred               
+;                #printxy string1
+;                #color vgreen               
+;                #printxy string2
+;                #color vgreen               
+;                #printxy string5
+;                #color vgreen               
+;                #printxy string6
+;                #color vmauve              
+;                #printxy string4
+;                #color vjaune              
+;                #printxy string7
+;                #color vjaune              
+;                #printxy string8
+;                #locate 2,9
+;                #color vwhite               
+;                #printwordbin adresse
                 lda #XVAL    ; initialise ... 
                 sta count   ; ...le compteur
 next            lda count
@@ -87,14 +88,14 @@ waitx           dex
                 .bend
 
 
-string1        .null    "test drapeaux cpu"
-string2        .null    "flags:nv-bdizc"
-string3        .null    "par: daniel lafrance"
-string4        .null    "(   )"
-string5        .byte    94,94,94,94,94,94,94,94,0
-string6        .byte    125,125,125,125,125,125,125,125,0
-string7        .null    "x=$   cpx #$"  
-string8        .null    "$   - $   = $"  
+string1        .null    BINCOLM-4,TITLELINE,"test drapeaux cpu"
+string2        .null    BINCOLM-5,BINLINE-3,"flags:nv-bdizc"
+string3        .null    1,1,"PAR: DANIEL LAFRANCE"
+string4        .null    BINCOLM+9,BINLINE+1, "(   )"
+string5        .byte    BINCOLM+1,BINLINE-2,94,94,94,94,94,94,94,94,0
+string6        .byte    BINCOLM+1,BINLINE-1,125,125,125,125,125,125,125,125,0
+string7        .null    BINCOLM,BINLINE+3, "x=$   cpx #$"  
+string8        .null    BINCOLM,BINLINE+5, "$   - $   = $"  
 count          .byte    XVAL
 tstval         .byte    XCPX
 result         .byte    0
@@ -102,7 +103,6 @@ row            .byte    0
 lin            .byte    0
 adresse        .word     $1234     
      
-.include       "macros-64tass.asm"
 .include       "map-vic20-kernal.asm"
 .include       "map-vic20-vic.asm"
 .include       "map-Vic20-basic2.asm"

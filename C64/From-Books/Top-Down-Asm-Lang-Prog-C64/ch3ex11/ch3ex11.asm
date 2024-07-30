@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20240710-235419"
+                Version = "20240715-221204"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -11,7 +11,7 @@
                jsr  main
                jsr  pop
                rts                                         
-*=10000 ;$c000
+;*=10000 ;$c000
 main           .block
                jsr scrmaninit
                #disable
@@ -27,7 +27,7 @@ main           .block
 mainout        rts
                .bend
                  
-*=20000
+;*=20000
 help           .block      
                #lowercase
                jsr cls
@@ -56,7 +56,7 @@ helptext       .null     $0d, format(" Basic Example.: SYS%05d",ch3ex11), $0d
 line           .null                 " --------------------------------------"
                .bend
 
-*=30000 ;$c400+24        ;To place the function at a specific place in memory.
+;*=30000 ;$c400+24        ;To place the function at a specific place in memory.
 ;-------------------------------------------------------------------------------
 ; This function prints 8 'Z' characters at the cursor position using an indirect 
 ; pointer.
@@ -64,10 +64,14 @@ line           .null                 " --------------------------------------"
 
 ch3ex11       .block
                pha
-               lda vicbordcol
-               sta byte
-               lda #$10
-               sta vicbordcol
+               jsr  cls
+               #print qhelp
+               lda  vicbordcol
+               sta  byte
+               lda  #$10
+               sta  vicbordcol
+               #print header
+               jmp  another
 ;===============================================================================
 ; Example 11 on page 27 starts here
 ;-------------------------------------------------------------------------------
@@ -85,13 +89,82 @@ branch         bne useptr
 ;-------------------------------------------------------------------------------
 ; Example stops here
 ;===============================================================================
-               jsr anykey
-               lda byte
-               sta vicbordcol
+another        jsr  getkey
+               pha
+               sec
+               jsr  plot
+               cpx  #24
+               bne  nohead
+               ;jsr  cls
+               #locate 0,0
+               #print qhelp
+               #print header
+nohead         lda  #13
+               jsr  putch
+               lda  #' '
+               jsr  putch
+               lda  #' '
+               jsr  putch
                pla
+               jsr  putch
+               pha
+               lda  #' '
+               jsr  putch
+               lda  #' '
+               jsr  putch
+               lda  #'%'
+               jsr  putch
+               pla
+               jsr  putabin
+               pha
+               lda  #' '
+               jsr  putch
+               lda  #'$'
+               jsr  putch
+               pla
+               jsr  putahex
+               pha
+               lda  #' '
+               jsr  putch
+               pla
+               jsr  putadec
+               ;pha
+               ;lda  #' '
+               ;jsr  putch
+               ;pla
+isitspecial    cmp  #27
+               bpl  isitctrlh
+               #print special
+               pha
+               ora  #%11000000
+               jsr  putch
+               pla     
+               ;cmp  #$0c           ; Is it CTRL]+[L]
+isitctrlh      cmp  #8             ; Is it CTRL]+[H]
+               bne  isitctrln
+               jsr  cls
+               #locate 0,0
+               #print qhelp
+               #print header
+isitctrln      cmp  #$14           ; Is it CTRL]+[N]    
+               bne  isitctrlq
+               jsr  help
+isitctrlq      cmp  #$11           ; Is it [CTRL]+[Q]
+               beq  doquit
+               jmp  another
+doquit         lda  byte
+               sta  vicbordcol
+               pla
+               jsr  cls
+               jsr  help
                rts
                .bend
-byte           .byte 0
+byte           .byte     0
+qhelp          .text     " Type a key to see char, bin, hex, dec.", 13
+               .text     "  CTRL+H help, CTRL+Q quit, CTRL+L cls", 13, 0
+header         .text     " chr %[binary] Hex Dec",13
+               .null     "+---+---------+---+---+"
+special        .null     "  CTRL+"                              
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------

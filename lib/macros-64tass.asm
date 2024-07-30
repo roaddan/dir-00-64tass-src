@@ -27,7 +27,7 @@ disable        .macro
 tolower        .macro
                php
                pha
-               lda  #b_lowercase
+               lda  #14
                jsr  $ffd2
                pla
                plp
@@ -48,7 +48,7 @@ toupper        .macro
 lowercase      .macro
                php
                pha
-               lda  #b_lowercase
+               lda  #14
                sta  characterset
                jsr  $ffd2
                pla

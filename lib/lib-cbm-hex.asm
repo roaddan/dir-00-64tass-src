@@ -259,3 +259,13 @@ decx           dex
                rts
 buffer         .byte     0,0,0
                .bend          
+
+putadec        .block
+               jsr  push
+               jsr  atodec
+               ldx  #<adec
+               ldy  #>adec+1
+               jsr  puts 
+               jsr  pop
+               rts
+               .bend
