@@ -122,6 +122,7 @@ basicsta       =    $801      ; 2049  basic start address
 basicrom       =    $a000     ; 40960 Basic rom base address
 sid            =    $d400     ; 54272 sid base address
 colorram       =    $d800     ; 55296 video color ram
+colram         =    $d800     ; 55296 video color ram
 colram0        =    colorram  ; 55296
 colram1        =    $d900     ; 55552
 colram2        =    $da00     ; 55808

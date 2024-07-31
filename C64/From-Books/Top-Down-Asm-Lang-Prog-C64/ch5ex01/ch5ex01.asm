@@ -16,9 +16,16 @@ main           .block
                jsr scrmaninit
                #disable
                jsr help
-               jmp  mainout
+;               jmp  mainout
                jsr anykey
+               ldx  #$00
+nextx          inx
+               txa
+               cpx  #$00
+               beq nonext
                jsr ch5ex01
+               jmp  nextx
+nonext         jsr  anykey
                #enable
                #uppercase
                jsr  cls
@@ -43,7 +50,7 @@ headera                              ;0123456789012345678901234567890123456789
                .text     $0d,        "     For the Commodore Vic20 and 64"
                .text     $0d,        "           Book by KEN SKIER."
                .null     $0d,        "         ISBN 0-07-057864-8 PBK"
-headerb        .text     $0d,        "            ch5ex01 (p.48)"
+headerb        .text     $0d,        "            ch5ex01 (p.46)"
                .text     $0d,        "           (c) McGraw-hill"
                .text     $0d,        "     programmed by Daniel Lafrance."
                .null     $0d, format("       Version: %s.",Version)
@@ -62,109 +69,28 @@ line           .null                 " --------------------------------------"
 ; pointer.
 ;-------------------------------------------------------------------------------
 
-ch5ex01       .block
+ch5ex01        .block
+tvput          jsr  push
                pha
-               jsr  cls
-               #print qhelp
-               lda  vicbordcol
-               sta  byte
-               lda  #$10
-               sta  vicbordcol
-               #print header
-               jmp  another
-;===============================================================================
-; Example 11 on page 27 starts here
-;-------------------------------------------------------------------------------
-               jmp  init
-pointer   .word     printit
-init           ldx  #0
-load           lda  #'Z'
-useptr         jmp  (pointer)
-; anything that would be inserted here will be jumped over by the pointer.
-               .byte 00,00,00,00,00,00,00,00
-printit        jsr  $ffd2
-adhust         inx
-test           cpx #9
-branch         bne useptr
-;-------------------------------------------------------------------------------
-; Example stops here
-;===============================================================================
-another        jsr  getkey
-               pha
-               sec
-               jsr  plot
-               cpx  #24
-               bne  nohead
-               ;jsr  cls
-               #locate 0,0
-               #print qhelp
-               #print header
-nohead         lda  #13
-               jsr  putch
-               lda  #' '
-               jsr  putch
-               lda  #' '
-               jsr  putch
+               lda  #<scrnram
+               sta  zpage1
+               lda  #>scrnram
+               sta  zpage1+1
+               lda  #<colram
+               sta  zpage2
+               lda  #>colram
+               sta  zpage2+1
                pla
-               jsr  putch
-               pha
-               lda  #' '
-               jsr  putch
-               lda  #' '
-               jsr  putch
-               lda  #'%'
-               jsr  putch
-               pla
-               jsr  putabin
-               pha
-               lda  #' '
-               jsr  putch
-               lda  #'$'
-               jsr  putch
-               pla
-               jsr  putahex
-               pha
-               lda  #' '
-               jsr  putch
-               pla
-               jsr  putadec
-               ;pha
-               ;lda  #' '
-               ;jsr  putch
-               ;pla
-isitspecial    cmp  #27
-               bpl  isitctrlh
-               #print special
-               pha
-               ora  #%11000000
-               jsr  putch
-               pla     
-               ;cmp  #$0c           ; Is it CTRL]+[L]
-isitctrlh      cmp  #8             ; Is it CTRL]+[H]
-               bne  isitctrln
-               jsr  cls
-               #locate 0,0
-               #print qhelp
-               #print header
-isitctrln      cmp  #$14           ; Is it CTRL]+[N]    
-               bne  isitctrlq
-               jsr  help
-isitctrlq      cmp  #$11           ; Is it [CTRL]+[Q]
-               beq  doquit
-               jmp  another
-doquit         lda  byte
-               sta  vicbordcol
-               pla
-               jsr  cls
-               jsr  help
+               ldy  #0
+onemore        sta  (zpage1),y
+               sta  (zpage2),y
+               iny
+               cpy  #$00
+               bne  onemore
+               jsr  pop
                rts
+tvptr     =    $fb
                .bend
-byte           .byte     0
-qhelp          .text     " Type a key to see char, bin, hex, dec.", 13
-               .text     "  CTRL+H help, CTRL+Q quit, CTRL+L cls", 13, 0
-header         .text     " chr %[binary] Hex Dec",13
-               .null     "+---+---------+---+---+"
-special        .null     "  CTRL+"                              
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
