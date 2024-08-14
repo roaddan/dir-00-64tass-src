@@ -18,93 +18,94 @@
 ;--------------------------------------------------------------------------------
 ;* macro sur les elements importants *
 ;--------------------------------------------------------------------------------
-u6510ddr       =    $00       ;   0 6510 port data dir. reg. (def: %xx101111)
-                             ;        (0=input, 1=output)
-u6510map       =    $01       ;   1 6510 port used as memory map reg.
-                             ;     bit-0 LORAM select ROM or RAM at $a000
-                             ;           1=Basic rom, 0=RAM          
-                             ;     bit-1 HIRAM select ROM or RAM at $e000
-                             ;           1=Kernal rom, 0=RAM          
-                             ;     bit-2 CHARGEN signal
-                             ;           1=Device I/O, 0=CharRom          
-                             ;     bit-3 Cassette Data Output line          
-                             ;     bit-4 Cassette switch sense
-                             ;         Reads button 0=Pressed, 1=Released          
-                             ;     bit-5 Cassette motor control
-                             ;         1=Motor on, 0=Motor off
-                             ;     bits 6 and 7 unused.
-unused2        =    $02       ;   2 unused.                
-adray1         =    $03       ; 3-4 Vector to routine to convert a number ...
-                             ;     ... from floating pointto signed integer.                                            
-adray2         =    $05       ; 5-6 Vector to routine to convert a number ...
-                             ;     ... from integer to floating point.
-b_charac       =    $07       ;   7 Search character for scanning ...
-                             ;     ... BASIC text input.
-b_endchr       =    $08       ;   8 Search character for scanning ... 
-                             ;     ... BASIC statement terminator or quote.
-b_trmpos       =    $09       ;   9 Cursor column position before the ...
-                             ;     ... last TAB or SPC.
-verck          =    $0a       ;  10 Flag: 0=Load or 1=Check
-b_count        =    $0b       ;  11 Index into the Text Input Buffer ... 
-                             ;     ... /Number of Array Subscripts.
-dimflg         =    $0c       ;  12 Flags for routine that locate or build array.
-valtyp         =    $0d       ;  13 Flag: Type of data ($ff=string or $00=numeric)
-intflg         =    $0e       ;  14 Numeric data Type ($80=Integer or $00=Float)
-garbfl         =    $0f       ;  15 Flag for list, Garbage collection, ...
-                             ;          ... and program tokenization.
-subflg         =    $10       ;  16 Flag: Subscript reference to an array or ...
-                             ;           ... a User-Defined function call (FN).
-inpflg         =    $11       ;  17 Flag: Is data input to GET, READ or INPUT.
-                             ;           ($98=READ, $40=GET, $00=INPUT)                                                                      
-tansgn         =    $12       ;  18 Flag: Sign of result of TAN or SIN.
-channl         =    $13       ;  19 Current i/o channel # (CMD logical file).
-linnum         =    $14       ;  20-21 Integer line number value.
-temppt         =    $16       ;  22 Ptr to next space in temp. string stack.
-lastpt         =    $17       ;  23-24 Ptr to last string in temp. string stack.
-txttab         =    $2b       ;  43-44 Ptr to start of BASIC Program text.
-vartab         =    $2d       ;  45-46 Ptr to start of BASIC Variable area.
-arytab         =    $2f       ;  47-48 Ptr to start of BASIC Array area.
-strebd         =    $31       ;  49-50 Ptr to END of BASIC Array area(+1) ...
-                             ;        ... and start of free RAM.
-fretop         =    $33       ;  51-52 Ptr to bottom of string text area.
-frespc         =    $35       ;  53-54 Temp. ptr for string.
-memsiz         =    $37       ;  55-56 Ptr to highest address used by BASIC.
-curlib         =    $39       ;  57-58 Current BASIC line number.
-oldlin         =    $3b       ;  59-60 Previous BASIC line number.
-oldtxt         =    $3d       ;  61-62 Ptr to current BASIC statement address.
-datlin         =    $3f       ;  63-64 Current DATA line number.
-datptr         =    $41       ;  65-66 Current DATA item address ptr.
-impptr         =    $43       ;  67-68 GET, READ or INPUT info. source ptr.
-varnam         =    $45       ;  69-70 Current BASIC variable name.
-varpnt         =    $47       ;  71-72 Ptr to current BASIC variable value.
-forpnt         =    $49       ;  73-74 Temp Ptr to index variable used by FOR.
-opptr          =    $4b       ;  75-76 Math operator table displacement.
-opmask         =    $4d       ;  77 Mask for comparison operation.
-defpnt         =    $4e       ;  78-79 Pointer to current FN descriptor.
-dscpnt         =    $50       ;  80-82 Tmp ptr to current string descriptor.
-                             ;        80-81 ptr to string
-                             ;        82    string length
+u6510ddr       =    $00       ; 0       6510 port data dir. reg. (def: %xx101111)
+                              ;         (0=input, 1=output)
+u6510map       =    $01       ; 1       6510 port used as memory map reg.
+                              ;         bit-0 LORAM select ROM or RAM at $a000
+                              ;               1=Basic rom, 0=RAM          
+                              ;         bit-1 HIRAM select ROM or RAM at $e000
+                              ;               1=Kernal rom, 0=RAM          
+                              ;         bit-2 CHARGEN signal
+                              ;               1=Device I/O, 0=CharRom          
+                              ;         bit-3 Cassette Data Output line          
+                              ;         bit-4 Cassette switch sense
+                              ;               Reads button 0=Pressed, 1=Released          
+                              ;         bit-5 Cassette motor control
+                              ;               1=Motor on, 0=Motor off
+                              ;         bit-6 Unused.
+                              ;         bit-7 Unused.
+unused2        =    $02       ; 2       Unused.                
+adray1         =    $03       ; 3-4     Vector to routine to convert a number ...
+                              ;         ... from floating pointto signed integer.                                            
+adray2         =    $05       ; 5-6     Vector to routine to convert a number ...
+                              ;         ... from integer to floating point.
+b_charac       =    $07       ; 7       Search character for scanning ...
+                              ;         ... BASIC text input.
+b_endchr       =    $08       ; 8       Search character for scanning ... 
+                              ;         ... BASIC statement terminator or quote.
+b_trmpos       =    $09       ; 9       Cursor column position before the ...
+                              ;         ... last TAB or SPC.
+verck          =    $0a       ; 10      Flag: 0=Load or 1=Check
+b_count        =    $0b       ; 11      Index into the Text Input Buffer ... 
+                              ;         ... /Number of Array Subscripts.
+dimflg         =    $0c       ; 12      Flags for routine that locate or build array.
+valtyp         =    $0d       ; 13 Flag: Type of data ($ff=string or $00=numeric)
+intflg         =    $0e       ; 14 Numeric data Type ($80=Integer or $00=Float)
+garbfl         =    $0f       ; 15 Flag for list, Garbage collection, ...
+                              ;    ... and program tokenization.
+subflg         =    $10       ; 16 Flag: Subscript reference to an array or ...
+                              ;    ... a User-Defined function call (FN).
+inpflg         =    $11       ; 17 Flag: Is data input to GET, READ or INPUT.
+                              ;          ($98=READ, $40=GET, $00=INPUT)                                                                      
+tansgn         =    $12       ; 18 Flag: Sign of result of TAN or SIN.
+channl         =    $13       ; 19 Current i/o channel # (CMD logical file).
+linnum         =    $14       ; 20-21 Integer line number value.
+temppt         =    $16       ; 22      Ptr to next space in temp. string stack.
+lastpt         =    $17       ; 23-24 Ptr to last string in temp. string stack.
+txttab         =    $2b       ; 43-44 Ptr to start of BASIC Program text.
+vartab         =    $2d       ; 45-46 Ptr to start of BASIC Variable area.
+arytab         =    $2f       ; 47-48 Ptr to start of BASIC Array area.
+strebd         =    $31       ; 49-50 Ptr to END of BASIC Array area(+1) ...
+                              ;       ... and start of free RAM.
+fretop         =    $33       ; 51-52 Ptr to bottom of string text area.
+frespc         =    $35       ; 53-54 Temp. ptr for string.
+memsiz         =    $37       ; 55-56 Ptr to highest address used by BASIC.
+curlib         =    $39       ; 57-58 Current BASIC line number.
+oldlin         =    $3b       ; 59-60 Previous BASIC line number.
+oldtxt         =    $3d       ; 61-62 Ptr to current BASIC statement address.
+datlin         =    $3f       ; 63-64 Current DATA line number.
+datptr         =    $41       ; 65-66 Current DATA item address ptr.
+impptr         =    $43       ; 67-68 GET, READ or INPUT info. source ptr.
+varnam         =    $45       ; 69-70 Current BASIC variable name.
+varpnt         =    $47       ; 71-72 Ptr to current BASIC variable value.
+forpnt         =    $49       ; 73-74 Temp Ptr to index variable used by FOR.
+opptr          =    $4b       ; 75-76 Math operator table displacement.
+opmask         =    $4d       ; 77 Mask for comparison operation.
+defpnt         =    $4e       ; 78-79 Pointer to current FN descriptor.
+dscpnt         =    $50       ; 80-82 Tmp ptr to current string descriptor.
+                              ;       80-81 ptr to string
+                              ;       82    string length
 four6          =    $53       ;  83 Constant of garbage collector.
 jmper          =    $54       ;  84-86 Jump to function Instruction.
 fac1           =    $61       ;  97-102 Floating point Accumulator #1
-;ICI
-chrget         =    $73       ; 115
-chrgot         =    $79       ; 121
-kiostatus      =    $90       ; 144 Kernal I/O status word (st) (byte) 
-curfnlen       =    $b7       ; 183 Current filename length (byte)
-cursecadd      =    $b9       ; 185 Current secondary address (byte)
-curdevno       =    $ba       ; 186 Current device number (byte)
-curfptr        =    $bb       ; 187 Current file pointer (word)
-stal           =    $c1       ; $c1-$c2 (193-194) ptr to ram address to load/save
-lstx           =    $c5       ; 197 matrix coordinate of last key pressed
-ndx            =    $c6       ; 198 Number of character in keyboard buffer
-zpage1         =    $fb       ; 251 zero page 1 address (word)
-zpage2         =    $fd       ; 253 zero page 2 address (word)
+                              ; ICI
+chrget         =    $73       ;  115
+chrgot         =    $79       ;  121
+kiostatus      =    $90       ;  144 Kernal I/O status word (st) (byte) 
+curfnlen       =    $b7       ;  183 Current filename length (byte)
+cursecadd      =    $b9       ;  185 Current secondary address (byte)
+curdevno       =    $ba       ;  186 Current device number (byte)
+curfptr        =    $bb       ;  187 Current file pointer (word)
+stal           =    $c1       ;  $c1-$c2 (193-194) ptr to ram address to load/save
+lstx           =    $c5       ;  197 matrix coordinate of last key pressed
+ndx            =    $c6       ;  198 Number of character in keyboard buffer
+zpage1         =    $fb       ;  251 zero page 1 address (word)
+zpage2         =    $fd       ;  253 zero page 2 address (word)
 zeropage       =    zpage1
 zonepage       =    zpage2
-kbbuff         =    $277      ; 631        
-carcol         =    $286      ; 646 basic next chr colscreenram (byte)
-hibase         =    $288      ;648
+kbbuff         =    $277      ;  631        
+carcol         =    $286      ;  646 basic next chr colscreenram (byte)
+hibase         =    $288      ;  648
 kcarcol        =    carcol
 bascol         =    carcol
 shflag         =    $28d      ; 653
@@ -127,6 +128,8 @@ colram0        =    colorram  ; 55296
 colram1        =    $d900     ; 55552
 colram2        =    $da00     ; 55808
 colram3        =    $db00     ; 56064
+
+colorptr  .word     colram0,colram1,colram2,colram3
 ; ------------------------------------------------------------
 ; - C O M P L E X   I N T E R F A C E   A D A P T O R   # 1
 ; ------------------------------------------------------------
