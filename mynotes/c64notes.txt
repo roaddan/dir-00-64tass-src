@@ -1,4 +1,5 @@
 Notes d'utilisation/programmation du Commodore 64.
+Dernière mise à jour : 20241014
 ==================================================
 En assembleur:
 --------------
@@ -6,16 +7,17 @@ Il est possible de générer en memoire le code basic pour faciliter le
 lancement d'un programme en assembleur. 
 Pour ce faire vous devez placer un entête dans votre code assembleur à
 l'adresse $0800 (2048) qui se décrit comme suit...
+
 		;----------------------------------------------------------------
-		; Entete Basic pour generer l'instruction
+		; Entete Basic pour generer l'instruction ...
 		;
-		;   SYS 2061 
+		;   SYS2061 
 		;
-		; visible avec la commande "LIST" sous Basic 2.0 et pouvoir lancer 
-		; votre programme assembleur par la commande RUN après avoir 
-		; charger celui-ci par la commande : 
+		; ... visible avec la commande "LIST" sous Basic 2.0 et pouvoir 
+		; lancer votre programme assembleur par la commande RUN après 
+		; avoir charger celui-ci par la commande : 
 		; 
-		; LOAD "NOMFICHIER.PRG",8,1 
+		;   LOAD "NOMFICHIER.PRG",8,1 
 		;----------------------------------------------------------------
 				*= $0800
 $0800			.byte $00     	;Basic commence avec un $00 à $0800.
@@ -68,9 +70,10 @@ Exemple qui initialise deux commandes basic.
 ============================================
 Pour que la commande "LIST" du basic affiche ...
 
-REM PAR NOM DE L'AUTEUR
-SYS 2088
-... nous aurons besoin d'inclure 2 commande basic dans notre entête 
+   REM PAR NOM DE L'AUTEUR
+   SYS 2088
+
+... nous aurons besoin d'inclure 2 commandes basic dans notre entête 
 assembleur comme suit:
 		;----------------------------------------------------------------
 		; Entete Basic pour generer les instructions ...
@@ -78,7 +81,7 @@ assembleur comme suit:
           ; REM *PAR NOM DE L'AUTEUR*
           ; SYS 2088
 		;
-		; ... visible par la commande "LIST" sous Basic 2.0 et pouvoir 
+		; ... visibles par la commande "LIST" sous Basic 2.0 et pouvoir 
 		; lancer votre programme assembleur par la commande RUN après 
 		; avoir charger celui-ci par la commande : 
 		; 
@@ -117,7 +120,8 @@ $0828	bcmd3	.word $0000    ;L'adresse de la commande Basic suivante.
 		;----------------------------------------------------------------
 $082a			jmp 	main      ;L'adresse $082a vaut 2090 en décimal.
 							; Voir la ligne à l'adresse $0823.
-$082d				.byte 0,0,0,0,0,0,0,0
+$082d				.word 0,0 ;Autre chose entre l'entête et le début
+					.word 0,0 ; réel de la fonction main.
 		;----------------------------------------------------------------
 		; Exemple de programme principale en assembleur qui change les 
 		;  couleurs de l'interface Basic.
