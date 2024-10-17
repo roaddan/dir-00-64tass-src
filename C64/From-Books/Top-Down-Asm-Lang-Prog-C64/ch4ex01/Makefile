@@ -132,12 +132,12 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # ** Using comment, you can mask or enable anny action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
-		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+#		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
+#		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
 #		$(FTPASMCMD)	# To transfer the source ASM file.
 #		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
-#		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
+		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
 
 # -----------------------------------------------------------------------------
 # When called with "make ftp". 

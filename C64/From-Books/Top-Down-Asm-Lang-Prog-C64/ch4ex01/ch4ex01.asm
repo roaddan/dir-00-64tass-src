@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20240725-132328"
+                Version = "20241016-220013"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -7,12 +7,8 @@
 ;
 ;-------------------------------------------------------------------------------
                .enc    none
-               jsr  push
-               jsr  main
-               jsr  pop
-               rts                                         
-;*=10000 ;$c000
 main           .block
+               jsr  push
                jsr scrmaninit
                #disable
                jsr help
@@ -24,7 +20,9 @@ main           .block
                jsr  cls
                #graycolor
 ;               jmp b_warmstart
-mainout        rts
+mainout        
+               jsr pop
+               rts
                .bend
                  
 ;*=20000
@@ -50,7 +48,7 @@ headerb        .text     $0d,        "            ch4ex01 (p.48)"
 shortcuts      .text     $0d,        " -------- S H O R T - C U T S ---------"
 ;               .text     $0d, format(" Main Run......: SYS%05d ($%04X)",main, main)
                .text     $0d, format(" This help.....: SYS%05d ($%04X)",help, help)
-               .null     $0d, format(" Run  ch3ex11..: SYS%05d ($%04X)",ch3ex11, ch3ex11),$0d
+               .null     $0d, format(" Run  ch4ex0lI1..: SYS%05d ($%04X)",ch3ex11, ch3ex11),$0d
 ;               .null     $0D, format(" Clear screen..: SYS%05d ($%04X)",cls, cls)
 helptext       .null     $0d, format(" Basic Example.: SYS%05d",ch3ex11), $0d
 line           .null                 " --------------------------------------"
