@@ -136,6 +136,8 @@ b_chk4comma   = $aefd ; Check for coma.             ;---;a--; a = char
 b_chk4lpar    = $aefa ; check for '('.              ;---;a--; a = char
 b_chk4rpar    = $aef7 ; check for ')'.              ;---;a--; a = char
 b_syntaxerr   = $af08 ; send 'SYNTAX ERROR'.        ;---;---;
+b_fort        = $afe6 ; FAC1 = FAC1 or FAC2.
+b_fandt       = $afe9 ; FAC1 = FAC1 and FAC2.
 b_fndfloatvar = $b0e7 ; find float var by name.     ;---;a-y; addr = $yyaa
                       ; Prerequisit: name in $45,$46 ($42,$43)
 b_bumpvaraddr = $b185 ; Bumb var addr by 2. *31     ;---;a-y; addr = $yyaa
@@ -152,20 +154,47 @@ b_strxy2float = $b7b9 ; Eval. float from str in xy. ;---;-xy; strptr = $yyxx
 b_getpokeprms = $b7eb ; Get 2 params for POKE, WAIT.;---;-x-; x = Param2
                       ; Prerequisit: Straddr in CHRGET ptr.  
                       ; Result: param2 in Acc#1.
-b_getadr      = $b7f7 ; Convert Floating point number to an Unsighed TwoByte Integer.                      
+b_getadr      = $b7f7 ; Convert Floating point number to an Unsighed TwoByte Integer.
+b_faddh       = $b849 ; FAC1 = FAC1 + 0.5 
+b_fsub        = $b850 ; FAC1 = FVAR - FAC1.         ;a-y;---; ptr = $yyaa
+b_fsubt       = $b853 ; FAC1 = FAC2 - FAC1.         ;---;---;                      
+b_fadd        = $b867 ; FAC1 = FVAR + FAC1.         ;a-y;---; ptr = $yyaa                
 b_memfloatadd = $b867 ; Add from memory.            ;a-y;---; ptr = $yyaa
-                      ; Result: floar result in Acc#1.
+b_faddt       = $b86a ; FAC1 = FAC2 + FCA1 
+b_f2addf1     = $b86a ; FAC1 = FAC2 + FCA1
+b_fcomp       = $b947 ; FAC1 = INV(FAC1) + 1
+b_fmulv       = $ba28 ; FCA1 = FAC1 * FVAR.         ;a-y;---; ptr = $yyaa
 b_memfloatmul = $ba28 ; Multiply from memory.       ;a-y;---; ptr = $yyaa
-                      ; Result: floar result in Acc#1.
+b_fmult       = $ba2b ; FAC1 = FAC1 * FAC2
+b_conupk      = $ba8c ; Copy FVAR to FAC2.          ;a-y;---; ptr = $yyaa
 b_acc1mul10   = $bae2 ; Multiply Acc#1 by 10.       ;---;---; ptr = $yyaa
-                      ; Result: floar result in Acc#1.
+b_fdiv        = $bb0f ;                      
+b_vdivf       = $bb0f ; FAC1 = FVAR / FAC1.         ;a-y;---; ptr = $yyaa
+b_fdivt       = $bb12 ; FAC1 = FAC2 / FAC1.
+b_movfm       = $bba2 ; Copy FVAR to FAC1.          ;a-y;---; ptr = $yyaa
 b_memvar2acc1 = $bba2 ; Unpack mem var to Acc#1.    ;a-y;---; ptr = $yyaa
-                      ; Result: floar result in Acc#1
-b_copyacc12xy = $bbd7 ; Copy Acc#1 to mem location. ;-xy;---; ptr = $yyxx
-b_acc2toacc1  = $bbfc ; Move Acc#2 to Acc#1.        ;---;---;  
+b_cpfac1to49  = $bbd0 ; Copy FAC1 to FORPNT ($49-$4a)
+b_fac1toaddr  = $bbd4 ; Copy FAC1 to memory.        ;-xy;---; ptr = $yyxx
+b_sgn         = $bc39 ; FAC1 = SIGN(FAC1)
+b_int2fac1    = $bc44 ; $62(lsb),$63(msb) int to FAC1
+b_abs         = $bc58 ; FAC1 = ABS(FAC1)
+b_fcomp       = $bc5b ; FAC1 = FAC1 comp(FVAR).     ;a-y;---; ptr = $yyaa
+b_cpfac1tow2  = $bbc7 ; Copy FAC1 to WORK#2 ($5c-$60)
+b_cpfac1tow1  = $bbca ; Copy FAC1 to WORK#1 ($57-$5b)
+b_cpfac1toxy  = $bbd7 ; Copy Acc#1 to mem location. ;-xy;---; ptr = $yyxx
+b_mul10       = $bae2 ; FAC1 = FAC1 * 10.
+B_fdiv10      = $bafe ; FAC1 = FAC1 / 10.
+b_movfa       = $bbfc ; 
+b_acc2toacc1  = $bbfc ; Copy Acc#2 to Acc#1.        ;---;---; 
+b_movaf       = $bc0c ;
 b_rndac1ac2   = $bc0c ; Move rnd Acc#1 to Acc#2.    ;---;---;  
 b_urndac1ac2  = $bc0f ; Move unrnd Acc#1 to Acc#2.  ;---;---;  
-b_rndac1      = $bc1b ; Round Acc#1.                ;---;---;  
+b_round       = $bc1b ;
+b_rndac1      = $bc1b ; Round Acc#1.                ;---;---; 
+b_int         = $bccc ; FAC1 = INT(FAC1) 
+b_addf1acc    = $bd7e ; Add Acc to FAC1 (a=0-9)     ;a--;---;
 b_putint      = $bdcd ; Print fix point value.      ;ax-;---; Value = $xxaa 
 b_putfloat    = $bdd7 ; Print Acc#1 float.          ;---;---;
 b_num2str     = $bddd ; Cnv num to str at $0100. *48;a-y;---; a=#$00, y=#$01
+b_sqr         = $bf71 ; FAC1 = SQRT(FAC1).
+b_fpwrt       = $bf7b ; FAC1 = FAC1 ^ FAC2. 
