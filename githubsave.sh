@@ -1,5 +1,6 @@
 #!/bin/bash
 export unedate="$(/bin/date "+%Y%m%d-%H%M%S")"
+echo ${unedate}
 case $1 in
 	status)
 		echo ${unedate}
