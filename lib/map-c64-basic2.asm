@@ -169,7 +169,7 @@ b_fadd        = $b867 ; FAC1 = FVAR + FAC1.         ;a-y;---; ptr = $yyaa
 b_memfloatadd = $b867 ; Add from memory.            ;a-y;---; ptr = $yyaa
 b_faddt       = $b86a ; FAC1 = FAC2 + FCA1 
 b_f2addf1     = $b86a ; FAC1 = FAC2 + FCA1
-b_fcomp       = $b947 ; FAC1 = INV(FAC1) + 1
+b_fcomp2      = $b947 ; FAC1 = INV(FAC1) + 1
 b_fmulv       = $ba28 ; FCA1 = FAC1 * FVAR.         ;a-y;---; ptr = $yyaa
 b_memfloatmul = $ba28 ; Multiply from memory.       ;a-y;---; ptr = $yyaa
 b_fmult       = $ba2b ; FAC1 = FAC1 * FAC2

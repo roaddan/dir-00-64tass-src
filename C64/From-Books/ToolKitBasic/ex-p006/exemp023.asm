@@ -11,8 +11,8 @@ main      .block
           jsr       scrmaninit
           #disable
           jsr       help
-          jsr       anykey
           jsr       exemp023
+          jsr       anykey
           #enable
           #uppercase
           jsr       cls
@@ -49,15 +49,11 @@ headerb   .byte     $0d
 shortcuts .byte     $0d
           .text               " -------- S H O R T - C U T S ---------"
           .byte     $0d
-          .text     format(   " exemp023: SYS%05d ($%04X)",main, main)
-          .byte     $0d
           .text     format(   " help: SYS%05d ($%04X)",help, help)
           .byte     $0d
           .text     format(   " cls: SYS%05d ($%04X)",cls, cls)
           .byte     $0d,0
 helptext  .byte     $0d
-          .text     format(   " First run: SYS%05d ($%04X)",exemp023, exemp023)
-          .byte     $0d, $0d
           .text     format(   " ex.: SYS%05d",exemp023)
           .byte     $0d
           .text     format(   "      for i=0to100:SYS%05d:next",exemp023)
@@ -67,19 +63,19 @@ line      .text               " --------------------------------------"
           .bend
 ;*=$4000
 
-exemp023       .block
+exemp023  .block
           pha
-          lda vicbordcol
-          sta byte
-          lda #$10
-          sta vicbordcol
-          jsr anykey
-          lda byte
-          sta vicbordcol
+          txa
+          pha
+          lda  #$05
+          ldx  #$03
+          jsr  b_putint
+          pla
+          tax
           pla
           rts
           .bend
-byte           .byte 0
+byte      .byte 0
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
