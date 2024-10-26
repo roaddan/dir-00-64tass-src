@@ -30,7 +30,7 @@ PRGDIR=dir-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=j2tester
+SOURCENAME=template
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -40,7 +40,7 @@ BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project the following
 # detail is used to specify where the resulting files will be placed. 
 # >> Complete path where the compiled files will be placed. 
-OUTDIR=/Users/Locals/temp/Output
+OUTDIR=/Users/Locals/temp/Output/C64
 #
 # 64tass allows to include libraries of code and routines of your making.
 # The Complete path to your library directory.
@@ -54,7 +54,7 @@ LIBDIR=$(BASEDIR)/dir-00-64tass-src/lib
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-VICEBIN=/Users/Daniel/bin
+VICEBIN=/Users/Locals/bin
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
@@ -67,8 +67,7 @@ C1541=$(VICEBIN)/c1541
 CARTCONV=$(VICEBIN)/cartconv
 # Complete path to some other emulator programs.
 X64SCSDL=/Applications/vice-x86-64-sdl2-3.6.1/x64sc.app/Contents/MacOS/x64sc
-X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
-MYX64=/Users/daniel/Applications/Vice Cocoa 3.1/x64.app
+X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
 #
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
@@ -89,7 +88,7 @@ JBMON64=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/C64/From-Books/40-best
 # Some other variables just to reduce command line length.
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
-VICE=$(X64)
+VICE=$(X64SCGTK)
 # The Vice autostart parameters. 
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # -----------------------------------------------------------------------------
@@ -116,11 +115,13 @@ FTPCMDPATH=/usr/local/bin/lftp
 # List of commands by filetype intended to the FTP server.
 # Note:  The following path must exist on the Ultimate II+ cartridge usb ...
 #        disks.
-FTPASMARG=cd /Usb0/dir-00-64tass-bin/asm; put $(SOURCENAME).asm; bye
-FTPTXTARG=cd /Usb0/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; bye
-FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
-FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
-FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
+# Where to put the files on the Ultimate II +.
+FTPBASDIR=/Usb0/dir-remote
+FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
+FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
+FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye
+FTPD64ARG=cd $(FTPBASDIR)/d64; put $(SOURCENAME).d64; bye
+FTPCRTARG=cd $(FTPBASDIR)/crt; put $(SOURCENAME).crt; bye
 # Concatenating lftp full commands.
 FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
 FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)
@@ -164,8 +165,12 @@ clean:
 # -----------------------------------------------------------------------------
 # Create disk image containing the resulting program.
 # The disk will be named as per the source file.
+
 $(SOURCENAME).d64: $(SOURCENAME).prg
-		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 -write $(SOURCENAME).prg $(SOURCENAME) 
+		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
+		-write $(SOURCENAME).prg $(SOURCENAME) \
+		-write $(DBC) dbc \
+		-write $(JBMON64) jbmon64
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 

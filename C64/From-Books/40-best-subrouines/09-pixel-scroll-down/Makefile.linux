@@ -115,11 +115,13 @@ FTPCMDPATH=/usr/local/bin/lftp
 # List of commands by filetype intended to the FTP server.
 # Note:  The following path must exist on the Ultimate II+ cartridge usb ...
 #        disks.
-FTPASMARG=cd /Usb0/dir-00-64tass-bin/asm; put $(SOURCENAME).asm; bye
-FTPTXTARG=cd /Usb0/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; bye
-FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
-FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
-FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
+# Where to put the files on the Ultimate II +.
+FTPBASDIR=/Usb0/dir-remote
+FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
+FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
+FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye
+FTPD64ARG=cd $(FTPBASDIR)/d64; put $(SOURCENAME).d64; bye
+FTPCRTARG=cd $(FTPBASDIR)/crt; put $(SOURCENAME).crt; bye
 # Concatenating lftp full commands.
 FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
 FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)

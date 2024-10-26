@@ -30,7 +30,7 @@ PRGDIR=dir-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=ch4ex01
+SOURCENAME=template
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -115,11 +115,13 @@ FTPCMDPATH=/usr/local/bin/lftp
 # List of commands by filetype intended to the FTP server.
 # Note:  The following path must exist on the Ultimate II+ cartridge usb ...
 #        disks.
-FTPASMARG=cd /Usb0/dir-00-64tass-bin/asm; put $(SOURCENAME).asm; bye
-FTPTXTARG=cd /Usb0/dir-00-64tass-bin/txt; put $(SOURCENAME).txt; bye
-FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
-FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
-FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
+# Where to put the files on the Ultimate II +.
+FTPBASDIR=/Usb0/dir-remote
+FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
+FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
+FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye
+FTPD64ARG=cd $(FTPBASDIR)/d64; put $(SOURCENAME).d64; bye
+FTPCRTARG=cd $(FTPBASDIR)/crt; put $(SOURCENAME).crt; bye
 # Concatenating lftp full commands.
 FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
 FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)
@@ -132,12 +134,12 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # ** Using comment, you can mask or enable anny action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-#		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
-#		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
+		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
 #		$(FTPASMCMD)	# To transfer the source ASM file.
 #		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
-		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
+#		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
 
 # -----------------------------------------------------------------------------
 # When called with "make ftp". 
