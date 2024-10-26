@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-           Version = "20240704-235234"
+           Version = "20241026-125836"
 ;-------------------------------------------------------------------------------           .include    "header-c64.asm"
           .include    "header-c64.asm"
           .include    "macros-64tass.asm"
@@ -33,16 +33,14 @@ help           .block
 headera                       ;0123456789012345678901234567890123456789
           .text               " *       Vic-20 and Commodore 64      *"
           .byte     $0d
-          .text               " *           Tool Kiy; BASIC          *"
+          .text               " *           Tool Kit: BASIC          *"
           .byte     $0d
           .text               " *          Book by Dan Heeb.         *"
           .byte     $0d
-          .text               " *         ISBN: 0-942386-32-9        *"
-          .byte     $0d,0
+          .null               " *         ISBN: 0-942386-32-9        *"
 
-headerb   .text               " *           exemp006 (pxx)           *"
-          .byte     $0d
-          .text               " *      (c) 1979 Brad Templeton       *"
+headerb   .byte     $0d
+          .text               " *           exemp006 (pxx)           *"
           .byte     $0d
           .text               " *    programmed by Daniel Lafrance.  *"
           .byte     $0d
