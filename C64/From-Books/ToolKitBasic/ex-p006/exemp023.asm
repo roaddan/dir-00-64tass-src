@@ -12,7 +12,7 @@ main      .block
           #disable
           jsr       help
           jsr       anykey
-          jsr       exemp006
+          jsr       exemp023
           #enable
           #uppercase
           jsr       cls
@@ -40,7 +40,7 @@ headera                       ;0123456789012345678901234567890123456789
           .null               " *         ISBN: 0-942386-32-9        *"
 
 headerb   .byte     $0d
-          .text               " *           exemp006 (pxx)           *"
+          .text               " *           exemp023 (pxx)           *"
           .byte     $0d
           .text               " *    programmed by Daniel Lafrance.  *"
           .byte     $0d
@@ -49,25 +49,25 @@ headerb   .byte     $0d
 shortcuts .byte     $0d
           .text               " -------- S H O R T - C U T S ---------"
           .byte     $0d
-          .text     format(   " exemp006: SYS%05d ($%04X)",main, main)
+          .text     format(   " exemp023: SYS%05d ($%04X)",main, main)
           .byte     $0d
           .text     format(   " help: SYS%05d ($%04X)",help, help)
           .byte     $0d
           .text     format(   " cls: SYS%05d ($%04X)",cls, cls)
           .byte     $0d,0
 helptext  .byte     $0d
-          .text     format(   " First run: SYS%05d ($%04X)",exemp006, exemp006)
+          .text     format(   " First run: SYS%05d ($%04X)",exemp023, exemp023)
           .byte     $0d, $0d
-          .text     format(   " ex.: SYS%05d",exemp006)
+          .text     format(   " ex.: SYS%05d",exemp023)
           .byte     $0d
-          .text     format(   "      for i=0to100:SYS%05d:next",exemp006)
+          .text     format(   "      for i=0to100:SYS%05d:next",exemp023)
           .byte     $0d,0
 line      .text               " --------------------------------------"
           .byte     $0d,0
           .bend
 ;*=$4000
 
-exemp006       .block
+exemp023       .block
           pha
           lda vicbordcol
           sta byte

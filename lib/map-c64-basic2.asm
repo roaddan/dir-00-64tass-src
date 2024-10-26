@@ -127,6 +127,7 @@ b_outstrprep  = $ab24 ; Print precomputated string. ;a--;---; a = strlen
                       ; Prerequisit: str addr in $22,$23 ($1f,$20)
 b_printqm     = $ab45 ; Print '?'.                  ;---;---;                      
 b_sendchar    = $ab47 ; Send char in a to device.   ;a--;a--; a = char                      
+b_intobuff    = $abf9 ; Input characters from std in anf write to buff. at $200.
 b_frmnum      = $ad8a ; Evaluate numeric expression and/or check for data type mismatch
 b_evalexpr    = $ad9e ; Evaluate expression.                      
                       ; Prerequisit: Addr of expr in CHRGET ptr.             
@@ -142,15 +143,21 @@ b_fndfloatvar = $b0e7 ; find float var by name.     ;---;a-y; addr = $yyaa
                       ; Prerequisit: name in $45,$46 ($42,$43)
 b_bumpvaraddr = $b185 ; Bumb var addr by 2. *31     ;---;a-y; addr = $yyaa
                       ;     Prerequisit : name in $45,$46 ($42,$43).
-b_float2int   = $b1bf ; Float to int in Acc#1.      ;---;---;
+b_ftoint      = $b1aa ; FAC1 to word in $aayy       ;---;a-y; imt = $aayy
+b_float2int   = $b1bf ; FAC1 to int in $64(lsb),$65(msb).
+                      ; Only if FAC1 between -32768 and +32767.
+b_num2int     = $b1d2 ; Converts float num expr to int in $64(lsb),$65(msb). 
 b_fcerr       = $b248 ; Print ILLEGAL QUANTITY error message.
 b_int2float   = $b391 ; Int to float in Acc#1.      ;---;---;
+b_ytofac1     = $b3a2 ; Convert int(y) to FAC1.     ;--y;---;
 b_getacc1lsb  = $b79e ; Get Acc#1 LSB in x.         ;---;-x-; x = Acc#1 LSB
+b_fac1tox     = $b7a1 ; Conv FAC1 to byte in x.     ;---;-x-; x = byte
 b_str2float   = $b7b5 ; Evaluate str to float (VAL) ;---;---;
                       ; Prerequisit: Straddr in CHRGET ptr.
                       ; Result: Float in Acc#1.
 b_strxy2float = $b7b9 ; Eval. float from str in xy. ;---;-xy; strptr = $yyxx
                       ; Result: Float in Acc#1.
+b_evfint2x    = $b7e9 ; Conv FAC1 to byte in x.     ;---;-x-; x = byte  
 b_getpokeprms = $b7eb ; Get 2 params for POKE, WAIT.;---;-x-; x = Param2
                       ; Prerequisit: Straddr in CHRGET ptr.  
                       ; Result: param2 in Acc#1.
@@ -167,7 +174,9 @@ b_fmulv       = $ba28 ; FCA1 = FAC1 * FVAR.         ;a-y;---; ptr = $yyaa
 b_memfloatmul = $ba28 ; Multiply from memory.       ;a-y;---; ptr = $yyaa
 b_fmult       = $ba2b ; FAC1 = FAC1 * FAC2
 b_conupk      = $ba8c ; Copy FVAR to FAC2.          ;a-y;---; ptr = $yyaa
+b_mul10       = $bae2 ; FAC1 = FAC1 * 10.
 b_acc1mul10   = $bae2 ; Multiply Acc#1 by 10.       ;---;---; ptr = $yyaa
+B_fdiv10      = $bafe ; FAC1 = FAC1 / 10.
 b_fdiv        = $bb0f ;                      
 b_vdivf       = $bb0f ; FAC1 = FVAR / FAC1.         ;a-y;---; ptr = $yyaa
 b_fdivt       = $bb12 ; FAC1 = FAC2 / FAC1.
@@ -176,14 +185,13 @@ b_memvar2acc1 = $bba2 ; Unpack mem var to Acc#1.    ;a-y;---; ptr = $yyaa
 b_cpfac1to49  = $bbd0 ; Copy FAC1 to FORPNT ($49-$4a)
 b_fac1toaddr  = $bbd4 ; Copy FAC1 to memory.        ;-xy;---; ptr = $yyxx
 b_sgn         = $bc39 ; FAC1 = SIGN(FAC1)
+b_atofac1     = $bc3c ; Convert int a to FAC1       ;a--;---; a = int 
 b_int2fac1    = $bc44 ; $62(lsb),$63(msb) int to FAC1
 b_abs         = $bc58 ; FAC1 = ABS(FAC1)
 b_fcomp       = $bc5b ; FAC1 = FAC1 comp(FVAR).     ;a-y;---; ptr = $yyaa
 b_cpfac1tow2  = $bbc7 ; Copy FAC1 to WORK#2 ($5c-$60)
 b_cpfac1tow1  = $bbca ; Copy FAC1 to WORK#1 ($57-$5b)
 b_cpfac1toxy  = $bbd7 ; Copy Acc#1 to mem location. ;-xy;---; ptr = $yyxx
-b_mul10       = $bae2 ; FAC1 = FAC1 * 10.
-B_fdiv10      = $bafe ; FAC1 = FAC1 / 10.
 b_movfa       = $bbfc ; 
 b_acc2toacc1  = $bbfc ; Copy Acc#2 to Acc#1.        ;---;---; 
 b_movaf       = $bc0c ;
@@ -191,10 +199,14 @@ b_rndac1ac2   = $bc0c ; Move rnd Acc#1 to Acc#2.    ;---;---;
 b_urndac1ac2  = $bc0f ; Move unrnd Acc#1 to Acc#2.  ;---;---;  
 b_round       = $bc1b ;
 b_rndac1      = $bc1b ; Round Acc#1.                ;---;---; 
+b_qint        = $bc9b ; Converts FAC1 to int in FAC1.
 b_int         = $bccc ; FAC1 = INT(FAC1) 
+b_fin         = $bcf3 ; Conv. ascii dec num to FAC1,
 b_addf1acc    = $bd7e ; Add Acc to FAC1 (a=0-9)     ;a--;---;
+b_linptr      = $bdcd 
 b_putint      = $bdcd ; Print fix point value.      ;ax-;---; Value = $xxaa 
 b_putfloat    = $bdd7 ; Print Acc#1 float.          ;---;---;
+b_fout        = $bddd ;
 b_num2str     = $bddd ; Cnv num to str at $0100. *48;a-y;---; a=#$00, y=#$01
 b_sqr         = $bf71 ; FAC1 = SQRT(FAC1).
 b_fpwrt       = $bf7b ; FAC1 = FAC1 ^ FAC2. 
