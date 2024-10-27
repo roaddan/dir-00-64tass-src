@@ -91,6 +91,18 @@ mycolor        .macro
                #color cblanc
                .endm
 
+c64col         .macro
+               #changebord cbleupale
+               #changeback cbleu
+               #color cbleupale
+               .endm
+
+v20col         .macro
+               #changebord ccyan
+               #changeback cblanc
+               #color cbleu
+               .endm
+
 graycolor      .macro
                #changebord cgrismoyen
                #changeback cgrisfonce
