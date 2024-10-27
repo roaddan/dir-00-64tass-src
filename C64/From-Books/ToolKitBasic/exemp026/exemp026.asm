@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-           Version = "20241026-161301"
+           Version = "20241026-221343"
 ;-------------------------------------------------------------------------------           .include    "header-c64.asm"
           .include    "header-c64.asm"
           .include    "macros-64tass.asm"
@@ -10,13 +10,15 @@
 main      .block
           jsr       scrmaninit
           #disable
+          #v20col
           jsr       help
-          jsr       exemp023
+          jsr       exemp026
           jsr       anykey
           #enable
           #uppercase
           jsr       cls
-          #graycolor
+;          #graycolor
+          #c64col
 ;          jmp      b_warmstart
           .bend
             
@@ -40,7 +42,7 @@ headera                       ;0123456789012345678901234567890123456789
           .null               " *         ISBN: 0-942386-32-9        *"
 
 headerb   .byte     $0d
-          .text               " *           exemp023 (pxx)           *"
+          .text               " *           exemp026 (p26)           *"
           .byte     $0d
           .text               " *    programmed by Daniel Lafrance.  *"
           .byte     $0d
@@ -48,22 +50,24 @@ headerb   .byte     $0d
 
 shortcuts .byte     $0d
           .text               " -------- S H O R T - C U T S ---------"
+          .byte     $0d,$0d
+          .text     format(   " exemp026: SYS %d ($%04X)",exemp026, exemp026)
           .byte     $0d
-          .text     format(   " help: SYS%05d ($%04X)",help, help)
+          .text     format(   " help....: SYS %d ($%04X)",help, help)
           .byte     $0d
-          .text     format(   " cls: SYS%05d ($%04X)",cls, cls)
+          .text     format(   " cls.....: SYS %d ($%04X)",cls, cls)
           .byte     $0d,0
 helptext  .byte     $0d
-          .text     format(   " ex.: SYS%05d",exemp023)
-          .byte     $0d
-          .text     format(   "      for i=0to100:SYS%05d:next",exemp023)
+          .text     format(   " ex.: SYS%d",exemp026)
+;          .byte     $0d
+;          .text     format(   "      for i=0to100:SYS%05d:next",exemp026)
           .byte     $0d,0
 line      .text               " --------------------------------------"
           .byte     $0d,0
           .bend
 ;*=$4000
 
-exemp023  .block
+exemp026  .block
           pha
           txa
           pha
