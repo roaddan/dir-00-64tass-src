@@ -12,13 +12,13 @@ main      .block
           #disable
           #v20col
           jsr       help
-          jsr       exemp026
-          jsr       anykey
+;          jsr       exemp026
+;          jsr       anykey
           #enable
           #uppercase
-          jsr       cls
+;          jsr       cls
 ;          #graycolor
-          #c64col
+;          #c64col
 ;          jmp      b_warmstart
           .bend
             
@@ -71,9 +71,33 @@ exemp026  .block
           pha
           txa
           pha
-          lda  #$05
-          ldx  #$03
-          jsr  b_putint
+          #v20col
+          jsr       cls
+          jsr  b_intcgt
+          lda  #$00
+          ldy  #$59
+clear     sta  $0200,y
+          dey
+          bne  clear
+          jsr  b_prompt
+          stx  $7a
+          sty  $7b
+          jsr  b_chrget
+          jsr  b_ascflt
+          jsr  b_facasc
+          ldy  #$ff
+fndend    iny
+          lda  $0100,y
+          bne  fndend
+          iny
+          tya
+          pha
+          lda  #$00
+          sta  $22
+          lda  #$01
+          sta  $23
+          pla
+          jsr  b_strout
           pla
           tax
           pla

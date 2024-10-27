@@ -330,6 +330,9 @@ vgrey2         =    %00001111
 ;-------------------------------------------------------------------------------
 ; R o u t i n e s   p o u r   l a   c o m m u n i c a t i o n   s é r i e
 ;-------------------------------------------------------------------------------
+;name   = $0000 ; do something
+;               ;----------------------------------------------------------------
+;               ; explication
 setprms= $e1d4 ; Set parameters for LOAD, SAVE, and verify
                ;----------------------------------------------------------------
                ; This routine is used in common by LOAD, SAVE, an veryfy for
