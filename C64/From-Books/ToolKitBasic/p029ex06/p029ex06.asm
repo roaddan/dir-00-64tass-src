@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-           Version = "20241028-104802"
+           Version = "20241028-172827"
 ;-------------------------------------------------------------------------------           .include    "header-c64.asm"
           .include    "header-c64.asm"
           .include    "macros-64tass.asm"
@@ -8,7 +8,7 @@
 ;-------------------------------------------------------------------------------
           .enc      none
 
-p028ex05  .block
+p029ex06  .block
           jsr  push
           #v20col
           jsr  cls
@@ -75,6 +75,22 @@ ptext     .byte b_crlf, b_purple, b_space
           .byte b_black,b_eot
 ptextend
           .bend
+
+akey      .block
+          lda  #<kmsg
+          sta  $22
+          lda  #>kmsg
+          sta  $23
+          lda  #kmsgend-kmsg
+          jsr  b_strout
+          jsr  anykey
+          rts
+kmsg      .byte b_crlf,b_green,b_crsr_up,b_crsr_right
+          .text               "Une clef pour continuer!"
+          .byte b_black,b_eot
+kmsgend                      
+          .bend
+  
 main      .block
           jsr       scrmaninit
           #disable
@@ -86,7 +102,7 @@ main      .block
           jsr       akey
           lda       #b_crlf
           jsr       $ffd2
-          jsr       p028ex05
+          jsr       p029ex06
           #enable
 ;          #uppercase
 ;          #c64col
@@ -136,37 +152,22 @@ headerb   .byte     $0d
 shortcuts .byte     b_blue,b_space,b_rvs_on
           .text               "        RACCOURCIS DES EXEMPLES       "
           .byte     b_rvs_off,b_crlf,b_crlf
-          .text     format(   " p028ex05: SYS %d ($%04X)",p028ex05, p028ex05)
+          .text     format(   " p029ex06: SYS %d ($%04X)",p029ex06, p029ex06)
           .byte     b_crlf
           .text     format(   " help....: SYS %d ($%04X)",help, help)
           .byte     b_crlf
           .text     format(   " cls.....: SYS %d ($%04X)",cls, cls)
           .byte     b_crlf,b_eot
 helptext  .byte     b_crlf,b_space,b_red
-          .text     format(   " ex.: SYS %d",p028ex05)
+          .text     format(   " ex.: SYS %d",p029ex06)
 ;          .byte     b_crlf
-;          .text     format(   "      for i=0to100:SYS%05d:next",p028ex05)
+;          .text     format(   "      for i=0to100:SYS%05d:next",p029ex06)
           .byte     b_crlf,b_black,b_eot
 
 line      .text               " --------------------------------------"
           .byte     b_crlf,b_eot
 
-akey      .block
-          lda  #<kmsg
-          sta  $22
-          lda  #>kmsg
-          sta  $23
-          lda  #kmsgend-kmsg
-          jsr  b_strout
-          jsr  anykey
-          rts
-kmsg      .byte b_crlf,b_green,b_crsr_up,b_crsr_right
-          .text               "Une clef pour continuer!"
-          .byte b_black,b_eot
-kmsgend                      
-          .bend
 
-i
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
