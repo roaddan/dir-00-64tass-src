@@ -197,6 +197,18 @@ again          jsr  getin
                rts
                .bend
 
+kbflushbuff    .block
+               php
+               pha
+again          jsr  getin
+               cmp  #0
+               bne  again
+               pla
+               plp
+               rts
+               .bend
+
+
 waitkey        .block
                jsr  push
                sta  thekey                

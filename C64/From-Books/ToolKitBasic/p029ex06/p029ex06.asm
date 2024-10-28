@@ -48,6 +48,7 @@ insub     .block
           pha
           txa
           pha
+          jsr  kbflushbuff
           jsr  b_intcgt       ; Initialide chrget
           lda  #$00           ; On efface le basic input buffer 
           ldy  #$59           ;  situé à $200 long de 89 bytes ($59)

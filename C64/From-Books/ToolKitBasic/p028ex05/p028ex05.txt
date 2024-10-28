@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.52.1237? listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L p028ex05.txt -o p028ex05.prg p028ex05.asm
-; Mon Oct 28 11:51:24 2024
+; Mon Oct 28 17:26:08 2024
 
 ;Offset	;Hex		;Source
 
@@ -773,6 +773,8 @@
 =$0200			b_inpbuff      =    $0200
 =$0d			b_crlf         =    $0d
 =$20			b_space        =    $20
+=$61			b_fac1         =    $61
+=$69			b_fac2         =    $69
 =$a3bb			b_opentxtspc   = $a3bb ; Open space in BASIC text.   ;a-y;---; Array top $yyaa
 =$a408			b_chkavailmem  = $a408 ; Check available Memory. *1  ;a-y;---; Array top $yyaa
 =$a435			b_outofmem     = $a435 ; ?Out of memory.             ;---;---;
@@ -1951,41 +1953,50 @@
 .12c1	60		               rts
 .12c2			waitkey
 .12c2	20 89 0e	               jsr  push
-.12c5	8d 13 13	               sta  thekey
+.12c5	8d 1f 13	               sta  thekey
 .12c8	20 e4 ff	nope           jsr  getin
 .12cb	20 d2 ff	               jsr  chrout
-.12ce	cd 13 13	               cmp  thekey
+.12ce	cd 1f 13	               cmp  thekey
 .12d1	d0 f5		               bne  nope
 .12d3	20 d2 ff	               jsr  chrout
 .12d6	20 c8 0e	               jsr  pop
 .12d9	60		               rts
-.12da			waitspace
-.12da	20 89 0e	               jsr  push
-.12dd	a9 7f		wait           lda  #$7f  ;%01111111
-.12df	8d 00 dc	               sta  $dc00
-.12e2	ad 01 dc	               lda  $dc01
-.12e5	29 10		               and  #$10  ;mask %00010000
-.12e7	d0 f4		               bne  wait
-.12e9	20 c8 0e	               jsr  pop
-.12ec			waitsstop
-.12ec	20 89 0e	               jsr  push
-.12ef	20 ed f6	wait           jsr  k_stop  ;%01111111
-.12f2	d0 fb		               bne  wait
-.12f4	20 c8 0e	               jsr  pop
-.12f7			waitreturn
-.12f7	20 89 0e	               jsr  push
-.12fa	ad 14 13	               lda  thecount
-.12fd	8d 00 04	               sta  scrnram
-.1300	a9 02		               lda  #$02
-.1302	8d 00 d8	               sta  colorram
-.1305	20 e4 ff	nope           jsr  getin
-.1308	c9 0d		nohex          cmp  #$0d
-.130a	d0 f9		               bne  nope
-.130c	ee 14 13	               inc  thecount
-.130f	20 c8 0e	               jsr  pop
-.1312	60		               rts
->1313	00		thekey         .byte   0
->1314	01		thecount       .byte   $01
+.12da			kbflushbuff
+.12da	08		again          php
+.12db	48		               pha
+.12dc	20 e4 ff	               jsr  getin
+.12df	c9 00		               cmp  #0
+.12e1	d0 f7		               bne  again
+.12e3	68		               pla
+.12e4	28		               plp
+.12e5	60		               rts
+.12e6			waitspace
+.12e6	20 89 0e	               jsr  push
+.12e9	a9 7f		wait           lda  #$7f  ;%01111111
+.12eb	8d 00 dc	               sta  $dc00
+.12ee	ad 01 dc	               lda  $dc01
+.12f1	29 10		               and  #$10  ;mask %00010000
+.12f3	d0 f4		               bne  wait
+.12f5	20 c8 0e	               jsr  pop
+.12f8			waitsstop
+.12f8	20 89 0e	               jsr  push
+.12fb	20 ed f6	wait           jsr  k_stop  ;%01111111
+.12fe	d0 fb		               bne  wait
+.1300	20 c8 0e	               jsr  pop
+.1303			waitreturn
+.1303	20 89 0e	               jsr  push
+.1306	ad 20 13	               lda  thecount
+.1309	8d 00 04	               sta  scrnram
+.130c	a9 02		               lda  #$02
+.130e	8d 00 d8	               sta  colorram
+.1311	20 e4 ff	nope           jsr  getin
+.1314	c9 0d		nohex          cmp  #$0d
+.1316	d0 f9		               bne  nope
+.1318	ee 20 13	               inc  thecount
+.131b	20 c8 0e	               jsr  pop
+.131e	60		               rts
+>131f	00		thekey         .byte   0
+>1320	01		thecount       .byte   $01
 
 ;******  Return to file: p028ex05.asm
 
