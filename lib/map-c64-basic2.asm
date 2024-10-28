@@ -76,7 +76,7 @@ b_f8           =    140
 b_dis_cmd      =    8
 b_ena_cmd      =    9
 ;--------------------------------------------------------------------------------
-; Box dezing available in all characterset
+; Box design available in all characterset
 ;--------------------------------------------------------------------------------
 b_ul           =    172
 b_ur           =    187
@@ -86,7 +86,13 @@ b_vl           =    182
 b_vr           =    181
 b_bo           =    184
 b_to           =    185
+;--------------------------------------------------------------------------------
+; Others
+;--------------------------------------------------------------------------------
+b_eot          =    $00
 b_inpbuff      =    $0200
+b_crlf         =    $0d
+b_space        =    $20
 ;--------------------------------------------------------------------------------
 ; Macro sur les elements importants (* = called by)
 ;--------------------------------------------------------------------------------
@@ -215,7 +221,9 @@ b_fpwrt        = $bf7b ; FAC1 = FAC1 ^ FAC2.
 b_poly2        = $e059 ; Ploynomial evaluation
 b_initcgt      = $e3bf ; Initialize all Basic zero page fixed value lication.   
 
+;--------------------------------------------------------------------------------
 ; Equates pour le livre Tool Kit: basic
+;--------------------------------------------------------------------------------
 b_axout        = $bdcd ; Print fix point value.      ;ax-;---; Value = $xxaa 
 b_intcgt       = $e3bf ; Initialize all Basic zero page fixed value lication.
 b_ascflt       = $bcf3 ; Conv. ascii dec num to FAC1,
