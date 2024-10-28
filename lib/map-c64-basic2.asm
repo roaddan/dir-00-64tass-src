@@ -86,6 +86,7 @@ b_vl           =    182
 b_vr           =    181
 b_bo           =    184
 b_to           =    185
+b_inpbuff      =    $0200
 ;--------------------------------------------------------------------------------
 ; Macro sur les elements importants (* = called by)
 ;--------------------------------------------------------------------------------
@@ -97,10 +98,10 @@ b_chkavailmem  = $a408 ; Check available Memory. *1  ;a-y;---; Array top $yyaa
 b_outofmem     = $a435 ; ?Out of memory.             ;---;---;        
 b_errormesg    = $a437 ; Send BASIC error message.   ;a--;---; a = errno
 b_warmstart    = $a474 ; Basic warm start.           ;---;---;
-;b_chrget       = $a48a ; Main CHRGET entry.          ;---;---; 
-;                       ; Prerequizite : $7a=#$ff,$7b=#$01, 
-;                       ;                ($77,$78),
-;                       ;                $01ff=Basic inbuf-1
+b_chrgetentry  = $a48a ; Main CHRGET entry.          ;---;---; 
+                       ; Prerequizite : $7a=#$ff,$7b=#$01, 
+                       ;                ($77,$78),
+                       ;                $01ff=Basic inbuf-1
 b_newline      = $a49c ; Crunch tokens, insert line. ;-x-;---; x = buff len
 b_clrready     = $a52a ; Fix chaining CLR and READY. ;---;---;
 b_fixchaining  = $a533 ; Fix chaining.               ;---;---;

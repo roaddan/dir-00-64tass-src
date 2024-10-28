@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.52.1237? listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L exemp026.txt -o exemp026.prg exemp026.asm
-; Sun Oct 27 00:25:24 2024
+; Sun Oct 27 23:30:01 2024
 
 ;Offset	;Hex		;Source
 
@@ -188,32 +188,32 @@
 .0aa9	8d 86 02	               sta  bascol
 .0aac	68		               pla
 .0aad	20 11 0b	          jsr       cls
-.0ab0	20 bf e3	          jsr  b_intcgt
-.0ab3	a9 00		          lda  #$00
-.0ab5	a0 59		          ldy  #$59
-.0ab7	99 00 02	clear     sta  $0200,y
-.0aba	88		          dey
-.0abb	d0 fa		          bne  clear
-.0abd	20 f9 ab	          jsr  b_prompt
-.0ac0	86 7a		          stx  $7a
+.0ab0	20 bf e3	          jsr  b_intcgt       ; Initialide chrget
+.0ab3	a9 00		          lda  #$00           ; On efface le basic input buffer
+.0ab5	a0 59		          ldy  #$59           ;  situé à $200 long de 89 bytes ($59)
+.0ab7	99 00 02	clear     sta  b_inpbuff,y    ;  en plaçant des $00 partout
+.0aba	88		          dey                 ;  et ce jusqu'au
+.0abb	d0 fa		          bne  clear          ;  dernier.
+.0abd	20 f9 ab	          jsr  b_prompt       ; Affiche un "?" et attend une entrée.
+.0ac0	86 7a		          stx  $7a            ; X et Y pointe sur $01ff au retour.
 .0ac2	84 7b		          sty  $7b
-.0ac4	20 73 00	          jsr  b_chrget
-.0ac7	20 f3 bc	          jsr  b_ascflt
-.0aca	20 dd bd	          jsr  b_facasc
-.0acd	a0 ff		          ldy  #$ff
-.0acf	c8		fndend    iny
-.0ad0	b9 00 01	          lda  $0100,y
-.0ad3	d0 fa		          bne  fndend
-.0ad5	c8		          iny
-.0ad6	98		          tya
-.0ad7	48		          pha
-.0ad8	a9 00		          lda  #$00
-.0ada	85 22		          sta  $22
-.0adc	a9 01		          lda  #$01
-.0ade	85 23		          sta  $23
-.0ae0	68		          pla
-.0ae1	20 24 ab	          jsr  b_strout
-.0ae4	68		          pla
+.0ac4	20 73 00	          jsr  b_chrget       ; Lecture du buffer.
+.0ac7	20 f3 bc	          jsr  b_ascflt       ; Conversion la chaine ascii en 200 en float.
+.0aca	20 dd bd	          jsr  b_facasc       ; Convertie FAC1 en ascii à $0100.
+.0acd	a0 ff		          ldy  #$ff           ; Cherche la fin de la chaine de caractère ($00)
+.0acf	c8		fndend    iny                 ; De
+.0ad0	b9 00 01	          lda  $0100,y        ; Lie le caractère.
+.0ad3	d0 fa		          bne  fndend         ; Ce n'est pas un $00, on cherche encore.
+.0ad5	c8		          iny                 ; On ajuste le compte.
+.0ad6	98		          tya                 ; On met le compte dans acc.
+.0ad7	48		          pha                 ; On le sauvegarde.
+.0ad8	a9 00		          lda  #$00           ; On place l'adresse de la chaine $0100
+.0ada	85 22		          sta  $22            ;  le $00 dans $22(lsb)
+.0adc	a9 01		          lda  #$01           ;  et le $01
+.0ade	85 23		          sta  $23            ;  dans $23(msb)
+.0ae0	68		          pla                 ; On récupère le compte.
+.0ae1	20 24 ab	          jsr  b_strout       ; Affiche la chaine(z) dont l'adresse est
+.0ae4	68		          pla                 ;  dans $22(lsb) et $23(msb)
 .0ae5	aa		          tax
 .0ae6	68		          pla
 .0ae7	60		          rts
@@ -722,6 +722,7 @@
 =181			b_vr           =    181
 =184			b_bo           =    184
 =185			b_to           =    185
+=$0200			b_inpbuff      =    $0200
 =$a3bb			b_opentxtspc   = $a3bb ; Open space in BASIC text.   ;a-y;---; Array top $yyaa
 =$a408			b_chkavailmem  = $a408 ; Check available Memory. *1  ;a-y;---; Array top $yyaa
 =$a435			b_outofmem     = $a435 ; ?Out of memory.             ;---;---;

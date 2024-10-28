@@ -73,32 +73,32 @@ exemp026  .block
           pha
           #v20col
           jsr       cls
-          jsr  b_intcgt
-          lda  #$00
-          ldy  #$59
-clear     sta  $0200,y
-          dey
-          bne  clear
-          jsr  b_prompt
-          stx  $7a
+          jsr  b_intcgt       ; Initialide chrget
+          lda  #$00           ; On efface le basic input buffer 
+          ldy  #$59           ;  situé à $200 long de 89 bytes ($59)
+clear     sta  b_inpbuff,y    ;  en plaçant des $00 partout
+          dey                 ;  et ce jusqu'au
+          bne  clear          ;  dernier.
+          jsr  b_prompt       ; Affiche un "?" et attend une entrée.
+          stx  $7a            ; X et Y pointe sur $01ff au retour.
           sty  $7b
-          jsr  b_chrget
-          jsr  b_ascflt
-          jsr  b_facasc
-          ldy  #$ff
-fndend    iny
-          lda  $0100,y
-          bne  fndend
-          iny
-          tya
-          pha
-          lda  #$00
-          sta  $22
-          lda  #$01
-          sta  $23
-          pla
-          jsr  b_strout
-          pla
+          jsr  b_chrget       ; Lecture du buffer.
+          jsr  b_ascflt       ; Conversion la chaine ascii en 200 en float.
+          jsr  b_facasc       ; Convertie FAC1 en ascii à $0100.
+          ldy  #$ff           ; Cherche la fin de la chaine de caractère ($00)
+fndend    iny                 ; De 
+          lda  $0100,y        ; Lie le caractère.
+          bne  fndend         ; Ce n'est pas un $00, on cherche encore.
+          iny                 ; On ajuste le compte. 
+          tya                 ; On met le compte dans acc.
+          pha                 ; On le sauvegarde.
+          lda  #$00           ; On place l'adresse de la chaine $0100
+          sta  $22            ;  le $00 dans $22(lsb)
+          lda  #$01           ;  et le $01      
+          sta  $23            ;  dans $23(msb)
+          pla                 ; On récupère le compte.
+          jsr  b_strout       ; Affiche la chaine(z) dont l'adresse est
+          pla                 ;  dans $22(lsb) et $23(msb)
           tax
           pla
           rts
