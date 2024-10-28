@@ -16,7 +16,7 @@ main      .block
           jsr       cls
           jsr       help
           jsr       akey
-          jsr       exemp027
+          jsr       p027ex03
           #enable
           #uppercase
 ;          jsr       cls
@@ -52,35 +52,36 @@ headera                       ;0123456789012345678901234567890123456789
           .text               " *          Book by Dan Heeb.         *"
           .byte     b_crlf
           .null               " *         ISBN: 0-942386-32-9        *"
-
-headerb   .byte     b_crlf
-          .text               " *        exemple #3 & #4 (p027)      *"
-          .byte     b_crlf
-          .text               " *    programmed by Daniel Lafrance.  *"
-          .byte     b_crlf
+headerb   .byte     $0d
+          .text               " *    Direct Use of Floating Point    *"
+          .byte     $0d
+          .text               " *         page 27, exemple #3        *"
+          .byte     $0d
+          .text               " *    Programmeur Daniel Lafrance.    *"
+          .byte     $0d
           .text     format(   " *      Version: %s.     * ",Version)
           .byte     b_black,b_eot
 
 shortcuts .byte     b_blue,b_space,b_rvs_on
-          .text               "   E X A M P L E  S H O R T  C U T S  "
+          .text               "        RACCOURCIS DES EXEMPLES       "
           .byte     b_rvs_off,b_crlf,b_crlf
-          .text     format(   " exemp027: SYS %d ($%04X)",exemp027, exemp027)
+          .text     format(   " p027ex03: SYS %d ($%04X)",p027ex03, p027ex03)
           .byte     b_crlf
           .text     format(   " help....: SYS %d ($%04X)",help, help)
           .byte     b_crlf
           .text     format(   " cls.....: SYS %d ($%04X)",cls, cls)
           .byte     b_crlf,b_eot
 helptext  .byte     b_crlf,b_space,b_red
-          .text     format(   " ex.: SYS %d",exemp027)
+          .text     format(   " ex.: SYS %d",p027ex03)
 ;          .byte     b_crlf
-;          .text     format(   "      for i=0to100:SYS%05d:next",exemp027)
+;          .text     format(   "      for i=0to100:SYS%05d:next",p027ex03)
           .byte     b_crlf,b_black,b_eot
 
 line      .text               " --------------------------------------"
           .byte     b_crlf,b_eot
 ;*=$4000
 
-exemp027  .block
+p027ex03  .block
           pha
           txa
           pha
@@ -150,7 +151,7 @@ akey      .block
           jsr  anykey
           rts
 kmsg      .byte b_crlf,b_green,b_crsr_up,b_crsr_right
-          .text               "Any key to continue!"
+          .text               "Une clef pour continuer!"
           .byte b_black,b_eot
 kmsgend                      
           .bend

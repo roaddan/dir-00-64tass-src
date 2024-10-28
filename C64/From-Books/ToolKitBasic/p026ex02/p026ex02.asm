@@ -12,7 +12,7 @@ main      .block
           #disable
           #v20col
           jsr       help
-          jsr       exemp026
+          jsr       p026ex02
 ;          jsr       akey
           #enable
 ;          #uppercase
@@ -44,31 +44,33 @@ headera                       ;0123456789012345678901234567890123456789
           .null               " *         ISBN: 0-942386-32-9        *"
 
 headerb   .byte     $0d
-          .text               " *          exemple #2 (p026)         *"
+          .text               " *    Direct Use of Floating Point    *"
           .byte     $0d
-          .text               " *    programmed by Daniel Lafrance.  *"
+          .text               " *         page 26, exemple #2        *"
+          .byte     $0d
+          .text               " *    Programmeur Daniel Lafrance.    *"
           .byte     $0d
           .null     format(   " *      Version: %s.     * ",Version)
 
-shortcuts .text               "   E X A M P L E  S H O R T  C U T S   "
+shortcuts .text               "        RACCOURCIS DES EXEMPLES       "
           .byte     $0d,$0d
-          .text     format(   " exemp026: SYS %d ($%04X)",exemp026, exemp026)
+          .text     format(   " p026ex02: SYS %d ($%04X)",p026ex02, p026ex02)
           .byte     $0d
           .text     format(   " help....: SYS %d ($%04X)",help, help)
           .byte     $0d
           .text     format(   " cls.....: SYS %d ($%04X)",cls, cls)
           .byte     $0d,0
 helptext  .byte     $0d
-          .text     format(   " ex.: SYS%d",exemp026)
+          .text     format(   " ex.: SYS%d",p026ex02)
 ;          .byte     $0d
-;          .text     format(   "      for i=0to100:SYS%05d:next",exemp026)
+;          .text     format(   "      for i=0to100:SYS%05d:next",p026ex02)
           .byte     $0d,0
 line      .text               " --------------------------------------"
           .byte     $0d,0
           .bend
 ;*=$4000
 
-exemp026  .block
+p026ex02  .block
           pha
           txa
           pha
@@ -115,7 +117,7 @@ akey      .block
           jsr  anykey
           rts
 kmsg      .byte $0d
-          .null               "Any key to continue!"
+          .null               "Une clef pour continuer!"
 kmsgend                      
           .bend
 
