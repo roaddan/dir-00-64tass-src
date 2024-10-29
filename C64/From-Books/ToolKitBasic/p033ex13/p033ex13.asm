@@ -8,86 +8,48 @@
 ;-------------------------------------------------------------------------------
           .enc      none
 
-p032ex10  .block
+p033ex13  .block
           jsr  push           ; Sauvegarde le statut complet.
-          #v20col
+again     #v20col
           jsr  cls            ; On efface l'écran.
           #print ttext
           #print ptext1
           jsr  insub          ; Lit le premier nombre.
-          jsr  b_f1tf2
-          lda  $61
-          jsr  b_f1xf2
+          jsr  b_f1t57
+          #print ptext2
+          jsr  insub          ; Lit le premier nombre.
+          lda  #$57
+          ldy  #$00
+          jsr  b_f1pfv
 noneg     jsr  b_facasc       ; Converti le résultat en ascii à $0100.
           #print restxt
           jsr  outsub         ; Affiche la valeur finale.
           lda  #$0d
           jsr  $ffd2
+          #print query
+          jsr  getkey
+          and  #$7f
+          cmp  #'o'
+          bne  out
+          jmp again
+out       jsr  aide
           jsr  pop            ; Récupère le statut complet.
           rts
+query     .byte     b_ltblue,b_space,b_crlf
+          .text     "   Un autre calcul (o/N)?"
+          .byte     b_crlf,b_eot 
 ttext     .byte     b_blue,b_space,b_rvs_on
-          .text     "      POINT FLOTTANT - AU CARREE     "
+          .text     "  POINT FLOTTANT - FAC1 = FVAR+FAC1  "
           .byte     b_rvs_off,b_crlf,b_eot 
 ptext1    .byte     b_crlf, b_purple, b_space
-          .text     "Entez un nombre ......."
+          .text     " Entez la valeur de FVAR"
+          .byte     b_black,b_eot
+ptext2    .byte     b_crlf, b_purple, b_space
+          .text     "      puis celle de FAC1"
           .byte     b_black,b_eot
 restxt    .byte     b_green,b_crlf
           .text    " Voici le resultat......:"
           .byte     b_black,b_eot
-          .bend
-
-outsub    .block
-          jsr  push           ; Sauvegarde le statut complet.
-          ldy  #$ff           ; On détermine 
-nxtchr    iny                 ;  le nombre de caractères
-          lda  $0100,y        ;  qu'il y a dans la chaine à afficher.
-          bne  nxtchr
-          iny                 ; On ajoute 1 au nombre trouvé pour compenser
-          tya                 ;  l'adresse a y=0.
-          pha                 ; Sauvegarde ce nombre.
-          lda  #$00           ; On prépare le pointeur $22-$23
-          sta  $22            ;  en le peuplant avec 
-          lda  #$01           ;  l'adresse ou se trouve la chaine
-          sta  $23            ;  à afficher.
-          pla                 ; On ramène le nombre de caractères.
-          jsr  b_strout       ; On affiche.
-          jsr  pop            ; Récupère le statut complet.
-          rts
-          .bend
-
-insub     .block
-          jsr  push           ; Sauvegarde le statut complet.
-          jsr  kbflushbuff
-          jsr  b_intcgt       ; Initialide chrget
-          lda  #$00           ; On efface le basic input buffer 
-          ldy  #$59           ;  situé à $200 long de 89 bytes ($59)
-clear     sta  b_inpbuff,y    ;  en plaçant des $00 partout
-          dey                 ;  et ce jusqu'au
-          bne  clear          ;  dernier.
-          jsr  b_prompt       ; Affiche un "?" et attend une entrée.
-          stx  $7a            ; X et Y pointe sur $01ff au retour.
-          sty  $7b
-          jsr  b_chrget       ; Lecture du buffer.
-          jsr  b_ascflt       ; Conversion la chaine ascii en 200 en float.
-                              ;  dans $22(lsb) et $23(msb)
-          jsr  pop            ; Récupère le statut complet.
-          rts
-
-          .bend
-
-akey      .block
-          lda  #<kmsg
-          sta  $22
-          lda  #>kmsg
-          sta  $23
-          lda  #kmsgend-kmsg
-          jsr  b_strout
-          jsr  anykey
-          rts
-kmsg      .byte b_crlf,b_green,b_crsr_up,b_crsr_right
-          .text               "Une clef pour continuer!"
-          .byte b_black,b_eot
-kmsgend                      
           .bend
 
 main      .block
@@ -97,11 +59,11 @@ main      .block
           jsr       bookinfo
           jsr       akey
           jsr       cls
-          jsr       help
+          jsr       aide
           jsr       akey
           lda       #b_crlf
           jsr       $ffd2
-          jsr       p032ex10
+          jsr       p033ex13
           #enable
 ;          #uppercase
 ;          #c64col
@@ -123,12 +85,12 @@ bookinfo  .block
           rts                      
           .bend  
 
-help      .block
+aide      .block
           jsr  push           ; Sauvegarde le statut complet.      
           #lowercase
           jsr       cls
           #print    shortcuts
-          #print    helptext
+          #print    aidetext
           #print    line
           jsr  pop            ; Récupère le statut complet.
           rts
@@ -145,7 +107,7 @@ headera                       ;0123456789012345678901234567890123456789
 headerb   .byte     $0d
           .text               " *    Direct Use of Floating Point    *"
           .byte     $0d
-          .text               " *        page 32, exemple #10        *"
+          .text               " *        page 33, exemple #13        *"
           .byte     $0d
           .text               " *    Programmeur Daniel Lafrance.    *"
           .byte     $0d
@@ -155,16 +117,16 @@ headerb   .byte     $0d
 shortcuts .byte     b_blue,b_space,b_rvs_on
           .text               "       RACCOURCIS DE L'EXEMPLE        "
           .byte     b_rvs_off,b_crlf,b_crlf
-          .text     format(   " p032ex10: SYS %d ($%04X)",p032ex10, p032ex10)
+          .text     format(   " p033ex13: SYS %d ($%04X)",p033ex13, p033ex13)
           .byte     b_crlf
-          .text     format(   " aide....: SYS %d ($%04X)",help, help)
+          .text     format(   " aide....: SYS %d ($%04X)",aide, aide)
           .byte     b_crlf
           .text     format(   " cls.....: SYS %d ($%04X)",cls, cls)
           .byte     b_crlf,b_eot
-helptext  .byte     b_crlf,b_space,b_red
-          .text     format(   " ex.: SYS %d",p032ex10)
+aidetext  .byte     b_crlf,b_space,b_red
+          .text     format(   " ex.: SYS %d",p033ex13)
 ;          .byte     b_crlf
-;          .text     format(   "      for i=0to100:SYS%05d:next",p032ex10)
+;          .text     format(   "      for i=0to100:SYS%05d:next",p033ex13)
           .byte     b_crlf,b_black,b_eot
 
 line      .text               " --------------------------------------"
@@ -172,9 +134,10 @@ line      .text               " --------------------------------------"
 
 
 ;-------------------------------------------------------------------------------
-; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
+; Je mets les librairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
 ;*=$c000        
+          .include "toolkitbasic.asm"
           .include "map-c64-kernal.asm"
           .include "map-c64-vicii.asm" 
           .include "map-c64-basic2.asm"

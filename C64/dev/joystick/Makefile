@@ -30,7 +30,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=template
+SOURCENAME=j2tester
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -140,8 +140,8 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-#		$(FTPASMCMD)	# To transfer the source ASM file.
-#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
+		$(FTPASMCMD)	# To transfer the source ASM file.
+		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
 #		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
 

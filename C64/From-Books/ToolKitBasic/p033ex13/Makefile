@@ -30,7 +30,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=p032ex11
+SOURCENAME=p033ex13
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -152,7 +152,7 @@ ftp:
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
 		$(FTPASMCMD)	# To transfer the source ASM file.
-		$(FTPTXTCMD)	# To transfer the resulting TXT file.
+		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
 
 # -----------------------------------------------------------------------------
