@@ -13,7 +13,7 @@ bcmd1     .word bcmd2   	;Adresse de la commande basic suivante.
 		.word 1   	;Numero de la ligne Basic.
 		.byte $8F		;Le token de la commande REM du Basic 
 					; ($8F=REM)
-		.text " *multiplication*"   
+		.text " *programmation assembleur sue c64*"   
 					; texte a afficher suite au REM.
 		.byte $00		;Un zéro pour indiquer la fin de cette 
 bcmd2     .word bcmd3   	;Adresse de la commande basic suivante.

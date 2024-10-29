@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-           Version = "20241028-172827"
+           Version = "20241028-214430"
 ;-------------------------------------------------------------------------------           .include    "header-c64.asm"
           .include    "header-c64.asm"
           .include    "macros-64tass.asm"
@@ -24,7 +24,8 @@ p029ex06  .block
           jsr  b_facasc       ; Converti le résultat en ascii à $0100.
           #print restxt
           jsr  outsub         ; Affiche la valeur finale.
-          
+          lda  #$0d
+          jsr  $ffd2
           jsr  pop            ; Récupère le statut complet.
           rts
 ttext     .byte     b_blue,b_space,b_rvs_on
@@ -34,7 +35,7 @@ ptext1    .byte     b_crlf, b_purple, b_space
           .text     "Entez un premier nombre"
           .byte     b_black,b_eot
 ptext2    .byte     b_crlf, b_purple, b_space
-          .text     "Entez un second nombre "
+          .text     "    et un second nombre"
           .byte     b_black,b_eot
 restxt    .byte     b_green,b_crlf
           .text    " Voici le resultat......:"
@@ -158,11 +159,11 @@ headerb   .byte     $0d
           .byte     b_black,b_eot
 
 shortcuts .byte     b_blue,b_space,b_rvs_on
-          .text               "        RACCOURCIS DES EXEMPLES       "
+          .text               "       RACCOURCIS DE L'EXEMPLE        "
           .byte     b_rvs_off,b_crlf,b_crlf
           .text     format(   " p029ex06: SYS %d ($%04X)",p029ex06, p029ex06)
           .byte     b_crlf
-          .text     format(   " help....: SYS %d ($%04X)",help, help)
+          .text     format(   " aide....: SYS %d ($%04X)",help, help)
           .byte     b_crlf
           .text     format(   " cls.....: SYS %d ($%04X)",cls, cls)
           .byte     b_crlf,b_eot
