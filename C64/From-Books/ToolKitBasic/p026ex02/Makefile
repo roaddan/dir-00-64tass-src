@@ -30,7 +30,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=p026ex02
+SOURCENAME=template
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -40,7 +40,8 @@ BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project the following
 # detail is used to specify where the resulting files will be placed. 
 # >> Complete path where the compiled files will be placed. 
-OUTDIR=/Users/Locals/temp/Output/C64
+OUTDIRC64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
+OUTDIRV20=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
 #
 # 64tass allows to include libraries of code and routines of your making.
 # The Complete path to your library directory.
@@ -89,6 +90,9 @@ JBMON64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/40-best-s
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
 VICE=$(X64SCGTK)
+OUTDIR=OUTDIRC64
+#OUTDIR=OUTDIRV20
+
 # The Vice autostart parameters. 
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # -----------------------------------------------------------------------------
