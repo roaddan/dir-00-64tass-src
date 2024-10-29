@@ -9,45 +9,59 @@
           .enc      none
 
 p029ex06  .block
-          jsr  push
+          jsr  push           ; Sauvegarde le statut complet.
           #v20col
-          jsr  cls
-          jsr  insub
-          jsr  b_f1t57
-          jsr  insub
-          lda  #$57
-          ldy  #$00
-          jsr  b_f1xfv
-          jsr  b_facasc
-          jsr  outsub
-          jsr  pop
+          jsr  cls            ; On efface l'écran.
+          #print ttext
+          #print ptext1
+          jsr  insub          ; Lit le premier nombre.
+          jsr  b_f1t57        ; Le copie en RAM.
+          #print ptext2
+          jsr  insub          ; Lit le second nombre dans FAC1.
+          lda  #$57           ; Multiply FAC1 avec
+          ldy  #$00           ;  le nombre sauvegardé
+          jsr  b_f1xfv        ;  en RAM.
+          jsr  b_facasc       ; Converti le résultat en ascii à $0100.
+          #print restxt
+          jsr  outsub         ; Affiche la valeur finale.
+          
+          jsr  pop            ; Récupère le statut complet.
           rts
-floatnum  .byte 0,0,0,0,0,0
+ttext     .byte     b_blue,b_space,b_rvs_on
+          .text     "    MULTIPLICATION - POINT FLOTTANT   "
+          .byte     b_rvs_off,b_crlf,$00   
+ptext1    .byte     b_crlf, b_purple, b_space
+          .text     "Entez un premier nombre"
+          .byte     b_black,b_eot
+ptext2    .byte     b_crlf, b_purple, b_space
+          .text     "Entez un second nombre "
+          .byte     b_black,b_eot
+restxt    .byte     b_green,b_crlf
+          .text    " Voici le resultat......:"
+          .byte     b_black,$00
           .bend
 
 outsub    .block
-          jsr  push
-          ldy  #$ff
-nxtchr    iny
-          lda  $0100,y
+          jsr  push           ; Sauvegarde le statut complet.
+          ldy  #$ff           ; On détermine 
+nxtchr    iny                 ;  le nombre de caractères
+          lda  $0100,y        ;  qu'il y a dans la chaine à afficher.
           bne  nxtchr
-          iny
-          tya
-          pha
-          lda  #$00
-          sta  $22
-          lda  #$01
-          sta  $23
-          pla
-          jsr  b_strout
-          jsr  pop
+          iny                 ; On ajoute 1 au nombre trouvé pour compenser
+          tya                 ;  l'adresse a y=0.
+          pha                 ; Sauvegarde ce nombre.
+          lda  #$00           ; On prépare le pointeur $22-$23
+          sta  $22            ;  en le peuplant avec 
+          lda  #$01           ;  l'adresse ou se trouve la chaine
+          sta  $23            ;  à afficher.
+          pla                 ; On ramène le nombre de caractères.
+          jsr  b_strout       ; On affiche.
+          jsr  pop            ; Récupère le statut complet.
           rts
           .bend
 
 insub     .block
-          pha
-          txa
-          pha
+          jsr  push           ; Sauvegarde le statut complet.
           jsr  kbflushbuff
           jsr  b_intcgt       ; Initialide chrget
           lda  #$00           ; On efface le basic input buffer 
@@ -55,25 +69,15 @@ insub     .block
 clear     sta  b_inpbuff,y    ;  en plaçant des $00 partout
           dey                 ;  et ce jusqu'au
           bne  clear          ;  dernier.
-          lda  #<ptext
-          sta  $22
-          lda  #>ptext
-          sta  $23
-          lda  #ptextend-ptext
-          jsr  b_strout       ; Affiche la chaine(z)
           jsr  b_prompt       ; Affiche un "?" et attend une entrée.
           stx  $7a            ; X et Y pointe sur $01ff au retour.
           sty  $7b
           jsr  b_chrget       ; Lecture du buffer.
           jsr  b_ascflt       ; Conversion la chaine ascii en 200 en float.
-          pla                 ;  dans $22(lsb) et $23(msb)
-          tax
-          pla
+                              ;  dans $22(lsb) et $23(msb)
+          jsr  pop            ; Récupère le statut complet.
           rts
-ptext     .byte b_crlf, b_purple, b_space
-          .text "Enter a number "
-          .byte b_black,b_eot
-ptextend
+
           .bend
 
 akey      .block
@@ -90,7 +94,7 @@ kmsg      .byte b_crlf,b_green,b_crsr_up,b_crsr_right
           .byte b_black,b_eot
 kmsgend                      
           .bend
-  
+
 main      .block
           jsr       scrmaninit
           #disable
@@ -112,22 +116,26 @@ main      .block
           .bend
 
             
-bookinfo  .block      
+bookinfo  .block
+          jsr  push           ; Sauvegarde le statut complet.      
           #lowercase
           jsr       cls
           #print    line
           #print    headera
           #print    headerb
           #print    line
+          jsr  pop            ; Récupère le statut complet.
           rts                      
           .bend  
 
-help      .block      
+help      .block
+          jsr  push           ; Sauvegarde le statut complet.      
           #lowercase
           jsr       cls
           #print    shortcuts
           #print    helptext
           #print    line
+          jsr  pop            ; Récupère le statut complet.
           rts
           .bend        
 

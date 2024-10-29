@@ -10,14 +10,21 @@
 		*= $0801
 ;		.byte $00     	;Basic commence avec un $00 à $0800.
 bcmd1     .word bcmd2   	;Adresse de la commande basic suivante.
-		.word 10   	;Numero de la ligne Basic.
+		.word 1   	;Numero de la ligne Basic.
+		.byte $8F		;Le token de la commande REM du Basic 
+					; ($8F=REM)
+		.text " *multiplication*"   
+					; texte a afficher suite au REM.
+		.byte $00		;Un zéro pour indiquer la fin de cette 
+bcmd2     .word bcmd3   	;Adresse de la commande basic suivante.
+		.word 2   	;Numero de la ligne Basic.
 		.byte $8F		;Le token de la commande REM du Basic 
 					; ($8F=REM)
 		.text " *par daniel lafrance*"   
 					; texte a afficher suite au REM.
 		.byte $00		;Un zéro pour indiquer la fin de cette 
-bcmd2     .word bcmd3   	;Adresse de la commande basic suivante.
-		.word 20   	;Numero de la ligne Basic.
+bcmd3     .word bcmd4   	;Adresse de la commande basic suivante.
+		.word 3   	;Numero de la ligne Basic.
 		.byte $9e		;Le token de la commande PRINT du Basic
 					; ($9e=SYS)
 					;L'adresse le la première instruction
@@ -25,7 +32,7 @@ bcmd2     .word bcmd3   	;Adresse de la commande basic suivante.
 		.text format("%05d",hpgmstart)  
 		.byte $00		;Un zéro pour indiquer la fin de cette 
 					; commande Basic.
-bcmd3	.word $0000    ;L'adresse de la commande Basic suivante.
+bcmd4	.word $0000    ;L'adresse de la commande Basic suivante.
 					; $0000 indique la fin du programme.
 ;--------------------------------------------------------------------------------
 ; a p p e l   d e   l a   s o u s   r o u t i n e   p r i n c i p a l e
