@@ -30,7 +30,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=p029ex06
+SOURCENAME=template
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -90,8 +90,8 @@ JBMON64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/40-best-s
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
 VICE=$(X64SCGTK)
-OUTDIR=OUTDIRC64
-#OUTDIR=OUTDIRV20
+OUTDIR=$(OUTDIRC64)
+#OUTDIR=$(OUTDIRV20)
 
 # The Vice autostart parameters. 
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
