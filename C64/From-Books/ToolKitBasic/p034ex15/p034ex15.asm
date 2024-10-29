@@ -8,19 +8,20 @@
 ;-------------------------------------------------------------------------------
           .enc      none
 
-p033ex13  .block
+p033ex14  .block
           jsr  push           ; Sauvegarde le statut complet.
 again     #v20col
           jsr  cls            ; On efface l'écran.
           #print ttext
           #print ptext1
           jsr  insub          ; Lit le premier nombre.
-          jsr  b_f1t57
+          jsr  b_f1t57        ; Copy FAC1 en RAM.
           #print ptext2
-          jsr  insub          ; Lit le premier nombre.
+          jsr  insub          ; Lit le second nombre.
           lda  #$57
           ldy  #$00
-          jsr  b_f1pfv
+          jsr  b_memtf2       ; Copy $0057 a FAC2
+          jsr  b_f2sf1        ; FAC1 = FAC2 - FAC1
 noneg     jsr  b_facasc       ; Converti le résultat en ascii à $0100.
           #print restxt
           jsr  outsub         ; Affiche la valeur finale.
@@ -39,16 +40,16 @@ query     .byte     b_ltblue,b_space,b_crlf
           .text     "   Un autre calcul (o/N)?"
           .byte     b_crlf,b_eot 
 ttext     .byte     b_blue,b_space,b_rvs_on
-          .text     "  POINT FLOTTANT - FAC1 = FVAR+FAC1  "
+          .text     "  POINT FLOTTANT - FAC1 = FAC2-FAC1  "
           .byte     b_rvs_off,b_crlf,b_eot 
 ptext1    .byte     b_crlf, b_purple, b_space
-          .text     " Entez la valeur de FVAR"
+          .text     " Entez la valeur de FAC2"
           .byte     b_black,b_eot
 ptext2    .byte     b_crlf, b_purple, b_space
           .text     "      puis celle de FAC1"
           .byte     b_black,b_eot
 restxt    .byte     b_green,b_crlf
-          .text    "      Resultat dans FAC1:"
+          .text    "       Resultat dans FAC1="
           .byte     b_black,b_eot
           .bend
 
@@ -63,7 +64,7 @@ main      .block
           jsr       akey
           lda       #b_crlf
           jsr       $ffd2
-          jsr       p033ex13
+          jsr       p033ex14
           #enable
 ;          #uppercase
 ;          #c64col
@@ -107,7 +108,7 @@ headera                       ;0123456789012345678901234567890123456789
 headerb   .byte     $0d
           .text               " *    Direct Use of Floating Point    *"
           .byte     $0d
-          .text               " *        page 33, exemple #13        *"
+          .text               " *        page 33, exemple #14        *"
           .byte     $0d
           .text               " *    Programmeur Daniel Lafrance.    *"
           .byte     $0d
@@ -117,16 +118,16 @@ headerb   .byte     $0d
 shortcuts .byte     b_blue,b_space,b_rvs_on
           .text               "       RACCOURCIS DE L'EXEMPLE        "
           .byte     b_rvs_off,b_crlf,b_crlf
-          .text     format(   " p033ex13: SYS %d ($%04X)",p033ex13, p033ex13)
+          .text     format(   " p033ex14: SYS %d ($%04X)",p033ex14, p033ex14)
           .byte     b_crlf
           .text     format(   " aide....: SYS %d ($%04X)",aide, aide)
           .byte     b_crlf
           .text     format(   " cls.....: SYS %d ($%04X)",cls, cls)
           .byte     b_crlf,b_eot
 aidetext  .byte     b_crlf,b_space,b_red
-          .text     format(   " ex.: SYS %d",p033ex13)
+          .text     format(   " ex.: SYS %d",p033ex14)
 ;          .byte     b_crlf
-;          .text     format(   "      for i=0to100:SYS%05d:next",p033ex13)
+;          .text     format(   "      for i=0to100:SYS%05d:next",p033ex14)
           .byte     b_crlf,b_black,b_eot
 
 line      .text               " --------------------------------------"
