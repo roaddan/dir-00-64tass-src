@@ -39,12 +39,7 @@ clear     sta  b_inpbuff,y    ;  en plaçant des $00 partout
           .bend
 
 akey      .block
-          lda  #<kmsg
-          sta  $22
-          lda  #>kmsg
-          sta  $23
-          lda  #kmsgend-kmsg
-          jsr  b_strout
+          #print kmsg
           jsr  anykey
           rts
 kmsg      .byte b_crlf,b_green,b_crsr_up,b_crsr_right

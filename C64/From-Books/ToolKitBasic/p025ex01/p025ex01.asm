@@ -7,6 +7,35 @@
 ;
 ;-------------------------------------------------------------------------------
           .enc      none
+
+p025ex01  .block
+          pha
+          txa
+          pha
+          lda  #$05
+          ldx  #$03
+          jsr  b_putint
+          pla
+          tax
+          pla
+          rts
+          .bend
+
+akey      .block
+          lda  #<kmsg
+          sta  $22
+          lda  #>kmsg
+          sta  $23
+          lda  #kmsgend-kmsg
+          jsr  b_strout
+          jsr  kbflushbuff
+          jsr  anykey
+          rts
+kmsg      .byte $0d
+          .null               "Une clef pour continuer!"
+kmsgend                      
+          .bend
+
 main      .block
           jsr       scrmaninit
           #disable
@@ -71,32 +100,6 @@ line      .text               " --------------------------------------"
           .bend
 ;*=$4000
 
-p025ex01  .block
-          pha
-          txa
-          pha
-          lda  #$05
-          ldx  #$03
-          jsr  b_putint
-          pla
-          tax
-          pla
-          rts
-          .bend
-
-akey      .block
-          lda  #<kmsg
-          sta  $22
-          lda  #>kmsg
-          sta  $23
-          lda  #kmsgend-kmsg
-          jsr  b_strout
-          jsr  anykey
-          rts
-kmsg      .byte $0d
-          .null               "Une clef pour continuer!"
-kmsgend                      
-          .bend
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------

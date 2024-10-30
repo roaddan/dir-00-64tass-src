@@ -7,29 +7,11 @@
 ;
 ;-------------------------------------------------------------------------------
           .enc      none
-main      .block
-          jsr       scrmaninit
-          #disable
-          #v20col
-          jsr       bookinfo
-          jsr       akey
-          jsr       cls
-          jsr       help
-          jsr       akey
-          lda       #b_crlf
-          jsr       $ffd2
-          jsr       p027ex04
-          #enable
-;          #uppercase
-;          #c64col
-;          jsr       cls
-;          jmp      b_warmstart
-          rts
-          .bend
 
 p027ex04  .block
           jsr  push
           #v20col
+          #print ttext 
           jsr  b_intcgt       ; Initialide chrget
           ldx  #<(floatnum-1)
           ldy  #>(floatnum-1)
@@ -51,9 +33,35 @@ sbufx     iny
           sta  $23
           pla
           jsr  b_strout
+          lda  #b_crlf
+          jsr  $ffd2
           jsr  pop
           rts
 floatnum  .null     "25.35e3"
+ttext     .byte     b_blue,b_space,b_rvs_on
+          .text     "    P.F. - AFFICHAGE STRING A F.P.   "
+          .byte     b_rvs_off,b_crlf,b_crlf,b_eot 
+          .bend
+
+main      .block
+          jsr  scrmaninit
+          #disable
+          #v20col
+          jsr  bookinfo
+          jsr  akey
+          jsr  cls
+          jsr  help
+          jsr  akey
+          jsr  cls
+          lda  #b_crlf
+          jsr  $ffd2
+          jsr  p027ex04
+          #enable
+;          #uppercase
+;          #c64col
+;          jsr       cls
+;          jmp      b_warmstart
+          rts
           .bend
             
 bookinfo  .block      

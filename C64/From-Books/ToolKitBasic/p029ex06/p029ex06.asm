@@ -13,34 +13,56 @@ p029ex06  .block
           #v20col
           jsr  cls            ; On efface l'écran.
           #print ttext
-          #print ptext1
+          #print ptext1a
           jsr  insub          ; Lit le premier nombre.
           jsr  b_f1t57        ; Le copie en RAM.
-          #print ptext2
+          #print ptext2a
           jsr  insub          ; Lit le second nombre dans FAC1.
           lda  #$57           ; Multiply FAC1 avec
           ldy  #$00           ;  le nombre sauvegardé
           jsr  b_f1xfv        ;  en RAM.
           jsr  b_facasc       ; Converti le résultat en ascii à $0100.
-          #print restxt
+          #print restxt1
           jsr  outsub         ; Affiche la valeur finale.
           lda  #$0d
           jsr  $ffd2
           jsr  pop            ; Récupère le statut complet.
           rts
+query     .byte     b_ltblue,b_space,b_crlf
+          .text     "   Un autre calcul (o/N)?"
+          .byte     b_crlf,b_eot 
 ttext     .byte     b_blue,b_space,b_rvs_on
-          .text     "    MULTIPLICATION - POINT FLOTTANT   "
-          .byte     b_rvs_off,b_crlf,$00   
-ptext1    .byte     b_crlf, b_purple, b_space
-          .text     "Entez un premier nombre"
+          .text      "       P.F. - FAC1 = FAC1 * FAC2      "
+          .byte     b_rvs_off,b_crlf,b_eot 
+ptext1a   .byte     b_crlf, b_purple, b_space
+          .text     " Entez la valeur de FAC1"
           .byte     b_black,b_eot
-ptext2    .byte     b_crlf, b_purple, b_space
-          .text     "    et un second nombre"
+ptext2a   .byte     b_crlf, b_purple, b_space
+          .text     " Entez la valeur de FAC2"
           .byte     b_black,b_eot
-restxt    .byte     b_green,b_crlf
-          .text    " Voici le resultat......:"
-          .byte     b_black,$00
+ptextva   .byte     b_crlf, b_purple, b_space
+          .text     " Entez la valeur de FVAR"
+          .byte     b_black,b_eot
+ptext1b   .byte     b_crlf, b_purple, b_space
+          .text     "      puis celle de FAC1"
+          .byte     b_black,b_eot
+ptext2b   .byte     b_crlf, b_purple, b_space
+          .text     "      puis celle de FAC2"
+          .byte     b_black,b_eot
+ptextvb   .byte     b_crlf, b_purple, b_space
+          .text     "      puis celle de FVAR"
+          .byte     b_black,b_eot
+restxt1   .byte     b_green,b_crlf
+          .text    " Resultat dans FAC1="
+          .byte     b_black,b_eot
+restxt2   .byte     b_green,b_crlf
+          .text    " Resultat dans FAC2="
+          .byte     b_black,b_eot
+restxtv   .byte     b_green,b_crlf
+          .text    " Resultat dans FVAR="
+          .byte     b_black,b_eot
           .bend
+
 
 outsub    .block
           jsr  push           ; Sauvegarde le statut complet.
