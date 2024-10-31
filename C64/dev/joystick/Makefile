@@ -30,7 +30,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=j2tester
+SOURCENAME=template
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -84,6 +84,8 @@ DISK8DIR=
 DISK9DIR=
 DBC=/Users/Locals/C64/00-usbkey32go/dbc
 JBMON64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/40-best-subrouines/00-supermon/jbmon/jbmon64
+CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
+J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
@@ -140,8 +142,8 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-		$(FTPASMCMD)	# To transfer the source ASM file.
-		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
+#		$(FTPASMCMD)	# To transfer the source ASM file.
+#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
 #		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
 
@@ -174,7 +176,9 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
-		-write $(JBMON64) jbmon64
+		-write $(JBMON64) jbmon64 \
+		-write $(CHAREDIT) charedit \
+		-write $(J2TESTER) j2tester
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 

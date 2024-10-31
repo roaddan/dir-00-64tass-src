@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-version  = "20241030-203832"  
+version  = "20241030-204143"  
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
@@ -140,7 +140,7 @@ device         .byte     8
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
                .include "routines.asm"
-;              .include "messages_fr.asm"
+;               .include "messages_fr.asm"
                .include "messages_en.asm"
                .include "map-c64-kernal.asm"
                .include "map-c64-vicii.asm"
