@@ -233,7 +233,7 @@ b_prompt       = $abf9 ; Input characters from std in anf write to buff. at $200
 b_chrget       = $0073
 b_chrgot       = $0079
 b_facasc       = $bddd ; Cnv num to str at $0100. *48;a-y;---; a=#$00, y=#$01
-b_vftf1        = $bba2 ; Copy FVAR to FAC1.          ;a-y;---; ptr = $yyaa
+b_fvtf1        = $bba2 ; Copy FVAR to FAC1.          ;a-y;---; ptr = $yyaa
 b_strout       = $ab24 ; Print precomputated string. ;a--;---; a = strlen
 b_f1t57        = $bbca ; Copy FAC1 to WORK#1 ($57-$5b)
 b_f1xfv        = $ba28 ; Multiply from memory.       ;a-y;---; ptr = $yyaa
@@ -258,6 +258,7 @@ b_sqrtf1       = $bf71 ; FAC1 = SQRT(FAC1).
 b_intf1        = $bccc ; FAC1 = INT(FAC1)
 b_f1t5c        = $bbc7 ; Copy FAC1 to WORK#2 ($5c-$60)
 b_f1cfv        = $bc5b ; FAC1 = FAC1 comp(FVAR).     ;a-y;---; ptr = $yyaa  
+b_comp         = $bc5b ; FAC1 = FAC1 comp(FVAR).     ;a-y;---; ptr = $yyaa 
 b_f1tx         = $b7a1 ; Conv FAC1 to byte in x.     ;---;-x-; x = byte
 b_fltay        = $b1aa ; FAC1 to word in $aayy       ;---;a-y; imt = $aayy
 b_ytfl1        = $b3a2 ; Convert int(y) to FAC1.     ;--y;---;

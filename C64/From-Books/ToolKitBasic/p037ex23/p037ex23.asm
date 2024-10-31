@@ -8,7 +8,7 @@
 ;-------------------------------------------------------------------------------
           .enc      none
 
-p036ex22  .block
+p037ex23  .block
           jsr  push           ; Sauvegarde le statut complet.
 again     #v20col
           jsr  cls            ; On efface l'écran.
@@ -18,12 +18,20 @@ again     #v20col
           jsr  b_f1t57
           #print ptext1b
           jsr  insub          ; Lit le premier nombre.
+          jsr  b_f1t5c
           lda  #$57
           ldy  #$00
-          jsr  b_fvdf1
-          jsr  b_f1t57
-          jsr  b_int
-          jsr  b_f1t5c
+          jsr  b_comp
+          tax
+          inx
+          bne  mless
+          lda  #$57
+          ldy  #$00
+          clc
+          bcc  mgreat
+mless     lda  #$5c
+          ldy  #$00
+mgreat    jsr  b_fvtf1        
           jsr  b_facasc
           #print restxt1
           jsr  outsub         ; Affiche la valeur finale.
@@ -43,7 +51,7 @@ query     .byte     b_ltblue,b_space,b_crlf
           .text     "   Un autre calcul (o/N)?"
           .byte     b_crlf,b_eot 
 ttext     .byte     b_blue,b_space,b_rvs_on
-          .text      " P.F. - FAC1 = ENTIER DE (FVAR/FAC1)  "
+          .text      " P.F. - FAC1 = PLUS GRAND FAV OU FAC1 "
           .byte     b_rvs_off,b_crlf,b_eot 
 ptext1a   .byte     b_crlf, b_purple, b_space
           .text     " Entez la valeur de FAC1"
@@ -85,7 +93,7 @@ main      .block
           jsr       akey
           lda       #b_crlf
           jsr       $ffd2
-          jsr       p036ex22
+          jsr       p037ex23
           #enable
 ;          #uppercase
 ;          #c64col
@@ -129,7 +137,7 @@ headera                       ;0123456789012345678901234567890123456789
 headerb   .byte     $0d
           .text               " *    Direct Use of Floating Point    *"
           .byte     $0d
-          .text               " *        page 36, exemple #22        *"
+          .text               " *        page 37, exemple #23        *"
           .byte     $0d
           .text               " *    Programmeur Daniel Lafrance.    *"
           .byte     $0d
@@ -139,16 +147,16 @@ headerb   .byte     $0d
 shortcuts .byte     b_blue,b_space,b_rvs_on
           .text               "       RACCOURCIS DE L'EXEMPLE        "
           .byte     b_rvs_off,b_crlf,b_crlf
-          .text     format(   " p036ex22: SYS %d ($%04X)",p036ex22, p036ex22)
+          .text     format(   " p037ex23: SYS %d ($%04X)",p037ex23, p037ex23)
           .byte     b_crlf
           .text     format(   " aide....: SYS %d ($%04X)",aide, aide)
           .byte     b_crlf
           .text     format(   " cls.....: SYS %d ($%04X)",cls, cls)
           .byte     b_crlf,b_eot
 aidetext  .byte     b_crlf,b_space,b_red
-          .text     format(   " ex.: SYS %d",p036ex22)
+          .text     format(   " ex.: SYS %d",p037ex23)
 ;          .byte     b_crlf
-;          .text     format(   "      for i=0to100:SYS%05d:next",p036ex22)
+;          .text     format(   "      for i=0to100:SYS%05d:next",p037ex23)
           .byte     b_crlf,b_black,b_eot
 
 line      .text               " --------------------------------------"
