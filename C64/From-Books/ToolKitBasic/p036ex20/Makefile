@@ -30,7 +30,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=template
+SOURCENAME=p036ex20
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
