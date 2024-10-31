@@ -1,6 +1,6 @@
 ;-------------------------------------------------------------------------------
-                Version = "20240704-235234-a"
-;-------------------------------------------------------------------------------                .include    "header-c64.asm"
+                Version = "20240704-235234"
+;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
 ;-------------------------------------------------------------------------------
@@ -10,7 +10,7 @@
 main           .block
                jsr scrmaninit
                #disable
-               jsr help
+               jsr aide
                jsr anykey
                jsr template
                #enable
@@ -20,49 +20,49 @@ main           .block
 ;               jmp b_warmstart
                .bend
                  
-help           .block      
+aide           .block      
                #lowercase
                jsr cls
                #print line
                #print headera
                #print headerb
                #print shortcuts
-               #print helptext
+               #print aidetext
                #print line
                rts                                
 headera                       ;0123456789012345678901234567890123456789
-               .text          "     40 BEST MACHINE CODE ROUTINES"
+               .text          "       SOME COMMODORE BOOK TITLE"
                .byte   $0d
-               .text          "          FOR THE COMMODORE 64"
-               .byte   $0d
-               .text          "       Book by Mark Greenshields."
+               .text          "     FOR THE COMMODORE 64 OR VIC 20"
+               .byte   $0d 
+               .text          "       Book wtitten by Some Author"
                .byte   $0d
                .text          "          ISBN 0-7156-1899-7"
                .byte   $0d,0
 
 headerb        .text          "            template (pxx)"
                .byte   $0d
-               .text          "        (c) 1979 Brad Templeton"
+               .text          "     (c) XXXX nom du Programmeur"
                .byte   $0d
-               .text          "     programmed by Daniel Lafrance."
+               .text          "      Code par Daniel Lafrance."
                .byte   $0d
-               .text   format("        Version: %s.",Version)
+               .text   format("         Version: %s.",Version)
                .byte   $0d,0
 
 shortcuts      .byte   $0d
                .text          " -------- S H O R T - C U T S ---------"
                .byte   $0d, $0d
-               .text   format(" template: SYS%05d ($%04X)",main, main)
+               .text   format(" template.: SYS%05d ($%04X)",main, main)
                .byte   $0d
-               .text   format(" help: SYS%05d ($%04X)",help, help)
+               .text   format(" aide.....: SYS%05d ($%04X)",aide, aide)
                .byte   $0d
-               .text   format(" cls: SYS%05d ($%04X)",cls, cls)
+               .text   format(" cls......: SYS%05d ($%04X)",cls, cls)
                .byte   $0d,0
-helptext       .text   format(" First run: SYS%05d ($%04X)",template, template)
+aidetext       .text   format(" Lancement: SYS%05d ($%04X)",template, template)
                .byte   $0d, $0d
-               .text   format(" ex.: SYS%05d",template)
+               .text   format("    ex.: SYS%05d",template)
                .byte   $0d
-               .text   format("      for i=0to100:SYS%05d:next",template)
+               .text   format("    for i=0to100:SYS%05d:next",template)
                .byte   $0d,0
 line           .text          " --------------------------------------"
                .byte   $0d,0
