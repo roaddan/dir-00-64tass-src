@@ -84,7 +84,7 @@ DISK8DIR=
 DISK9DIR=
 DBC=/Users/Locals/C64/00-usbkey32go/dbc
 JBMON64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/40-best-subrouines/00-supermon/jbmon/jbmon64
-CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
+CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit.prg
 J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
 #
 #-------------------------------------------------------------------------------
