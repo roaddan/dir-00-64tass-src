@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # --------- 6 4 t a s s   m a k e   f i l e   w i t h   V i c e ---------------
 # ----------------- a n d   F T P   u t i l i t i e s . -----------------------
-# ---------------------- M A C O S   V E R S I O N ----------------------------
+# ---------------------- L I N U X   V E R S I O N ----------------------------
 # -----------------------------------------------------------------------------
 # Note:  
 # 	A) 64tass can be downloaded from :
@@ -21,7 +21,7 @@
 # -----------------------------------------------------------------------------
 # Tis can be change to any assembler of your liking.
 # Complete path to the 64tass assembler program.
-TASS=/Users/Locals/bin/64tass_dir/64tass
+TASS=/usr/bin//64tass
 # Final location where the assembled files must be copied. 
 PRGDIR=d-00-64tass-bin
 #
@@ -31,7 +31,6 @@ PRGDIR=d-00-64tass-bin
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
 SOURCENAME=p039ex28
-
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -46,7 +45,7 @@ OUTDIRV20=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
 #
 # 64tass allows to include libraries of code and routines of your making.
 # The Complete path to your library directory.
-LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
+TASSLIB=$(BASEDIR)/d-00-64tass-src/lib
 #
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
@@ -56,7 +55,7 @@ LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-VICEBIN=/Users/Locals/bin
+VICEBIN=/Users/daniel/bin
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
@@ -68,8 +67,8 @@ C1541=$(VICEBIN)/c1541
 # Complete path to the cartconv cartridge converter program.
 CARTCONV=$(VICEBIN)/cartconv
 # Complete path to some other emulator programs.
-X64SCSDL=/Applications/vice-x86-64-sdl2-3.6.1/x64sc.app/Contents/MacOS/x64sc
-X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
+X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
+X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
 #
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
@@ -80,24 +79,21 @@ TMPSEP06=-9 $(BASEDIR)/d-tmp-dskimg/turbo-macro-pro-sep06.d64
 # Complete path to the Vic20 Utility disk to be mounted on drive 9.
 V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # Complete local path to be mounted as a disk on drive 8 and/or 9.  
-# **** tests not yet conclusive.
+# **** Tests not yet conclusive depending on emulator version's.
 DISK8DIR=
 DISK9DIR=
 DBC=/Users/Locals/C64/00-usbkey32go/dbc
 JBMON64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/40-best-subrouines/00-supermon/jbmon/jbmon64
-CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
-J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
-VICE=$(X64SCGTK)
+VICE=$(X64)
 OUTDIR=$(OUTDIRC64)
 #OUTDIR=$(OUTDIRV20)
-
-# The Vice autostart parameters. 
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
+#
 # -----------------------------------------------------------------------------
 # --------------------- O P T I O N N A L   S E C T I O N ---------------------
 # -----------------------------------------------------------------------------
@@ -118,7 +114,7 @@ AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # FTP SERVER CONFIG
 FTPSVRIP=192.168.2.200 # Check cartridge root menu for your address.
 # FTP CLI client full path.
-FTPCMDPATH=/usr/local/bin/lftp
+FTPCMDPATH=/usr/local/bin/lftp 
 # List of commands by filetype intended to the FTP server.
 # Note:  The following path must exist on the Ultimate II+ cartridge usb ...
 #        disks.
@@ -141,12 +137,12 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # ** Using comment, you can mask or enable anny action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
-		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+#		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
+#		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
 #		$(FTPASMCMD)	# To transfer the source ASM file.
 #		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
-#		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
+		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
 
 # -----------------------------------------------------------------------------
 # When called with "make ftp". 
@@ -177,9 +173,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
-		-write $(JBMON64) jbmon64 \
-		-write $(CHAREDIT) charedit \
-		-write $(J2TESTER) j2tester
+		-write $(JBMON64) jbmon64
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 
