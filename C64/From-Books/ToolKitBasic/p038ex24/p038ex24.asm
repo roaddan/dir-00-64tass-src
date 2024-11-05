@@ -8,33 +8,19 @@
 ;-------------------------------------------------------------------------------
           .enc      none
 
-p037ex23  .block
+p038ex24  .block
           jsr  push           ; Sauvegarde le statut complet.
 again     #v20col
           jsr  cls            ; On efface l'écran.
           #print ttext        ; Affiche le titre.
-          #print ptextva      ; Affiche l'invite du premier nombre.
+          #print ptext1a      ; Affiche l'invite du premier nombre.
           jsr  insub          ; Lit le premier nombre.
-          jsr  b_f1t57        ; Copie FAC1 vers $0057.
-          #print ptext1b      ; Affiche l'invite du second nombre.
-          jsr  insub          ; Lit le premier nombre.
-          jsr  b_f1t5c        ; Copie FAC1 vers $005C.
-          lda  #$57           
-          ldy  #$00
-          jsr  b_comp         ; Compare FAC1 avec FVAR de l'adresse $0057.
-          tax                 ; Sauvegarde le résultat dans Acc.
-          inx                 ; 
-          bne  mless          ; Si mémoire <= FAC1 branche.
-          lda  #$57           
-          ldy  #$00
-          clc
-          bcc  mgreat         ; Si mémoire > FAC1 branche.
-mless     lda  #$5c
-          ldy  #$00
-mgreat    jsr  b_fvtf1        ; Copie FVAR pointé paa A et Y vers FAC1.
-          jsr  b_facasc       ; Conversion en ascii.
-          #print restxt1      ; Affiche l'invite du résultat.
-          jsr  outsub         ; Affiche la valeur finale.
+          lda  #$00
+          sta  $0d
+          jsr  b_f1tx
+          txa
+          #print restxtx      ; Affiche l'invite du premier nombre.
+          jsr  putahexfmt
           lda  #$0d           ; Affiche un CRLF.
           jsr  $ffd2
           #print query        ; Affiche l'invite de nouveau calcul.
@@ -51,7 +37,7 @@ query     .byte     b_ltblue,b_space,b_crlf
           .text     "   Un autre calcul (o/N)?"
           .byte     b_crlf,b_eot 
 ttext     .byte     b_blue,b_space,b_rvs_on
-          .text      " P.F. - FAC1 = PLUS GRAND FAV OU FAC1 "
+          .text      "   FAC1 (0-256) en entier 8 bits (x)  "
           .byte     b_rvs_off,b_crlf,b_eot 
 ptext1a   .byte     b_crlf, b_purple, b_space
           .text     " Entez la valeur de FAC1"
@@ -80,7 +66,11 @@ restxt2   .byte     b_green,b_crlf
 restxtv   .byte     b_green,b_crlf
           .text    " Resultat dans FVAR="
           .byte     b_black,b_eot
+restxtx   .byte     b_green,b_crlf
+          .text    " Resultat dans X ="
+          .byte     b_black,b_eot
           .bend
+
 
 main      .block
           jsr       scrmaninit
@@ -93,7 +83,7 @@ main      .block
           jsr       akey
           lda       #b_crlf
           jsr       $ffd2
-          jsr       p037ex23
+          jsr       p038ex24
           #enable
 ;          #uppercase
 ;          #c64col
@@ -137,7 +127,7 @@ headera                       ;0123456789012345678901234567890123456789
 headerb   .byte     $0d
           .text               " *    Direct Use of Floating Point    *"
           .byte     $0d
-          .text               " *        page 37, exemple #23        *"
+          .text               " *        page 38, exemple #24        *"
           .byte     $0d
           .text               " *    Programmeur Daniel Lafrance.    *"
           .byte     $0d
@@ -147,16 +137,16 @@ headerb   .byte     $0d
 shortcuts .byte     b_blue,b_space,b_rvs_on
           .text               "       RACCOURCIS DE L'EXEMPLE        "
           .byte     b_rvs_off,b_crlf,b_crlf
-          .text     format(   " p037ex23: SYS %d ($%04x)",p037ex23, p037ex23)
+          .text     format(   " p038ex24: SYS %d ($%04x)",p038ex24, p038ex24)
           .byte     b_crlf
           .text     format(   " aide....: SYS %d ($%04x)",aide, aide)
           .byte     b_crlf
           .text     format(   " cls.....: SYS %d ($%04x)",cls, cls)
           .byte     b_crlf,b_eot
 aidetext  .byte     b_crlf,b_space,b_red
-          .text     format(   " ex.: SYS %d",p037ex23)
+          .text     format(   " ex.: SYS %d",p038ex24)
 ;          .byte     b_crlf
-;          .text     format(   "      for i=0to100:SYS%05d:next",p037ex23)
+;          .text     format(   "      for i=0to100:SYS%05d:next",p038ex24)
           .byte     b_crlf,b_black,b_eot
 
 line      .text               " --------------------------------------"
