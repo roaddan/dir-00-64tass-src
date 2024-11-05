@@ -12,38 +12,38 @@ p037ex23  .block
           jsr  push           ; Sauvegarde le statut complet.
 again     #v20col
           jsr  cls            ; On efface l'écran.
-          #print ttext
-          #print ptextva
+          #print ttext        ; Affiche le titre.
+          #print ptextva      ; Affiche l'invite du premier nombre.
           jsr  insub          ; Lit le premier nombre.
-          jsr  b_f1t57
-          #print ptext1b
+          jsr  b_f1t57        ; Copie FAC1 vers $0057.
+          #print ptext1b      ; Affiche l'invite du second nombre.
           jsr  insub          ; Lit le premier nombre.
-          jsr  b_f1t5c
-          lda  #$57
+          jsr  b_f1t5c        ; Copie FAC1 vers $005C.
+          lda  #$57           
           ldy  #$00
-          jsr  b_comp
-          tax
-          inx
-          bne  mless
-          lda  #$57
+          jsr  b_comp         ; Compare FAC1 avec FVAR de l'adresse $0057.
+          tax                 ; Sauvegarde le résultat dans Acc.
+          inx                 ; 
+          bne  mless          ; Si mémoire <= FAC1 branche.
+          lda  #$57           
           ldy  #$00
           clc
-          bcc  mgreat
+          bcc  mgreat         ; Si mémoire > FAC1 branche.
 mless     lda  #$5c
           ldy  #$00
-mgreat    jsr  b_fvtf1        
-          jsr  b_facasc
-          #print restxt1
+mgreat    jsr  b_fvtf1        ; Copie FVAR pointé paa A et Y vers FAC1.
+          jsr  b_facasc       ; Conversion en ascii.
+          #print restxt1      ; Affiche l'invite du résultat.
           jsr  outsub         ; Affiche la valeur finale.
-          lda  #$0d
+          lda  #$0d           ; Affiche un CRLF.
           jsr  $ffd2
-          #print query
-          jsr  getkey
-          and  #$7f
-          cmp  #'o'
-          bne  out
-          jmp again
-out       jsr  aide
+          #print query        ; Affiche l'invite de nouveau calcul.
+          jsr  getkey         ; Attend une clef.
+          and  #$7f           ; Met en minuscule.
+          cmp  #'o'           ; Est-ce 'o'ui
+          bne  out            ; Non, on sort.
+          jmp again           ; On recommence.
+out       jsr  aide           ; Affiche le menu d'aide.
           jsr  pop            ; Récupère le statut complet.
           rts
                     ;0123456789012345678901234567890123456789

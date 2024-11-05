@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.52.1237? listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L p037ex23.txt -o p037ex23.prg p037ex23.asm
-; Wed Oct 30 21:32:35 2024
+; Mon Nov  4 19:44:10 2024
 
 ;Offset	;Hex		;Source
 
@@ -69,47 +69,47 @@
 .0883	20 b3 0d	               jsr  puts
 .0886	20 e3 0e	               jsr  pull
 .0889	20 1b 0d	          jsr  insub          ; Lit le premier nombre.
-.088c	20 ca bb	          jsr  b_f1t57
+.088c	20 ca bb	          jsr  b_f1t57        ; Copie FAC1 vers $0057.
 .088f	20 a4 0e	               jsr  push
 .0892	a2 94		isx            ldx  #<ptext1b
 .0894	a0 09		isy            ldy  #>ptext1b
 .0896	20 b3 0d	               jsr  puts
 .0899	20 e3 0e	               jsr  pull
 .089c	20 1b 0d	          jsr  insub          ; Lit le premier nombre.
-.089f	20 c7 bb	          jsr  b_f1t5c
+.089f	20 c7 bb	          jsr  b_f1t5c        ; Copie FAC1 vers $005C.
 .08a2	a9 57		          lda  #$57
 .08a4	a0 00		          ldy  #$00
-.08a6	20 5b bc	          jsr  b_comp
-.08a9	aa		          tax
-.08aa	e8		          inx
-.08ab	d0 07		          bne  mless
+.08a6	20 5b bc	          jsr  b_comp         ; Compare FAC1 avec FVAR de l'adresse $0057.
+.08a9	aa		          tax                 ; Sauvegarde le résultat dans Acc.
+.08aa	e8		          inx                 ;
+.08ab	d0 07		          bne  mless          ; Si mémoire <= FAC1 branche.
 .08ad	a9 57		          lda  #$57
 .08af	a0 00		          ldy  #$00
 .08b1	18		          clc
-.08b2	90 04		          bcc  mgreat
+.08b2	90 04		          bcc  mgreat         ; Si mémoire > FAC1 branche.
 .08b4	a9 5c		mless     lda  #$5c
 .08b6	a0 00		          ldy  #$00
-.08b8	20 a2 bb	mgreat    jsr  b_fvtf1
-.08bb	20 dd bd	          jsr  b_facasc
+.08b8	20 a2 bb	mgreat    jsr  b_fvtf1        ; Copie FVAR pointé paa A et Y vers FAC1.
+.08bb	20 dd bd	          jsr  b_facasc       ; Conversion en ascii.
 .08be	20 a4 0e	               jsr  push
 .08c1	a2 eb		isx            ldx  #<restxt1
 .08c3	a0 09		isy            ldy  #>restxt1
 .08c5	20 b3 0d	               jsr  puts
 .08c8	20 e3 0e	               jsr  pull
 .08cb	20 fd 0c	          jsr  outsub         ; Affiche la valeur finale.
-.08ce	a9 0d		          lda  #$0d
+.08ce	a9 0d		          lda  #$0d           ; Affiche un CRLF.
 .08d0	20 d2 ff	          jsr  $ffd2
 .08d3	20 a4 0e	               jsr  push
 .08d6	a2 f3		isx            ldx  #<query
 .08d8	a0 08		isy            ldy  #>query
 .08da	20 b3 0d	               jsr  puts
 .08dd	20 e3 0e	               jsr  pull
-.08e0	20 d5 12	          jsr  getkey
-.08e3	29 7f		          and  #$7f
-.08e5	c9 4f		          cmp  #'o'
-.08e7	d0 03		          bne  out
-.08e9	4c 57 08	          jmp again
-.08ec	20 bf 0a	out       jsr  aide
+.08e0	20 d5 12	          jsr  getkey         ; Attend une clef.
+.08e3	29 7f		          and  #$7f           ; Met en minuscule.
+.08e5	c9 4f		          cmp  #'o'           ; Est-ce 'o'ui
+.08e7	d0 03		          bne  out            ; Non, on sort.
+.08e9	4c 57 08	          jmp again           ; On recommence.
+.08ec	20 bf 0a	out       jsr  aide           ; Affiche le menu d'aide.
 .08ef	20 e3 0e	          jsr  pop            ; Récupère le statut complet.
 .08f2	60		          rts
 >08f3	9a 20 0d	query     .byte     b_ltblue,b_space,b_crlf
