@@ -1,0 +1,417 @@
+
+; 64tass Turbo Assembler Macro V1.52.1237? listing file
+; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L p042ex02.txt -o p042ex02.prg p042ex02.asm
+; Thu Nov  7 13:09:11 2024
+
+;Offset	;Hex		;Source
+
+;******  Processing input file: p042ex02.asm
+
+="20241105-205257"	           Version = "20241105-205257"
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/macros-64tass.asm
+
+
+;******  Return to file: p042ex02.asm
+
+=$a57c			ntok      =    $a57c
+=$a724			nlst      =    $a724
+=$ab47			ochr      =    $ab47
+=$a6ef			lret1     =    $a6ef
+=$a6f3			lret2     =    $a6f3
+=$a7ae			nstt      =    $a7ae
+=$a7e7			ncmd      =    $a7e7
+=$aef1			evalp     =    $aef1
+=$ad8d			nchk      =    $ad8d
+=$ae8d			nfnc      =    $ae8d
+=$ad9e			eval      =    $ad9e
+=$b7a1			f1tx      =    $b7a1
+=$af08			syntax    =    $af08
+=$d020			breg      =    $d020
+=$d021			sreg      =    $d021
+=$028a			kreg      =    $028a
+=$e394			cstrt     =    $e394
+=$e453			rvect     =    $e453
+=$bbca			f1t57     =    $bbca
+=$bccc			intf1     =    $bccc
+=$b850			subf1     =    $b850
+=$aefa			chklp     =    $aefa
+=$aefd			chkcm     =    $aefd
+=$aef7			chkrp     =    $aef7
+=$bb0f			f1div     =    $bb0f
+=$a43a			nerr      =    $a43a
+=$a447			errcnt    =    $a447
+=$a474			ready     =    $a474
+=$9100			errx      =    $9100
+=$9200			tokx      =    $9200
+=$9300			listx     =    $9300
+=$9400			comx      =    $9400
+=$9500			funcx     =    $9500
+>c000	00 91		errv      .word     errx
+>c002	00 92		tokv      .word     tokx
+>c004	00 93		lstv      .word     listx
+>c006	00 94		comv      .word     comx
+>c008	00 95		fncv      .word     funcx
+.c00a	78		          sei
+.c00b	ad 00 c0	          lda  errv
+.c00e	8d 00 30	          sta  $3000     ; ($3000) =
+.c011	ad 01 c0	          lda  errv+1    ; Error message vector
+.c014	8d 01 03	          sta  $0301     ;
+.c017	ad 02 c0	          lda  tokv
+.c01a	8d 04 03	          sta  $0304     ; ($0304) =
+.c01d	ad 03 c0	          lda  tokv+1    ; Tokenization vector
+.c020	8d 05 03	          sta  $0305     ;
+.c023	ad 04 c0	          lda  lstv
+.c026	8d 06 03	          sta  $0306     ; ($0306) =
+.c029	ad 05 c0	          lda  lstv+1    ; List tokens vector
+.c02c	8d 07 03	          sta  $0307     ;
+.c02f	ad 06 c0	          lda  comv
+.c032	8d 08 03	          sta  $0308     ; ($0308) =
+.c035	ad 07 c0	          lda  comv+1    ; Command vector
+.c038	8d 09 03	          sta  $0309     ;
+.c03b	ad 08 c0	          lda  fncv
+.c03e	8d 0a 03	          sta  $030a     ; ($030a) =
+.c041	ad 09 c0	          lda  fncv+1    ; Function vector
+.c044	8d 0b 03	          sta  $030b     ;
+>c047	49 c0		adrtok    .word     toktab
+>c049	c1 c4 d5 cd	toktab    .text     "ADUM"
+>c04d	d0		          .byte     $d0       ; ADUMP   $01
+>c04e	c1 d0 d0 ce	          .text     "APPN"
+>c052	c4		          .byte     $c4       ; APPND   $02
+>c053	c1 d5 d4 cf	          .text     "AUTO"
+>c057	ce		          .byte     $ce       ; AUTON   $03
+>c058	c2 cf		          .text     "BO"
+>c05a	d8		          .byte     $d8       ; BOX     $04
+>c05b	c3 c1 d3	          .text     "CAS"
+>c05e	c5		          .byte     $c5       ; CASE    $05
+>c05f	c3 c8 c1 ce	          .text     "CHANG"
+>c063	c7
+>c064	c5		          .byte     $c5       ; CHANGE  $06
+>c065	c3 c9 d2 c3	          .text     "CIRCL"
+>c069	cc
+>c06a	c5		          .byte     $c5       ; CIRCLE  $07
+>c06b	c3 cf cc cc	          .text     "COLLID"
+>c06f	c9 c4
+>c071	c5		          .byte     $c5       ; COLLIDE $08
+>c072	c3 cf cd c7	          .text     "COMG"
+>c076	d4		          .byte     $d4       ; COMGT   $09
+>c077	c3 cf d0	          .text     "COP"
+>c07a	d9		          .byte     $d9       ; COPY    $0a
+>c07b	c4 c5		          .text     "DE"
+>c07d	cc		          .byte     $cc       ; DEL     $0b
+>c07e	c4 cc c1	          .text     "DLA"
+>c081	d9		          .byte     $d9       ; DLAY    $0c
+>c082	c4 d2 c1	          .text     "DRA"
+>c085	d7		          .byte     $d7       ; DRAW    $0d
+>c086	c4 d5 cd	          .text     "DUM"
+>c089	d0		          .byte     $d0       ; DUMP    $0e
+>c08a	c5 d2 c1 d3	          .text     "ERAS"
+>c08e	c5		          .byte     $c5       ; erase   $0f
+>c08f	c7 c6 c9 ce	          .text     "GFIN"
+>c093	c4		          .byte     $c4       ; GFIND   $12
+>c094	c8 c5 cc	          .text     "HEL"
+>c097	d0		          .byte     $d0       ; HELP    $13
+>c098	c8 c9 cd c5	          .text     "HIME"
+>c09c	cd		          .byte     $cd       ; HIMEM   $14
+>c09d	c8 c9 d2 c5	          .text     "HIRE"
+>c0a1	d3		          .byte     $d3       ; HIRES   $15
+>c0a2	c8 d0 c5	          .text     "HPE"
+>c0a5	ce		          .byte     $ce       ; HPEN    $16
+>c0a6	c8 d4 c1	          .text     "HTA"
+>c0a9	c2		          .byte     $c2       ; HTAB    $17
+>c0aa	c9 ce d3 c5	          .text     "INSER"
+>c0ae	d2
+>c0af	d4		          .byte     $d4       ; INSERT  $18
+>c0b0	cc c1 c2 c5	          .text     "LABE"
+>c0b4	cc		          .byte     $cc       ; LABEL   $19
+>c0b5	cc c9 ce	          .text     "LIN"
+>c0b8	c5		          .byte     $c5       ; LINE    $1a
+>c0b9	cc cf cd c5	          .text     "LOME"
+>c0bd	cd		          .byte     $cd       ; LOMEM   $1b
+>c0be	cd c5 d2 c7	          .text     "MERG"
+>c0c2	c5		          .byte     $c5       ; MERGE   $1c
+>c0c3	cd cf		          .text     "MO"
+>c0c5	c4		          .byte     $c4       ; MOD     $1d
+>c0c6	cd cf d6	          .text     "MOV"
+>c0c9	c5		          .byte     $c5       ; MOVE    $1e
+>c0ca	d4 c1 d0 c5	          .text     "TAPE"
+>c0ce	cd		          .byte     $cd       ; TAPEM   $1f
+>c0cf	cd d5 cc d4	          .text     "MULTI"
+>c0d3	c9
+>c0d4	c3		          .byte     $c3       ; MULTIC  $20
+>c0d5	cf cc		          .text     "OL"
+>c0d7	c4		          .byte     $c4       ; OLD     $21
+>c0d8	d0 c1 c9 ce	          .text     "PAINT"
+>c0dc	d4
+>c0dd	d2		          .byte     $d2       ; PAINTR  $22
+>c0de	d0 c6 cb c5	          .text     "PFKE"
+>c0e2	d9		          .byte     $d9       ; PFKEY   $23
+>c0e3	d0 cf c9 ce	          .text     "POINT"
+>c0e7	d4
+>c0e8	d2		          .byte     $d2       ; POINTR  $24
+>c0e9	d0 cf		          .text     "PO"
+>c0eb	d0		          .byte     $d0       ; POP     $25
+>c0ec	d0 d2 cf	          .text     "PRO"
+>c0ef	c3		          .byte     $c3       ; PROC    $26
+>c0f0	d0 d2 d4 d5	          .text     "PRTUSN"
+>c0f4	d3 ce
+>c0f6	c7		          .byte     $c7       ; PRTUSNG $27
+>c0f7	d2 c5 ce d5	          .text     "RENU"
+>c0fb	cd		          .byte     $cd       ; RENUM   $28
+>c0fc	d2 c5 d0 c5	          .text     "REPEA"
+>c100	c1
+>c101	d4		          .byte     $d4       ; REPEAT  $29
+>c102	d2 cc d3	          .text     "RLS"
+>c105	d4		          .byte     $d4       ; RLST    $2A
+>c106	d3 c5		          .text     "SE"
+>c108	d4		          .byte     $d4       ; SET     $2B
+>c109	d3 c9 ce c7	          .text     "SINGL"
+>c10d	cc
+>c10e	c5		          .byte     $c5       ; SINGLE  $2C
+>c10f	d3 d0 d2 c9	          .text     "SPRITE"
+>c113	d4 c5
+>c115	c3		          .byte     $c3       ; SPRITEC $2D
+>c116	d3 d0 d2 c9	          .text     "SPRITE"
+>c11a	d4 c5
+>c11c	c4		          .byte     $c4       ; SPRITED $2E
+>c11d	d3 50 d2 c9	          .text     "SpRITE"
+>c121	d4 c5
+>c123	cd		          .byte     $cd       ; SPRITEM $2F
+>c124	d3 d2		          .text     "SR"
+>c126	d4		          .byte     $d4       ; SRT     $30
+>c127	d4 d2 c1 c3	          .text     "TRAC"
+>c12b	c5		          .byte     $c5       ; TRACE   $31
+>c12c	d5 ce cc d3	          .text     "UNLS"
+>c130	d4		          .byte     $d4       ; UNLST   $32
+>c131	d5 ce ce	          .text     "UNN"
+>c134	d7		          .byte     $d7       ; UNNW    $33
+>c135	d6 c4 d5 cd	          .text     "VDUM"
+>c139	d0		          .byte     $d0       ; VDUMP   $34
+>c13a	d6 d0 c5	          .text     "VPE"
+>c13d	ce		          .byte     $ce       ; VPEN    $35
+>c13e	d6 d4 c1	          .text     "VTA"
+>c141	c2		          .byte     $c2       ; VTAB    $36
+>c142	d7 c8 c9 cc	          .text     "WHIL"
+>c146	c5		          .byte     $c5       ; WHILE   $37
+>c147	c3 cf cc	          .text     "COL"
+>c14a	c4		          .byte     $c4       ; COLD    $38
+>c14b	c2 d2 c4	          .text     "BRD"
+>c14e	d2		          .byte     $d2       ; BRDR    $39
+>c14f	d3 c3 d2 c5	          .text     "SCREE"
+>c153	c5
+>c154	ce		          .byte     $ce       ; SCREEN  $3A
+>c155	d6 c2 c1 c3	          .text     "VBAC"
+>c159	cb		          .byte     $cb       ; VBACK   $3B
+>c15a	cb c5 d9	          .text     "KEY"
+>c15d	d3		          .byte     $d3       ; KEYS    $3C
+>c15e	c6 d2 c1	          .text     "FRA"
+>c161	c3		          .byte     $c3       ; FRAC    $3D
+>c162	ca cf		          .text     "JO"
+>c164	d9		          .byte     $d9       ; JOY     $3E
+>c165	d0 c5 ce	          .text     "PEN"
+>c168	d8		          .byte     $d8       ; PENX    $3F
+>c169	d0 c5 ce	          .text     "PEN"
+>c16c	d9		          .byte     $d9       ; PENY    $40
+>c16d	c4 c9		          .text     "DI"
+>c16f	d6		          .byte     $d6       ; DIV     $41
+>c170	00		          .byte     $00       ; END of keyword list
+>c171	3d		fncone    .byte     $3d  ; Last command Token+1 (or first function token)
+>c172	3e		twoarg    .byte     $3e  ; First token for functions that needs tow or more
+>c173	42		endfnc    .byte     $42  ; Last token plus one.
+>c174	f5 c1		comadr    .word     adump-1
+>c176	f6 c1		          .word     appnd-1
+>c178	f7 c1		          .word     auton-1
+>c17a	f8 c1		          .word     box-1
+>c17c	f9 c1		          .word     case-1
+>c17e	fa c1		          .word     change-1
+>c180	fb c1		          .word     circle-1
+>c182	fc c1		          .word     collid-1
+>c184	fd c1		          .word     comgt-1
+>c186	fe c1		          .word     copy-1
+>c188	ff c1		          .word     del-1
+>c18a	00 c2		          .word     dlay-1
+>c18c	01 c2		          .word     draw-1
+>c18e	02 c2		          .word     dump-1
+>c190	03 c2		          .word     erase-1
+>c192	04 c2		          .word     find-1
+>c194	05 c2		          .word     gchang-1
+>c196	06 c2		          .word     gfind-1
+>c198	07 c2		          .word     help-1
+>c19a	08 c2		          .word     himem-1
+>c19c	09 c2		          .word     hires-1
+>c19e	0a c2		          .word     hpen-1
+>c1a0	0b c2		          .word     htab-1
+>c1a2	0c c2		          .word     insert-1
+>c1a4	0d c2		          .word     label-1
+>c1a6	0e c2		          .word     line-1
+>c1a8	0f c2		          .word     lomem-1
+>c1aa	10 c2		          .word     merge-1
+>c1ac	11 c2		          .word     mod-1
+>c1ae	12 c2		          .word     mode-1
+>c1b0	13 c2		          .word     tapem-1
+>c1b2	14 c2		          .word     multic-1
+>c1b4	15 c2		          .word     old-1
+>c1b6	16 c2		          .word     paintr-1
+>c1b8	17 c2		          .word     pfkey-1
+>c1ba	18 c2		          .word     pointr-1
+>c1bc	19 c2		          .word     pop-1
+>c1be	1a c2		          .word     proc-1
+>c1c0	1b c2		          .word     prtusn-1
+>c1c2	1c c2		          .word     renum-1
+>c1c4	1d c2		          .word     repeat-1
+>c1c6	1e c2		          .word     rlst-1
+>c1c8	1f c2		          .word     set-1
+>c1ca	20 c2		          .word     single-1
+>c1cc	21 c2		          .word     spritc-1
+>c1ce	22 c2		          .word     spritd-1
+>c1d0	23 c2		          .word     spritm-1
+>c1d2	24 c2		          .word     srt-1
+>c1d4	25 c2		          .word     trace-1
+>c1d6	26 c2		          .word     unlst-1
+>c1d8	27 c2		          .word     unnw-1
+>c1da	28 c2		          .word     vdump-1
+>c1dc	29 c2		          .word     vpen-1
+>c1de	2a c2		          .word     vtab-1
+>c1e0	2b c2		          .word     while-1
+>c1e2	2c c2		          .word     cold-1
+>c1e4	2d c2		          .word     brdr-1
+>c1e6	2e c2		          .word     screen-1
+>c1e8	2f c2		          .word     vback-1
+>c1ea	30 c2		          .word     keys-1
+>c1ec	32 c2		fncadr    .word     frac
+>c1ee	33 c2		          .word     joy
+>c1f0	34 c2		          .word     penx
+>c1f2	35 c2		          .word     peny
+>c1f4	36 c2		          .word     div
+.c1f6			adump
+.c1f6	60		          rts
+.c1f7			appnd
+.c1f7	60		          rts
+.c1f8			auton
+.c1f8	60		          rts
+.c1f9			box
+.c1f9	60		          rts
+.c1fa			case
+.c1fa	60		          rts
+.c1fb			change
+.c1fb	60		          rts
+.c1fc			circle
+.c1fc	60		          rts
+.c1fd			collid
+.c1fd	60		          rts
+.c1fe			comgt
+.c1fe	60		          rts
+.c1ff			copy
+.c1ff	60		          rts
+.c200			del
+.c200	60		          rts
+.c201			dlay
+.c201	60		          rts
+.c202			draw
+.c202	60		          rts
+.c203			dump
+.c203	60		          rts
+.c204			erase
+.c204	60		          rts
+.c205			find
+.c205	60		          rts
+.c206			gchang
+.c206	60		          rts
+.c207			gfind
+.c207	60		          rts
+.c208			help
+.c208	60		          rts
+.c209			himem
+.c209	60		          rts
+.c20a			hires
+.c20a	60		          rts
+.c20b			hpen
+.c20b	60		          rts
+.c20c			htab
+.c20c	60		          rts
+.c20d			insert
+.c20d	60		          rts
+.c20e			label
+.c20e	60		          rts
+.c20f			line
+.c20f	60		          rts
+.c210			lomem
+.c210	60		          rts
+.c211			merge
+.c211	60		          rts
+.c212			mod
+.c212	60		          rts
+.c213			mode
+.c213	60		          rts
+.c214			tapem
+.c214	60		          rts
+.c215			multic
+.c215	60		          rts
+.c216			old
+.c216	60		          rts
+.c217			paintr
+.c217	60		          rts
+.c218			pfkey
+.c218	60		          rts
+.c219			pointr
+.c219	60		          rts
+.c21a			pop
+.c21a	60		          rts
+.c21b			proc
+.c21b	60		          rts
+.c21c			prtusn
+.c21c	60		          rts
+.c21d			renum
+.c21d	60		          rts
+.c21e			repeat
+.c21e	60		          rts
+.c21f			rlst
+.c21f	60		          rts
+.c220			set
+.c220	60		          rts
+.c221			single
+.c221	60		          rts
+.c222			spritc
+.c222	60		          rts
+.c223			spritd
+.c223	60		          rts
+.c224			spritm
+.c224	60		          rts
+.c225			srt
+.c225	60		          rts
+.c226			trace
+.c226	60		          rts
+.c227			unlst
+.c227	60		          rts
+.c228			unnw
+.c228	60		          rts
+.c229			vdump
+.c229	60		          rts
+.c22a			vpen
+.c22a	60		          rts
+.c22b			vtab
+.c22b	60		          rts
+.c22c			while
+.c22c	60		          rts
+.c22d			cold
+.c22d	60		          rts
+.c22e			brdr
+.c22e	60		          rts
+.c22f			screen
+.c22f	60		          rts
+.c230			vback
+.c230	60		          rts
+.c231			keys
+.c231	60		          rts
+.c232			frac
+.c232	60		          rts
+.c233			joy
+.c233	60		          rts
+.c234			penx
+.c234	60		          rts
+.c235			peny
+.c235	60		          rts
+.c236			div
+.c236	60		          rts
+
+;******  End of listing
