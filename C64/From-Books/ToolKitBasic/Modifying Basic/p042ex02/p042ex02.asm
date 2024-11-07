@@ -106,12 +106,6 @@ ready     =    $a474
 ;         SYS 58232      :REM BASIC CLOD START
 ;-------------------------------------------------------------------------------
 ; ********************************* Page 49 ************************************
-errx      =    $9100
-tokx      =    $9200
-listx     =    $9300
-comx      =    $9400
-funcx     =    $9500
-
 errv      .word     errx
 tokv      .word     tokx
 lstv      .word     listx
@@ -120,24 +114,24 @@ fncv      .word     funcx
 ;-------------------------------------------------------------------------------
           sei
           lda  errv
-          sta  $3000     ; ($3000) =
-          lda  errv+1    ; Error message vector
-          sta  $0301     ; 
+          sta  $3000         ; ($3000) =
+          lda  errv+1        ; Error message vector
+          sta  $0301         ; 
           lda  tokv
-          sta  $0304     ; ($0304) =
-          lda  tokv+1    ; Tokenization vector
+          sta  $0304         ; ($0304) =
+          lda  tokv+1        ; Tokenization vector
           sta  $0305     ;
           lda  lstv
-          sta  $0306     ; ($0306) =
-          lda  lstv+1    ; List tokens vector
+          sta  $0306         ; ($0306) =
+          lda  lstv+1        ; List tokens vector
           sta  $0307     ;
           lda  comv
-          sta  $0308     ; ($0308) =
-          lda  comv+1    ; Command vector
+          sta  $0308         ; ($0308) =
+          lda  comv+1        ; Command vector
           sta  $0309     ;
           lda  fncv
-          sta  $030a     ; ($030a) =
-          lda  fncv+1    ; Function vector
+          sta  $030a         ; ($030a) =
+          lda  fncv+1        ; Function vector
           sta  $030b     ;
 ;-------------------------------------------------------------------------------
 ; Table of new keywords
@@ -165,145 +159,145 @@ fncv      .word     funcx
 ;-------------------------------------------------------------------------------
 adrtok    .word     toktab
 toktab    .text     "ADUM"
-          .byte     $d0       ; ADUMP   $01
+          .byte     $d0           ; ADUMP   $01
           .text     "APPN"
-          .byte     $c4       ; APPND   $02
+          .byte     $c4           ; APPND   $02
 ; 'AUTON' - Embeded keyword 'TO'
           .text     "AUTO"
-          .byte     $ce       ; AUTON   $03
+          .byte     $ce           ; AUTON   $03
           .text     "BO"
-          .byte     $d8       ; BOX     $04
+          .byte     $d8           ; BOX     $04
           .text     "CAS"
-          .byte     $c5       ; CASE    $05
+          .byte     $c5           ; CASE    $05
           .text     "CHANG"
-          .byte     $c5       ; CHANGE  $06
+          .byte     $c5           ; CHANGE  $06
           .text     "CIRCL"
-          .byte     $c5       ; CIRCLE  $07
+          .byte     $c5           ; CIRCLE  $07
           .text     "COLLID"
-          .byte     $c5       ; COLLIDE $08
+          .byte     $c5           ; COLLIDE $08
           .text     "COMG"
-          .byte     $d4       ; COMGT   $09
+          .byte     $d4           ; COMGT   $09
           .text     "COP"
-          .byte     $d9       ; COPY    $0a
+          .byte     $d9           ; COPY    $0a
           .text     "DE"
-          .byte     $cc       ; DEL     $0b
+          .byte     $cc           ; DEL     $0b
           .text     "DLA"
-          .byte     $d9       ; DLAY    $0c
+          .byte     $d9           ; DLAY    $0c
           .text     "DRA"
-          .byte     $d7       ; DRAW    $0d
+          .byte     $d7           ; DRAW    $0d
           .text     "DUM"
-          .byte     $d0       ; DUMP    $0e
+          .byte     $d0           ; DUMP    $0e
           .text     "ERAS"
-          .byte     $c5       ; erase   $0f
+          .byte     $c5           ; erase   $0f
 ; ********************************* Page 051 ************************************
           .text     "GFIN"
-          .byte     $c4       ; GFIND   $12
+          .byte     $c4           ; GFIND   $12
           .text     "HEL"
-          .byte     $d0       ; HELP    $13
+          .byte     $d0           ; HELP    $13
           .text     "HIME"
-          .byte     $cd       ; HIMEM   $14
+          .byte     $cd           ; HIMEM   $14
           .text     "HIRE"
-          .byte     $d3       ; HIRES   $15
+          .byte     $d3           ; HIRES   $15
           .text     "HPE"
-          .byte     $ce       ; HPEN    $16
+          .byte     $ce           ; HPEN    $16
           .text     "HTA"
-          .byte     $c2       ; HTAB    $17
+          .byte     $c2           ; HTAB    $17
           .text     "INSER"
-          .byte     $d4       ; INSERT  $18
+          .byte     $d4           ; INSERT  $18
           .text     "LABE"
-          .byte     $cc       ; LABEL   $19
+          .byte     $cc           ; LABEL   $19
           .text     "LIN"
-          .byte     $c5       ; LINE    $1a
+          .byte     $c5           ; LINE    $1a
           .text     "LOME"
-          .byte     $cd       ; LOMEM   $1b
+          .byte     $cd           ; LOMEM   $1b
           .text     "MERG"
-          .byte     $c5       ; MERGE   $1c
+          .byte     $c5           ; MERGE   $1c
           .text     "MO"
-          .byte     $c4       ; MOD     $1d
+          .byte     $c4           ; MOD     $1d
           .text     "MOV"
-          .byte     $c5       ; MOVE    $1e
+          .byte     $c5           ; MOVE    $1e
           .text     "TAPE"
-          .byte     $cd       ; TAPEM   $1f
+          .byte     $cd           ; TAPEM   $1f
           .text     "MULTI"
-          .byte     $c3       ; MULTIC  $20
+          .byte     $c3           ; MULTIC  $20
           .text     "OL"
-          .byte     $c4       ; OLD     $21
+          .byte     $c4           ; OLD     $21
 ; 'PAINTR' - Embeded keyword 'INT'
           .text     "PAINT"
-          .byte     $d2       ; PAINTR  $22
+          .byte     $d2           ; PAINTR  $22
           .text     "PFKE"
-          .byte     $d9       ; PFKEY   $23
+          .byte     $d9           ; PFKEY   $23
 ; 'POINTR' - Embeded keyword 'INT'
           .text     "POINT"
-          .byte     $d2       ; POINTR  $24
+          .byte     $d2           ; POINTR  $24
           .text     "PO"
-          .byte     $d0       ; POP     $25
+          .byte     $d0           ; POP     $25
           .text     "PRO"
-          .byte     $c3       ; PROC    $26
+          .byte     $c3           ; PROC    $26
           .text     "PRTUSN"
-          .byte     $c7       ; PRTUSNG $27
+          .byte     $c7           ; PRTUSNG $27
           .text     "RENU"
-          .byte     $cd       ; RENUM   $28
+          .byte     $cd           ; RENUM   $28
           .text     "REPEA"
 ; ********************************* Page 52 ************************************
-          .byte     $d4       ; REPEAT  $29
+          .byte     $d4           ; REPEAT  $29
           .text     "RLS"
-          .byte     $d4       ; RLST    $2A
+          .byte     $d4           ; RLST    $2A
           .text     "SE"
-          .byte     $d4       ; SET     $2B
+          .byte     $d4           ; SET     $2B
           .text     "SINGL"
-          .byte     $c5       ; SINGLE  $2C
+          .byte     $c5           ; SINGLE  $2C
           .text     "SPRITE"
-          .byte     $c3       ; SPRITEC $2D
+          .byte     $c3           ; SPRITEC $2D
           .text     "SPRITE"
-          .byte     $c4       ; SPRITED $2E
+          .byte     $c4           ; SPRITED $2E
           .text     "SpRITE"
-          .byte     $cd       ; SPRITEM $2F
+          .byte     $cd           ; SPRITEM $2F
           .text     "SR"
-          .byte     $d4       ; SRT     $30
+          .byte     $d4           ; SRT     $30
           .text     "TRAC"
-          .byte     $c5       ; TRACE   $31
+          .byte     $c5           ; TRACE   $31
           .text     "UNLS"
-          .byte     $d4       ; UNLST   $32
+          .byte     $d4           ; UNLST   $32
           .text     "UNN"
-          .byte     $d7       ; UNNW    $33
+          .byte     $d7           ; UNNW    $33
           .text     "VDUM"
-          .byte     $d0       ; VDUMP   $34
+          .byte     $d0           ; VDUMP   $34
           .text     "VPE"
-          .byte     $ce       ; VPEN    $35
+          .byte     $ce           ; VPEN    $35
           .text     "VTA"
-          .byte     $c2       ; VTAB    $36
+          .byte     $c2           ; VTAB    $36
           .text     "WHIL"
-          .byte     $c5       ; WHILE   $37
+          .byte     $c5           ; WHILE   $37
           .text     "COL"
-          .byte     $c4       ; COLD    $38
+          .byte     $c4           ; COLD    $38
           .text     "BRD"
-          .byte     $d2       ; BRDR    $39
+          .byte     $d2           ; BRDR    $39
           .text     "SCREE"
-          .byte     $ce       ; SCREEN  $3A
+          .byte     $ce           ; SCREEN  $3A
           .text     "VBAC"
-          .byte     $cb       ; VBACK   $3B
+          .byte     $cb           ; VBACK   $3B
           .text     "KEY"
-          .byte     $d3       ; KEYS    $3C
+          .byte     $d3           ; KEYS    $3C
           .text     "FRA"
-          .byte     $c3       ; FRAC    $3D
+          .byte     $c3           ; FRAC    $3D
           .text     "JO"
-          .byte     $d9       ; JOY     $3E
+          .byte     $d9           ; JOY     $3E
           .text     "PEN"
-          .byte     $d8       ; PENX    $3F
+          .byte     $d8           ; PENX    $3F
           .text     "PEN"
-          .byte     $d9       ; PENY    $40
+          .byte     $d9           ; PENY    $40
           .text     "DI"
-          .byte     $d6       ; DIV     $41
+          .byte     $d6           ; DIV     $41
 ; ********************************* Page 53 ************************************
-          .byte     $00       ; END of keyword list
+          .byte     $00           ; END of keyword list
 ;-------------------------------------------------------------------------------
 ; Equates specify where commands end, function begin and end, and which 
 ; functions only have one argument.
-fncone    .byte     $3d  ; Last command Token+1 (or first function token)
-twoarg    .byte     $3e  ; First token for functions that needs tow or more 
-                         ; arguments.
-endfnc    .byte     $42  ; Last token plus one.
+fncone    .byte     $3d      ; Last command Token+1 (or first function token)
+twoarg    .byte     $3e      ; First token for functions that needs tow or more 
+                             ; arguments.
+endfnc    .byte     $42      ; Last token plus one.
 ;-------------------------------------------------------------------------------
 ;-------------------------------------------------------------------------------
 ; Command address table:
@@ -392,100 +386,100 @@ errtab    .word     err1
 ; New error massages
 ;-------------------------------------------------------------------------------
 err1      .text     "INVALID KEY IPTIO"
-          .byte     $ce       ; Invalid key option
+          .byte     $ce           ; Invalid key option
 ;-------------------------------------------------------------------------------
 ; Tokenization routine for new commands
 ;-------------------------------------------------------------------------------
-tokx      jsr  ntok      ; Handle normal tokens.
-          ldx  #$00      ; Set input index.
-          ldy  #$04      ; Set output index.
-          sty  $0f       ; Flag for data token.
-charlp    lda  $0200,x   ; Next char from buffer.
-          cmp  #$80      ; If already a token.
-          bcs  store     ; then skip.
-          cmp  #$20      ; Test for space.
-          beq  store     ;
-          sta  $08       ; Save for possible quote.
-          cmp  #$22      ; Is it quote?
+tokx      jsr  ntok           ; Handle normal tokens.
+          ldx  #$00           ; Set input index.
+          ldy  #$04           ; Set output index.
+          sty  $0f            ; Flag for data token.
+charlp    lda  $0200,x        ; Next char from buffer.
+          cmp  #$80           ; If already a token.
+          bcs  store          ; then skip.
+          cmp  #$20           ; Test for space.
+          beq  store          ;
+          sta  $08            ; Save for possible quote.
+          cmp  #$22           ; Is it quote?
           beq  quote     
-          bit  $0f       ; See if inside data.
-          bvs  store     ; Yes - branch
-          cmp  #$30      ; See if numeric.
+          bit  $0f            ; See if inside data.
+          bvs  store          ; Yes - branch
+          cmp  #$30           ; See if numeric.
           bcc  notnum
-          cmp  #$3c      ; Branch if number.
+          cmp  #$3c           ; Branch if number.
           bcc  store     
 notnum    lda  adrtok+1
           sta  $fd
           sta  $ff
-          sty  $71       ; Save output pointer
-          lda  adrtok    ; Set Pointers
-          tay            ;   to tokeen table
-          dey            ;   in ($fc) and
-          sty  $fe       ;   ($fe).
+          sty  $71            ; Save output pointer
+          lda  adrtok         ; Set Pointers
+          tay                 ;   to tokeen table
+          dey                 ;   in ($fc) and
+          sty  $fe            ;   ($fe).
           dey
           sty  $fc
           ldy  #$01
-          sty  $0b       ; Init token index.
+          sty  $0b            ; Init token index.
           dey
-          stx  $7a       ; Save input index.
+          stx  $7a            ; Save input index.
 ; ********************************* Page 56 ************************************
           dex
-nextup    iny            ; Next character in table.
+nextup    iny                 ; Next character in table.
           bne  notinc
-          inc  $ff       ; Move to next table.
-          inc  $fd       ; Page after 256 bytes
-notinc    inx            ; Next character in buffer
+          inc  $ff            ; Move to next table.
+          inc  $fd            ; Page after 256 bytes
+notinc    inx                 ; Next character in buffer
 notend    lda  $0200,x
           sec
           sbc  ($fe),y
-          beq  nextup    ; If buffer and table match.
-          cmp  #$80      ; If only high bit off
-          bne  nomtch    ; No match
-          lda  #$60      ; Two-byte token-lst byte fixed.
-          ldy  $71       ; Output index.
+          beq  nextup         ; If buffer and table match.
+          cmp  #$80           ; If only high bit off
+          bne  nomtch         ; No match
+          lda  #$60           ; Two-byte token-lst byte fixed.
+          ldy  $71            ; Output index.
           iny
-          sta  $01fb,y   ; Store the $60 token.
+          sta  $01fb,y        ; Store the $60 token.
           inc  $71
-          lda  $0b       ; 2nd byte token.
-repeet    ldy  $71       ; Reset output index.
-store     inx            ; Input index.
-          iny            ; Output index.
-          sta  $01fb,y   ; Store char.
+          lda  $0b            ; 2nd byte token.
+repeet    ldy  $71            ; Reset output index.
+store     inx                 ; Input index.
+          iny                 ; Output index.
+          sta  $01fb,y        ; Store char.
           lda  $01fb,y
-          beq  done      ; If end of buffer.
+          beq  done           ; If end of buffer.
           sec
-          sbc  #$3a      ; See if colon.
+          sbc  #$3a           ; See if colon.
           beq  colon
-          cmp  #$49      ; See if "DATA" token.
+          cmp  #$49           ; See if "DATA" token.
           bne  nodat
-colon     sta  $0f       ; Sat data flag to $49 for bvs.
+colon     sta  $0f            ; Sat data flag to $49 for bvs.
           bne  charlp
 nodat     sec
-          sbc  #$55      ; See if REM
+          sbc  #$55           ; See if REM
           bne  charlp
-          sta  $08       ; If REM set $00 termiator.
-tstend    lda  $0200,x   ; Next char from input buffer.
+          sta  $08            ; If REM set $00 termiator.
+tstend    lda  $0200,x        ; Next char from input buffer.
           beq  store
-          cmp  $08       ; = terminator?
+          cmp  $08            ; = terminator?
           beq  store
 ;-------------------------------------------------------------------------------
-quote     iny            ; Output index.
+quote     iny                 ; Output index.
           sta  $01fb,y   
           inx
-          bne  tstend    ; Unconditional.
+          bne  tstend         ; Unconditional.
 nomtch    ldx  $7a
-          inc  $0b       ; Token coount.
+          inc  $0b            ; Token coount.
 tokadv    iny
-; ********************************* Page 057 *********************************** 
+; ********************************* Page 57 ************************************ 
           bne  notovr
-          inc  $ff       ; Increment Token
-          inc  $fd       ; Inchement Table page
+          inc  $ff            ; Increment Token
+          inc  $fd            ; Inchement Table page
 notovr    lda  ($fc),y   
-          bpl  tokadv    ; Loop intil end-of-token byte.
+          bpl  tokadv         ; Loop intil end-of-token byte.
           lda  ($fe),y
-          bne  notend    ; Fall through if $00 end.
-          lda  $0200,x   ; END-OF-TABLE.
-          bpl  repeet    ; Try next char in buffer
+          bne  notend         ; Fall through if $00 end.
+          lda  $0200,x        ; END-OF-TABLE.
+          bpl  repeet         ; Try next char in buffer
 done      sta  $01fd,y
           lda  #$01
           sta  $7b
@@ -495,36 +489,262 @@ done      sta  $01fd,y
 ;-------------------------------------------------------------------------------
 ; List front-end to handle listing of new keywords through detokenization.
 ;-------------------------------------------------------------------------------
-listx     bmi  onetok    ; One byte token.
-          cmp  #$60      ; Double token?
-          beq  lsttok    ; Yes - Branch.
-          bne  prtone    ; Not a token.
-onetok    bit  $0f       ; In quote?
+listx     bmi  onetok         ; One byte token.
+          cmp  #$60           ; Double token?
+          beq  lsttok         ; Yes - Branch.
+          bne  prtone         ; Not a token.
+onetok    bit  $0f            ; In quote?
           bmi  prtone
-tstnls    cmp  #$ff      ; PI?
-          beq  prtone    ; No - do new token.
-          jmp  nlst      ; No - do token.
-lsttok    lda  adrtok+1  ; Set pointer
-          sta  $ff       ;   to token table
+tstnls    cmp  #$ff           ; PI?
+          beq  prtone         ; No - do new token.
+          jmp  nlst           ; No - do token.
+lsttok    lda  adrtok+1       ; Set pointer
+          sta  $ff            ;   to token table
           dec  $ff
-          lda  adrtok    ;   in ($fe)
+          lda  adrtok         ;   in ($fe)
           sta  $fe
-          iny            ; get second byte of token
+          iny                 ; get second byte of token
           lda  ($5f),y
-          sty  $49       ; Save index into line.
+          sty  $49            ; Save index into line.
           tax
-          ldy  #$ff      ; Set index into keyword table.
-lloop1    dex            ; If x=0 then
-          beq  match     ; Keyword match token.
+          ldy  #$ff           ; Set index into keyword table.
+lloop1    dex                 ; If x=0 then
+          beq  match          ; Keyword match token.
 lloop2    iny
           bne cont1
-; ********************************* Page 058 ***********************************           
+; ********************************* Page 58 ************************************           
+          inc  $ff
+cont1     lda  ($fe),y        ; Next keyword char.
+          bpl  lloop2         ; Same keyword.
+          bmi  lloop1          ; End of keyword.
+match     iny
+          bne  cont2
+          inc  $ff
+cont2     lda  ($fe),y        ; Get a keyword char.
+          bmi  endtok         ; Last char of token.
+          jsr  ochr           ; output all chars except last.
+          bne  match          ; Unconditional.
+endtok    jmp  lret1          ; Back to list.
+prtone    jmp  lret2          ; Back to list.
+;-------------------------------------------------------------------------------
+; New command execution.
+;-------------------------------------------------------------------------------
+comx      jsr  $0073          ; Chrget
+          php
+          cmp  #$60           ; Two-byte token?
+          bne  nrmxeq
+          lda  #$ea           ; Remove check for 
+          sta  $82            ;   space in chrget
+          sta  $83            ;   due to $6020 token.
+          jsr  $0073          ; Get second token
+          pha
+          lda  #$f0           ; Restore check for
+          sta  $82            ;   space in chrget
+          lda  #$fe
+          sta  $83
+          pla
+          cmp  fncone         ; Token > command ?
+          bcs  nrmxeq         ; If yes exit
+          plp                 ; If not
+          jsr  cmdnew         ;   do the command.
+          jmp  nstt           ; Prepare for next basic statement.
+;-------------------------------------------------------------------------------
+cmdnew    sec
+          sbc  #$01
+          asl
+          tay
+          lda  comadr+1,y
+          pha
+          lda  comadr,y
+          pha
+          jmp  $0073
+;-------------------------------------------------------------------------------
+; ********************************* Page 59 ************************************
+;-------------------------------------------------------------------------------
+nrmxeq    plp
+          jmp  ncmd           ; Normal Commands           
+;-------------------------------------------------------------------------------
+; New error message handler.
+;   VIC version does not need the BMI RDYMSG and the JMP READY
+;-------------------------------------------------------------------------------
+errx      txa
+          bmi  rdymsg         ; Not needed by VIC-20.
+          cpx  #$1f           ; New error message?
+          bcs  newerr         ; Yes.
+          jmp  nerr           ; No. 
+rdymsg    jmp  ready          ; Not needed by VIC-20.
+newerr    txa
+          sec
+          sbc  #$1f           ; Get index into
+          asl                 ;   new error address
+          tax                 ;   table.
+          lda  errtab,x
+          sta  $22
+          lda  errtab+1,x
+          sta  $23
+          jmp  errcnt         ; Continue with normal error message handler.          
+;-------------------------------------------------------------------------------
+; New function execution.
+;-------------------------------------------------------------------------------
+funcx     lda  #$00
+          sta  $0d            ; Indicate numeric result.
+          jsr  $0073
+          php
+          cmp  #$60           ; See if to-byte token.
+          bne  nrmfnc         ; If not - Normal Function.
+          jsr  $0073          ; get second byte.
+          cmp  fncone         ; Check for
+          bcc  errfnc         ;   valid range
+          cmp  endfnc         ;   for 2nd byte.
+          bcs  errfnc
+          plp
+          pha
+          cmp  twoarg         ; See if one-arg function.
+          bcs  mltarg         ; No - branch
+          jsr  $0073          ; Chrget the "(".
+; ********************************* Page 60 ************************************   
+          jsr  evalp          ; Eval expression in parens
+mltarg    pla                 ; Get index into
+          sec                 ;   function
+          sbc  fncone         ;   address table.
+          asl
+          tay
+          lda  fncadr,y       ; Set up to
+          sta  $55            ;   execute like
+          lda  fncadr+1,y     ;   normal function.
+          sta  $56
+          jsr  $0054
+          jmp  nchk           ; Check for numeric result
+;-------------------------------------------------------------------------------
+nrmfnc    plp
+          jmp  nfnc           ; Normal Function
+errfnc    jmp  syntax         ; If 2nd byte not valid
+;-------------------------------------------------------------------------------
+; Screen - Set screen background colour (C-64 Version)
+;-------------------------------------------------------------------------------
+screen    jsr  eval           ; Eval expression.
+          jsr  f1tx           ; Convert FAC1 to X-reg 0-255.
+          cpx  #$10           ; Valid Colour?
+          bcs  syner1
+          stx  sreg
+          rts
+syner1    jmp  syntax         ; Syntax error.
+;-------------------------------------------------------------------------------
+; Screen - Set screen background colour (VIC-20 Version)
+;-------------------------------------------------------------------------------
+;screen    jsr  eval           ; Eval expression.
+;          jsr  f1tx           ; Convert FAC1 to X-reg 0-255.
+;          cpx  #$10           ; Valid Colour?
+;          bcs  synv1         ; No.
+;          lda  sreg
+;          and  #$0f
+;          sta  sreg
+;          txa
+;          asl
+;          asl
+;          asl
+;          asl
+;          ora  sreg
+;          sta  sreg
+;          rts
+;synv1     jmp  syntax
+; ********************************* Page 61 ************************************  
+;-------------------------------------------------------------------------------
+; Cold
+;-------------------------------------------------------------------------------
+cold      jmp  cstrt
+;-------------------------------------------------------------------------------
+; brdr - set border colour (C-64 Version)
+;-------------------------------------------------------------------------------
+brdr      jsr  eval           ; Eval expression.
+          jsr  f1tx           ; Convert FAC1 to X-reg 0-255.
+          cpx  #$10           ; Valid Colour?
+          bcs  syner2
+          stx  breg
+          rts
+syner2    jmp  syntax         ; Syntax error.
+;-------------------------------------------------------------------------------
+; brdr - set border colour (VIC-20 Version)
+;-------------------------------------------------------------------------------
+;brdr      jsr  eval           ; Eval expression.
+;          jsr  f1tx           ; Convert FAC1 to X-reg 0-255.
+;          cpx  #$08           ; Valid Colour?
+;          bcs  syver2         ; No.
+;          lda  breg
+;          and  #$f8
+;          sta  breg
+;          txa
+;          ora  breg
+;          sta  breg
+;          rts
+;syver2    jmp  syntax
+;-------------------------------------------------------------------------------
+; vback - Reset vectors to normal settings
+;-------------------------------------------------------------------------------
+vback     sei
+          jsr  rvect          ; init vectors.
+          cli
+          rts
+;-------------------------------------------------------------------------------
+; keys - Set keystroke autorepeat.
+;    A - All Typomatic
+;    N - None Typomatic
+;    S - Normal Typomatic
+;-------------------------------------------------------------------------------
+keys      cmp  #$41           ; Is-it "A"?
+          bne  nota
+          lda  #$80
+          bne  comkey
+nota      cmp  #$4e           ; Is it "N"?
+          bne notn
+; ********************************* Page 62 ************************************  
+          lda  #$40
+          bne  comkey
+notn      cmp  #$53           ; Is it "S"?
+          bne  syner3
+          lda  #$00
+comkey    sta  kreg
+          jsr  $0073          ; Chrget end-of-statement
+          rts
+;-------------------------------------------------------------------------------
+syner3    ldx  #$1f           ; Set error number.
+          jmp  ($0300)        ; Error vector.
+;-------------------------------------------------------------------------------
+; frac - Return fractional part of number
+;-------------------------------------------------------------------------------
+frac      jsr  f1t57          ; Copy fac1 to $0057...
+          jsr  intf1          ; FAC1 = INT(FAC1)
+          lda  #$57
+          ldy  #$00
+          jsr  subf1          ; FAC1 = ($0057)-FAC1
+          rts
+;-------------------------------------------------------------------------------
+; div - Return integer quotient.
+;-------------------------------------------------------------------------------
+div       jsr  $0073          ; Chrget the "(".
+          jsr  chklp          ; Check for "(".
+          jsr  eval           ; Eval 1st expression.
+          jsr  f1t57          ; Copy fac1 to $0057...
+          jsr  chkcm          ; Check for comme
+          jsr  eval           ; Eval 2nd expression.
+          jsr  chkrp          ; Check for ")".
+          lda  #$57
+          ldy  #$00
+          jsr  f1div          ; FAC1 = ($0057)/FAC1 
+          jsr  intf1          ; FAC1 = INT(FAC1)
+          rts
+;-------------------------------------------------------------------------------
+; Commands and functions not yet implemented.
+;-------------------------------------------------------------------------------
+
+
+
+
 
 
 ;-------------------------------------------------------------------------------
 ; Temporary sub-routine declarations
 ;-------------------------------------------------------------------------------
-
 adump     .block
           rts
           .bend
@@ -691,27 +911,9 @@ vtab      .block
 while     .block
           rts
           .bend
-cold     .block
-          rts
-          .bend
-brdr      .block
-          rts
-          .bend
-screen    .block
-          rts
-          .bend
-vback     .block
-          rts
-          .bend
-keys      .block
-          rts
-          .bend
 ;-------------------------------------------------------------------------------
 ; Function declarations
 ;-------------------------------------------------------------------------------
-frac      .block
-          rts
-          .bend
 joy       .block
           rts
           .bend
@@ -719,9 +921,6 @@ penx      .block
           rts
           .bend
 peny      .block
-          rts
-          .bend
-div       .block
           rts
           .bend
 
