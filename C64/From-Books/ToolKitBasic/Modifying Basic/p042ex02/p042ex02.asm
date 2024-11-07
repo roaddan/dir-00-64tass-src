@@ -6,7 +6,7 @@
 
           .enc      none
 ;-------------------------------------------------------------------------------           
-; ** Page 046
+; ********************************* Page 046 ***********************************
 ;-------------------------------------------------------------------------------
 ; New commands for basic:
 ;    Two-byte token version allowing possible 255 new commands. 
@@ -22,7 +22,7 @@ nlst      =    $a724
 ochr      =    $ab47
 lret1     =    $a6ef
 lret2     =    $a6f3
-; ** Page 0487
+; ********************************* Page 047 ***********************************
 nstt      =    $a7ae
 ncmd      =    $a7e7
 evalp     =    $aef1
@@ -71,7 +71,7 @@ ready     =    $a474
 ;intf1     =    $dccc
 ;subf1     =    $d850
 ;chklp     =    $cefa
-;; ** Page 048
+;; ********************************* Page 48 ***********************************
 ;chkcm     =    $cefd
 ;chkrp     =    $cef7
 ;f1div     =    $db0f
@@ -105,7 +105,7 @@ ready     =    $a474
 ;         SYS 65433      :REM TO DO MEMTOP
 ;         SYS 58232      :REM BASIC CLOD START
 ;-------------------------------------------------------------------------------
-; ** Page 049
+; ********************************* Page 49 ************************************
 errx      =    $9100
 tokx      =    $9200
 listx     =    $9300
@@ -151,7 +151,7 @@ fncv      .word     funcx
 ; With the two byte tokens used the first token is allways $60 while the value 
 ; for the second is shown following the command or function name below.
 ;
-; ** Page 050
+; ********************************* Page 50 ************************************
 ;
 ; Many commands are not actually implemented - they are listed here to provide 
 ; a framework you can build on.
@@ -195,7 +195,7 @@ toktab    .text     "ADUM"
           .byte     $d0       ; DUMP    $0e
           .text     "ERAS"
           .byte     $c5       ; erase   $0f
-; ** page 051
+; ********************************* Page 051 ************************************
           .text     "GFIN"
           .byte     $c4       ; GFIND   $12
           .text     "HEL"
@@ -245,7 +245,7 @@ toktab    .text     "ADUM"
           .text     "RENU"
           .byte     $cd       ; RENUM   $28
           .text     "REPEA"
-; ** Page 52
+; ********************************* Page 52 ************************************
           .byte     $d4       ; REPEAT  $29
           .text     "RLS"
           .byte     $d4       ; RLST    $2A
@@ -295,7 +295,7 @@ toktab    .text     "ADUM"
           .byte     $d9       ; PENY    $40
           .text     "DI"
           .byte     $d6       ; DIV     $41
-; ** Page 053
+; ********************************* Page 53 ************************************
           .byte     $00       ; END of keyword list
 ;-------------------------------------------------------------------------------
 ; Equates specify where commands end, function begin and end, and which 
@@ -335,7 +335,7 @@ comadr    .word     adump-1
           .word     help-1
           .word     himem-1
           .word     hires-1
-; ** Page 054          
+; ********************************* Page 54 ************************************          
           .word     hpen-1
           .word     htab-1
           .word     insert-1
@@ -383,7 +383,7 @@ fncadr    .word     frac
           .word     penx
           .word     peny
           .word     div
-; ** Page 055
+; ********************************* Page 55 ************************************
 ;-------------------------------------------------------------------------------
 ; Table of address of new error messages.
 ;-------------------------------------------------------------------------------
@@ -392,12 +392,137 @@ errtab    .word     err1
 ; New error massages
 ;-------------------------------------------------------------------------------
 err1      .text     "INVALID KEY IPTIO"
-          .byte     $ce
-
+          .byte     $ce       ; Invalid key option
+;-------------------------------------------------------------------------------
+; Tokenization routine for new commands
+;-------------------------------------------------------------------------------
+tokx      jsr  ntok      ; Handle normal tokens.
+          ldx  #$00      ; Set input index.
+          ldy  #$04      ; Set output index.
+          sty  $0f       ; Flag for data token.
+charlp    lda  $0200,x   ; Next char from buffer.
+          cmp  #$80      ; If already a token.
+          bcs  store     ; then skip.
+          cmp  #$20      ; Test for space.
+          beq  store     ;
+          sta  $08       ; Save for possible quote.
+          cmp  #$22      ; Is it quote?
+          beq  quote     
+          bit  $0f       ; See if inside data.
+          bvs  store     ; Yes - branch
+          cmp  #$30      ; See if numeric.
+          bcc  notnum
+          cmp  #$3c      ; Branch if number.
+          bcc  store     
+notnum    lda  adrtok+1
+          sta  $fd
+          sta  $ff
+          sty  $71       ; Save output pointer
+          lda  adrtok    ; Set Pointers
+          tay            ;   to tokeen table
+          dey            ;   in ($fc) and
+          sty  $fe       ;   ($fe).
+          dey
+          sty  $fc
+          ldy  #$01
+          sty  $0b       ; Init token index.
+          dey
+          stx  $7a       ; Save input index.
+; ********************************* Page 56 ************************************
+          dex
+nextup    iny            ; Next character in table.
+          bne  notinc
+          inc  $ff       ; Move to next table.
+          inc  $fd       ; Page after 256 bytes
+notinc    inx            ; Next character in buffer
+notend    lda  $0200,x
+          sec
+          sbc  ($fe),y
+          beq  nextup    ; If buffer and table match.
+          cmp  #$80      ; If only high bit off
+          bne  nomtch    ; No match
+          lda  #$60      ; Two-byte token-lst byte fixed.
+          ldy  $71       ; Output index.
+          iny
+          sta  $01fb,y   ; Store the $60 token.
+          inc  $71
+          lda  $0b       ; 2nd byte token.
+repeet    ldy  $71       ; Reset output index.
+store     inx            ; Input index.
+          iny            ; Output index.
+          sta  $01fb,y   ; Store char.
+          lda  $01fb,y
+          beq  done      ; If end of buffer.
+          sec
+          sbc  #$3a      ; See if colon.
+          beq  colon
+          cmp  #$49      ; See if "DATA" token.
+          bne  nodat
+colon     sta  $0f       ; Sat data flag to $49 for bvs.
+          bne  charlp
+nodat     sec
+          sbc  #$55      ; See if REM
+          bne  charlp
+          sta  $08       ; If REM set $00 termiator.
+tstend    lda  $0200,x   ; Next char from input buffer.
+          beq  store
+          cmp  $08       ; = terminator?
+          beq  store
+;-------------------------------------------------------------------------------
+quote     iny            ; Output index.
+          sta  $01fb,y   
+          inx
+          bne  tstend    ; Unconditional.
+nomtch    ldx  $7a
+          inc  $0b       ; Token coount.
+tokadv    iny
+; ********************************* Page 057 *********************************** 
+          bne  notovr
+          inc  $ff       ; Increment Token
+          inc  $fd       ; Inchement Table page
+notovr    lda  ($fc),y   
+          bpl  tokadv    ; Loop intil end-of-token byte.
+          lda  ($fe),y
+          bne  notend    ; Fall through if $00 end.
+          lda  $0200,x   ; END-OF-TABLE.
+          bpl  repeet    ; Try next char in buffer
+done      sta  $01fd,y
+          lda  #$01
+          sta  $7b
+          lda  #$ff
+          sta  $7a
+          rts
+;-------------------------------------------------------------------------------
+; List front-end to handle listing of new keywords through detokenization.
+;-------------------------------------------------------------------------------
+listx     bmi  onetok    ; One byte token.
+          cmp  #$60      ; Double token?
+          beq  lsttok    ; Yes - Branch.
+          bne  prtone    ; Not a token.
+onetok    bit  $0f       ; In quote?
+          bmi  prtone
+tstnls    cmp  #$ff      ; PI?
+          beq  prtone    ; No - do new token.
+          jmp  nlst      ; No - do token.
+lsttok    lda  adrtok+1  ; Set pointer
+          sta  $ff       ;   to token table
+          dec  $ff
+          lda  adrtok    ;   in ($fe)
+          sta  $fe
+          iny            ; get second byte of token
+          lda  ($5f),y
+          sty  $49       ; Save index into line.
+          tax
+          ldy  #$ff      ; Set index into keyword table.
+lloop1    dex            ; If x=0 then
+          beq  match     ; Keyword match token.
+lloop2    iny
+          bne cont1
+; ********************************* Page 058 ***********************************           
 
 
 ;-------------------------------------------------------------------------------
-; Sub-routine declarations
+; Temporary sub-routine declarations
 ;-------------------------------------------------------------------------------
 
 adump     .block
@@ -463,7 +588,7 @@ himem     .block
 hires     .block
           rts
           .bend
-; ** Page 054          
+; ********************************* Page 054          
 hpen      .block
           rts
           .bend
