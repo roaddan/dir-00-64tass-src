@@ -1,0 +1,295 @@
+
+; 64tass Turbo Assembler Macro V1.52.1237? listing file
+; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L p065ex03.txt -o p065ex03.prg p065ex03.asm
+; Thu Nov  7 21:40:41 2024
+
+;Offset	;Hex		;Source
+
+;******  Processing input file: p065ex03.asm
+
+="20241105-205257"	           Version = "20241105-205257"
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/macros-64tass.asm
+
+
+;******  Return to file: p065ex03.asm
+
+=$a57c			ntok      =    $a57c
+=$a724			nlst      =    $a724
+=$ab47			ochr      =    $ab47
+=$a6ef			lret1     =    $a6ef
+=$a6f3			lret2     =    $a6f3
+=$a7ae			nstt      =    $a7ae
+=$a7e7			ncmd      =    $a7e7
+=$aef1			evalp     =    $aef1
+=$ad8d			nchk      =    $ad8d
+=$ae8d			nfnc      =    $ae8d
+=$ad9e			eval      =    $ad9e
+=$b7a1			f1tx      =    $b7a1
+=$af08			syntax    =    $af08
+=$d020			breg      =    $d020
+=$d021			sreg      =    $d021
+=$028a			kreg      =    $028a
+=$e394			cstrt     =    $e394
+=$e453			rvect     =    $e453
+=$bbca			f1t57     =    $bbca
+=$bccc			intf1     =    $bccc
+=$b850			subf1     =    $b850
+=$aefa			chklp     =    $aefa
+=$aefd			chkcm     =    $aefd
+=$aef7			chkrp     =    $aef7
+=$bb0f			f1div     =    $bb0f
+.c000	78		          sei
+.c001	ad 33 c0	          lda  tokv
+.c004	8d 04 03	          sta  $0304          ; ($0304) =
+.c007	ad 34 c0	          lda  tokv+1         ; Tokenization vector
+.c00a	8d 05 03	          sta  $0305          ;
+.c00d	ad 35 c0	          lda  lstv
+.c010	8d 06 03	          sta  $0306          ; ($0306) =
+.c013	ad 36 c0	          lda  lstv+1         ; List tokens vector
+.c016	8d 07 03	          sta  $0307          ;
+.c019	ad 37 c0	          lda  comv
+.c01c	8d 08 03	          sta  $0308          ; ($0308) =
+.c01f	ad 38 c0	          lda  comv+1         ; Command vector
+.c022	8d 09 03	          sta  $0309          ;
+.c025	ad 39 c0	          lda  fncv
+.c028	8d 0a 03	          sta  $030a          ; ($030a) =
+.c02b	ad 3a c0	          lda  fncv+1         ; Function vector
+.c02e	8d 0b 03	          sta  $030b          ;
+.c031	58		          cli
+.c032	60		          rts
+>c033	6b c0		tokv      .word     newtok
+>c035	ff c0		lstv      .word     newlst
+>c037	3a c1		comv      .word     newcom
+>c039	62 c1		fncv      .word     newfnc
+>c03b	c3 cf cc	toktab    .text     "COL"
+>c03e	c4		          .byte     $c4            ; COLD    $cc
+>c03f	c2 d2 c4	          .text     "BRD"
+>c042	d2		          .byte     $d2            ; BRDR    $ce
+>c043	d3 c3 d2 c5	          .text     "SCREE"
+>c047	c5
+>c048	ce		          .byte     $ce            ; SCREEN  $cd
+>c049	d6 c2 c1 c3	          .text     "VBAC"
+>c04d	cb		          .byte     $cb            ; VBACK   $cf
+>c04e	cb c5 d9	          .text     "KEY"
+>c051	d3		          .byte     $d3            ; KEYS    $d0
+>c052	c6 d2 c1	          .text     "FRA"
+>c055	c3		          .byte     $c3            ; FRAC    $d1
+>c056	c4 c9		          .text     "DI"
+>c058	d6		          .byte     $d6            ; DIV     $d2
+>c059	00		          .byte     $00            ; END of keyword list
+>c05a	d1		fncone    .byte     $d1      ; Last command Token+1 (or first function token)
+>c05b	3e		twoarg    .byte     $3e      ; First token for functions that needs tow or more
+>c05c	42		endfnc    .byte     $42      ; Last token plus one.
+>c05d	ac c1		comadr    .word     cold-1
+>c05f	af c1		          .word     brdr-1
+>c061	9b c1		          .word     screen-1
+>c063	c0 c1		          .word     vback-1
+>c065	c6 c1		          .word     keys-1
+>c067	e7 c1		fncadr    .word     frac
+>c069	f5 c1		          .word     div
+.c06b	20 7c a5	newtok    jsr  ntok           ; Handle normal tokens.
+.c06e	a2 00		          ldx  #$00           ; Set input index.
+.c070	a0 04		          ldy  #$04           ; Set output index.
+.c072	84 0f		          sty  $0f            ; Flag for data token.
+.c074	bd 00 02	charlp    lda  $0200,x        ; Next char from buffer.
+.c077	c9 80		          cmp  #$80           ; If already a token.
+.c079	b0 36		          bcs  store          ; then skip.
+.c07b	c9 20		          cmp  #$20           ; Test for space.
+.c07d	f0 32		          beq  store          ;
+.c07f	85 08		          sta  $08            ; Save for possible quote.
+.c081	c9 22		          cmp  #$22           ; Is it quote?
+.c083	f0 53		          beq  quote
+.c085	24 0f		          bit  $0f            ; See if inside data.
+.c087	70 28		          bvs  store          ; Yes - branch
+.c089	c9 30		          cmp  #$30           ; See if numeric.
+.c08b	90 04		          bcc  notnum
+.c08d	c9 3c		          cmp  #$3c           ; Branch if number.
+.c08f	90 20		          bcc  store
+.c091	84 71		notnum    sty  $71            ; Save output pointer
+.c093	a0 00		          ldy  #$00
+.c095	84 0b		          sty  $0b
+.c097	88		          dey
+.c098	86 7a		          stx  $7a
+.c09a	ca		          dex
+.c09b	c8		nextup    iny                 ; Next character in table.
+.c09c	e8		          inx
+.c09d	bd 00 02	notend    lda  $0200,x
+.c0a0	38		          sec
+.c0a1	f9 3b c0	          sbc  toktab,y
+.c0a4	f0 f5		          beq  nextup         ; If buffer and table match.
+.c0a6	c9 80		          cmp  #$80           ; If only high bit off
+.c0a8	d0 35		          bne  nomtch         ; No match
+.c0aa	a9 0b		          lda  #$0b           ; Token value.
+.c0ac	18		          clc
+.c0ad	69 cc		          adc  #$cc           ; Add start address to expanded tokens.
+.c0af	a4 71		repeat    ldy  $71            ; Reset output index.
+.c0b1	e8		store     inx                 ; Input index.
+.c0b2	c8		          iny                 ; Output index.
+.c0b3	99 fb 01	          sta  $01fb,y        ; Store char.
+.c0b6	b9 fb 01	          lda  $01fb,y
+.c0b9	f0 38		          beq  done           ; If end of buffer.
+.c0bb	38		          sec
+.c0bc	e9 3a		          sbc  #$3a           ; See if colon.
+.c0be	f0 04		          beq  colon
+.c0c0	c9 49		          cmp  #$49           ; See if "DATA" token.
+.c0c2	d0 04		          bne  notdat
+.c0c4	85 0f		colon     sta  $0f            ; Sat data flag to $49 for bvs.
+.c0c6	d0 ac		          bne  charlp
+.c0c8	38		notdat     sec
+.c0c9	e9 55		          sbc  #$55           ; See if REM
+.c0cb	d0 a7		          bne  charlp
+.c0cd	85 08		          sta  $08            ; If REM set $00 termiator.
+.c0cf	bd 00 02	tstend    lda  $0200,x        ; Next char from input buffer.
+.c0d2	f0 dd		          beq  store
+.c0d4	c5 08		          cmp  $08            ; = terminator?
+.c0d6	f0 d9		          beq  store
+.c0d8	c8		quote     iny                 ; Output index.
+.c0d9	99 fb 01	          sta  $01fb,y
+.c0dc	e8		          inx
+.c0dd	d0 f0		          bne  tstend         ; Unconditional.
+.c0df	a6 7a		nomtch    ldx  $7a
+.c0e1	e6 0b		          inc  $0b            ; Token count.
+.c0e3	c8		tokadv    iny
+.c0e4	b9 3a c0	          lda  toktab-1,y
+.c0e7	10 fa		          bpl  tokadv
+.c0e9	b9 3b c0	          lda  toktab,y
+.c0ec	d0 af		          bne  notend
+.c0ee	bd 00 02	          lda  $0200,x        ; end-of-table
+.c0f1	10 bc		          bpl  repeat
+.c0f3	99 fd 01	done      sta  $01fd,y
+.c0f6	a9 01		          lda  #$01
+.c0f8	85 7b		          sta  $7b
+.c0fa	a9 ff		          lda  #$ff
+.c0fc	85 7a		          sta  $7a
+.c0fe	60		          rts
+.c0ff	10 36		newlst    bpl  prtone
+.c101	c9 ff		          cmp  #$ff           ; PI?
+.c103	f0 32		          beq  prtone         ; No - do new token.
+.c105	24 0f		          bit  $0f            ; In quote ?
+.c107	30 2e		          bmi  prtone
+.c109	c9 cc		          cmp  #$cc           ; Less than command?
+.c10b	b0 03		          bcs  lsttok         ; Yes if >= $cc
+.c10d	4c 24 a7	          jmp  nlst           ; no - do normal list detokenization.
+.c110	38		lsttok    sec
+.c111	e9 cb		          sbc  #$cb           ; #$cc = 1, $cd = 2, etc.
+.c113	aa		          tax
+.c114	84 49		          sty  $49            ; Save index into line.
+.c116	a0 ff		          ldy  #$ff           ; Set index into keyword table.
+.c118	ca		lloop1    dex                 ; If x=0 then
+.c119	f0 08		          beq  match          ; Keyword match token.
+.c11b	c8		lloop2    iny
+.c11c	b9 3b c0	          lda  toktab,y       ; Next keyword char.
+.c11f	10 fa		          bpl  lloop2         ; Same keyword.
+.c121	30 f5		          bmi  lloop1         ; End of keyword.
+.c123	c8		match     iny
+.c124	b9 3b c0	          lda  toktab,y       ; Get keyword char.
+.c127	d0 02		          bne  cont2
+.c129	e6 ff		          inc  $ff
+.c12b	b1 fe		cont2     lda  ($fe),y        ; Get a keyword char.
+.c12d	30 05		          bmi  endtok         ; Last char of token.
+.c12f	20 47 ab	          jsr  ochr           ; Output all chars except last.
+.c132	d0 ef		          bne  match          ; Unconditional.
+.c134	4c ef a6	endtok    jmp  lret1          ; Back to list.
+.c137	4c f3 a6	prtone    jmp  lret2          ; Back to list.
+.c13a	20 73 00	newcom    jsr  $0073          ; Chrget
+.c13d	08		          php
+.c13e	c9 cc		          cmp  #$cc           ; Less than command?
+.c140	d0 1c		          bne  nrmxeq
+.c142	cd 5a c0	          cmp  fncone         ; Greater than command?
+.c145	b0 17		          bcs  nrmxeq
+.c147	28		          plp
+.c148	20 4e c1	          jsr  cmdnew
+.c14b	4c ae a7	          jmp  nstt
+.c14e	38		cmdnew    sec
+.c14f	e9 cc		          sbc  #$cc
+.c151	0a		          asl
+.c152	a8		          tay
+.c153	b9 5e c0	          lda  comadr+1,y
+.c156	48		          pha
+.c157	b9 5d c0	          lda  comadr,y
+.c15a	48		          pha
+.c15b	4c 73 00	          jmp  $0073
+.c15e	28		nrmxeq    plp
+.c15f	4c e7 a7	          jmp  ncmd           ; Normal Commands
+.c162	a9 00		newfnc    lda  #$00
+.c164	85 0d		          sta  $0d            ; Indicate numeric result.
+.c166	20 73 00	          jsr  $0073
+.c169	08		          php
+.c16a	cd 5a c0	          cmp  fncone         ; Valid function
+.c16d	90 29		          bcc  nrmfnc         ;   token?
+.c16f	cd 5c c0	          cmp  endfnc         ;   for 2nd byte.
+.c172	b0 24		          bcs  nrmfnc
+.c174	28		          plp
+.c175	48		          pha
+.c176	cd 5b c0	          cmp  twoarg         ; See if one-arg function.
+.c179	b0 06		          bcs  mltarg         ; No - branch
+.c17b	20 73 00	          jsr  $0073          ; Chrget the "(".
+.c17e	20 f1 ae	          jsr  evalp          ; Eval expression in parens
+.c181	68		mltarg    pla                 ; Get index into
+.c182	38		          sec                 ;   function
+.c183	ed 5a c0	          sbc  fncone         ;   address table.
+.c186	0a		          asl
+.c187	a8		          tay
+.c188	b9 67 c0	          lda  fncadr,y       ; Set up to
+.c18b	85 55		          sta  $55            ;   execute like
+.c18d	b9 68 c0	          lda  fncadr+1,y     ;   normal function.
+.c190	85 56		          sta  $56
+.c192	20 54 00	          jsr  $0054
+.c195	4c 8d ad	          jmp  nchk           ; Check for numeric result
+.c198	28		nrmfnc    plp
+.c199	4c 8d ae	          jmp  nfnc           ; Normal Function
+.c19c	20 9e ad	screen    jsr  eval           ; Eval expression.
+.c19f	20 a1 b7	          jsr  f1tx           ; Convert FAC1 to X-reg 0-255.
+.c1a2	e0 10		          cpx  #$10           ; Valid Colour?
+.c1a4	b0 04		          bcs  syner1
+.c1a6	8e 21 d0	          stx  sreg
+.c1a9	60		          rts
+.c1aa	4c 08 af	syner1    jmp  syntax         ; Syntax error.
+.c1ad	4c 94 e3	cold      jmp  cstrt
+.c1b0	20 9e ad	brdr      jsr  eval           ; Eval expression.
+.c1b3	20 a1 b7	          jsr  f1tx           ; Convert FAC1 to X-reg 0-255.
+.c1b6	e0 10		          cpx  #$10           ; Valid Colour?
+.c1b8	b0 04		          bcs  syner2
+.c1ba	8e 20 d0	          stx  breg
+.c1bd	60		          rts
+.c1be	4c 08 af	syner2    jmp  syntax         ; Syntax error.
+.c1c1	78		vback     sei
+.c1c2	20 53 e4	          jsr  rvect          ; init vectors.
+.c1c5	58		          cli
+.c1c6	60		          rts
+.c1c7	c9 41		keys      cmp  #$41           ; Is-it "A"?
+.c1c9	d0 04		          bne  nota
+.c1cb	a9 80		          lda  #$80
+.c1cd	d0 0e		          bne  comkey
+.c1cf	c9 4e		nota      cmp  #$4e           ; Is it "N"?
+.c1d1	d0 04		          bne notn
+.c1d3	a9 40		          lda  #$40
+.c1d5	d0 06		          bne  comkey
+.c1d7	c9 53		notn      cmp  #$53           ; Is it "S"?
+.c1d9	d0 09		          bne  syner3
+.c1db	a9 00		          lda  #$00
+.c1dd	8d 8a 02	comkey    sta  kreg
+.c1e0	20 73 00	          jsr  $0073          ; Chrget end-of-statement
+.c1e3	60		          rts
+.c1e4	4c 08 af	syner3    jmp  syntax         ; Error vector.
+.c1e7	20 ca bb	frac      jsr  f1t57          ; Copy fac1 to $0057...
+.c1ea	20 cc bc	          jsr  intf1          ; FAC1 = INT(FAC1)
+.c1ed	a9 57		          lda  #$57
+.c1ef	a0 00		          ldy  #$00
+.c1f1	20 50 b8	          jsr  subf1          ; FAC1 = ($0057)-FAC1
+.c1f4	60		          rts
+.c1f5	20 73 00	div       jsr  $0073          ; Chrget the "(".
+.c1f8	20 fa ae	          jsr  chklp          ; Check for "(".
+.c1fb	20 9e ad	          jsr  eval           ; Eval 1st expression.
+.c1fe	20 ca bb	          jsr  f1t57          ; Copy fac1 to $0057...
+.c201	20 fd ae	          jsr  chkcm          ; Check for comme
+.c204	20 9e ad	          jsr  eval           ; Eval 2nd expression.
+.c207	20 f7 ae	          jsr  chkrp          ; Check for ")".
+.c20a	a9 57		          lda  #$57
+.c20c	a0 00		          ldy  #$00
+.c20e	20 0f bb	          jsr  f1div          ; FAC1 = ($0057)/FAC1
+.c211	20 cc bc	          jsr  intf1          ; FAC1 = INT(FAC1)
+.c214	60		          rts
+
+;******  End of listing

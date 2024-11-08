@@ -215,7 +215,7 @@ done      sta  $01fd,y
 ;-------------------------------------------------------------------------------
 ; List front-end to handle listing of new keywords through detokenization.
 ;-------------------------------------------------------------------------------
-newlist   bpl  prtone
+newlst    bpl  prtone
           cmp  #$ff           ; PI?
           beq  prtone         ; No - do new token.
           bit  $0f            ; In quote ?
@@ -227,7 +227,6 @@ newlist   bpl  prtone
 lsttok    sec
           sbc  #$cb           ; #$cc = 1, $cd = 2, etc.
           tax
-          sty
           sty  $49            ; Save index into line.
           ldy  #$ff           ; Set index into keyword table.
 lloop1    dex                 ; If x=0 then
@@ -303,11 +302,6 @@ mltarg    pla                 ; Get index into
 ;-------------------------------------------------------------------------------
 nrmfnc    plp
           jmp  nfnc           ; Normal Function
-
-
-;; HHHHEEEERRRREEEE
-
-
 ;-------------------------------------------------------------------------------
 ; Screen - Set screen background colour (C-64 Version)
 ;-------------------------------------------------------------------------------
@@ -316,28 +310,9 @@ screen    jsr  eval           ; Eval expression.
           cpx  #$10           ; Valid Colour?
           bcs  syner1
           stx  sreg
+; ********************************* Page 72 ************************************ 
           rts
 syner1    jmp  syntax         ; Syntax error.
-;-------------------------------------------------------------------------------
-; Screen - Set screen background colour (VIC-20 Version)
-;-------------------------------------------------------------------------------
-;screen    jsr  eval           ; Eval expression.
-;          jsr  f1tx           ; Convert FAC1 to X-reg 0-255.
-;          cpx  #$10           ; Valid Colour?
-;          bcs  synv1         ; No.
-;          lda  sreg
-;          and  #$0f
-;          sta  sreg
-;          txa
-;          asl
-;          asl
-;          asl
-;          asl
-;          ora  sreg
-;          sta  sreg
-;          rts
-;synv1     jmp  syntax
-; ********************************* Page 61 ************************************  
 ;-------------------------------------------------------------------------------
 ; Cold
 ;-------------------------------------------------------------------------------
@@ -352,21 +327,6 @@ brdr      jsr  eval           ; Eval expression.
           stx  breg
           rts
 syner2    jmp  syntax         ; Syntax error.
-;-------------------------------------------------------------------------------
-; brdr - set border colour (VIC-20 Version)
-;-------------------------------------------------------------------------------
-;brdr      jsr  eval           ; Eval expression.
-;          jsr  f1tx           ; Convert FAC1 to X-reg 0-255.
-;          cpx  #$08           ; Valid Colour?
-;          bcs  syver2         ; No.
-;          lda  breg
-;          and  #$f8
-;          sta  breg
-;          txa
-;          ora  breg
-;          sta  breg
-;          rts
-;syver2    jmp  syntax
 ;-------------------------------------------------------------------------------
 ; vback - Reset vectors to normal settings
 ;-------------------------------------------------------------------------------
@@ -386,7 +346,6 @@ keys      cmp  #$41           ; Is-it "A"?
           bne  comkey
 nota      cmp  #$4e           ; Is it "N"?
           bne notn
-; ********************************* Page 62 ************************************
           lda  #$40
           bne  comkey
 notn      cmp  #$53           ; Is it "S"?
@@ -396,9 +355,9 @@ comkey    sta  kreg
           jsr  $0073          ; Chrget end-of-statement
           rts
 ;-------------------------------------------------------------------------------
-syner3    ldx  #$1f           ; Set error number.
-          jmp  ($0300)        ; Error vector.
+syner3    jmp  syntax         ; Error vector.
 ;-------------------------------------------------------------------------------
+; ********************************* Page 72 ************************************ 
 ; frac - Return fractional part of number
 ;-------------------------------------------------------------------------------
 frac      jsr  f1t57          ; Copy fac1 to $0057...
@@ -422,110 +381,6 @@ div       jsr  $0073          ; Chrget the "(".
           jsr  f1div          ; FAC1 = ($0057)/FAC1 
           jsr  intf1          ; FAC1 = INT(FAC1)
           rts
-;-------------------------------------------------------------------------------
-; Commands and functions not yet implemented.
-;-------------------------------------------------------------------------------
-adump     rts
-appnd     rts
-auton     rts
-box       rts
-case      rts
-change    rts
-circle    rts
-collid    rts
-comgt     rts
-copy      rts
-del       rts
-dlay      rts
-draw      rts
-dump      rts
-erase     rts
-find      rts
-gchang    rts
-gfind     rts
-help      rts
-himem     rts
-hires     rts
-; ********************************* Page 63 ************************************
-hpen      rts
-htab      rts
-insert    rts
-label     rts
-line      rts
-lomem     rts
-merge     rts
-mod       rts
-mode      rts
-tapem     rts
-multic    rts
-old       rts
-paintr    rts
-pfkey     rts
-pointr    rts
-pop       rts
-proc      rts
-prtusn    rts
-renum     rts
-repeat    rts
-rlst      rts
-set       rts
-single    rts
-spritc    rts
-spritd    rts
-spritm    rts
-srt       rts
-trace     rts
-unlst     rts
-unnw      rts
-vdump     rts
-vpen      rts
-; ********************************* Page 64 ************************************
-vtab      rts
-while     rts
-;-------------------------------------------------------------------------------
-; Function declarations
-;-------------------------------------------------------------------------------
-joy       rts
-penx      rts
-peny      rts
-;-------------------------------------------------------------------------------
-; Allow imbeded keywords.
-;
-; Routine used when Commodore 64 tokenization routine is modified to check for a
-; following space, colon or $00 END-OF-LINE byte before a keyword is tokenized 
-; to allow the new keywords to contain embedded old keywords. 
-; (Except at the end of a new keyword).
-;
-;  If thie feature is used then you must follow all keywords with a space.
-;
-;  Basic program to modify the C-64 tokenization routine is:
-;
-;    10 FOR X=40960 TO 49151 
-;    20 Y=PEEK(X)  :REM COPY BASIC TO RAM
-;    30 POKE X,Y   :REM $A000 TO $BFFF
-;    40 NEXT
-;    45 REM JMP $C469 (50281)
-;    50 POKE 42433,76
-;    60 POKE 42434,105
-;    70 POKE 42435,196
-;    80 POKE 1,PEEK(1) AND 254
-;-------------------------------------------------------------------------------
-modtok    cmp  #$80
-          bne  posin
-          pha                 ; If possible token.
-          lda  $0201,x        ; Get next char.
-          cmp  #$20           ; Is it a space?
-          beq  endw
-          cmp  #$00           ; END-OF-LINE?
-          beq  endw
-          cmp  #$3a           ; ":"?
-          beq  endw
-          pla
-; ********************************* Page 64 ************************************
-posin     jmp  $a5f5          ; don't tokenize.
-endw      pla
-          jmp  $a5c5          ; Do tokenize.   
-
 
 ;-------------------------------------------------------------------------------
 ; Je mets les librairies à la fin pour que le code du projet se place aux debut
