@@ -697,7 +697,7 @@ keys      cmp  #$41           ; Is-it "A"?
           bne  comkey
 nota      cmp  #$4e           ; Is it "N"?
           bne notn
-; ********************************* Page 62 ************************************  
+; ********************************* Page 62 ************************************
           lda  #$40
           bne  comkey
 notn      cmp  #$53           ; Is it "S"?
@@ -757,7 +757,7 @@ gfind     rts
 help      rts
 himem     rts
 hires     rts
-; ********************************* Page 054          
+; ********************************* Page 63 ************************************
 hpen      rts
 htab      rts
 insert    rts
@@ -790,6 +790,7 @@ unlst     rts
 unnw      rts
 vdump     rts
 vpen      rts
+; ********************************* Page 64 ************************************
 vtab      rts
 while     rts
 ;-------------------------------------------------------------------------------
@@ -800,7 +801,47 @@ penx      rts
 peny      rts
 ;-------------------------------------------------------------------------------
 ; Allow imbeded keywords.
+;
+; Routine used when Commodore 64 tokenization routine is modified to check for a
+; following space, colon or $00 END-OF-LINE byte before a keyword is tokenized 
+; to allow the new keywords to contain embedded old keywords. 
+; (Except at the end of a new keyword).
+;
+;  If thie feature is used then you must follow all keywords with a space.
+;
+;  Basic program to modify the C-64 tokenization routine is:
+;
+;    10 FOR X=40960 TO 49151 
+;    20 Y=PEEK(X)  :REM COPY BASIC TO RAM
+;    30 POKE X,Y   :REM $A000 TO $BFFF
+;    40 NEXT
+;    45 REM JMP $C469 (50281)
+;    50 POKE 42433,76
+;    60 POKE 42434,105
+;    70 POKE 42435,196
+;    80 POKE 1,PEEK(1) AND 254
 ;-------------------------------------------------------------------------------
+modtok    cmp  #$80
+          bne  posin
+          pha                 ; If possible token.
+          lda  $0201,x        ; Get next char.
+          cmp  #$20           ; Is it a space?
+          beq  endw
+          cmp  #$00           ; END-OF-LINE?
+          beq  endw
+          cmp  #$3a           ; ":"?
+          beq  endw
+          pla
+; ********************************* Page 64 ************************************
+posin     jmp  $a5f5          ; don't tokenize.
+endw      pla
+          jmp  $a5c5          ; Do tokenize.   
+;-------------------------------------------------------------------------------
+; New command for Basic
+; One-byte token version
+; Allowing new tokens $cc - $ce
+; Commodore 64 version.
+;-------------------------------------------------------------------------------     
 
 
 ;-------------------------------------------------------------------------------
