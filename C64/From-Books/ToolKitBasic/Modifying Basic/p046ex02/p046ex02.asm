@@ -133,6 +133,8 @@ fncv      .word     funcx
           sta  $030a         ; ($030a) =
           lda  fncv+1        ; Function vector
           sta  $030b     ;
+          cli
+          rts
 ;-------------------------------------------------------------------------------
 ; Table of new keywords
 ;
