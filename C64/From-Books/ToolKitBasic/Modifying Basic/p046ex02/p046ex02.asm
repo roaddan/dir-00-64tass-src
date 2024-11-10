@@ -82,7 +82,7 @@ ready     =    $a474
 ; Starting location of command package on the C-64 is $c000 (49152).
 ; Starting location of command package on the VIC-20 is $6200 (25088).
 ; Origin for the commodore 64.
-          *=$c000
+          *=$8000
 ; Origin for the commodore VIC-20.
 ;          *=$6200
 ;-------------------------------------------------------------------------------
@@ -114,7 +114,7 @@ fncv      .word     funcx
 ;-------------------------------------------------------------------------------
           sei
           lda  errv
-          sta  $3000         ; ($3000) =
+          sta  $0300         ; ($0300) =
           lda  errv+1        ; Error message vector
           sta  $0301         ; 
           lda  tokv
@@ -253,7 +253,7 @@ toktab    .text     "ADUM"
           .byte     $c3           ; SPRITEC $2D
           .text     "SPRITE"
           .byte     $c4           ; SPRITED $2E
-          .text     "SpRITE"
+          .text     "SPRITE"
           .byte     $cd           ; SPRITEM $2F
           .text     "SR"
           .byte     $d4           ; SRT     $30
@@ -340,7 +340,7 @@ comadr    .word     adump-1
           .word     lomem-1
           .word     merge-1
           .word     mod-1
-          .word     mode-1
+          .word     move-1
           .word     tapem-1
           .word     multic-1
           .word     old-1
@@ -453,10 +453,10 @@ store     inx                 ; Input index.
           sbc  #$3a           ; See if colon.
           beq  colon
           cmp  #$49           ; See if "DATA" token.
-          bne  nodat
+          bne  notdat
 colon     sta  $0f            ; Sat data flag to $49 for bvs.
           bne  charlp
-nodat     sec
+notdat    sec
           sbc  #$55           ; See if REM
           bne  charlp
           sta  $08            ; If REM set $00 termiator.
@@ -542,7 +542,7 @@ comx      jsr  $0073          ; Chrget
           pha
           lda  #$f0           ; Restore check for
           sta  $82            ;   space in chrget
-          lda  #$fe
+          lda  #$ef        
           sta  $83
           pla
           cmp  fncone         ; Token > command ?
@@ -768,7 +768,7 @@ line      rts
 lomem     rts
 merge     rts
 mod       rts
-mode      rts
+move      rts
 tapem     rts
 multic    rts
 old       rts
@@ -838,12 +838,6 @@ modtok    cmp  #$80
 posin     jmp  $a5f5          ; don't tokenize.
 endw      pla
           jmp  $a5c5          ; Do tokenize.   
-;-------------------------------------------------------------------------------
-; New command for Basic
-; One-byte token version
-; Allowing new tokens $cc - $ce
-; Commodore 64 version.
-;-------------------------------------------------------------------------------     
 
 
 ;-------------------------------------------------------------------------------
