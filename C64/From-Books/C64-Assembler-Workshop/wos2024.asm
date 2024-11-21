@@ -19,9 +19,9 @@
 ;-------------------------------------------------------------------------------
 main           .block
 ;-------------------------------------------------------------------------------
-               jsr  scrmaninit     ; Initialisation de l'écran
-               jsr  greetings      ; Message d'identification.
-               jsr  wedgeos        ; Installe le "wedge".
+               jsr  scrmaninit     ; Initialisation de l'é
+               jsr  greetings
+               jsr  wedgeos
 over           rts  
                .bend
 ;-------------------------------------------------------------------------------
@@ -36,46 +36,46 @@ initwos        lda  #$4c           ; On remplace l’instruction cmp
                jmp  ready          ; Affiche "Ready" et lance basic warm-start.
  
 ;début de notre fonction
-wos            cmp  #$40           ; Est-ce un "@"?
-               bne  ncmd           ; Non, traitons la commande normale.
-               lda  $9d            ; Sommes nous en mode pgm?
-               beq  cmdmod         ; Oui, On traite l'exécution immédiate.
-               lda  $0200          ; Non, On lit le tampon clavier.
-               cmp  #$40           ; Est-ce un "@"?
-               bne  stdcmd         ; Non, stdcmd, branche a $1c (+28) bytes
-               jsr  xtdcmd         ; Oui, xtdcmd, une de nos commandes
-l290           ldy  #$00           ; Initialise l'index
-l300           lda  ($7a),y        ; Prend un octet du tampon.
+wos            cmp  #$40           ; Est-ce un "@" (ASCII).
+               bne  lnormcmd       ; Laisse Basic interpreter sa commande.
+               lda  $9d            ; Le Z de MSGFLG indique si en mode pgm.
+               beq  lmodepgm       ; Oui - branche a lmodepgm.
+               lda  $0200          ; Non - lecture du tampon clavier.
+               cmp  #$40           ; Est-ce un "@" (ASCII).
+               bne  lflushpfx      ; Non, stdcmd, branche a $1c (+28) bytes
+               jsr  lfindxcmd      ; Oui, cherchons parmis nos commandes.
+l290           ldy  #$00           ; Initialise l'index à $00.
+lgetbuffb      lda  ($7a),y        ; Prend un octet du tampon clavier.
                cmp  #$20           ; Est-ce un espace?
-               beq  l380           ; 320 - 2 oui on va à 380
-               inc  $7a       ; 330 - 2 on incremente le lsB du pointeur
-               bne  l300      ; 340 - 2 Pas de report branche a $f6 (-10) bytes
-               inc  $7b       ; 350 - 2 on fait le repport
-               sec            ; 360 - 1 on force un branchement a 290 
-               bcs  l300      ; 370 - 2 branche a $f1 (-15) bytes  
-l380           jsr  b_warmstart ; 380 - 3 appel à basic  
-               lda  #$00      ; 390 - 2  On efface a
-               sec            ; 400 - 1 On force le C pour brch à 570  
-l410           bcs  ncmd      ; 410 - 2 branche a $1d (+29) bytes
-stdcmd           lda  #$40      ; 420 - 2 récupère @
-               sec            ; 430 - 1 On force le C pour brch à 570
-               bcs  ncmd      ; 440 - 2 branche a $18  (+24) bytes
+               beq  lnoxcmd        ; Oui, On ignore le "@".
+               inc  $7a            ; On incremente le LSB du pointeur.
+               bne  lgetbuffb      ; Pas de report, On lit le prochain octet.
+               inc  $7b            ; On fait un repport au MSB du pointeur.
+               sec                 ; On force un branchement par BCS. 
+               bcs  lgetbuffb      ; On lit le prochain octet. 
+lnoxcmd        jsr  b_warmstart    ; On retourne à l'interpréteur Basic.  
+               lda  #$00           ; On place $00 dans Acc.
+               sec                 ; On force le C pour BCS et ... 
+l410           bcs  lnormcmd       ; ... brancher à lnormcmd.
+lflushpfx      lda  #$40           ; Charge "@" dans Acc. 
+               sec                 ; On force le C pour BCS et ... 
+               bcs  lnormcmd       ; ... brancher à lnormcmd.
 ;-------------------------------------------------------------------------------
 ; --- Program Mode ---------------
 ;-------------------------------------------------------------------------------
-cmdmod         jsr  xtdcmd      ; 450 - 3 On trouve et exécute notre commande
+lmodepgm           jsr  lfindxcmd      ; modepgm - 3 On trouve et exécute notre commande
                ldy  #$00      ; 460 - 2 On initialise l'indexe
 l470           lda  ($7a),y   ; 470 - 2 On lit un octet du programme
                cmp  #$00      ; 480 - 2 Si 0, fin de ligne
-               beq  ncmd      ; 490 - 2 branche à $0d (+13) bytes
+               beq  lnormcmd      ; 490 - 2 branche à $0d (+13) bytes
                cmp  #$3a      ; 500 - 2 Est-ce un :
-               beq  ncmd      ; 510 - 2 branche à $09 ( +9) bytes 
+               beq  lnormcmd      ; 510 - 2 branche à $09 ( +9) bytes 
                inc  $7a       ; 520 - 2 Incrémente lsB du PTR
                bne  l470      ; 530 - 2 branche à $f2 (-14) bytes
                inc  $7b       ; 540 - 2 On fait le repport
                sec            ; 550 - 1 On force le branchement
                bcs  l470      ; 560 - 2 branche à $ed  (-20) bytes  
-ncmd           cmp  #$3a      ; 570 - 2 est-ce un délimiteur :
+lnormcmd           cmp  #$3a      ; normcmd - 2 est-ce un délimiteur :
                bcs  l650      ; 580 - 2 branche si >= à $0a (+10) bytes
                cmp  #$20      ; 590 - 2 est-ce un " "
                beq  l660      ; 600 - 2 branche à $07 ( +7) bytes
@@ -87,7 +87,7 @@ l650           rts            ; 650 - 1 Retourne à Basic
                jmp  ready
 l660           jmp  $0073     ; 660 - 3 lance CHARGET
 
-xtdcmd           ; On charge la table de commande en mémoire
+lfindxcmd           ; On charge la table de commande en mémoire
                lda  #<cmdtbl  ;$00      ; 670 - 2
                sta  $7f       ;           680 - 2
                lda  #>cmdtbl  ;$c1      ; 690 - 2
@@ -197,15 +197,15 @@ L250           sec            ;250
 p2tester       .block
 ;-------------------------------------------------------------------------------
                jsr  push
-L380           jsr  getin     ;380
-               beq  L380      ;390
+Lnoxcmd           jsr  getin     ;noxcmd
+               beq  Lnoxcmd      ;390
                jsr  atobin    ;aschex2bin;400
                bcc  out       ;410
-               lda  #$FF      ;420
+               lda  #$FF      ;flushpfx
                               ;430 over
 out            sta  $fb       ;430
                jsr  pop       
-               rts            ;450
+               rts            ;modepgm
                .bend               
 
 ;-------------------------------------------------------------------------------

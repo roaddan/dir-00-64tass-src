@@ -1,11 +1,11 @@
 
 ; 64tass Turbo Assembler Macro V1.52.1237? listing file
-; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L wos2022.txt -o wos2022.prg wos2022.asm
-; Thu Nov 21 12:19:06 2024
+; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L wos2024.txt -o wos2024.prg wos2024.asm
+; Thu Nov 21 13:30:07 2024
 
 ;Offset	;Hex		;Source
 
-;******  Processing input file: wos2022.asm
+;******  Processing input file: wos2024.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/header-c64.asm
@@ -33,66 +33,66 @@
 >084f	00 00		bcmd4	.word $0000    ;L'adresse de la commande Basic suivante.
 .0851	4c 00 c0	hpgmstart       jmp      main  ; le programme principale doit s'appeler "main"
 
-;******  Return to file: wos2022.asm
+;******  Return to file: wos2024.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/macros-64tass.asm
 
 
-;******  Return to file: wos2022.asm
+;******  Return to file: wos2024.asm
 
 ="20241118-223038"	     version = "20241118-223038"
 =$a474			     ready     =    $a474
 .c000			main
-.c000	20 69 c3	               jsr  scrmaninit
+.c000	20 69 c3	               jsr  scrmaninit     ; Initialisation de l'é
 .c003	20 c3 c0	               jsr  greetings
 .c006	20 0a c0	               jsr  wedgeos
 .c009	60		over           rts
 .c00a			wedgeos
-.c00a	a9 4c		initwos        lda  #$4c      ; 140 - 2 on remplace l’instruction cmp
-.c00c	85 7c		               sta  $7c       ; 150 - 2 ... avec « : » par jmp à
-.c00e	a9 19		               lda  #<wos     ; 160 - 2 ... l’adresse de notre
-.c010	85 7d		               sta  $7d       ; 170 - 2 ... fonction à la place de
-.c012	a9 c0		               lda  #>wos     ; 180 - 2 ... celle du basic du c64
-.c014	85 7e		               sta  $7e       ; 190 - 2 ... pour s’insérer.
-.c016	4c 74 a4	               jmp  ready     ; 200 - 3 Affiche "Ready" et lance basic warm-start.
-.c019	c9 40		wos            cmp  #$40      ; 210 - 2 est-ce un "@"
-.c01b	d0 44		               bne  l570      ; 220 - 2 branche a $44 (+68) bytes
-.c01d	a5 9d		               lda  $9d       ; 230 - 2 sommes nous en mode pgm
-.c01f	f0 28		               beq  l450      ; 240 - 2 oui - branche a $28 (+40) bytes
-.c021	ad 00 02	               lda  $0200     ; 250 - 3 non - lire kb buffer
-.c024	c9 40		               cmp  #$40      ; 260 - 2 est-ce un "@"
-.c026	d0 1c		               bne  l420      ; 270 - 2 non, stdcmd, branche a $1c (+28) bytes
-.c028	20 76 c0	               jsr  l670      ; 280 - 3 oui, xtdcmd, une de nos commandes
-.c02b	a0 00		l290           ldy  #$00      ; 290 - 2 Initialise l'index
-.c02d	b1 7a		l300           lda  ($7a),y   ; 300 - 2 Prend un byte du buffer
-.c02f	c9 20		               cmp  #$20      ; 310 - 2 est-ce un espace
-.c031	f0 09		               beq  l380      ; 320 - 2 oui on va à 380
-.c033	e6 7a		               inc  $7a       ; 330 - 2 on incremente le lsB du pointeur
-.c035	d0 f6		               bne  l300      ; 340 - 2 Pas de report branche a $f6 (-10) bytes
-.c037	e6 7b		               inc  $7b       ; 350 - 2 on fait le repport
-.c039	38		               sec            ; 360 - 1 on force un branchement a 290
-.c03a	b0 f1		               bcs  l300      ; 370 - 2 branche a $f1 (-15) bytes
-.c03c	20 74 a4	l380           jsr  b_warmstart ; 380 - 3 appel à basic
-.c03f	a9 00		               lda  #$00      ; 390 - 2  On efface a
-.c041	38		               sec            ; 400 - 1 On force le C pour brch à 570
-.c042	b0 1d		l410           bcs  l570      ; 410 - 2 branche a $1d (+29) bytes
-.c044	a9 40		l420           lda  #$40      ; 420 - 2 récupère @
-.c046	38		               sec            ; 430 - 1 On force le C pour brch à 570
-.c047	b0 18		               bcs  l570      ; 440 - 2 branche a $18  (+24) bytes
-.c049	20 76 c0	l450           jsr  l670      ; 450 - 3 On trouve et exécute notre commande
+.c00a	a9 4c		initwos        lda  #$4c           ; On remplace l’instruction cmp
+.c00c	85 7c		               sta  $7c            ; ... avec « : » par jmp à
+.c00e	a9 19		               lda  #<wos          ; ... l’adresse de notre
+.c010	85 7d		               sta  $7d            ; ... fonction à la place de
+.c012	a9 c0		               lda  #>wos          ; ... celle du basic du c64
+.c014	85 7e		               sta  $7e            ; ... pour s’insérer.
+.c016	4c 74 a4	               jmp  ready          ; Affiche "Ready" et lance basic warm-start.
+.c019	c9 40		wos            cmp  #$40           ; Est-ce un "@" (ASCII).
+.c01b	d0 44		               bne  lnormcmd       ; Laisse Basic interpreter sa commande.
+.c01d	a5 9d		               lda  $9d            ; Le Z de MSGFLG indique si en mode pgm.
+.c01f	f0 28		               beq  lmodepgm       ; Oui - branche a lmodepgm.
+.c021	ad 00 02	               lda  $0200          ; Non - lecture du tampon clavier.
+.c024	c9 40		               cmp  #$40           ; Est-ce un "@" (ASCII).
+.c026	d0 1c		               bne  lflushpfx      ; Non, stdcmd, branche a $1c (+28) bytes
+.c028	20 76 c0	               jsr  lfindxcmd      ; Oui, cherchons parmis nos commandes.
+.c02b	a0 00		l290           ldy  #$00           ; Initialise l'index à $00.
+.c02d	b1 7a		lgetbuffb      lda  ($7a),y        ; Prend un octet du tampon clavier.
+.c02f	c9 20		               cmp  #$20           ; Est-ce un espace?
+.c031	f0 09		               beq  lnoxcmd        ; Oui, On ignore le "@".
+.c033	e6 7a		               inc  $7a            ; On incremente le LSB du pointeur.
+.c035	d0 f6		               bne  lgetbuffb      ; Pas de report, On lit le prochain octet.
+.c037	e6 7b		               inc  $7b            ; On fait un repport au MSB du pointeur.
+.c039	38		               sec                 ; On force un branchement par BCS.
+.c03a	b0 f1		               bcs  lgetbuffb      ; On lit le prochain octet.
+.c03c	20 74 a4	lnoxcmd        jsr  b_warmstart    ; On retourne à l'interpréteur Basic.
+.c03f	a9 00		               lda  #$00           ; On place $00 dans Acc.
+.c041	38		               sec                 ; On force le C pour BCS et ...
+.c042	b0 1d		l410           bcs  lnormcmd       ; ... brancher à lnormcmd.
+.c044	a9 40		lflushpfx      lda  #$40           ; Charge "@" dans Acc.
+.c046	38		               sec                 ; On force le C pour BCS et ...
+.c047	b0 18		               bcs  lnormcmd       ; ... brancher à lnormcmd.
+.c049	20 76 c0	lmodepgm           jsr  lfindxcmd      ; modepgm - 3 On trouve et exécute notre commande
 .c04c	a0 00		               ldy  #$00      ; 460 - 2 On initialise l'indexe
 .c04e	b1 7a		l470           lda  ($7a),y   ; 470 - 2 On lit un octet du programme
 .c050	c9 00		               cmp  #$00      ; 480 - 2 Si 0, fin de ligne
-.c052	f0 0d		               beq  l570      ; 490 - 2 branche à $0d (+13) bytes
+.c052	f0 0d		               beq  lnormcmd      ; 490 - 2 branche à $0d (+13) bytes
 .c054	c9 3a		               cmp  #$3a      ; 500 - 2 Est-ce un :
-.c056	f0 09		               beq  l570      ; 510 - 2 branche à $09 ( +9) bytes
+.c056	f0 09		               beq  lnormcmd      ; 510 - 2 branche à $09 ( +9) bytes
 .c058	e6 7a		               inc  $7a       ; 520 - 2 Incrémente lsB du PTR
 .c05a	d0 f2		               bne  l470      ; 530 - 2 branche à $f2 (-14) bytes
 .c05c	e6 7b		               inc  $7b       ; 540 - 2 On fait le repport
 .c05e	38		               sec            ; 550 - 1 On force le branchement
 .c05f	b0 ed		               bcs  l470      ; 560 - 2 branche à $ed  (-20) bytes
-.c061	c9 3a		l570           cmp  #$3a      ; 570 - 2 est-ce un délimiteur :
+.c061	c9 3a		lnormcmd           cmp  #$3a      ; normcmd - 2 est-ce un délimiteur :
 .c063	b0 0a		               bcs  l650      ; 580 - 2 branche si >= à $0a (+10) bytes
 .c065	c9 20		               cmp  #$20      ; 590 - 2 est-ce un " "
 .c067	f0 0a		               beq  l660      ; 600 - 2 branche à $07 ( +7) bytes
@@ -103,7 +103,7 @@
 .c06f	60		l650           rts            ; 650 - 1 Retourne à Basic
 .c070	4c 74 a4	               jmp  ready
 .c073	4c 73 00	l660           jmp  $0073     ; 660 - 3 lance CHARGET
-.c076			l670
+.c076			lfindxcmd
 .c076	a9 67		               lda  #<cmdtbl  ;$00      ; 670 - 2
 .c078	85 7f		               sta  $7f       ;           680 - 2
 .c07a	a9 c1		               lda  #>cmdtbl  ;$c1      ; 690 - 2
@@ -209,14 +209,14 @@
 .c151	60		               rts
 .c152			p2tester
 .c152	20 97 c4	               jsr  push
-.c155	20 e4 ff	L380           jsr  getin     ;380
-.c158	f0 fb		               beq  L380      ;390
+.c155	20 e4 ff	Lnoxcmd           jsr  getin     ;noxcmd
+.c158	f0 fb		               beq  Lnoxcmd      ;390
 .c15a	20 01 c7	               jsr  atobin    ;aschex2bin;400
 .c15d	90 02		               bcc  out       ;410
-.c15f	a9 ff		               lda  #$FF      ;420
+.c15f	a9 ff		               lda  #$FF      ;flushpfx
 .c161	85 fb		out            sta  $fb       ;430
 .c163	20 d6 c4	               jsr  pop
-.c166	60		               rts            ;450
+.c166	60		               rts            ;modepgm
 .c167			cmdtbl
 >c167	c3 cc d3 00	               .text     "CLS",0,"LOW",0,"UP",0
 >c16b	cc cf d7 00 d5 d0 00
@@ -714,7 +714,7 @@
 =240			kerrf0         =    240  ; top-of-memory change rs-232 buffer allocation.
 .c369			libtart
 
-;******  Return to file: wos2022.asm
+;******  Return to file: wos2024.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/map-c64-basic2.asm
@@ -913,7 +913,7 @@
 =$b3a2			b_ytfl1        = $b3a2 ; Convert int(y) to FAC1.     ;--y;---;
 =$e059			b_poly         = $e059 ; Ploynomial evaluation
 
-;******  Return to file: wos2022.asm
+;******  Return to file: wos2024.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/map-c64-vicii.asm
@@ -973,7 +973,7 @@
 =53293			vicsprt6col = vic+$2d 	; $d02d, 53293		|--|--|--|--|c3|c2|c1|c0|
 =53294			vicsprt7col = vic+$2e 	; $d02e, 53294		|--|--|--|--|c3|c2|c1|c0|
 
-;******  Return to file: wos2022.asm
+;******  Return to file: wos2024.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-c64-basic2.asm
@@ -1161,7 +1161,7 @@
 .c495	68		               pla
 .c496	60		               rts
 
-;******  Return to file: wos2022.asm
+;******  Return to file: wos2024.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-cbm-pushpop.asm
@@ -1242,7 +1242,7 @@
 >c50a	00		ra        .byte     0
 >c50b	00 00		pc        .word     0
 
-;******  Return to file: wos2022.asm
+;******  Return to file: wos2024.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-cbm-mem.asm
@@ -1433,7 +1433,7 @@
 >c64a	00 00		zp1        .word   $0000
 >c64c	00 00		zp2        .word   $0000
 
-;******  Return to file: wos2022.asm
+;******  Return to file: wos2024.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-cbm-hex.asm
@@ -1623,7 +1623,7 @@
 .c79f	20 d6 c4	               jsr  pop
 .c7a2	60		               rts
 
-;******  Return to file: wos2022.asm
+;******  Return to file: wos2024.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-cbm-disk.asm
@@ -1779,7 +1779,7 @@
 >c8fe	45 52 52 45	               .null     "erreur d'ecriture"
 >c902	55 52 20 44 27 45 43 52 49 54 55 52 45 00
 
-;******  Return to file: wos2022.asm
+;******  Return to file: wos2024.asm
 
 
 ;******  End of listing
