@@ -30,7 +30,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=p036ex21
+SOURCENAME=template
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -127,12 +127,14 @@ FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
 FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
 FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye
 FTPD64ARG=cd $(FTPBASDIR)/d64; put $(SOURCENAME).d64; bye
+FTPD81ARG=cd $(FTPBASDIR)/d81; put $(SOURCENAME).d81; bye
 FTPCRTARG=cd $(FTPBASDIR)/crt; put $(SOURCENAME).crt; bye
 # Concatenating lftp full commands.
 FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
 FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)
 FTPPRGCMD=$(FTPCMDPATH) -e "$(FTPPRGARG)" $(FTPSVRIP)
 FTPD64CMD=$(FTPCMDPATH) -e "$(FTPD64ARG)" $(FTPSVRIP)
+FTPD81CMD=$(FTPCMDPATH) -e "$(FTPD81ARG)" $(FTPSVRIP)
 FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 #
 # -----------------------------------------------------------------------------
@@ -142,8 +144,9 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-#		$(FTPASMCMD)	# To transfer the source ASM file.
-#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
+		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
+		$(FTPASMCMD)	# To transfer the source ASM file.
+		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
 #		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
 
@@ -151,9 +154,10 @@ all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 # When called with "make ftp". 
 # ** Using comment, you can mask or enable anny action.
 ftp:		
-		#$(SOURCENAME).d64	# To compile the source file and crate disk.
+		$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
 		$(FTPASMCMD)	# To transfer the source ASM file.
 		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
@@ -165,7 +169,7 @@ clean:
 		rm $(BASEDIR)/$(PRGDIR)/prg/$(SOURCENAME).prg
 		rm $(BASEDIR)/$(PRGDIR)/txt/$(SOURCENAME).txt
 		rm $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64
-
+		rm $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81
 # -----------------------------------------------------------------------------
 # Rule to compile the source file.
 # -----------------------------------------------------------------------------
@@ -179,8 +183,17 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
+		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
+		-write $(SOURCENAME).prg $(SOURCENAME) \
+		-write $(DBC) dbc \
+		-write $(JBMON64) jbmon64 \
+		-write $(CHAREDIT) charedit \
+		-write $(J2TESTER) j2tester
+
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
+		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
+		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
 # Assembling and distributing resulting files.
 $(SOURCENAME).prg: $(SOURCENAME).asm

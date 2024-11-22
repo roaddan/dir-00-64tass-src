@@ -30,7 +30,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=wos2024
+SOURCENAME=template
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -183,14 +183,15 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
-		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
-		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
+
+		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
+		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 

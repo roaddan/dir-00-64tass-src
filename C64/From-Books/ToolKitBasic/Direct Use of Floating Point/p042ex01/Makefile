@@ -30,7 +30,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=p042ex01
+SOURCENAME=template
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -67,8 +67,8 @@ C1541=$(VICEBIN)/c1541
 # Complete path to the cartconv cartridge converter program.
 CARTCONV=$(VICEBIN)/cartconv
 # Complete path to some other emulator programs.
-X64SCSDL=/Applications/vice-x86-64-sdl2-3.7.1/x64sc.app/Contents/MacOS/x64sc
-X64SCGTK=/Applications/vice-x86-64-gtk3-3.7.1/x64sc.app/Contents/MacOS/x64sc
+X64SCSDL=/Applications/vice-x86-64-sdl2-3.6.1/x64sc.app/Contents/MacOS/x64sc
+X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
 #
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
@@ -84,14 +84,17 @@ DISK8DIR=
 DISK9DIR=
 DBC=/Users/Locals/C64/00-usbkey32go/dbc
 JBMON64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/40-best-subrouines/00-supermon/jbmon/jbmon64
+CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
+J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
-VICE=$(X64)
+VICE=$(X64SCGTK)
 OUTDIR=$(OUTDIRC64)
 #OUTDIR=$(OUTDIRV20)
+
 # The Vice autostart parameters. 
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # -----------------------------------------------------------------------------
@@ -124,12 +127,14 @@ FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
 FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
 FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye
 FTPD64ARG=cd $(FTPBASDIR)/d64; put $(SOURCENAME).d64; bye
+FTPD81ARG=cd $(FTPBASDIR)/d81; put $(SOURCENAME).d81; bye
 FTPCRTARG=cd $(FTPBASDIR)/crt; put $(SOURCENAME).crt; bye
 # Concatenating lftp full commands.
 FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
 FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)
 FTPPRGCMD=$(FTPCMDPATH) -e "$(FTPPRGARG)" $(FTPSVRIP)
 FTPD64CMD=$(FTPCMDPATH) -e "$(FTPD64ARG)" $(FTPSVRIP)
+FTPD81CMD=$(FTPCMDPATH) -e "$(FTPD81ARG)" $(FTPSVRIP)
 FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 #
 # -----------------------------------------------------------------------------
@@ -139,6 +144,7 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
 		$(FTPASMCMD)	# To transfer the source ASM file.
 		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
@@ -148,9 +154,10 @@ all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 # When called with "make ftp". 
 # ** Using comment, you can mask or enable anny action.
 ftp:		
-		#$(SOURCENAME).d64	# To compile the source file and crate disk.
+		$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
 		$(FTPASMCMD)	# To transfer the source ASM file.
 		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
@@ -162,7 +169,7 @@ clean:
 		rm $(BASEDIR)/$(PRGDIR)/prg/$(SOURCENAME).prg
 		rm $(BASEDIR)/$(PRGDIR)/txt/$(SOURCENAME).txt
 		rm $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64
-
+		rm $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81
 # -----------------------------------------------------------------------------
 # Rule to compile the source file.
 # -----------------------------------------------------------------------------
@@ -173,9 +180,20 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
-		-write $(JBMON64) jbmon64
+		-write $(JBMON64) jbmon64 \
+		-write $(CHAREDIT) charedit \
+		-write $(J2TESTER) j2tester
+		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
+		-write $(SOURCENAME).prg $(SOURCENAME) \
+		-write $(DBC) dbc \
+		-write $(JBMON64) jbmon64 \
+		-write $(CHAREDIT) charedit \
+		-write $(J2TESTER) j2tester
+
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
+		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
+		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
 # Assembling and distributing resulting files.
 $(SOURCENAME).prg: $(SOURCENAME).asm
