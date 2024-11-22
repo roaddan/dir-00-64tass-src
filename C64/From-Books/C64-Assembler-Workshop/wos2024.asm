@@ -3,10 +3,10 @@
 ;-------------------------------------------------------------------------------
 ; Equates
 ;-------------------------------------------------------------------------------
-     version = "20241118-223038"
+     version = "20241118-223011"
      ready     =    $a474
-               .enc none
-               *=$c000
+               .enc text
+               *=$8000
 ;-------------------------------------------------------------------------------
 main           .block
 ;-------------------------------------------------------------------------------
@@ -285,7 +285,8 @@ dir11          lda  #$0b
 dir12          lda  #$0c
                jmp  dirn
 dirn           sta  dsk_dev
-dir            jsr  diskdir
+dir            jsr  diskerror            
+               jsr  diskdir
                jsr  diskerror
                ;jsr  showregs
                ;jsr  cls
@@ -318,7 +319,7 @@ msg1 .null " **************************************"
 msg2 .byte 13
      .null " *     c64 WOS commandes etendues     *"
 msg3 .byte 13
-     .null " *        par Daniel Lafrance         *"
+     .null " * par Daniel Lafrance  (@? for help) *"
 msg4 .byte 13
      .null format(   " *    Version.....: %s   *",version)
 ;               .text     "CLS",0,"LOW",0,"UP",0
@@ -328,21 +329,21 @@ msg4 .byte 13
 ;               .text     "DIR",0,"8DIR",0,"9DIR",0,"10DIR",0,"11DIR",0,"12DIR",0
 
 hlp0           .byte $0d
-               .null "  @cls  : clear scr  @test :           "
+               .null "  @cls  = clear scr ; @test =          "
 hlp1           .byte $0d
-               .null "  @low  : lcase      @up   : ucase     "
+               .null "  @low  = lcase     ; @up   = ucase    "
 hlp2           .byte $0d
-               .null "  @about: tell me    @?    : this help "
+               .null "  @about= tell me   ; @?    = this help"
 hlp3           .byte $0d
-               .null "  @s+/- : scrn-col   @b+/- : bord-col  "
+               .null "  @s+/- = scrn-col  ; @b+/- = bord-col "
 hlp4           .byte $0d
-               .null "  @f+/- : font-col   @fill : fill-font "
+               .null "  @f+/- = font-col  ; @fill = fill-font"
 hlp5           .byte $0d
-               .null "  @dir  : list disk  @8dir : lst #8    "
+               .null "  @dir  = list disk ; @8dir = disk #8  "
 hlp6           .byte $0d
-               .null "  @9dir : llst #8    @10dir: lst drv 8 "
+               .null "  @9dir = disk #9   ; @10dir= disk #10 "
 hlp7           .byte $0d
-               .text "  @11dir: list disk  @12dir: lst drv 8 "
+               .text "  @11dir= disk #11  ; @12dir= disk #12 "
                .byte $0d, $00
 help           .block
                jsr  push
@@ -363,6 +364,7 @@ help           .block
 ;-------------------------------------------------------------------------------
 ; Inclusion des librairies
 ;-------------------------------------------------------------------------------
+          *=$c000
      .include  "map-c64-kernal.asm" 
      .include  "map-c64-basic2.asm"
      .include  "map-c64-vicii.asm"

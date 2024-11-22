@@ -161,7 +161,7 @@ clean:
 		rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 
 		rm $(BASEDIR)/$(PRGDIR)/prg/$(SOURCENAME).prg
 		rm $(BASEDIR)/$(PRGDIR)/txt/$(SOURCENAME).txt
-		rm $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64
+		rm $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81
 
 # -----------------------------------------------------------------------------
 # Rule to compile the source file.
@@ -170,12 +170,12 @@ clean:
 # The disk will be named as per the source file.
 
 $(SOURCENAME).d64: $(SOURCENAME).prg
-		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
+		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64
-		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
-		cp -f  $(SOURCENAME).d64 $(OUTDIR)
+		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d64
+		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
 # Assembling and distributing resulting files.
 $(SOURCENAME).prg: $(SOURCENAME).asm
