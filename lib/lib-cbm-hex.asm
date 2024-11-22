@@ -21,7 +21,7 @@ abin           .null     "00000000"
 adec           .null     "   "
 putahexfmtxy   .block
                jsr  push
-               jsr  a2hex
+               jsr  atohex
                ldx  a2hexpx
                ldy  a2hexpy
                jsr  gotoxy
@@ -33,7 +33,7 @@ putahexfmtxy   .block
                .bend
 putahexfmt     .block
                jsr  push
-               jsr  a2hex
+               jsr  atohex
                ldx  #<a2hexprefix
                ldy  #>a2hexprefix
                jsr  puts
@@ -43,7 +43,7 @@ putahexfmt     .block
                
 putahex        .block
                jsr  push
-               jsr  a2hex
+               jsr  atohex
                ldx  #<a2hexstr
                ldy  #>a2hexstr
                jsr  puts
@@ -55,7 +55,7 @@ putahex        .block
 ; hexadécimal.
 ; La méthode décimal est employé puisque c'est la plus rapide.
 ;-------------------------------------------------------------------------------
-nib2hex        .block          
+nibtohex        .block          
                php             
                and  #$0f    
                sed
@@ -96,15 +96,15 @@ lsra4bits      .block
 ; a2hexstr - affiche la chaine
 ; a2hexstr+1 - sans afficher le ($)
 ;***************************************
-a2hex          .block
+atohex         .block
                php
                pha
                pha
                jsr  lsra4bits
-               jsr  nib2hex
+               jsr  nibtohex
                sta  a2hexstr
                pla
-               jsr  nib2hex
+               jsr  nibtohex
                sta  a2hexstr+1
                lda  #$00                ; set end of string
                sta  a2hexstr+2
@@ -118,23 +118,23 @@ a2hex          .block
 ;***************************************
 xy2hex         .block
                jsr  push
-               jsr  a2hex
+               jsr  atohex
                txa
                pha
                jsr  lsra4bits
-               jsr  nib2hex
+               jsr  nibtohex
                sta  a2hexstr
                pla
-               jsr  nib2hex
+               jsr  nibtohex
                sta  a2hexstr+1
 
                tya
                pha
                jsr  lsra4bits
-               jsr  nib2hex
+               jsr  nibtohex
                sta  a2hexstr+2
                pla
-               jsr  nib2hex
+               jsr  nibtohex
                sta  a2hexstr+3
                lda  #$00                ; 0 ended string
                sta  a2hexstr+4
@@ -153,7 +153,7 @@ nextbit        rol
                pha
                adc  #$00
                and  #$01
-               jsr  nib2hex
+               jsr  nibtohex
                sta  abin,y
                pla
                iny
@@ -241,18 +241,18 @@ decx           dex
                bne  nextbit
                pha  
                tya
-               jsr  nib2hex
+               jsr  nibtohex
                sta  adec
                pla
                pha
-               jsr  nib2hex
+               jsr  nibtohex
                sta  adec+2
                pla
                ror
                ror
                ror
                ror
-               jsr  nib2hex
+               jsr  nibtohex
                sta  adec+1
                cld
                jsr  pull

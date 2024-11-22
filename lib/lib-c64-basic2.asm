@@ -269,7 +269,7 @@ zp1      .word      $00
 putrahex       .block
                php
                pha
-               jsr  a2hex
+               jsr  atohex
                lda  #<a2hexstr
                ldy  #>a2hexstr
                jsr  puts
@@ -292,7 +292,7 @@ kputrahexxy
 bputrahexxy    
 putrahexxy     .block
                php
-               jsr  a2hex
+               jsr  atohex
                lda  #<a2hexpos
                ldy  #>a2hexpos
                jsr  putsxy
@@ -315,7 +315,7 @@ putrahexxy     .block
 ;---------------------------------------------------------------------
 putrahexcxy    .block
                php
-               jsr  a2hex
+               jsr  atohex
                lda  #<a2hexpos
                ldy  #>a2hexpos
                jsr  putscxy
