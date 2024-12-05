@@ -124,7 +124,7 @@ FTPCMDPATH=/usr/local/bin/lftp
 # Where to put the files on the Ultimate II +.
 FTPBASDIR=/Usb0/d-remote
 FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
-FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
+FTPTXTARG=cd $(FTPBASDIR)/lst; put $(SOURCENAME).lst; bye
 FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye
 FTPD64ARG=cd $(FTPBASDIR)/d64; put $(SOURCENAME).d64; bye
 FTPD81ARG=cd $(FTPBASDIR)/d81; put $(SOURCENAME).d81; bye
@@ -144,7 +144,7 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 #		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-#		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
+		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
 #		$(FTPASMCMD)	# To transfer the source ASM file.
 #		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
@@ -165,9 +165,9 @@ ftp:
 # -----------------------------------------------------------------------------
 # To clean and start project fresh. (seldome used). 
 clean:	
-		rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 
+		rm $(SOURCENAME).lst $(SOURCENAME).prg $(SOURCENAME).d64 
 		rm $(BASEDIR)/$(PRGDIR)/prg/$(SOURCENAME).prg
-		rm $(BASEDIR)/$(PRGDIR)/txt/$(SOURCENAME).txt
+		rm $(BASEDIR)/$(PRGDIR)/lst/$(SOURCENAME).lst
 		rm $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64
 		rm $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81
 # -----------------------------------------------------------------------------
@@ -197,10 +197,10 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 
 # Assembling and distributing resulting files.
 $(SOURCENAME).prg: $(SOURCENAME).asm
-		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
+		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).lst -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)
-		cp -f  $(SOURCENAME).txt $(BASEDIR)/$(PRGDIR)/txt
-		cp -f  $(SOURCENAME).txt $(OUTDIR)
+		cp -f  $(SOURCENAME).lst $(BASEDIR)/$(PRGDIR)/lst
+		cp -f  $(SOURCENAME).lst $(OUTDIR)
 
 

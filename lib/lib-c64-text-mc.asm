@@ -337,10 +337,12 @@ clrinverse     .block
 ;---------------------------------------------------------------------------
 putch          .block              ; Voir Ordinogramme B
                jsr  push           ; On sauvegarde les registres
+               pha
                jsr  scrptr2zp1     ; Place le ptr d'ecran sur zp1
                and  #%00111111     ; Masque des bits 6 et 7 pour la ouleur.
                ora  bkcol          ; On y ajoute la couleur du fond.
                ldy  #0             ; Met Y à 0
+               pla
                sta  (zpage1),y     ; Affiche le caractere
                ldx  colptr+1       ; Place le MSB du ptr de couleur
                stx  zpage1+1       ; ... dans le MSB du zp1.
@@ -539,11 +541,11 @@ scrptr2str     .block
                lda  scrptr+1
                pha
                jsr  lsra4bits
-               jsr  nib2hex
+               jsr  nibtohex
                sta  scraddr
                pla
                jsr  lsra4bits
-               jsr  nib2hex
+               jsr  nibtohex
                sta  scraddr+1
      ;----------------------------------
      ; chaine du msb de la couleur
@@ -551,11 +553,11 @@ scrptr2str     .block
                lda  scrptr+1
                pha
                jsr  lsra4bits
-               jsr  nib2hex
+               jsr  nibtohex
                sta  scraddr
                pla
                jsr  lsra4bits
-               jsr  nib2hex
+               jsr  nibtohex
                sta  scraddr+1
      ;----------------------------------
      ; Chaine du lsb d'ecran et couleur
@@ -563,12 +565,12 @@ scrptr2str     .block
                lda  scrptr
                pha
                jsr  lsra4bits
-               jsr  nib2hex
+               jsr  nibtohex
                sta  scraddr+2
                sta  coladdr+2
                pla
                jsr  lsra4bits
-               jsr  nib2hex
+               jsr  nibtohex
                sta  scraddr+3
                sta  coladdr+3
      ;----------------------------------
@@ -644,7 +646,7 @@ colptr2zp2     .block
 putrahex       .block
                php
                pha
-               jsr     a2hex
+               jsr     atohex
                ldx     #<a2hexcol
                ldy     #>a2hexcol
                jsr     puts
@@ -658,14 +660,14 @@ putrahex       .block
 ; la chaine dans X-(lsb) et Y-(msb).
 ; Entree : A
 ; Sortie : Valeur hexadecimale à la
-;          position (a2hexpx,a2hexpy).
-; **Note : a2hexpx et a2hexpy doivent 
+;          position (atohexpx,atohexpy).
+; **Note : atohexpx et atohexpy doivent 
 ;          etre modifiees avant l'appel.
 ;---------------------------------------------------------------------------
 putrahexxy     .block
                php
                pha
-               jsr  a2hex
+               jsr  atohex
                lda  #<a2hexpos
                ldy  #>a2hexpos
                jsr  putsxy
@@ -679,16 +681,16 @@ putrahexxy     .block
 ; la chaine dans X-(lsb) et Y-(msb).
 ; Entree : A
 ; Sortie : Valeur hexadecimale à la 
-;          position (a2hexpx,a2hexpy) et
+;          position (atohexpx,atohexpy) et
 ;          dans la couleur a2hexcol.
-; **Note : a2hexcol, a2hexpx et a2hexpy
+; **Note : a2hexcol, atohexpx et atohexpy
 ;          doivent etre modifiees avant 
 ;          l'appel.
 ;---------------------------------------------------------------------------
 putrahexcxy    .block
                php
                pla
-               jsr  a2hex
+               jsr  atohex
                lda  #<a2hexpos
                ldy  #>a2hexpos
                jsr  putscxy
