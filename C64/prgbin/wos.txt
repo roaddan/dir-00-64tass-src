@@ -1,13 +1,13 @@
 
 ; 64tass Turbo Assembler Macro V1.52.1237? listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L wos.txt -o wos.prg wos.asm
-; Fri Nov 22 13:32:33 2024
+; Fri Nov 22 14:16:41 2024
 
 ;Offset	;Hex		;Source
 
 ;******  Processing input file: wos.asm
 
-="20241122-130155"	  version      = "20241122-130155"
+="20241122-133359"	  version      = "20241122-133359"
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/header-c64.asm
 
@@ -45,18 +45,18 @@
 =$a474			     ready     =    $a474
 .8000			main
 .8000	20 08 c0	               jsr  scrmaninit     ; Initialisation de l'é
-.8003	20 da 80	               jsr  greetings
+.8003	20 c8 82	               jsr  greetings
 .8006	20 0a 80	               jsr  wedgeos
 .8009	60		over           rts
 .800a			wedgeos
 .800a	a9 08		initwos        lda  #$08
 .800c	8d 73 c5	               sta  dsk_dev
 .800f	ad 86 02	               lda  bascol
-.8012	8d 37 83	               sta  fcol
+.8012	8d aa 82	               sta  fcol
 .8015	ad 20 d0	               lda  vicbordcol
-.8018	8d 35 83	               sta  bcol
+.8018	8d a8 82	               sta  bcol
 .801b	ad 21 d0	               lda  vicbackcol
-.801e	8d 36 83	               sta  scol
+.801e	8d a9 82	               sta  scol
 .8021	a9 4c		               lda  #$4c           ; On remplace l’instruction cmp
 .8023	85 7c		               sta  $7c            ; ... avec « : » par jmp à
 .8025	a9 30		               lda  #<wos          ; ... l’adresse de notre
@@ -111,7 +111,7 @@
 .8086	60		ltbasic        rts                 ; tbasic - 1 Retourne à Basic
 .8087	4c 74 a4	               jmp  ready
 .808a	4c 73 00	ltochrget      jmp  $0073          ; tochrget - 3 lance CHARGET
-.808d	a9 ac		lfindxcmd      lda  #<cmdtbl       ; On place le (LSB) de l'adresse de la ...
+.808d	a9 0d		lfindxcmd      lda  #<cmdtbl       ; On place le (LSB) de l'adresse de la ...
 .808f	85 7f		               sta  $7f            ; ... table des commandes a l'adresse $7f ...
 .8091	a9 81		               lda  #>cmdtbl       ; ... et le (MSB) ...
 .8093	85 80		               sta  $80            ; ... a l'adresse $80.
@@ -145,300 +145,304 @@
 .80c3	e8		               inx                 ; ... adresse dans la table des commandes.
 .80c4	38		               sec                 ; Force le branchement de BCS.
 .80c5	b0 d8		               bcs  lgettabcar     ; Va lire le prochain caractere de la table.
-.80c7	bd 4a 82	lgcmdvct       lda  cmdvect,x      ; Récupère le LSB de l'adresse d'exécution.
+.80c7	bd b7 81	lgcmdvct       lda  cmdvect,x      ; Récupère le LSB de l'adresse d'exécution.
 .80ca	85 80		               sta  $80            ; Le place à 80.
 .80cc	e8		               inx                 ; Avance X pour aller chercher le MSB ...
-.80cd	bd 4a 82	               lda  cmdvect,x      ; ... de l'adresse d'exécution et ...
+.80cd	bd b7 81	               lda  cmdvect,x      ; ... de l'adresse d'exécution et ...
 .80d0	85 81		               sta  $81            ; ... le sauvegarde.
 .80d2	6c 80 00	               jmp  ($0080)        ; Saute vers le vecteur d'exécution.
 .80d5	a2 0b		illegal        ldx  #$0b           ; Charge le code d'erreur dans X
 .80d7	6c 00 03	               jmp  ($300)         ; Affiche l'erreur.
-.80da			greetings
-.80da	20 36 c1	               jsr  push
-.80dd	a9 06		               lda  #vbleu
-.80df	8d 21 d0	               sta  vicbackcol
-.80e2	a9 03		               lda  #vcyan
-.80e4	8d 20 d0	               sta  vicbordcol
-.80e7	20 28 c0	               jsr  cls
-.80ea	a9 01		               lda  #vblanc
-.80ec	8d 86 02	               sta  bascol
-.80ef	20 36 c1	               jsr  push
-.80f2	a2 55		               ldx  #<msg0
-.80f4	a0 83		               ldy  #>msg0
-.80f6	20 45 c0	               jsr  puts
-.80f9	20 75 c1	               jsr  pull
-.80fc	20 36 c1	               jsr  push
-.80ff	a2 58		               ldx  #<msg1
-.8101	a0 83		               ldy  #>msg1
-.8103	20 45 c0	               jsr  puts
-.8106	20 75 c1	               jsr  pull
-.8109	20 36 c1	               jsr  push
-.810c	a2 80		               ldx  #<msg2
-.810e	a0 83		               ldy  #>msg2
-.8110	20 45 c0	               jsr  puts
-.8113	20 75 c1	               jsr  pull
-.8116	a9 0d		               lda  #$0d
-.8118	20 3f c0	               jsr  putch
-.811b	20 36 c1	               jsr  push
-.811e	a2 58		               ldx  #<msg1
-.8120	a0 83		               ldy  #>msg1
-.8122	20 45 c0	               jsr  puts
-.8125	20 75 c1	               jsr  pull
-.8128	a9 0d		               lda  #$0d
-.812a	20 3f c0	               jsr  putch
-.812d	20 75 c1	               jsr  pop
-.8130	60		               rts
-.8131			help
-.8131	20 36 c1	               jsr  push
-.8134	20 36 c1	               jsr  push
-.8137	a2 55		               ldx  #<msg0
-.8139	a0 83		               ldy  #>msg0
-.813b	20 45 c0	               jsr  puts
-.813e	20 75 c1	               jsr  pull
-.8141	20 36 c1	               jsr  push
-.8144	a2 58		               ldx  #<msg1
-.8146	a0 83		               ldy  #>msg1
-.8148	20 45 c0	               jsr  puts
-.814b	20 75 c1	               jsr  pull
-.814e	20 36 c1	               jsr  push
-.8151	a2 49		               ldx  #<hlp0
-.8153	a0 84		               ldy  #>hlp0
-.8155	20 45 c0	               jsr  puts
-.8158	20 75 c1	               jsr  pull
-.815b	20 36 c1	               jsr  push
-.815e	a2 20		               ldx  #<msg6
-.8160	a0 84		               ldy  #>msg6
-.8162	20 45 c0	               jsr  puts
-.8165	20 75 c1	               jsr  pull
-.8168	20 36 c1	               jsr  push
-.816b	a2 58		               ldx  #<msg1
-.816d	a0 83		               ldy  #>msg1
-.816f	20 45 c0	               jsr  puts
-.8172	20 75 c1	               jsr  pull
-.8175	20 75 c1	               jsr  pop
-.8178	60		               rts
-.8179			ascii2bintxt
-.8179	20 36 c1	               jsr  push           ;p21
-.817c	c9 30		               cmp  #$30           ;120
-.817e	90 12		               bcc  Lnonum         ;130
-.8180	c9 3a		               cmp  #$3a           ;140
-.8182	90 08		               bcc  L210           ;150
-.8184	e9 07		               sbc  #$07           ;160
-.8186	90 0a		               bcc  Lnonum         ;170
-.8188	c9 40		               cmp  #$40           ;180
-.818a	b0 02		               bcs  L220           ;190
-.818c	29 0f		L210           and  #$0f           ;210
-.818e	20 75 c1	L220           jsr  pop            ;220 return
-.8191	60		               rts                 ;230
-.8192	38		Lnonum         sec                 ;nonum
-.8193	20 75 c1	               jsr  pop
-.8196	60		               rts
-.8197			p2tester
-.8197	20 36 c1	               jsr  push
-.819a	20 e4 ff	lnoxcmd        jsr  getin          ;noxcmd
-.819d	f0 fb		               beq  lnoxcmd        ;390
-.819f	20 a0 c3	               jsr  atobin          ;aschex2bin;400
-.81a2	90 02		               bcc  out            ;410
-.81a4	a9 ff		               lda  #$FF           ;flushpfx
-.81a6	85 fb		out            sta  $fb            ;430
-.81a8	20 75 c1	               jsr  pop
-.81ab	60		               rts            ;modepgm
-.81ac			cmdtbl
->81ac	c3 cc d3 00	               .text     "CLS",0,"LOW",0,"UP",0
->81b0	cc cf d7 00 d5 d0 00
->81b7	d4 c5 d3 d4	               .text     "TEST",0
->81bb	00
->81bc	c1 c2 cf d5	               .text     "ABOUT",0,"?",0
->81c0	d4 00 3f 00
->81c4	d3 2b 00 d3	               .text     "S+",0,"S-",0,"B+",0,"B-",0,"F+",0,"F-",0,"FILL",0
->81c8	2d 00 c2 2b 00 c2 2d 00 c6 2b 00 c6 2d 00 c6 c9
->81d8	cc cc 00
->81db	c4 c9 d2 00	               .text     "DIR",0,"8DIR",0,"9DIR",0,"10DIR",0,"11DIR",0,"12DIR",0
->81df	38 c4 c9 d2 00 39 c4 c9 d2 00 31 30 c4 c9 d2 00
->81ef	31 31 c4 c9 d2 00 31 32 c4 c9 d2 00
->81fb	43 4c 53 00	               .text     "cls",0,"low",0,"up",0
->81ff	4c 4f 57 00 55 50 00
->8206	54 45 53 54	               .text     "test",0
->820a	00
->820b	41 42 4f 55	               .text     "about",0,"?",0
->820f	54 00 3f 00
->8213	53 2b 00 53	               .text     "s+",0,"s-",0,"b+",0,"b-",0,"f+",0,"f-",0,"fill",0
->8217	2d 00 42 2b 00 42 2d 00 46 2b 00 46 2d 00 46 49
->8227	4c 4c 00
->822a	44 49 52 00	               .text     "dir",0,"8dir",0,"9dir",0,"10dir",0,"11dir",0,"12dir",0
->822e	38 44 49 52 00 39 44 49 52 00 31 30 44 49 52 00
->823e	31 31 44 49 52 00 31 32 44 49 52 00
-.824a			cmdvect
->824a	96 82 9b 82	               .word     woscls, woslow, wosup
->824e	a0 82
->8250	a5 82		               .word     wostest
->8252	b3 82 c5 82	               .word     wosabout, woshelp
->8256	d5 82 db 82	               .word     wosincback, wosdecback,wosincbrd, wosdecbrd
->825a	c9 82 cf 82
->825e	e1 82 e7 82	               .word     wosincfont, wosdecfont, wosfillcol
->8262	be 82
->8264	2b 83 0f 83	               .word     dir, dir8, dir9, dir10, dir11, dir12
->8268	14 83 19 83 1e 83 23 83
->8270	96 82 9b 82	               .word     woscls, woslow, wosup
->8274	a0 82
->8276	a5 82		               .word     wostest
->8278	b3 82 c5 82	               .word     wosabout, woshelp
->827c	d5 82 db 82	               .word     wosincback, wosdecback, wosincbrd, wosdecbrd
->8280	c9 82 cf 82
->8284	e1 82 e7 82	               .word     wosincfont, wosdecfont, wosfillcol
->8288	be 82
->828a	2b 83 0f 83	               .word     dir, dir8, dir9, dir10, dir11, dir12
->828e	14 83 19 83 1e 83 23 83
-.8296			cmdcode
-.8296	a9 93		woscls         lda  #$93       ; code 147 clear+home
-.8298	4c d2 ff	               jmp  chrout     ;
-.829b	a9 0e		woslow         lda  #$0e
-.829d	4c d2 ff	               jmp  chrout
-.82a0	a9 8e		wosup          lda  #$8e
-.82a2	4c d2 ff	               jmp  chrout
-.82a5			wostest
-.82a5	20 36 c1	               jsr  push
-.82a8	a2 b7		               ldx  #<tester
-.82aa	a0 82		               ldy  #>tester
-.82ac	20 45 c0	               jsr  puts
-.82af	20 75 c1	               jsr  pull
-.82b2	60		               rts
-.82b3	20 da 80	wosabout       jsr  greetings
-.82b6	60		               rts
->82b7	54 45 53 54	tester         .null "tester"
->82bb	45 52 00
-.82be	20 38 83	wosfillcol     jsr  fillcarcol
-.82c1	60		               rts
-.82c2	4c ed 82	               jmp  woscleancol
-.82c5	20 31 81	woshelp        jsr  help
-.82c8	60		               rts
-.82c9	ee 35 83	wosincbrd      inc  bcol
-.82cc	4c ed 82	               jmp  woscleancol
-.82cf	ce 35 83	wosdecbrd      dec  bcol
-.82d2	4c ed 82	               jmp  woscleancol
-.82d5	ee 36 83	wosincback     inc  scol
-.82d8	4c ed 82	               jmp  woscleancol
-.82db	ce 36 83	wosdecback     dec  scol
-.82de	4c ed 82	               jmp  woscleancol
-.82e1	ee 37 83	wosincfont     inc  fcol
-.82e4	4c ed 82	               jmp  woscleancol
-.82e7	ce 37 83	wosdecfont     dec  fcol
-.82ea	4c ed 82	               jmp  woscleancol
-.82ed	ad 36 83	woscleancol    lda  scol
-.82f0	29 0f		               and  #$0f
-.82f2	8d 36 83	               sta  scol
-.82f5	8d 21 d0	               sta  vicbackcol
-.82f8	ad 35 83	               lda  bcol
-.82fb	29 0f		               and  #$0f
-.82fd	8d 35 83	               sta  bcol
-.8300	8d 20 d0	               sta  vicbordcol
-.8303	ad 37 83	               lda  fcol
-.8306	29 0f		               and  #$0f
-.8308	8d 37 83	               sta  fcol
-.830b	8d 86 02	               sta  bascol
-.830e	60		               rts
-.830f	a9 08		dir8           lda  #$08
-.8311	4c 28 83	               jmp  dirn
-.8314	a9 09		dir9           lda  #$09
-.8316	4c 28 83	               jmp  dirn
-.8319	a9 0a		dir10          lda  #$0a
-.831b	4c 28 83	               jmp  dirn
-.831e	a9 0b		dir11          lda  #$0b
-.8320	4c 28 83	               jmp  dirn
-.8323	a9 0c		dir12          lda  #$0c
-.8325	4c 28 83	               jmp  dirn
-.8328	8d 73 c5	dirn           sta  dsk_dev
-.832b	20 42 c4	dir            jsr  diskerror
-.832e	20 65 c4	               jsr  diskdir
-.8331	20 42 c4	               jsr  diskerror
-.8334	60		               rts
->8335	00		bcol           .byte     $00
->8336	00		scol           .byte     $00
->8337	00		fcol           .byte     $00
-.8338			fillcarcol
-.8338	20 36 c1	               jsr  push
-.833b	a2 04		               ldx  #$04
-.833d	a0 00		               ldy  #$00
-.833f	ad 86 02	               lda  bascol
-.8342	99 00 d8	nxtcolram      sta  colram0,y
-.8345	99 00 d9	               sta  colram1,y
-.8348	99 00 da	               sta  colram2,y
-.834b	99 00 db	               sta  colram3,y
-.834e	c8		               iny
-.834f	d0 f1		               bne  nxtcolram
-.8351	20 75 c1	               jsr  pop
-.8354	60		               rts
->8355	93 0e 00	msg0 .byte 147,14,0
->8358	20 2a 2a 2a	msg1 .null " **************************************"
->835c	2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a
->836c	2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a
->837c	2a 2a 2a 00
->8380	0d		msg2 .byte 13
->8381	20 2a 20 20	     .text " *     c64 WOS Commandes Etendues     *"
->8385	20 20 20 43 36 34 20 d7 cf d3 20 c3 4f 4d 4d 41
->8395	4e 44 45 53 20 c5 54 45 4e 44 55 45 53 20 20 20
->83a5	20 20 2a
->83a8	0d		msg3 .byte 13
->83a9	20 2a 20 c9	     .text " * Inspiration C64 Assembler Workshop *"
->83ad	4e 53 50 49 52 41 54 49 4f 4e 20 c3 36 34 20 c1
->83bd	53 53 45 4d 42 4c 45 52 20 d7 4f 52 4b 53 48 4f
->83cd	50 20 2a
->83d0	0d		msg4 .byte 13
->83d1	20 2a 20 42	     .text " * by Bruce Smith ISBN: 1 85014 004 9 *"
->83d5	59 20 c2 52 55 43 45 20 d3 4d 49 54 48 20 c9 d3
->83e5	c2 ce 3a 20 31 20 38 35 30 31 34 20 30 30 34 20
->83f5	39 20 2a
->83f8	0d		msg5 .byte 13
->83f9	20 2a 20 c3	     .text " * Code Daniel Lafrance (@? for help) *"
->83fd	4f 44 45 20 c4 41 4e 49 45 4c 20 cc 41 46 52 41
->840d	4e 43 45 20 28 40 3f 20 46 4f 52 20 48 45 4c 50
->841d	29 20 2a
->8420	0d		msg6 .byte 13
->8421	20 2a 20 20	     .null format(   " *    Version.....: %s   *",version)
->8425	20 20 d6 45 52 53 49 4f 4e 2e 2e 2e 2e 2e 3a 20
->8435	32 30 32 34 31 31 32 32 2d 31 33 30 31 35 35 20
->8445	20 20 2a 00
->8449	0d		hlp0           .byte $0d
->844a	20 20 40 43	               .text "  @cls  = clear scr ; @test =          "
->844e	4c 53 20 20 3d 20 43 4c 45 41 52 20 53 43 52 20
->845e	3b 20 40 54 45 53 54 20 3d 20 20 20 20 20 20 20
->846e	20 20 20
->8471	0d		hlp1           .byte $0d
->8472	20 20 40 4c	               .text "  @low  = lcase     ; @up   = ucase    "
->8476	4f 57 20 20 3d 20 4c 43 41 53 45 20 20 20 20 20
->8486	3b 20 40 55 50 20 20 20 3d 20 55 43 41 53 45 20
->8496	20 20 20
->8499	0d		hlp2           .byte $0d
->849a	20 20 40 41	               .text "  @about= tell me   ; @?    = this help"
->849e	42 4f 55 54 3d 20 54 45 4c 4c 20 4d 45 20 20 20
->84ae	3b 20 40 3f 20 20 20 20 3d 20 54 48 49 53 20 48
->84be	45 4c 50
->84c1	0d		hlp3           .byte $0d
->84c2	20 20 40 53	               .text "  @s+/- = scrn-col  ; @b+/- = bord-col "
->84c6	2b 2f 2d 20 3d 20 53 43 52 4e 2d 43 4f 4c 20 20
->84d6	3b 20 40 42 2b 2f 2d 20 3d 20 42 4f 52 44 2d 43
->84e6	4f 4c 20
->84e9	0d		hlp4           .byte $0d
->84ea	20 20 40 46	               .text "  @f+/- = font-col  ; @fill = fill-font"
->84ee	2b 2f 2d 20 3d 20 46 4f 4e 54 2d 43 4f 4c 20 20
->84fe	3b 20 40 46 49 4c 4c 20 3d 20 46 49 4c 4c 2d 46
->850e	4f 4e 54
->8511	0d		hlp5           .byte $0d
->8512	20 20 40 44	               .text "  @dir  = list disk ; @8dir = disk #8  "
->8516	49 52 20 20 3d 20 4c 49 53 54 20 44 49 53 4b 20
->8526	3b 20 40 38 44 49 52 20 3d 20 44 49 53 4b 20 23
->8536	38 20 20
->8539	0d		hlp6           .byte $0d
->853a	20 20 40 39	               .text "  @9dir = disk #9   ; @10dir= disk #10 "
->853e	44 49 52 20 3d 20 44 49 53 4b 20 23 39 20 20 20
->854e	3b 20 40 31 30 44 49 52 3d 20 44 49 53 4b 20 23
->855e	31 30 20
->8561	0d		hlp7           .byte $0d
->8562	20 20 40 31	               .text "  @11dir= disk #11  ; @12dir= disk #12 "
->8566	31 44 49 52 3d 20 44 49 53 4b 20 23 31 31 20 20
->8576	3b 20 40 31 32 44 49 52 3d 20 44 49 53 4b 20 23
->8586	31 32 20
->8589	00		               .byte $00
+.80da			ascii2bintxt
+.80da	20 36 c1	               jsr  push           ;p21
+.80dd	c9 30		               cmp  #$30           ;120
+.80df	90 12		               bcc  Lnonum         ;130
+.80e1	c9 3a		               cmp  #$3a           ;140
+.80e3	90 08		               bcc  L210           ;150
+.80e5	e9 07		               sbc  #$07           ;160
+.80e7	90 0a		               bcc  Lnonum         ;170
+.80e9	c9 40		               cmp  #$40           ;180
+.80eb	b0 02		               bcs  L220           ;190
+.80ed	29 0f		L210           and  #$0f           ;210
+.80ef	20 75 c1	L220           jsr  pop            ;220 return
+.80f2	60		               rts                 ;230
+.80f3	38		Lnonum         sec                 ;nonum
+.80f4	20 75 c1	               jsr  pop
+.80f7	60		               rts
+.80f8			p2tester
+.80f8	20 36 c1	               jsr  push
+.80fb	20 e4 ff	lnoxcmd        jsr  getin          ;noxcmd
+.80fe	f0 fb		               beq  lnoxcmd        ;390
+.8100	20 a0 c3	               jsr  atobin          ;aschex2bin;400
+.8103	90 02		               bcc  out            ;410
+.8105	a9 ff		               lda  #$FF           ;flushpfx
+.8107	85 fb		out            sta  $fb            ;430
+.8109	20 75 c1	               jsr  pop
+.810c	60		               rts            ;modepgm
+.810d			cmdtbl
+>810d	c3 cc d3 00	               .text     "CLS",0,"LOW",0,"UP",0
+>8111	cc cf d7 00 d5 d0 00
+>8118	d4 c5 d3 d4	               .text     "TEST",0
+>811c	00
+>811d	c1 c2 cf d5	               .text     "ABOUT",0,"?",0
+>8121	d4 00 3f 00
+>8125	d3 2b 00 d3	               .text     "S+",0,"S-",0,"B+",0,"B-",0,"F+",0,"F-",0,"FILL",0
+>8129	2d 00 c2 2b 00 c2 2d 00 c6 2b 00 c6 2d 00 c6 c9
+>8139	cc cc 00
+>813c	c4 d3 d4 c1	               .text     "DSTAT",0,"DIR",0,"8DIR",0,"9DIR",0,"10DIR",0,"11DIR",0,"12DIR",0
+>8140	d4 00 c4 c9 d2 00 38 c4 c9 d2 00 39 c4 c9 d2 00
+>8150	31 30 c4 c9 d2 00 31 31 c4 c9 d2 00 31 32 c4 c9
+>8160	d2 00
+>8162	43 4c 53 00	               .text     "cls",0,"low",0,"up",0
+>8166	4c 4f 57 00 55 50 00
+>816d	54 45 53 54	               .text     "test",0
+>8171	00
+>8172	41 42 4f 55	               .text     "about",0,"?",0
+>8176	54 00 3f 00
+>817a	53 2b 00 53	               .text     "s+",0,"s-",0,"b+",0,"b-",0,"f+",0,"f-",0,"fill",0
+>817e	2d 00 42 2b 00 42 2d 00 46 2b 00 46 2d 00 46 49
+>818e	4c 4c 00
+>8191	44 53 54 41	               .text     "dstat",0,"dir",0,"8dir",0,"9dir",0,"10dir",0,"11dir",0,"12dir",0
+>8195	54 00 44 49 52 00 38 44 49 52 00 39 44 49 52 00
+>81a5	31 30 44 49 52 00 31 31 44 49 52 00 31 32 44 49
+>81b5	52 00
+.81b7			cmdvect
+>81b7	09 82 0e 82	               .word     woscls, woslow, wosup
+>81bb	13 82
+>81bd	18 82		               .word     wostest
+>81bf	26 82 38 82	               .word     wosabout, woshelp
+>81c3	48 82 4e 82	               .word     wosincback, wosdecback,wosincbrd, wosdecbrd
+>81c7	3c 82 42 82
+>81cb	54 82 5a 82	               .word     wosincfont, wosdecfont, wosfillcol
+>81cf	31 82
+>81d1	a4 82 9e 82	               .word     dstat, dir, dir8, dir9, dir10, dir11, dir12
+>81d5	82 82 87 82 8c 82 91 82 96 82
+>81df	09 82 0e 82	               .word     woscls, woslow, wosup
+>81e3	13 82
+>81e5	18 82		               .word     wostest
+>81e7	26 82 38 82	               .word     wosabout, woshelp
+>81eb	48 82 4e 82	               .word     wosincback, wosdecback, wosincbrd, wosdecbrd
+>81ef	3c 82 42 82
+>81f3	54 82 5a 82	               .word     wosincfont, wosdecfont, wosfillcol
+>81f7	31 82
+>81f9	a4 82 9e 82	               .word     dstat, dir, dir8, dir9, dir10, dir11, dir12, dstat
+>81fd	82 82 87 82 8c 82 91 82 96 82 a4 82
+.8209			cmdcode
+.8209	a9 93		woscls         lda  #$93       ; code 147 clear+home
+.820b	4c d2 ff	               jmp  chrout     ;
+.820e	a9 0e		woslow         lda  #$0e
+.8210	4c d2 ff	               jmp  chrout
+.8213	a9 8e		wosup          lda  #$8e
+.8215	4c d2 ff	               jmp  chrout
+.8218			wostest
+.8218	20 36 c1	               jsr  push
+.821b	a2 2a		               ldx  #<tester
+.821d	a0 82		               ldy  #>tester
+.821f	20 45 c0	               jsr  puts
+.8222	20 75 c1	               jsr  pull
+.8225	60		               rts
+.8226	20 c8 82	wosabout       jsr  greetings
+.8229	60		               rts
+>822a	54 45 53 54	tester         .null "tester"
+>822e	45 52 00
+.8231	20 ab 82	wosfillcol     jsr  fillcarcol
+.8234	60		               rts
+.8235	4c 60 82	               jmp  woscleancol
+.8238	20 1f 83	woshelp        jsr  help
+.823b	60		               rts
+.823c	ee a8 82	wosincbrd      inc  bcol
+.823f	4c 60 82	               jmp  woscleancol
+.8242	ce a8 82	wosdecbrd      dec  bcol
+.8245	4c 60 82	               jmp  woscleancol
+.8248	ee a9 82	wosincback     inc  scol
+.824b	4c 60 82	               jmp  woscleancol
+.824e	ce a9 82	wosdecback     dec  scol
+.8251	4c 60 82	               jmp  woscleancol
+.8254	ee aa 82	wosincfont     inc  fcol
+.8257	4c 60 82	               jmp  woscleancol
+.825a	ce aa 82	wosdecfont     dec  fcol
+.825d	4c 60 82	               jmp  woscleancol
+.8260	ad a9 82	woscleancol    lda  scol
+.8263	29 0f		               and  #$0f
+.8265	8d a9 82	               sta  scol
+.8268	8d 21 d0	               sta  vicbackcol
+.826b	ad a8 82	               lda  bcol
+.826e	29 0f		               and  #$0f
+.8270	8d a8 82	               sta  bcol
+.8273	8d 20 d0	               sta  vicbordcol
+.8276	ad aa 82	               lda  fcol
+.8279	29 0f		               and  #$0f
+.827b	8d aa 82	               sta  fcol
+.827e	8d 86 02	               sta  bascol
+.8281	60		               rts
+.8282	a9 08		dir8           lda  #$08
+.8284	4c 9b 82	               jmp  dirn
+.8287	a9 09		dir9           lda  #$09
+.8289	4c 9b 82	               jmp  dirn
+.828c	a9 0a		dir10          lda  #$0a
+.828e	4c 9b 82	               jmp  dirn
+.8291	a9 0b		dir11          lda  #$0b
+.8293	4c 9b 82	               jmp  dirn
+.8296	a9 0c		dir12          lda  #$0c
+.8298	4c 9b 82	               jmp  dirn
+.829b	8d 73 c5	dirn           sta  dsk_dev
+.829e	20 42 c4	dir            jsr  diskerror
+.82a1	20 65 c4	               jsr  diskdir
+.82a4	20 42 c4	dstat          jsr  diskerror
+.82a7	60		               rts
+>82a8	00		bcol           .byte     $00
+>82a9	00		scol           .byte     $00
+>82aa	00		fcol           .byte     $00
+.82ab			fillcarcol
+.82ab	20 36 c1	               jsr  push
+.82ae	a2 04		               ldx  #$04
+.82b0	a0 00		               ldy  #$00
+.82b2	ad 86 02	               lda  bascol
+.82b5	99 00 d8	nxtcolram      sta  colram0,y
+.82b8	99 00 d9	               sta  colram1,y
+.82bb	99 00 da	               sta  colram2,y
+.82be	99 00 db	               sta  colram3,y
+.82c1	c8		               iny
+.82c2	d0 f1		               bne  nxtcolram
+.82c4	20 75 c1	               jsr  pop
+.82c7	60		               rts
+.82c8			greetings
+.82c8	20 36 c1	               jsr  push
+.82cb	a9 06		               lda  #vbleu
+.82cd	8d 21 d0	               sta  vicbackcol
+.82d0	a9 03		               lda  #vcyan
+.82d2	8d 20 d0	               sta  vicbordcol
+.82d5	20 28 c0	               jsr  cls
+.82d8	a9 01		               lda  #vblanc
+.82da	8d 86 02	               sta  bascol
+.82dd	20 36 c1	               jsr  push
+.82e0	a2 6c		               ldx  #<msg0
+.82e2	a0 83		               ldy  #>msg0
+.82e4	20 45 c0	               jsr  puts
+.82e7	20 75 c1	               jsr  pull
+.82ea	20 36 c1	               jsr  push
+.82ed	a2 6f		               ldx  #<msg1
+.82ef	a0 83		               ldy  #>msg1
+.82f1	20 45 c0	               jsr  puts
+.82f4	20 75 c1	               jsr  pull
+.82f7	20 36 c1	               jsr  push
+.82fa	a2 97		               ldx  #<msg2
+.82fc	a0 83		               ldy  #>msg2
+.82fe	20 45 c0	               jsr  puts
+.8301	20 75 c1	               jsr  pull
+.8304	a9 0d		               lda  #$0d
+.8306	20 3f c0	               jsr  putch
+.8309	20 36 c1	               jsr  push
+.830c	a2 6f		               ldx  #<msg1
+.830e	a0 83		               ldy  #>msg1
+.8310	20 45 c0	               jsr  puts
+.8313	20 75 c1	               jsr  pull
+.8316	a9 0d		               lda  #$0d
+.8318	20 3f c0	               jsr  putch
+.831b	20 75 c1	               jsr  pop
+.831e	60		               rts
+.831f			help
+.831f	20 36 c1	               jsr  push
+.8322	20 36 c1	               jsr  push
+.8325	a2 6c		               ldx  #<msg0
+.8327	a0 83		               ldy  #>msg0
+.8329	20 45 c0	               jsr  puts
+.832c	20 75 c1	               jsr  pull
+.832f	20 36 c1	               jsr  push
+.8332	a2 6f		               ldx  #<msg1
+.8334	a0 83		               ldy  #>msg1
+.8336	20 45 c0	               jsr  puts
+.8339	20 75 c1	               jsr  pull
+.833c	20 36 c1	               jsr  push
+.833f	a2 60		               ldx  #<hlp0
+.8341	a0 84		               ldy  #>hlp0
+.8343	20 45 c0	               jsr  puts
+.8346	20 75 c1	               jsr  pull
+.8349	20 36 c1	               jsr  push
+.834c	a2 37		               ldx  #<vers
+.834e	a0 84		               ldy  #>vers
+.8350	20 45 c0	               jsr  puts
+.8353	20 75 c1	               jsr  pull
+.8356	a9 0d		               lda       #$0d
+.8358	20 3f c0	               jsr       putch
+.835b	20 36 c1	               jsr  push
+.835e	a2 6f		               ldx  #<msg1
+.8360	a0 83		               ldy  #>msg1
+.8362	20 45 c0	               jsr  puts
+.8365	20 75 c1	               jsr  pull
+.8368	20 75 c1	               jsr  pop
+.836b	60		               rts
+>836c	93 0e 00	msg0 .byte 147,14,0
+>836f	20 2a 2a 2a	msg1 .null " **************************************"
+>8373	2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a
+>8383	2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a 2a
+>8393	2a 2a 2a 00
+>8397	0d		msg2 .byte 13
+>8398	20 2a 20 20	     .text " *     c64 WOS Commandes Etendues     *"
+>839c	20 20 20 43 36 34 20 d7 cf d3 20 c3 4f 4d 4d 41
+>83ac	4e 44 45 53 20 c5 54 45 4e 44 55 45 53 20 20 20
+>83bc	20 20 2a
+>83bf	0d		msg3 .byte 13
+>83c0	20 2a 20 c9	     .text " * Inspiration C64 Assembler Workshop *"
+>83c4	4e 53 50 49 52 41 54 49 4f 4e 20 c3 36 34 20 c1
+>83d4	53 53 45 4d 42 4c 45 52 20 d7 4f 52 4b 53 48 4f
+>83e4	50 20 2a
+>83e7	0d		msg4 .byte 13
+>83e8	20 2a 20 42	     .text " * by Bruce Smith ISBN: 1 85014 004 9 *"
+>83ec	59 20 c2 52 55 43 45 20 d3 4d 49 54 48 20 c9 d3
+>83fc	c2 ce 3a 20 31 20 38 35 30 31 34 20 30 30 34 20
+>840c	39 20 2a
+>840f	0d		msg5 .byte 13
+>8410	20 2a 20 c3	     .text " * Code Daniel Lafrance (@? for help) *"
+>8414	4f 44 45 20 c4 41 4e 49 45 4c 20 cc 41 46 52 41
+>8424	4e 43 45 20 28 40 3f 20 46 4f 52 20 48 45 4c 50
+>8434	29 20 2a
+>8437	0d		vers .byte 13
+>8438	20 2a 20 20	     .null format(   " *    Version.....: %s   *",version)
+>843c	20 20 d6 45 52 53 49 4f 4e 2e 2e 2e 2e 2e 3a 20
+>844c	32 30 32 34 31 31 32 32 2d 31 33 33 33 35 39 20
+>845c	20 20 2a 00
+>8460	0d		hlp0           .byte $0d
+>8461	20 20 40 43	               .text "  @cls  = clear scr ; @test =          "
+>8465	4c 53 20 20 3d 20 43 4c 45 41 52 20 53 43 52 20
+>8475	3b 20 40 54 45 53 54 20 3d 20 20 20 20 20 20 20
+>8485	20 20 20
+>8488	0d		hlp1           .byte $0d
+>8489	20 20 40 4c	               .text "  @low  = lcase     ; @up   = ucase    "
+>848d	4f 57 20 20 3d 20 4c 43 41 53 45 20 20 20 20 20
+>849d	3b 20 40 55 50 20 20 20 3d 20 55 43 41 53 45 20
+>84ad	20 20 20
+>84b0	0d		hlp2           .byte $0d
+>84b1	20 20 40 41	               .text "  @about= tell me   ; @?    = this help"
+>84b5	42 4f 55 54 3d 20 54 45 4c 4c 20 4d 45 20 20 20
+>84c5	3b 20 40 3f 20 20 20 20 3d 20 54 48 49 53 20 48
+>84d5	45 4c 50
+>84d8	0d		hlp3           .byte $0d
+>84d9	20 20 40 53	               .text "  @s+/- = scrn-col  ; @b+/- = bord-col "
+>84dd	2b 2f 2d 20 3d 20 53 43 52 4e 2d 43 4f 4c 20 20
+>84ed	3b 20 40 42 2b 2f 2d 20 3d 20 42 4f 52 44 2d 43
+>84fd	4f 4c 20
+>8500	0d		hlp4           .byte $0d
+>8501	20 20 40 46	               .text "  @f+/- = font-col  ; @fill = fill-font"
+>8505	2b 2f 2d 20 3d 20 46 4f 4e 54 2d 43 4f 4c 20 20
+>8515	3b 20 40 46 49 4c 4c 20 3d 20 46 49 4c 4c 2d 46
+>8525	4f 4e 54
+>8528	0d		hlp5           .byte $0d
+>8529	20 20 40 44	               .text "  @dir  = list disk ; @8dir = disk #8  "
+>852d	49 52 20 20 3d 20 4c 49 53 54 20 44 49 53 4b 20
+>853d	3b 20 40 38 44 49 52 20 3d 20 44 49 53 4b 20 23
+>854d	38 20 20
+>8550	0d		hlp6           .byte $0d
+>8551	20 20 40 39	               .text "  @9dir = disk #9   ; @10dir= disk #10 "
+>8555	44 49 52 20 3d 20 44 49 53 4b 20 23 39 20 20 20
+>8565	3b 20 40 31 30 44 49 52 3d 20 44 49 53 4b 20 23
+>8575	31 30 20
+>8578	0d		hlp7           .byte $0d
+>8579	20 20 40 31	               .text "  @11dir= disk #11  ; @12dir= disk #12 "
+>857d	31 44 49 52 3d 20 44 49 53 4b 20 23 31 31 20 20
+>858d	3b 20 40 31 32 44 49 52 3d 20 44 49 53 4b 20 23
+>859d	31 32 20
+>85a0	00		               .byte $00
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/map-c64-kernal.asm
 

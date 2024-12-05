@@ -2,7 +2,7 @@
 ; Auteur : 
 ; Inspiration : 
 ; Programmeur  = "Daniel Lafrance" 
-  version      = "20241122-130155"
+  version      = "20241122-133359"
 ;-------------------------------------------------------------------------------
      .include "header-c64.asm"     ; Saut à la fonction main (jmp main)
      .include "macros-64tass.asm"
@@ -142,42 +142,6 @@ illegal        ldx  #$0b           ; Charge le code d'erreur dans X
                jmp  ($300)         ; Affiche l'erreur.
                .bend
 ;-------------------------------------------------------------------------------
-greetings      .block
-;-------------------------------------------------------------------------------
-               jsr  push
-               lda  #vbleu
-               sta  vicbackcol
-               lda  #vcyan
-               sta  vicbordcol
-               jsr  cls
-               lda  #vblanc
-               sta  bascol
-               #print msg0
-               #print msg1 
-               #print msg2
-               lda  #$0d
-               jsr  putch
-               #print msg1
-               lda  #$0d
-               jsr  putch
-               jsr  pop
-               rts
-               .bend
-
-;-------------------------------------------------------------------------------
-help           .block
-;-------------------------------------------------------------------------------
-               jsr  push
-               #print    msg0
-               #print    msg1
-               #print    hlp0
-               #print    msg6
-               #print    msg1
-               jsr  pop
-               rts
-               .bend
-
-;-------------------------------------------------------------------------------
 ascii2bintxt     .block
 ;-------------------------------------------------------------------------------
                jsr  push           ;p21
@@ -222,13 +186,13 @@ cmdtbl         ;Uppercase
                .text     "TEST",0
                .text     "ABOUT",0,"?",0
                .text     "S+",0,"S-",0,"B+",0,"B-",0,"F+",0,"F-",0,"FILL",0
-               .text     "DIR",0,"8DIR",0,"9DIR",0,"10DIR",0,"11DIR",0,"12DIR",0
+               .text     "DSTAT",0,"DIR",0,"8DIR",0,"9DIR",0,"10DIR",0,"11DIR",0,"12DIR",0
                ;Lowrecase
                .text     "cls",0,"low",0,"up",0
                .text     "test",0
                .text     "about",0,"?",0
                .text     "s+",0,"s-",0,"b+",0,"b-",0,"f+",0,"f-",0,"fill",0
-               .text     "dir",0,"8dir",0,"9dir",0,"10dir",0,"11dir",0,"12dir",0
+               .text     "dstat",0,"dir",0,"8dir",0,"9dir",0,"10dir",0,"11dir",0,"12dir",0
 ;-------------------------------------------------------------------------------
 cmdvect        ;Uppercase
 ;-------------------------------------------------------------------------------
@@ -237,14 +201,14 @@ cmdvect        ;Uppercase
                .word     wosabout, woshelp
                .word     wosincback, wosdecback,wosincbrd, wosdecbrd 
                .word     wosincfont, wosdecfont, wosfillcol
-               .word     dir, dir8, dir9, dir10, dir11, dir12
+               .word     dstat, dir, dir8, dir9, dir10, dir11, dir12
                ;Lowercase
                .word     woscls, woslow, wosup
                .word     wostest
                .word     wosabout, woshelp
                .word     wosincback, wosdecback, wosincbrd, wosdecbrd 
                .word     wosincfont, wosdecfont, wosfillcol
-               .word     dir, dir8, dir9, dir10, dir11, dir12
+               .word     dstat, dir, dir8, dir9, dir10, dir11, dir12, dstat
 ;-------------------------------------------------------------------------------
 cmdcode
 ;-------------------------------------------------------------------------------
@@ -304,7 +268,7 @@ dir12          lda  #$0c
 dirn           sta  dsk_dev
 dir            jsr  diskerror            
                jsr  diskdir
-               jsr  diskerror
+dstat          jsr  diskerror
                ;jsr  showregs
                ;jsr  cls
                rts
@@ -312,8 +276,9 @@ dir            jsr  diskerror
 bcol           .byte     $00
 scol           .byte     $00
 fcol           .byte     $00
-
+;-------------------------------------------------------------------------------
 fillcarcol     .block
+;-------------------------------------------------------------------------------
                jsr  push
                ldx  #$04
                ldy  #$00
@@ -327,6 +292,43 @@ nxtcolram      sta  colram0,y
                jsr  pop
                rts
                .bend
+;-------------------------------------------------------------------------------
+greetings      .block
+;-------------------------------------------------------------------------------
+               jsr  push
+               lda  #vbleu
+               sta  vicbackcol
+               lda  #vcyan
+               sta  vicbordcol
+               jsr  cls
+               lda  #vblanc
+               sta  bascol
+               #print msg0
+               #print msg1 
+               #print msg2
+               lda  #$0d
+               jsr  putch
+               #print msg1
+               lda  #$0d
+               jsr  putch
+               jsr  pop
+               rts
+               .bend
+;-------------------------------------------------------------------------------
+help           .block
+;-------------------------------------------------------------------------------
+               jsr  push
+               #print    msg0
+               #print    msg1
+               #print    hlp0
+               #print    vers
+               lda       #$0d
+               jsr       putch
+               #print    msg1
+               jsr  pop
+               rts
+               .bend
+
 
 ;-------------------------------------------------------------------------------
 ; D A T A   A R E A 
@@ -341,7 +343,7 @@ msg4 .byte 13
      .text " * by Bruce Smith ISBN: 1 85014 004 9 *"
 msg5 .byte 13
      .text " * Code Daniel Lafrance (@? for help) *"     
-msg6 .byte 13
+vers .byte 13
      .null format(   " *    Version.....: %s   *",version)
 hlp0           .byte $0d
                .text "  @cls  = clear scr ; @test =          "
