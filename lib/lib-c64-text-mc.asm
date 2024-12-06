@@ -332,17 +332,20 @@ clrinverse     .block
                rts
                .bend
 ;---------------------------------------------------------------------------
-; Affiche le caracteere dans A à la 
-; position/couleur de l'ecran virtuel.
+; Affiche le caractere contenu dans A à la position/couleur actuelle de 
+; l'ecran virtuel.
 ;---------------------------------------------------------------------------
 putch          .block              ; Voir Ordinogramme B
                jsr  push           ; On sauvegarde les registres
-               pha
                jsr  scrptr2zp1     ; Place le ptr d'ecran sur zp1
                and  #%00111111     ; Masque des bits 6 et 7 pour la ouleur.
-               ora  bkcol          ; On y ajoute la couleur du fond.
-               ldy  #0             ; Met Y à 0
+               pha
+               lda  bkcol
+               and  #%11000000
+               sta  bkcol
                pla
+               ora  bkcol          ; On y ajoute la couleur du fond.
+               ldy  #$00           ; Met Y à 0
                sta  (zpage1),y     ; Affiche le caractere
                ldx  colptr+1       ; Place le MSB du ptr de couleur
                stx  zpage1+1       ; ... dans le MSB du zp1.

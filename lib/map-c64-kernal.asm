@@ -262,9 +262,12 @@ cbrun          =    $9
 crose          =    $a
 cgrisfonce     =    $b
 cgrismoyen     =    $c
+cgris0         =    $b
+cgris1         =    $c
 cvertpale      =    $d
 cbleupale      =    $e
 cgrispale      =    $f
+cgris3          =    $f
 ; pour anglosaxons
 cblack         =    $0
 cwhite         =    $1
