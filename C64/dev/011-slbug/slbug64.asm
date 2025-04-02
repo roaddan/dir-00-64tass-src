@@ -63,7 +63,7 @@ headerb        .text          "*       POUR COMMODORE 64      *"
                .text          "* PORT C64 PAR DANIEL LAFRANCE *"
                .byte   $0d,0
 
-headerc        .text          "*          (c) 2024            *"
+headerc        .text          "*      (c) DECEMBRE 2024       *"
                .byte   $0d
                .text   format("* Version: %-20s*",Version)
                .byte   $0d,0
