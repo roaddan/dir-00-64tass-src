@@ -10,9 +10,10 @@
 
 main           .block
                jsr scrmaninit
+               #lowercase
                #disable
-               jsr aide
-               jsr anykey
+;               jsr aide
+;               jsr anykey
                jsr essai01
                #enable
                #uppercase
@@ -44,6 +45,7 @@ essai01        .block
 ;               sta vicbordcol
                jsr  cls
                #printcxy uiistatustxt
+               jsr  waituiinotbusy
                lda  uiiidenreg
                jsr  putahexfmt
 

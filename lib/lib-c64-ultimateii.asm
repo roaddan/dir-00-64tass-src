@@ -28,7 +28,7 @@ uiidatamore	=	$03
 ; 1541 Ultimate II+ DOS Command structure :	$01 CMD [XX] <FILENAME> 
 ;-------------------------------------------------------------------------------
 ;-------------------------------------------------------------------------------
-: CMD list
+; CMD list
 ;-------------------------------------------------------------------------------
 uii_identify	=	$01	; $01 $01 -> Read Id String as "ULTIMATE-II DOS V1.0"
 
@@ -195,7 +195,7 @@ getuiistate	.block
 waituiiidle	.block
 			php
 			pha
-noyyet		jsr	getuiistate
+notyet		jsr	getuiistate
 			cmp  #$00
 			bne	notyet
 			pla
@@ -209,7 +209,7 @@ noyyet		jsr	getuiistate
 isuiimoredata	.block
 			php
 			pha
-noyyet		jsr	getuiistate
+notyet		jsr	getuiistate
 			cmp  #$00
 			bne	notyet
 			pla
@@ -221,7 +221,7 @@ noyyet		jsr	getuiistate
 ;-------------------------------------------------------------------------------
 ; Wait while 1541 Ultimate II+ is busy.
 ;-------------------------------------------------------------------------------
-waituiibusy	.block
+waituiinotbusy	.block
 			php
 wait			jsr	isuiibusy
 			bcs	wait
