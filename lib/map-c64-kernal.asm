@@ -192,6 +192,7 @@ bcuright       =    $1d       ;  29 [CRS-R]           Cursor RIGHT
 bgreen         =    $1e       ;  30 [CTRL]+[6]        Set colour to GREEN
 bblue          =    $1f       ;  31 [CTRL]+[7]        Set colour to BLUE
 borange        =    $81       ; 129 [C=]+[1]          Set colour to ORANGE
+
 f1key          =    $85       ; 133 [F1]
 f2key          =    $86       ; 134 [F2]
 f3key          =    $87       ; 135 [F3]
@@ -200,6 +201,17 @@ f5key          =    $89       ; 137 [F5]
 f6key          =    $8a       ; 138 [F6]
 f7key          =    $8b       ; 139 [F7]
 f8key          =    $8c       ; 140 [F8]
+dcurkey        =    17
+ucurkey        =    145
+rcurkey        =    29
+lcurkey        =    157
+larrowkey      =    95
+uarrowkey      =    94
+homekey        =    19
+clearkey       =    147
+delkey         =    20
+inskey         =    148
+
 bcarret1       =    $8d       ; 141 [SHIFT]+[RETURN]
 bgraph         =    $8e       ; 142 select Uppercase+graphics charset
 bblack         =    $90       ; 144 [CTRL]+[1]        Set colour to BLACK

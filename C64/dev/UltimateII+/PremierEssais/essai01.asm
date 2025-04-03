@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20241122-125638"
+                Version = "20250402-233301"
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -7,6 +7,7 @@
 ;
 ;-------------------------------------------------------------------------------
                .enc    none
+
 main           .block
                jsr scrmaninit
                #disable
@@ -26,58 +27,36 @@ aide           .block
                #print line
                #print headera
                #print headerb
+               #print line
+               #print line
                #print shortcuts
                #print aidetext
                #print line
-               rts                                
-headera                       ;0123456789012345678901234567890123456789
-               .text          " 1541 Ultimate II + Gestion de fichiers"
-               .byte   $0d  
-               .text          " Cartouche et API par Gideon Zweijtzer"
-               .byte   $0d
-               .text          "     API Version 1.0, 1er Feb 2013"
-               .byte   $0d,0
-
-headerb        .text          "               essai01 "
-               .byte   $0d
-               .text          "       (c) 2025 Daniel Lafrance"
-               .byte   $0d
-               .text   format("         Version: %s.",Version)
-               .byte   $0d,0
-
-shortcuts      .byte   $0d
-               .text          " -------- S H O R T - C U T S ---------"
-               .byte   $0d, $0d
-               .text   format(" essai01..: SYS%05d ($%04X)",main, main)
-               .byte   $0d
-               .text   format(" aide.....: SYS%05d ($%04X)",aide, aide)
-               .byte   $0d
-               .text   format(" cls......: SYS%05d ($%04X)",cls, cls)
-               .byte   $0d,0
-aidetext       .text   format(" Lancement: SYS%05d ($%04X)",essai01, essai01)
-               .byte   $0d, $0d
-               .text   format("    ex.: SYS%05d",essai01)
-               .byte   $0d
-               .text   format("    for i=0to100:SYS%05d:next",essai01)
-               .byte   $0d,0
-line           .text          " --------------------------------------"
-               .byte   $0d,0
-               .bend
+               rts  
+               .bend                              
 ;*=$4000
 
 essai01        .block
                pha
-               lda vicbordcol
-               sta byte
-               lda #$10
-               sta vicbordcol
+;               lda vicbordcol
+;               sta byte
+;               lda #$10
+;               sta vicbordcol
+               jsr  cls
+               #printcxy uiistatustxt
+               lda  uiiidenreg
+               jsr  putahexfmt
+
                jsr anykey
-               lda byte
-               sta vicbordcol
+;               lda byte
+;               sta vicbordcol
                pla
                rts
                .bend
+
 byte           .byte 0
+               .include    "./strings_fr.asm"
+               .include    "lib-c64-ultimateii.asm"
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
