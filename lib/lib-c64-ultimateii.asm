@@ -7,7 +7,7 @@
 ;-------------------------------------------------------------------------------
 uiictrlreg	=	$df1c
 uiistatreg	=	$df1c
-uiicomddta	=	$df1d
+uiicmddata	=	$df1d
 uiiidenreg	=	$df1d
 uiirspdtaa	=	$df1e
 uiistatdta	=	$df1e
@@ -162,6 +162,7 @@ out			pla
 ;-------------------------------------------------------------------------------
 isuiierror	.block
 			pha ; Bit 3
+			clc
 			lda	uiistatreg
 			and	#%00001000
 			cmp	#%00001000
@@ -178,7 +179,7 @@ out			pla
 ;    3 = Data More
 ;-------------------------------------------------------------------------------
 getuiistate	.block
-			php	; Bita 5,4
+			php	; Bits 5,4
 			lda	uiistatreg
 			lsr	
 			lsr	
@@ -188,6 +189,20 @@ getuiistate	.block
 			plp
 			rts
 			.bend
+
+isuiidataavail	.block
+			pha
+			clc
+			lda	uiistatreg
+			and	#%10000000
+			cmp	#%10000000
+			bne	out
+			sec
+out			pla
+			rta
+			.bend
+
+
 			
 ;-------------------------------------------------------------------------------
 ; Wait for 1541 Ultimate II+ to be in idle mode.
@@ -229,5 +244,42 @@ wait			jsr	isuiibusy
 			rts
 			.bend
 
+;-------------------------------------------------------------------------------
+; Write a byte to the cmd register wher the 1541 Ultimate II+ is not busy.
+;-------------------------------------------------------------------------------
+uiiputcmdbyte	.block
+			jsr 	waituiinotbusy
+			sta	uiicmddata
+			rts
+			.bend
+;-------------------------------------------------------------------------------
+; Write a zero ended command to the the 1541 Ultimate II+ command buffer.
+; pointex by $YYXX.
+;-------------------------------------------------------------------------------
+uiisndcmd		.block
+			jsr	push
+			stx	zpage1
+			sty	zpage1+1
+			ldy	#$00
+next			lda	(zpage1),y
+			beq	finish
+			jsr	uiiputcmdbyte
+			iny
+			jmp	next
+finish		lda	#$01
+			sta	uiictrlreg
+			jsr	pop
+			rts
+			.bend
 
+uiireaddata	.block
+			php
+			jsr	isuiidataavail
+			bcs	nodata
+			lda	uiirspdtaa
+			jmp	outdata
+nodata		lda	#$00
+outdata		plp
+			rts
+			.bend
 uiigettime

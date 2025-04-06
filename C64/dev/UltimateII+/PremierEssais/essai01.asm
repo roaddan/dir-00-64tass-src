@@ -1,8 +1,9 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250402-233301"
+                Version = "20250403-233301 t1"
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
+               .include    "lib-c64-ultimateii.asm"
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -35,7 +36,7 @@ aide           .block
                #print line
                rts  
                .bend                              
-;*=$4000
+;*=$4001
 
 essai01        .block
                pha
@@ -44,12 +45,25 @@ essai01        .block
 ;               lda #$10
 ;               sta vicbordcol
                jsr  cls
-               #printcxy uiistatustxt
+               #printcxy uiiidenttxt
                jsr  waituiinotbusy
                lda  uiiidenreg
                jsr  putahexfmt
-
-               jsr anykey
+               #printcxy uiistatustxt
+               ldy  #>uiiidcmd
+               ldx  #<uiiidcmd
+               jsr  uiisndcmd 
+showstatus     #printcxy uiistatusval
+               lda  uiistatreg
+               jsr  putabinfmt
+               #printcxy uiiresponse
+moredata       jsr  isuiidataavail
+               bcc  nodata
+               jsr  uiireaddata
+               jsr  putch
+               jmp  moredata
+nodata         jmp  showstatus
+               jsr  anykey
 ;               lda byte
 ;               sta vicbordcol
                pla
@@ -58,7 +72,15 @@ essai01        .block
 
 byte           .byte 0
                .include    "./strings_fr.asm"
-               .include    "lib-c64-ultimateii.asm"
+uiiy           =    0
+uiix           =    1      
+uiiidenttxt    .byte     1,uiix,uiiy
+               .null     "Ultimate II + id....: " 
+uiistatustxt   .byte     1,uiix,uiiy+1
+               .null     "Ultimate II + status: " 
+uiistatusval   .byte     3,uiix+22,uiiy+1,0  
+uiiresponse    .byte     3,uiix+22,uiiy+3,0
+uiiidcmd       .byte     $01,$01,$00
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------

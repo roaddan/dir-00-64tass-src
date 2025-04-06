@@ -39,9 +39,6 @@ line           .byte     $20,192,192,192,192,192,192,192,192,192
                .byte     192,192,192,192,192,192,192,192,192,192
                .byte     192,192,192,192,192,192,192,192,192
                .byte     $0d,0
-
-uiistatustxt   .byte     1,1,2
-               .null     "Ultimate II + status: "   
 uiiconnected   .null     "present"
 uiiunconnected .null     "absent"                  
 
