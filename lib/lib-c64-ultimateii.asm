@@ -1,16 +1,16 @@
 ;-------------------------------------------------------------------------------
 ; 1541 Ultimate II+ DOS Include file for constants and functions:
 ;-------------------------------------------------------------------------------
-
+               .include    "macro-c64-ultimateii.asm"
 ;-------------------------------------------------------------------------------
 ; Constants addresses.
 ;-------------------------------------------------------------------------------
-uiictrlreg	=	$df1c
-uiistatreg	=	$df1c
-uiicmddata	=	$df1d
-uiiidenreg	=	$df1d
-uiirspdtaa	=	$df1e
-uiistatdta	=	$df1e
+uiictrlreg	=	$df1c	;(Write)
+uiistatreg	=	$df1c	;(Read)	default $00
+uiicmddata	=	$df1d	;(Write)
+uiiidenreg	=	$df1d	;(Read)	default $c9
+uiirspdata	=	$df1e	;(Read only)
+uiistadata	=	$df1f	;(Read only)
 
 ;-------------------------------------------------------------------------------
 ; Status register flag and constants
@@ -265,9 +265,20 @@ next			lda	(zpage1),y
 			beq	finish
 			jsr	uiiputcmdbyte
 			iny
+
+
+		jsr	updatestatus
+		jsr	showregs
+		jsr 	anykey
+
 			jmp	next
 finish		lda	#$01
 			sta	uiictrlreg
+
+		jsr	updatestatus
+		jsr	showregs
+		jsr 	anykey
+
 			jsr	pop
 			rts
 			.bend
@@ -276,7 +287,7 @@ uiireaddata	.block
 			php
 			jsr	isuiidataavail
 			bcs	nodata
-			lda	uiirspdtaa
+			lda	uiirspdata
 			jmp	outdata
 nodata		lda	#$00
 outdata		plp
