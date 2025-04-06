@@ -190,16 +190,19 @@ getuiistate	.block
 			rts
 			.bend
 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 isuiidataavail	.block
-			pha
+			pha			;tourlou
 			clc
-			lda	uiistatreg
+			lda	uiistadata
 			and	#%10000000
 			cmp	#%10000000
 			bne	out
 			sec
 out			pla
-			rta
+			rts
 			.bend
 
 
@@ -264,30 +267,33 @@ uiisndcmd		.block
 next			lda	(zpage1),y
 			beq	finish
 			jsr	uiiputcmdbyte
+
+
+;		jsr	updatestatus
+;		jsr	showregs
+;		jsr 	anykey
+
 			iny
-
-
-		jsr	updatestatus
-		jsr	showregs
-		jsr 	anykey
-
 			jmp	next
 finish		lda	#$01
 			sta	uiictrlreg
 
-		jsr	updatestatus
-		jsr	showregs
-		jsr 	anykey
+;		jsr	updatestatus
+;		jsr	showregs
+;		jsr 	anykey
 
 			jsr	pop
 			rts
 			.bend
 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 uiireaddata	.block
 			php
-			jsr	isuiidataavail
+			jsr	isuiidataavail  
 			bcs	nodata
-			lda	uiirspdata
+			lda	uiirspdata	
 			jmp	outdata
 nodata		lda	#$00
 outdata		plp

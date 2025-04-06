@@ -116,7 +116,7 @@ gotoxy         .block
 ;---------------------------------------------------------------------
 cursor         .block
 bascol    =    $0286
-               php
+               php            ;tourlou
                pha
                bcc  restore
                jsr  kplot
@@ -231,6 +231,7 @@ putscxy        .block
      ; and set it
      ;-------------------------------------------- 
                sta  bascol
+
      ;-------------------------------------------- 
      ; adjusting start addr
      ;-------------------------------------------- 

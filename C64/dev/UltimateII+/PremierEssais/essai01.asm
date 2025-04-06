@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250403-233302"
+                Version = "20250405-231555 a"
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -48,21 +48,31 @@ essai01        .block
                jsr  putahexfmt
 ; sending a command
 sendcommand    #uiimacsndcmd uiiidcmd
-               jsr  updatestatus
-nodata         ;jsr  anykey
-               ;jmp  sendcommand
+               ;jsr  updatestatus
+               #printcxy txtrespponse
+               ;lda  uiirspdata
+               ;jsr  putch
+moredata       jsr  uiireaddata
+               cmp  #$00
+               beq  nodata 
+               jsr  putch
+               jmp  moredata
+               jsr  showregs
+nodata         jsr  anykey
                pla
                plp
                rts
                .bend
 
 printstatic    .block
-               jsr  push
+               jsr  push 
                #printcxy lbluiititle
                #printcxy lbluiiidenreg
                #printcxy lbluiistatreg
+               #printcxy defuiistatreg
                #printcxy lbluiirspdata
                #printcxy lbluiistadata
+               #printcxy defuiistadata
                jsr  pop
                rts
                .bend
@@ -70,6 +80,8 @@ printstatic    .block
 updatestatus   .block
                jsr  push
 
+               lda  #$03
+               sta  a2hexcol
                #printcxy txtuiistatreg
                lda  uiistatreg
                jsr  putabinfmt
@@ -86,29 +98,34 @@ updatestatus   .block
 
 byte           .byte 0
                .include    "./strings_fr.asm"
-uiiy           =    0
+uiiy           =    1
 uiix           =    1  
 ;===============================================
 ; Static text    
 ;===============================================
-lbluiititle    .byte     1,uiix+7,uiiy
-               .null     "1541 Ultimate II+" 
-lbluiiidenreg  .byte     1,uiix+3 ,uiiy+2
-               .null     "id register --------> " 
-lbluiistatreg  .byte    1,uiix+3 ,uiiy+3
-               .null     "cmd status reg. ----> " 
-lbluiirspdata  .byte     1,uiix+3 ,uiiy+4.
-               .null     "data status reg. ---> " 
-lbluiistadata  .byte     1,uiix+3 ,uiiy+5
-               .null     "response data reg. -> " 
+lbluiititle    .byte     1,uiix+9,uiiy,18
+               .text     " 1541 Ultimate II+ "
+               .byte     146,0
+lbluiiidenreg  .byte     1,uiix ,uiiy+2
+               .null     format("Id register ------ $%04X -> ", uiiidenreg)
+lbluiistatreg  .byte     1,uiix ,uiiy+4
+               .null     format("Cmd status reg. -- $%04X -> ", uiistatreg) 
+lbluiistadata  .byte     1,uiix ,uiiy+6
+               .null     format("Response data reg. $%04X -> ", uiirspdata) 
+lbluiirspdata  .byte     1,uiix ,uiiy+8.
+               .null     format("Data status reg. - $%04X -> ", uiistadata) 
 ;===============================================
 ; Value text    
 ;===============================================
-txtuiiidenreg  .byte     3,uiix+25,uiiy+2,0
-txtuiistatreg  .byte     3,uiix+25,uiiy+3,0  
-txtuiirspdata  .byte     3,uiix+25,uiiy+4,0
-txtuiistadata  .byte     3,uiix+25,uiiy+5,0
-
+txtuiiidenreg  .byte     3,uiix+28,uiiy+2,0
+defuiistatreg  .byte     3,uiix+29,uiiy+3
+               .null     "AASSEPCB"
+txtuiistatreg  .byte     3,uiix+28,uiiy+4,0  
+txtuiirspdata  .byte     3,uiix+28,uiiy+6,0
+defuiistadata  .byte     3,uiix+29,uiiy+7
+               .null     "AASSEPCB"
+txtuiistadata  .byte     3,uiix+28,uiiy+8,0
+txtrespponse   .byte     3,uiix+5,uiiy+12,0
 
 
 ;uiictrlreg     =    $df1c     ;(Write)
