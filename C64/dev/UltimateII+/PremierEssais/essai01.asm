@@ -9,20 +9,27 @@
 ;-------------------------------------------------------------------------------
                .enc    none
 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 main           .block
                jsr scrmaninit
                #lowercase
                #disable
 ;               jsr aide
 ;               jsr anykey
+               mycolor
                jsr essai01
                #enable
                #uppercase
                jsr  cls
-               #graycolor
+               #mycolor
 ;               jmp b_warmstart
                .bend
                  
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 aide           .block      
                #lowercase
                jsr cls
@@ -38,6 +45,9 @@ aide           .block
                .bend                              
 ;*=$4001
 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 essai01        .block
                php
                pha
@@ -48,17 +58,16 @@ essai01        .block
                jsr  putahexfmt
 ; sending a command
 sendcommand    #uiimacsndcmd uiiidcmd
-               ;jsr  updatestatus
                #printcxy txtrespponse
-               ;lda  uiirspdata
-               ;jsr  putch
 moredata       jsr  uiireaddata
                cmp  #$00
                beq  nodata 
                jsr  putch
                jmp  moredata
-               jsr  showregs
-nodata         jsr  anykey
+nodata         jsr  uiisendack
+               jsr  updatestatus
+               jsr  showregs 
+               jsr  anykey
                pla
                plp
                rts
@@ -104,7 +113,7 @@ uiix           =    1
 ; Static text    
 ;===============================================
 lbluiititle    .byte     1,uiix+9,uiiy,18
-               .text     " 1541 Ultimate II+ "
+               .text     " 1541 Ultimate II + "
                .byte     146,0
 lbluiiidenreg  .byte     1,uiix ,uiiy+2
                .null     format("Id register ------ $%04X -> ", uiiidenreg)
@@ -125,7 +134,7 @@ txtuiirspdata  .byte     3,uiix+28,uiiy+6,0
 defuiistadata  .byte     3,uiix+29,uiiy+7
                .null     "AASSEPCB"
 txtuiistadata  .byte     3,uiix+28,uiiy+8,0
-txtrespponse   .byte     3,uiix+5,uiiy+12,0
+txtrespponse   .byte     3,uiix+9,uiiy+1,0
 
 
 ;uiictrlreg     =    $df1c     ;(Write)

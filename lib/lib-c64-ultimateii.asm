@@ -267,21 +267,10 @@ uiisndcmd		.block
 next			lda	(zpage1),y
 			beq	finish
 			jsr	uiiputcmdbyte
-
-
-;		jsr	updatestatus
-;		jsr	showregs
-;		jsr 	anykey
-
 			iny
 			jmp	next
 finish		lda	#$01
 			sta	uiictrlreg
-
-;		jsr	updatestatus
-;		jsr	showregs
-;		jsr 	anykey
-
 			jsr	pop
 			rts
 			.bend
@@ -291,6 +280,7 @@ finish		lda	#$01
 ;-------------------------------------------------------------------------------
 uiireaddata	.block
 			php
+			jsr	waituiinotbusy
 			jsr	isuiidataavail  
 			bcs	nodata
 			lda	uiirspdata	
@@ -298,5 +288,15 @@ uiireaddata	.block
 nodata		lda	#$00
 outdata		plp
 			rts
+			.bend
+
+uiisendack	.block
+			php
+			pha
+			lda	#%00000010
+			sta 	uiictrlreg
+			pla
+			plp
+			rts	
 			.bend
 uiigettime

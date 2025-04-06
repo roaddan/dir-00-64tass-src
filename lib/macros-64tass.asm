@@ -89,7 +89,7 @@ c64color       .macro
 
 mycolor        .macro
                jsr  push
-               #changebord cbleupale
+               #changebord cvert
                #changeback cbleu
                #color cblanc
                jsr  pull

@@ -2,7 +2,7 @@
 ;
 ;-------------------------------------------------------------------------------                
 headera                       ;0123456789012345678901234567890123456789
-               .text          " 1541 Ultimate II + Gestion de fichiers"
+               .text          "   1541 Ultimate II + Premiers essais "
                .byte     $0d  
                .text          " Cartouche et API par Gideon Zweijtzer."
                .byte     $0d
