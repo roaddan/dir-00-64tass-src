@@ -57,14 +57,20 @@ essai01        .block
                lda  uiiidenreg
                jsr  putahexfmt
 ; sending a command
-sendcommand    #uiimacsndcmd uiiidcmd
+               #uiimacsndcmd uiicmddata
                #printcxy txtrespponse
-moredata       jsr  uiireaddata
+               jsr  updatestatus
+moredata       jsr  uiifreaddata
                cmp  #$00
-               beq  nodata 
-               jsr  putch
+               beq  nodata
+               cmp  #$00
+               beq  putit
+               cmp  #$27
+               bcc  putit
+               ora  #%00100000
+putit          jsr  putch
                jmp  moredata
-nodata         jsr  uiisendack
+nodata         jsr  uuifsnddataacc
                jsr  updatestatus
                jsr  showregs 
                jsr  anykey
@@ -73,6 +79,9 @@ nodata         jsr  uiisendack
                rts
                .bend
 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 printstatic    .block
                jsr  push 
                #printcxy lbluiititle
@@ -86,68 +95,33 @@ printstatic    .block
                rts
                .bend
 
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 updatestatus   .block
                jsr  push
-
                lda  #$03
                sta  a2hexcol
                #printcxy txtuiistatreg
-               lda  uiistatreg
+               lda  uiicmdstat
                jsr  putabinfmt
                #printcxy txtuiirspdata
-               lda  uiirspdata
+               lda  uiirxdata
                jsr  putabinfmt
                #printcxy txtuiistadata
-               lda  uiistadata
+               lda  uiidatastat
                jsr  putabinfmt
                jsr  pop
                rts
                .bend
 
 
-byte           .byte 0
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
                .include    "./strings_fr.asm"
-uiiy           =    1
-uiix           =    1  
-;===============================================
-; Static text    
-;===============================================
-lbluiititle    .byte     1,uiix+9,uiiy,18
-               .text     " 1541 Ultimate II + "
-               .byte     146,0
-lbluiiidenreg  .byte     1,uiix ,uiiy+2
-               .null     format("Id register ------ $%04X -> ", uiiidenreg)
-lbluiistatreg  .byte     1,uiix ,uiiy+4
-               .null     format("Cmd status reg. -- $%04X -> ", uiistatreg) 
-lbluiistadata  .byte     1,uiix ,uiiy+6
-               .null     format("Response data reg. $%04X -> ", uiirspdata) 
-lbluiirspdata  .byte     1,uiix ,uiiy+8.
-               .null     format("Data status reg. - $%04X -> ", uiistadata) 
-;===============================================
-; Value text    
-;===============================================
-txtuiiidenreg  .byte     3,uiix+28,uiiy+2,0
-defuiistatreg  .byte     3,uiix+29,uiiy+3
-               .null     "AASSEPCB"
-txtuiistatreg  .byte     3,uiix+28,uiiy+4,0  
-txtuiirspdata  .byte     3,uiix+28,uiiy+6,0
-defuiistadata  .byte     3,uiix+29,uiiy+7
-               .null     "AASSEPCB"
-txtuiistadata  .byte     3,uiix+28,uiiy+8,0
-txtrespponse   .byte     3,uiix+9,uiiy+1,0
 
 
-;uiictrlreg     =    $df1c     ;(Write)
-;uiistatreg     =    $df1c     ;(Read)   default $00
-;uiicmddata     =    $df1d     ;(Write)
-;uiiidenreg     =    $df1d     ;(Read)   default $c9
-;uiirspdata     =    $df1e     ;(Read only)
-;uiistadata     =    $df1f     ;(Read only)
-
-;===============================================
-; list of commands
-;===============================================
-uiiidcmd       .byte     $01,$01,$00
 
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut

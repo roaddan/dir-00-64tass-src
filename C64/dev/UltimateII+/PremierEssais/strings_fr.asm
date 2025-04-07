@@ -42,3 +42,39 @@ line           .byte     $20,192,192,192,192,192,192,192,192,192
 uiiconnected   .null     "present"
 uiiunconnected .null     "absent"                  
 
+uiiy           =    1
+uiix           =    1  
+;===============================================
+; Static text    
+;===============================================
+lbluiititle    .byte     1,uiix+9,uiiy,18
+               .text     " 1541 Ultimate II + "
+               .byte     146,0
+lbluiiidenreg  .byte     1,uiix ,uiiy+2
+               .null     format("Id register ------ $%04X -> ", uiiidenreg)
+lbluiistatreg  .byte     1,uiix ,uiiy+4
+               .null     format("Cmd status reg. -- $%04X -> ", uiicmdstat) 
+lbluiistadata  .byte     1,uiix ,uiiy+6
+               .null     format("Response data reg. $%04X -> ", uiirxdata) 
+lbluiirspdata  .byte     1,uiix ,uiiy+8.
+               .null     format("Data status reg. - $%04X -> ", uiidatastat) 
+;===============================================
+; Value text    
+;===============================================
+txtuiiidenreg  .byte     3,uiix+28,uiiy+2,0
+defuiistatreg  .byte     3,uiix+29,uiiy+3
+               .null     "AASSEPCB"
+txtuiistatreg  .byte     3,uiix+28,uiiy+4,0  
+txtuiirspdata  .byte     3,uiix+28,uiiy+6,0
+defuiistadata  .byte     3,uiix+29,uiiy+7
+               .null     "AASSEPCB"
+txtuiistadata  .byte     3,uiix+28,uiiy+8,0
+txtrespponse   .byte     3,uiix+9,uiiy+1,0
+
+
+;uiictrlreg     =    $df1c     ;(Write)
+;uiistatreg     =    $df1c     ;(Read)   default $00
+;uiicmddata     =    $df1d     ;(Write)
+;uiiidenreg     =    $df1d     ;(Read)   default $c9
+;uiirspdata     =    $df1e     ;(Read only)
+;uiistadata     =    $df1f     ;(Read only)

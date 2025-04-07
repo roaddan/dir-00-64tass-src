@@ -3,26 +3,25 @@
 ;-------------------------------------------------------------------------------
                .include    "macro-c64-ultimateii.asm"
 ;-------------------------------------------------------------------------------
-; Constants addresses.
+; 1541 Ultimate II+ register addresses.
 ;-------------------------------------------------------------------------------
 uiictrlreg	=	$df1c	;(Write)
-uiistatreg	=	$df1c	;(Read)	default $00
+	;------------------------------------------------------------------------
+	; Status register flag and constants
+	;------------------------------------------------------------------------
+	; Bit 7 ; Bit 6 ; Bit 5 ; Bit 4 ; Bit 3 ;  Bit 2  ;   Bit 1  ;   Bit 0  ;
+	;-------;-------;---------------;-------;---------;----------;-----------
+	;DATA_AV;STAT_AV;     STATE     ; ERROR ; ABORT_P ; DATA_ACC ; CMD_BUSY ;
+	;------------------------------------------------------------------------
+					uiiidle		=	$00
+					uiicmdbusy	=	$01
+					uiidatalast	=	$02
+					uiidatamore	=	$03
+uiicmdstat	=	$df1c	;(Read)	default $00
 uiicmddata	=	$df1d	;(Write)
 uiiidenreg	=	$df1d	;(Read)	default $c9
-uiirspdata	=	$df1e	;(Read only)
-uiistadata	=	$df1f	;(Read only)
-
-;-------------------------------------------------------------------------------
-; Status register flag and constants
-;-------------------------------------------------------------------------------
-;  Bit 7  ;  Bit 6  ; Bit 5 ; Bit 4 ;  Bit 3  ;   Bit 2  ;   Bit 1  ;   Bit 0  ;
-;---------;---------;---------------;---------;----------;----------;-----------
-; DATA_AV ; STAT_AV ;     STATE     ;  ERROR  ;  ABORT_P ; DATA_ACC ; CMD_BUSY ;
-;-------------------------------------------------------------------------------
-uiiidle		=	$00
-uiicmdbusy	=	$01
-uiidatalast	=	$02
-uiidatamore	=	$03
+uiirxdata		=	$df1e	;(Read only)
+uiidatastat	=	$df1f	;(Read only)
 
 ;-------------------------------------------------------------------------------
 ; 1541 Ultimate II+ DOS Command structure :	$01 CMD [XX] <FILENAME> 
@@ -109,16 +108,38 @@ uii_time_set	=	$27	; $01 $27 <Y> <M> <D> <H> <M> <S>
 
 uii_dos_echo	= 	$f0	; $01 $f0 
 
+;===============================================
+; 541 Ultimate II+ Commandlist definition
+;===============================================
+uiicmdgetid       	.byte     $01,$01,$00
+uiicmdgettime		.byte	$01,$26,$00
 
+
+
+
+
+;-------------------------------------------------------------------------------
+; Tampon de communication R/X avec pointeur et status.
+; 	- Si start=end et Bit 0 de flag = 0 le buffer est vide
+;	- Si start=end et Bit 0 de flag = 0 le buffer est plein
+;    - Si le bit 7 de rxflag = 1 la routine de réception doit être appelée quand 
+;      le buffer sera vidé.  
+;-------------------------------------------------------------------------------
+rxbuffer         .fill     256
+rxbstart         .byte     0
+rxbend           .byte     0
+rxbflag          .byte     0
+txbuffer         .fill     256
+txbstart         .byte     0
+txbend           .byte     0
+txbflag          .byte     0
 
 
 ;-------------------------------------------------------------------------------
 ; Return Carry flag set if 1541 Ultimate II+ busy.
 ;-------------------------------------------------------------------------------
-isuiibusy		.block
-			pha	; Bit 0
-			clc
-			lda	uiistatreg
+uuifisbusy	.block
+			lda	uiicmdstat
 			and	#%00000001
 			cmp	#%00000001
 			bne  out
@@ -128,27 +149,37 @@ out			pla
 			.bend
 
 ;-------------------------------------------------------------------------------
-; Return Carry flag representing 1541 Ultimate II+ condition.
+; Check if 1541 Ultimate II+ has send a data acc.
 ;-------------------------------------------------------------------------------
-isuiidataacc	.block
-			pha ; Bit 1
-			clc
-			lda	uiistatreg
-			and	#%00000100
-			cmp	#%00000100
-			bne	out
-			sec
+uuifisdataacc	.block
+			pha
+			lda	uiidatastat
+			and	#%00000010	
 out			pla
+			rts
+			.bend
+
+
+;-------------------------------------------------------------------------------
+; 
+;-------------------------------------------------------------------------------
+uuifsnddataacc	.block
+			php
+			pha
+			lda	#%00000100
+			sta	uiictrlreg	
+out			pla
+			plp
 			rts
 			.bend
 
 ;-------------------------------------------------------------------------------
 ; Return Carry flag representing 1541 Ultimate II+ abort condition.
 ;-------------------------------------------------------------------------------
-isuiiabort	.block
+uuifsndabort	.block
 			pha ; Bit 2
 			clc
-			lda	uiistatreg
+			lda	uiicmdstat
 			and	#%00000100
 			cmp	#%00000100
 			bne	out
@@ -160,10 +191,10 @@ out			pla
 ;-------------------------------------------------------------------------------
 ; Return Carry flag representing 1541 Ultimate II+ error condition.
 ;-------------------------------------------------------------------------------
-isuiierror	.block
+uuifiscerror	.block
 			pha ; Bit 3
 			clc
-			lda	uiistatreg
+			lda	uiicmdstat
 			and	#%00001000
 			cmp	#%00001000
 			bne	out
@@ -178,9 +209,9 @@ out			pla
 ;    2 = Data Last
 ;    3 = Data More
 ;-------------------------------------------------------------------------------
-getuiistate	.block
+uuifgetcmdstat	.block
 			php	; Bits 5,4
-			lda	uiistatreg
+			lda	uiicmdstat
 			lsr	
 			lsr	
 			lsr
@@ -193,10 +224,11 @@ getuiistate	.block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-isuiidataavail	.block
+uuifisdataavail	
+			.block
 			pha			;tourlou
 			clc
-			lda	uiistadata
+			lda	uiidatastat
 			and	#%10000000
 			cmp	#%10000000
 			bne	out
@@ -210,10 +242,10 @@ out			pla
 ;-------------------------------------------------------------------------------
 ; Wait for 1541 Ultimate II+ to be in idle mode.
 ;-------------------------------------------------------------------------------
-waituiiidle	.block
+uuifwaitidle	.block
 			php
 			pha
-notyet		jsr	getuiistate
+notyet		jsr	uuifgetcmdstat
 			cmp  #$00
 			bne	notyet
 			pla
@@ -224,10 +256,10 @@ notyet		jsr	getuiistate
 ;-------------------------------------------------------------------------------
 ; Wait for 1541 Ultimate II+ to be in idle mode.
 ;-------------------------------------------------------------------------------
-isuiimoredata	.block
+uuifismoredata	.block
 			php
 			pha
-notyet		jsr	getuiistate
+notyet		jsr	uuifgetcmdstat
 			cmp  #$00
 			bne	notyet
 			pla
@@ -239,9 +271,9 @@ notyet		jsr	getuiistate
 ;-------------------------------------------------------------------------------
 ; Wait while 1541 Ultimate II+ is busy.
 ;-------------------------------------------------------------------------------
-waituiinotbusy	.block
+uiifbusywait	.block
 			php
-wait			jsr	isuiibusy
+wait			jsr	uuifisbusy
 			bcs	wait
 			plp
 			rts
@@ -250,8 +282,8 @@ wait			jsr	isuiibusy
 ;-------------------------------------------------------------------------------
 ; Write a byte to the cmd register wher the 1541 Ultimate II+ is not busy.
 ;-------------------------------------------------------------------------------
-uiiputcmdbyte	.block
-			jsr 	waituiinotbusy
+uiifputcmdbyte	.block
+			jsr 	uiifbusywait
 			sta	uiicmddata
 			rts
 			.bend
@@ -259,14 +291,14 @@ uiiputcmdbyte	.block
 ; Write a zero ended command to the the 1541 Ultimate II+ command buffer.
 ; pointex by $YYXX.
 ;-------------------------------------------------------------------------------
-uiisndcmd		.block
+uiifsndcmd	.block
 			jsr	push
 			stx	zpage1
 			sty	zpage1+1
 			ldy	#$00
 next			lda	(zpage1),y
 			beq	finish
-			jsr	uiiputcmdbyte
+			jsr	uiifputcmdbyte
 			iny
 			jmp	next
 finish		lda	#$01
@@ -278,19 +310,22 @@ finish		lda	#$01
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-uiireaddata	.block
+uiifreaddata	.block
 			php
-			jsr	waituiinotbusy
-			jsr	isuiidataavail  
+			jsr	uiifbusywait
+			jsr	uuifisdataavail  
 			bcs	nodata
-			lda	uiirspdata	
+			lda	uiirxdata	
 			jmp	outdata
 nodata		lda	#$00
 outdata		plp
 			rts
 			.bend
 
-uiisendack	.block
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+uiifsendack	.block
 			php
 			pha
 			lda	#%00000010
@@ -299,4 +334,4 @@ uiisendack	.block
 			plp
 			rts	
 			.bend
-uiigettime
+
