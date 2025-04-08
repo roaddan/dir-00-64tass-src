@@ -6,7 +6,7 @@ headera                       ;0123456789012345678901234567890123456789
                .byte     $0d  
                .text          " Cartouche et API par Gideon Zweijtzer."
                .byte     $0d
-               .text          "     API Version 1.0, 1er Feb 2013"
+               .text          "    Version API 1.0, 1er Fev. 2013"
                .byte     $0d,0
 
 headerb        .text          "               essai01 "
@@ -51,13 +51,13 @@ lbluiititle    .byte     1,uiix+9,uiiy,18
                .text     " 1541 Ultimate II + "
                .byte     146,0
 lbluiiidenreg  .byte     1,uiix ,uiiy+2
-               .null     format("Id register ------ $%04X -> ", uiiidenreg)
+               .null     format("Identification..($%04X) -> ", uiiidenreg)
 lbluiistatreg  .byte     1,uiix ,uiiy+4
-               .null     format("Cmd status reg. -- $%04X -> ", uiicmdstat) 
+               .null     format("Status Commande.($%04X) -> ", uiicmdstat) 
 lbluiistadata  .byte     1,uiix ,uiiy+6
-               .null     format("Response data reg. $%04X -> ", uiirxdata) 
+               .null     format("Data reponse....($%04X) -> ", uiirxdata) 
 lbluiirspdata  .byte     1,uiix ,uiiy+8.
-               .null     format("Data status reg. - $%04X -> ", uiidatastat) 
+               .null     format("Status Data.....($%04X) -> ", uiidatastat) 
 ;===============================================
 ; Value text    
 ;===============================================

@@ -1,9 +1,12 @@
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------                
 headera                       ;0123456789012345678901234567890123456789
-               .text          "     1541 Ultimate II+ File Manager"
+               .text          "     1541 Ultimate II + First Try "
                .byte     $0d  
-               .text          " Cartridge snd API by Gideon Zweijtzer."
+               .text          " Cartridge and API by Gideon Zweijtzer."
                .byte     $0d
-               .text          "     API Version 1.0, 1er Feb 2013"
+               .text          "    Version API 1.0, 1er Fev. 2013"
                .byte     $0d,0
 
 headerb        .text          "               essai01 "
@@ -17,24 +20,61 @@ shortcuts      .byte     $0d
                .byte     ucurkey,ucurkey
                .byte     rcurkey,rcurkey,rcurkey,rcurkey
                .byte     rcurkey,rcurkey,rcurkey,rcurkey,rcurkey      
-               .text          " S H O R T - C U T S "
+               .text          " R A C C O U R C I S "
                .byte     $0d
                .text   format(" essai01..: SYS%05d ($%04X)",main, main)
                .byte     $0d
-               .text   format(" help.....: SYS%05d ($%04X)",aide, aide)
+               .text   format(" aide.....: SYS%05d ($%04X)",aide, aide)
                .byte     $0d
                .text   format(" cls......: SYS%05d ($%04X)",cls, cls)
                .byte     $0d,0
-aidetext       .text   format(" Execute..: SYS%05d ($%04X)",essai01, essai01)
+aidetext       .text   format(" Lancement: SYS%05d ($%04X)",essai01, essai01)
                .byte     $0d, $0d
                .text   format("    ex.: SYS%05d",essai01)
-;              .byte     $0d
-;              .text   format("    for i=0to100:SYS%05d:next",essai01)
+               .byte     $0d
+               .text   format("    for i=0to100:SYS%05d:next",essai01)
                .byte     $0d,0
 line           .byte     $20,192,192,192,192,192,192,192,192,192
                .byte     192,192,192,192,192,192,192,192,192,192
                .byte     192,192,192,192,192,192,192,192,192,192
                .byte     192,192,192,192,192,192,192,192,192
                .byte     $0d,0
+uiiconnected   .null     "present"
+uiiunconnected .null     "absent"                  
+
+uiiy           =    1
+uiix           =    1  
+;===============================================
+; Static text    
+;===============================================
+lbluiititle    .byte     1,uiix+9,uiiy,18
+               .text     " 1541 Ultimate II + "
+               .byte     146,0
+lbluiiidenreg  .byte     1,uiix ,uiiy+2
+               .null     format("Identification..($%04X) -> ", uiiidenreg)
+lbluiistatreg  .byte     1,uiix ,uiiy+4
+               .null     format("Status Commande.($%04X) -> ", uiicmdstat) 
+lbluiistadata  .byte     1,uiix ,uiiy+6
+               .null     format("Data reponse....($%04X) -> ", uiirxdata) 
+lbluiirspdata  .byte     1,uiix ,uiiy+8.
+               .null     format("Status Data.....($%04X) -> ", uiidatastat) 
+;===============================================
+; Value text    
+;===============================================
+txtuiiidenreg  .byte     3,uiix+28,uiiy+2,0
+defuiistatreg  .byte     3,uiix+29,uiiy+3
+               .null     "AASSEPCB"
+txtuiistatreg  .byte     3,uiix+28,uiiy+4,0  
+txtuiirspdata  .byte     3,uiix+28,uiiy+6,0
+defuiistadata  .byte     3,uiix+29,uiiy+7
+               .null     "AASSEPCB"
+txtuiistadata  .byte     3,uiix+28,uiiy+8,0
+txtrespponse   .byte     3,uiix+9,uiiy+1,0
 
 
+;uiictrlreg     =    $df1c     ;(Write)
+;uiistatreg     =    $df1c     ;(Read)   default $00
+;uiicmddata     =    $df1d     ;(Write)
+;uiiidenreg     =    $df1d     ;(Read)   default $c9
+;uiirspdata     =    $df1e     ;(Read only)
+;uiistadata     =    $df1f     ;(Read only)

@@ -12,7 +12,7 @@ case $1 in
 	*)
 		git add .
 		git commit -m $(/bin/date "+%Y%m%d-%H%M%S")
-		git push -f origin main
+		git push -u origin main
 		;;
 esac
 
