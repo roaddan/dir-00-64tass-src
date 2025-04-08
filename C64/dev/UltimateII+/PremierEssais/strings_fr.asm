@@ -65,10 +65,10 @@ txtuiiidenreg  .byte     3,uiix+28,uiiy+2,0
 defuiistatreg  .byte     3,uiix+29,uiiy+3
                .null     "AASSEPCB"
 txtuiistatreg  .byte     3,uiix+28,uiiy+4,0  
-txtuiirspdata  .byte     3,uiix+28,uiiy+6,0
-defuiistadata  .byte     3,uiix+29,uiiy+7
+txtuiirspdata  .byte     3,uiix+28,uiiy+8,0
+defuiistadata  .byte     3,uiix+29,uiiy+5
                .null     "AASSEPCB"
-txtuiistadata  .byte     3,uiix+28,uiiy+8,0
+txtuiistadata  .byte     3,uiix+28,uiiy+6,0
 txtrespponse   .byte     3,uiix+9,uiiy+1,0
 
 

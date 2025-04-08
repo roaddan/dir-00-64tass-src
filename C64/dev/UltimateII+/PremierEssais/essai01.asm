@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250405-231555 a"
+                Version = "20250405-231555 "
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -8,6 +8,11 @@
 ;
 ;-------------------------------------------------------------------------------
                .enc    none
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+               .include    "./strings_en.asm" 
 
 ;-------------------------------------------------------------------------------
 ;
@@ -89,7 +94,7 @@ printstatic    .block
                #printcxy lbluiiidenreg
                #printcxy lbluiistatreg
                #printcxy defuiistatreg
-               #printcxy lbluiirspdata
+               ;#printcxy lbluiirspdata
                #printcxy lbluiistadata
                #printcxy defuiistadata
                jsr  pop
@@ -106,23 +111,15 @@ updatestatus   .block
                #printcxy txtuiistatreg
                lda  uiicmdstat
                jsr  putabinfmt
-               #printcxy txtuiirspdata
-               lda  uiirxdata
-               jsr  putabinfmt
+               ;#printcxy txtuiirspdata
+               ;lda  uiirxdata 
+               ;jsr  putabinfmt
                #printcxy txtuiistadata
                lda  uiidatastat
                jsr  putabinfmt
                jsr  pop
                rts
                .bend
-
-
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-               .include    "./strings_fr.asm"
-
-
 
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
