@@ -30,7 +30,7 @@ main           .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-aide           .block      
+aide           .block       
                #lowercase
                jsr cls
                #print line
@@ -57,10 +57,11 @@ essai01        .block
                lda  uiiidenreg
                jsr  putahexfmt
 ; sending a command
-               #uiimacsndcmd uiicmddata
+               #uiimacsndcmd uiicmdgetid
                #printcxy txtrespponse
-               jsr  updatestatus
-moredata       jsr  uiifreaddata
+
+               ;jsr  updatestatus
+moredata       jsr  uiifreadrxdata
                cmp  #$00
                beq  nodata
                cmp  #$00
@@ -70,7 +71,7 @@ moredata       jsr  uiifreaddata
                ora  #%00100000
 putit          jsr  putch
                jmp  moredata
-nodata         jsr  uuifsnddataacc
+nodata         jsr  uiifsenddataacc
                jsr  updatestatus
                jsr  showregs 
                jsr  anykey
