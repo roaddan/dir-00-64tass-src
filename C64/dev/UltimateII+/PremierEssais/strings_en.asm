@@ -6,10 +6,10 @@ headera                       ;0123456789012345678901234567890123456789
                .byte     $0d  
                .text          " Cartridge and API by Gideon Zweijtzer."
                .byte     $0d
-               .text          "    Version API 1.0, 1er Fev. 2013"
+               .text          "    API Version 1.0, Feb. 1st 2013"
                .byte     $0d,0
 
-headerb        .text          "               essai01 "
+headerb        .text          "             essai01.prg "
                .byte     $0d
                .text          "       (c) 2025 Daniel Lafrance"
                .byte     $0d
@@ -21,14 +21,15 @@ shortcuts      .byte     $0d
                .byte     rcurkey,rcurkey,rcurkey,rcurkey
                .byte     rcurkey,rcurkey,rcurkey,rcurkey,rcurkey      
                .text          " R A C C O U R C I S "
+               .text          "  S H O R T C U T S  "
                .byte     $0d
                .text   format(" essai01..: SYS%05d ($%04X)",main, main)
                .byte     $0d
-               .text   format(" aide.....: SYS%05d ($%04X)",aide, aide)
+               .text   format(" help.....: SYS%05d ($%04X)",aide, aide)
                .byte     $0d
                .text   format(" cls......: SYS%05d ($%04X)",cls, cls)
                .byte     $0d,0
-aidetext       .text   format(" Lancement: SYS%05d ($%04X)",essai01, essai01)
+aidetext       .text   format(" Execute: SYS%05d ($%04X)",essai01, essai01)
                .byte     $0d, $0d
                .text   format("    ex.: SYS%05d",essai01)
                .byte     $0d
@@ -39,8 +40,8 @@ line           .byte     $20,192,192,192,192,192,192,192,192,192
                .byte     192,192,192,192,192,192,192,192,192,192
                .byte     192,192,192,192,192,192,192,192,192
                .byte     $0d,0
-uiiconnected   .null     "present"
-uiiunconnected .null     "absent"                  
+uiiconnected   .null     "Installed"
+uiiunconnected .null     "Uninstalled"                  
 
 uiiy           =    1
 uiix           =    1  
@@ -53,11 +54,11 @@ lbluiititle    .byte     1,uiix+9,uiiy,18
 lbluiiidenreg  .byte     1,uiix ,uiiy+2
                .null     format("Identification..($%04X) -> ", uiiidenreg)
 lbluiistatreg  .byte     1,uiix ,uiiy+4
-               .null     format("Status Commande.($%04X) -> ", uiicmdstat) 
+               .null     format("Commande Status.($%04X) -> ", uiicmdstat) 
 lbluiistadata  .byte     1,uiix ,uiiy+6
-               .null     format("Data reponse....($%04X) -> ", uiirxdata) 
+               .null     format("Data Response...($%04X) -> ", uiirxdata) 
 lbluiirspdata  .byte     1,uiix ,uiiy+8.
-               .null     format("Status Data.....($%04X) -> ", uiidatastat) 
+               .null     format("Data Status.....($%04X) -> ", uiidatastat) 
 ;===============================================
 ; Value text    
 ;===============================================
