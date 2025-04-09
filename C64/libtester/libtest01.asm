@@ -14,7 +14,7 @@
 ;-------------------------------------------------------------------------------
 main           .block
                jsr scrmaninit
-               #lowercase
+               #uppercase
                #disable
                jsr aide
                jsr anykey
@@ -52,9 +52,11 @@ libtest01        .block
                php
                pha
                jsr  cls
+               lda  #$00
+nexta          pha
                #printcxy    dataloc
-               #color crose
-               lda #$55
+               #color ccyan
+               pla
                jsr  putabinfmt
                pha  
                lda #' '
@@ -66,7 +68,9 @@ libtest01        .block
                jsr putch
                pla
                jsr putadec
-
+               clc
+               adc  #$01
+               bne  nexta
                jsr  anykey
                pla
                plp
