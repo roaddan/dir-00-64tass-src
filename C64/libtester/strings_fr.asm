@@ -18,7 +18,7 @@ shortcuts      .byte     $0d
                .byte     rcurkey,rcurkey,rcurkey,rcurkey,rcurkey      
                .text          " R A C C O U R C I S "
                .byte     $0d
-               .text   format(" libtest01..: SYS%05d ($%04X)",main, main)
+               .text   format(" libtest01: SYS%05d ($%04X)",main, main)
                .byte     $0d
                .text   format(" aide.....: SYS%05d ($%04X)",aide, aide)
                .byte     $0d

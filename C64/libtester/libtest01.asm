@@ -18,7 +18,7 @@ main           .block
                #disable
                jsr aide
                jsr anykey
-               mycolor
+               #mycolor
                jsr libtest01
                #enable
                #uppercase
@@ -30,7 +30,7 @@ main           .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-aide           .block       
+aide           .block      
                #lowercase
                jsr cls
                #print line
@@ -55,7 +55,7 @@ libtest01        .block
                lda  #$00
 nexta          pha
                #printcxy    dataloc
-               #color ccyan
+               #color cblanc
                pla
                jsr  putabinfmt
                pha  
