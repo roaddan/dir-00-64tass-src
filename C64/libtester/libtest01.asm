@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250405-231555"
+                Version = "20250405-231555 "
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -7,7 +7,7 @@
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-               .enc    'none'
+               .enc    none
 
 ;-------------------------------------------------------------------------------
 ;
@@ -15,8 +15,9 @@
 main           .block
                jsr scrmaninit
                #uppercase
+               #toupper
                #disable
-               jsr aide
+               ;jsr aide
                jsr anykey
                #mycolor
                jsr libtest01
@@ -48,33 +49,30 @@ aide           .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-libtest01        .block
+libtest01      .block 
                php
                pha
                jsr  cls
-               lda  #$00
+               lda  #166
 nexta          pha
                #printcxy    dataloc
-               #color cblanc
-               pla
-               jsr  putabinfmt
-               pha  
-               lda #' '
-               jsr putch
-               pla
-               jsr putahexfmt
-               pha  
-               lda #' '
-               jsr putch
-               pla
-               jsr putadec
-               clc
-               adc  #$01
-               bne  nexta
+               #color ccyan
+               setloop $0000+(40*23)
+               jsr  cls
+roll           lda  car
+               ;jsr  anykey
+               jsr  putch
+               ;inc  car
+               jsr  loop
+               php
+               plp
+               bne  roll
+               jsr  showregs
                jsr  anykey
-               pla
+out            pla
                plp
                rts
+car            .byte     166
                .bend
 
 ;-------------------------------------------------------------------------------

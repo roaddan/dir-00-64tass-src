@@ -132,12 +132,10 @@ nopage         pla
 ;---------------------------------------------------------------------
 deczp2         .block
                php
-               pha
-               lda  zpage2
+               dec  zpage2
                bne  nopage
                dec  zpage2+1
-nopage         pla       
-               plp         
+nopage         plp         
                rts
                .bend
 ;---------------------------------------------------------------------
@@ -236,6 +234,32 @@ thatsit         sta     addr2
                 plp
                 rts
                 .bend
+
+;*******************************************************************************
+; Faire une fonction de boucle qui reçois un compte et l'adresse d'une routine 
+; en paramètre.
+;*******************************************************************************
+
+;-------------------------------------------------------------------------------
+; Une forme de for-next sur 16 bits.
+; Placez le nombre nombre dans loopcount à l'aide de la macro setloop avant 
+; d'appeler la fonction. 
+; La loop fonction retournera le flag z a 1 si le décompte est terminé.
+;-------------------------------------------------------------------------------
+loop           .block
+               dec  loopcount
+               bne  norep
+               dec  loopcount+1 
+norep          lda  loopcount
+               cmp  #$00
+               bne  out
+               eor  loopcount+1
+               cmp  #$ff
+out            rts
+               .bend
+
+
+
 ;-------------------------------------------------------------------------------
 ; Variables globales
 ;-------------------------------------------------------------------------------
@@ -243,6 +267,8 @@ ymult          .byte     40
 addr1          .word     $0000    
 addr2          .word     $0000
 bytecnt        .word     $0000       
-zp1        .word   $0000
-zp2        .word   $0000
+zp1            .word   $0000
+zp2            .word   $0000
+loopcount      .word     $0000
+
 

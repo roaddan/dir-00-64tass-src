@@ -9,6 +9,24 @@ enable         .macro
                pla
                plp
                .endm
+
+setloop        .macro lcount
+               pha
+               lda  #<\lcount
+               sta  loopcount
+               lda  #>\lcount
+               sta  loopcount+1
+               pla
+               .endm
+
+
+loadxy         .macro location
+               php
+               ldx  \location
+               ldy  \location+1
+               plp
+               .endm
+
 ; ------------------------------------------------------------------------------
 ; Disable character case chamge with [C=]+[SHIFT]
 ; ------------------------------------------------------------------------------
@@ -232,3 +250,4 @@ printwordbin   .macro adresse
                #print abin
                jsr  pop
                .endm
+
