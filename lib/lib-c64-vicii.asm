@@ -26,6 +26,10 @@ screenena      .block
                rts
                .bend
 
+;*******************************************************************************
+; Corriger les fonctions graphiques pour utiliser une autre page mémoire
+;*******************************************************************************
+bmpram = 8192
 ;-------------------------------------------------------------------------------
 ; Set VICII in high resolution Graphic mode. (BMP) 320x200
 ;-------------------------------------------------------------------------------
@@ -67,5 +71,27 @@ victonormal   .block
                sta  $0038
                pla
                plp
+               rts
+               .bend
+
+;-------------------------------------------------------------------------------
+; Set VICII in normal character mode.
+;-------------------------------------------------------------------------------
+vicbmpclear    .block
+               jsr  push
+               jsr  cls                 ; Efface la mémoire caractères qui est 
+                                        ; devenu la mémoire couleur. 
+               lda  #<8192              ; Place le LSB de 8192 ...
+               sta  zpage1              ; ... dans le lsb de zpage1.
+               lda  #>8192              ; Place le MSB de 8192 ...
+               sta  zpage1+1            ; ... dans le Msb de zpage1.
+               setloop $0000+(8191)
+               ldy  #$00
+next           lda  #$01           
+               sta  (zpage1),y
+               jsr  inczpage1
+               jsr  loop
+               bne  next
+               jsr  pop
                rts
                .bend

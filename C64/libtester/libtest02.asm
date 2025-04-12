@@ -61,7 +61,11 @@ libtest01      .block
                lda  #166
                #printcxy    dataloc
                #color ccyan
+               jsr  showregs
+               jsr  anykey 
                jsr  victohighres
+               jsr  anykey
+               jsr  vicbmpclear
                jsr  anykey
                jsr  victonormal
                setloop $0000+(40*23)
@@ -75,7 +79,7 @@ roll           lda  car
 out            pla
                plp
                rts
-car            .byte     166
+car            .byte     32
                .bend
 
 ;-------------------------------------------------------------------------------
