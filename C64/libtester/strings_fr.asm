@@ -18,13 +18,13 @@ shortcuts      .byte     $0d
                .byte     rcurkey,rcurkey,rcurkey,rcurkey,rcurkey      
                .text          " R A C C O U R C I S "
                .byte     $0d
-               .text   format(" libtest01: SYS%05d ($%04X)",main, main)
+               .text   format(" libtest01: SYS%05d (jsr $%04X)",main, main)
                .byte     $0d
-               .text   format(" aide.....: SYS%05d ($%04X)",aide, aide)
+               .text   format(" aide.....: SYS%05d (jsr $%04X)",aide, aide)
                .byte     $0d
-               .text   format(" cls......: SYS%05d ($%04X)",cls, cls)
+               .text   format(" cls......: SYS%05d (jsr $%04X)",cls, cls)
                .byte     $0d,0
-aidetext       .text   format(" Lancement: SYS%05d ($%04X)",libtest01, libtest01)
+aidetext       .text   format(" Lancement: SYS%05d (jsr $%04X)",libtest01, libtest01)
                .byte     $0d, $0d
                 .text   format("    ex.: SYS%05d",libtest01)
                 .byte     $0d

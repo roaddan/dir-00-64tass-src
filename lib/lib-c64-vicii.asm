@@ -69,6 +69,7 @@ victonormal   .block
                sta  $0037
                lda  #$a0
                sta  $0038
+               jsr  cls
                pla
                plp
                rts
@@ -79,15 +80,15 @@ victonormal   .block
 ;-------------------------------------------------------------------------------
 vicbmpclear    .block
                jsr  push
-               jsr  cls                 ; Efface la mémoire caractères qui est 
-                                        ; devenu la mémoire couleur. 
+               lda  #cmauve
+               jsr  setvicbmpbkcol
                lda  #<8192              ; Place le LSB de 8192 ...
                sta  zpage1              ; ... dans le lsb de zpage1.
                lda  #>8192              ; Place le MSB de 8192 ...
                sta  zpage1+1            ; ... dans le Msb de zpage1.
                setloop $0000+(8191)
                ldy  #$00
-next           lda  #$01           
+next           lda  #$00           
                sta  (zpage1),y
                jsr  inczpage1
                jsr  loop
@@ -95,3 +96,48 @@ next           lda  #$01
                jsr  pop
                rts
                .bend
+
+;-------------------------------------------------------------------------------
+; Set VICII bitmap backgroundcolor.
+;-------------------------------------------------------------------------------
+setvicbmpbkcol .block
+               jsr  push
+               and  #$0f
+               sta  vicbmpbkcol
+               ldy  #<1024              ; Place le LSB de 8192 ...
+               sty  zpage1              ; ... dans le lsb de zpage1.
+               ldy  #>1024              ; Place le MSB de 8192 ...
+               sty  zpage1+1            ; ... dans le Msb de zpage1.
+               setloop $0000+(1024)
+               ldy  #$00  
+next           lda  (zpage1),y
+               and  #$f0
+               ora  vicbmpbkcol
+               sta  (zpage1),y
+               jsr  inczpage1
+               jsr  loop
+               bne  next
+               jsr  pop
+               rts
+vicbmpbkcol
+               .bend
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

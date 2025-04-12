@@ -9,6 +9,7 @@
 ;-------------------------------------------------------------------------------
                .enc    none
 
+*=$c000        
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -17,7 +18,7 @@ main           .block
                #uppercase
                #toupper
                #disable
-               ;jsr aide
+               jsr aide
                #mycolor
                jsr libtest01
                #enable
@@ -26,7 +27,7 @@ main           .block
                #locate 0,0
                ; #c64color
                jsr  anykey
-;               jmp b_warmstart
+               jmp b_warmstart
                rts
                .bend
                  
@@ -35,7 +36,7 @@ main           .block
 ;-------------------------------------------------------------------------------
 aide           .block
                jsr  push      
-               #lowercase
+               #lowercase 
                jsr  cls
                #print line
                #print headera
@@ -49,7 +50,6 @@ aide           .block
                jsr  pop
                rts  
                .bend                              
-;*=$4001
 
 ;-------------------------------------------------------------------------------
 ;
@@ -57,7 +57,7 @@ aide           .block
 libtest01      .block 
                php
                pha
-               jsr  cls
+               jsr  cls 
                lda  #166
                #printcxy    dataloc
                #color ccyan
@@ -66,6 +66,12 @@ libtest01      .block
                jsr  victohighres
                jsr  anykey
                jsr  vicbmpclear
+               ldy  #$0f
+nextc          tya
+               jsr  setvicbmpbkcol
+               dey
+               cpy  #$00
+               bpl  nextc
                jsr  anykey
                jsr  victonormal
                setloop $0000+(40*23)
@@ -85,7 +91,6 @@ car            .byte     32
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
-;*=$c000        
                ; Les constantes 
                ;===================================
                .include  "map-c64-kernal.asm"
