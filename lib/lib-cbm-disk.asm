@@ -172,7 +172,19 @@ noerror        jsr pop
 error          .block
                jsr  push
                ; accumulator contains basic error code
-
+               ; most likely errors:
+               ; a = $01 (file not open)
+isit01         cmp  #$01
+               bne  isti02
+               ldx  #<dsk_emsg01         
+               ldy  #>dsk_emsg01
+               jmp  printerror 
+               ; a = $02 (write error)
+isit02         cmp  #$02
+               bne  isti05
+               ldx  #<dsk_emsg02         
+               ldy  #>dsk_emsg02
+               jmp  printerror 
                ; most likely errors:
                ; a = $05 (device not present)
 isit05         cmp  #$05
@@ -202,21 +214,22 @@ isit00         cmp  #$00
 printerror     jsr  puts
 noerror        jsr  pop
                rts
+dsk_msg1       .byte     141
+               .null     "succes" 
+dsk_emsg01     .byte     141
+               .null     "fichier non ouvert"
+dsk_emsg02     .byte     17
+               .null     "erreur d'ecriture"
+dsk_emsg05     .byte     17
+               .null     "lecteur absent"
+dsk_emsg04     .byte     17
+               .null     "fichier introuvable"
+dsk_emsg1d     .byte     17
+               .null     "erreur de chargement"
+dsk_emsg00     .byte     17
+               .null     "break error"
 
-error1         ldx  #<dsk_emsg1         
-               ldy  #>dsk_emsg1   
-               jsr  puts
-               jsr  pop
-               rts
-
-error2         ldx #<dsk_emsg2         
-               ldy #>dsk_emsg2   
-               jsr puts
-               jsr  pop    
-               rts
                .bend
-
-
 
 dsk_putmesg    .block
                jsr push
@@ -242,18 +255,4 @@ dsk_fnptr      .word     $00       ; Pointer to filename
 dsk_fnlen      .byte     0         ; Number of character in filename.
 dsk_msg0       .byte     141       ; Miscilinaous file message.
                .null     "saving "
-dsk_msg1       .byte     141
-               .null     "succes" 
-dsk_emsg1      .byte     141
-               .null     "fichier non ouvert"
-dsk_emsg2      .byte     17
-               .null     "erreur d'ecriture"
-dsk_emsg05      .byte     17
-               .null     "lecteur absent"
-dsk_emsg04      .byte     17
-               .null     "fichier introuvable"
-dsk_emsg1d     .byte     17
-               .null     "erreur de chargement"
-dsk_emsg00     .byte     17
-               .null     "break error"
 
