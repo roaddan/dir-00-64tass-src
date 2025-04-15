@@ -30,12 +30,12 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=libtest02
+SOURCENAME=template
 DEPSLOCALES=strings_fr.asm  strings_en.asm
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
-LIBDEPS=$(shell find ./lib -type f -iname "*.asm")
+LIBDEPS=$(shell find /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -maxdepth 1 -type f -iname "*.asm")
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
