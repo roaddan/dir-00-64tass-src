@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250405-231555"
+                Version = "20250412-154154"
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -20,14 +20,14 @@ main           .block
                #disable
                jsr aide
                #mycolor
-               jsr libtest01
+               jsr libtest02
                #enable
                #uppercase
                ;jsr  cls
                #locate 0,0
                ; #c64color
                jsr  anykey
-               jmp b_warmstart
+               jmp  k_coldstart
                rts
                .bend
                  
@@ -54,7 +54,7 @@ aide           .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-libtest01      .block 
+libtest02      .block 
                php
                pha
                jsr  cls 
