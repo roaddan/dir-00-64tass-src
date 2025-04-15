@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250412-154154"
+                Version = "20250414-224259"
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm" 
                .include    "macros-64tass.asm"
@@ -27,7 +27,7 @@ main           .block
                #locate 0,0
                ; #c64color
                jsr  anykey
-               jmp  k_coldstart
+               jmp  k_warmstart
                rts
                .bend
                  
@@ -42,6 +42,8 @@ aide           .block
                #print headera
                #print headerb
                #print line
+               lda  #$0d
+               jsr  putch
                #print line
                #print shortcuts
                #print aidetext

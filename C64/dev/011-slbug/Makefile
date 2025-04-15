@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # --------- 6 4 t a s s   m a k e   f i l e   w i t h   V i c e ---------------
 # ----------------- a n d   F T P   u t i l i t i e s . -----------------------
-# ---------------------- M A C O S   V E R S I O N ----------------------------
+# ---------------------- L I N U X   V E R S I O N ----------------------------
 # -----------------------------------------------------------------------------
 # Note:  
 # 	A) 64tass can be downloaded from :
@@ -19,9 +19,7 @@
 # -----------------------------------------------------------------------------
 # ----------------------- 6 4 T A S S   S E C T I O N -------------------------
 # -----------------------------------------------------------------------------
-# Tis can be change to any assembler of your liking.
-# Complete path to the 64tass assembler program.
-TASS=/Users/Locals/bin/64tass_dir/64tass
+# This can be change to any assembler of your liking.
 # Final location where the assembled files must be copied. 
 PRGDIR=d-00-64tass-bin
 #
@@ -30,7 +28,13 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=slbug64
+SOURCENAME=template
+DEPSLOCALES=strings_fr.asm  strings_en.asm
+# -----------------------------------------------------------------------------
+# Dépendances des libraries pour valider tous les changements.
+# -----------------------------------------------------------------------------
+LIBDEPS=$(shell find ./lib -type f -iname "*.asm")
+DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -55,7 +59,9 @@ LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-VICEBIN=/Users/Locals/bin
+VICEBIN=/usr/bin
+# Complete path to the 64tass assembler program.
+TASS=$(VICEBIN)/64tass
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
@@ -91,7 +97,7 @@ J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2test
 # Some other variables just to reduce command line length.
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
-VICE=$(X64SCGTK)
+VICE=$(X64)
 OUTDIR=$(OUTDIRC64)
 #OUTDIR=$(OUTDIRV20)
 
@@ -117,14 +123,14 @@ AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # FTP SERVER CONFIG
 FTPSVRIP=192.168.2.200 # Check cartridge root menu for your address.
 # FTP CLI client full path.
-FTPCMDPATH=/usr/local/bin/lftp
+FTPCMDPATH=/usr/bin/lftp
 # List of commands by filetype intended to the FTP server.
 # Note:  The following path must exist on the Ultimate II+ cartridge usb ...
 #        disks.
 # Where to put the files on the Ultimate II +.
 FTPBASDIR=/Usb0/d-remote
 FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
-FTPTXTARG=cd $(FTPBASDIR)/lst; put $(SOURCENAME).lst; bye
+FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
 FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye
 FTPD64ARG=cd $(FTPBASDIR)/d64; put $(SOURCENAME).d64; bye
 FTPD81ARG=cd $(FTPBASDIR)/d81; put $(SOURCENAME).d81; bye
@@ -142,13 +148,13 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # ** Using comment, you can mask or enable anny action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
+#		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 #		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
 #		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
 #		$(FTPASMCMD)	# To transfer the source ASM file.
 #		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
-#		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
+		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
 
 # -----------------------------------------------------------------------------
 # When called with "make ftp". 
@@ -165,9 +171,9 @@ ftp:
 # -----------------------------------------------------------------------------
 # To clean and start project fresh. (seldome used). 
 clean:	
-		rm $(SOURCENAME).lst $(SOURCENAME).prg $(SOURCENAME).d64 
+		rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 
 		rm $(BASEDIR)/$(PRGDIR)/prg/$(SOURCENAME).prg
-		rm $(BASEDIR)/$(PRGDIR)/lst/$(SOURCENAME).lst
+		rm $(BASEDIR)/$(PRGDIR)/txt/$(SOURCENAME).txt
 		rm $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64
 		rm $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81
 # -----------------------------------------------------------------------------
@@ -183,24 +189,23 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
+		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
+		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
-
-		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
-		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
 # Assembling and distributing resulting files.
-$(SOURCENAME).prg: $(SOURCENAME).asm
-		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).lst -o $(SOURCENAME).prg
+$(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
+		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)
-		cp -f  $(SOURCENAME).lst $(BASEDIR)/$(PRGDIR)/lst
-		cp -f  $(SOURCENAME).lst $(OUTDIR)
+		cp -f  $(SOURCENAME).txt $(BASEDIR)/$(PRGDIR)/txt
+		cp -f  $(SOURCENAME).txt $(OUTDIR)
 
 

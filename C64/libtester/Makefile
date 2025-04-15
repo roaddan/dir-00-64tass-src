@@ -31,6 +31,12 @@ PRGDIR=d-00-64tass-bin
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
 SOURCENAME=libtest02
+DEPSLOCALES=strings_fr.asm  strings_en.asm
+# -----------------------------------------------------------------------------
+# Dépendances des libraries pour valider tous les changements.
+# -----------------------------------------------------------------------------
+LIBDEPS=$(shell find ./lib -type f -iname "*.asm")
+DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -144,7 +150,7 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
+		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
 		$(FTPASMCMD)	# To transfer the source ASM file.
 		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
@@ -183,19 +189,20 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
-		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
-		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
+
+		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
+		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
 # Assembling and distributing resulting files.
-$(SOURCENAME).prg: $(SOURCENAME).asm
+$(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)

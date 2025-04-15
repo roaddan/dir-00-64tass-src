@@ -2,7 +2,8 @@
 ;
 ;-------------------------------------------------------------------------------                
 headera                       ;0123456789012345678901234567890123456789
-               .text          "     Commodore 64 test de librarie "
+               .byte     b_home,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right
+               .text              " Commodore 64 test de libraries "
                .byte     $0d,0
 
 headerb        .text          "               libtest02 "

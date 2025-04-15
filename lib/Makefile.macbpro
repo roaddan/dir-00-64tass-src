@@ -31,6 +31,21 @@ PRGDIR=d-00-64tass-bin
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
 SOURCENAME=template
+SOURCENAME=template
+DEPSLOCALES=strings_fr.asm  strings_en.asm
+# -----------------------------------------------------------------------------
+# Dépendances des libraries pour valider tous les changements.
+# -----------------------------------------------------------------------------
+LIBDEP1=./lib/header-c64.asm ./lib/header.asm ./lib/lib-c64-basic2.asm ./lib/lib-c64-joystick.asm 
+LIBDEP2=./lib/lib-c64-math.asm ./lib/lib-c64-nmi.asm ./lib/lib-c64-showregs.asm ./lib/lib-c64-sid-notes.asm
+LIBDEP3=./lib/lib-c64-spriteman.asm ./lib/lib-c64-text-mc.asm ./lib/lib-c64-text-sd.asm ./lib/lib-c64-tmpjb.asm
+LIBDEP4=./lib/lib-c64-ultimateii.asm ./lib/lib-c64-vicii.asm ./lib/lib-c64-words.asm ./lib/lib-cbm-chargen.asm
+LIBDEP5=./lib/lib-cbm-disk.asm ./lib/lib-cbm-hex.asm ./lib/lib-cbm-keyb.asm ./lib/lib-cbm-mem.asm
+LIBDEP6=./lib/lib-cbm-pushpop.asm ./lib/lib-vic20-basic2.asm ./lib/macro-c64-ultimateii.asm ./lib/macros-64tass.asm
+LIBDEP7=./lib/map-c64-basic2.asm ./lib/map-c64-kernal.asm ./lib/map-c64-sid-2.asm ./lib/map-c64-sid-notes-ntsc.asm
+LIBDEP8=./lib/map-c64-sid-notes-pal.asm ./lib/map-c64-sid.asm ./lib/map-c64-vicii.asm ./lib/toolkitbasic.asm
+LIBDEPS=$(LIBDEP1) $(LIBDEP2) $(LIBDEP3) $(LIBDEP4) $(LIBDEP5) $(LIBDEP6) $(LIBDEP7) $(LIBDEP8) 
+DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -195,7 +210,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
 # Assembling and distributing resulting files.
-$(SOURCENAME).prg: $(SOURCENAME).asm
+$(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)

@@ -1614,6 +1614,7 @@ k_coldstart    =    $fce2; 75) Power on reset.             ;---;---;
 k_coldboot     =    $fce2; 75) Power on reset.             ;---;---;
 k_warmreset    =    $fe66;     Warm resetstart
 k_warmboot     =    $fe66;     Warm resetstart
+k_warmstart    =    $fe66;     Warm resetstart
 k_devsndaddr2  =    $ff93; 56) Send second address.        ;a--;---; a= SA or #$60 
 
 ;--------------------------------------------------------------------------------

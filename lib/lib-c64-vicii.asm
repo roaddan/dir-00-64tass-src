@@ -119,9 +119,35 @@ next           lda  (zpage1),y
                bne  next
                jsr  pop
                rts
-vicbmpbkcol
+vicbmpbkcol    .byte     $00
                .bend
 
+;-------------------------------------------------------------------------------
+; Calcul des coordonnées pour écrire im point sur l'écran em bitmap.
+; Y contien la ligne (0-199), AX contient la colonne (0-299)
+;-------------------------------------------------------------------------------
+bmphrcalccoords  .block
+               jsr  push
+               clc       ; On met Carry à 0
+               ror       ; le bit 0 de a dans carry  ?/2
+               txa       ; x dans a
+               lsr       ; ?/4
+               lsr       ; ?/8 a = (ax)/8
+               sta  bmphrcol
+               tya       ; Y dans a
+               lsr       ; ?/2
+               lsr       ; ?/4
+               lsr       ; ?/8 a=Y/8
+               sta  bmphrrow
+               pha
+               tya
+               jsr  pop
+               rts
+               .bend
+
+bmphrrow       .byte     $00
+bmphrcol       .byte     $00
+bmphrmask      .byte     $00
 
 
 

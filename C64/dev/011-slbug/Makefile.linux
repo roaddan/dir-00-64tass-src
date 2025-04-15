@@ -30,7 +30,13 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=slbug64
+SOURCENAME=template
+DEPSLOCALES=strings_fr.asm  strings_en.asm
+# -----------------------------------------------------------------------------
+# Dépendances des libraries pour valider tous les changements.
+# -----------------------------------------------------------------------------
+LIBDEPS=$(shell find ./lib -type f -iname "*.asm")
+DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/C64/00-usbkey32go
@@ -195,7 +201,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
 # Assembling and distributing resulting files.
-$(SOURCENAME).prg: $(SOURCENAME).asm
+$(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)
