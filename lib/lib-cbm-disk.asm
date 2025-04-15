@@ -1,13 +1,13 @@
-;---------;---------;---------;---------;---------;---------;---------;---------
+;-------------------------------------------------------------------------------
 ; Book......: The impossible routines
 ; Author....: Kevin Bergin (1984)
 ; ISBN......: 0 7156 1806 7
 ; Typist....: Daniel Lafrance
 ; Program...: Disk error
 ; Book Page.: 55
-;---------;---------;---------;---------;---------;---------;---------;---------
+;-------------------------------------------------------------------------------
 ; Description : Display last disk error
-;---------;---------;---------;---------;---------;---------;---------;---------
+;-------------------------------------------------------------------------------
 diskerror      .block
                jsr  push
                lda  dsk_dev   ; Select device 8
@@ -25,6 +25,9 @@ nextchar       jsr  acptr     ; $ffa5 |a  , rx serie.
                rts
                 .bend
 
+;-------------------------------------------------------------------------------
+; Display disk directory on screen.
+;-------------------------------------------------------------------------------
 diskdir        .block
                jsr  push
                lda  #$24      ; L012C - Filename is "$"
@@ -82,12 +85,18 @@ exit           jsr  sfclose   ; L0191 - $f642 ... close file.
                rts            ; L0194
                .bend
 
+;-------------------------------------------------------------------------------
+; Display disk directory follower by disk status.
+;-------------------------------------------------------------------------------
 directory      .block
                jsr  diskdir
                jsr  diskerror
                rts
                .bend
 
+;-------------------------------------------------------------------------------
+; Save memory content to file.
+;-------------------------------------------------------------------------------
 memtofile      .block
                jsr  dsk_putmesg
                jsr  push
@@ -112,13 +121,39 @@ noerror        jsr  pop
                rts 
                .bend
 
+;=============================================================================
+;    mem2file_usage jsr  push
+;                   lda  #<fname
+;                   sta  dsk_fnptr
+;                   lda  #<fname
+;                   sta  dsk_fnptr+1
+;                   lda  #12
+;                   sta  dsk_fn_len
+;                   lda  device
+;                   sta  dsk_lfsno
+;                   lda  #<datastart
+;                   sta  dsk_data_s
+;                   lda  #>datastart
+;                   sta  dsk_data_s+1
+;                   lda  #<dataend
+;                   sta  dsk_data_e
+;                   lda  #>dataend
+;                   sta  dsk_data_e+1
+;                   jsr  memtofile
+;                   jsr  pop
+;                   rts               
+;=============================================================================
+
+;-------------------------------------------------------------------------------
+; Load file to memory.
+;-------------------------------------------------------------------------------
 filetomem      .block
                jsr push
-               lda dsk_fnlen
-               ldx dsk_fnptr
-               ldy dsk_fnptr+1
+               lda dsk_fnlen  ; Loads filename lenght.
+               ldx dsk_fnptr  ; Points x and y to the filename
+               ldy dsk_fnptr+1;pointer
                jsr setnam     ; call setnam
-               lda dsk_lfsno
+               lda dsk_lfsno  ; Loads Acc with the logical file number
                ldx dsk_dev    ; default to device 8
                ldy #$01       ; not $01 means: load to address stored in file
                jsr setlfs     ; call setlfs
@@ -130,49 +165,58 @@ filetomem      .block
 noerror        jsr pop
                rts
                .bend
+
+;-------------------------------------------------------------------------------
+; Error messages management.  *** TODO ***
+;-------------------------------------------------------------------------------
 error          .block
+               jsr  push
                ; accumulator contains basic error code
 
                ; most likely errors:
                ; a = $05 (device not present)
+isit05         cmp  #$05
+               bne  isti04
+               ldx  #<dsk_emsg05         
+               ldy  #>dsk_emsg05
+               jmp  printerror 
                ; a = $04 (file not found)
+isit04         cmp  #$04
+               bne  isti1d
+               ldx  #<dsk_emsg04         
+               ldy  #>dsk_emsg04
+               jmp  printerror                
                ; a = $1d (load error)
+isit1d         cmp  #$1d
+               bne  isti00
+               ldx  #<dsk_emsg1d         
+               ldy  #>dsk_emsg1d
+               jmp  printerror                
                ; a = $00 (break, run/stop has been pressed during loading)
-
+isit00         cmp  #$00
+               bne  noerror
+               ldx  #<dsk_emsg00         
+               ldy  #>dsk_emsg00
+               jmp  printerror      
                ; ... error handling ...
+printerror     jsr  puts
+noerror        jsr  pop
                rts
 
 error1         ldx  #<dsk_emsg1         
                ldy  #>dsk_emsg1   
                jsr  puts
+               jsr  pop
                rts
 
 error2         ldx #<dsk_emsg2         
                ldy #>dsk_emsg2   
-               jsr puts    
+               jsr puts
+               jsr  pop    
                rts
                .bend
 
-;mem2file_usage jsr  push
-;               lda  #<fname
-;               sta  dsk_fnptr
-;               lda  #<fname
-;               sta  dsk_fnptr+1
-;               lda  #12
-;               sta  dsk_fn_len
-;               lda  device
-;               sta  dsk_lfsno
-;               lda  #<datastart
-;               sta  dsk_data_s
-;               lda  #>datastart
-;               sta  dsk_data_s+1
-;               lda  #<dataend
-;               sta  dsk_data_e
-;               lda  #>dataend
-;               sta  dsk_data_e+1
-;               jsr  memtofile
-;               jsr  pop
-;               rts
+
 
 dsk_putmesg    .block
                jsr push
@@ -190,19 +234,26 @@ dsk_putmesg    .block
                rts    
                .bend      
 
-dsk_data_s     .word     $0000    ; example addresses
-dsk_data_e     .word     $2000
-dsk_dev        .byte     $08
-dsk_lfsno      .byte     $00     
-dsk_fnptr      .word     $00
-dsk_fnlen      .byte     0
-dsk_msg0       .byte     141 
-               .null     "saving"
+dsk_data_s     .word     $0000     ; Data start example addresses
+dsk_data_e     .word     $2000     ; Data end 
+dsk_dev        .byte     $08       ; Device number
+dsk_lfsno      .byte     $00       ; Logical file number
+dsk_fnptr      .word     $00       ; Pointer to filename
+dsk_fnlen      .byte     0         ; Number of character in filename.
+dsk_msg0       .byte     141       ; Miscilinaous file message.
+               .null     "saving "
 dsk_msg1       .byte     141
                .null     "succes" 
 dsk_emsg1      .byte     141
                .null     "fichier non ouvert"
 dsk_emsg2      .byte     17
                .null     "erreur d'ecriture"
-
+dsk_emsg05      .byte     17
+               .null     "lecteur absent"
+dsk_emsg04      .byte     17
+               .null     "fichier introuvable"
+dsk_emsg1d     .byte     17
+               .null     "erreur de chargement"
+dsk_emsg00     .byte     17
+               .null     "break error"
 
