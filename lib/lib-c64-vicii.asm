@@ -81,14 +81,14 @@ victonormal   .block
 vicbmpclear    .block
                jsr  push
                lda  #cmauve
-               jsr  setvicbmpbkcol
+               jsr  setvicbmpbackcol
                lda  #<8192              ; Place le LSB de 8192 ...
                sta  zpage1              ; ... dans le lsb de zpage1.
                lda  #>8192              ; Place le MSB de 8192 ...
                sta  zpage1+1            ; ... dans le Msb de zpage1.
                setloop $0000+(8191)
                ldy  #$00
-next           lda  #$00           
+next           lda  #$0f           
                sta  (zpage1),y
                jsr  inczpage1
                jsr  loop
@@ -100,10 +100,11 @@ next           lda  #$00
 ;-------------------------------------------------------------------------------
 ; Set VICII bitmap backgroundcolor.
 ;-------------------------------------------------------------------------------
-setvicbmpbkcol .block
+setvicbmpbackcol 
+               .block
                jsr  push
                and  #$0f
-               sta  vicbmpbkcol
+               sta  vicbmpbackcol
                ldy  #<1024              ; Place le LSB de 8192 ...
                sty  zpage1              ; ... dans le lsb de zpage1.
                ldy  #>1024              ; Place le MSB de 8192 ...
@@ -112,14 +113,44 @@ setvicbmpbkcol .block
                ldy  #$00  
 next           lda  (zpage1),y
                and  #$f0
-               ora  vicbmpbkcol
+               ora  vicbmpbackcol
                sta  (zpage1),y
                jsr  inczpage1
                jsr  loop
                bne  next
                jsr  pop
                rts
-vicbmpbkcol    .byte     $00
+vicbmpbackcol  .byte     $00
+               .bend
+
+;-------------------------------------------------------------------------------
+; Set VICII bitmap backgroundcolor.
+;-------------------------------------------------------------------------------
+setvicbmpforecol 
+               .block
+               jsr  push
+               rol
+               rol
+               rol
+               rol
+               and  #$f0
+               sta  vicbmpforecol
+               ldy  #<1024              ; Place le LSB de 8192 ...
+               sty  zpage1              ; ... dans le lsb de zpage1.
+               ldy  #>1024              ; Place le MSB de 8192 ...
+               sty  zpage1+1            ; ... dans le Msb de zpage1.
+               setloop $0000+(1024)
+               ldy  #$00  
+next           lda  (zpage1),y
+               and  #$0f
+               ora  vicbmpforecol
+               sta  (zpage1),y
+               jsr  inczpage1
+               jsr  loop
+               bne  next
+               jsr  pop
+               rts
+vicbmpforecol  .byte     $00
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -143,6 +174,10 @@ bmphrcalccoords  .block
                tya
                jsr  pop
                rts
+               .bend
+
+vicbmpfill     .block
+
                .bend
 
 bmphrrow       .byte     $00

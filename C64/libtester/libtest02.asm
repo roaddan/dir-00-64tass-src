@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250414-224259"
+                Version = "20250414-224259 "
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm" 
                .include    "macros-64tass.asm"
@@ -59,18 +59,23 @@ aide           .block
 libtest02      .block 
                php
                pha
-               jsr  cls 
+               jsr  cls
                lda  #166
                #printcxy    dataloc
                #color ccyan
                jsr  showregs
                jsr  anykey 
-               jsr  victohighres
+               jsr  victohighres 
                jsr  anykey
                jsr  vicbmpclear
                ldy  #$0f
 nextc          tya
-               jsr  setvicbmpbkcol
+               jsr  setvicbmpbackcol
+        b       iny
+               tya
+               dey
+               jsr  setvicbmpforecol
+               jsr  vicbmpclear
                dey
                cpy  #$00
                bpl  nextc
