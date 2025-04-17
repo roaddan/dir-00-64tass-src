@@ -27,7 +27,7 @@ main           .block
                #locate 0,0
                ; #c64color
                jsr  anykey
-               jmp  k_warmstart
+               jmp  k_coldstart
                rts
                .bend
                  
@@ -71,11 +71,12 @@ libtest02      .block
                ldy  #$0f
 nextc          tya
                jsr  setvicbmpbackcol
-        b       iny
-               tya
-               dey
+               pha
+               eor   #$0f
                jsr  setvicbmpforecol
-               jsr  vicbmpclear
+               pla
+               jsr   anykey
+               ;jsr  vicbmpclear
                dey
                cpy  #$00
                bpl  nextc
