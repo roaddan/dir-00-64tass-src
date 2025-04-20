@@ -10,20 +10,31 @@ enable         .macro
                plp
                .endm
 
-setloop        .macro lcount
-               pha
-               lda  #<\lcount
-               sta  loopcount
-               lda  #>\lcount
-               sta  loopcount+1
-               pla
-               .endm
-
-
-loadxy         .macro location
+loadxymem      .macro location
                php
                ldx  \location
                ldy  \location+1
+               plp
+               .endm
+
+loadxyimm      .macro value
+               php
+               ldx  #>value
+               ldy  #<value
+               plp
+               .endm
+
+loadaxmem      .macro location
+               php
+               ldx  \location
+               lda  \location+1
+               plp
+               .endm
+
+loadaximm      .macro value
+               php
+               lda  #>value
+               ldx  #<value
                plp
                .endm
 

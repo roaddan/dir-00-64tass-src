@@ -262,7 +262,14 @@ norep          lda  loopcount
 out            rts
                .bend
 
-
+setloop        .macro lcount
+               pha
+               lda  #<\lcount
+               sta  loopcount
+               lda  #>\lcount
+               sta  loopcount+1
+               pla
+               .endm
 
 ;-------------------------------------------------------------------------------
 ; Variables globales
