@@ -1,15 +1,14 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250414-224259 "
+                Version = "20250405-231555 "
 ;-------------------------------------------------------------------------------                
-               .include    "header-c64.asm" 
+               .include    "header-c64.asm"
                .include    "macros-64tass.asm"
-               .include    "strings_fr.asm"
+               .include     "strings_fr.asm"
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
                .enc    none
 
-*=$c000        
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -18,98 +17,76 @@ main           .block
                #uppercase
                #toupper
                #disable
-               jsr aide
+               ;jsr aide
+               jsr anykey
                #mycolor
-               jsr libtest02
+               jsr libtest01
                #enable
                #uppercase
-               ;jsr  cls
-               #locate 0,0
-               ; #c64color
-               jsr  anykey
-               jmp  k_coldstart
-               rts
+               jsr  cls
+               #mycolor
+;               jmp b_warmstart
                .bend
                  
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-aide           .block
-               jsr  push      
-               #lowercase 
-               jsr  cls
+aide           .block      
+               #lowercase
+               jsr cls
                #print line
                #print headera
                #print headerb
                #print line
-               lda  #$0d
-               jsr  putch
                #print line
                #print shortcuts
                #print aidetext
                #print line
-               jsr  anykey
-               jsr  pop
                rts  
                .bend                              
+;*=$4001
 
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-libtest02      .block 
+libtest01      .block 
                php
                pha
                jsr  cls
                lda  #166
+nexta          pha
                #printcxy    dataloc
                #color ccyan
-               jsr  showregs
-               jsr  anykey 
-               jsr  victohighres 
-               jsr  anykey
-               jsr  vicbmpclear
-               ldy  #$0f
-nextc          tya
-               jsr  setvicbmpbackcol
-               pha
-               eor   #$0f
-               jsr  setvicbmpforecol
-               pla
-               jsr   anykey
-               ;jsr  vicbmpclear
-               dey
-               cpy  #$00
-               bpl  nextc
-               jsr  anykey
-               jsr  victonormal
-               setloop $0000+(40*23)
-roll           lda  car
-               jsr  putch
+               ;setloop $0000+(40*23)
+               ;jsr  cls
+roll           ;lda  car
+               ;jsr  anykey
+               ;jsr  putch
                ;inc  car
-               jsr  loop
+               ;jsr  loop
+               php
+               plp
                bne  roll
                jsr  showregs
-               ;jsr  anykey
+               jsr  anykey
 out            pla
                plp
                rts
-car            .byte     32
+car            .byte     166
                .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
-               ; Les constantes 
-               ;===================================
+;*=$c000        
                .include  "map-c64-kernal.asm"
                .include  "map-c64-vicii.asm" 
                .include  "map-c64-basic2.asm"
-
-               ; Les routines
-               ;===================================
-               .include  "lib-c64-vicii.asm" 
                .include  "lib-c64-basic2.asm"
-               .include  "lib-c64-basic2-math.asm"
                .include  "lib-cbm-pushpop.asm"
                .include  "lib-cbm-mem.asm"
                .include  "lib-cbm-hex.asm"
