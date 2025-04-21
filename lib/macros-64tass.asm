@@ -10,33 +10,21 @@ enable         .macro
                plp
                .endm
 
-loadxymem      .macro location
+loadxymem      .macro xyadd
                php
-               ldx  \location
-               ldy  \location+1
+               ldx  \xyadd
+               ldy  \xyadd+1
                plp
                .endm
 
-loadxyimm      .macro value
+loadxyimm      .macro xyimm
                php
-               ldx  #>value
-               ldy  #<value
+               ldx  #>\xyimm
+               ldy  #<\xyimm
                plp
                .endm
 
-loadaxmem      .macro location
-               php
-               ldx  \location
-               lda  \location+1
-               plp
-               .endm
 
-loadaximm      .macro value
-               php
-               lda  #>value
-               ldx  #<value
-               plp
-               .endm
 
 ; ------------------------------------------------------------------------------
 ; Disable character case chamge with [C=]+[SHIFT]

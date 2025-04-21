@@ -17,10 +17,10 @@ main           .block
                #uppercase
                #toupper
                #disable
-               ;jsr aide
-               jsr anykey
+               jsr aide
+               ;jsr anykey
                #mycolor
-               jsr libtest01
+               jsr libtest03
                #enable
                #uppercase
                jsr  cls
@@ -49,7 +49,7 @@ aide           .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-libtest01      .block 
+libtest03      .block 
                php
                pha
                jsr  cls
@@ -57,22 +57,24 @@ libtest01      .block
 nexta          pha
                #printcxy    dataloc
                #color ccyan
-               ;setloop $0000+(40*23)
-               ;jsr  cls
-roll           ;lda  car
-               ;jsr  anykey
-               ;jsr  putch
-               ;inc  car
-               ;jsr  loop
-               php
-               plp
-               bne  roll
+               #loadaxmem     valeur
+               jsr  b_pr_ax_str
+again          #locate   0,8
+               jsr  b_getascnum
+               ;jsr  showregs
+               #locate   1,10
+               ldy  #$55
+               jsr  b_printbuff
                jsr  showregs
+               jsr  b_floattomem
+               jsr  b_outsub
+               jmp  again
                jsr  anykey
 out            pla
                plp
                rts
 car            .byte     166
+valeur         .word     12346
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -87,6 +89,7 @@ car            .byte     166
                .include  "map-c64-vicii.asm" 
                .include  "map-c64-basic2.asm"
                .include  "lib-c64-basic2.asm"
+               .include  "lib-c64-basic2-math.asm"
                .include  "lib-cbm-pushpop.asm"
                .include  "lib-cbm-mem.asm"
                .include  "lib-cbm-hex.asm"
