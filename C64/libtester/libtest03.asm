@@ -17,15 +17,16 @@ main           .block
                #uppercase
                #toupper
                #disable
-               jsr aide
+               ;jsr aide
                ;jsr anykey
                #mycolor
-               jsr libtest03
+               jsr  libtest03
+               jsr  anykey   
                #enable
                #uppercase
-               jsr  cls
+               ;jsr  cls
                #mycolor
-;               jmp b_warmstart
+               rts
                .bend
                  
 ;-------------------------------------------------------------------------------
@@ -42,6 +43,8 @@ aide           .block
                #print shortcuts
                #print aidetext
                #print line
+               jsr  anykey
+               jsr  cls
                rts  
                .bend                              
 ;*=$4001
@@ -52,24 +55,22 @@ aide           .block
 libtest03      .block 
                php
                pha
-               jsr  cls
-               lda  #166
-nexta          pha
-               #printcxy    dataloc
-               #color ccyan
-               #loadaxmem     valeur
-               jsr  b_pr_ax_str
-again          #locate   0,8
-               jsr  b_getascnum
+nexta          #printcxy    dataloc
+               #color cyellow
+               ;#loadaxmem     valeur
+               ;jsr  b_pr_ax_str
+again          ;#locate   0,8
+               ;jsr  b_getascnum
                ;jsr  showregs
-               #locate   1,10
-               ldy  #$55
-               jsr  b_printbuff
-               jsr  showregs
-               jsr  b_floattomem
+               ;#locate   1,10
+               ;ldy  #$55
+               ;jsr  b_printbuff
+               ;jsr  showregs
+               ;jsr  b_mul2fptoasc
+               ;jsr  anykey
+               lda  #55
+               jsr  b_fac1powfac2
                jsr  b_outsub
-               jmp  again
-               jsr  anykey
 out            pla
                plp
                rts

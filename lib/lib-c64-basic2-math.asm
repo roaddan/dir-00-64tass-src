@@ -65,12 +65,6 @@ b_getascnum	.block
 			jsr	b_chrget		
 			jsr	b_ascflt		; Convert ASCII string at 0200 to FAC1 FP.
 			jsr	b_facasc		; Converts FAC1 to ASCII string at 100.
-;			ldy	#$ff
-;fndend		iny				; Determin the end of string by searching ...
-;			lda	$0100,y		; ... EOS $00 byte.
-;			bne	fndend
-;			iny				; Y contains the lenght of the string
-;			sty  b_bufflenght
 			jsr	b_getbufflen	; Calculate lenght of buff and store in var. 
 			jsr	pop
 			rts
@@ -140,21 +134,15 @@ b_readmemfloat	.block
 			jsr	b_ascflt	; Convert ascii string to floating point in FAC1.
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-;			ldy	#$ff
-;fndend		iny			; Determin the end of string by searching ...
-;			lda	$0100,y	; ... EOS $00 byte.
-;			bne	fndend
-;			iny			; Y contains the lenght of the string
-;			sty  b_bufflenght
 			jsr	b_getbufflen
 			jsr	pop
 			rts
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 5 .: Storing floating point accumulateur into memory.
+; Example 5 .: Storing floating point multiplication into memory.
 ;------------------------------------------------------------------------------
-b_fac1tomem	.block
+b_mul2fptomem	.block
 			jsr	push
 			jsr	b_insub		; Input first number.
 			jsr	b_f1t57		; Copy FAC1 to $0057.
@@ -173,7 +161,7 @@ b_fac1tomem	.block
 ; Example 6 .: Multiply 2 numbers got from input device.
 ; Output.....: Variable b_bufflenght contains the lenght of the string.
 ;------------------------------------------------------------------------------
-b_floattomem	.block
+b_mul2fptoasc	.block
 			jsr	push
 			jsr	b_insub		; Get first number.
 			jsr	b_f1t57		; Copy FAC1 to $0057.
@@ -181,17 +169,17 @@ b_floattomem	.block
 			lda	#$57
 			ldy	#$00			; Set pointer to FVAR.
 			jsr	b_f1xfv		; FAC1 = FAC1 x FVAR.
-			jsr	b_facasc		; Convert FAC1 to ascii string at $0100.
-			jsr	b_getbufflen	; Calculate lenght of buff and store in var. 
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
 			jsr	pop
 			rts
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 5.2: Common subroutine to calculate basic command buffer lenght.
+; Example 6.2: Common subroutine to calculate basic command buffer lenght.
 ; Output.....: Variable b_bufflenght contains the lenght of the string.
 ;------------------------------------------------------------------------------
-b_getbufflen		.block
+b_getbufflen	.block
 			jsr	push
 			ldy	#$ff
 nxtchar		iny				; Determine lenght of string by ...
@@ -204,15 +192,207 @@ nxtchar		iny				; Determine lenght of string by ...
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 5.3: Common subroutine print the basic command buffer to the output
+; Example 6.3: Common subroutine print the basic command buffer to the output
 ;			device.
 ;------------------------------------------------------------------------------
 b_outsub		.block
 			jsr	push
 			jsr	b_getbufflen	; Calculate lenght of buff and store in var. 
 			jsr	b_printbuff	; Print buffer content on output device.
+			jsr	b_getbufflen	; Calculate lenght of buff and store in var. 
 			jsr	pop
 			rts
 			.bend
 
+;------------------------------------------------------------------------------
+; Example 7  : Multiply FAC1 by 10.
+;------------------------------------------------------------------------------
+b_fac1x10		.block
+			jsr	push
+			jsr	b_insub
+			jsr	b_f1x10	; FAC1 = FAC1 X 10
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+			jsr	pop
+			rts
+			.bend
+
+;------------------------------------------------------------------------------
+; Example 8 (9)  : Divide FAC1 by 10.
+;------------------------------------------------------------------------------
+b_fac1d10		.block
+			jsr	push
+			jsr	b_insub		; Get first number.
+			jsr	b_sgnf1
+			pha
+			jsr	b_f1d10		; FAC1 = FAC1 / 10
+			pla
+			tax
+			inx
+			bne	notneg
+			lda	#$80		; On force le bit de signe ...
+			sta	$66		; de FAC1 a 1 (neg)
+notneg		jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+			jsr	pop
+			rts
+			.bend
+
+;------------------------------------------------------------------------------
+; Example 10 : FAC1 square.
+;------------------------------------------------------------------------------
+b_fac1square	.block
+			jsr	push
+			jsr	b_insub		; Get first number.
+			jsr	b_f1tf2		; Copy FAC1 to FAC2.
+			lda	$61			; get exponent of FAC1
+			jsr	b_f1xf2		; FAC1 = FAC1 X FAC2
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+			jsr	pop
+			rts
+			.bend
+
+;------------------------------------------------------------------------------
+; Example 11 : FVAR divided by FAC1
+;------------------------------------------------------------------------------
+b_fvardfac1	.block
+			jsr	push
+			jsr	b_insub		; Get first number.
+			jsr	b_f1t57		; Copy FAC1 to $0057			
+			jsr	b_insub		; Get second number.
+			lda	#$57
+			ldy	#$00
+			jsr	b_fvdf1		; FAC1 = FVAR / FAC1
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+			jsr	pop
+			rts
+			.bend
+
+;------------------------------------------------------------------------------
+; Example 12 : FAC2 divided by FAC1.
+;------------------------------------------------------------------------------
+b_fac2dfac1	.block
+			jsr	push
+			jsr	b_insub		; Get first number.
+			jsr	b_f1t57		; Copy FAC1 to $0057			
+			jsr	b_insub		; Get second number.
+			lda	#$57
+			ldy	#$00
+			jsr	b_memtf2		; copy memory to FAC2
+			lda	$61			; get exponent of FAC1
+			jsr	b_f2df1		; FAC1 = FAC2 / FAC1
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+			jsr	pop
+			rts
+			.bend
+
+;------------------------------------------------------------------------------
+; Example 13 : Add FVAR to FAC1.
+;------------------------------------------------------------------------------
+b_fac1pfvar	.block
+			jsr	push
+			jsr	b_insub		; Get first number.
+			jsr	b_f1t57		; Copy FAC1 to $0057			
+			jsr	b_insub		; Get second number.
+			lda	#$57
+			ldy	#$00
+			jsr	b_f1pfv		; FAC1 = FAC1 + FVAR
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+			jsr	pop
+			rts
+			.bend
+
+;------------------------------------------------------------------------------
+; Example 14 : Substract FAC1 from FAC1.
+;------------------------------------------------------------------------------
+b_fac2sfac1	.block
+			jsr	push
+			jsr	b_insub		; Get first number.
+			jsr	b_f1t57		; Copy FAC1 to $0057			
+			jsr	b_insub		; Get second number.
+			lda	#$57
+			ldy	#$00
+			jsr	b_memtf2		; copy memory to FAC2
+			jsr	b_f2sf1		; FAC1 = FAC2 + FAC1
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+			jsr	pop
+			rts
+			.bend
+
+;------------------------------------------------------------------------------
+; Example 15 : Substract FAC1 from FVAR.
+;------------------------------------------------------------------------------
+b_fvarsfac1	.block
+			jsr	push
+			jsr	b_insub		; Get first number.
+			jsr	b_f1t57		; Copy FAC1 to $0057			
+			jsr	b_insub		; Get second number.
+			lda	#$57
+			ldy	#$00
+			jsr	b_fvsf1		; FAC1 = FVAR + FAC1
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+			jsr	pop
+			rts
+			.bend
+
+;------------------------------------------------------------------------------
+; Example 16 : Add acc to FAC1.
+;------------------------------------------------------------------------------
+b_accpfac1	.block
+			jsr	push
+			pha
+			jsr	b_insub		; Get first number.
+			pla
+			jsr	b_f1pacc
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+			jsr	pop
+			rts
+			.bend
+
+;------------------------------------------------------------------------------
+; Example 17 : Add FAC2 to FAC1.
+;------------------------------------------------------------------------------
+b_fac2pfac1	.block
+			jsr	push
+			jsr	b_insub		; Get first number.
+			jsr	b_f1t57		; Copy FAC1 to $0057			
+			jsr	b_insub		; Get second number.
+			lda	#$57
+			ldy	#$00
+			jsr	b_memtf2		; copy memory to FAC2
+			lda	$61			; get exponent of FAC1
+			jsr	b_f1pf2
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+			jsr	pop
+			rts
+			.bend
+
+;------------------------------------------------------------------------------
+; Example 18 : Add FAC1 to the power of FAC2.
+;------------------------------------------------------------------------------
+b_fac1powfac2
+			.block
+			jsr	push
+			jsr	b_insub		; Get first number.
+			jsr	b_f1t57		; Copy FAC1 to $0057			
+			jsr	b_insub		; Get second number.
+			lda	#$57
+			ldy	#$00
+			jsr	b_memtf2		; copy memory to FAC2
+			lda	$61			; get exponent of FAC1
+			jsr	b_expon
+			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+						; $0100.
+
+			jsr	pop
+			rts
+			.bend
 
