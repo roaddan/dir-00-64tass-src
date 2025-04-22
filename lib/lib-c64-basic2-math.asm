@@ -17,13 +17,13 @@ b_math_template
 b_bufflenght	.byte	$00
 b_multresult	.word 	$0000,$0000,$0000
 ;------------------------------------------------------------------------------
-; Example 1: Convert Accum and X-reg to ascii string
+; Example 1: Convert Accum and X-reg ($AAXX) to decimal ascii string.
 ; Input: A=MSB, X=LSB
 ; You can load a and x using macro 
 ;            loadaxmem for Memory content or ... 
 ;            loadaximm for immediate mode.     
 ;------------------------------------------------------------------------------
-b_pr_ax_str	.block
+b_praxstr		.block
 			jsr	push
 			jsr	b_axout
 			jsr	pop

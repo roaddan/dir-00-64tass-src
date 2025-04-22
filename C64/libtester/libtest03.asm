@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250405-231555 "
+                Version = "20250405-231555"
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -47,7 +47,7 @@ aide           .block
                jsr  cls
                rts  
                .bend                              
-;*=$4001
+*=$4001
 
 ;-------------------------------------------------------------------------------
 ;
@@ -56,7 +56,7 @@ libtest03      .block
                php
                pha
 nexta          #printcxy    dataloc
-               #color cyellow
+               #color ccyan
                ;#loadaxmem     valeur
                ;jsr  b_pr_ax_str
 again          ;#locate   0,8
@@ -68,9 +68,12 @@ again          ;#locate   0,8
                ;jsr  showregs
                ;jsr  b_mul2fptoasc
                ;jsr  anykey
-               lda  #55
-               jsr  b_fac1powfac2
-               jsr  b_outsub
+               lda  #$00
+               ldx  #$10
+               ;#loadaxmem $0000
+               jsr  showregs
+               #locate   0,0
+               jsr  b_praxstr 
 out            pla
                plp
                rts
