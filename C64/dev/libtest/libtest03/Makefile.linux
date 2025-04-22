@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # --------- 6 4 t a s s   m a k e   f i l e   w i t h   V i c e ---------------
 # ----------------- a n d   F T P   u t i l i t i e s . -----------------------
-# ---------------------- M A C O S   V E R S I O N ----------------------------
+# ---------------------- L I N U X   V E R S I O N ----------------------------
 # -----------------------------------------------------------------------------
 # Note:  
 # 	A) 64tass can be downloaded from :
@@ -30,20 +30,12 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=libtest03
+SOURCENAME=template
 DEPSLOCALES=strings_fr.asm  strings_en.asm
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
-LIBDEP1=./lib/header-c64.asm ./lib/header.asm ./lib/lib-c64-basic2.asm ./lib/lib-c64-joystick.asm 
-LIBDEP2=./lib/lib-c64-math.asm ./lib/lib-c64-nmi.asm ./lib/lib-c64-showregs.asm ./lib/lib-c64-sid-notes.asm
-LIBDEP3=./lib/lib-c64-spriteman.asm ./lib/lib-c64-text-mc.asm ./lib/lib-c64-text-sd.asm ./lib/lib-c64-tmpjb.asm
-LIBDEP4=./lib/lib-c64-ultimateii.asm ./lib/lib-c64-vicii.asm ./lib/lib-c64-words.asm ./lib/lib-cbm-chargen.asm
-LIBDEP5=./lib/lib-cbm-disk.asm ./lib/lib-cbm-hex.asm ./lib/lib-cbm-keyb.asm ./lib/lib-cbm-mem.asm
-LIBDEP6=./lib/lib-cbm-pushpop.asm ./lib/lib-vic20-basic2.asm ./lib/macro-c64-ultimateii.asm ./lib/macros-64tass.asm
-LIBDEP7=./lib/map-c64-basic2.asm ./lib/map-c64-kernal.asm ./lib/map-c64-sid-2.asm ./lib/map-c64-sid-notes-ntsc.asm
-LIBDEP8=./lib/map-c64-sid-notes-pal.asm ./lib/map-c64-sid.asm ./lib/map-c64-vicii.asm ./lib/toolkitbasic.asm
-LIBDEPS=$(LIBDEP1) $(LIBDEP2) $(LIBDEP3) $(LIBDEP4) $(LIBDEP5) $(LIBDEP6) $(LIBDEP7) $(LIBDEP8) 
+LIBDEPS=$(shell find /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -maxdepth 1 -type f -iname "*.asm")
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
@@ -158,7 +150,7 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
+		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
 		$(FTPASMCMD)	# To transfer the source ASM file.
 		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
@@ -197,15 +189,14 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
+		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
+		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
-
-		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
-		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
