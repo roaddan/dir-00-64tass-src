@@ -18,7 +18,7 @@ b_bufflenght	.byte	$00
 b_num1		.word	$1000,$1000,$1001
 b_num2		.word	$0000,$0000,$0000
 b_multresult	.word 	$0000,$0000,$0000
-b_testnum		.null	"6.28e-23"
+b_testnum		.null	"6.28e-23 "
 ;------------------------------------------------------------------------------
 ; Example 1: Convert Accum and X-reg ($AAXX) to decimal ascii string.
 ; Input: A=MSB, X=LSB
@@ -49,7 +49,6 @@ loadaximm      .macro aximm
                plp
                .endm
 
-
 ;------------------------------------------------------------------------------
 ; Example 2.1: Prompt for a number from input device and save it as ascii in 
 ; 			the Basic line editor input buffer.
@@ -72,7 +71,6 @@ b_getascnum	.block
 			jsr	pop
 			rts
 			.bend			
-
 
 ;------------------------------------------------------------------------------
 ; Example 2.2: Common subroutine to clear the basic command buffer.
@@ -206,6 +204,7 @@ b_outsub		.block
 			jsr	push
 			jsr	b_getbufflen	; Calculate lenght of buff and store in var. 
 			jsr	b_printbuff	; Print buffer content on output device.
+			jsr	b_clearbuff
 			jsr	pop
 			rts
 			.bend
