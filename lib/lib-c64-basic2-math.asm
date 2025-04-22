@@ -15,7 +15,10 @@ b_math_template
 ;------------------------------------------------------------------------------
 ; Common memory locations.
 b_bufflenght	.byte	$00
+b_num1		.word	$1000,$1000,$1001
+b_num2		.word	$0000,$0000,$0000
 b_multresult	.word 	$0000,$0000,$0000
+b_testnum		.null	"6.28e-23"
 ;------------------------------------------------------------------------------
 ; Example 1: Convert Accum and X-reg ($AAXX) to decimal ascii string.
 ; Input: A=MSB, X=LSB
@@ -69,6 +72,7 @@ b_getascnum	.block
 			jsr	pop
 			rts
 			.bend			
+
 
 ;------------------------------------------------------------------------------
 ; Example 2.2: Common subroutine to clear the basic command buffer.
@@ -126,12 +130,15 @@ b_insub		.block
 b_readmemfloat	.block
 			jsr	push
 			jsr	b_intcgt	; Initialize CHRGET.
-			ldx	#$83		; Set pointer to fvar as location for var minus 1
-			ldy	#$c5
+			ldx	#<(b_testnum-1)  ;#$83		; Set pointer to fvar as location for var minus 1
+			ldy	#>(b_testnum-1)  ; #$c5
 			stx	$7a
 			sty	$7b
 			jsr	b_chrget
-			jsr	b_ascflt	; Convert ascii string to floating point in FAC1.
+			jsr	b_ascflt	  ; Convert ascii string to floating point in FAC1.
+;			ldx	#<(b_num1)  ;
+;			ldy	#>(b_num1)  ;
+;			jsr	b_f1tmem
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
 			jsr	b_getbufflen
@@ -199,7 +206,6 @@ b_outsub		.block
 			jsr	push
 			jsr	b_getbufflen	; Calculate lenght of buff and store in var. 
 			jsr	b_printbuff	; Print buffer content on output device.
-			jsr	b_getbufflen	; Calculate lenght of buff and store in var. 
 			jsr	pop
 			rts
 			.bend
