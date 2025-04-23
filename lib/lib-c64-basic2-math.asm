@@ -17,7 +17,8 @@ b_math_template
 b_bufflenght	.byte	$00
 b_num1		.word	$0000,$0000,$0000
 b_num2		.word	$0000,$0000,$0000
-b_multresult	.word 	$0000,$0000,$0000
+b_num0
+b_numresult	.word 	$0000,$0000,$0000
 b_testnum		.null	"128"
 ;------------------------------------------------------------------------------
 ; Example 1: Convert Accum and X-reg ($AAXX) to decimal ascii string.
@@ -139,12 +140,24 @@ b_readmemfloat	.block
 			stx	$7a
 			sty	$7b
 			jsr	b_chrget
+
 			jsr	pushreg
+			
 			ldx	#<(b_num1)  	; Copy FAC1 dans la variable ...
 			ldy	#>(b_num1)  	; ... 
 			jsr	b_f1tmem		; b_num1
 
-		jsr	b_prhexbnum1
+			jsr	b_f1x10
+
+			ldx	#<(b_num2)  	; Copy FAC1 dans la variable ...
+			ldy	#>(b_num2)  	; ... 
+			jsr	b_f1tmem		; b_num1
+
+			ldx	#<(b_num0)  	; Copy FAC1 dans la variable ...
+			ldy	#>(b_num0)  	; ... 
+			jsr	b_f1tmem		; b_num1
+
+			jsr	b_prhexbnum1
 			jsr	popreg
 			jsr	b_ascflt	  	; Convert ascii string to floating point in FAC1.
 			jsr	b_facasc		; Convert FAC1 floating point to ascii string at 
@@ -174,8 +187,8 @@ b_mul2fptomem	.block
 			lda	#$57			
 			ldy	#$00			; Point to 1st number.
 			jsr	b_f1xfv		; FAC1 = FAC1 X FVAR.
-			ldx	#<b_multresult	; Set pointer to area to copy result to.
-			ldy	#>b_multresult
+			ldx	#<b_numresult	; Set pointer to area to copy result to.
+			ldy	#>b_numresult
 			jsr	b_f1tmem		; Copy FAC1 to memory.
 			jsr	popreg
 			rts
@@ -420,6 +433,9 @@ b_fac1powfac2
 			rts
 			.bend
 
+;------------------------------------------------------------------------------
+; Printing b_num1, b_num2 ans b_numresult in hex on screen.
+;------------------------------------------------------------------------------
 b_prhexbnum1	.block
 			jsr	pushall		; debug
 			#locate	0,5
@@ -427,12 +443,18 @@ b_prhexbnum1	.block
 			sta	zpage1
 			lda	#>b_num1
 			sta	zpage1+1
-			ldy	#$06
-			ldx	#$06
+			ldy	#$00
+			ldx	#18
 more			lda	(zpage1),y
 			jsr	putahex
-			dey
-			dex
+			iny
+			cpy	#6
+			bne	is12
+			#locate	0,7
+is12			cpy	#12
+			bne	doit			
+			#locate	0,9
+doit			dex
 			bne	more
 			jsr	popall
 			rts	
