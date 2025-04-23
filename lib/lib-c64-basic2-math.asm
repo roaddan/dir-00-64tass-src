@@ -15,10 +15,10 @@ b_math_template
 ;------------------------------------------------------------------------------
 ; Common memory locations.
 b_bufflenght	.byte	$00
-b_num1		.word	$1000,$1000,$1001
+b_num1		.word	$0000,$0000,$0000
 b_num2		.word	$0000,$0000,$0000
 b_multresult	.word 	$0000,$0000,$0000
-b_testnum		.null	"6.28e-23 "
+b_testnum		.null	"128"
 ;------------------------------------------------------------------------------
 ; Example 1: Convert Accum and X-reg ($AAXX) to decimal ascii string.
 ; Input: A=MSB, X=LSB
@@ -134,16 +134,20 @@ b_readmemfloat	.block
 			lda	$7b
 			sta	b_v7b
 
-			ldx	#<(b_testnum-1)  ;#$83		; Set pointer to fvar as location for var minus 1
-			ldy	#>(b_testnum-1)  ; #$c5
+			ldx	#<(b_testnum-1); #$83		; Set pointer to fvar as location for var minus 1
+			ldy	#>(b_testnum-1); #$c5
 			stx	$7a
 			sty	$7b
 			jsr	b_chrget
-			jsr	b_ascflt	  ; Convert ascii string to floating point in FAC1.
-			ldx	#<(b_num1)  ;
-			ldy	#>(b_num1)  ;
-			jsr	b_f1tmem
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
+			jsr	pushreg
+			ldx	#<(b_num1)  	; Copy FAC1 dans la variable ...
+			ldy	#>(b_num1)  	; ... 
+			jsr	b_f1tmem		; b_num1
+
+		jsr	b_prhexbnum1
+			jsr	popreg
+			jsr	b_ascflt	  	; Convert ascii string to floating point in FAC1.
+			jsr	b_facasc		; Convert FAC1 floating point to ascii string at 
 						; $0100.
 			jsr	b_getbufflen
 
@@ -152,6 +156,7 @@ b_readmemfloat	.block
 			lda	b_v7b
 			sta	$7b
 			jsr	b_clearbuff
+
 			jsr	popreg
 			rts
 b_v7a		.byte	$00
@@ -415,3 +420,20 @@ b_fac1powfac2
 			rts
 			.bend
 
+b_prhexbnum1	.block
+			jsr	pushall		; debug
+			#locate	0,5
+			lda	#<b_num1
+			sta	zpage1
+			lda	#>b_num1
+			sta	zpage1+1
+			ldy	#$06
+			ldx	#$06
+more			lda	(zpage1),y
+			jsr	putahex
+			dey
+			dex
+			bne	more
+			jsr	popall
+			rts	
+			.bend
