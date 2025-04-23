@@ -140,8 +140,8 @@ device         .byte     8
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
                .include "routines.asm"
-               .include "messages_fr.asm"
-;               .include "messages_en.asm"
+               .include "strings_fr.asm"
+;               .include "strings_en.asm"
                .include "map-c64-kernal.asm"
                .include "map-c64-vicii.asm"
                .include "map-c64-basic2.asm"

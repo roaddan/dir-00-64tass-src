@@ -175,32 +175,32 @@ error          .block
                ; most likely errors:
                ; a = $01 (file not open)
 isit01         cmp  #$01
-               bne  isti02
+               bne  isit02
                ldx  #<dsk_emsg01         
                ldy  #>dsk_emsg01
                jmp  printerror 
                ; a = $02 (write error)
 isit02         cmp  #$02
-               bne  isti05
+               bne  isit05
                ldx  #<dsk_emsg02         
                ldy  #>dsk_emsg02
                jmp  printerror 
                ; most likely errors:
                ; a = $05 (device not present)
 isit05         cmp  #$05
-               bne  isti04
+               bne  isit04
                ldx  #<dsk_emsg05         
                ldy  #>dsk_emsg05
                jmp  printerror 
                ; a = $04 (file not found)
 isit04         cmp  #$04
-               bne  isti1d
+               bne  isit1d
                ldx  #<dsk_emsg04         
                ldy  #>dsk_emsg04
                jmp  printerror                
                ; a = $1d (load error)
 isit1d         cmp  #$1d
-               bne  isti00
+               bne  isit00
                ldx  #<dsk_emsg1d         
                ldy  #>dsk_emsg1d
                jmp  printerror                
