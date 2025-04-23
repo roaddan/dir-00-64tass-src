@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-version  = "20241030-204144"  
+version  = "20250422-224206"  
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
@@ -30,7 +30,7 @@ main           .block
                #disable
                jsr  drawcredits
                #printcxy menu_msg
-               jsr  screendis
+               ;jsr  screendis
                jsr  copycharset
                jsr  cls
                jsr  setscreenptr
@@ -42,7 +42,8 @@ main           .block
                jsr  drawfkeys
                lda  #$00
                #affichemesg prompt_msg
-               jsr  screenena 
+               ;jsr  screenena 
+     jsr  anykey
                jsr  keyaction
                jsr  cls
                jsr  drawcredits
@@ -51,12 +52,12 @@ main           .block
                jsr  getkey
                jsr  cls       
 endmain        jsr  pop
-               jsr  k_warmboot
+               ;jsr  k_coldboot
                rts
                .bend
 
 savetofile     .block
-               #pushall
+               jsr  pushall
                lda  #<fname
                sta  dsk_fnptr
                lda  #>fname
@@ -79,11 +80,11 @@ savetofile     .block
                #printcxy wait_msg
                #locate 1,4
                jsr  memtofile
-               #popall
+               jsr  popall
                rts
                .bend
 loadfromfile   .block
-               #pushall
+               jsr  pushall
                lda  #<fname
                sta  dsk_fnptr
                lda  #>fname
@@ -106,7 +107,7 @@ loadfromfile   .block
                #printcxy wait_msg
                #locate 1,4
                jsr  filetomem
-               #popall
+               jsr  popall
                rts
                .bend
 

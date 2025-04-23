@@ -31,7 +31,7 @@ PRGDIR=d-00-64tass-bin
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
 SOURCENAME=charedit
-DEPSLOCALES=strings_fr.asm strings_en.asm
+DEPSLOCALES=strings_fr.asm strings_en.asm localmacro.asm routines.asm
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
@@ -162,10 +162,10 @@ all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 ftp:		
 		$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
-		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
-		$(FTPASMCMD)	# To transfer the source ASM file.
-		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
+#		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+#		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
+#		$(FTPASMCMD)	# To transfer the source ASM file.
+#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
 
 # -----------------------------------------------------------------------------
@@ -187,14 +187,14 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
-		-write $(CHAREDIT) charedit \
-		-write $(J2TESTER) j2tester
+		-write $(J2TESTER) j2tester #\
+#		-write $(CHAREDIT) charedit
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
-		-write $(CHAREDIT) charedit \
-		-write $(J2TESTER) j2tester
+		-write $(J2TESTER) j2tester #\
+#		-write $(CHAREDIT) charedit
 
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)

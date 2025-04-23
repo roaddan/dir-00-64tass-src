@@ -1,17 +1,8 @@
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-template       .block
-               jsr  push
-               jsr  pop
-               rts
-               .bend
-
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
 screenredraw   .block
-               #pushall
+               jsr  pushall
                jsr  screendis
                jsr  cls
                jsr  staticscreen
@@ -22,7 +13,7 @@ screenredraw   .block
                jsr  putch
                #affichemesg prompt_msg
                jsr  screenena
-               #popall
+               jsr  popall
                rts
                .bend
 
@@ -30,7 +21,7 @@ screenredraw   .block
 ;
 ;-------------------------------------------------------------------------------
 getfname       .block
-               jsr  push
+               jsr  pushall
                #affichemesg fname_msg
                ldx  #$00
                stx  count
@@ -44,7 +35,7 @@ getanother     jsr  getalphanum
                beq  finish
                jmp  getanother
 finish         #affichemesg pfname
-               jsr  pop
+               jsr  popall
                rts
 count          .byte     0
                .bend
@@ -53,7 +44,7 @@ count          .byte     0
 ;
 ;-------------------------------------------------------------------------------
 getalphanum    .block
-               jsr  push
+               jsr  pushall
 getanother     jsr  getkey
                cmp  #$30      ; 0
                bmi  getanother
@@ -65,7 +56,7 @@ isitletter     cmp  #$41      ; A
                bmi  goodone
                jmp  getanother              
 goodone        sta  tempbyte
-               jsr  pop
+               jsr  popall
                lda  tempbyte
                rts
 tempbyte       .byte     0
@@ -75,7 +66,7 @@ tempbyte       .byte     0
 ;
 ;-------------------------------------------------------------------------------
 copychar       .block
-               jsr  push
+               jsr  pushall
                jsr  getvalidkey
                lda  bitmapaddr     ; on pointe sur la table des bitmaps
                sta  zpage1
@@ -103,7 +94,7 @@ nextbyte       lda  (zpage1),y
                iny
                cpy  #$08
                bne  nextbyte               
-out            jsr  pop
+out            jsr  popall
                rts
                .bend 
 
@@ -111,7 +102,7 @@ out            jsr  pop
 ;
 ;-------------------------------------------------------------------------------
 getvalidkey    .block
-               jsr  push
+               jsr  pushall
                #affichemesg copychar_msg
 getgoodkey     jsr  getkey
                sta  copykey
@@ -124,7 +115,7 @@ getgoodkey     jsr  getkey
                beq  goodone
                jmp  getgoodkey
 goodone        jsr  putch
-               jsr  pop
+               jsr  popall
                rts
                .bend
 copykey        .byte 0   
@@ -133,7 +124,7 @@ copykey        .byte 0
 ;
 ;-------------------------------------------------------------------------------
 drawcredits   .block
-               jsr  push
+               jsr  pushall
                jsr  cls
                #printcxy whoami0
                #printcxy whoami1
@@ -150,7 +141,7 @@ drawcredits   .block
                jsr  delay
                jsr  delay
                jsr  delay
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -158,7 +149,7 @@ drawcredits   .block
 ;
 ;-------------------------------------------------------------------------------
 setdefaultchar .block
-               jsr  push
+               jsr  pushall
                lda  #$40
                sta  currentkey
                tax
@@ -171,7 +162,7 @@ setdefaultchar .block
                #locate   17,5
                jsr  atodec
                #print    adec
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -179,7 +170,7 @@ setdefaultchar .block
 ;
 ;-------------------------------------------------------------------------------
 resetmenuacolor  .block
-               jsr  push
+               jsr  pushall
                lda  #menu1col1
                sta  f1abutton
                sta  f3abutton
@@ -191,7 +182,7 @@ resetmenuacolor  .block
                sta  f6abutton
                sta  f8abutton
                ;jsr  drawfkeys
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -199,7 +190,7 @@ resetmenuacolor  .block
 ;
 ;-------------------------------------------------------------------------------
 resetmenubcolor  .block
-               jsr  push
+               jsr  pushall
                lda  #menu2col1
                sta  f1bbutton
                sta  f3bbutton
@@ -211,14 +202,14 @@ resetmenubcolor  .block
                sta  f6bbutton
                sta  f8bbutton
                ;jsr  drawfkeys
-               jsr  pop
+               jsr  popall
                rts
                .bend
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
 setmenuacolor  .block
-               jsr  push
+               jsr  pushall
                sta  f1abutton
                sta  f2abutton
                sta  f3abutton
@@ -228,7 +219,7 @@ setmenuacolor  .block
                sta  f7abutton
                sta  f8abutton
                ;jsr  drawfkeys
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -236,7 +227,7 @@ setmenuacolor  .block
 ;
 ;-------------------------------------------------------------------------------
 setmenubcolor  .block
-               jsr  push
+               jsr  pushall
                sta  f1bbutton
                sta  f2bbutton
                sta  f3bbutton
@@ -246,7 +237,7 @@ setmenubcolor  .block
                sta  f7bbutton
                sta  f8bbutton
                ;jsr  drawfkeys
-               jsr  pop
+               jsr  popall
                rts
                .bend
                
@@ -254,7 +245,7 @@ setmenubcolor  .block
 ;
 ;-------------------------------------------------------------------------------
 drawkeyval     .block
-               jsr  push
+               jsr  pushall
                #locate 1,19
                ;#print txt0
                lda  currentkey
@@ -311,7 +302,7 @@ drawkeyval     .block
                jsr  putahex
 
                ;jsr  delay
-               jsr  pop
+               jsr  popall
                rts
 txt0           .null     "petscii :   "
 txt1           .null     "key code: "

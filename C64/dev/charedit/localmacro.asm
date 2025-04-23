@@ -36,10 +36,3 @@ flashfkey      .macro fkeyptr
                pla
                plp
                .endm
-
-pushall        .macro
-               jsr  push
-               .endm
-popall         .macro
-               jsr  pop
-               .endm
