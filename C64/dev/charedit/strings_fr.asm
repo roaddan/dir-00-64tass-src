@@ -5,7 +5,7 @@ blankmsg       .byte     mesgcol,0,5,146
                .null     "                                       "
 
 prompt_msg     .byte     mesgcol,0,5,146
-               .null     " utilisez les clefs de fonction :"
+               .null     "       utilisez les clefs de fonction: "
 
 wait_msg       .byte     mesgcol,0,5,146
                .null     " un instant s.v.p. ... "
@@ -29,7 +29,7 @@ fill_msg       .byte     mesgcol,0,5
                .null     " remplir char:  chr$(   )"
 f7a_msg
 work_msg       .byte     mesgcol,0,5
-               .null     " recuperer les caracteres."
+               .null     " recuperer les caracteres du chargen."
 f1b_msg
 invr_msg       .byte     mesgcol,0,5
                .null     " basculer verticalement:"
@@ -44,13 +44,13 @@ scrolll_msg    .byte     mesgcol,0,5
                .null     " defiler vers la gauche:"
 f5b_msg
 scrollu_msg    .byte     mesgcol,0,5
-               .null     " defiler vers le haut:"
+               .null     " defiler 1 bit vers le haut:"
 f6b_msg
 scrolld_msg    .byte     mesgcol,0,5
-               .null     " defiler vers le bas:"
+               .null     " defiler 1 bit vers le bas:"
 f7b_msg
 rvrs_msg       .byte     mesgcol,0,5
-               .null     " reverse character:"
+               .null     " inverser les bits:"
 
 menua_msg      .byte     mesgcol,0,5
                .null     " vous etes dirige vers le menu 1."
@@ -58,22 +58,22 @@ menub_msg      .byte     mesgcol,0,5
                .null     " vous etes dirige vers le menu 2."
 
 copychar_msg   .byte     vjaune,0,5
-               .null     " entrez le caractera a copier (?).",157,157,157
+               .null     " entrez le caracter a copier (?).",157,157,157
 
 fname_msg      .byte     vjaune,0,5
                .null     " nom du fichier (6 lettres): ",$a4,$a4,$a4,$a4,$a4,$a4,".chr",157,157,157,157,157,157,157,157,157,157
 
-quit_msg       .byte     vmauve,21,24,18
+quit_msg       .byte     vmauve,18,24,18
                .text     "ctrl-x",146
-               .null     "-quitter."     
+               .null     " = quitter.   "     
 
-redraw_msg     .byte     vrose,18,22,18
+redraw_msg     .byte     vvert,18,23,18
                .text     "ctrl-r",146
-               .null     " rafraichir."     
+               .null     " = rafraichir."     
 menu_msg
-exit_msg       .byte     vvert1,21,24,18
+exit_msg       .byte     vvert1,18,24,18
                .text     "ctrl-x",146
-               .null     " au menu."     
+               .null     " = au menu.   "     
 
 whoami0        .byte     whoamicol,4,6,18
                .null     "                               ",146

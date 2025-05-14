@@ -30,7 +30,7 @@ main           .block
                #disable
                jsr  drawcredits
                #printcxy menu_msg
-               ;jsr  screendis
+               jsr  screendis
                jsr  copycharset
                jsr  cls
                jsr  setscreenptr
@@ -42,8 +42,8 @@ main           .block
                jsr  drawfkeys
                lda  #$00
                #affichemesg prompt_msg
-               ;jsr  screenena 
-     jsr  anykey
+               jsr  kbflushbuff
+               jsr  screenena 
                jsr  keyaction
                jsr  cls
                jsr  drawcredits
@@ -53,7 +53,7 @@ main           .block
                jsr  cls       
 endmain        jsr  pop
                ;jsr  k_coldboot
-               rts
+               brk
                .bend
 
 savetofile     .block
@@ -144,6 +144,7 @@ device         .byte     8
                .include "strings_fr.asm"
 ;               .include "strings_en.asm"
                .include "map-c64-kernal.asm"
+*=$c000
                .include "map-c64-vicii.asm"
                .include "map-c64-basic2.asm"
                .include "lib-c64-vicii.asm"
@@ -153,6 +154,7 @@ device         .byte     8
                .include "lib-cbm-hex.asm"
                .include "lib-cbm-keyb.asm"
                .include "lib-cbm-disk.asm"
+               .include "lib-c64-showregs.asm"
 ;               .include "lib-c64-text-sd.asm"
 ;               .include "lib-c64-text-mc.asm"
 ;               .include "lib-c64-drawregs.asm"                

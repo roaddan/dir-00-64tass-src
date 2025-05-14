@@ -2,7 +2,7 @@
 ;
 ;-------------------------------------------------------------------------------
 screenredraw   .block
-               jsr  pushall
+               jsr  pushreg
                jsr  screendis
                jsr  cls
                jsr  staticscreen
@@ -13,7 +13,7 @@ screenredraw   .block
                jsr  putch
                #affichemesg prompt_msg
                jsr  screenena
-               jsr  popall
+               jsr  popreg
                rts
                .bend
 
@@ -21,7 +21,7 @@ screenredraw   .block
 ;
 ;-------------------------------------------------------------------------------
 getfname       .block
-               jsr  pushall
+               jsr  pushreg
                #affichemesg fname_msg
                ldx  #$00
                stx  count
@@ -35,7 +35,7 @@ getanother     jsr  getalphanum
                beq  finish
                jmp  getanother
 finish         #affichemesg pfname
-               jsr  popall
+               jsr  popreg
                rts
 count          .byte     0
                .bend
@@ -44,7 +44,7 @@ count          .byte     0
 ;
 ;-------------------------------------------------------------------------------
 getalphanum    .block
-               jsr  pushall
+               jsr  pushreg
 getanother     jsr  getkey
                cmp  #$30      ; 0
                bmi  getanother
@@ -56,7 +56,7 @@ isitletter     cmp  #$41      ; A
                bmi  goodone
                jmp  getanother              
 goodone        sta  tempbyte
-               jsr  popall
+               jsr  popreg
                lda  tempbyte
                rts
 tempbyte       .byte     0
@@ -102,7 +102,7 @@ out            jsr  popall
 ;
 ;-------------------------------------------------------------------------------
 getvalidkey    .block
-               jsr  pushall
+               jsr  pushreg
                #affichemesg copychar_msg
 getgoodkey     jsr  getkey
                sta  copykey
@@ -115,7 +115,7 @@ getgoodkey     jsr  getkey
                beq  goodone
                jmp  getgoodkey
 goodone        jsr  putch
-               jsr  popall
+               jsr  popreg
                rts
                .bend
 copykey        .byte 0   
@@ -124,7 +124,7 @@ copykey        .byte 0
 ;
 ;-------------------------------------------------------------------------------
 drawcredits   .block
-               jsr  pushall
+               jsr  pushreg
                jsr  cls
                #printcxy whoami0
                #printcxy whoami1
@@ -141,7 +141,7 @@ drawcredits   .block
                jsr  delay
                jsr  delay
                jsr  delay
-               jsr  popall
+               jsr  popreg
                rts
                .bend
 
@@ -149,7 +149,7 @@ drawcredits   .block
 ;
 ;-------------------------------------------------------------------------------
 setdefaultchar .block
-               jsr  pushall
+               jsr  pushreg
                lda  #$40
                sta  currentkey
                tax
@@ -162,7 +162,7 @@ setdefaultchar .block
                #locate   17,5
                jsr  atodec
                #print    adec
-               jsr  popall
+               jsr  popreg
                rts
                .bend
 
@@ -170,7 +170,7 @@ setdefaultchar .block
 ;
 ;-------------------------------------------------------------------------------
 resetmenuacolor  .block
-               jsr  pushall
+               jsr  pushreg
                lda  #menu1col1
                sta  f1abutton
                sta  f3abutton
@@ -182,7 +182,7 @@ resetmenuacolor  .block
                sta  f6abutton
                sta  f8abutton
                ;jsr  drawfkeys
-               jsr  popall
+               jsr  popreg
                rts
                .bend
 
@@ -190,7 +190,7 @@ resetmenuacolor  .block
 ;
 ;-------------------------------------------------------------------------------
 resetmenubcolor  .block
-               jsr  pushall
+               jsr  pushreg
                lda  #menu2col1
                sta  f1bbutton
                sta  f3bbutton
@@ -202,14 +202,14 @@ resetmenubcolor  .block
                sta  f6bbutton
                sta  f8bbutton
                ;jsr  drawfkeys
-               jsr  popall
+               jsr  popreg
                rts
                .bend
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
 setmenuacolor  .block
-               jsr  pushall
+               jsr  pushreg
                sta  f1abutton
                sta  f2abutton
                sta  f3abutton
@@ -219,7 +219,7 @@ setmenuacolor  .block
                sta  f7abutton
                sta  f8abutton
                ;jsr  drawfkeys
-               jsr  popall
+               jsr  popreg
                rts
                .bend
 
@@ -227,7 +227,7 @@ setmenuacolor  .block
 ;
 ;-------------------------------------------------------------------------------
 setmenubcolor  .block
-               jsr  pushall
+               jsr  pushreg
                sta  f1bbutton
                sta  f2bbutton
                sta  f3bbutton
@@ -237,7 +237,7 @@ setmenubcolor  .block
                sta  f7bbutton
                sta  f8bbutton
                ;jsr  drawfkeys
-               jsr  popall
+               jsr  popreg
                rts
                .bend
                
@@ -245,7 +245,7 @@ setmenubcolor  .block
 ;
 ;-------------------------------------------------------------------------------
 drawkeyval     .block
-               jsr  pushall
+               jsr  pushreg
                #locate 1,19
                ;#print txt0
                lda  currentkey
@@ -302,7 +302,7 @@ drawkeyval     .block
                jsr  putahex
 
                ;jsr  delay
-               jsr  popall
+               jsr  popreg
                rts
 txt0           .null     "petscii :   "
 txt1           .null     "key code: "
@@ -317,8 +317,8 @@ txt6           .null     "stack......:"
 ;
 ;-------------------------------------------------------------------------------
 keyaction      .block
-               jsr  push
-loop           jsr  getkey
+               jsr  pushreg
+keyloop        jsr  getkey
 f1             cmp  #key_f1
                bne  f2
                jmp  dof1
@@ -348,21 +348,22 @@ ctrlx          cmp  #ctrl_x
                jmp  doquit
 ctrlr          cmp  #ctrl_r
                bne  ishex14
-               jsr  screenredraw
-               jmp  loop
+               jmp  doredraw
 ishex14        cmp  #$14
                bne  ishex12
-               jmp  loop               
+               ;something to do here
+               jmp  keyloop               
 ishex12        cmp  #$12
                bne  reste
-               jmp  loop               
+               ;something to do here
+               jmp  keyloop               
 reste          #locate   13,12
                jsr  putch
-               pha
-               lda  currentkey
-               sta  previouskey
-               pla
-               sta  currentkey
+               pha                 ; remembers 
+               lda  currentkey     ; the 
+               sta  previouskey    ; previous key
+               pla                 ;
+               sta  currentkey     ; an store current
                tax
                ldy  asciitorom,x               
                sty  bitmapoffset
@@ -371,24 +372,36 @@ reste          #locate   13,12
 ;               #locate   17,5
 ;               jsr  atodec
 ;               #print    adec
-               jmp  loop
+               jmp  keyloop
+;----------------------------------------------------------
 dof1           jsr  f1action  ;edit/reverse
-               jmp  loop
+               jmp  keyloop
+;----------------------------------------------------------
 dof2           jsr  f2action  ;save/flip vert
-               jmp  loop
+               jmp  keyloop
+;----------------------------------------------------------
 dof3           jsr  f3action  ;load/flip horz
-               jmp  loop
+               jmp  keyloop
+;----------------------------------------------------------
 dof4           jsr  f4action  ;copy/scroll r
-               jmp  loop
+               jmp  keyloop
+;----------------------------------------------------------
 dof5           jsr  f5action  ;clear/scroll l
-               jmp  loop
+               jmp  keyloop
+;----------------------------------------------------------
 dof6           jsr  f6action  ;fill;/scroll up
-               jmp  loop
+               jmp  keyloop
+;----------------------------------------------------------
 dof7           jsr  f7action  ;clear;/scroll down
-               jmp  loop
+               jmp  keyloop
+;----------------------------------------------------------
 dof8           jsr  f8action  ; function
-               jmp  loop
-doquit         jsr  pop
+               jmp  keyloop
+;----------------------------------------------------------
+doredraw       jsr  screenredraw
+               jmp  keyloop
+;----------------------------------------------------------
+doquit         jsr  popreg
                rts
                .bend
 
@@ -396,7 +409,7 @@ doquit         jsr  pop
 ;
 ;-------------------------------------------------------------------------------
 editor         .block 
-               jsr  push
+               jsr  pushreg
                #affichemesg exit_msg
                #affichemesg edit_msg
                jsr  setcurs
@@ -495,7 +508,7 @@ do_swap        jsr  do_eor
                ;jmp  totop
 totop          jmp  ed_loop
 do_ctrlx       jsr  clrcurs
-               jsr  pop
+               jsr  popreg
                rts
 
                .bend
@@ -505,7 +518,7 @@ do_ctrlx       jsr  clrcurs
 ;-------------------------------------------------------------------------------
 ; use     byteaddr,cursln,curscl
 do_eor         .block
-               jsr  push
+               jsr  pushreg
                lda  mapaddr
                sta  zpage2
                lda  mapaddr+1
@@ -522,7 +535,7 @@ do_eor         .block
                eor  (zpage2),y
                jsr  drawkeyval
                sta  (zpage2),y
-               jsr  pop
+               jsr  popreg
                rts
                .bend
 
@@ -530,7 +543,7 @@ do_eor         .block
 ;
 ;-------------------------------------------------------------------------------
 setcurs        .block
-               jsr  push
+               jsr  pushreg
                ldx  #grid_left
                ldy  cursln
                jsr  gotoxy
@@ -542,7 +555,7 @@ setcurs        .block
                jsr  gotoxy
                lda  #$da
                jsr  putch
-               jsr  pop
+               jsr  popreg
                rts
                .bend
 
@@ -550,7 +563,7 @@ setcurs        .block
 ;
 ;-------------------------------------------------------------------------------
 clrcurs        .block
-               jsr  push
+               jsr  pushreg
                ldx  #grid_left
                ldy  cursln
                jsr  gotoxy
@@ -562,7 +575,7 @@ clrcurs        .block
                jsr  gotoxy
                lda  #$20
                jsr  putch
-               jsr  pop
+               jsr  popreg
                rts
                .bend
 
@@ -570,7 +583,7 @@ clrcurs        .block
 ;
 ;-------------------------------------------------------------------------------
 drawbitmap     .block
-               jsr  push
+               jsr  pushall
                ; prépare le text
                jsr  calcmapaddr              
                lda  mapaddr        ; on pointe sur la table des bitmaps
@@ -595,12 +608,12 @@ isy            ldy  #$00      ; la ligne (autoinc)
                cpy  #$08
                bmi  nextline
                jsr  highlight
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
 highlight      .block
-               jsr  push
+               jsr  pushreg
                ldx  previouskey
                lda  asciitorom,x
                tax
@@ -611,7 +624,7 @@ highlight      .block
                tax
                lda  #charcolor
                sta  colorram,x 
-               jsr  pop
+               jsr  popreg
                rts
                .bend
 
@@ -620,7 +633,7 @@ highlight      .block
 ;
 ;-------------------------------------------------------------------------------
 calcmapaddr    .block
-               jsr  push
+               jsr  pushall
                lda  bitmapaddr     ; on pointe sur la table des bitmaps
                sta  zpage1
                lda  bitmapaddr+1
@@ -640,7 +653,7 @@ thesame        pha
                sta  mapaddr+1
                pla
                jsr  drawkeyval
-out            jsr  pop
+out            jsr  popall
                rts
                .bend
 
@@ -648,7 +661,7 @@ out            jsr  pop
 ;
 ;-------------------------------------------------------------------------------
 abintograph    .block
-               jsr  push
+               jsr  pushall
                lda  #<abin
                sta  zpage1
                lda  #>abin+1
@@ -665,7 +678,7 @@ itszero        lda  #$2e
 next           iny
                cpy  #$08       
                bmi  nextbit
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -673,7 +686,7 @@ next           iny
 ;
 ;-------------------------------------------------------------------------------
 setscreenptr   .block
-               jsr  push
+               jsr  pushreg
 ;               ; BASIC -> print chr$(8)
                lda  #$08      ; basic commande to disable ...
                jsr  chrout    ; ... character set change.
@@ -711,7 +724,7 @@ setscreenptr   .block
 ;               sta  $0288          ; On indique au kernal que la mémoire video ...
 ;                                   ; ... commence à 4 * 256 = 1024
 ;                                   ; 648 - top page of screen memory
-               jsr  pop
+               jsr  popreg
                rts
                .bend
 
@@ -719,7 +732,7 @@ setscreenptr   .block
 ;
 ;-------------------------------------------------------------------------------
 copycharset    .block
-               jsr  push
+               jsr  pushreg
 
                ; On desactive les interruptions du clavier.
                ; BASIC -> poke 56334, peek(56334) and 254 
@@ -748,7 +761,7 @@ copycharset    .block
                ora  #%00000001     ;254
                sta  cia1cra        ;$dc0e, 56334 cia1 control register A
 
-               jsr  pop
+               jsr  popreg
                rts
                .bend
 
@@ -756,7 +769,7 @@ copycharset    .block
 ;
 ;-------------------------------------------------------------------------------
 memcopy        .block
-               jsr  push
+               jsr  pushall
 
                lda  startaddr
                sta  zpage1
@@ -781,7 +794,7 @@ onemore        lda  (zpage1),y
                cmp  stopaddr
                bne  onemore
 
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -809,7 +822,7 @@ staticscreen   .block
 ;
 ;-------------------------------------------------------------------------------
 drawfkeys      .block
-               jsr  push
+               jsr  pushreg
                lda  fkeyset
                cmp  #$0
                bne  secondks
@@ -832,7 +845,7 @@ secondks       #printcxy titremenu2
                #printcxy f6bbutton
                #printcxy f7bbutton
                #printcxy f8bbutton
-end            jsr  pop
+end            jsr  popreg
                rts
                .bend
 
@@ -840,7 +853,7 @@ end            jsr  pop
 ;
 ;-------------------------------------------------------------------------------
 drawallchars   .block
-               jsr push
+               jsr pushreg
                #locate   0,0
                ldx  #$00
 nextc          txa  
@@ -850,7 +863,7 @@ nextc          txa
                inx
                cpx  #$80
                bne  nextc
-               jsr  pop
+               jsr  popreg
                rts
                .bend
 
@@ -863,7 +876,7 @@ hline2=6
 hline3=18
 vlinepos=16
 vzplit=scrnnewram+(6*40)+8
-               jsr  push
+               jsr  pushall
                ldx  #40
                lda  #64
 nextl          sta  scrnnewram+(40*hline1)-1,x  ;On imprime les deux grande
@@ -900,7 +913,7 @@ another93      sta  (zpage1),y
                ldy  #0
                lda  #115
                sta  (zpage1),y
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -908,7 +921,7 @@ another93      sta  (zpage1),y
 ;
 ;-------------------------------------------------------------------------------
 drawgrid      .block
-               jsr  push
+               jsr  pushall
                jsr  screendis
                lda  #<scrnnewram+(40*(grid_top))+grid_left
                sta  zpage1
@@ -950,7 +963,7 @@ nextlin        sta  (zpage1),y
                lda  #$7d                     ;+
                sta  scrnnewram+(40*(13))+14
                jsr screenena
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -990,7 +1003,7 @@ nocarry        sta  zpage1
 ;
 ;-------------------------------------------------------------------------------
 delay          .block
-               jsr  push
+               jsr  pushreg
                lda  #$0
                tax
                tay
@@ -1001,7 +1014,7 @@ yagain         dey
                bne  yagain
                cpx  #$00
                bne  xagain
-               jsr  pop
+               jsr  popreg
                rts
                .bend
 
@@ -1208,6 +1221,7 @@ out            pla
 ;
 ;-------------------------------------------------------------------------------
 f8action       .block
+               php
                pha
                lda  #$0
                sta  editmode
@@ -1222,7 +1236,10 @@ swapit         eor  #$ff
                sta  fkeyset
                jsr  drawfkeys
                pla
+               pha
                #affichemesg prompt_msg
+               pla
+               plp
                rts
                .bend
 
@@ -1230,7 +1247,7 @@ swapit         eor  #$ff
 ;
 ;-------------------------------------------------------------------------------
 reverse        .block
-               jsr  push
+               jsr  pushall
                #setzpage2     mapaddr
                ldy  #$00
 again          lda  (zpage2),y
@@ -1239,7 +1256,7 @@ again          lda  (zpage2),y
                iny
                cpy  #$08
                bne  again
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -1247,7 +1264,7 @@ again          lda  (zpage2),y
 ;
 ;-------------------------------------------------------------------------------
 scrollup       .block
-               jsr  push
+               jsr  pushall
                #setzpage1     mapaddr
                #setzpage2     mapaddr
                jsr  inczp2
@@ -1261,7 +1278,7 @@ again          lda  (zpage2),y
                bne  again
                lda  tmpbyte
                sta  (zpage1),y  
-               jsr  pop
+               jsr  popall
                rts
 tmpbyte        .byte     $00
                .bend
@@ -1270,7 +1287,7 @@ tmpbyte        .byte     $00
 ;
 ;-------------------------------------------------------------------------------
 scrolldown     .block
-               jsr  push
+               jsr  pushall
                #setzpage1     mapaddr
                #setzpage2     mapaddr
                jsr  inczp2
@@ -1285,7 +1302,7 @@ again          dey                      ;xxxxxxxx
                ldy  #$00                      
                lda  tmpbyte
                sta  (zpage1),y  
-               jsr  pop
+               jsr  popall
                rts
 tmpbyte        .byte     $00
                .bend
@@ -1294,7 +1311,7 @@ tmpbyte        .byte     $00
 ;
 ;-------------------------------------------------------------------------------
 scrollright     .block
-               jsr  push
+               jsr  pushall
                #setzpage1     mapaddr
                ldy  #$00
 again          lda  (zpage1),y
@@ -1307,7 +1324,7 @@ zero           sta  (zpage1),y
                iny
                cpy  #$08
                bne  again 
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -1315,7 +1332,7 @@ zero           sta  (zpage1),y
 ;
 ;-------------------------------------------------------------------------------
 scrollleft     .block
-               jsr  push
+               jsr  pushall
                #setzpage1     mapaddr
                ldy  #$00
 again          lda  (zpage1),y
@@ -1326,7 +1343,7 @@ again          lda  (zpage1),y
                iny
                cpy  #$08
                bne  again 
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
@@ -1334,10 +1351,12 @@ again          lda  (zpage1),y
 ;
 ;-------------------------------------------------------------------------------
 fillchar      .block
-               jsr  push
+               php
+               pha
                lda  #$ff
                jsr  allsame
-               jsr  pop
+               pla
+               plp
                rts
                .bend
 
@@ -1345,10 +1364,12 @@ fillchar      .block
 ;
 ;-------------------------------------------------------------------------------
 clearchar      .block
-               jsr  push
+               php
+               pha
                lda  #$00
                jsr  allsame
-               jsr  pop
+               pla
+               plp
                rts
                .bend
 
@@ -1369,7 +1390,7 @@ again          sta  (zpage2),y
 ;
 ;-------------------------------------------------------------------------------
 fliphorz       .block
-               jsr  push
+               jsr  pushall
                #setzpage2     mapaddr
                ldy  #$00
 nextbyte       lda  (zpage2),y
@@ -1384,7 +1405,7 @@ rolagain       rol
                iny
                cpy  #$08
                bmi  nextbyte
-               jsr  pop
+               jsr  popall
                rts
 tmpbyte        .byte     $00
                .bend
@@ -1393,7 +1414,7 @@ tmpbyte        .byte     $00
 ;
 ;-------------------------------------------------------------------------------
 flipvert       .block
-               jsr  push
+               jsr  pushall
                #setzpage2     mapaddr
                ldy  #$00
 tostack        lda  (zpage2),y
@@ -1407,7 +1428,7 @@ fromstack      pla
                iny
                cpy  #$08
                bne  fromstack
-               jsr  pop
+               jsr  popall
                rts
                .bend
 

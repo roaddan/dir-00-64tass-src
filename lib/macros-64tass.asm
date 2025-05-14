@@ -97,43 +97,43 @@ changeback     .macro c
                .endm
 
 c64color       .macro
-               jsr  push
+               jsr  pushreg
                #changebord cbleupale
                #changeback cbleu
                #color cbleupale
-               jsr  pull
+               jsr  popreg
                .endm
 
 mycolor        .macro
-               jsr  push
+               jsr  pushreg
                #changebord cvert
                #changeback cbleu
                #color cblanc
-               jsr  pull
+               jsr  popreg
                .endm
 
 c64col         .macro
-               jsr  push
+               jsr  pushreg
                #changebord cbleupale
                #changeback cbleu
                #color cbleupale
-               jsr  pull
+               jsr  popreg
                .endm
 
 v20col         .macro
-               jsr  push
+               jsr  pushreg
                #changebord ccyan
                #changeback cblanc
                #color cbleu
-               jsr  pull
+               jsr  popreg
                .endm
 
 graycolor      .macro
-               jsr  push
+               jsr  pushreg
                #changebord cgrismoyen
                #changeback cgrisfonce
                #color cgrispale
-               jsr  pull
+               jsr  popreg
                .endm
 
 setzpage1      .macro addr
@@ -155,11 +155,11 @@ setzpage2      .macro addr
                .endm
 
 locate         .macro x,y
-               jsr  push
+               jsr  pushreg
                ldx  #\x
                ldy  #\y
                jsr  gotoxy
-               jsr  pop
+               jsr  popreg
                .endm
 
 scrcolors      .macro fg, bg         
@@ -177,64 +177,64 @@ color          .macro    col
                .endm
 
 print          .macro pointer
-               jsr  push
+               jsr  pushreg
                ldx  #<\pointer
                ldy  #>\pointer
                jsr  puts
-               jsr  pull
+               jsr  popreg
                .endm
 
 println        .macro pointer
-               jsr  push
+               jsr  pushreg
                ldx  #<\pointer
                ldy  #>\pointer
                jsr  puts
                lda  #$0d
                jsr  putch
-               jsr  pull
+               jsr  popreg
                .endm
 
 printxy        .macro pointer
-               jsr  push
+               jsr  pushreg
                ldx  #<\pointer 
                ldy  #>\pointer
                jsr  putsxy
-               jsr  pull
+               jsr  popreg
                .endm
 
 printcxy       .macro pointer
-               jsr  push
+               jsr  pushreg
                ldx  #<\pointer 
                ldy  #>\pointer
                jsr  putscxy
-               jsr  pull
+               jsr  popreg
                .endm
 
 printfmt       .macro prefix, pointer
-               jsr  push
+               jsr  pushreg
                lda  #\prefix
                jsr  putch
                #print \pointer
-               jsr  pull
+               jsr  popreg
                .endm
 
 printpos       .macro x,y,pointer
-               jsr  push
+               jsr  pushreg
                #locate \x,\y
                #print \pointer
-               jsr  pull
+               jsr  popreg
                .endm
 
 
 printfmtxy     .macro x,y,prefix,pointer
-               jsr  push
+               jsr  pushreg
                #locate \x,\y
                #printfmt \prefix,\pointer
-               jsr  pull
+               jsr  popreg
                .endm
 
 printwordbin   .macro adresse
-               jsr  push
+               jsr  pushall
                lda  #<\adresse
                sta  $fb
                lda  #>\adresse
@@ -247,6 +247,6 @@ printwordbin   .macro adresse
                lda  ($fb),y
                jsr  atobin
                #print abin
-               jsr  pop
+               jsr  popall
                .endm
 

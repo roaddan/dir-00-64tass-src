@@ -191,9 +191,9 @@ keypressed     lda 203
 
 
 getkey         .block
-again          jsr  getin
+gkagain        jsr  getin
                cmp  #0
-               beq  again
+               beq  gkagain
                rts
                .bend
 
