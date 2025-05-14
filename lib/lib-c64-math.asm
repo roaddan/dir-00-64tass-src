@@ -1,20 +1,3 @@
-;! headstart
-;*= $801
-;.word (+), 10
-;.null $9e, "2061"
-;+ .word 0
-;                .enc      none
-;                ;.enc      screen
-;main            .block
-;                lda #$00
-;                sta $d020
-;                sta $d021
-;                lda #$01
-;                sta bascol
-;                rts
-;                .bend            
-;! headend 
-;              .include  "c64_lib_pushpop.asm"
 ;----------------------------------------
 ; add2word
 ; adresse   = XXYY X=MSB, Y=LSB
