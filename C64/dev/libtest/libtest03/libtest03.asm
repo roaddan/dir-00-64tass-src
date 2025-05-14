@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250421-232831"
+                Version = "20250513-222751"
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
@@ -16,16 +16,14 @@ main           .block
                #uppercase
                #toupper
                #disable
-               ;jsr aide
-               ;jsr anykey
                #mycolor
+               jsr  aide
                jsr  libtest03
                jsr  anykey   
-               #enable
-               #uppercase
-               ;jsr  cls
-               #mycolor
-               rts
+               ;#enable
+               ;#uppercase
+               ;jmp b_warmstart
+               brk
                .bend
 ;*=$c000                 
 ;-------------------------------------------------------------------------------
@@ -72,8 +70,8 @@ again          ;#locate   0,8
                ;#loadaximm 53280
                jsr  showregs
                #locate   0,0
-               jsr  b_praxstr 
-               jsr  b_readmemfloat
+               jsr  b_praxstr      ; Print AAXX as string
+               jsr  b_readmemfloat 
                ;ldx  $7a
                ;ldy  $7b
                ;jsr  showregs

@@ -8,6 +8,9 @@
 ;.null $9e, "2061"
 ;+ .word 0
 		*= $0801
+;--------------------------------------------------------------------------------
+		;1 REM*PROGRAMMATION ASSEMBLEUR SUR C64*
+;--------------------------------------------------------------------------------
 ;		.byte $00     	;Basic commence avec un $00 à $0800.
 bcmd1     .word bcmd2   	;Adresse de la commande basic suivante.
 		.word 1   	;Numero de la ligne Basic.
@@ -15,6 +18,9 @@ bcmd1     .word bcmd2   	;Adresse de la commande basic suivante.
 					; ($8F=REM)
 		.text "*programmation assembleur sur c64*"   
 					; texte a afficher suite au REM.
+;--------------------------------------------------------------------------------
+		;2 REM*PAR DANIEL LAFRANCE*
+;--------------------------------------------------------------------------------
 		.byte $00		;Un zéro pour indiquer la fin de cette 
 bcmd2     .word bcmd3   	;Adresse de la commande basic suivante.
 		.word 2   	;Numero de la ligne Basic.
@@ -22,6 +28,9 @@ bcmd2     .word bcmd3   	;Adresse de la commande basic suivante.
 					; ($8F=REM)
 		.text "*par daniel lafrance*"   
 					; texte a afficher suite au REM.
+;--------------------------------------------------------------------------------
+		;3 SYS02129
+;--------------------------------------------------------------------------------
 		.byte $00		;Un zéro pour indiquer la fin de cette 
 bcmd3     .word bcmd4   	;Adresse de la commande basic suivante.
 		.word 3   	;Numero de la ligne Basic.
@@ -35,6 +44,8 @@ bcmd3     .word bcmd4   	;Adresse de la commande basic suivante.
 bcmd4	.word $0000    ;L'adresse de la commande Basic suivante.
 					; $0000 indique la fin du programme.
 ;--------------------------------------------------------------------------------
-; a p p e l   d e   l a   s o u s   r o u t i n e   p r i n c i p a l e
+; A p p e l   d u  p r o g r a m m e  p r i n c i p a l e .
 ;--------------------------------------------------------------------------------
-hpgmstart       jmp      main  ; le programme principale doit s'appeler "main"
+hpgmstart	jmp	main  	; Le programme principale doit s'appeler "main" et ...
+					; ... doit se rerminer par un BRK.
+;--------------------------------------------------------------------------------
