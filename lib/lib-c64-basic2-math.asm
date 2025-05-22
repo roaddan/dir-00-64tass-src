@@ -2,21 +2,18 @@
 ; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
 ; Nom du fichier .: lib-c64-basic2-math.asm
 ; Cernière m.à j. : 20250521
-; Inspiration ....: 
+; Inspiration ....: Vic-20 and Commodore 64 Tool Kit: Basic by Dan Heeb.
+; ISBN ...........: 0-942386-32-9 
+; Section du livre: Direct Use of Floarting Point
+
 ;--------------------------------------------------------------------------------
 b_math_template
 			.block
-			jsr	pushreg	; Sauvegarde tous les registres
-			jsr	popreg
+			jsr	pushreg	; Sauvegarde tous les registres.
+			jsr	popreg	; Récupère tous les registres.
 			rts
 			.bend
-
-;------------------------------------------------------------------------------
-; Reference....: Vic-20 and Commodore 64 Tool Kit: Basic by Dan Heeb.
-; ISBN.........: 0-942386-32-9 
-; Book section : Direct Use of Floarting Point
-;------------------------------------------------------------------------------
-; Common memory locations.
+; Variables mémoires communes.
 b_bufflenght	.byte	$00
 b_num1		.word	$0000,$0000,$0000
 b_num2		.word	$0000,$0000,$0000
@@ -24,11 +21,11 @@ b_num0
 b_numresult	.word 	$0000,$0000,$0000
 b_testnum		.null	"128"
 ;------------------------------------------------------------------------------
-; Example 1: Convert Accum and X-reg ($AAXX) to decimal ascii string.
-; Input: A=MSB, X=LSB
-; You can load a and x using macro 
-;            loadaxmem for Memory content or ... 
-;            loadaximm for immediate mode.     
+; Example 1: Convertion de Accum et X-reg ($AAXX) en chaine décimal ascii.
+; Entrée: A=MSB, X=LSB
+; Pour charger les registres a and x utilisez les macros ... 
+;            loadaxmem pour un contenu mémoire ou ... 
+;            loadaximm pour le mode immédiat.     
 ;------------------------------------------------------------------------------
 b_praxstr		.block
 			jsr	pushreg
@@ -37,19 +34,19 @@ b_praxstr		.block
 			rts
 			.bend
 
-; Macros to initialize AAXX.
+; Macros pour peupler AAXX.
 ; ==========================
 loadaxmem      .macro axadd
                php
-               ldx  \axadd		; Load lsb od address in X.
-               lda  \axadd+1		; Load msb od address in A.
+               ldx  \axadd		; Charge lsb de l'adresse dans X.
+               lda  \axadd+1		; Charge msb de l'adresse dans A.
                plp
                .endm
 
 loadaximm      .macro aximm
                php
-               lda  #>\aximm
-               ldx  #<\aximm
+               ldx  #<\aximm		; Charge dans X le LSB de la valeur imm.
+               lda  #>\aximm 		; Charge dans A le MSB de la valeur imm.
                plp
                .endm
 
