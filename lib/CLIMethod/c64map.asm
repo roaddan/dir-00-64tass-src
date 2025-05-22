@@ -1,3 +1,9 @@
+;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 ;=========================================
 ; c64map.asm - carthographie memoire et 
 ;    declaration de constantes pour les

@@ -1,3 +1,9 @@
+;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 sidbase =   $d400
 ; Voice 1
 frelo1  =   $d400 ; 54272 - Voice 1 frequency control (low byte).

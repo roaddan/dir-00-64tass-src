@@ -1,3 +1,9 @@
+;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 template     	sta     template_ra       
                 php                     ; On sauvegarde tout les registres 
                 pla                     ;   cc, a, x et y.

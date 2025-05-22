@@ -1,4 +1,9 @@
 ;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 ; v20-map-kernal.asm - Carthographie memoire et declaration de constantes pour le
 ; commodores Vic20
 ;--------------------------------------------------------------------------------

@@ -1,3 +1,9 @@
+;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 ;Note           high, low
 lad1    .word $00F8 ; NTSC (hex): high: $00, low: $F8 ; (dec): low:248, High:0
 si1     .word $0106 ; NTSC (hex): high: $01, low: $06 ; (dec): low:6, High:1

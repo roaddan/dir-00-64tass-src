@@ -1,4 +1,9 @@
-; ----------------------------------------------------------------------------
+;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 ; SID note frequency calculated for a PAL system with a 985248 Hz Christal.
 ; ----------------------------------------------------------------------------
 ; Values are limited to the humain audible frequencies (20hx to 20000hz) and 

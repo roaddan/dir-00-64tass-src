@@ -1,4 +1,9 @@
 ;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 ; c64_bas2map.asm - Carthographie memoire et declaration de constantes pour les
 ; le Basic 2.0 du commodores 64 et 64c
 ;--------------------------------------------------------------------------------

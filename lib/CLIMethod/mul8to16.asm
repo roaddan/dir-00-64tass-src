@@ -1,3 +1,9 @@
+;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 ; mul 8x8 16 bit result for when you can't afford big tables
 ; by djmips 
 ;

@@ -1,4 +1,9 @@
-;---------------------------------------------------------------------------
+;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 ; Program ...: VICII Multi Color mode screen managing utilities
 ; Fichier ...: c64_lib_text_mc.asm
 ; Auteur ....: Daniel Lafrance     

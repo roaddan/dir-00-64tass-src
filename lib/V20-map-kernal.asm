@@ -1,10 +1,11 @@
 ;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 ; c64_map.asm - Carthographie memoire et declaration de constantes pour les
 ; commodores 64 et 64c
-;--------------------------------------------------------------------------------
-; Scripteur...: daniel lafrance, j5w 1w5, canada.
-; Version.....: 20191223.1
-; Inspiration.: isbn 0-87455-082-3
 ;--------------------------------------------------------------------------------
 ; Segmentation principales de la mÃ©moire
 ;--------------------------------------------------------------------------------

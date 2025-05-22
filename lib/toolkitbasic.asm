@@ -1,4 +1,9 @@
-            
+;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .:
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------
 outsub    .block
           jsr  push           ; Sauvegarde le statut complet.
           ldy  #$ff           ; On détermine 
