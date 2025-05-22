@@ -4,7 +4,7 @@
 ; Cernière m.à j. : 20250521
 ; Inspiration ....: Vic-20 and Commodore 64 Tool Kit: Basic by Dan Heeb.
 ; ISBN ...........: 0-942386-32-9 
-; Section du livre: Direct Use of Floarting Point
+; Section du livre: Direct Use of Floarting Point (Pages 19 à 40)
 ;--------------------------------------------------------------------------------
 b_math_template
 			.block
@@ -13,19 +13,27 @@ b_math_template
 			rts
 			.bend
 ;--------------------------------------------------------------------------------
-; Variables mémoires communes.
+; N O T E : Dans les commentaire l'acronyme "P.F." signifie "Point Flottant".
+;--------------------------------------------------------------------------------
+
+;--------------------------------------------------------------------------------
+; Variables publiques communes.
+;--------------------------------------------------------------------------------
 b_bufflenght	.byte	$00
 b_num1		.word	$0000,$0000,$0000
 b_num2		.word	$0000,$0000,$0000
 b_num0
 b_numresult	.word 	$0000,$0000,$0000
 b_testnum		.null	"128"
+
 ;------------------------------------------------------------------------------
-; Example 1: Convertion de Accum et X-reg ($AAXX) en chaine décimal ascii.
+; Convertion de Accum et X-reg ($AAXX) en chaine décimal ascii.
 ; Entrée: A=MSB, X=LSB
 ; Pour charger les registres a and x utilisez les macros ... 
 ;            loadaxmem pour un contenu mémoire ou ... 
-;            loadaximm pour le mode immédiat.     
+;            loadaximm pour le mode immédiat.    
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 1 de la page 25.
 ;------------------------------------------------------------------------------
 b_praxstr		.block
 			jsr	pushreg		; Sauvegarde tous les registres.
@@ -34,8 +42,9 @@ b_praxstr		.block
 			rts
 			.bend
 
-; Macros pour peupler AAXX.
-; ==========================
+;------------------------------------------------------------------------------
+; M a c r o s   p o u r   p e u p l e r   A A X X .
+;------------------------------------------------------------------------------
 loadaxmem      .macro axadd
                php
                ldx  \axadd		; Charge lsb de l'adresse dans X.
@@ -50,12 +59,13 @@ loadaximm      .macro aximm
                plp
                .endm
 ;------------------------------------------------------------------------------
-; Exemple 2.1: Récupère un nombre à partir du périphérique d'entrée et le 
-;			sauvegarde en ASCII dans le tampon d'éditeur de ligne de BASIC 
-;			et sauvegarde la longueur de la chaîne dans la variable ...
-;			b_bufflenght.
+; Récupère un nombre à partir du périphérique d'entrée et le sauvegarde en 
+; ASCII dans le tampon d'éditeur de ligne de BASIC et sauvegarde la longueur de
+; la chaîne dans la variable b_bufflenght.
 ; Entrée ....: STDIN
 ; Sortie ....: Tampon de ligne Basic et la variable b_bufflenght.
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 2, page 26.
 ;------------------------------------------------------------------------------
 b_getascnum	.block
 			jsr	pushreg		; Sauvegarde tous les registres.
@@ -74,7 +84,9 @@ b_getascnum	.block
 			.bend			
 
 ;------------------------------------------------------------------------------
-; Exemple 2.2: Sous-routine commune pour effacer le tampon de commande BASIC.
+; Sous-routine commune pour effacer le tampon de commande BASIC.
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 2, page 26.
 ;------------------------------------------------------------------------------
 b_clearbuff	.block
 			jsr	pushreg		; Sauvegarde tous les registres.
@@ -88,9 +100,11 @@ clear		sta	$0200,y		; ... tampon d'entrée de BASIC.
 			.bend
 
 ;------------------------------------------------------------------------------
-; Exemple 2.3: Affiche le nombre P.F. sauvegardé en ascii dans le tampon 
-;			d'édition de ligne BASIC.
-; Mods.......: Récupère la longueur de la chaîne de b_bufflenght.
+; Affiche le nombre P.F. sauvegardé en ascii dans le tampon d'édition de ligne
+; BASIC.
+; Entrée ...: Récupère la longueur de la chaîne de b_bufflenght.
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 2, page 26.
 ;------------------------------------------------------------------------------
 b_printbuff	.block
 			jsr	pushreg		; Sauvegarde tous les registres.
@@ -105,9 +119,10 @@ b_printbuff	.block
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 3 .: Recoit un nombre de l'éditeur et le convertie en point flottant 
-;			dans FAC1.
+; Recoit un nombre de l'éditeur et le convertie en point flottant dans FAC1.
 ; Sortie ....: FAC1 contient le nombre en format PF..
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 3, page 27.
 ;------------------------------------------------------------------------------
 b_insub		.block
 			jsr	pushreg		; Sauvegarde tous les registres.
@@ -117,115 +132,116 @@ b_insub		.block
 							; ... BASIC. 
 			stx	$7a
 			sty	$7b
-			jsr	b_chrget
+			jsr	b_chrget		; Lit un jeton du périphérique d'entrée.
 			jsr	b_ascflt		; Conv. la chaîne ascii en PF dans FAC1.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 4 .: Read a floating point number from memory.
-; Output.....: Variable b_bufflenght contains the lenght of the string.
+; Lecture d'un point flottant à ârtir de la mémoire.
+; Sortie.....: La Variable b_bufflenght contient la longueur de la chaîne.
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 4, page 27.
 ;------------------------------------------------------------------------------
 b_readmemfloat	.block
-			jsr	pushreg
-			jsr	b_intcgt	; Initialize CHRGET.
-
-			lda	$7a
-			sta	b_v7a
+			jsr	pushreg		; Sauvegarde tous les registres.
+			jsr	b_intcgt		; Initialisation de CHRGET.
+			lda	$7a			; Sauvegarde des valeurs actuelles des cases
+			sta	b_v7a		; ... mémoires $007a et $007b. 
 			lda	$7b
 			sta	b_v7b
-
-			ldx	#<(b_testnum-1); #$83		; Set pointer to fvar as location for var minus 1
-			ldy	#>(b_testnum-1); #$c5
-			stx	$7a
-			sty	$7b
-			jsr	b_chrget
-
-			jsr	pushreg
-			
-			ldx	#<(b_num1)  	; Copy FAC1 dans la variable ...
+			ldx	#<(b_testnum-1); Initialise le pointeur FVAR à l'adresse de
+			stx	$7a			; ...
+			ldy	#>(b_testnum-1); ...
+			sty	$7b			; ... la variable -1.
+			jsr	b_chrget		; Lit un jeton du périphérique d'entrée.
+				jsr	pushreg		; Sauvegarde tous les registres.
+			ldx	#<(b_num1)  	; Copie de FAC1 dans la variable ...
 			ldy	#>(b_num1)  	; ... 
 			jsr	b_f1tmem		; b_num1
-
-			jsr	b_f1x10
-
-			ldx	#<(b_num2)  	; Copy FAC1 dans la variable ...
+			jsr	b_f1x10		; Multiplie FAC1 par 10.
+			ldx	#<(b_num2)  	; Copie de FAC1 dans la variable ...
 			ldy	#>(b_num2)  	; ... 
-			jsr	b_f1tmem		; b_num1
-
-			ldx	#<(b_num0)  	; Copy FAC1 dans la variable ...
+			jsr	b_f1tmem		; b_num2
+			ldx	#<(b_num0)  	; Copie de FAC1 dans la variable ...
 			ldy	#>(b_num0)  	; ... 
-			jsr	b_f1tmem		; b_num1
-
-			jsr	b_prhexbnum1
-			jsr	popreg
-			jsr	b_ascflt	  	; Convert ascii string to floating point in FAC1.
-			jsr	b_facasc		; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_f1tmem		; b_num0
+			jsr	b_prhexbnum1	; Affiche b_num1 en hexadécimal.
+				jsr	popreg		; Récupère tous les registres.
+			jsr	b_ascflt	  	; Conv. chaîne ASCII vers P.F. dans FAC1.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 			jsr	b_getbufflen
-
-			lda	b_v7a
-			sta	$7a
-			lda	b_v7b
-			sta	$7b
+			lda	b_v7a		; Récupération des valeurs initiales des 
+			sta	$7a			; ...
+			lda	b_v7b		; ...
+			sta	$7b			; ... cases mémoires $007a et $007b.
 			jsr	b_clearbuff
-
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
+; Variables locale privées
 b_v7a		.byte	$00
 b_v7b		.byte	$00
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 5 .: Storing floating point multiplication into memory.
+; Multiplication de FAC1 et FAV et place le résultat en mémoire.
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 5, page 28.
 ;------------------------------------------------------------------------------
 b_mul2fptomem	.block
-			jsr	pushreg
-			jsr	b_insub		; Input first number.
-			jsr	b_f1t57		; Copy FAC1 to $0057.
-			jsr	b_insub		; Input second number.
-			lda	#$57			
-			ldy	#$00			; Point to 1st number.
-			jsr	b_f1xfv		; FAC1 = FAC1 X FVAR.
-			ldx	#<b_numresult	; Set pointer to area to copy result to.
-			ldy	#>b_numresult
-			jsr	b_f1tmem		; Copy FAC1 to memory.
-			jsr	popreg
+			jsr	pushreg		; Sauvegarde tous les registres.
+			jsr	b_insub		; Récupère le premier nombre.
+			jsr	b_f1t57		; Copie FAC1 dans $0057.
+			jsr	b_insub		; Récupère le second nombre.
+			lda	#$57			; Pointe vers le premier 
+			ldy	#$00			; ... nombre.
+			jsr	b_f1xfv		; Effectue la multiplication 
+							; FAC1 = FAC1 X FVAR.
+			ldx	#<b_numresult	; Initialise le pointeur ou le résultat doit
+			ldy	#>b_numresult	; ... être copié.
+			jsr	b_f1tmem		; Copie FAC1 en mémoire.
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 6 .: Multiply 2 numbers got from input device.
-; Output.....: Variable b_bufflenght contains the lenght of the string.
+; Multiplication de deux nombres reçus du périphérique d'entrée.
+; Sortie.....: La variable b_bufflenght contiemnt la longueur de la chaîne.
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 6, page 29.
 ;------------------------------------------------------------------------------
 b_mul2fptoasc	.block
-			jsr	pushreg
-			jsr	b_insub		; Get first number.
-			jsr	b_f1t57		; Copy FAC1 to $0057.
-			jsr	b_insub	;	 Get second number.
-			lda	#$57
-			ldy	#$00			; Set pointer to FVAR.
-			jsr	b_f1xfv		; FAC1 = FAC1 x FVAR.
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
-			jsr	popreg
+			jsr	pushreg		; Sauvegarde tous les registres.
+			jsr	b_insub		; Récupère le premier nombre.
+			jsr	b_f1t57		; Copie FAC1 dans $0057.
+			jsr	b_insub		; Récupère le second nombre.
+			lda	#$57			; Pointe vers le premier 
+			ldy	#$00			; ... nombre.
+			jsr	b_f1xfv		; Effectue la multiplication 
+							; FAC1 = FAC1 X FVAR.
+			jsr	b_facasc		; Conv. le P.F. FAC1 en chaîne de caractères 
+							; ascii à la position $0100.
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 6.2: Common sous-routine to calculate basic command buffer lenght.
-; Output.....: Variable b_bufflenght contains the lenght of the string.
+; Sous-routine commune pour calculer la longueur du tampon d'entrée de commande 
+; de BASIC.
+; Sortie.....: La variable b_bufflenght contiemnt la longueur de la chaîne.
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 6, page 29.
 ;------------------------------------------------------------------------------
 b_getbufflen	.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			ldy	#$ff
 nxtchar		iny				; Determine lenght of string by ...
 			lda	$0100,y		; ... searching for $00 EOS byte.
 			bne	nxtchar		
 			iny	
 			sty	b_bufflenght	; Store buffer lenght in common variable.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -234,11 +250,11 @@ nxtchar		iny				; Determine lenght of string by ...
 ;			device.
 ;------------------------------------------------------------------------------
 b_outsub		.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_getbufflen	; Calculate lenght of buff and store in var. 
 			jsr	b_printbuff	; Print buffer content on output device.
 			jsr	b_clearbuff
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -246,12 +262,12 @@ b_outsub		.block
 ; Example 7  : Multiply FAC1 by 10.
 ;------------------------------------------------------------------------------
 b_fac1x10		.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub
 			jsr	b_f1x10	; FAC1 = FAC1 X 10
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -259,7 +275,7 @@ b_fac1x10		.block
 ; Example 8 (9)  : Divide FAC1 by 10.
 ;------------------------------------------------------------------------------
 b_fac1d10		.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub		; Get first number.
 			jsr	b_sgnf1
 			pha
@@ -272,7 +288,7 @@ b_fac1d10		.block
 			sta	$66		; de FAC1 a 1 (neg)
 notneg		jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -280,14 +296,14 @@ notneg		jsr	b_facasc	; Convert FAC1 floating point to ascii string at
 ; Example 10 : FAC1 square.
 ;------------------------------------------------------------------------------
 b_fac1square	.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub		; Get first number.
 			jsr	b_f1tf2		; Copy FAC1 to FAC2.
 			lda	$61			; get exponent of FAC1
 			jsr	b_f1xf2		; FAC1 = FAC1 X FAC2
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -295,7 +311,7 @@ b_fac1square	.block
 ; Example 11 : FVAR divided by FAC1
 ;------------------------------------------------------------------------------
 b_fvardfac1	.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub		; Get first number.
 			jsr	b_f1t57		; Copy FAC1 to $0057			
 			jsr	b_insub		; Get second number.
@@ -304,7 +320,7 @@ b_fvardfac1	.block
 			jsr	b_fvdf1		; FAC1 = FVAR / FAC1
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -312,7 +328,7 @@ b_fvardfac1	.block
 ; Example 12 : FAC2 divided by FAC1.
 ;------------------------------------------------------------------------------
 b_fac2dfac1	.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub		; Get first number.
 			jsr	b_f1t57		; Copy FAC1 to $0057			
 			jsr	b_insub		; Get second number.
@@ -323,7 +339,7 @@ b_fac2dfac1	.block
 			jsr	b_f2df1		; FAC1 = FAC2 / FAC1
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -331,7 +347,7 @@ b_fac2dfac1	.block
 ; Example 13 : Add FVAR to FAC1.
 ;------------------------------------------------------------------------------
 b_fac1pfvar	.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub		; Get first number.
 			jsr	b_f1t57		; Copy FAC1 to $0057			
 			jsr	b_insub		; Get second number.
@@ -340,7 +356,7 @@ b_fac1pfvar	.block
 			jsr	b_f1pfv		; FAC1 = FAC1 + FVAR
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -348,7 +364,7 @@ b_fac1pfvar	.block
 ; Example 14 : Substract FAC1 from FAC1.
 ;------------------------------------------------------------------------------
 b_fac2sfac1	.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub		; Get first number.
 			jsr	b_f1t57		; Copy FAC1 to $0057			
 			jsr	b_insub		; Get second number.
@@ -358,7 +374,7 @@ b_fac2sfac1	.block
 			jsr	b_f2sf1		; FAC1 = FAC2 + FAC1
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -366,7 +382,7 @@ b_fac2sfac1	.block
 ; Example 15 : Substract FAC1 from FVAR.
 ;------------------------------------------------------------------------------
 b_fvarsfac1	.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub		; Get first number.
 			jsr	b_f1t57		; Copy FAC1 to $0057			
 			jsr	b_insub		; Get second number.
@@ -375,7 +391,7 @@ b_fvarsfac1	.block
 			jsr	b_fvsf1		; FAC1 = FVAR + FAC1
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -383,14 +399,14 @@ b_fvarsfac1	.block
 ; Example 16 : Add acc to FAC1.
 ;------------------------------------------------------------------------------
 b_accpfac1	.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			pha
 			jsr	b_insub		; Get first number.
 			pla
 			jsr	b_f1pacc
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -398,7 +414,7 @@ b_accpfac1	.block
 ; Example 17 : Add FAC2 to FAC1.
 ;------------------------------------------------------------------------------
 b_fac2pfac1	.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub		; Get first number.
 			jsr	b_f1t57		; Copy FAC1 to $0057			
 			jsr	b_insub		; Get second number.
@@ -409,7 +425,7 @@ b_fac2pfac1	.block
 			jsr	b_f1pf2
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -418,7 +434,7 @@ b_fac2pfac1	.block
 ;------------------------------------------------------------------------------
 b_fac1powfac2
 			.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub		; Get first number.
 			jsr	b_f1t57		; Copy FAC1 to $0057			
 			jsr	b_insub		; Get second number.
@@ -430,7 +446,7 @@ b_fac1powfac2
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
 
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
