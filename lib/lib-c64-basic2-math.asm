@@ -235,12 +235,12 @@ b_mul2fptoasc	.block
 ;------------------------------------------------------------------------------
 b_getbufflen	.block
 			jsr	pushreg		; Sauvegarde tous les registres.
-			ldy	#$ff
-nxtchar		iny				; Determine lenght of string by ...
-			lda	$0100,y		; ... searching for $00 EOS byte.
-			bne	nxtchar		
-			iny	
-			sty	b_bufflenght	; Store buffer lenght in common variable.
+			ldy	#$ff			; Détermine la longueur de la chaine en
+nxtchar		iny				; ... cherchant le caractère $00
+			lda	$0100,y		; ... ($00 = EOS 'End Of String').
+			bne	nxtchar		; Pas celui là. on passe au prochain.
+			iny				; On ajuste Y pour la longueur de la chaîne.
+			sty	b_bufflenght	; Sauvegarde dans le variable.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
