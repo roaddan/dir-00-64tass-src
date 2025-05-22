@@ -5,14 +5,14 @@
 ; Inspiration ....: Vic-20 and Commodore 64 Tool Kit: Basic by Dan Heeb.
 ; ISBN ...........: 0-942386-32-9 
 ; Section du livre: Direct Use of Floarting Point
-
 ;--------------------------------------------------------------------------------
 b_math_template
 			.block
-			jsr	pushreg	; Sauvegarde tous les registres.
-			jsr	popreg	; Récupère tous les registres.
+			jsr	pushreg		; Sauvegarde tous les registres.
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
+;--------------------------------------------------------------------------------
 ; Variables mémoires communes.
 b_bufflenght	.byte	$00
 b_num1		.word	$0000,$0000,$0000
@@ -28,9 +28,9 @@ b_testnum		.null	"128"
 ;            loadaximm pour le mode immédiat.     
 ;------------------------------------------------------------------------------
 b_praxstr		.block
-			jsr	pushreg
+			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_axout
-			jsr	popreg
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -49,76 +49,77 @@ loadaximm      .macro aximm
                lda  #>\aximm 		; Charge dans A le MSB de la valeur imm.
                plp
                .endm
-
 ;------------------------------------------------------------------------------
-; Example 2.1: Prompt for a number from input device and save it as ascii in 
-; 			the Basic line editor input buffer.
-; Mods.......: Does not pring the resulting ascii value.			  
-;			Instead saves the lenght of the ascii string in b_bufflenght.
-; Output.....: Variable b_bufflenght contains the lenght of the string.
+; Exemple 2.1: Récupère un nombre à partir du périphérique d'entrée et le 
+;			sauvegarde en ASCII dans le tampon d'éditeur de ligne de BASIC 
+;			et sauvegarde la longueur de la chaîne dans la variable ...
+;			b_bufflenght.
+; Entrée ....: STDIN
+; Sortie ....: Tampon de ligne Basic et la variable b_bufflenght.
 ;------------------------------------------------------------------------------
 b_getascnum	.block
-			jsr	pushreg
-			jsr	b_intcgt		; Initialyse charget
-			jsr	b_clearbuff	; Clear basic input buffer
-			jsr	b_prompt		; Prompt for ? and fill buffer by reading...
-							; ... input device.
-			stx	$7a			; X and Y points to $01ff on return.
+			jsr	pushreg		; Sauvegarde tous les registres.
+			jsr	b_intcgt		; Initialise charget
+			jsr	b_clearbuff	; Efface le tampon d'entrée de BASIC.
+			jsr	b_prompt		; Affiche ? et peuple de tampon d'entrée de 
+							; ... BASIC.
+			stx	$7a			; X and Y pointent vers $01ff au retour.
 			sty	$7b
-			jsr	b_chrget		
-			jsr	b_ascflt		; Convert ASCII string at 0200 to FAC1 FP.
-			jsr	b_facasc		; Converts FAC1 to ASCII string at 100.
-			jsr	b_getbufflen	; Calculate lenght of buff and store in var. 
-			jsr	popreg
+			jsr	b_chrget		; Lit un jeton du périphérique d'entrée.
+			jsr	b_ascflt		; Conv. ASCII de l'adresse 0200 vers FAC1.
+			jsr	b_facasc		; Conv. FAC1 en chaîne ASCII à 100.
+			jsr	b_getbufflen	; Calcule la longueur de la chaîne dans var. 
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend			
 
 ;------------------------------------------------------------------------------
-; Example 2.2: Common subroutine to clear the basic command buffer.
+; Exemple 2.2: Sous-routine commune pour effacer le tampon de commande BASIC.
 ;------------------------------------------------------------------------------
 b_clearbuff	.block
-			jsr	pushreg
-			lda	#$00
-			ldy	#$59
-clear		sta	$0200,y		; Clear Basic input buffer
-			dey				
-			bne	clear		; 60 bytes.
-			jsr	popreg
+			jsr	pushreg		; Sauvegarde tous les registres.
+			lda	#$00			; Place des $00 à toutes adresses de 
+			ldy	#$59			; ... $1a6 à $200 pour effacer le
+clear		sta	$0200,y		; ... tampon d'entrée de BASIC.
+			dey				; 
+			bne	clear		; 60 octets.
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 2.3: Prints the number saved it as ascii in the Basic line editor 
-;			input buffer.
-; Mods.......: Gets the lenght of the ascii string from b_bufflenght.
+; Exemple 2.3: Affiche le nombre P.F. sauvegardé en ascii dans le tampon 
+;			d'édition de ligne BASIC.
+; Mods.......: Récupère la longueur de la chaîne de b_bufflenght.
 ;------------------------------------------------------------------------------
 b_printbuff	.block
-			jsr	pushreg
-			lda	#$00			; Set $22 to point to string at 100
-			sta	$22
-			lda	#$01
+			jsr	pushreg		; Sauvegarde tous les registres.
+			lda	#$00			; Positionne le vecteur $0022 et 
+			sta	$22			; ... $0023 pour quLil pointe vers
+			lda	#$01			; l'adresse $0100.
 			sta	$23
-			lda	b_bufflenght
-			jsr	b_strout
-			jsr	popreg
+			lda	b_bufflenght	; Charge la longueur de la chaîne.
+			jsr	b_strout		; Affiche la chaine
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 3 .: Input a number from the editor and convert as floating point in
-; FAC1.
-; Output ....: FAC1 contains FP value.
+; Example 3 .: Recoit un nombre de l'éditeur et le convertie en point flottant 
+;			dans FAC1.
+; Sortie ....: FAC1 contient le nombre en format PF..
 ;------------------------------------------------------------------------------
 b_insub		.block
-			jsr	pushreg
-			jsr	b_intcgt	; Initialize CHRGET.
-			jsr	b_clearbuff
-			jsr	b_prompt
+			jsr	pushreg		; Sauvegarde tous les registres.
+			jsr	b_intcgt		; Initialise CHRGET.
+			jsr	b_clearbuff	; Efface le tampon d'entrée de BASIC.
+			jsr	b_prompt		; Affiche ? et peuple de tampon d'entrée de 
+							; ... BASIC. 
 			stx	$7a
 			sty	$7b
 			jsr	b_chrget
-			jsr	b_ascflt	; Convert ascii string to floating point in FAC1.
-			jsr	popreg
+			jsr	b_ascflt		; Conv. la chaîne ascii en PF dans FAC1.
+			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
 
@@ -213,7 +214,7 @@ b_mul2fptoasc	.block
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 6.2: Common subroutine to calculate basic command buffer lenght.
+; Example 6.2: Common sous-routine to calculate basic command buffer lenght.
 ; Output.....: Variable b_bufflenght contains the lenght of the string.
 ;------------------------------------------------------------------------------
 b_getbufflen	.block
@@ -229,7 +230,7 @@ nxtchar		iny				; Determine lenght of string by ...
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 6.3: Common subroutine print the basic command buffer to the output
+; Example 6.3: Common sous-routine print the basic command buffer to the output
 ;			device.
 ;------------------------------------------------------------------------------
 b_outsub		.block
