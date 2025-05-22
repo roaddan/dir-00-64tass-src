@@ -1,7 +1,7 @@
 ;--------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
-; Nom du fichier .:
-; Cernière m.à j. : 
+; Nom du fichier .: header-v20.asm
+; Cernière m.à j. : 20250521-222823
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
 ; Entete de programme assembleur pour demarrage à partir du

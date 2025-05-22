@@ -1,7 +1,7 @@
 ;--------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
-; Nom du fichier .:
-; Cernière m.à j. : 
+; Nom du fichier .: lib-c64-nmi.asm
+; Cernière m.à j. : 20250521
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
 ; On change le vecteur d'interruption pour y placer le retour a 

@@ -1,7 +1,6 @@
 ;--------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
-; Nom du fichier .:
-; Cernière m.à j. : 
+; Nom du fichier .: header-c64.asm
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
 ; Entete de programme assembleur pour demarrage à partir du BASIC 2.0 du 

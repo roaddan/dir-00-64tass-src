@@ -1,12 +1,12 @@
 ;--------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
-; Nom du fichier .:
-; Cernière m.à j. : 
+; Nom du fichier .: lib-c64-basic2-math.asm
+; Cernière m.à j. : 20250521
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
 b_math_template
 			.block
-			jsr	pushreg
+			jsr	pushreg	; Sauvegarde tous les registres
 			jsr	popreg
 			rts
 			.bend
