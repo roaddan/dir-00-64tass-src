@@ -69,7 +69,7 @@ Programming/usage note for the Commodore 64.
 In assembly language:
 ---------------------
 It is possible to generate the BASIC memory code to ease the execution of 
-an assembled program.
+an assembly language program.
 To do this you must place a header at the very beginning of your code at 
 address $0800 (2048) that should look as follow ...
           ;----------------------------------------------------------------
