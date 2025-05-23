@@ -13,7 +13,10 @@ b_math_template
 			rts
 			.bend
 ;--------------------------------------------------------------------------------
-; N O T E : Dans les commentaire l'acronyme "P.F." signifie "Point Flottant".
+; N O T E : Dans les commentaire les acronymes suivant signifient :
+;
+; √ "P.F." = "Point Flottant".
+; √ conc   = conversion	
 ;--------------------------------------------------------------------------------
 
 ;--------------------------------------------------------------------------------
@@ -266,9 +269,10 @@ b_outsub		.block
 ;------------------------------------------------------------------------------
 b_fac1x10		.block
 			jsr	pushreg		; Sauvegarde tous les registres.
-√			jsr	b_f1x10	; FAC1 = FAC1 X 10
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_insub		; Récupère un nombre de l'entrée standard.
+			jsr	b_f1x10		; FAC1 = FAC1 X 10
+			jsr	b_facasc		; Conv. FAC1 floating point to ascii string at 
+							; $0100.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -278,7 +282,7 @@ b_fac1x10		.block
 ;------------------------------------------------------------------------------
 b_fac1d10		.block
 			jsr	pushreg		; Sauvegarde tous les registres.
-			jsr	b_insub		; Get first number.
+			jsr	b_insub		; Récupère un nombre.
 			jsr	b_sgnf1
 			pha
 			jsr	b_f1d10		; FAC1 = FAC1 / 10
@@ -286,10 +290,10 @@ b_fac1d10		.block
 			tax
 			inx
 			bne	notneg
-			lda	#$80		; On force le bit de signe ...
-			sta	$66		; de FAC1 a 1 (neg)
-notneg		jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			lda	#$80			; On force le bit de signe ...
+			sta	$66			; de FAC1 a 1 (neg)
+notneg		jsr	b_facasc		; Convert FAC1 floating point to ascii string at 
+							; $0100.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend

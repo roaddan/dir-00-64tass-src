@@ -4,7 +4,7 @@ English version below
 
 Développement pour CBM C64 et Vic20 avec 64tass.
 ================================================
-Ces fichiers ont été créé pour expérimenter la programmation du Commodore 64 et du Vic20 avec un simple éditeur de fichier et de l'utilitaire « Make ».
+Ces fichiers ont été créé pour expérimenter la programmation en language assembleur du Commodore 64 et du Vic20 avec un simple éditeur de fichier et de l'utilitaire « Make ».
 
 L'assembleur interplateforme 64Tass a été choisi pour sa similarité avec l'assembleur Turbo-Macro-Pro roulant sur les machines CBM64.
 
@@ -12,7 +12,7 @@ Le fichier "makefile" est structuré par des variables en entête pour l'environ
 
 De toutes évidences, vous devrez modifier le fichier "Makefile" en fonction de votre configuration.
 
-D'autre version du makefile sont aussi disponnibles.
+D'autre version du makefile sont aussi disponnibles. (MacOS, Linux)
 
 Commencer par explorer le répertoire "lib". Celui-ci contien le coeur de mes expérimentations et de mon développement.
 
@@ -24,7 +24,7 @@ English version.
 ----------------
 CBM C64 and Vic20 development using 64tass.
 ===========================================
-Those files where created to experiment assembly programming for the Commodore 64 and Vic20 using a simple text editor and the make utility. 
+Those files where created to experiment assembly lamguage programming for the Commodore 64 and Vic20 using a simple text editor and the make utility. 
 
 The 64tass cross assembler was chosen for its similarity with the Turbo-Macro-Pro assembler running under the CBM64 machines.
 
