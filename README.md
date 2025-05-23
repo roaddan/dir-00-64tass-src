@@ -14,7 +14,11 @@ De toutes évidences, vous devrez modifier le fichier "Makefile" en fonction de 
 
 D'autre version du makefile sont aussi disponnibles.
 
+Commencer par explorer le répertoire "lib". Celui-ci contien le coeur de mes expérimentations et de mon développement.
+
 Par choix et aussi parce que le français est peu présent sur le web, tous les commentaire présent dans le code seront graduellement traduit en francais même si les noms des variables et fonctions demeureront principalement en anglais.
+
+Amusez-vous.
 
 English version.
 ----------------
@@ -30,4 +34,8 @@ You must evidently modify the "Makefile" to reflect your work environnement.
 
 Other versions of the makefile are also available.
 
+You should start by exploring the "lib" directory. It contains the heart of my experiments and developpements.
+
 By choice and also because french is not verry present on the web, all comments in the code will progressively be translated in french even though the variables and function names will remain mostly in english.
+
+Have fun.
