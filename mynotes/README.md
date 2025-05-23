@@ -44,7 +44,7 @@ $080d               jmp  main      ;L'adresse $080d vaut 2061 en décimal.
 
           ;----------------------------------------------------------------
           ; À partir de ce point le programme peut être situé n'importe où
-          ; en mémoire.
+          ; en mémoire RAM.
           ;----------------------------------------------------------------          
 
           ;----------------------------------------------------------------
@@ -126,7 +126,7 @@ $080d               jmp  main      ;The $080d address converts to 2061 décimal.
 
           ;----------------------------------------------------------------
           ; Starting at this point the program can reside anywhere in 
-          ; memory.
+          ; RAM memory.
           ;----------------------------------------------------------------          
 $0810     main      php            ;Choice of "main" for name is arbritrairy.
 $0811               pha            ;Save modified register.
