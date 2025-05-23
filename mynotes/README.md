@@ -10,7 +10,7 @@ Pour ce faire vous devez placer un entête dans votre code assembleur à
 l'adresse $0800 (2048) qui se décrit comme suit...
           ;----------------------------------------------------------------
           ; Entete BASIC pour generer la commande "SYS 2061" visible avec 
-          ;  la commande "LIST" sous BASIC 2.0
+          ; la commande "LIST" sous BASIC 2.0
           ;----------------------------------------------------------------
 *= $0800
 $0800               .byte $00      ;BASIC commence avec un $00 à $0800.
@@ -24,12 +24,14 @@ $080a               .byte $00      ;Un zéro pour indiquer la fin de cette
 $080b     bcmd2     .word $0000    ;L'adresse de la commande BASIC suivante.
           ;----------------------------------------------------------------
           ; Début du programme assembleur. Ici je choisi de mettre un 
-          ;  "jmp main", "main" étant le nom de la routine principale qui
-          ;  sera lancée. 
+          ; "jmp main", "main" étant le nom de la routine principale qui
+          ; sera lancée. 
+          ;
           ; Ce faisant il est possible de déplacer "main" en mémoire sans 
-          ;  que cela de change l'entête.
+          ; que cela de change l'entête.
+          ;
           ; Vous pouvez remplacer "main" par une adresse spécifique pour 
-          ;  lancer l'exécution d'un programme placé ailleur en mémoire.
+          ; lancer l'exécution d'un programme placé ailleur en mémoire.
           ; Exemple: 
           ;         jmp $fce2      ;Pour exécuter un RESET du système.  
           ;----------------------------------------------------------------
@@ -37,7 +39,7 @@ $080d               jmp  main      ;L'adresse $080d vaut 2061 en décimal.
                                    ; Voir la ligne à l'adresse $0806.
           ;----------------------------------------------------------------
           ; Exemple de programme principale en assembleur qui change les 
-          ;  couleurs de l'interface BASIC.
+          ; couleurs de l'interface BASIC.
           ;
           ; IMPORTANT: Puisque la commande BASIC "SYS" se comporte comme la 
           ;            commande "JSR", ce programme doit de terminer par un 
@@ -90,8 +92,10 @@ $080b     bcmd2     .word $0000    ;Address of the next BASIC command.
           ; Start of program.
           ; Here I have chosen to put a "jmp main" instruction as "main" 
           ; is the name of the starting routine of all my programs.
+          ;
           ; It is thus possible to put the main subroutine anywhere in the 
           ; program memory without changing this header.
+          ;
           ; You can replace main with any address sprcific to your program.
           ; Exemple: 
           ;         jmp $fce2      ;To launch a system RESET.  
