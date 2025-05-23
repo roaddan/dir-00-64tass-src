@@ -59,7 +59,7 @@ $0828               rts            ;Retourne propre au BASIC.
           ; Fin du programme.
           ;----------------------------------------------------------------
 ```
-English
+English version
 ```
 Programming/usage note for the Commodore 64.
 ==================================================
