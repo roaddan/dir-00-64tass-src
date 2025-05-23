@@ -171,12 +171,12 @@ b_readmemfloat	.block
 				jsr	popreg		; Récupère tous les registres.
 			jsr	b_ascflt	  	; Conv. chaîne ASCII vers P.F. dans FAC1.
 			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
-			jsr	b_getbufflen
+			jsr	b_getbufflen	; Calcule la longueur de la chaîne dans var. 
 			lda	b_v7a		; Récupération des valeurs initiales des 
 			sta	$7a			; ...
 			lda	b_v7b		; ...
 			sta	$7b			; ... cases mémoires $007a et $007b.
-			jsr	b_clearbuff
+			jsr	b_clearbuff	; Efface le tampon d'entrée de BASIC.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 ; Variables locale privées
@@ -246,16 +246,17 @@ nxtchar		iny				; ... cherchant le caractère $00
 			.bend
 
 ;------------------------------------------------------------------------------
-; Common sous-routine print the basic command buffer to the output
-;			device.
+; Sous-routine Commune qui affiche le tampon de commande BASIC sur le 
+; périphérique de sortie.
 ;------------------------------------------------------------------------------
 ; Tirée de l'Exemple 6, page 29.
 ;------------------------------------------------------------------------------
 b_outsub		.block
 			jsr	pushreg		; Sauvegarde tous les registres.
-			jsr	b_getbufflen	; Calculate lenght of buff and store in var. 
-			jsr	b_printbuff	; Print buffer content on output device.
-			jsr	b_clearbuff
+			jsr	b_getbufflen	; Calcule la longueur de la chaîne dans var. 
+			jsr	b_printbuff	; Affiche le contenu du tampon sur le 
+							; ... périphérique de sortie.
+			jsr	b_clearbuff	; Efface le tampon d'entrée de BASIC.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -265,8 +266,7 @@ b_outsub		.block
 ;------------------------------------------------------------------------------
 b_fac1x10		.block
 			jsr	pushreg		; Sauvegarde tous les registres.
-			jsr	b_insub
-			jsr	b_f1x10	; FAC1 = FAC1 X 10
+√			jsr	b_f1x10	; FAC1 = FAC1 X 10
 			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
 						; $0100.
 			jsr	popreg		; Récupère tous les registres.

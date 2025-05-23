@@ -14,6 +14,8 @@ De toutes évidences, vous devrez modifier le fichier "Makefile" en fonction de 
 
 D'autre version du makefile sont aussi disponnibles.
 
+Par choix et aussi parce que le français est peu présent sur le web, tous les commentaire présent dans le code seront graduellement traduit en francais même si les noms des variables et fonctions demeureront principalement en anglais.
+
 English version.
 ----------------
 CBM C64 and Vic20 development using 64tass.
@@ -27,3 +29,5 @@ The "makefile" is structured by variables in it's header for the MACOS 10.15.7 e
 You must evidently modify the "Makefile" to reflect your work environnement.
 
 Other versions of the makefile are also available.
+
+By choice and also because french is not verry present on the web, all comments in the code will progressively be translated in french even though the variables and function names will remain mostly in english.
