@@ -16,7 +16,7 @@ l'adresse $0800 (2048) qui se décrit comme suit...
 $0800               .byte $00      ;BASIC commence avec un $00 à $0800.
 $0801     bcmd1     .word bcmd2    ;Adresse de la commande BASIC suivante.
 $0803               .word $000a    ;Numero de la ligne BASIC.
-$0805               .byte $9e      ;Le token de la commande BASIC ($9e=SYS)
+$0805               .byte $9e      ;Le jeton de la commande BASIC ($9e=SYS)
 $0806               .text "2061"   ;L'adresse le la première instruction
                                    ;... assembleur de votre programme
 $080a               .byte $00      ;Un zéro pour indiquer la fin de cette 
@@ -39,8 +39,9 @@ $080d               jmp  main      ;L'adresse $080d vaut 2061 en décimal.
           ; Exemple de programme principale en assembleur qui change les 
           ;  couleurs de l'interface BASIC.
           ;
-          ; IMPORTANT: Ce programme doit de terminer par un RTS pour 
-          ;            revenir proprement au BASIC.     
+          ; IMPORTANT: Puisque la commande BASIC "SYS" se comporte comme la 
+          ;            commande "JSR", ce programme doit de terminer par un 
+          ;            RTS pour revenir au BASIC proprement.     
           ;----------------------------------------------------------------
 $0810     main      php            ;Le nom "main" est arbritraire.
 $0811               pha            ;Sauvegarde les registres modifiés.
