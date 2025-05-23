@@ -6,8 +6,12 @@ En assembleur:
 --------------
 Il est possible de générer en memoire le code BASIC pour faciliter le 
 lancement d'un programme en assembleur. 
-Pour ce faire vous devez placer un entête dans votre code assembleur à
-l'adresse $0800 (2048) qui se décrit comme suit...
+
+Pour ce faire vous devez placer un entête dans votre code assembleur et 
+vous assurer que celui-ci sera positionné à l'adresse $0800 (2048).
+
+Cet entete se décrit comme suit...
+
           ;----------------------------------------------------------------
           ; Entete BASIC pour generer la commande "SYS 2061" visible avec 
           ; la commande "LIST" sous BASIC 2.0
@@ -70,8 +74,12 @@ In assembly language:
 ---------------------
 It is possible to generate the BASIC memory code to ease the execution of 
 an assembly language program.
-To do this you must place a header at the very beginning of your code at 
-address $0800 (2048) that should look as follow ...
+
+To do this you must place a header at the very beginning of your code and 
+make shure that it will be locates at address $0800 (2048).
+
+The header should look as follow ...
+
           ;----------------------------------------------------------------
           ; BASIC header to generate the "SYS 2061" visible by the BASIC
           ; 2.0 "LIST" command.
