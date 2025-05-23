@@ -41,13 +41,19 @@ $080b     bcmd2     .word $0000    ;L'adresse de la commande BASIC suivante.
           ;----------------------------------------------------------------
 $080d               jmp  main      ;L'adresse $080d vaut 2061 en décimal.
                                    ; Voir la ligne à l'adresse $0806.
+
+          ;----------------------------------------------------------------
+          ; À partir de ce point le programme peut être situé n'importe où
+          ; en mémoire.
+          ;----------------------------------------------------------------          
+
           ;----------------------------------------------------------------
           ; Exemple de programme principale en assembleur qui change les 
           ; couleurs de l'interface BASIC.
           ;
-          ; IMPORTANT: Puisque la commande BASIC "SYS" se comporte comme la 
-          ;            commande "JSR", ce programme doit de terminer par un 
-          ;            RTS pour revenir au BASIC proprement.     
+          ; IMPORTANT: Puisque la commande BASIC "SYS" se comporte comme un 
+          ;            "JSR", le programme doit de terminer par un "RTS" 
+          ;            pour assurer un retour normal à BASIC.     
           ;----------------------------------------------------------------
 $0810     main      php            ;Le nom "main" est arbritraire.
 $0811               pha            ;Sauvegarde les registres modifiés.
@@ -113,10 +119,15 @@ $080d               jmp  main      ;The $080d address converts to 2061 décimal.
           ; Assembly language progran that changes the default BASIC 
           ; interface colours.
           ;
-          ; IMPORTANT: Since the "SYS" instruction is equivalent to the 
-          ;            "jsr" instruction, the program must end with the 
-          ;            "RTS" instruction to normally return to BASIC.     
+          ; IMPORTANT: Since the "SYS" instruction is equivalent to "jsr",
+          ;            the program must end with a "RTS" to ensure a normal 
+          ;            return to BASIC.     
           ;----------------------------------------------------------------
+
+          ;----------------------------------------------------------------
+          ; Starting at this point the program can reside anywhere in 
+          ; memory.
+          ;----------------------------------------------------------------          
 $0810     main      php            ;Choice of "main" for name is arbritrairy.
 $0811               pha            ;Save modified register.
 $0812     bord      lda  #$05      ;Green for the ...
