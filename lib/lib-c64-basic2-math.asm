@@ -409,7 +409,7 @@ b_fvarsfac1     .block
                ldy  #$00           ; ... premier nombre.
                jsr  b_fvsf1        ; Effec. la soustraction: FAC1 = FVAR - FAC1.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
-               jsr  popreg          ; Récupère tous les registres.
+               jsr  popreg         ; Récupère tous les registres.
                rts
                .bend
 
@@ -424,8 +424,8 @@ b_accpfac1     .block
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                pla                 ; Récupère l'Acc.
                jsr  b_f1pacc       ; Effectue l'adition: FAC1 = FAC1 + ACC.
-               jsr  b_facasc        Conv. P.F. FAC1 vers chaîne ascii à $0100.
-               jsr  popreg          ; Récupère tous les registres.
+               jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
+               jsr  popreg         ; Récupère tous les registres.
                rts
                .bend
 
