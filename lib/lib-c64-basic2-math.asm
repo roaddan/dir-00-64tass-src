@@ -246,8 +246,10 @@ nxtchar		iny				; ... cherchant le caractère $00
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 6.3: Common sous-routine print the basic command buffer to the output
+; Common sous-routine print the basic command buffer to the output
 ;			device.
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 6, page 29.
 ;------------------------------------------------------------------------------
 b_outsub		.block
 			jsr	pushreg		; Sauvegarde tous les registres.
