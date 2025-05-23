@@ -36,7 +36,7 @@ b_testnum      .null     "128"
 ;            loadaxmem pour un contenu mémoire ou ... 
 ;            loadaximm pour le mode immédiat.    
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 1 de la page 25.
+; Code inspiré de l'exemple 1 de la page 25.
 ;------------------------------------------------------------------------------
 b_praxstr          .block
                jsr  pushreg        ; Sauvegarde tous les registres.
@@ -68,7 +68,7 @@ loadaximm      .macro aximm
 ; Entrée ....: STDIN
 ; Sortie ....: Tampon de ligne Basic et la variable b_bufflenght.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 2, page 26.
+; Code inspiré de l'exemple 2, page 26.
 ;------------------------------------------------------------------------------
 b_getascnum     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
@@ -89,7 +89,7 @@ b_getascnum     .block
 ;------------------------------------------------------------------------------
 ; Sous-routine commune pour effacer le tampon de commande BASIC.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 2, page 26.
+; Code inspiré de l'exemple 2, page 26.
 ;------------------------------------------------------------------------------
 b_clearbuff     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
@@ -107,7 +107,7 @@ clear          sta  $0200,y        ; ... tampon d'entrée de BASIC.
 ; BASIC.
 ; Entrée ...: Récupère la longueur de la chaîne de b_bufflenght.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 2, page 26.
+; Code inspiré de l'exemple 2, page 26.
 ;------------------------------------------------------------------------------
 b_printbuff     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
@@ -125,7 +125,7 @@ b_printbuff     .block
 ; Recoit un nombre de l'éditeur et le convertie en point flottant dans FAC1.
 ; Sortie ....: FAC1 contient le nombre en format PF..
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 3, page 27.
+; Code inspiré de l'exemple 3, page 27.
 ;------------------------------------------------------------------------------
 b_insub          .block
                jsr  pushreg        ; Sauvegarde tous les registres.
@@ -142,10 +142,10 @@ b_insub          .block
                .bend
 
 ;------------------------------------------------------------------------------
-; Lecture d'un point flottant à ârtir de la mémoire.
+; Lecture d'un point flottant à partir de la mémoire.
 ; Sortie.....: La Variable b_bufflenght contient la longueur de la chaîne.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 4, page 27.
+; Code inspiré de l'exemple 4, page 27.
 ;------------------------------------------------------------------------------
 b_readmemfloat     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
@@ -190,15 +190,15 @@ b_v7b          .byte     $00
 ;------------------------------------------------------------------------------
 ; Multiplication de FAC1 et FAV et place le résultat en mémoire.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 5, page 28.
+; Code inspiré de l'exemple 5, page 28.
 ;------------------------------------------------------------------------------
 b_mul2fptomem     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
-               jsr  b_insub        ; Récupère le premier nombre.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
                jsr  b_f1t57        ; Copie FAC1 dans $0057.
-               jsr  b_insub        ; Récupère le second nombre.
-               lda  #$57           ; Pointe vers le premier 
-               ldy  #$00           ; ... nombre.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               lda  #$57           ; Charge l'adresse mémoire du 
+               ldy  #$00           ; ... premier nombre.
                jsr  b_f1xfv        ; Effectue la multiplication 
                                    ; FAC1 = FAC1 X FVAR.
                ldx  #<b_numresult  ; Initialise le pointeur ou le résultat doit
@@ -212,15 +212,15 @@ b_mul2fptomem     .block
 ; Multiplication de deux nombres reçus du périphérique d'entrée.
 ; Sortie.....: La variable b_bufflenght contiemnt la longueur de la chaîne.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 6, page 29.
+; Code inspiré de l'exemple 6, page 29.
 ;------------------------------------------------------------------------------
 b_mul2fptoasc     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
-               jsr  b_insub        ; Récupère le premier nombre.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
                jsr  b_f1t57        ; Copie FAC1 dans $0057.
-               jsr  b_insub        ; Récupère le second nombre.
-               lda  #$57           ; Pointe vers le premier 
-               ldy  #$00           ; ... nombre.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               lda  #$57           ; Charge l'adresse mémoire du 
+               ldy  #$00           ; ... premier nombre.
                jsr  b_f1xfv        ; Effectue la multiplication : 
                                    ; FAC1 = FAC1 X FVAR.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
@@ -233,7 +233,7 @@ b_mul2fptoasc     .block
 ; de BASIC.
 ; Sortie.....: La variable b_bufflenght contient la longueur de la chaîne.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 6, page 29.
+; Code inspiré de l'exemple 6, page 29.
 ;------------------------------------------------------------------------------
 b_getbufflen     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
@@ -251,7 +251,7 @@ nxtchar        iny                 ; ... cherchant le caractère $00
 ; Sous-routine Commune qui affiche le tampon de commande BASIC sur le 
 ; périphérique de sortie.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 6, page 29.
+; Code inspiré de l'exemple 6, page 29.
 ;------------------------------------------------------------------------------
 b_outsub          .block
                jsr  pushreg        ; Sauvegarde tous les registres.
@@ -266,11 +266,11 @@ b_outsub          .block
 ;------------------------------------------------------------------------------
 ; Multiplication de FAC1 par 10 et sauvegarde le résultat en mémoire.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 7, page 30.
+; Code inspiré de l'exemple 7, page 30.
 ;------------------------------------------------------------------------------
 b_fac1x10          .block
                jsr  pushreg        ; Sauvegarde tous les registres.
-               jsr  b_insub        ; Récupère un nombre de l'entrée standard.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
                jsr  b_f1x10        ; Multiplie FAC1 par 10.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
@@ -283,13 +283,13 @@ b_fac1x10          .block
 ;------------------------------------------------------------------------------
 
 ;------------------------------------------------------------------------------
-; Division FAC1 par 10 et sauvegarde le résultat en mémoire.
+; Division de FAC1 par 10 et sauvegarde le résultat en mémoire.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 9, page 31.
+; Code inspiré de l'exemple 9, page 31.
 ;------------------------------------------------------------------------------
 b_fac1d10          .block
                jsr  pushreg        ; Sauvegarde tous les registres.
-               jsr  b_insub        ; Récupère un nombre.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
                jsr  b_sgnf1        ; Vérifie le signe de FAC1.
                pha                 ; Sauvegarde le signe.
                jsr  b_f1d10        ; Divise FAC1 par 10.
@@ -305,13 +305,13 @@ notneg          jsr  b_facasc      ; Conv. P.F. FAC1 vers chaîne ascii à $0100
                .bend
 
 ;------------------------------------------------------------------------------
-; Calcul le carré de FAC1.
+; Calcul le carré de FAC1 et sauvegarde le résultat en mémoire.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 10, page 32.
+; Code inspiré de l'exemple 10, page 32.
 ;------------------------------------------------------------------------------
 b_fac1square     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
-               jsr  b_insub        ; Récupère un nombre.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
                jsr  b_f1tf2        ; Copie FAC1 vers FAC2.
                lda  $61            ; Récupère l'exposant de FAC1.
                jsr  b_f1xf2        ; Multiplie FAC1 et FAC2. FAC1=FAC1xFAC2.
@@ -321,17 +321,17 @@ b_fac1square     .block
                .bend
 
 ;------------------------------------------------------------------------------
-; Divise un P.F. en mémoire par FAC1.
+; Division d'un P.F. en mémoire par FAC1 et sauvegarde le résultat en mémoire.
 ;------------------------------------------------------------------------------
-; Tirée de l'Exemple 11, page 32.
+; Code inspiré de l'exemple 11, page 32.
 ;------------------------------------------------------------------------------
 b_fvardfac1     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
-               jsr  b_f1t57        ; Copie FAC1 vers $0057.               
+               jsr  b_f1t57        ; Copie FAC1 vers $0057.
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
-               ldy  #$00           ; ... premier nombre
+               ldy  #$00           ; ... premier nombre.
                jsr  b_fvdf1        ; Divise FVAR et FAC1. (FAC1=FVAR/FAC1).
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
@@ -339,53 +339,59 @@ b_fvardfac1     .block
                .bend
 
 ;------------------------------------------------------------------------------
-; Example 12 : FAC2 divided by FAC1.
+; Division de FAC2 par FAC1 et sauvegarde le résultat en mémoire.
+;------------------------------------------------------------------------------
+; Code inspiré de l'exemple 12, page 32.
 ;------------------------------------------------------------------------------
 b_fac2dfac1     .block
-               jsr  pushreg          ; Sauvegarde tous les registres.
-               jsr  b_insub          ; Get first number.
-               jsr  b_f1t57          ; Copy FAC1 to $0057               
-               jsr  b_insub          ; Get second number.
-               lda  #$57
-               ldy  #$00
-               jsr  b_memtf2          ; copy memory to FAC2
-               lda  $61               ; get exponent of FAC1
-               jsr  b_f2df1          ; FAC1 = FAC2 / FAC1
-               jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
-               jsr  popreg          ; Récupère tous les registres.
+               jsr  pushreg        ; Sauvegarde tous les registres.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               jsr  b_f1t57        ; Copie FAC1 vers $0057.       
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               lda  #$57           ; Charge l'adresse mémoire du 
+               ldy  #$00           ; ... premier nombre.
+               jsr  b_memtf2       ; Copie FVAR vers FAC2.
+               lda  $61            ; Récupère l'exposant de FAC1.
+               jsr  b_f2df1        ; Effectue la division: FAC1 = FAC2 / FAC1.
+               jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
+               jsr  popreg         ; Récupère tous les registres.
                rts
                .bend
 
 ;------------------------------------------------------------------------------
-; Example 13 : Add FVAR to FAC1.
+; Addition de FVAR et FAC1 et sauvegarde le résultat en mémoire.
+;------------------------------------------------------------------------------
+; Code inspiré de l'exemple 13, page 33.
 ;------------------------------------------------------------------------------
 b_fac1pfvar     .block
-               jsr  pushreg          ; Sauvegarde tous les registres.
-               jsr  b_insub          ; Get first number.
-               jsr  b_f1t57          ; Copy FAC1 to $0057               
-               jsr  b_insub          ; Get second number.
-               lda  #$57
-               ldy  #$00
-               jsr  b_f1pfv          ; FAC1 = FAC1 + FVAR
-               jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
-               jsr  popreg          ; Récupère tous les registres.
+               jsr  pushreg        ; Sauvegarde tous les registres.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               jsr  b_f1t57        ; Copie FAC1 vers $0057.               
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               lda  #$57           ; Charge l'adresse mémoire du 
+               ldy  #$00           ; ... premier nombre.
+               jsr  b_f1pfv        ; Effectue l'addition: FAC1 = FAC1 + FVAR.
+               jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
+               jsr  popreg         ; Récupère tous les registres.
                rts
                .bend
 
 ;------------------------------------------------------------------------------
-; Example 14 : Substract FAC1 from FAC1.
+; Soustraction de FAC1 de FAC2 et sauvegarde le résultat en mémoire.
+;------------------------------------------------------------------------------
+; Code inspiré de l'exemple 14, page 33.
 ;------------------------------------------------------------------------------
 b_fac2sfac1     .block
-               jsr  pushreg          ; Sauvegarde tous les registres.
-               jsr  b_insub          ; Get first number.
-               jsr  b_f1t57          ; Copy FAC1 to $0057               
-               jsr  b_insub          ; Get second number.
-               lda  #$57
-               ldy  #$00
-               jsr  b_memtf2          ; copy memory to FAC2
-               jsr  b_f2sf1          ; FAC1 = FAC2 + FAC1
-               jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
-               jsr  popreg          ; Récupère tous les registres.
+               jsr  pushreg        ; Sauvegarde tous les registres.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               jsr  b_f1t57        ; Copie FAC1 vers $0057.              
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               lda  #$57           ; Charge l'adresse mémoire du 
+               ldy  #$00           ; ... premier nombre.
+               jsr  b_memtf2       ; Copie FVAR vers FAC2.
+               jsr  b_f2sf1        ; Effec. la soustraction: FAC1 = FAC2 + FAC1.
+               jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
+               jsr  popreg         ; Récupère tous les registres.
                rts
                .bend
 
@@ -394,11 +400,11 @@ b_fac2sfac1     .block
 ;------------------------------------------------------------------------------
 b_fvarsfac1     .block
                jsr  pushreg          ; Sauvegarde tous les registres.
-               jsr  b_insub          ; Get first number.
-               jsr  b_f1t57          ; Copy FAC1 to $0057               
-               jsr  b_insub          ; Get second number.
-               lda  #$57
-               ldy  #$00
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               jsr  b_f1t57        ; Copie FAC1 vers $0057.              
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               lda  #$57           ; Charge l'adresse mémoire du 
+               ldy  #$00           ; ... premier nombre.
                jsr  b_fvsf1          ; FAC1 = FVAR + FAC1
                jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 
@@ -412,7 +418,7 @@ b_fvarsfac1     .block
 b_accpfac1     .block
                jsr  pushreg          ; Sauvegarde tous les registres.
                pha
-               jsr  b_insub          ; Get first number.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
                pla
                jsr  b_f1pacc
                jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
@@ -425,18 +431,18 @@ b_accpfac1     .block
 ; Example 17 : Add FAC2 to FAC1.
 ;------------------------------------------------------------------------------
 b_fac2pfac1     .block
-               jsr  pushreg          ; Sauvegarde tous les registres.
-               jsr  b_insub          ; Get first number.
-               jsr  b_f1t57          ; Copy FAC1 to $0057               
-               jsr  b_insub          ; Get second number.
-               lda  #$57
-               ldy  #$00
-               jsr  b_memtf2          ; copy memory to FAC2
-               lda  $61               ; get exponent of FAC1
+               jsr  pushreg        ; Sauvegarde tous les registres.
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               jsr  b_f1t57        ; Copie FAC1 vers $0057.              
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               lda  #$57           ; Charge l'adresse mémoire du 
+               ldy  #$00           ; ... premier nombre.
+               jsr  b_memtf2       ; Copie FVAR vers FAC2.
+               lda  $61            ; Récupère l'exposant de FAC1.
                jsr  b_f1pf2
                jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 
-               jsr  popreg          ; Récupère tous les registres.
+               jsr  popreg         ; Récupère tous les registres.
                rts
                .bend
 
@@ -446,13 +452,13 @@ b_fac2pfac1     .block
 b_fac1powfac2
                .block
                jsr  pushreg          ; Sauvegarde tous les registres.
-               jsr  b_insub          ; Get first number.
-               jsr  b_f1t57          ; Copy FAC1 to $0057               
-               jsr  b_insub          ; Get second number.
-               lda  #$57
-               ldy  #$00
-               jsr  b_memtf2          ; copy memory to FAC2
-               lda  $61               ; get exponent of FAC1
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               jsr  b_f1t57        ; Copie FAC1 vers $0057.           
+               jsr  b_insub        ; Capture un nombre de L'entrée STD.
+               lda  #$57           ; Charge l'adresse mémoire du 
+               ldy  #$00           ; ... premier nombre.
+               jsr  b_memtf2       ; Copie FVAR vers FAC2.
+               lda  $61            ; Récupère l'exposant de FAC1.
                jsr  b_expon
                jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 
