@@ -16,7 +16,8 @@ Cet entete se décrit comme suit...
           ; Entete BASIC pour generer la commande "SYS 2061" visible avec 
           ; la commande "LIST" sous BASIC 2.0
           ;----------------------------------------------------------------
-*= $0800
+*= $0800  ; La première commande BASIC commence toujours à $0800.
+          ;----------------------------------------------------------------
 $0800               .byte $00      ;BASIC commence avec un $00 à $0800.
 $0801     bcmd1     .word bcmd2    ;Adresse de la commande BASIC suivante.
 $0803               .word $000a    ;Numero de la ligne BASIC.
@@ -90,7 +91,7 @@ The header should look as follow ...
           ; BASIC header to generate the "SYS 2061" visible by the BASIC
           ; 2.0 "LIST" command.
           ;----------------------------------------------------------------
-*= $0800  ;First BASIC command allways starts at $0800
+*= $0800  ; First BASIC command allways starts at $0800.
           ;----------------------------------------------------------------
 $0800               .byte $00      ;BASIC starts with a $00 code at $0800.
 $0801     bcmd1     .word bcmd2    ;Adress of the next BASIC command.
