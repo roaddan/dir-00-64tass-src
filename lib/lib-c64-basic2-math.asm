@@ -370,7 +370,7 @@ b_fac1pfvar     .block
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
                ldy  #$00           ; ... premier nombre.
-               jsr  b_f1pfv        ; Effectue l'addition: FAC1 = FAC1 + FVAR.
+               jsr  b_f1pfv        ; Effectue l'adition: FAC1 = FAC1 + FVAR.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
                rts
@@ -389,46 +389,50 @@ b_fac2sfac1     .block
                lda  #$57           ; Charge l'adresse mémoire du 
                ldy  #$00           ; ... premier nombre.
                jsr  b_memtf2       ; Copie FVAR vers FAC2.
-               jsr  b_f2sf1        ; Effec. la soustraction: FAC1 = FAC2 + FAC1.
+               jsr  b_f2sf1        ; Effec. la soustraction: FAC1 = FAC2 - FAC1.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
                rts
                .bend
 
 ;------------------------------------------------------------------------------
-; Example 15 : Substract FAC1 from FVAR.
+; Soustraction de FAC1 de FVAR et sauvegarde le résultat en mémoire.
+;------------------------------------------------------------------------------
+; Code inspiré de l'exemple 15, page 34.
 ;------------------------------------------------------------------------------
 b_fvarsfac1     .block
-               jsr  pushreg          ; Sauvegarde tous les registres.
+               jsr  pushreg        ; Sauvegarde tous les registres.
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                jsr  b_f1t57        ; Copie FAC1 vers $0057.              
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
                ldy  #$00           ; ... premier nombre.
-               jsr  b_fvsf1          ; FAC1 = FVAR + FAC1
-               jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
-
+               jsr  b_fvsf1        ; Effec. la soustraction: FAC1 = FVAR - FAC1.
+               jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg          ; Récupère tous les registres.
                rts
                .bend
 
 ;------------------------------------------------------------------------------
-; Example 16 : Add acc to FAC1.
+; Adition de l'Aacc à FAC1 et sauvegarde le résultat en mémoire.
+;------------------------------------------------------------------------------
+; Code inspiré de l'exemple 16, page 34.
 ;------------------------------------------------------------------------------
 b_accpfac1     .block
-               jsr  pushreg          ; Sauvegarde tous les registres.
-               pha
+               jsr  pushreg        ; Sauvegarde tous les registres.
+               pha                 ; Sauvegarde l'Acc.
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
-               pla
-               jsr  b_f1pacc
-               jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
-
+               pla                 ; Récupère l'Acc.
+               jsr  b_f1pacc       ; Effectue l'adition: FAC1 = FAC1 + ACC.
+               jsr  b_facasc        Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg          ; Récupère tous les registres.
                rts
                .bend
 
 ;------------------------------------------------------------------------------
-; Example 17 : Add FAC2 to FAC1.
+; Adition de FAC2 à FAC1 et sauvegarde le résultat en mémoire.
+;------------------------------------------------------------------------------
+; Code inspiré de l'exemple 17, page 34.
 ;------------------------------------------------------------------------------
 b_fac2pfac1     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
@@ -439,19 +443,20 @@ b_fac2pfac1     .block
                ldy  #$00           ; ... premier nombre.
                jsr  b_memtf2       ; Copie FVAR vers FAC2.
                lda  $61            ; Récupère l'exposant de FAC1.
-               jsr  b_f1pf2
-               jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
-
+               jsr  b_f1pf2        ; Effactue l'adition: FAC1 = FAC1 + FAC2.
+               jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
                rts
                .bend
 
 ;------------------------------------------------------------------------------
-; Example 18 : Add FAC1 to the power of FAC2.
+; Calcul FAC1 à la puissance FAC2 et sauvegarde le résultat en mémoire.
+;------------------------------------------------------------------------------
+; Code inspiré de l'exemple 17, page 34.
 ;------------------------------------------------------------------------------
 b_fac1powfac2
                .block
-               jsr  pushreg          ; Sauvegarde tous les registres.
+               jsr  pushreg        ; Sauvegarde tous les registres.
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                jsr  b_f1t57        ; Copie FAC1 vers $0057.           
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
@@ -459,36 +464,35 @@ b_fac1powfac2
                ldy  #$00           ; ... premier nombre.
                jsr  b_memtf2       ; Copie FVAR vers FAC2.
                lda  $61            ; Récupère l'exposant de FAC1.
-               jsr  b_expon
-               jsr  b_facasc          ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
-
-
-               jsr  popreg          ; Récupère tous les registres.
+               jsr  b_expon        ; Calcul FAC1 = FAC1 ^ FAC2.
+               jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
+               jsr  popreg         ; Récupère tous les registres.
                rts
                .bend
 
 ;------------------------------------------------------------------------------
 ; Printing b_num1, b_num2 ans b_numresult in hex on screen.
 ;------------------------------------------------------------------------------
-b_prhexbnum1     .block
-               jsr  pushall          ; debug
-               #locate     0,5
+; test et debug des fonctions.
+b_prhexbnum1   .block
+               jsr  pushall        ; debug
+               #locate   0,5
                lda  #<b_num1
                sta  zpage1
                lda  #>b_num1
                sta  zpage1+1
                ldy  #$00
                ldx  #18
-more               lda  (zpage1),y
+more           lda  (zpage1),y
                jsr  putahex
                iny
-               cpy     #6
+               cpy  #6
                bne  is12
-               #locate     0,7
-is12               cpy     #12
+               #locate   0,7
+is12           cpy  #12
                bne  doit               
-               #locate     0,9
-doit               dex
+               #locate   0,9
+doit           dex
                bne  more
                jsr  popall
                rts     
