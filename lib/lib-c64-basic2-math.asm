@@ -16,7 +16,7 @@ b_math_template
 ; N O T E : Dans les commentaire les acronymes suivant signifient :
 ;
 ; √ "P.F." = "Point Flottant".
-; √ conc   = conversion	
+; √ conv.   = conversion	
 ;--------------------------------------------------------------------------------
 
 ;--------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ b_getascnum	.block
 			sty	$7b
 			jsr	b_chrget		; Lit un jeton du périphérique d'entrée.
 			jsr	b_ascflt		; Conv. ASCII de l'adresse 0200 vers FAC1.
-			jsr	b_facasc		; Conv. FAC1 en chaîne ASCII à 100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 			jsr	b_getbufflen	; Calcule la longueur de la chaîne dans var. 
 			jsr	popreg		; Récupère tous les registres.
 			rts
@@ -221,10 +221,9 @@ b_mul2fptoasc	.block
 			jsr	b_insub		; Récupère le second nombre.
 			lda	#$57			; Pointe vers le premier 
 			ldy	#$00			; ... nombre.
-			jsr	b_f1xfv		; Effectue la multiplication 
+			jsr	b_f1xfv		; Effectue la multiplication : 
 							; FAC1 = FAC1 X FVAR.
-			jsr	b_facasc		; Conv. le P.F. FAC1 en chaîne de caractères 
-							; ascii à la position $0100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -232,7 +231,7 @@ b_mul2fptoasc	.block
 ;------------------------------------------------------------------------------
 ; Sous-routine commune pour calculer la longueur du tampon d'entrée de commande 
 ; de BASIC.
-; Sortie.....: La variable b_bufflenght contiemnt la longueur de la chaîne.
+; Sortie.....: La variable b_bufflenght contient la longueur de la chaîne.
 ;------------------------------------------------------------------------------
 ; Tirée de l'Exemple 6, page 29.
 ;------------------------------------------------------------------------------
@@ -265,14 +264,15 @@ b_outsub		.block
 			.bend
 
 ;------------------------------------------------------------------------------
-; Example 7  : Multiply FAC1 by 10.
+; Multiply FAC1 by 10 et sauvegarde le résultat en mémoire.
+;------------------------------------------------------------------------------
+; Tirée de l'Exemple 7, page 30.
 ;------------------------------------------------------------------------------
 b_fac1x10		.block
 			jsr	pushreg		; Sauvegarde tous les registres.
 			jsr	b_insub		; Récupère un nombre de l'entrée standard.
-			jsr	b_f1x10		; FAC1 = FAC1 X 10
-			jsr	b_facasc		; Conv. FAC1 floating point to ascii string at 
-							; $0100.
+			jsr	b_f1x10		; Multiplie FAC1 par 10.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -285,15 +285,14 @@ b_fac1d10		.block
 			jsr	b_insub		; Récupère un nombre.
 			jsr	b_sgnf1
 			pha
-			jsr	b_f1d10		; FAC1 = FAC1 / 10
+			jsr	b_f1d10		; Divise FAC1 par 10.
 			pla
 			tax
 			inx
 			bne	notneg
 			lda	#$80			; On force le bit de signe ...
 			sta	$66			; de FAC1 a 1 (neg)
-notneg		jsr	b_facasc		; Convert FAC1 floating point to ascii string at 
-							; $0100.
+notneg		jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -307,8 +306,7 @@ b_fac1square	.block
 			jsr	b_f1tf2		; Copy FAC1 to FAC2.
 			lda	$61			; get exponent of FAC1
 			jsr	b_f1xf2		; FAC1 = FAC1 X FAC2
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -324,8 +322,7 @@ b_fvardfac1	.block
 			lda	#$57
 			ldy	#$00
 			jsr	b_fvdf1		; FAC1 = FVAR / FAC1
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -343,8 +340,7 @@ b_fac2dfac1	.block
 			jsr	b_memtf2		; copy memory to FAC2
 			lda	$61			; get exponent of FAC1
 			jsr	b_f2df1		; FAC1 = FAC2 / FAC1
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -360,8 +356,7 @@ b_fac1pfvar	.block
 			lda	#$57
 			ldy	#$00
 			jsr	b_f1pfv		; FAC1 = FAC1 + FVAR
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -378,8 +373,7 @@ b_fac2sfac1	.block
 			ldy	#$00
 			jsr	b_memtf2		; copy memory to FAC2
 			jsr	b_f2sf1		; FAC1 = FAC2 + FAC1
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -395,8 +389,8 @@ b_fvarsfac1	.block
 			lda	#$57
 			ldy	#$00
 			jsr	b_fvsf1		; FAC1 = FVAR + FAC1
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
+
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -410,8 +404,8 @@ b_accpfac1	.block
 			jsr	b_insub		; Get first number.
 			pla
 			jsr	b_f1pacc
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
+
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -429,8 +423,8 @@ b_fac2pfac1	.block
 			jsr	b_memtf2		; copy memory to FAC2
 			lda	$61			; get exponent of FAC1
 			jsr	b_f1pf2
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
+
 			jsr	popreg		; Récupère tous les registres.
 			rts
 			.bend
@@ -449,8 +443,8 @@ b_fac1powfac2
 			jsr	b_memtf2		; copy memory to FAC2
 			lda	$61			; get exponent of FAC1
 			jsr	b_expon
-			jsr	b_facasc	; Convert FAC1 floating point to ascii string at 
-						; $0100.
+			jsr	b_facasc		; Conv. P.F. FAC1 vers chaîne ascii à $0100.
+
 
 			jsr	popreg		; Récupère tous les registres.
 			rts

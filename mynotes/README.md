@@ -11,13 +11,13 @@ l'adresse $0800 (2048) qui se décrit comme suit...
 		; Entete Basic pour generer la commande "SYS 2061" visible avec 
 		;  la commande "LIST" sous Basic 2.0
 		;----------------------------------------------------------------
-				*= $0800
+			*= $0800
 $0800			.byte $00     	;Basic commence avec un $00 à $0800.
 $0801	bcmd1		.word bcmd2   	;Adresse de la commande basic suivante.
 $0803			.word $000a   	;Numero de la ligne Basic.
-$0805			.byte $9e		;Le token de la commande Basic ($9e=SYS)
-$0806			.text "2061"   ;L'adresse le la première instruction
-							; assembleur de votre programme
+$0805			.byte $9e	;Le token de la commande Basic ($9e=SYS)
+$0806			.text "2061"	;L'adresse le la première instruction
+					; assembleur de votre programme
 $080a			.byte $00		;Un zéro pour indiquer la fin de cette 
 							; commande Basic.
 $080b	bcmd2		.word $0000    ;L'adresse de la commande Basic suivante.
