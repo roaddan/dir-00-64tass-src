@@ -1,9 +1,9 @@
 ;--------------------------------------------------------------------------------
-; Scripteur   : Daniel Lafrance, G9B-0S5, canada.
-; Nom du fichier .: lib-c64-basic2.asm
-; Version    : 20230610-223618
-; Dernière m.à j. : 20250523
-; Inspiration  .: 
+; Scripteur .......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier ..: lib-c64-basic2.asm
+; Version .........: 20230610-223618
+; Dernière m.à j. .: 20250523
+; Inspiration  ....: 
 ;--------------------------------------------------------------------------------
 ; lib-c64-basic2.asm - Fonctions d'affichage par l'utilisation des routines du 
 ; rom BASIC du Commodores 64 et 64c. 
