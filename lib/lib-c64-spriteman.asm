@@ -115,28 +115,28 @@ sprt_showpos    .block
                 jsr     push
 ;---------------la valeur 16 bits de js_sprite
                 lda     sprt_x
-                jsr     a2hex
+                jsr  atohex
                 lda     a2hexstr 
                 sta     sprite_pos+26
                 lda     a2hexstr+1 
                 sta     sprite_pos+27
 
                 lda     sprt_x+1
-                jsr     a2hex
+                jsr  atohex
                 lda     a2hexstr 
                 sta     sprite_pos+24
                 lda     a2hexstr+1 
                 sta     sprite_pos+25
                 
                 lda     sprt_y
-                jsr     a2hex
+                jsr  atohex
                 lda     a2hexstr 
                 sta     sprite_pos+32
                 lda     a2hexstr+1 
                 sta     sprite_pos+33
                 
                 lda     #0
-                jsr     a2hex
+                jsr  atohex
                 lda     a2hexstr 
                 sta     sprite_pos+30
                 lda     a2hexstr+1 

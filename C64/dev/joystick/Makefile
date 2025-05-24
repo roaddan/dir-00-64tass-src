@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # --------- 6 4 t a s s   m a k e   f i l e   w i t h   V i c e ---------------
 # ----------------- a n d   F T P   u t i l i t i e s . -----------------------
-# ---------------------- L I N U X   V E R S I O N ----------------------------
+# ---------------------- M A C O S   V E R S I O N ----------------------------
 # -----------------------------------------------------------------------------
 # Note:  
 # 	A) 64tass can be downloaded from :
@@ -19,7 +19,9 @@
 # -----------------------------------------------------------------------------
 # ----------------------- 6 4 T A S S   S E C T I O N -------------------------
 # -----------------------------------------------------------------------------
-# This can be change to any assembler of your liking.
+# Tis can be change to any assembler of your liking.
+# Complete path to the 64tass assembler program.
+TASS=/Users/Locals/bin/64tass_dir/64tass
 # Final location where the assembled files must be copied. 
 PRGDIR=d-00-64tass-bin
 #
@@ -28,8 +30,9 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=libtest02
+SOURCENAME=j2tester
 DEPSLOCALES=strings_fr.asm  strings_en.asm
+DEPSLOCALES=
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
@@ -59,9 +62,7 @@ LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-VICEBIN=/usr/bin
-# Complete path to the 64tass assembler program.
-TASS=$(VICEBIN)/64tass
+VICEBIN=/Users/Locals/bin
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
@@ -81,7 +82,7 @@ X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
 #-------------------------------------------------------------------------------
 # These options enable you to mount utility disk image in drive 9.
 # Complete path to the c64 Utility disk to be mounted on drive 9.
-TMPSEP06=-9 $(BASEDIR)/d-disk-img/d64/turbo-macro-pro-sep06.d64
+TMPSEP06=-9 $(BASEDIR)/d-tmp-dskimg/turbo-macro-pro-sep06.d64
 # Complete path to the Vic20 Utility disk to be mounted on drive 9.
 V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # Complete local path to be mounted as a disk on drive 8 and/or 9.  
@@ -91,19 +92,18 @@ DISK9DIR=
 DBC=/Users/Locals/C64/00-usbkey32go/dbc
 JBMON64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/40-best-subrouines/00-supermon/jbmon/jbmon64
 CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
-J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
+#J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
 #-------------------------------------------------------------------------------
 # Here you choose the vice emulator of your choosing.
-VICE=$(X64)
+VICE=$(X64SCGTK)
 OUTDIR=$(OUTDIRC64)
 #OUTDIR=$(OUTDIRV20)
 
 # The Vice autostart parameters. 
-#AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
-AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81:$(SOURCENAME)
+AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # -----------------------------------------------------------------------------
 # --------------------- O P T I O N N A L   S E C T I O N ---------------------
 # -----------------------------------------------------------------------------
@@ -124,7 +124,7 @@ AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81:$(SOURCENAME)
 # FTP SERVER CONFIG
 FTPSVRIP=192.168.2.200 # Check cartridge root menu for your address.
 # FTP CLI client full path.
-FTPCMDPATH=/usr/bin/lftp
+FTPCMDPATH=/usr/local/bin/lftp
 # List of commands by filetype intended to the FTP server.
 # Note:  The following path must exist on the Ultimate II+ cartridge usb ...
 #        disks.
@@ -149,13 +149,13 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # ** Using comment, you can mask or enable anny action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-#		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
-#		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-#		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
-#		$(FTPASMCMD)	# To transfer the source ASM file.
-#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
+		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
+		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
+		$(FTPASMCMD)	# To transfer the source ASM file.
+		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
-		$(VICE) $(AUTOSTART) $(TMPSEP06) & # to load vice with arguments.
+#		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
 
 # -----------------------------------------------------------------------------
 # When called with "make ftp". 
@@ -172,7 +172,7 @@ ftp:
 # -----------------------------------------------------------------------------
 # To clean and start project fresh. (seldome used). 
 clean:	
-		rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 $(SOURCENAME).d81
+		rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 
 		rm $(BASEDIR)/$(PRGDIR)/prg/$(SOURCENAME).prg
 		rm $(BASEDIR)/$(PRGDIR)/txt/$(SOURCENAME).txt
 		rm $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64
@@ -188,16 +188,17 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
-		-write $(CHAREDIT) charedit \
-		-write $(J2TESTER) j2tester
-		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
-		cp -f  $(SOURCENAME).d64 $(OUTDIR)
+		-write $(CHAREDIT) charedit
+		# -write $(J2TESTER) j2tester
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
-		-write $(CHAREDIT) charedit \
-		-write $(J2TESTER) j2tester
+		-write $(CHAREDIT) charedit
+		# -write $(J2TESTER) j2tester
+
+		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
+		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 

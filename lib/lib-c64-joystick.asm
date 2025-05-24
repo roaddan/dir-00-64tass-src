@@ -359,27 +359,27 @@ js_1showvals    .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                ; la valeur 8 bits de js_1 X
                lda  js_1x          
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr+1 
                sta  js_1val8+19
                lda  a2hexstr+2 
                sta  js_1val8+20
                ; la valeur 16 bits de js_1 X
                lda  js_1pixx
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr+1 
                sta  js_1val16+14
                lda  a2hexstr+2 
                sta  js_1val16+15
                lda  js_1pixx+1
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr+1 
                sta  js_1val16+12
                lda  a2hexstr+2 
                sta  js_1val16+13
                ; la valeyr 8 bits de js_1 Y
                lda  js_1y          
-               jsr  a2hex
+               jsr  atohex
                ;lda  a2hexstr 
                ;sta  js_1val+21
                lda  a2hexstr+1 
@@ -388,20 +388,20 @@ js_1showvals    .block
                sta  js_1val8+24
                ; la valeur 16 bits de js_1 Y
                lda  js_1pixy
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr+1 
                sta  js_1val16+20
                lda  a2hexstr+2 
                sta  js_1val16+21
                lda  #0
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr+1 
                sta  js_1val16+18
                lda  a2hexstr+2 
                sta  js_1val16+19
                ; le bouton fire de js_1          
                lda  js_1fire          
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr+2 
                sta  js_1val8+33
                ldx  #<js_1val8 
@@ -420,7 +420,7 @@ js_2showvals    .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                ; la valeur 8 bits de js_2 X
                lda  js_2x          
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr 
                sta  js_2val8+19
                lda  a2hexstr+1 
@@ -428,21 +428,21 @@ js_2showvals    .block
                ; la valeur 16 bits de js_2 X
                ;lda  js_2pixx
                lda  js_2clickx
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr 
                sta  js_2val16+14
                lda  a2hexstr+1 
                sta  js_2val16+15
                ;lda  js_2pixx+1
                lda  js_2clickx+1
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr 
                sta  js_2val16+12
                lda  a2hexstr+1 
                sta  js_2val16+13
                ; la valeur 8 bits de js_2 Y
                lda  js_2y          
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr 
                sta  js_2val8+23
                lda  a2hexstr+1 
@@ -450,20 +450,20 @@ js_2showvals    .block
                ; la valeur 16 bits de js_2 Y
                ;lda  js_2pixy
                lda  js_2clicky
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr 
                sta  js_2val16+20
                lda  a2hexstr+1 
                sta  js_2val16+21
                lda  #0
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr 
                sta  js_2val16+18
                lda  a2hexstr+1 
                sta  js_2val16+19
                ; le bouton fire de js_2          
                lda  js_2fire          
-               jsr  a2hex
+               jsr  atohex
                lda  a2hexstr+1 
                sta  js_2val8+33
 ; on affiche les données
