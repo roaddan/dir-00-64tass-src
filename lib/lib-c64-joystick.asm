@@ -1,43 +1,52 @@
 ;--------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
 ; Nom du fichier .: lib-c64-joystick.asm
+; Version ........: Quelque part en 2023
 ; Cernière m.à j. : 20250521
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
 ; Lecture de la des manettes de commande numériques.
-; ----------------------------------------------------------------------------
-js_2port       =    $dc00
-js_1port       =    $dc01
-js_2dir        =    $dc02
-js_1dir        =    $dc03
+;--------------------------------------------------------------------------------
+
+;--------------------------------------------------------------------------------
+; Déclaration des constantes.
+;--------------------------------------------------------------------------------
+js_2port       =    $dc00          ; CIA #1 Port data A 
+js_1port       =    $dc01          ; CIA #1 Port data B
+js_2dir        =    $dc02          ; CIA #1 Port de direction A
+js_1dir        =    $dc03          ; CIA #1 port de direction B
 js_xoffset     =    2
 js_yoffset     =    2
 js_location    =    0
 
-; ----------------------------------------------------------------------------
+;--------------------------------------------------------------------------------
+; Initialisation des registres PIA pour la lecture des ports manette.
+;--------------------------------------------------------------------------------
 js_init        .block
-; ----------------------------------------------------------------------------
-jsr  push
-               lda  js_1dir
-               and  #$e0
+               php
+               pha
+               lda  js_1dir        ; Place les bits de direction du port B
+               and  #$e0           ; 4-0 en entrées (0).
                sta  js_1dir
-               lda  js_2dir
-               and  #$e0
+               lda  js_2dir        ; Place les bits de direction du port A
+               and  #$e0           ; 4-0 en entrées (0).
                sta  js_2dir
-               jsr  pop
+               plp
+               pla
                rts
                .bend
                 
-; ----------------------------------------------------------------------------
+;--------------------------------------------------------------------------------
+; Effectue un scan de tous les ports pour mettre à jour les variables d'action.
+;--------------------------------------------------------------------------------
 js_scan        .block
-; ----------------------------------------------------------------------------
-jsr  js_1scan
+               jsr  js_1scan
                jsr  js_2scan
                rts
                .bend
-; ----------------------------------------------------------------------------
+;--------------------------------------------------------------------------------
 ; Port 1 js_1= %000FRLDU
-; ----------------------------------------------------------------------------
+;--------------------------------------------------------------------------------
 js_1scan       .block
                jsr  push
                lda  js_1port 
@@ -50,8 +59,6 @@ js_1scan       .block
                bne  p1scan
                jmp  port1_out
 p1scan         eor  #$1f
-               ;ldx     #$01
-               ;jsr     showregs
                clc
                ;------------------------
                ; BOUTON EN-HAUT
@@ -60,7 +67,7 @@ p1scan         eor  #$1f
 js_1b0         lsr                     
                ;Est-ce vers le haut (U)
                bcc  js_1b1          
-               ;On stack la valeur
+               ;On stock la valeur
                pha
                inc  js_1flag
                ;Oui!
@@ -192,7 +199,7 @@ port2           lda     js_2port
                 eor     #$1f
                 sta js_2status
                 pla 
-                cmp	#$1f
+                cmp #$1f
                 bne     p2scan
                 ;jsr     showregs
                 jmp     port2_out
