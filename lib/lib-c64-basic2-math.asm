@@ -1,10 +1,10 @@
 ;--------------------------------------------------------------------------------
-; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
-; Nom du fichier .: lib-c64-basic2-math.asm
-; Cernière m.à j. : 20250521
-; Inspiration ....: Vic-20 and Commodore 64 Tool Kit: Basic by Dan Heeb.
-; ISBN ...........: 0-942386-32-9 
-; Section du livre: Direct Use of Floarting Point (Pages 19 à 40)
+; Scripteur ........: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier ...: lib-c64-basic2-math.asm
+; Cernière m.à j. ..: 20250521
+; Inspiration ......: Vic-20 and Commodore 64 Tool Kit: Basic by Dan Heeb.
+; ISBN .............: 0-942386-32-9 
+; Section du livre .: Direct Use of Floarting Point (Pages 19 à 40)
 ;--------------------------------------------------------------------------------
 b_math_template
                .block
@@ -32,8 +32,8 @@ b_testnum      .null     "128"
 ;------------------------------------------------------------------------------
 ; Convertion de Accum et X-reg ($AAXX) en chaine décimal ascii.
 ; Entrée: A=MSB, X=LSB
-; Pour charger les registres a and x utilisez les macros ... 
-;            loadaxmem pour un contenu mémoire ou ... 
+; Pour charger les registres a and x utilisez les macros   
+;            loadaxmem pour un contenu mémoire ou   
 ;            loadaximm pour le mode immédiat.    
 ;------------------------------------------------------------------------------
 ; Code inspiré de l'exemple 1 de la page 25.
@@ -65,8 +65,8 @@ loadaximm      .macro aximm
 ; Récupère un nombre à partir du périphérique d'entrée et le sauvegarde en 
 ; ASCII dans le tampon d'éditeur de ligne de BASIC et sauvegarde la longueur de
 ; la chaîne dans la variable b_bufflenght.
-; Entrée ....: STDIN
-; Sortie ....: Tampon de ligne Basic et la variable b_bufflenght.
+; Entrée  .: STDIN
+; Sortie  .: Tampon de ligne Basic et la variable b_bufflenght.
 ;------------------------------------------------------------------------------
 ; Code inspiré de l'exemple 2, page 26.
 ;------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ b_getascnum     .block
                jsr  b_intcgt       ; Initialise charget
                jsr  b_clearbuff    ; Efface le tampon d'entrée de BASIC.
                jsr  b_prompt       ; Affiche ? et peuple de tampon d'entrée de 
-                                   ; ... BASIC.
+                                   ;   BASIC.
                stx  $7a            ; X and Y pointent vers $01ff au retour.
                sty  $7b
                jsr  b_chrget       ; Lit un jeton du périphérique d'entrée.
@@ -94,8 +94,8 @@ b_getascnum     .block
 b_clearbuff     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                lda  #$00           ; Place des $00 à toutes adresses de 
-               ldy  #$59           ; ... $1a6 à $200 pour effacer le
-clear          sta  $0200,y        ; ... tampon d'entrée de BASIC.
+               ldy  #$59           ;   $1a6 à $200 pour effacer le
+clear          sta  $0200,y        ;   tampon d'entrée de BASIC.
                dey                 ; 
                bne  clear          ; 60 octets.
                jsr  popreg         ; Récupère tous les registres.
@@ -105,14 +105,14 @@ clear          sta  $0200,y        ; ... tampon d'entrée de BASIC.
 ;------------------------------------------------------------------------------
 ; Affiche le nombre P.F. sauvegardé en ascii dans le tampon d'édition de ligne
 ; BASIC.
-; Entrée ...: Récupère la longueur de la chaîne de b_bufflenght.
+; Entrée  : Récupère la longueur de la chaîne de b_bufflenght.
 ;------------------------------------------------------------------------------
 ; Code inspiré de l'exemple 2, page 26.
 ;------------------------------------------------------------------------------
 b_printbuff     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                lda  #$00           ; Positionne le vecteur $0022 et 
-               sta  $22            ; ... $0023 pour quLil pointe vers
+               sta  $22            ;   $0023 pour quLil pointe vers
                lda  #$01           ; l'adresse $0100.
                sta  $23
                lda  b_bufflenght   ; Charge la longueur de la chaîne.
@@ -123,7 +123,7 @@ b_printbuff     .block
 
 ;------------------------------------------------------------------------------
 ; Recoit un nombre de l'éditeur et le convertie en point flottant dans FAC1.
-; Sortie ....: FAC1 contient le nombre en format PF..
+; Sortie  .: FAC1 contient le nombre en format PF 
 ;------------------------------------------------------------------------------
 ; Code inspiré de l'exemple 3, page 27.
 ;------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ b_insub          .block
                jsr  b_intcgt       ; Initialise CHRGET.
                jsr  b_clearbuff    ; Efface le tampon d'entrée de BASIC.
                jsr  b_prompt       ; Affiche ? et peuple de tampon d'entrée de 
-                                   ; ... BASIC. 
+                                   ;   BASIC. 
                stx  $7a
                sty  $7b
                jsr  b_chrget       ; Lit un jeton du périphérique d'entrée.
@@ -143,7 +143,7 @@ b_insub          .block
 
 ;------------------------------------------------------------------------------
 ; Lecture d'un point flottant à partir de la mémoire.
-; Sortie.....: La Variable b_bufflenght contient la longueur de la chaîne.
+; Sortie  : La Variable b_bufflenght contient la longueur de la chaîne.
 ;------------------------------------------------------------------------------
 ; Code inspiré de l'exemple 4, page 27.
 ;------------------------------------------------------------------------------
@@ -151,34 +151,34 @@ b_readmemfloat     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                jsr  b_intcgt       ; Initialisation de CHRGET.
                lda  $7a            ; Sauvegarde des valeurs actuelles des cases
-               sta  b_v7a          ; ... mémoires $007a et $007b. 
+               sta  b_v7a          ;   mémoires $007a et $007b. 
                lda  $7b
                sta  b_v7b
                ldx  #<(b_testnum-1); Initialise le pointeur FVAR à l'adresse de
-               stx  $7a            ; ...
-               ldy  #>(b_testnum-1); ...
-               sty  $7b            ; ... la variable -1.
+               stx  $7a            ; - 
+               ldy  #>(b_testnum-1); - 
+               sty  $7b            ; - la variable -1.
                jsr  b_chrget       ; Lit un jeton du périphérique d'entrée.
                jsr  pushreg        ; Sauvegarde tous les registres.
-               ldx  #<(b_num1)     ; Copie de FAC1 dans la variable ...
-               ldy  #>(b_num1)     ; ... 
-               jsr  b_f1tmem       ; b_num1
+               ldx  #<(b_num1)     ; Copie de FAC1 dans la variable b_num1. 
+               ldy  #>(b_num1)     ;   
+               jsr  b_f1tmem       ; 
                jsr  b_f1x10        ; Multiplie FAC1 par 10.
-               ldx  #<(b_num2)     ; Copie de FAC1 dans la variable ...
-               ldy  #>(b_num2)     ; ... 
-               jsr  b_f1tmem       ; b_num2
-               ldx  #<(b_num0)     ; Copie de FAC1 dans la variable ...
-               ldy  #>(b_num0)     ; ... 
-               jsr  b_f1tmem       ; b_num0
+               ldx  #<(b_num2)     ; Copie de FAC1 dans la variable b_num2.
+               ldy  #>(b_num2)     ;   
+               jsr  b_f1tmem       ; 
+               ldx  #<(b_num0)     ; Copie de FAC1 dans la variable b_num0.
+               ldy  #>(b_num0)     ; 
+               jsr  b_f1tmem       ; 
                jsr  b_prhexbnum1   ; Affiche b_num1 en hexadécimal.
                jsr  popreg         ; Récupère tous les registres.
                jsr  b_ascflt       ; Conv. chaîne ASCII vers P.F. dans FAC1.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  b_getbufflen   ; Calcule la longueur de la chaîne dans var. 
                lda  b_v7a          ; Récupération des valeurs initiales des 
-               sta  $7a            ; ...
-               lda  b_v7b          ; ...
-               sta  $7b            ; ... cases mémoires $007a et $007b.
+               sta  $7a            ;   cases mémoires $007a et $007b.
+               lda  b_v7b          ;  
+               sta  $7b            ;
                jsr  b_clearbuff    ; Efface le tampon d'entrée de BASIC.
                jsr  popreg         ; Récupère tous les registres.
                rts
@@ -198,11 +198,11 @@ b_mul2fptomem     .block
                jsr  b_f1t57        ; Copie FAC1 dans $0057.
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
-               ldy  #$00           ; ... premier nombre.
+               ldy  #$00           ;   premier nombre.
                jsr  b_f1xfv        ; Effectue la multiplication 
                                    ; FAC1 = FAC1 X FVAR.
                ldx  #<b_numresult  ; Initialise le pointeur ou le résultat doit
-               ldy  #>b_numresult  ; ... être copié.
+               ldy  #>b_numresult  ;   être copié.
                jsr  b_f1tmem       ; Copie FAC1 en mémoire.
                jsr  popreg         ; Récupère tous les registres.
                rts
@@ -210,7 +210,7 @@ b_mul2fptomem     .block
 
 ;------------------------------------------------------------------------------
 ; Multiplication de deux nombres reçus du périphérique d'entrée.
-; Sortie.....: La variable b_bufflenght contiemnt la longueur de la chaîne.
+; Sortie  : La variable b_bufflenght contiemnt la longueur de la chaîne.
 ;------------------------------------------------------------------------------
 ; Code inspiré de l'exemple 6, page 29.
 ;------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ b_mul2fptoasc     .block
                jsr  b_f1t57        ; Copie FAC1 dans $0057.
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
-               ldy  #$00           ; ... premier nombre.
+               ldy  #$00           ;   premier nombre.
                jsr  b_f1xfv        ; Effectue la multiplication : 
                                    ; FAC1 = FAC1 X FVAR.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
@@ -231,15 +231,15 @@ b_mul2fptoasc     .block
 ;------------------------------------------------------------------------------
 ; Sous-routine commune pour calculer la longueur du tampon d'entrée de commande 
 ; de BASIC.
-; Sortie.....: La variable b_bufflenght contient la longueur de la chaîne.
+; Sortie  : La variable b_bufflenght contient la longueur de la chaîne.
 ;------------------------------------------------------------------------------
 ; Code inspiré de l'exemple 6, page 29.
 ;------------------------------------------------------------------------------
 b_getbufflen     .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                ldy  #$ff           ; Détermine la longueur de la chaine en
-nxtchar        iny                 ; ... cherchant le caractère $00
-               lda  $0100,y        ; ... ($00 = EOS 'End Of String').
+nxtchar        iny                 ;   cherchant le caractère $00
+               lda  $0100,y        ;   ($00 = EOS 'End Of String').
                bne  nxtchar        ; Pas celui là. on passe au prochain.
                iny                 ; On ajuste Y pour la longueur de la chaîne.
                sty  b_bufflenght   ; Sauvegarde dans le variable.
@@ -257,7 +257,7 @@ b_outsub          .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                jsr  b_getbufflen   ; Calcule la longueur de la chaîne dans var. 
                jsr  b_printbuff    ; Affiche le contenu du tampon sur le 
-                                   ; ... périphérique de sortie.
+                                   ;   périphérique de sortie.
                jsr  b_clearbuff    ; Efface le tampon d'entrée de BASIC.
                jsr  popreg         ; Récupère tous les registres.
                rts
@@ -279,7 +279,7 @@ b_fac1x10          .block
 
 ;------------------------------------------------------------------------------
 ; L'exemple 8 de la page 31 n'existe que pour démontrer le 'bug' de signe du 
-; ... ROM BASIC 
+;   ROM BASIC 
 ;------------------------------------------------------------------------------
 
 ;------------------------------------------------------------------------------
@@ -295,10 +295,10 @@ b_fac1d10          .block
                jsr  b_f1d10        ; Divise FAC1 par 10.
                pla                 ; Récupère le signe.
                tax                 ; Place le signe dans X.
-               inx                 ; Incrémente et si n'est pas ...
-               bne  notneg         ; ... egale à 0 i.e. non négatif.
-               lda  #$80           ; On force le bit de signe ...
-               sta  $66            ; ... de FAC1 a 1 (neg).
+               inx                 ; Incrémente et si n'est pas  
+               bne  notneg         ;   egale à 0 i.e. non négatif.
+               lda  #$80           ; On force le bit de signe  
+               sta  $66            ;   de FAC1 a 1 (neg).
 notneg          jsr  b_facasc      ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
                rts
@@ -331,7 +331,7 @@ b_fvardfac1     .block
                jsr  b_f1t57        ; Copie FAC1 vers $0057.
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
-               ldy  #$00           ; ... premier nombre.
+               ldy  #$00           ;   premier nombre.
                jsr  b_fvdf1        ; Divise FVAR et FAC1. (FAC1=FVAR/FAC1).
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
@@ -349,7 +349,7 @@ b_fac2dfac1     .block
                jsr  b_f1t57        ; Copie FAC1 vers $0057.       
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
-               ldy  #$00           ; ... premier nombre.
+               ldy  #$00           ;   premier nombre.
                jsr  b_memtf2       ; Copie FVAR vers FAC2.
                lda  $61            ; Récupère l'exposant de FAC1.
                jsr  b_f2df1        ; Effectue la division: FAC1 = FAC2 / FAC1.
@@ -369,7 +369,7 @@ b_fac1pfvar     .block
                jsr  b_f1t57        ; Copie FAC1 vers $0057.               
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
-               ldy  #$00           ; ... premier nombre.
+               ldy  #$00           ;   premier nombre.
                jsr  b_f1pfv        ; Effectue l'adition: FAC1 = FAC1 + FVAR.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
@@ -387,7 +387,7 @@ b_fac2sfac1     .block
                jsr  b_f1t57        ; Copie FAC1 vers $0057.              
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
-               ldy  #$00           ; ... premier nombre.
+               ldy  #$00           ;   premier nombre.
                jsr  b_memtf2       ; Copie FVAR vers FAC2.
                jsr  b_f2sf1        ; Effec. la soustraction: FAC1 = FAC2 - FAC1.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
@@ -406,7 +406,7 @@ b_fvarsfac1     .block
                jsr  b_f1t57        ; Copie FAC1 vers $0057.              
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
-               ldy  #$00           ; ... premier nombre.
+               ldy  #$00           ;   premier nombre.
                jsr  b_fvsf1        ; Effec. la soustraction: FAC1 = FVAR - FAC1.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
@@ -440,7 +440,7 @@ b_fac2pfac1     .block
                jsr  b_f1t57        ; Copie FAC1 vers $0057.              
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
-               ldy  #$00           ; ... premier nombre.
+               ldy  #$00           ;   premier nombre.
                jsr  b_memtf2       ; Copie FVAR vers FAC2.
                lda  $61            ; Récupère l'exposant de FAC1.
                jsr  b_f1pf2        ; Effactue l'adition: FAC1 = FAC1 + FAC2.
@@ -461,7 +461,7 @@ b_fac1powfac2
                jsr  b_f1t57        ; Copie FAC1 vers $0057.           
                jsr  b_insub        ; Capture un nombre de L'entrée STD.
                lda  #$57           ; Charge l'adresse mémoire du 
-               ldy  #$00           ; ... premier nombre.
+               ldy  #$00           ;   premier nombre.
                jsr  b_memtf2       ; Copie FVAR vers FAC2.
                lda  $61            ; Récupère l'exposant de FAC1.
                jsr  b_expon        ; Calcul FAC1 = FAC1 ^ FAC2.
