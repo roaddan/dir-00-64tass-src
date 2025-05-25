@@ -40,10 +40,10 @@ norep2         pla
 
 bmtester       .block
                jsr  pushreg
-               lda  #$02
+               lda  #1
                jsr  bmaddacc
-               ldx  bmnum0
-               ldy  bmnum0+1
+               ldy  bmnum0
+               ldx  bmnum0+1
                lda  bmovfl
                jsr  showregs
                jsr  popreg  

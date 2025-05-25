@@ -1,14 +1,8 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250405-231555 "
+                Version = "20250525-151829 "
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
-               .include  "lib-c64-binmath.asm"
-
                .include    "macros-64tass.asm"
-               .include     "strings_fr.asm"
-;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
                .enc    none
 
 ;-------------------------------------------------------------------------------
@@ -45,8 +39,7 @@ aide           .block
                #print aidetext
                #print line
                rts  
-               .bend                              
-;*=$4001
+               .bend  
 
 ;-------------------------------------------------------------------------------
 ;
@@ -59,10 +52,10 @@ libtest00      .block
 nexta          pha
                #printcxy    dataloc
                #color ccyan
-               #setloop $0000+(5)
+               #setloop $0000+(65535)
                jsr  cls
 roll           jsr  bmtester
-               jsr  anykey
+               ;jsr  anykey
                jsr  loop
                bne  roll
 out            pla
@@ -72,8 +65,9 @@ car            .byte     166
                .bend
 
 ;-------------------------------------------------------------------------------
-;
+; Liste des chaines de charactères
 ;-------------------------------------------------------------------------------
+               .include    "strings_fr.asm"
 
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
@@ -85,6 +79,9 @@ car            .byte     166
                .include  "map-c64-basic2.asm"
                .include  "lib-c64-basic2.asm"
                .include  "lib-cbm-pushpop.asm"
+
+               .include  "lib-c64-binmath.asm"
+
                .include  "lib-cbm-mem.asm"
                .include  "lib-cbm-hex.asm"
                .include  "lib-cbm-keyb.asm"
