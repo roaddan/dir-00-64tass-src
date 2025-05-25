@@ -2,6 +2,8 @@
                 Version = "20250405-231555 "
 ;-------------------------------------------------------------------------------                
                .include    "header-c64.asm"
+               .include  "lib-c64-binmath.asm"
+
                .include    "macros-64tass.asm"
                .include     "strings_fr.asm"
 ;-------------------------------------------------------------------------------
@@ -17,10 +19,10 @@ main           .block
                #uppercase
                #toupper
                #disable
-               ;jsr aide
+               jsr aide
                jsr anykey
                #mycolor
-               jsr libtest01
+               jsr libtest00
                #enable
                #uppercase
                jsr  cls
@@ -49,7 +51,7 @@ aide           .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-libtest01      .block 
+libtest00      .block 
                php
                pha
                jsr  cls
@@ -57,18 +59,12 @@ libtest01      .block
 nexta          pha
                #printcxy    dataloc
                #color ccyan
-               setloop $0000+(40*23)
+               #setloop $0000+(5)
                jsr  cls
-roll           lda  car
-               ;jsr  anykey
-               jsr  putch
-               ;inc  car
-               jsr  loop
-               php
-               plp
-               bne  roll
-               jsr  showregs
+roll           jsr  bmtester
                jsr  anykey
+               jsr  loop
+               bne  roll
 out            pla
                plp
                rts
@@ -82,9 +78,10 @@ car            .byte     166
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
-;*=$c000        
+*=$c000        
                .include  "map-c64-kernal.asm"
                .include  "map-c64-vicii.asm" 
+               .include  "lib-c64-vicii.asm" 
                .include  "map-c64-basic2.asm"
                .include  "lib-c64-basic2.asm"
                .include  "lib-cbm-pushpop.asm"

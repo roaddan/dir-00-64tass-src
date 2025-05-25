@@ -27,8 +27,9 @@ bmaddacc       .block
                pha
                clc
                adc  bmnum0
+               sta  bmnum0
                bcc  norep
-               inc  bmnum+1  
+               inc  bmnum0+1  
 norep          bcc  norep2
                lda  #$01
                sta  bmovfl              
