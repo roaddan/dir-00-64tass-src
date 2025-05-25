@@ -3,7 +3,7 @@
 ; Nom du fichier .: lib-c64-math.asm
 ; Création .......: Quelque part en 2022.
 ; Cernière m.à j. : 20250521
-; Inspiration ....:
+; Inspiration ....: 
 ; Note ...........: En création.
 ;-------------------------------------------------------------------------------
 
