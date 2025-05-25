@@ -54,6 +54,7 @@ nexta          pha
                #color ccyan
                #setloop $0000+(65535)
                jsr  cls
+               jsr  showregs 
 roll           jsr  bmtester
                ;jsr  anykey
                jsr  loop
