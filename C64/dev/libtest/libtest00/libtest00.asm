@@ -16,6 +16,7 @@ main           .block
                jsr aide
                jsr anykey
                #mycolor
+               lda #$05 
                jsr libtest00
                #enable
                #uppercase
@@ -56,6 +57,8 @@ nexta          pha
                jsr  cls
                jsr  showregs 
 roll           jsr  bmtester
+               jsr  inczp1
+               jsr  deczp2
                ;jsr  anykey
                jsr  loop
                bne  roll
