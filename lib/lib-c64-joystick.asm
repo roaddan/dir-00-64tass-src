@@ -50,13 +50,13 @@ js_scan        .block
 ;--------------------------------------------------------------------------------
 js_1scan       .block
                jsr  pushreg        ; Sauvegarde tous les registres.
-               lda  js_1port 
-               and  #$1f
-               pha
-               eor  #$1f
-               sta  js_1status
-               pla
-               cmp  #$00
+               lda  js_1port       ; Lecture du port d'entrées
+               and  #$1f           ; Masque les bits 7, 6 et 5.
+               pha                 ; Copie sur la pile.
+               eor  #$1f           ; Inverse tous les bits.
+               sta  js_1status     ; Sauvegarde le status.
+               pla                 ; Récupère une copie originale.
+               cmp  #$00           ; Si les bits sont tous 0
                bne  p1scan
                jmp  port1_out
 p1scan         eor  #$1f
@@ -150,42 +150,38 @@ out            jsr  popreg         ; Récupère tous les registres.
 ;-------------------------------------------------------------------------------
 js_2scan         .block
                jsr  pushreg        ; Sauvegarde tous les registres.
-port2          lda  js_2port 
-               and  #$1f
-               pha 
-               eor  #$1f
-               sta  js_2status
-               pla 
-               cmp #$1f
-               bne  p2scan
-               ;jsr  showregs
-               jmp  port2_out
-p2scan         eor  #$1f
-               ;ldx  #$02
-               ;jsr  showregs          
-               clc
+port2          lda  js_2port       ; Lecture du port d'entrées.
+               and  #$1f           ; Masque les bits 7, 6 et 5.
+               pha                 ; Crée une copie sur la pile.
+               eor  #$1f           ; Inverse les bits 4 à 0.
+               sta  js_2status     ; Sauvegarde le status.
+               pla                 ; Récupère le status original.
+               cmp  #$1f           ; Si des interrupteurs sont appuyé ... 
+               bne  p2scan         ; ... on cherche lesquels.
+               jmp  port2_out      ; Si non on sort.
+p2scan         inc  js_2flag       ; On incrémente le témoin de changement.
+               eor  #$1f           ; On inverse les bits 
+               clc                 ; On met le carry à 0.
 ; ***** BOUTON EN-HAUT
-js_2b0         lsr                 ; On decale js_2 bit 0 dans C
-               bcc  js_2b1         ; Est-ce vers le haut (U)
-               pha                 ; On stack la valeur
-               inc  js_2flag
+js_2b0         lsr                 ; On decale js_2 bit 0 dans Carry.
+               bcc  js_2b1         ; Si pas BTNUP, on vérifi le prochain.
+               pha                 ; C'est BTNUP, on stack la valeur décalée.
                lda  js_2pixy       ; Oui!
                sec                 ; On place la carry a 1
-               sbc  #js_yoffset    ; On reduit
-               cmp  #$f0
-               bcc  sto2ym
-               lda  #$00
-sto2ym         sta  js_2pixy       ; le y 
+               sbc  #js_yoffset    ; Déplace le crs vrs le haut de offset.
+               cmp  #$f0           ; Si posy plus basse que Viewport NTSC ...
+               bcc  sto2ym         ; Si le crs dépasse le bas du viewport ...
+               lda  #$00           ; On le replace en haut.
+sto2ym         sta  js_2pixy       ; Sauvegarde La pos. pixel de Y. 
                pla                 ; On recupere la valeur
 ; ***** BOUTON EN-BAS
 js_2b1         lsr                 ; On decale js_2 bit 0 dans C
-               bcc  js_2b2         ; Est-ce vers le bas (D)
-               pha                 ; On stack la valeur
-               inc  js_2flag
+               bcc  js_2b2         ; Si pas BTNDO, on vérifi le prochain.
+               pha                 ; C'est BTNDO, on stack la valeur décalée.
                lda  js_2pixy       ; Oui!
                clc                 ; On place la carry a 0
-               adc  #js_yoffset    ; On augmente
-               cmp  #199
+               adc  #js_yoffset    ; Déplace le crs vrs le bas de offset.
+               cmp  #199           ; ......ici......
                bcc  sto2yp
                lda  #199
 sto2yp         sta  js_2pixy       ; le y 
@@ -194,7 +190,6 @@ sto2yp         sta  js_2pixy       ; le y
 js_2b2         lsr                 ; On decale js_2 bit 0 dans C
                bcc  js_2b3         ; Est-ce vers la gauche (L)
                pha                    ;On stack la valeur
-               inc  js_2flag
                lda  js_2pixx       ; Oui!
                ora  js_2pixx+1
                beq  js_2b2out
@@ -211,7 +206,6 @@ js_2b2out      pla                 ; On recupere la valeur
 js_2b3         lsr                 ; On decale js_2 bit 0 dans C
                bcc  js_2b4         ; Est-ce vers la droite (R)
                pha                 ; On stack la valeur
-               inc  js_2flag
                lda  js_2pixx+1
                beq  incj2x
                lda  js_2pixx
@@ -228,7 +222,6 @@ js_2b3out      pla                 ; On recupere la valeur
 ; ***** BOUTON FIRE
 js_2b4         lsr                 ;Estce le bbouton fire (F)
                bcc  port2_out      ;Oui!
-               inc  js_2flag
                inc  js_2fire       ; On augmente le nombre de tir
                lda  #%00000001
                sta  js_2events
@@ -246,8 +239,7 @@ js_2wait       ldx  #$00
 js_2rel        iny
                bne  sr1
                inx
-sr1            ;jsr  showregs
-               lda  js_2port 
+sr1            lda  js_2port 
                eor  #$ff
                and  #$10
                ;cmp  #$1f          ; On attend le telachement 
