@@ -16,18 +16,19 @@ initnmireu
          .block
 jumpback = $0140
 nmivect  = $0318
-         php
-         pha
-         sei
-         lda #<jumpback
-         sta nmivect
-         lda #>jumpback
-         sta nmivect+1
-         pla
-         plp
-         rts
-         .bend
+               php             
+               pha
+               sei
+               lda  #<jumpback
+               sta  nmivect
+               lda  #>jumpback
+               sta  nmivect+1
+               pla
+               plp
+               rts
+               .bend
 initnmistd
+
          .block
 jumpback = $8000
 nmivect  = $0318

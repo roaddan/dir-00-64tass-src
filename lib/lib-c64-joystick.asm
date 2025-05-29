@@ -1,16 +1,16 @@
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
 ; Nom du fichier .: lib-c64-joystick.asm
 ; Version ........: Quelque part en 2023
 ; Cernière m.à j. : 20250521
 ; Inspiration ....: 
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Lecture de la des manettes de commande numériques.
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Déclaration des constantes.
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 js_2port       =    $dc00          ; CIA #1 Port data A 
 js_1port       =    $dc01          ; CIA #1 Port data B
 js_2dir        =    $dc02          ; CIA #1 Port de direction A
@@ -19,9 +19,9 @@ js_xoffset     =    2
 js_yoffset     =    2
 js_location    =    0
 
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Initialisation des registres PIA pour la lecture des ports manette.
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 js_init        .block
                php                 ; Sauvegarde le registre de  
                pha                 ;   status et le registre a.
@@ -36,18 +36,18 @@ js_init        .block
                rts
                .bend
                
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Effectue un scan de tous les ports pour mettre à jour les variables d'action.
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 js_scan        .block
                jsr  js_1scan       ; Scan la manette du port B.
                jsr  js_2scan       ; Scan la manette du port A.
                rts
                .bend
 
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Port 1 js_1= %000FRLDU
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 js_1scan       .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                lda  js_1port       ; Lecture du port d'entrées
@@ -57,7 +57,7 @@ js_1scan       .block
                sta  js_1status     ; Sauvegarde le status.
                pla                 ; Récupère une copie originale.
                cmp  #$00           ; Si les bits sont tous 0
-               bne  p1scan
+               bne  p1scan         ; On scan le port
                jmp  port1_out
 p1scan         eor  #$1f
                clc
@@ -67,7 +67,7 @@ js_1b0         lsr                 ; On decale js_2 bit 0 dans C
                pha                 ; On stock la valeur
                inc  js_1flag
                lda  js_1pixy       ; Oui!
-               sec                 ; On place la carry a 1
+               sec                 ; On place la Carry a 1
                sbc  #js_yoffset    ; On reduit
                cmp  #$f0
                bcc  sto1ym
@@ -80,7 +80,7 @@ js_1b1         lsr                 ; On decale js_2 bit 0 dans C
                pha                 ; On stack la valeur
                inc  js_1flag
                lda  js_1pixy       ; Oui!
-               clc                 ; On place la carry a 0
+               clc                 ; On place la Carry a 0
                adc  #js_yoffset    ; On augmente
                cmp  #199
                bcc  sto1yp
@@ -95,7 +95,7 @@ js_1b2         lsr                 ; On decale js_1 bit 0 dans C
                lda  js_1pixx       ; Oui!
                ora  js_1pixx+1
                beq  js_1b2out
-               sec                 ; On place la carry a 1
+               sec                 ; On place la Carry a 1
                lda  js_1pixx       ; Oui!
                sbc  #js_xoffset    ; On diminue
                sta  js_1pixx       ; le X 
@@ -115,7 +115,7 @@ js_1b3         lsr                 ; On decale js_1 bit 0 dans C
                cmp  #$40-4
                bmi  incj1x
                jmp  js_1b3out
-incj1x         clc                 ; On place la carry a 0
+incj1x         clc                 ; On place la Carry a 0
                lda  js_1pixx       
                adc  #js_xoffset    ; On augmente
                sta  js_1pixx       ; le X 
@@ -152,48 +152,45 @@ js_2scan         .block
                jsr  pushreg        ; Sauvegarde tous les registres.
 port2          lda  js_2port       ; Lecture du port d'entrées.
                and  #$1f           ; Masque les bits 7, 6 et 5.
-               pha                 ; Crée une copie sur la pile.
                eor  #$1f           ; Inverse les bits 4 à 0.
-               sta  js_2status     ; Sauvegarde le status.
-               pla                 ; Récupère le status original.
-               cmp  #$1f           ; Si des interrupteurs sont appuyé ... 
+               sta  js_2status     ; Sauvegarde le status en mémoire.
+               cmp  #$00           ; Si des interrupteurs sont appuyé ... 
                bne  p2scan         ; ... on cherche lesquels.
                jmp  port2_out      ; Si non on sort.
 p2scan         inc  js_2flag       ; On incrémente le témoin de changement.
-               eor  #$1f           ; On inverse les bits 
-               clc                 ; On met le carry à 0.
+               clc                 ; On met le Carry à 0.
 ; ***** BOUTON EN-HAUT
 js_2b0         lsr                 ; On decale js_2 bit 0 dans Carry.
+               pha                 ; On stack la valeur décalée.
                bcc  js_2b1         ; Si pas BTNUP, on vérifi le prochain.
-               pha                 ; C'est BTNUP, on stack la valeur décalée.
                lda  js_2pixy       ; Oui!
-               sec                 ; On place la carry a 1
+               sec                 ; On place la Carry a 1.
                sbc  #js_yoffset    ; Déplace le crs vrs le haut de offset.
                cmp  #$f0           ; Si posy plus basse que Viewport NTSC ...
                bcc  sto2ym         ; Si le crs dépasse le bas du viewport ...
                lda  #$00           ; On le replace en haut.
 sto2ym         sta  js_2pixy       ; Sauvegarde La pos. pixel de Y. 
-               pla                 ; On recupere la valeur
 ; ***** BOUTON EN-BAS
-js_2b1         lsr                 ; On decale js_2 bit 0 dans C
-               bcc  js_2b2         ; Si pas BTNDO, on vérifi le prochain.
-               pha                 ; C'est BTNDO, on stack la valeur décalée.
+               pla                 ; On recupere la valeur du scan décalé.
+js_2b1         lsr                 ; On decale js_2 bit 0 dans Carry.
+               pha                 ; On stack la valeur décalée.
+               bcc  js_2b2         ; Si pas BTN-BAS, on vérifi le prochain.
                lda  js_2pixy       ; Oui!
-               clc                 ; On place la carry a 0
+               clc                 ; On place la Carry a 0.
                adc  #js_yoffset    ; Déplace le crs vrs le bas de offset.
-               cmp  #199           ; ......ici......
-               bcc  sto2yp
-               lda  #199
-sto2yp         sta  js_2pixy       ; le y 
-               pla                 ; On recupere la valeur
+               cmp  #199           ; Sommes nous dépassé le bas de l'écran?
+               bcc  sto2yp         ; Non, on sauvegarde la position.
+               lda  #199           ; Oui,
+sto2yp         sta  js_2pixy       ; On bloque le Y à 199.
 ; ***** BOUTON A-GAUCHE
+               pla                 ; On recupere la valeur du scan décalé.
 js_2b2         lsr                 ; On decale js_2 bit 0 dans C
-               bcc  js_2b3         ; Est-ce vers la gauche (L)
-               pha                    ;On stack la valeur
+               pha                 ; On stack la valeur décalée.
+               bcc  js_2b3         ; Est-ce le bouton gauche (L)
                lda  js_2pixx       ; Oui!
-               ora  js_2pixx+1
+               ora  js_2pixx+1     
                beq  js_2b2out
-               sec                 ; On place la carry a 1
+               sec                 ; On place la Carry a 1
                lda  js_2pixx       ; Oui!
                sbc  #js_xoffset    ; On diminue
                sta  js_2pixx       ;  le X 
@@ -201,25 +198,26 @@ js_2b2         lsr                 ; On decale js_2 bit 0 dans C
                lda  js_2pixx+1
                beq  js_2b2out
                dec  js_2pixx+1     ; sur 16 bits
-js_2b2out      pla                 ; On recupere la valeur
+js_2b2out      
 ; ***** BOUTON A-DROITE
 js_2b3         lsr                 ; On decale js_2 bit 0 dans C
+               pha                 ; On stack la valeur décalée.
                bcc  js_2b4         ; Est-ce vers la droite (R)
-               pha                 ; On stack la valeur
                lda  js_2pixx+1
                beq  incj2x
                lda  js_2pixx
                cmp  #$40-js_xoffset
                bmi  incj2x
                jmp  js_2b3out
-incj2x         clc                 ; On place la carry a 0
+incj2x         clc                 ; On place la Carry a 0
                lda  js_2pixx       ; Oui!
                adc  #js_xoffset    ; On augmente
                sta  js_2pixx       ;   le X 
                bcc  js_2b3out      ; de offset
                inc  js_2pixx+1     ; sur 16 bits
-js_2b3out      pla                 ; On recupere la valeur
+js_2b3out
 ; ***** BOUTON FIRE
+               pla                 ; On recupere la valeur du scan décalé.
 js_2b4         lsr                 ;Estce le bbouton fire (F)
                bcc  port2_out      ;Oui!
                inc  js_2fire       ; On augmente le nombre de tir
@@ -239,11 +237,10 @@ js_2wait       ldx  #$00
 js_2rel        iny
                bne  sr1
                inx
-sr1            lda  js_2port 
+sr1            lda  js_2port
                eor  #$ff
-               and  #$10
-               ;cmp  #$1f          ; On attend le telachement 
-               bne  js_2rel        ;   des boutons
+               and  #$10 
+               bne  js_2rel        ; On attend le relachement du bouton FEU.
 port2_out      lda  js_2flag
                beq  out
                jsr  js_2correct

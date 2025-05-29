@@ -62,7 +62,7 @@ goagain        jsr       setinverse
                ldx       #<js_status6 
                ldy       #>js_status6
                jsr       putscxy
- ;              rts
+;               rts
                ldx       #$00
                ldy       #$0f
                jsr       gotoxy
@@ -187,6 +187,7 @@ js_status6     .byte     vcyan,bkcol0,1,23
 ;-------------------------------------------------------------------------------
 ; Includes
 ;-------------------------------------------------------------------------------
+*=$c000
                .include  "map-c64-kernal.asm"
                .include  "map-c64-vicii.asm" 
                .include  "lib-cbm-pushpop.asm"
