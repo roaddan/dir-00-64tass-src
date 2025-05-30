@@ -1,4 +1,9 @@
-;-------------------------------------------------------------------------------
+;--------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Nom du fichier .: j2tester.asm
+; Cernière m.à j. : 
+; Inspiration ....: 
+;--------------------------------------------------------------------------------;-------------------------------------------------------------------------------
 ; Révision : 20250523-224956
 ;-------------------------------------------------------------------------------
                .include    "header-c64.asm"
@@ -7,148 +12,83 @@
 ;
 ;-------------------------------------------------------------------------------
 main           .block
-;               jsr       initnmi        ; À utiliser avec TMPreu
-;               jsr       setmyint
+;               jsr  initnmi        ; À utiliser avec TMPreu
+;               jsr  setmyint
 ;               rts
-               jsr       scrmaninit
-               jsr       js_init
-               lda       #$80
-               sta       curcol
-               lda       #0
-               sta       vicback0col
-               lda       #vrouge
-               sta       brdcol
-               sta       vicbordcol
-               jsr       cls
-               lda       #$20
-               ora       #%00000000
-               ldy       #$04
-               ldx       #$04
-               jsr       memfill
-               lda       #$00
-               ldy       #$d8
-               jsr       memfill
-               jsr       sprt_init
-goagain        jsr       setinverse
-               ldx       #<bstring1 
-               ldy       #>bstring1
-               jsr       putscxy
-                
-               ldx       #<bstring2 
-               ldy       #>bstring2
-               jsr       putscxy
-               ldx       #<bstring3 
-               ldy       #>bstring3
-               jsr       putscxy
-               ldx       #<bstring4 
-               ldy       #>bstring4
-               jsr       putscxy
-               jsr       clrinverse
-               ldx       #<js_status1 
-               ldy       #>js_status1
-               jsr       putscxy
-               ldx       #<js_status2 
-               ldy       #>js_status2
-               jsr       putscxy
-               ldx       #<js_status3 
-               ldy       #>js_status3
-               jsr       putscxy
-               ldx       #<js_status4 
-               ldy       #>js_status4
-               jsr       putscxy
-               ldx       #<js_status5 
-               ldy       #>js_status5
-               jsr       putscxy
-               ldx       #<js_status6 
-               ldy       #>js_status6
-               jsr       putscxy
-;               rts
-               ldx       #$00
-               ldy       #$0f
-               jsr       gotoxy
-               lda       #vjaune
-               jsr       setcurcol
-               ldx       #$00
-               jsr       setbkcol
-;               lda       #$00
-;nextcar        jsr       putch
-;               clc
-;               adc       #$01
-;               cmp       #64
-;               bne       nextcar
-               
-looper         ;jsr       showregs
-               jsr       js_scan
-               jsr       js_showvals
-;               jsr       js_updatecurs
-               jsr       sprt_move
-loopit         
-;               jsr       showregs
-               ldx       #$16
-               ldy       #$11
-               jsr       gotoxy
-               lda       #3
-               jsr       setcurcol
-               inc       onebyte
-               lda       onebyte
-               lda       js_2fire
-               jsr       putabinfmt
-;               jsr       showregs
-;               jsr       putabin
-;               jmp       loopit
-;               rts
-;               lda       #$0
-;               sta       c64u-addr1+1
-;               lda       #$00
-;               sta       c64u-addr1
-;               ldy       #10
-;               ldx       #05
-;               jsr       c64u-xy2addr
-;               ldy       c64u-addr2
-;               ldx       c64u-addr2+1
-;               ldx       js_2pixx+1
-;               ldy       js_2pixx
-;               lda       js_2fire
-;               jsr       showregs
-               pha
-               lda       js_2fire
-               beq       nochange     
-               lda       vicbordcol
-               clc
-               adc       #$0
-               and       #$0f
-               sta       vicbordcol
-               lda       js_2y
-               cmp       #$04
-               bne       toborder
-               lda       js_2x
-               cmp       #$0b
-               bmi       toborder
-               cmp       #$1d
-               bpl       toborder
-               inc       sprt_ptr
-               lda       sprt_ptr
-               jsr       showregs
-               cmp       #9         
-               bcc       drawsptr
-               lda       #$00
-drawsptr       sta       sprt_ptr
-               jsr       sprt_init
-;               jsr       showregs    
-toborder       lda       vicbordcol
-               sec
-               adc       #0
-               and       #$0f
-               sta       $d029
-               lda       #$00
-               sta       js_2fire    
-nochange       ;jsr       showregs
-               inx 
-               pla
-               jsr       kstop
-               bne       looper
-               jsr       k_warmboot
-out            rts
+               jsr  scrmaninit
+               jsr  js_init
+               lda  #$80
+               sta  curcol
+               lda  #0
+               sta  vicback0col
+               lda  #vrouge
+               sta  brdcol
+               sta  vicbordcol
+               jsr  cls
+               lda  #$20
+               ora  #%00000000
+               ldy  #$04
+               ldx  #$04
+               jsr  memfill
+               lda  #$00
+               ldy  #$d8
+               jsr  memfill
+               jsr  sprt_init
+goagain        jsr  setinverse
+               #printcxy bstring1 
+               #printcxy bstring2 
+               #printcxy bstring3 
+               #printcxy bstring4 
+               jsr  clrinverse
+               #printcxy js_status1 
+               #printcxy js_status2 
+               #printcxy js_status3 
+               #printcxy js_status4 
+               #printcxy js_status5 
+               #printcxy js_status6 
+               #locate   $00,$0f
+               lda  #vjaune
+               jsr  setcurcol
+               ldx  #$00
+               jsr  setbkcol
+
+
+looper         jsr  js_scan        ; ****** Un prob avec j2scan.
+
+INFINIE        jmp  INFINIE          ; Un branchement infinie. 
+   
+
+               jsr  js_showvals
+
+
+               jsr  js_updatecurs
+               jsr  sprt_move
+               ldx  #$16
+               ldy  #$11
+               jsr  gotoxy
+               lda  #3
+               jsr  setcurcol
+               lda  js_2fire
+
+               beq  looper     
+               lda  js_2y
+               cmp  #$04
+               bne  nochange
+               lda  js_2x
+               cmp  #$0b
+               bmi  nochange
+               cmp  #$1d
+               bpl  nochange
+               inc  sprt_ptr
+               lda  sprt_ptr
+               cmp  #9         
+               bcc  drawsptr
+               lda  #$00
+drawsptr       sta  sprt_ptr
+               jsr  sprt_init
+nochange       jmp  looper
+out            jsr  kstop
+               rts
 onebyte        .byte     0    
                .enc      screen
 bstring1       .byte     vbleu1,bkcol1,0,0        
@@ -157,7 +97,7 @@ bstring1       .byte     vbleu1,bkcol1,0,0
                .text     "      Visualisation du port jeu #2      "
                .byte     0
 bstring2       .byte     vgris,bkcol2,0,1
-               .text     " Programme assembleur pour 6502 sur C64 "
+               .text     " Programme assembleur pour 6510 sur C64 "
                .byte     0
 bstring3       .byte     vrose,bkcol3,0,2
                .text     "     par Daniel Lafrance (2024-06) C    "
@@ -187,7 +127,12 @@ js_status6     .byte     vcyan,bkcol0,1,23
 ;-------------------------------------------------------------------------------
 ; Includes
 ;-------------------------------------------------------------------------------
+;
+;*=$8000
+               .include  "lib-c64-joystick.asm"
+               .include  "lib-c64-spriteman.asm"
 *=$c000
+               .include  "lib-c64-showregs.asm"                
                .include  "map-c64-kernal.asm"
                .include  "map-c64-vicii.asm" 
                .include  "lib-cbm-pushpop.asm"
@@ -195,7 +140,4 @@ js_status6     .byte     vcyan,bkcol0,1,23
                .include  "lib-cbm-hex.asm"
 ;               .include  "lib-c64-text-sd.asm"
                .include  "lib-c64-text-mc.asm"
-               .include  "lib-c64-showregs.asm"                
-               .include  "lib-c64-joystick.asm"
-               .include  "lib-c64-spriteman.asm"
                 

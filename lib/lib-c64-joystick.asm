@@ -123,19 +123,18 @@ incj1x         clc                 ; On place la Carry a 0
                inc  js_1pixx+1     ; sur 16 bits
 js_1b3out      pla                 ; On recupere la valeur
 ; ***** BOUTON FIRE
-js_1b4         lsr                 ; Est-ce le bbouton fire (F)
+js_1b4         pla                 ; On recupere la valeur
+               lsr                 ; Est-ce le bbouton fire (F)
                bcc  port1_out      ; Oui!
                inc  js_1flag
                inc  js_1fire       ; On augmente le nombre de tir
 js_1wait       ldx  #$01
                ldy  #$ff
 js_1rel        iny
-               ;jsr  showregs
                lda  js_1port 
                eor  #$ff
                and  #$10
-               ;cmp  #$1f          ; On attend le relachement 
-               bne  js_1rel        ;  des boutons
+               bne  js_1rel        ; On attend le relachement des boutons. 
 port1_out      lda  js_1flag
                beq  out
                jsr  js_1correct
@@ -171,8 +170,8 @@ js_2b0         lsr                 ; On decale js_2 bit 0 dans Carry.
                lda  #$00           ; On le replace en haut.
 sto2ym         sta  js_2pixy       ; Sauvegarde La pos. pixel de Y. 
 ; ***** BOUTON EN-BAS
-               pla                 ; On recupere la valeur du scan décalé.
-js_2b1         lsr                 ; On decale js_2 bit 0 dans Carry.
+js_2b1         pla                 ; On recupere la valeur du scan décalé.
+               lsr                 ; On decale js_2 bit 0 dans Carry.
                pha                 ; On stack la valeur décalée.
                bcc  js_2b2         ; Si pas BTN-BAS, on vérifi le prochain.
                lda  js_2pixy       ; Oui!
@@ -183,8 +182,8 @@ js_2b1         lsr                 ; On decale js_2 bit 0 dans Carry.
                lda  #199           ; Oui,
 sto2yp         sta  js_2pixy       ; On bloque le Y à 199.
 ; ***** BOUTON A-GAUCHE
-               pla                 ; On recupere la valeur du scan décalé.
-js_2b2         lsr                 ; On decale js_2 bit 0 dans C
+js_2b2         pla                 ; On recupere la valeur du scan décalé.
+               lsr                 ; On decale js_2 bit 0 dans C
                pha                 ; On stack la valeur décalée.
                bcc  js_2b3         ; Est-ce le bouton gauche (L)
                lda  js_2pixx       ; Oui!
@@ -200,7 +199,8 @@ js_2b2         lsr                 ; On decale js_2 bit 0 dans C
                dec  js_2pixx+1     ; sur 16 bits
 js_2b2out      
 ; ***** BOUTON A-DROITE
-js_2b3         lsr                 ; On decale js_2 bit 0 dans C
+js_2b3         pla                 ; On recupere la valeur du scan décalé.         
+               lsr                 ; On decale js_2 bit 0 dans C
                pha                 ; On stack la valeur décalée.
                bcc  js_2b4         ; Est-ce vers la droite (R)
                lda  js_2pixx+1
@@ -217,8 +217,8 @@ incj2x         clc                 ; On place la Carry a 0
                inc  js_2pixx+1     ; sur 16 bits
 js_2b3out
 ; ***** BOUTON FIRE
-               pla                 ; On recupere la valeur du scan décalé.
-js_2b4         lsr                 ;Estce le bbouton fire (F)
+js_2b4         pla                 ; On recupere la valeur du scan décalé.
+               lsr                 ;Estce le bbouton fire (F)
                bcc  port2_out      ;Oui!
                inc  js_2fire       ; On augmente le nombre de tir
                lda  #%00000001
@@ -241,8 +241,8 @@ sr1            lda  js_2port
                eor  #$ff
                and  #$10 
                bne  js_2rel        ; On attend le relachement du bouton FEU.
-port2_out      lda  js_2flag
-               beq  out
+port2_out      ;lda  js_2flag
+               ;beq  out
                jsr  js_2correct
                lda  #0
                sta  js_2flag
