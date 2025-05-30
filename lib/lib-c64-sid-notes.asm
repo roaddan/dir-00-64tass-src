@@ -1,8 +1,8 @@
 ;--------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
-; Nom du fichier .:
+; Nom du fichier .: lib-c64-sid-notes.asm
 ; Cernière m.à j. : 
-; Inspiration ....: 
+; Inspiration ....: Programmers guide to the Commodore 64.
 ;--------------------------------------------------------------------------------
 ;Note           high, low
 lad1    .word $00F8 ; NTSC (hex): high: $00, low: $F8 ; (dec): low:248, High:0
@@ -133,3 +133,4 @@ FreqTableNtscHi:
                 .byte $21,$23,$25,$27,$2a,$2c,$2f,$32,$35,$38,$3b,$3f  ; 6
                 .byte $43,$47,$4b,$4f,$54,$59,$5e,$64,$6a,$70,$77,$7e  ; 7
                 .byte $86,$8e,$96,$9f,$a9,$b3,$bd,$c9,$d5,$e1,$ef,$fd  ; 8
+                
