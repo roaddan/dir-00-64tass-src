@@ -69,9 +69,9 @@ cpchar2ram     .block
                lda  cia1+14   ; peek (56334)
                and  #254      ; and 254
                sta  cia1+14   ; poke 56334 
-               lda  memmapreg ; peek (1)
+               lda  u6510map  ; peek (1)
                and  #251      ; and %11111011
-               sta  memmapreg ; poke 1
+               sta  u6510map  ; poke 1
                lda  #<chargen ; LSB de chargen
                sta  zpage1    ;
                lda  #>chargen ; MSB de chargen
@@ -91,9 +91,9 @@ nextbyte       lda  (zpage1),y
                inc  zpage2+1
                dex  
                bne  nextpage
-               lda  memmapreg ; peek (1)
+               lda  u6510map  ; peek (1)
                ora  #4        ; and %00000100
-               sta  memmapreg ; poke 1
+               sta  u6510map  ; poke 1
                lda  cia1+14   ; peek 56334
                ora  #1        ; or 1
                sta  cia1+14   ; poke 56334

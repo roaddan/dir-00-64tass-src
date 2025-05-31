@@ -1,18 +1,18 @@
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
 ; Nom du fichier .:
 ; Cernière m.à j. : 
 ; Inspiration ....: 
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; c64_map.asm - Carthographie memoire et declaration de constantes pour les
 ; commodores 64 et 64c
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Scripteur...: daniel lafrance, j5w 1w5, canada.
 ; Version.....: 20230328-095101
 ; Inspiration.: isbn 0-87455-082-3
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Segmentation principales de la mÃ©moire
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou sans 64tass utilisez
 ; la syntaxes ...
 ;
@@ -20,9 +20,9 @@
 ;
 ; ... en prenant soin de placer le fichier dans le meme disque ou rÃ©pertoire que
 ; votre programme.
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ;* macro sur les elements importants *
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 u6510ddr       =    $00       ; 0       6510 port data dir. reg. (def: %xx101111)
                               ;         (0=input, 1=output)
 u6510map       =    $01       ; 1       6510 port used as memory map reg.
@@ -126,6 +126,7 @@ scrram2        =    $600      ; 1536
 scrram3        =    $700      ; 1792
 basicsta       =    $801      ; 2049  basic start address
 basicrom       =    $a000     ; 40960 Basic rom base address
+chargen        =    $d000
 sid            =    $d400     ; 54272 sid base address
 colorram       =    $d800     ; 55296 video color ram
 colram         =    $d800     ; 55296 video color ram
@@ -177,11 +178,11 @@ cia2cra        =    $dd0e     ; 56590 cia2 control register A
 cia2crb        =    $dd0f     ; 56501 cia2 control register B
 kernalrom      =    $e000     ; 57344 start of kernal rom
 irq            =    $ea31     ; 59953 irq entry point
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ;* Basic petscii control characters 
 ;  when printed with ?chr$(##) or jsr $ffd2 
 ;  Where keystroke are shown, []+[]=combined 
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 bstop          =    $03       ;  03 [STOP],     [CTRL]-[C]
 bwhite         =    $05       ;  05 [CTRL]+[2], [CTRL]-[E], Set colour to WHITE
 block          =    $08       ;  08 Disable char map switch with [SHIFT]+[C=]     
@@ -302,7 +303,7 @@ cmidgray       =    $c
 clightgreen    =    $d
 clightblue     =    $e
 clightgray     =    $f
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ;* vic code couleur en francais *
 ; couleur %xxxx0000
 ;              |||+-> bit 0   : Inverse tous les autres bits
@@ -312,7 +313,7 @@ clightgray     =    $f
 ;     0010=rouge, 0010=Cyan,  1010=rose  , 1011=gris      
 ;     0100=vert,  0101=mauve, 1100=gris1 , 1101=vert2           
 ;     0110=vleu,  0111=jaune, 1110=bleu1 , 1111=gris2           
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 vnoir          =    %00000000
 vblack         =    %00000000
 vblanc         =    %00000001
@@ -1532,7 +1533,7 @@ vector = $ff8d ; jmp $fd1a Read/set I/O vectors.
 ;-------------------------------------------------------------------------------
 ;* kernal function vectors *
 ;ayx=input ayx=outputs (c)=1 (c)=0
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 kd_poly1       =    $e043
 kd_poly2       =    $e059
 kd_rmulc       =    $e08d       ;
@@ -1582,49 +1583,180 @@ kudtim         =    udtim          ;   , maj sysclock
 kscreen        =    screen         ; yx, get format ecran
 kplot          =    plot           ; yx, (c) get csr pos.
 kiobase        =    iobase         ; yx, def. i/o mem page
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Kernal entry point
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 k_echostartup  =    $e39a
-k_putch        =    $e716; 52) Print a character.          ;a--;---; a= char
+k_putch        =    $e716; 52) Print a character.           ;a--;---; a= char
 k_cls          =    $e7a0
 k_cursordown   =    $e87c
 k_scrollup     =    $e8ea
 k_home         =    $e94e
 k_insertline   =    $e965
 k_screlldown   =    $e9c8
-k_devsndlstn   =    $ed0c; 55) Send 'LISTEN'>IEEE/Serial.  ;a--;---; a= dev # 
-k_ieeein       =    $ee13; 60) Input from IEEE/Serial.     ;---;a--; a= Data byte  
-k_devsndutalk  =    $eef6; 58) Send 'UNTALK'>IEEE/Serial.  ;---;---;
-k_devsndulstn  =    $ef04; 59) Send 'UNLISTEN'>IEEE/Serial.;---;---; 
-k_putsysmsg    =    $f12f; 53) Print system message.       ;--y;---; y= msg offset
-k_cloself      =    $f291; 61) Close logical file .        ;a--;---; a= file # 
-k_loadsub      =    $f49e; 63) LOAD subroutine.            ;axy;---; a= # start=yyxx
-k_prnsrch      =    $f5af; 64) Print SEARCHING if imm mode.;---;---;
-k_echosearch   =    $f5b3; 64b) Skipping test part of 64.  ;---;---; 
-k_prnfnam      =    $f5c1; 65) Print filename.             ;---;---;
-k_stop         =    $f6ed; 62) Check for STOP key.         ;---;---; z= 1 pressed
-k_gettaphdblk  =    $f7ea; 66) Find a tape hdr blk.        ;a--;---; a= len 
+k_devsndlstn   =    $ed0c; 55) Send 'LISTEN'>IEEE/Serial.   ;a--;---; a=dev # 
+k_ieeein       =    $ee13; 60) Input from IEEE/Serial.      ;---;a--; a=Data byte  
+k_devsndutalk  =    $eef6; 58) Send 'UNTALK'>IEEE/Serial.   ;---;---;
+k_devsndulstn  =    $ef04; 59) Send 'UNLISTEN'>IEEE/Serial. ;---;---; 
+k_putsysmsg    =    $f12f; 53) Print system message.        ;--y;---; y=msg offset
+k_cloself      =    $f291; 61) Close logical file .         ;a--;---; a=file # 
+k_loadsub      =    $f49e; 63) LOAD subroutine.             ;axy;---; a=# start=yyxx
+k_prnsrch      =    $f5af; 64) Print SEARCHING if imm mode. ;---;---;
+k_echosearch   =    $f5b3; 64b) Skipping test part of 64.   ;---;---; 
+k_prnfnam      =    $f5c1; 65) Print filename.              ;---;---;
+k_stop         =    $f6ed; 62) Check for STOP key.          ;---;---; z=1 pressed
+k_gettaphdblk  =    $f7ea; 66) Find a tape hdr blk.         ;a--;---; a=len 
                          ;     Prerequisit: Pointer to string in zpage1  
-k_fndtaphdblk  =    $f7ea; 67) Find any tape hdr blk.      ;---;---; 
-k_waittapplay  =    $f817; 68) Press PLAY... (wait)        ;---;---;
-k_rdtape2buff  =    $f841; 69) Read tape to buffer.        ;---;---;
-k_readtape     =    $f847; 70) Read tape.                 ;---;---;
-k_wrbuff2tape  =    $f864; 71) write buffer to tape.       ;---;---;
-k_wrtape       =    $f869; 72) write tape.                ;a--;---; a= ldr len
-k_resettapeio  =    $fb8e; 73) Reset tape I/O.             ;---;---;
-k_setintvect   =    $fcbd; 74) set interupt vector.        ;---;---;
-k_coldreset    =    $fce2; 75) Power on reset.             ;---;---;
-k_coldstart    =    $fce2; 75) Power on reset.             ;---;---;
-k_coldboot     =    $fce2; 75) Power on reset.             ;---;---;
+k_fndtaphdblk  =    $f7ea; 67) Find any tape hdr blk.       ;---;---; 
+k_waittapplay  =    $f817; 68) Press PLAY... (wait)         ;---;---;
+k_rdtape2buff  =    $f841; 69) Read tape to buffer.         ;---;---;
+k_readtape     =    $f847; 70) Read tape.                   ;---;---;
+k_wrbuff2tape  =    $f864; 71) write buffer to tape.        ;---;---;
+k_wrtape       =    $f869; 72) write tape.                  ;a--;---; a=ldr len
+k_resettapeio  =    $fb8e; 73) Reset tape I/O.              ;---;---;
+k_setintvect   =    $fcbd; 74) set interupt vector.         ;---;---;
+k_coldreset    =    $fce2; 75) Power on reset.              ;---;---;
+k_coldstart    =    $fce2; 75) Power on reset.              ;---;---;
+k_coldboot     =    $fce2; 75) Power on reset.              ;---;---;
 k_warmreset    =    $fe66;     Warm resetstart
 k_warmboot     =    $fe66;     Warm resetstart
 k_warmstart    =    $fe66;     Warm resetstart
-k_devsndaddr2  =    $ff93; 56) Send second address.        ;a--;---; a= SA or #$60 
-
-;--------------------------------------------------------------------------------
+k_devsndaddr2  =    $ff93; 56) Send second address.         ;a--;---; a=SAor#$60 
+;-------------------------------------------------------------------------------
+; getin key values
+;-------------------------------------------------------------------------------
+arrowleft      =    $5f
+ctrl_al        =    $06
+escape         =    $5f
+ctrl_escape    =    $06
+pound          =    $a9
+home           =    $13
+clear          =    $93
+uparrow        =    $5e
+pisign         =    $de
+runstop        =    $03
+cursd          =    $11
+cursu          =    $91
+cursr          =    $1d
+cursl          =    $9d
+key_f1         =    $85
+key_f3         =    $86
+key_f5         =    $87
+key_f7         =    $88
+key_f2         =    $89
+key_f4         =    $8a
+key_f6         =    $8b
+key_f8         =    $8c
+enter          =    $0d
+comd_enter     =    $8d
+key_a          =    $41
+key_b          =    $42
+key_c          =    $43
+key_d          =    $44
+key_e          =    $45
+key_f          =    $46
+key_g          =    $47
+key_h          =    $48
+key_i          =    $49
+key_j          =    $4a
+key_k          =    $4b
+key_l          =    $4c
+key_m          =    $4d
+key_n          =    $4e
+key_o          =    $4f
+key_p          =    $50
+key_q          =    $51
+key_r          =    $52
+key_s          =    $53
+key_t          =    $54
+key_u          =    $55
+key_v          =    $56
+key_w          =    $57
+key_x          =    $58
+key_y          =    $59
+key_z          =    $5a
+shift_a        =    $c1
+shift_b        =    $c2
+shift_c        =    $c3
+shift_d        =    $c4
+shift_e        =    $c5
+shift_f        =    $c6
+shift_g        =    $c7
+shift_h        =    $c8
+shift_i        =    $c9
+shift_j        =    $ca
+shift_k        =    $cb
+shift_l        =    $cc
+shift_m        =    $cd
+shift_n        =    $ce
+shift_o        =    $cf
+shift_p        =    $d0
+shift_q        =    $d1
+shift_r        =    $d2
+shift_s        =    $d3
+shift_t        =    $d4
+shift_u        =    $d5
+shift_v        =    $d6
+shift_w        =    $d7
+shift_x        =    $d8
+shift_y        =    $d9
+shift_z        =    $da
+ctrl_a         =    $01
+ctrl_b         =    $02
+ctrl_c         =    $03
+ctrl_d         =    $04
+ctrl_e         =    $05
+ctrl_f         =    $06
+ctrl_g         =    $07
+ctrl_h         =    $08
+ctrl_i         =    $09
+ctrl_j         =    $0a
+ctrl_k         =    $0b
+ctrl_l         =    $0c
+ctrl_m         =    $0d
+key_enter      =    $0d
+ctrl_n         =    $0e
+ctrl_o         =    $0f
+ctrl_p         =    $10
+ctrl_q         =    $11
+ctrl_r         =    $12
+ctrl_s         =    $13
+ctrl_t         =    $14
+ctrl_u         =    $15
+ctrl_v         =    $16
+ctrl_w         =    $17
+ctrl_x         =    $18
+ctrl_y         =    $19
+ctrl_z         =    $1a
+comd_a         =    $b0    
+comd_b         =    $bf    
+comd_c         =    $bc    
+comd_d         =    $ac    
+comd_e         =    $b1    
+comd_f         =    $bb    
+comd_g         =    $a5    
+comd_h         =    $b4    
+comd_i         =    $a2    
+comd_j         =    $b5    
+comd_k         =    $a1    
+comd_l         =    $b6    
+comd_m         =    $a7    
+comd_n         =    $aa    
+comd_o         =    $b9    
+comd_p         =    $af    
+comd_q         =    $ab    
+comd_r         =    $b2    
+comd_s         =    $ae    
+comd_t         =    $a3    
+comd_u         =    $b8    
+comd_v         =    $be    
+comd_w         =    $b3    
+comd_x         =    $bd    
+comd_y         =    $b7    
+comd_z         =    $ad    
+;-------------------------------------------------------------------------------
 ; error codes
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; if an error occurs during a kernal routine, then the carry bit of the 
 ; accumulator is set and the error code is returned in the accumulator.
 ;---------------+---------------------------------------------------------------
@@ -1648,9 +1780,9 @@ kerrf0         =    240  ; top-of-memory change rs-232 buffer allocation.
 ;========================= h e x a - d e c i m a l==============================
 ;0000000000000001111111111111111222222222222222233333333333333334444444444444444
 ;123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; a p p e l   d e   l a   s o u s   r o u t i n e   p r i n c i p a l e
-;--------------------------------------------------------------------------------
-libtart        ;jmp      main  ; le programme principale doit s'appeler "main"
+;-------------------------------------------------------------------------------
+libtart        jmp  main           ; Programme principale doit s'appeler "main"
                ;jsr      k_coldboot
                ;rts

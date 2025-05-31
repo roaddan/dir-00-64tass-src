@@ -6,6 +6,8 @@
 ;--------------------------------------------------------------------------------;-------------------------------------------------------------------------------
 ; Révision : 20250523-224956
 ;-------------------------------------------------------------------------------
+               .include  "map-c64-kernal.asm"
+               .include  "map-c64-vicii.asm" 
                .include    "header-c64.asm"
                .include    "macros-64tass.asm"
 ;-------------------------------------------------------------------------------
@@ -132,12 +134,10 @@ js_status6     .byte     vcyan,bkcol0,1,23
                .include  "lib-c64-joystick.asm"
                .include  "lib-c64-spriteman.asm"
 *=$c000
-               .include  "lib-c64-showregs.asm"                
-               .include  "map-c64-kernal.asm"
-               .include  "map-c64-vicii.asm" 
+            
+;               .include  "lib-c64-text-sd.asm"
+               .include  "lib-c64-text-mc.asm"
                .include  "lib-cbm-pushpop.asm"
                .include  "lib-cbm-mem.asm"
                .include  "lib-cbm-hex.asm"
-;               .include  "lib-c64-text-sd.asm"
-               .include  "lib-c64-text-mc.asm"
-                
+               .include  "lib-c64-showregs.asm"                    

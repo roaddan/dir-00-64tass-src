@@ -1,9 +1,8 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250525-151829 "
+               Version = "20250525-151829"
 ;-------------------------------------------------------------------------------                
-               .include    "header-c64.asm"
-               .include    "macros-64tass.asm"
-               .enc    none
+               .include  "header-c64.asm"
+               .enc      none
 
 ;-------------------------------------------------------------------------------
 ;
@@ -76,17 +75,32 @@ car            .byte     166
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
-*=$c000        
-               .include  "map-c64-kernal.asm"
-               .include  "map-c64-vicii.asm" 
-               .include  "lib-c64-vicii.asm" 
-               .include  "map-c64-basic2.asm"
-               .include  "lib-c64-basic2.asm"
+*=$8000
                .include  "lib-cbm-pushpop.asm"
-
-               .include  "lib-c64-binmath.asm"
-
                .include  "lib-cbm-mem.asm"
                .include  "lib-cbm-hex.asm"
                .include  "lib-cbm-keyb.asm"
+               .include  "lib-cbm-disk.asm"
+               .include  "lib-cbm-chargen.asm"
+               .include  "lib-c64-nmi.asm"
+
+*=$c000        
+               .include  "lib-c64-basic2.asm"
+               .include  "lib-c64-basic2-math.asm"
+               .include  "lib-c64-binmath.asm"
+               .include  "lib-c64-vicii.asm" 
                .include  "lib-c64-showregs.asm"
+               .include  "lib-c64-ultimateii.asm"
+
+;               .include  "lib-c64-mc-spriteman.asm"
+;               .include  "lib-c64-mc-joystick.asm"
+;               .include  "lib-c64-mc-text.asm"
+;               .include  "lib-c64-sd-text.asm"
+
+
+
+               .include  "map-c64-kernal.asm"
+               .include  "map-c64-basic2.asm"
+               .include  "map-c64-vicii.asm" 
+               .include  "macros-64tass.asm"
+ 

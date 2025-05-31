@@ -20,7 +20,6 @@
 ;   en prenant soin de placer le fichier dans le meme disque ou répertoire que
 ; votre programme.
 ;-------------------------------------------------------------------------------
-
 ;-------------------------------------------------------------------------------
 ; Initialisation des paramêtres de base pour la gestion de l'écran.
 ;-------------------------------------------------------------------------------
