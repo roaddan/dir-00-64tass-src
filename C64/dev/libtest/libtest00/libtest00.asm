@@ -22,6 +22,7 @@ main           .block
                jsr  cls
                #mycolor
 ;               jmp b_warmstart
+               rts
                .bend
                  
 ;-------------------------------------------------------------------------------
@@ -52,8 +53,9 @@ libtest00      .block
 nexta          pha
                #printcxy    dataloc
                #color ccyan
-               #setloop $0000+(65535)
+               #setloop $0000+(256)
                jsr  cls
+               jsr  clearregs
                jsr  showregs 
 roll           jsr  bmtester
                jsr  inczp1
@@ -67,6 +69,16 @@ out            pla
 car            .byte     166
                .bend
 
+clearregs      .block
+               lda  #$00
+               sta  zpage1
+               sta  zpage1+1
+               sta  zpage2
+               sta  zpage2+1
+               tax
+               tay               
+               rts
+               .bend
 ;-------------------------------------------------------------------------------
 ; Liste des chaines de charactères
 ;-------------------------------------------------------------------------------
