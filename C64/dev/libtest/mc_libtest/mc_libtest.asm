@@ -49,47 +49,30 @@ looper         jsr  js_scan
                jsr  js_showvals
                jsr  js_updatecurs
                jsr  sprt_move
-               ;lda  #$0
-               ;sta  c64u_addr1+1
-               ;lda  #$00
-               ;sta  c64u_addr1
-               ;ldy  #10
-               ;ldx  #05
-               ;jsr  c64u_xy2addr
-               ;ldy  c64u_addr2
-               ;ldx  c64u_addr2+1
-               ;ldx  js_2pixx+1
-               ;ldy  js_2pixx
-               ;lda  js_2fire
-               ;jsr  showregs
-               pha
-               lda  js_2fire
-               and  #$1f
-               eor  #$1f
-               beq  nochange
-               sta  vicbordcol
-               sta  $d029
+               jsr  showstatus
+               ;pha
+               ;lda  js_2status
+               ;beq  nochange
+               ;sta  vicbordcol
+nochange       ;pla
+;????????????????????????????????????????????
+;eternel            jmp  eternel
+;????????????????????????????????????????????
+               inc  $d020
+               jmp  looper
+out             rts
+               .bend
+showstatus     .block
                jsr  pushreg
-               lda  js_2port
+               lda  js_2status
                ldx  #$01
                stx  bascol
                ldx  #3
                ldy  #22
                jsr  putabinxy
                jsr  popreg
-nochange       pla
-;????????????????????????????????????????????
-;eternel            jmp  eternel
-;????????????????????????????????????????????
-
-               ;inc  vicbordcol
-               jmp  looper
-               jsr  kstop
-               bne  looper
-               jsr  k_warmboot
-out             rts
-               .bend
-               
+               rts
+               .bend               
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
