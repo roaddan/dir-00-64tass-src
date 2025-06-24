@@ -707,32 +707,32 @@ sd_scrptr2str   .block
                 lda     sd_scrptr+1
                 pha
                 jsr     lsra4bits
-                jsr     nib2hex
+                jsr     nibtohex
                 sta     sd_scraddr
                 pla
                 jsr     lsra4bits
-                jsr     nib2hex
+                jsr     nibtohex
                 sta     sd_scraddr+1
 ;--chaine du msb de la couleur----------
                 lda     sd_scrptr+1
                 pha
                 jsr     lsra4bits
-                jsr     nib2hex
+                jsr     nibtohex
                 sta     sd_scraddr
                 pla
                 jsr     lsra4bits
-                jsr     nib2hex
+                jsr     nibtohex
                 sta     sd_scraddr+1
 ;--chaine du lsb de l'ecran et couleur--
                 lda     sd_scrptr
                 pha
                 jsr     lsra4bits
-                jsr     nib2hex
+                jsr     nibtohex
                 sta     sd_scraddr+2
                 sta     sd_coladdr+2
                 pla
                 jsr     lsra4bits
-                jsr     nib2hex
+                jsr     nibtohex
                 sta     sd_scraddr+3
                 sta     sd_coladdr+3
 ;--on recupere tout---------------------
@@ -804,7 +804,7 @@ sd_colptr2zp2   .block
 sd_putrahex     .block
                 php
                 pha
-                jsr     a2hex
+                jsr     atohex
                 ldx     #<a2hexcol
                 ldy     #>a2hexcol
                 jsr     sd_puts
@@ -822,7 +822,7 @@ sd_putrahex     .block
 sd_putrahexxy   .block
                 php
                 pha
-                jsr     a2hex
+                jsr     atohex
                 lda     #<a2hexpos
                 ldy     #>a2hexpos
                 jsr     sd_putsxy
@@ -842,7 +842,7 @@ sd_putrahexxy   .block
 sd_putrahexcxy  .block
                 php
                 pla
-                jsr     a2hex
+                jsr     atohex
                 lda     #<a2hexpos
                 ldy     #>a2hexpos
                 jsr     sd_putscxy

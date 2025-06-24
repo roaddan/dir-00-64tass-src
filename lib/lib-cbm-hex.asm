@@ -22,7 +22,8 @@ a2hexprefix    .byte     "$"            ; pour aputs
 a2hexstr       .word     $00
                .word     $00
                .byte     0              ; 0 end string
-           
+abincol        .byte     1
+abinbkcol      .byte     %00000000           
 abin           .null     "00000000"
 adec           .null     "   "
                
@@ -180,6 +181,13 @@ nextbit        rol
                jsr  pull
                rts
                .bend          
+
+abinsetmccol   .block
+               jsr  pushreg
+               jsr  popreg
+               rts
+               .bend
+
 
 ;-----------------------------------------------------------------------------
 ; Affiche le contenu de abin à la position du curseur.
