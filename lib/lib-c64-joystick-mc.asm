@@ -128,13 +128,13 @@ js_1b4         pla                 ; On recupere la valeur
                bcc  port1_out      ; Oui!
                inc  js_1flag
                inc  js_1fire       ; On augmente le nombre de tir
-js_1wait       ldx  #$01
-               ldy  #$ff
-js_1rel        iny
-               lda  js_1port 
-               eor  #$ff
-               and  #$10
-               bne  js_1rel        ; On attend le relachement des boutons. 
+;js_1wait       ldx  #$01
+;               ldy  #$ff
+;js_1rel        iny
+;               lda  js_1port 
+;               eor  #$ff
+;               and  #$10
+;               bne  js_1rel        ; On attend le relachement des boutons. 
 port1_out      lda  js_1flag
                beq  out
                jsr  js_1correct
@@ -232,15 +232,15 @@ js_2b4         pla                 ; On recupere la valeur du scan décalé.
                lda  js_2val16a+1
                eor  #%01000000
                sta  js_2val16a+1
-js_2wait       ldx  #$00
-               ldy  #$ff
-js_2rel        iny
-               bne  sr1
-               inx
-sr1            lda  js_2port
-               eor  #$ff
-               and  #$10 
-               bne  js_2rel        ; On attend le relachement du bouton FEU.
+;js_2wait       ldx  #$00
+;               ldy  #$ff
+;js_2rel        iny
+;               bne  sr1
+;               inx
+;sr1            lda  js_2port
+;               eor  #$ff
+;               and  #$10 
+               ;bne  js_2rel        ; On attend le relachement du bouton FEU.
 port2_out      ;lda  js_2flag
                ;beq  out
                jsr  js_2correct

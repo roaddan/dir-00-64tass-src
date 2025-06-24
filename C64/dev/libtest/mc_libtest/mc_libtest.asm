@@ -49,7 +49,7 @@ looper         jsr  js_scan
                jsr  js_showvals
                jsr  js_updatecurs
                jsr  sprt_move
-               jsr  showstatus
+               ; jsr  showstatus
                ;pha
                ;lda  js_2status
                ;beq  nochange
@@ -58,14 +58,20 @@ nochange       ;pla
 ;????????????????????????????????????????????
 ;eternel            jmp  eternel
 ;????????????????????????????????????????????
+               ;lda  js_2status
+               ;sta  $d020
                inc  $d020
                jmp  looper
 out             rts
                .bend
+
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
 showstatus     .block
                jsr  pushreg
                lda  js_2status
-               ldx  #$01
+               ldx  #$03
                stx  bascol
                ldx  #3
                ldy  #22

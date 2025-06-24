@@ -199,9 +199,9 @@ synccolptr     .block
                plp                      ; ... et les flags
                rts
                .bend
+
 ;---------------------------------------------------------------------------
-; Efface l'ecran avec la couleur voulue 
-; et place le curseur à 0,0.
+; Efface l'ecran avec la couleur voulue et place le curseur à 0,0.
 ;---------------------------------------------------------------------------
 cls            .block
                jsr  push                ; On sauvegarde les registres
@@ -288,9 +288,9 @@ nextcar
                jsr  pop
                rts
                .bend
+
 ;---------------------------------------------------------------------------
-; Change la couleur du pourtour et sa 
-; valeur de reference.
+; Change la couleur du pourtour et sa valeur de reference.
 ;---------------------------------------------------------------------------
 setborder      .block
                php
@@ -301,8 +301,7 @@ setborder      .block
                .bend
 
 ;---------------------------------------------------------------------------
-; Place le flag de l'inverse video pour 
-; le prochain caracteere à afficher.
+; Place le flag de l'inverse video pour le prochain caracteere à afficher.
 ;---------------------------------------------------------------------------
 setinverse     .block
                php
@@ -319,8 +318,7 @@ setinverse     .block
                rts
                .bend
 ;---------------------------------------------------------------------------
-; Retire le flag de l'inverse video pour 
-; le prochain caracteere à afficher.
+; Retire le flag de l'inverse video pour le prochain caracteere à afficher.
 ;---------------------------------------------------------------------------
 clrinverse     .block
                php
@@ -361,8 +359,7 @@ putch          .block              ; Voir Ordinogramme B
                rts
                .bend
 ;---------------------------------------------------------------------------
-; Affiche un caracteres dont l'adresse 
-; est dans zp2 à la position et la
+; Affiche un caracteres dont l'adresse est dans zp2 à la position et la
 ; couleur du curseur virtuel.        
 ;---------------------------------------------------------------------------
 z2putch        .block              ; Voir Ordinogramme A
@@ -452,7 +449,7 @@ putsxy         .block              ; Voir Ordinogramme F
 ; Utilisation : Carcol, backno, x, y, texte, 0
 ;---------------------------------------------------------------------------
 putscxy        .block
-               jsr  push           ; On Sauvegarde registres et zp2         
+               jsr  pushall        ; On Sauvegarde registres et zp2         
                stx  zpage2         ; On place l'adresse de chaine dans zp2
                sty  zpage2+1       ; X = MSB, Y = LSB
                ldy  #0             ; Place le compteur
@@ -470,7 +467,7 @@ putscxy        .block
                jsr  gotoxy         ; gotoxy : X=col, y=ligne 
                jsr  inczp2         ; Place le ptr en début de chaine
                jsr  z2puts         ; On imprime la chaine
-               jsr  pop
+               jsr  popall
                rts
                .bend    
 ;---------------------------------------------------------------------------
@@ -663,14 +660,11 @@ putrahex       .block
                rts
                .bend
 ;---------------------------------------------------------------------------
-; Transforme le contenu du registre A en
-; hexadecimal et retourne l'adresse de
-; la chaine dans X-(lsb) et Y-(msb).
+; Transforme le contenu du registre A en hexadecimal et retourne l'adresse 
+; de la chaine dans X-(lsb) et Y-(msb).
 ; Entree : A
-; Sortie : Valeur hexadecimale à la
-;          position (atohexpx,atohexpy).
-; **Note : atohexpx et atohexpy doivent 
-;          etre modifiees avant l'appel.
+; Sortie : Valeur hexadecimale à la position (atohexpx,atohexpy).
+; **Note : atohexpx et atohexpy doivent etre modifiees avant l'appel.
 ;---------------------------------------------------------------------------
 putrahexxy     .block
                php

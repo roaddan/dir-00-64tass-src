@@ -345,7 +345,7 @@ sprt_ptr8      .word     sprt_image + (8*66)
 sprt_ptr9      .word     sprt_image + (9*66)                      
 testbyte       .byte     255                      
 sprt_txtcol    =         vjaune         
-sprt_txtbak    =         bkcol0        
+sprt_txtbak    =         bkcol1        
 sprt_color     =         vwhite               
 sprite_pos     .byte     sprt_txtcol,sprt_txtbak,4,14
 ;                    ;0000000000111111111122222222223333333333                       
