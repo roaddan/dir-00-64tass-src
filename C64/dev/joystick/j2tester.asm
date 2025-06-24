@@ -3,13 +3,15 @@
 ; Nom du fichier .: j2tester.asm
 ; Cernière m.à j. : 
 ; Inspiration ....: 
-;--------------------------------------------------------------------------------;-------------------------------------------------------------------------------
+;--------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ; Révision : 20250523-224956
 ;-------------------------------------------------------------------------------
+               .enc none
                .include  "map-c64-kernal.asm"
                .include  "map-c64-vicii.asm" 
-               .include    "header-c64.asm"
-               .include    "macros-64tass.asm"
+               .include  "header-c64.asm"
+               .include  "macros-64tass.asm"
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -18,6 +20,7 @@ main           .block
 ;               jsr  setmyint
 ;               rts
                jsr  scrmaninit
+ici            jmp  ici               
                jsr  js_init
                lda  #$80
                sta  curcol
@@ -131,12 +134,11 @@ js_status6     .byte     vcyan,bkcol0,1,23
 ;-------------------------------------------------------------------------------
 ;
 ;*=$8000
-               .include  "lib-c64-joystick.asm"
-               .include  "lib-c64-spriteman.asm"
-*=$c000
-            
+               .include  "lib-c64-joystick-mc.asm"
+               .include  "lib-c64-spriteman-mc.asm"
 ;               .include  "lib-c64-text-sd.asm"
                .include  "lib-c64-text-mc.asm"
+*=$c000
                .include  "lib-cbm-pushpop.asm"
                .include  "lib-cbm-mem.asm"
                .include  "lib-cbm-hex.asm"

@@ -351,17 +351,17 @@ vgrey2         =    %00001111
 ;-------------------------------------------------------------------------------
 ; R o u t i n e s   p o u r   l a   c o m m u n i c a t i o n   s é r i e
 ;-------------------------------------------------------------------------------
-;name   = $0000 ; do something
-;               ;----------------------------------------------------------------
-;               ; explication
-setprms= $e1d4 ; Set parameters for LOAD, SAVE, and verify
+;name=$0000    ; do something
+;              ;----------------------------------------------------------------
+;              ; explication
+setprms=$e1d4  ; Set parameters for LOAD, SAVE, and verify
                ;----------------------------------------------------------------
                ; This routine is used in common by LOAD, SAVE, an veryfy for
                ; setting the filename, the logical file, device number, and 
                ; secondary address, all of witch must be done prior to these 
                ; operations. 
 ;-------------------------------------------------------------------------------
-stalk  = $ed09 ; Send Talk command to serial bus.
+stalk=$ed09    ; Send Talk command to serial bus.
                ;----------------------------------------------------------------
                ; Description:
                ;  - stalk send's talk command to serial bus.
@@ -369,7 +369,7 @@ stalk  = $ed09 ; Send Talk command to serial bus.
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-slisten= $ed0c ; Send LISTEN command to serial bus.
+slisten=$ed0c  ; Send LISTEN command to serial bus.
                ;----------------------------------------------------------------
                ; Description:
                ;  - slisten send's LISTEN command to serial bus.
@@ -377,7 +377,7 @@ slisten= $ed0c ; Send LISTEN command to serial bus.
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-sflush = $ed40 ; Flush serial bus output cache at memory address $0095, to 
+sflush=$ed40   ; Flush serial bus output cache at memory address $0095, to 
                ; serial bus.
                ;----------------------------------------------------------------
                ; Description:
@@ -386,7 +386,7 @@ sflush = $ed40 ; Flush serial bus output cache at memory address $0095, to
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-slisten2= $edb9 ; Send LISTEN secondary addressto serial bus.
+slisten2=$edb9 ; Send LISTEN secondary addressto serial bus.
                ;----------------------------------------------------------------
                ; Description:
                ;  - slisten2 send's LISTEN command to serial bus.
@@ -394,7 +394,7 @@ slisten2= $edb9 ; Send LISTEN secondary addressto serial bus.
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-stalk2 = $edb9 ; Send TALK secondary addressto serial bus.
+stalk2=$edb9  ; Send TALK secondary addressto serial bus.
                ;----------------------------------------------------------------
                ; Description:
                ;  - stalk2 send's LISTEN command to serial bus.
@@ -402,7 +402,7 @@ stalk2 = $edb9 ; Send TALK secondary addressto serial bus.
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-sbout  = $eddd ; Write byte to serial bus.
+sbout=$eddd    ; Write byte to serial bus.
                ;----------------------------------------------------------------
                ; Description:
                ;  - sbout write byte to serial bus.
@@ -410,7 +410,7 @@ sbout  = $eddd ; Write byte to serial bus.
                ; Output :    -
                ; Altered registers : - 
 ;-------------------------------------------------------------------------------
-sutalk = $edef ; Send UNTalk command to serial bus.
+sutalk=$edef   ; Send UNTalk command to serial bus.
                ;----------------------------------------------------------------
                ; Description:
                ;  - sutalk send's UNtalk command to serial bus.
@@ -418,7 +418,7 @@ sutalk = $edef ; Send UNTalk command to serial bus.
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-sulisten= $edfe ; Send UNLISTEN command to serial bus.
+sulisten=$edfe ; Send UNLISTEN command to serial bus.
                ;----------------------------------------------------------------
                ; Description:
                ;  - slisten send's UNLISTEN command to serial bus.
@@ -426,7 +426,7 @@ sulisten= $edfe ; Send UNLISTEN command to serial bus.
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-sclkhigh= $ee85 ; Set CLOCK OUT to High
+sclkhigh=$ee85 ; Set CLOCK OUT to High
                ;----------------------------------------------------------------
                ; Description:
                ;  - sclkhi set's CLOCK OUT to hight.
@@ -434,7 +434,7 @@ sclkhigh= $ee85 ; Set CLOCK OUT to High
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-sclklow= $ee8e ; Set CLOCK OUT to low
+sclklow=$ee8e  ; Set CLOCK OUT to low
                ;----------------------------------------------------------------
                ; Description:                
                ;  - sclkhi set's CLOCK OUT to low.
@@ -442,7 +442,7 @@ sclklow= $ee8e ; Set CLOCK OUT to low
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-sdathigh= $ee97 ; Set DATA OUT to High
+sdathigh=$ee97 ; Set DATA OUT to High
                ;----------------------------------------------------------------
                ; Description:
                ;  - sdtahigh set's DATA OUT to hight.
@@ -450,7 +450,7 @@ sdathigh= $ee97 ; Set DATA OUT to High
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-sdatlow= $eea0 ; Set DATA OUT to low
+sdatlow=$eea0  ; Set DATA OUT to low
                ;----------------------------------------------------------------
                ; Description:                
                ;  - sdatlow set's DATA OUT to low.
@@ -458,7 +458,7 @@ sdatlow= $eea0 ; Set DATA OUT to low
                ; Output :    -
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-sclkdta= $eea9 ; Read CLOCK IN and DATA IN.
+sclkdta=$eea9  ; Read CLOCK IN and DATA IN.
                ;----------------------------------------------------------------
                ; Description:                
                ;  - Read CLOCK IN and DATA IN.
@@ -468,7 +468,7 @@ sclkdta= $eea9 ; Read CLOCK IN and DATA IN.
                ;             A= CLOCK IN (in bit #7)
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-sbread = $f1ad ; Read one byte from serial port.
+sbread=$f1ad   ; Read one byte from serial port.
                ;----------------------------------------------------------------
                ; Description:                
                ;  - Read one byte from serial port.
@@ -476,47 +476,47 @@ sbread = $f1ad ; Read one byte from serial port.
                ; Output:    A Byte Read. (Read $0d, Return, if dev stat <> 0.)
                ; Altered registers : A 
 ;-------------------------------------------------------------------------------
-sstdin = $F237 ; Define serial bus as standard input; do not send TALK 
+sstdin=$F237   ; Define serial bus as standard input; do not send TALK 
                ; secondary address if secondary address bit #7= 1.
                ;----------------------------------------------------------------
                ; Input: A= Device number.
                ; Output: –
                ; Used registers: A, X.
 ;-------------------------------------------------------------------------------
-sstdout= $F279 ; Define serial bus as standard output; do not send LISTEN 
+sstdout=$F279  ; Define serial bus as standard output; do not send LISTEN 
                ; secondary address if secondary address bit #7= 1.
                ;----------------------------------------------------------------
                ; Input: A= Device number.
                ; Output: –
                ; Used registers: A, X.                
 ;-------------------------------------------------------------------------------
-sfopen = $F3D5 ; Open file on serial bus; do not send file name if secondary 
+sfopen=$F3D5   ; Open file on serial bus; do not send file name if secondary 
                ; address bit #7= 1 or file name length= 0.
                ;----------------------------------------------------------------
                ; Input: –
                ; Output: –
                ; Used registers: A, Y.
 ;-------------------------------------------------------------------------------
-sutclose= $F528 ; Send UNTALK and CLOSE command to serial bus.
+sutclose=$F528 ; Send UNTALK and CLOSE command to serial bus.
                ;----------------------------------------------------------------
                ; Input: –
                ; Output: –
                ; Used registers: A.
 ;-------------------------------------------------------------------------------
-sulclose= $F63F ; Send UNLISTEN and CLOSE command to serial bus.
+sulclose=$F63F ; Send UNLISTEN and CLOSE command to serial bus.
                ;----------------------------------------------------------------
                ; Input: –
                ; Output: –
                ; Used registers: A.
 ;-------------------------------------------------------------------------------
-sfclose= $F642 ; Close file on serial bus; do not send CLOSE secondary address 
+sfclose=$F642  ; Close file on serial bus; do not send CLOSE secondary address 
                ; if secondary address bit #7= 1.
                ;----------------------------------------------------------------
                ; Input: –
                ; Output: –
                ; Used registers: –
 ;-------------------------------------------------------------------------------
-stimeout= $FE21 ; Unknown. (Set serial bus timeout.)
+stimeout=$FE21 ; Unknown. (Set serial bus timeout.)
                ;----------------------------------------------------------------
                ; Input: A= Timeout value.
                ; Output: –
@@ -524,7 +524,7 @@ stimeout= $FE21 ; Unknown. (Set serial bus timeout.)
 ;-------------------------------------------------------------------------------
 ; r o u t i n e s   p r é s e n t e s   d a n s   l e   k e r n a l
 ;-------------------------------------------------------------------------------
-acptr  = $ffa5 ; jmp $ee13 Recoit un caractere provenant du port serie
+acptr=$ffa5    ; jmp $ee13 Recoit un caractere provenant du port serie
                ;----------------------------------------------------------------
                ; Description.:
                ; - acptr est utilisÃ© pour recupÃ©rer des donnÃ©es provenant du 
@@ -549,7 +549,7 @@ acptr  = $ffa5 ; jmp $ee13 Recoit un caractere provenant du port serie
                ; - Cet exemple ne montre que le rÃ©sultat final.
                ; - Effectuez d'abord lâ€™appel de talk et tksa.
 ;-------------------------------------------------------------------------------
-chkin  = $ffc6 ; jmp ($031e) Define an input channel. 
+chkin=$ffc6    ; jmp ($031e) Define an input channel. 
                ;----------------------------------------------------------------
                ; Description.:
                ; - chkin is used to define any opened file as an input file. 
@@ -573,7 +573,7 @@ chkin  = $ffc6 ; jmp ($031e) Define an input channel.
                ; Note.:
                ; - The x register designates which file #.
 ;-------------------------------------------------------------------------------
-chkout = $ffc9 ; jmp ($0320) Define an output channel.
+chkout=$ffc9   ; jmp ($0320) Define an output channel.
                ;----------------------------------------------------------------
                ; Description.:
                ; - Just like chkin, but it defines the file for output. 
@@ -597,7 +597,7 @@ chkout = $ffc9 ; jmp ($0320) Define an output channel.
                ; Note.:
                ; - The x register designates which file #.
 ;-------------------------------------------------------------------------------
-chrin  = $ffcf ; jmp ($0324) Get a character from the input channel
+chrin=$ffcf    ; jmp ($0324) Get a character from the input channel
                ;----------------------------------------------------------------
                ; Description.:
                ; - chrin will get a character from the current input device. 
@@ -626,7 +626,7 @@ chrin  = $ffcf ; jmp ($0324) Get a character from the input channel
                ; Note.:
                ; - This example is like an input statement. try running it.
 ;-------------------------------------------------------------------------------
-chrout = $ffd2 ; jmp ($0326) Output a character
+chrout=$ffd2   ; jmp ($0326) Output a character
                ;----------------------------------------------------------------
                ; Description.:
                ; - Load the accumulator with your number and call. 
@@ -654,7 +654,7 @@ chrout = $ffd2 ; jmp ($0326) Output a character
                ; - The letter a is printed to the screen. 
                ; - Call open first for the printer.
 ;-------------------------------------------------------------------------------
-cint   = $ff81 ; jsr $e518 Initialize the screen editor and vic-ii chip
+cint=$ff81     ; jsr $e518 Initialize the screen editor and vic-ii chip
                ;----------------------------------------------------------------
                ; Description:
                ; - cint resets the 6567 video controller chip and the screen 
@@ -668,7 +668,7 @@ cint   = $ff81 ; jsr $e518 Initialize the screen editor and vic-ii chip
                ; Note:
                ; - Basically, just like pressing the stop and restore keys.
 ;-------------------------------------------------------------------------------
-ciout  = $ffa8 ; jmp $eddd Transmit a byte over the serial bus
+ciout=$ffa8    ; jmp $eddd Transmit a byte over the serial bus
                ;----------------------------------------------------------------
                ; Description.:
                ; - ciout will send data to the serial bus. 
@@ -694,7 +694,7 @@ ciout  = $ffa8 ; jmp $eddd Transmit a byte over the serial bus
                ; Note.:
                ; - The accumulator is used to transfer the data.
 ;-------------------------------------------------------------------------------
-clall  = $ffe7 ; jmp ($032c) Close all open files
+clall=$ffe7    ; jmp ($032c) Close all open files
                ;----------------------------------------------------------------
                ; Description.:
                ; - clall really does what its name implies-it closes all files 
@@ -718,7 +718,7 @@ clall  = $ffe7 ; jmp ($032c) Close all open files
                ; Note.:
                ; - The clrchn routine is called automatically.
 ;-------------------------------------------------------------------------------
-close  = $ffc3 ; jmp ($031c) Close a logical file
+close=$ffc3    ; jmp ($031c) Close a logical file
                ;----------------------------------------------------------------
                ; Description.:
                ; - This routine will close any logical file that has been 
@@ -742,7 +742,7 @@ close  = $ffc3 ; jmp ($031c) Close a logical file
                ; Note.:
                ; - The accumulator designates the file #.
 ;-------------------------------------------------------------------------------
-clrchn = $ffcc ; jmp ($0322) - Clear all i/o channels.
+clrchn=$ffcc   ; jmp ($0322) - Clear all i/o channels.
                ;----------------------------------------------------------------
                ; Description.:
                ; - clrchn resets all channels and i/o registers - the input to 
@@ -766,7 +766,7 @@ clrchn = $ffcc ; jmp ($0322) - Clear all i/o channels.
                ; Note.:
                ; - The accumulator and the x register are altered.
 ;-------------------------------------------------------------------------------
-getin  = $ffe4 ; jmp ($032a) Get a character.
+getin=$ffe4    ; jmp ($032a) Get a character.
                ;----------------------------------------------------------------
                ; Description.:
                ; - getin will get one piece of data from the input device. 
@@ -791,7 +791,7 @@ getin  = $ffe4 ; jmp ($032a) Get a character.
                ; Note.:
                ; - If the serial bus is used, then all registers are altered.
 ;-------------------------------------------------------------------------------
-iobase = $fff3 ; jmp $e500 Define i/o memory page
+iobase=$fff3   ; jmp $e500 Define i/o memory page
                ;----------------------------------------------------------------
                ; Description.:
                ; - iobase returns the low and high bytes of the starting 
@@ -821,7 +821,7 @@ iobase = $fff3 ; jmp $e500 Define i/o memory page
                ; - Point is a zero-page address used to access the ddr 
                ;   indirectly.
 ;-------------------------------------------------------------------------------
-ioinit = $ff84 ; ($fda3) Initialize i/o devices.
+ioinit=$ff84   ; ($fda3) Initialize i/o devices.
                ;----------------------------------------------------------------
                ; Description:
                ; - ioinit initializes all i/o devices and routines. 
@@ -835,7 +835,7 @@ ioinit = $ff84 ; ($fda3) Initialize i/o devices.
                ; Note:
                ; - All registers are altered.
 ;-------------------------------------------------------------------------------
-listen = $ffb1 ; jmp ($ed0c) Command a device on the serial bus to listen.
+listen=$ffb1   ; jmp ($ed0c) Command a device on the serial bus to listen.
                ;----------------------------------------------------------------
                ; Description.:
                ; - listen will command any device on the serial bus to receive 
@@ -859,7 +859,7 @@ listen = $ffb1 ; jmp ($ed0c) Command a device on the serial bus to listen.
                ; Note.:
                ; - The accumulator designates the device #.
 ;-------------------------------------------------------------------------------
-load   = $ffd5 ; jmp $f4e9 Load device to RAM.
+load=$ffd5     ; jmp $f4e9 Load device to RAM.
                ;----------------------------------------------------------------
                ; Description.:
                ; - The computer will perform either the load or the verify 
@@ -897,7 +897,7 @@ load   = $ffd5 ; jmp $f4e9 Load device to RAM.
                ;   decimal, x being the low byte and y being the high byte for 
                ;   the load.
 ;-------------------------------------------------------------------------------
-membot = $ff9c ; jmp $fe34 Get/set bottom of memory.
+membot=$ff9c   ; jmp $fe34 Get/set bottom of memory.
                ;----------------------------------------------------------------
                ; Description.:
                ; - If the carry bit is set, then the low byte and the 
@@ -927,7 +927,7 @@ membot = $ff9c ; jmp $fe34 Get/set bottom of memory.
                ; Note.:
                ; - The accumulator is left alone.
 ;-------------------------------------------------------------------------------
-memtop = $ff99 ; jmp $fe25 Get/Set top of ram
+memtop=$ff99   ; jmp $fe25 Get/Set top of ram
                ;----------------------------------------------------------------
                ; Description.:
                ; - Same principle as membot, except the top of ram is affected.
@@ -953,7 +953,7 @@ memtop = $ff99 ; jmp $fe25 Get/Set top of ram
                ; Note.:
                ; - The accumulator is left alone.
 ;-------------------------------------------------------------------------------
-open   = $ffc0 ; jmp ($031a) Open a logical file
+open=$ffc0     ; jmp ($031a) Open a logical file
                ;----------------------------------------------------------------
                ; Description.:
                ; - After setlfs and setnam have been called, you can open a 
@@ -986,7 +986,7 @@ open   = $ffc0 ; jmp ($031a) Open a logical file
                ; Note.:
                ; - Opens the current name file with the current lfs.
 ;-------------------------------------------------------------------------------
-plot   = $fff0 ; jmp $e50a Set or retrieve cursor location x=column, y=line
+plot=$fff0     ; jmp $e50a Set or retrieve cursor location x=column, y=line
                ;----------------------------------------------------------------
                ; Description.:
                ; - If the carry bit of the accumulator is set, then the 
@@ -1014,7 +1014,7 @@ plot   = $fff0 ; jmp $e50a Set or retrieve cursor location x=column, y=line
                ; Note.:
                ; - The cursor is now in the middle of the screen.
 ;-------------------------------------------------------------------------------
-ramtas = $ff87 ; ($fd50) Initialise ram, tape buffer and screen.
+ramtas=$ff87   ; ($fd50) Initialise ram, tape buffer and screen.
                ;----------------------------------------------------------------
                ; Description:
                ; - ramtas is used to test ram, reset the top and bottom of 
@@ -1029,7 +1029,7 @@ ramtas = $ff87 ; ($fd50) Initialise ram, tape buffer and screen.
                ; Note:
                ; - All registers are altered.
 ;-------------------------------------------------------------------------------
-rdtim  = $ffde ; jmp $f6dd Read system clock
+rdtim=$ffde    ; jmp $f6dd Read system clock
                ;----------------------------------------------------------------
                ; Description.:
                ; - Locations 160-162 are transferred, in order, to the y 
@@ -1045,7 +1045,7 @@ rdtim  = $ffde ; jmp $f6dd Read system clock
                ; Note.:
                ; - The system clock can be translated as hours/minutes/seconds.
 ;-------------------------------------------------------------------------------
-readst = $ffb7 ; jmp $fe07 Read i/o status word
+readst=$ffb7   ; jmp $fe07 Read i/o status word
                ;----------------------------------------------------------------
                ; Description.:
                ; - When called, readst returns the status of the i/o devices. 
@@ -1071,7 +1071,7 @@ readst = $ffb7 ; jmp $fe07 Read i/o status word
                ; - In this case, if the accumulator is 16, a read error 
                ;   occurred.
 ;-------------------------------------------------------------------------------
-restor = $ff8a ; jmp $fd15 Restore default I/O vectors.
+restor=$ff8a   ; jmp $fd15 Restore default I/O vectors.
                ;----------------------------------------------------------------
                ; Input..: -
                ; Output.: –
@@ -1089,7 +1089,7 @@ restor = $ff8a ; jmp $fd15 Restore default I/O vectors.
                ; Note.:
                ; - All registers are altered.
 ;-------------------------------------------------------------------------------
-save   = $ffd8 ; jmp $f5dd Save memory to a device.
+save=$ffd8     ; jmp $f5dd Save memory to a device.
                ;----------------------------------------------------------------
                ; Description.:
                ; - The computer will perform either the load or the verify 
@@ -1133,7 +1133,7 @@ save   = $ffd8 ; jmp $f5dd Save memory to a device.
                ;   decimal, x being the low byte and y being the high byte for 
                ;   the load.
 ;-------------------------------------------------------------------------------
-scnkey = $ff9f ; jmp $ea87 Scan the keyboard
+scnkey=$ff9f   ; jmp $ea87 Scan the keyboard
                ;----------------------------------------------------------------
                ; Description.:
                ; - TScan the keyboard to see if a key is pressed. 
@@ -1158,7 +1158,7 @@ scnkey = $ff9f ; jmp $ea87 Scan the keyboard
                ;----------------------------------------------------------------
                ; Note.:
 ;-------------------------------------------------------------------------------
-screen = $ffed ; jmp $e505 Return screen format
+screen=$ffed   ; jmp $e505 Return screen format
                ;----------------------------------------------------------------
                ; Description.:
                ; - Screen returns the number of columns and rows the screen has 
@@ -1185,7 +1185,7 @@ screen = $ffed ; jmp $e505 Return screen format
                ; - screen allows further compatibility between the 64, the 
                ;   vic-20, and future versions of the 64.
 ;-------------------------------------------------------------------------------
-second = $ff93 ; jmp $edb9 Send secondary address after listen
+second=$ff93   ; jmp $edb9 Send secondary address after listen
                ;----------------------------------------------------------------
                ; Description.:
                ; - After listen has been called, a secondary address may be 
@@ -1212,7 +1212,7 @@ second = $ff93 ; jmp $edb9 Send secondary address after listen
                ; Note.:
                ; - The accumulator designates the address number.
 ;-------------------------------------------------------------------------------
-setlfs = $ffba ; jmp $fe00 Set up a logical file
+setlfs=$ffba   ; jmp $fe00 Set up a logical file
                ;----------------------------------------------------------------
                ; Description.:
                ; - setlfs stands for set logical address, file address, and 
@@ -1239,7 +1239,7 @@ setlfs = $ffba ; jmp $fe00 Set up a logical file
                ; Note.:
                ; - If open is called, the command will be open 1,8,15.
 ;-------------------------------------------------------------------------------
-setmsg = $ff90 ; jmp $fe18 Set kernal message output flag
+setmsg=$ff90   ; jmp $fe18 Set kernal message output flag
                ;----------------------------------------------------------------
                ; Description.:
                ; - Depending on the accumulator, either error messages, control 
@@ -1264,7 +1264,7 @@ setmsg = $ff90 ; jmp $fe18 Set kernal message output flag
                ; Note.:
                ; - A 128 is for error messages; a zero, for turning both off.
 ;-------------------------------------------------------------------------------
-setnam = $ffbd ; jmp $fdf9 Set up file name
+setnam=$ffbd   ; jmp $fdf9 Set up file name
                ;----------------------------------------------------------------
                ; Description.:
                ; - In order to access the open, load, or save routines, 
@@ -1291,7 +1291,7 @@ setnam = $ffbd ; jmp $fdf9 Set up file name
                ; Note.:
                ; - Accumulator is file length, x= low byte, and y= high byte.
 ;-------------------------------------------------------------------------------
-settim = $ffdb ; jmp $f6e4 Set the system clock.
+settim=$ffdb   ; jmp $f6e4 Set the system clock.
                ;----------------------------------------------------------------
                ; Description.:
                ; - settim is the opposite of rdtim: it sets the system clock
@@ -1317,7 +1317,7 @@ settim = $ffdb ; jmp $f6e4 Set the system clock.
                ; Note.:
                ; - This allows very accurate timing for many things.
 ;-------------------------------------------------------------------------------
-settmo = $ffa2 ; jmp $fe21 Set ieee bus card timeout flag
+settmo=$ffa2   ; jmp $fe21 Set ieee bus card timeout flag
                ;----------------------------------------------------------------
                ; Description.:
                ; - settmo is used only with an ieee add-on card to access the 
@@ -1342,7 +1342,7 @@ settmo = $ffa2 ; jmp $fe21 Set ieee bus card timeout flag
                ; - To enable time-outs, set the accumulator to a 128 and call 
                ;   settmo.
 ;-------------------------------------------------------------------------------
-stop   = $ffe1 ; jmp ($0328) Check if stop key is pressed.
+stop=$ffe1     ; jmp ($0328) Check if stop key is pressed.
                ;----------------------------------------------------------------
                ; Description.:
                ; - Stop will set the z flag of the accumulator if the stop key 
@@ -1367,7 +1367,7 @@ stop   = $ffe1 ; jmp ($0328) Check if stop key is pressed.
                ; Note.:
                ; - stop must be called if the stop key is to remain functional.
 ;-------------------------------------------------------------------------------
-talk   = $ffb4 ; jmp $ed09 Command a device on the serial bus to talk
+talk=$ffb4     ; jmp $ed09 Command a device on the serial bus to talk
                ;----------------------------------------------------------------
                ; Description.:
                ; - This routine will command a device on the serial bus to 
@@ -1392,7 +1392,7 @@ talk   = $ffb4 ; jmp $ed09 Command a device on the serial bus to talk
                ; Note.:
                ; - The accumulator designates the file number.
 ;-------------------------------------------------------------------------------
-tksa   = $ff96 ; jmp $edc7 Send a secondary address to a device commanded to talk
+tksa=$ff96     ; jmp $edc7 Send a secondary address to a device commanded to talk
                ;----------------------------------------------------------------
                ; Description.:
                ; - tksa is used to send a secondary address for a talk device.
@@ -1419,7 +1419,7 @@ tksa   = $ff96 ; jmp $edc7 Send a secondary address to a device commanded to tal
                ; Note.:
                ; - This example will tell the printer to print in uppercase.
 ;-------------------------------------------------------------------------------
-udtim  = $ffea ; jmp $f69b Update the system clock
+udtim=$ffea    ; jmp $f69b Update the system clock
                ;----------------------------------------------------------------
                ; Description.:
                ; - If you are using your own interrupt system, you can update 
@@ -1443,7 +1443,7 @@ udtim  = $ffea ; jmp $f69b Update the system clock
                ; Note.:
                ; - It is useful to call udtim before calling stop.
 ;-------------------------------------------------------------------------------
-unlsn  = $ffae ; jmp $edfe Send an unlisten command
+unlsn=$ffae    ; jmp $edfe Send an unlisten command
                ;----------------------------------------------------------------
                ; Description.:
                ; - unlsn commands all devices on the serial bus to stop
@@ -1467,7 +1467,7 @@ unlsn  = $ffae ; jmp $edfe Send an unlisten command
                ; Note.:
                ; - The serial bus can now be used for other things.
 ;-------------------------------------------------------------------------------
-untlk  = $ffab ; jmp $edef Send an untalk command
+untlk=$ffab    ; jmp $edef Send an untalk command
                ;----------------------------------------------------------------
                ; Description.:
                ; - All devices previously set to talk will stop sending data.
@@ -1491,7 +1491,7 @@ untlk  = $ffab ; jmp $edef Send an untalk command
                ; - Sending untlk commands all talking devices to get off the 
                ;   serial bus.
 ;-------------------------------------------------------------------------------
-vector = $ff8d ; jmp $fd1a Read/set I/O vectors.
+vector=$ff8d   ; jmp $fd1a Read/set I/O vectors.
                ;----------------------------------------------------------------
                ; Description.:
                ; - If the carry bit of the accumulator is set, the start 
@@ -1783,6 +1783,6 @@ kerrf0         =    240  ; top-of-memory change rs-232 buffer allocation.
 ;-------------------------------------------------------------------------------
 ; a p p e l   d e   l a   s o u s   r o u t i n e   p r i n c i p a l e
 ;-------------------------------------------------------------------------------
-libtart        jmp  main           ; Programme principale doit s'appeler "main"
+libtart        jsr  main           ; Programme principale doit s'appeler "main"
                ;jsr      k_coldboot
                ;rts
