@@ -142,4 +142,4 @@ js_status6     .byte     vcyan,bkcol0,1,23
                .include  "lib-cbm-pushpop.asm"
                .include  "lib-cbm-mem.asm"
                .include  "lib-cbm-hex.asm"
-               .include  "lib-c64-showregs.asm"                    
+               .include  "lib-c64-showregs-mc.asm"                    
