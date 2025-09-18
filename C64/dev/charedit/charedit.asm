@@ -141,8 +141,8 @@ device         .byte     8
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
                .include "routines.asm"
-               .include "strings_fr.asm"
-;               .include "strings_en.asm"
+;               .include "strings_fr.asm"
+               .include "strings_en.asm"
                .include "map-c64-kernal.asm"
 *=$c000
                .include "map-c64-vicii.asm"
@@ -154,7 +154,7 @@ device         .byte     8
                .include "lib-cbm-hex.asm"
                .include "lib-cbm-keyb.asm"
                .include "lib-cbm-disk.asm"
-               .include "lib-c64-showregs.asm"
+               .include "lib-c64-showregs-sd.asm"
 ;               .include "lib-c64-text-sd.asm"
 ;               .include "lib-c64-text-mc.asm"
 ;               .include "lib-c64-drawregs.asm"                

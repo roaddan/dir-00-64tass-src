@@ -133,12 +133,12 @@ js_status6     .byte     vcyan,bkcol0,1,23
 ; Includes
 ;-------------------------------------------------------------------------------
 ;
-;*=$8000
+*=$8000
                .include  "lib-c64-joystick-mc.asm"
                .include  "lib-c64-spriteman-mc.asm"
 ;               .include  "lib-c64-text-sd.asm"
                .include  "lib-c64-text-mc.asm"
-*=$c000
+*=$c800
                .include  "lib-cbm-pushpop.asm"
                .include  "lib-cbm-mem.asm"
                .include  "lib-cbm-hex.asm"

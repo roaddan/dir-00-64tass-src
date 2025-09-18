@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # --------- 6 4 t a s s   m a k e   f i l e   w i t h   V i c e ---------------
 # ----------------- a n d   F T P   u t i l i t i e s . -----------------------
-# ---------------------- M A C O S   V E R S I O N ----------------------------
+# ---------------------- L I N U X   V E R S I O N ----------------------------
 # -----------------------------------------------------------------------------
 # Note:  
 # 	A) 64tass can be downloaded from :
@@ -21,7 +21,7 @@
 # -----------------------------------------------------------------------------
 # Tis can be change to any assembler of your liking.
 # Complete path to the 64tass assembler program.
-TASS=/Users/Locals/bin/64tass_dir/64tass
+TASS=//usr/bin/64tass
 # Final location where the assembled files must be copied. 
 PRGDIR=d-00-64tass-bin
 #
@@ -31,7 +31,7 @@ PRGDIR=d-00-64tass-bin
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
 SOURCENAME=charedit
-DEPSLOCALES=strings_fr.asm strings_en.asm localmacro.asm routines.asm
+DEPSLOCALES=strings_fr.asm  strings_en.asm
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
@@ -61,7 +61,7 @@ LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-VICEBIN=/Users/Locals/bin
+VICEBIN=/usr/bin
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
@@ -88,9 +88,9 @@ V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # **** tests not yet conclusive.
 DISK8DIR=
 DISK9DIR=
-DBC=/Users/Locals/C64/00-usbkey32go/dbc
+DBC=/Users/Locals/C64/00-usbkey32go/dbc.prg
 JBMON64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/40-best-subrouines/00-supermon/jbmon/jbmon64
-CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit.prg
+CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
 J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
 #
 #-------------------------------------------------------------------------------
@@ -150,7 +150,7 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
+		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
 		$(FTPASMCMD)	# To transfer the source ASM file.
 		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
@@ -162,10 +162,10 @@ all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 ftp:		
 		$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
-#		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-#		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
-#		$(FTPASMCMD)	# To transfer the source ASM file.
-#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
+		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+		$(FTPD81CMD)	# To transfer the resulting D64 disk file.
+		$(FTPASMCMD)	# To transfer the source ASM file.
+		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
 
 # -----------------------------------------------------------------------------
@@ -187,17 +187,16 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
-		-write $(J2TESTER) j2tester #\
-#		-write $(CHAREDIT) charedit
+		-write $(CHAREDIT) charedit \
+		-write $(J2TESTER) j2tester
+		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
+		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
-		-write $(J2TESTER) j2tester #\
-#		-write $(CHAREDIT) charedit
-
-		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
-		cp -f  $(SOURCENAME).d64 $(OUTDIR)
+		-write $(CHAREDIT) charedit \
+		-write $(J2TESTER) j2tester
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
