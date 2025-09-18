@@ -5,7 +5,7 @@ blankmsg       .byte     mesgcol,0,5,146
                .null     "                                       "
 
 prompt_msg     .byte     mesgcol,0,5,146
-               .null     "       utilisez les clefs de fonction: "
+               .null     " utilisez les clefs de fonction:       "
 
 wait_msg       .byte     mesgcol,0,5,146
                .null     " un instant s.v.p. ... "
