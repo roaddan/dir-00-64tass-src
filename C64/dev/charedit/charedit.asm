@@ -1,10 +1,10 @@
 ;-------------------------------------------------------------------------------
-version  = "20250422-224206"  
+version  = "20250422-224206-0"  
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
                .include "localmacro.asm"
-               .enc     none
+               .enc     "none"
 fkeyleft       =    18
 f1top          =    9 
 scrnnewram     =    $0400 
@@ -141,10 +141,11 @@ device         .byte     8
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
                .include "routines.asm"
-;               .include "strings_fr.asm"
-               .include "strings_en.asm"
-               .include "map-c64-kernal.asm"
+               .include "strings_fr.asm"
+;               .include "strings_en.asm"
+
 *=$c000
+               .include "map-c64-kernal.asm"
                .include "map-c64-vicii.asm"
                .include "map-c64-basic2.asm"
                .include "lib-c64-vicii.asm"
