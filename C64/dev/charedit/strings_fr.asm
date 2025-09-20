@@ -94,7 +94,7 @@ whoami5        .byte     whoamicol,4,11,18
                .null     "                               ",146
 
 whoami6        .byte     whoamicol,4,12,18 
-               .null     "     code en assembleur par    ",146
+               .null     "      code assembleur par      ",146
 
 whoami7        .byte     whoamicol,4,13,18
                .null     " daniel lafrance quebec/canada ",146
