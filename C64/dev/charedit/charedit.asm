@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-version  = "20250917-231330"  
+version  = "20250925-000001"  
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
                .include "macros-64tass.asm"
@@ -155,9 +155,9 @@ device         .byte     8
                .include "lib-cbm-hex.asm"
                .include "lib-cbm-keyb.asm"
                .include "lib-cbm-disk.asm"
-               .include "lib-c64-showregs-sd.asm"
-;               .include "lib-c64-text-sd.asm"
-;               .include "lib-c64-text-mc.asm"
-;               .include "lib-c64-drawregs.asm"                
-;               .include "lib-c64-joystick.asm"
-;               .include "lib-c64-spriteman.asm"
+               .include "lib-c64-std-showregs.asm"
+;               .include "lib-c64-std-text.asm"
+;               .include "lib-c64-mcd-text.asm"
+;               .include "lib-c64-mcd-showregs.asm"                
+;               .include "lib-c64-mcd-joystick.asm"
+;               .include "lib-c64-mcd-spriteman.asm"

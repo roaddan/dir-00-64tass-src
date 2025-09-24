@@ -5,9 +5,9 @@
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
 ;-------------------------------------------------------------------------------
-; Révision : 20250523-224956
+; Révision : 20250923-000000
 ;-------------------------------------------------------------------------------
-               .enc none
+               .enc "none"
                .include  "map-c64-kernal.asm"
                .include  "map-c64-vicii.asm" 
                .include  "header-c64.asm"
@@ -20,7 +20,7 @@ main           .block
 ;               jsr  setmyint
 ;               rts
                jsr  scrmaninit
-ici            jmp  ici               
+;ici            jmp  ici               
                jsr  js_init
                lda  #$80
                sta  curcol
@@ -133,13 +133,16 @@ js_status6     .byte     vcyan,bkcol0,1,23
 ; Includes
 ;-------------------------------------------------------------------------------
 ;
-*=$8000
-               .include  "lib-c64-joystick-mc.asm"
-               .include  "lib-c64-spriteman-mc.asm"
-;               .include  "lib-c64-text-sd.asm"
-               .include  "lib-c64-text-mc.asm"
-*=$c800
+;*=$8000
+               .include  "lib-c64-std-text.asm"
+               .include  "lib-c64-std-joystick.asm"
+               .include  "lib-c64-std-spriteman.asm"
+               .include  "lib-c64-std-showregs.asm"
+;               .include  "lib-c64-mcd-text.asm"
+;               .include  "lib-c64-mcd-joystick.asm"
+;               .include  "lib-c64-mcd-spriteman.asm"
+;               .include  "lib-c64-mcd-showregs.asm"
+;*=$c000
                .include  "lib-cbm-pushpop.asm"
                .include  "lib-cbm-mem.asm"
                .include  "lib-cbm-hex.asm"
-               .include  "lib-c64-showregs-mc.asm"                    

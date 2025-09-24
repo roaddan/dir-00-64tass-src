@@ -38,7 +38,7 @@ bcmd2          .word bcmd3         ;Adresse de la commande basic suivante.
                .byte $00           ;Un zéro pour indiquer la fin de cette 
 bcmd3          .word bcmd4         ;Adresse de la commande basic suivante.
                .word 3             ;Numero de la ligne Basic.
-               .byte $9e           ;Le token de la commande PRINT du Basic
+               .byte $9e           ;Le token de la commande SYS du Basic
                                    ;... ($9e=SYS)
                                    ;L'adresse le la première instruction
                                    ; assembleur de votre programme
@@ -50,6 +50,6 @@ bcmd4          .word $0000         ;L'adresse de la commande Basic suivante.
 ;--------------------------------------------------------------------------------
 ; A p p e l   d u  p r o g r a m m e  p r i n c i p a l e .
 ;--------------------------------------------------------------------------------
-hpgmstart     jmp   main           ; Le programme principale doit s'appeler "main" 
+hpgmstart     jsr   main           ; Le programme principale doit s'appeler "main" 
                                    ; ... doit se rerminer par un RTS.
 ;--------------------------------------------------------------------------------

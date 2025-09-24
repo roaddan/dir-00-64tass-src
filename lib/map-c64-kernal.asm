@@ -1783,6 +1783,6 @@ kerrf0         =    240  ; top-of-memory change rs-232 buffer allocation.
 ;-------------------------------------------------------------------------------
 ; a p p e l   d e   l a   s o u s   r o u t i n e   p r i n c i p a l e
 ;-------------------------------------------------------------------------------
-libtart        jsr  main           ; Programme principale doit s'appeler "main"
+;libtart        jsr  main           ; Programme principale doit s'appeler "main"
                ;jsr      k_coldboot
                ;rts

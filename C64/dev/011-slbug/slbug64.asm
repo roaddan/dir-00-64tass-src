@@ -3,26 +3,27 @@
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                 
                 .include    "header-c64.asm"
-                .include    "macros-64tass.asm"
+
 ;-------------------------------------------------------------------------------
-               .enc    none
+               .enc    "none"
 main           .block
                jsr  scrmaninit
                #tolower
                #disable
-               lda #cnoir
-               sta vicbordcol
+               lda  #cnoir
+               sta  vicbordcol
                lda  #cgris0
                sta  vicbackcol
                lda  #cblanc
                sta  bascol
                jsr  cls
-               jsr help
-               jsr slbug64
-               jmp b_warmstart
+               jsr  help
+               jsr  anykey
+               jsr  slbug64
+               ;jmp  b_warmstart
                rts
                .bend
-*=$c000                
+;*=$c000                
 slbug64        .block
                 pha
                 jsr anykey
@@ -85,21 +86,19 @@ helptext       .text   format(" Lancement de slbug64  : SYS%5d",slbug64)
                .byte   $0d,0
                .bend
 ;*=$4000
-
-
-
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
-;*=$c000        
-                .include "map-c64-kernal.asm"
-                .include "map-c64-vicii.asm" 
-                .include "map-c64-basic2.asm"
-;                .include "lib-c64-text-mc.asm"
-                .include "lib-c64-basic2.asm"
-                .include "lib-cbm-pushpop.asm"
-                .include "lib-cbm-mem.asm"
-                .include "lib-cbm-hex.asm"
-                .include "lib-cbm-keyb.asm"
+*=$c000        
+                .include    "macros-64tass.asm"
+                .include    "map-c64-kernal.asm"
+                .include    "map-c64-vicii.asm"
+                .include    "map-c64-basic2.asm"
+                .include    "lib-c64-vicii.asm"
+                .include    "lib-c64-basic2.asm"
+                .include    "lib-cbm-pushpop.asm"
+                .include    "lib-cbm-mem.asm"
+                .include    "lib-cbm-hex.asm"
+                .include    "lib-cbm-keyb.asm"
            
  

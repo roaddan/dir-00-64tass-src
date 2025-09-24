@@ -173,24 +173,21 @@ pasdereport    jsr  synccolptr          ; On synchronise le ptr couleur.
 synccolptr     .block
                php                      ; Sauvegarde flags ...
                pha                      ; ... et accumulateur
-     ;---------------------------------------
+     ;----------------------------------------------------------------------
      ; On conserve le LSB comme offset.
-     ;---------------------------------------
+     ;----------------------------------------------------------------------
                lda  scrptr              ; Récupère le LSB du scrptr ...
                sta  colptr              ; ... pour le placer dans le colptr.
-     ;---------------------------------------
-     ; Peu importe ou se trouve la 
-     ; memoire video, la memoire de 
-     ; couleurs se trouve  toujours à 
-     ; $d800.           
-     ;---------------------------------------
+     ;----------------------------------------------------------------------
+     ; Peu importe ou se trouve la memoire video, la memoire de couleurs se 
+     ; trouve  toujours à $d800.           
+     ;----------------------------------------------------------------------
      ; Exemple: 
      ;  Si le curseur est à $0455 - 2009
-     ;  On transforme le MSB en masquant 
-     ;  les 6 bits les plus significatif
-     ;  et en y ajoutant $d8. 
+     ;  On transforme le MSB en masquant les 6 bits les plus significatif et 
+     ;  en y ajoutant $d8. 
      ;  Ainsi $0455 devient $d855
-     ;---------------------------------------
+     ;----------------------------------------------------------------------
                lda  scrptr+1            ; Récupère le mSB du scrptr, ...
                and  #%00000011          ; ... le converti pour pointer ...
                ora  #%11011000          ; ... la RAM couleur ...
@@ -204,7 +201,7 @@ synccolptr     .block
 ; Efface l'ecran avec la couleur voulue et place le curseur à 0,0.
 ;---------------------------------------------------------------------------
 cls            .block
-               jsr  push                ; On sauvegarde les registres
+               jsr  pushall             ; On sauvegarde les registres
                lda  virtaddr            ; On replace le curseur d'ecran à
                sta  scrptr
                lda  virtaddr+1          ; sa position initiale, ($0400).
@@ -256,7 +253,7 @@ nextcar
      ;---------------------------------------
      ; Les 256 ont-ils ete fait ?
      ;---------------------------------------
-;               jsr  putch
+               jsr  putch
                dey
                bne  nextcar
      ;---------------------------------------
@@ -285,7 +282,7 @@ nextcar
      ; appelant.
      ;---------------------------------------
                ;jsr  restzp1
-               jsr  pop
+               jsr  popall
                rts
                .bend
 
