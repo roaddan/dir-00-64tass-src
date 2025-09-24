@@ -1,13 +1,13 @@
 
 ; 64tass Turbo Assembler Macro V1.54.1900 listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L slbug64.txt -o slbug64.prg slbug64.asm
-; Wed Sep 24 16:18:04 2025
+; Wed Sep 24 16:51:56 2025
 
 ;Offset	;Hex		;Source
 
 ;******  Processing input file: slbug64.asm
 
-="20241205-163838"	                Version = "20241205-163838"
+="20250924-000001"	                Version = "20250924-000001"
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/header-c64.asm
 
@@ -50,135 +50,142 @@
 .0864	20 d2 ff	               jsr  $ffd2
 .0867	68		               pla
 .0868	28		               plp
-.0869	a9 00		               lda  #cnoir
+.0869	a9 05		               lda  #cvert
 .086b	8d 20 d0	               sta  vicbordcol
-.086e	a9 0b		               lda  #cgris0
+.086e	a9 06		               lda  #cbleu
 .0870	8d 21 d0	               sta  vicbackcol
 .0873	a9 01		               lda  #cblanc
 .0875	8d 86 02	               sta  bascol
 .0878	20 34 c1	               jsr  cls
-.087b	20 a0 08	               jsr  help
-.087e	20 d4 c5	               jsr  anykey
-.0881	20 85 08	               jsr  slbug64
-.0884	60		               rts
-.0885			slbug64
-.0885	48		                pha
-.0886	20 d4 c5	                jsr anykey
-.0889	ad 20 d0	                lda vicbordcol
-.088c	8d 9f 08	                sta byte
-.088f	a9 10		                lda #$10
+.087b	20 97 08	               jsr  help
+.087e	20 82 08	               jsr  slbug64
+.0881	60		               rts
+.0882			slbug64
+.0882	08		                php
+.0883	48		                pha
+.0884	20 d4 c5	                jsr anykey
+.0887	ad 20 d0	                lda vicbordcol
+.088a	48		                pha
+.088b	a9 10		                lda #$10
+.088d	8d 20 d0	                sta vicbordcol
+.0890	68		                pla
 .0891	8d 20 d0	                sta vicbordcol
-.0894	20 d4 c5	                jsr anykey
-.0897	ad 9f 08	                lda byte
-.089a	8d 20 d0	                sta vicbordcol
-.089d	68		                pla
-.089e	60		                rts
->089f	00		byte            .byte 0
-.08a0			help
-.08a0	20 34 c1	               jsr cls
-.08a3	20 b5 c2	               jsr  pushreg
-.08a6	a2 87		               ldx  #<line
-.08a8	a0 0a		               ldy  #>line
-.08aa	20 51 c1	               jsr  puts
-.08ad	20 e4 c2	               jsr  popreg
-.08b0	20 b5 c2	               jsr  pushreg
-.08b3	a2 19		               ldx  #<headera
-.08b5	a0 09		               ldy  #>headera
-.08b7	20 51 c1	               jsr  puts
-.08ba	20 e4 c2	               jsr  popreg
-.08bd	20 b5 c2	               jsr  pushreg
-.08c0	a2 87		               ldx  #<line
-.08c2	a0 0a		               ldy  #>line
-.08c4	20 51 c1	               jsr  puts
-.08c7	20 e4 c2	               jsr  popreg
-.08ca	20 b5 c2	               jsr  pushreg
-.08cd	a2 3b		               ldx  #<headerb
-.08cf	a0 09		               ldy  #>headerb
-.08d1	20 51 c1	               jsr  puts
-.08d4	20 e4 c2	               jsr  popreg
-.08d7	20 b5 c2	               jsr  pushreg
-.08da	a2 87		               ldx  #<line
-.08dc	a0 0a		               ldy  #>line
-.08de	20 51 c1	               jsr  puts
-.08e1	20 e4 c2	               jsr  popreg
-.08e4	20 b5 c2	               jsr  pushreg
-.08e7	a2 c0		               ldx  #<headerc
-.08e9	a0 09		               ldy  #>headerc
-.08eb	20 51 c1	               jsr  puts
-.08ee	20 e4 c2	               jsr  popreg
-.08f1	20 b5 c2	               jsr  pushreg
-.08f4	a2 87		               ldx  #<line
-.08f6	a0 0a		               ldy  #>line
-.08f8	20 51 c1	               jsr  puts
-.08fb	20 e4 c2	               jsr  popreg
-.08fe	20 b5 c2	               jsr  pushreg
-.0901	a2 03		               ldx  #<shortcuts
-.0903	a0 0a		               ldy  #>shortcuts
-.0905	20 51 c1	               jsr  puts
-.0908	20 e4 c2	               jsr  popreg
-.090b	20 b5 c2	               jsr  pushreg
-.090e	a2 87		               ldx  #<line
-.0910	a0 0a		               ldy  #>line
-.0912	20 51 c1	               jsr  puts
-.0915	20 e4 c2	               jsr  popreg
-.0918	60		               rts
-.0919			headera
->0919	2a 2a 2a 2a	               .text          "**** SL-BUG 64 Version 4.00 ****"
->091d	20 d3 cc 2d c2 d5 c7 20 36 34 20 d6 45 52 53 49
->092d	4f 4e 20 34 2e 30 30 20 2a 2a 2a 2a
->0939	0d 00		               .byte   $0d,0
->093b	2a 20 20 20	headerb        .text          "*       POUR COMMODORE 64      *"
->093f	20 20 20 20 d0 cf d5 d2 20 c3 cf cd cd cf c4 cf
->094f	d2 c5 20 36 34 20 20 20 20 20 20 2a
->095b	0d		               .byte   $0d
->095c	2a 20 20 c9	               .text          "*  IDEE ORIGINALE: S. LEBLANC  *"
->0960	c4 c5 c5 20 cf d2 c9 c7 c9 ce c1 cc c5 3a 20 d3
->0970	2e 20 cc c5 c2 cc c1 ce c3 20 20 2a
->097c	0d		               .byte   $0d
->097d	2a 20 d6 45	               .text          "* Version originale sur MC6809 *"
->0981	52 53 49 4f 4e 20 4f 52 49 47 49 4e 41 4c 45 20
->0991	53 55 52 20 cd c3 36 38 30 39 20 2a
->099d	0d		               .byte   $0d
->099e	2a 20 d0 cf	               .text          "* PORT C64 PAR DANIEL LAFRANCE *"
->09a2	d2 d4 20 c3 36 34 20 d0 c1 d2 20 c4 c1 ce c9 c5
->09b2	cc 20 cc c1 c6 d2 c1 ce c3 c5 20 2a
->09be	0d 00		               .byte   $0d,0
->09c0	2a 20 20 20	headerc        .text          "*      (c) DECEMBRE 2024       *"
->09c4	20 20 20 28 43 29 20 c4 c5 c3 c5 cd c2 d2 c5 20
->09d4	32 30 32 34 20 20 20 20 20 20 20 2a
->09e0	0d		               .byte   $0d
->09e1	2a 20 d6 45	               .text   format("* Version: %-20s*",Version)
->09e5	52 53 49 4f 4e 3a 20 32 30 32 34 31 32 30 35 2d
->09f5	31 36 33 38 33 38 20 20 20 20 20 2a
->0a01	0d 00		               .byte   $0d,0
->0a03	0d		shortcuts      .byte   $0d
->0a04	2a 2d 2d 2d	               .text          "*---- R A C C O U R C I S -----*"
->0a08	2d 20 d2 20 c1 20 c3 20 c3 20 cf 20 d5 20 d2 20
->0a18	c3 20 c9 20 d3 20 2d 2d 2d 2d 2d 2a
->0a24	0d		               .byte   $0d
->0a25	2a 20 c5 58	               .text   format("* Execution.: SYS%5d ($%X) *",slbug64,slbug64)
->0a29	45 43 55 54 49 4f 4e 2e 3a 20 d3 d9 d3 20 32 31
->0a39	38 31 20 28 24 38 38 35 29 20 2a
->0a44	0d		               .byte   $0d
->0a45	2a 20 c1 49	               .text   format("* Aide......: SYS%5d ($%X) *",help,help)
->0a49	44 45 2e 2e 2e 2e 2e 2e 3a 20 d3 d9 d3 20 32 32
->0a59	30 38 20 28 24 38 c1 30 29 20 2a
->0a64	0d		               .byte   $0d
->0a65	2a 20 c3 cc	               .text   format("* CLS.......: SYS%5d ($%X) *",cls,cls)
->0a69	d3 2e 2e 2e 2e 2e 2e 2e 3a 20 d3 d9 d3 34 39 34
->0a79	36 30 20 28 24 c3 31 33 34 29 20 2a
->0a85	0d 00		               .byte   $0d,0
->0a87	2a 2d 2d 2d	line           .text          "*------------------------------*"
->0a8b	2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d
->0a9b	2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2a
->0aa7	0d 00		               .byte   $0d,0
->0aa9	20 cc 41 4e	helptext       .text   format(" Lancement de slbug64  : SYS%5d",slbug64)
->0aad	43 45 4d 45 4e 54 20 44 45 20 53 4c 42 55 47 36
->0abd	34 20 20 3a 20 d3 d9 d3 20 32 31 38 31
->0aca	0d		               .byte   $0d
->0acb	20 45 58 2e	                .text   format(" ex.: SYS%5d",slbug64)
->0acf	3a 20 d3 d9 d3 20 32 31 38 31
->0ad9	0d 00		               .byte   $0d,0
+.0894	68		                pla
+.0895	28		                plp
+.0896	60		                rts
+.0897			help
+.0897	20 47 c2	                jsr pushall
+.089a	20 34 c1	                jsr cls
+.089d	20 b5 c2	               jsr  pushreg
+.08a0	a2 9c		               ldx  #<line
+.08a2	a0 81		               ldy  #>line
+.08a4	20 51 c1	               jsr  puts
+.08a7	20 e4 c2	               jsr  popreg
+.08aa	20 b5 c2	               jsr  pushreg
+.08ad	a2 00		               ldx  #<headera
+.08af	a0 80		               ldy  #>headera
+.08b1	20 51 c1	               jsr  puts
+.08b4	20 e4 c2	               jsr  popreg
+.08b7	20 b5 c2	               jsr  pushreg
+.08ba	a2 9c		               ldx  #<line
+.08bc	a0 81		               ldy  #>line
+.08be	20 51 c1	               jsr  puts
+.08c1	20 e4 c2	               jsr  popreg
+.08c4	20 b5 c2	               jsr  pushreg
+.08c7	a2 4b		               ldx  #<headerb
+.08c9	a0 80		               ldy  #>headerb
+.08cb	20 51 c1	               jsr  puts
+.08ce	20 e4 c2	               jsr  popreg
+.08d1	20 b5 c2	               jsr  pushreg
+.08d4	a2 9c		               ldx  #<line
+.08d6	a0 81		               ldy  #>line
+.08d8	20 51 c1	               jsr  puts
+.08db	20 e4 c2	               jsr  popreg
+.08de	20 b5 c2	               jsr  pushreg
+.08e1	a2 96		               ldx  #<headerc
+.08e3	a0 80		               ldy  #>headerc
+.08e5	20 51 c1	               jsr  puts
+.08e8	20 e4 c2	               jsr  popreg
+.08eb	20 b5 c2	               jsr  pushreg
+.08ee	a2 9c		               ldx  #<line
+.08f0	a0 81		               ldy  #>line
+.08f2	20 51 c1	               jsr  puts
+.08f5	20 e4 c2	               jsr  popreg
+.08f8	20 b5 c2	               jsr  pushreg
+.08fb	a2 06		               ldx  #<shortcuts
+.08fd	a0 81		               ldy  #>shortcuts
+.08ff	20 51 c1	               jsr  puts
+.0902	20 e4 c2	               jsr  popreg
+.0905	20 b5 c2	               jsr  pushreg
+.0908	a2 9c		               ldx  #<line
+.090a	a0 81		               ldy  #>line
+.090c	20 51 c1	               jsr  puts
+.090f	20 e4 c2	               jsr  popreg
+.0912	20 82 c2	                jsr popall
+.0915	60		                rts
+
+;******  Processing file: chaines_fr.asm
+
+.8000			headera
+>8000	20 20 20 20	                .text          "    **** SL-BUG 64 Version 4.00 ****"
+>8004	2a 2a 2a 2a 20 d3 cc 2d c2 d5 c7 20 36 34 20 d6
+>8014	45 52 53 49 4f 4e 20 34 2e 30 30 20 2a 2a 2a 2a
+>8024	0d		                .byte   $0d
+>8025	20 20 20 20	                .text          "    *       Pour Commodore 64      *"
+>8029	2a 20 20 20 20 20 20 20 d0 4f 55 52 20 c3 4f 4d
+>8039	4d 4f 44 4f 52 45 20 36 34 20 20 20 20 20 20 2a
+>8049	0d 00		                .byte   $0d,0
+>804b	20 20 20 20	headerb         .text          "    *  Idee Originale: S. Leblanc  *"
+>804f	2a 20 20 c9 44 45 45 20 cf 52 49 47 49 4e 41 4c
+>805f	45 3a 20 d3 2e 20 cc 45 42 4c 41 4e 43 20 20 2a
+>806f	0d		                .byte   $0d
+>8070	20 20 20 20	                .text          "    * Version originale sur MC6809 *"
+>8074	2a 20 d6 45 52 53 49 4f 4e 20 4f 52 49 47 49 4e
+>8084	41 4c 45 20 53 55 52 20 cd c3 36 38 30 39 20 2a
+>8094	0d 00		                .byte   $0d,$0
+>8096	20 20 20 20	headerc         .text          "    * Port sur C64 Daniel Lafrance *"
+>809a	2a 20 d0 4f 52 54 20 53 55 52 20 c3 36 34 20 c4
+>80aa	41 4e 49 45 4c 20 cc 41 46 52 41 4e 43 45 20 2a
+>80ba	0d		                .byte   $0d
+>80bb	20 20 20 20	                .text          "    *      (c) Septembre 2025      *"
+>80bf	2a 20 20 20 20 20 20 28 43 29 20 d3 45 50 54 45
+>80cf	4d 42 52 45 20 32 30 32 35 20 20 20 20 20 20 2a
+>80df	0d		                .byte   $0d
+>80e0	20 20 20 20	                .text   format("    * Version: %-20s*",Version)
+>80e4	2a 20 d6 45 52 53 49 4f 4e 3a 20 32 30 32 35 30
+>80f4	39 32 34 2d 30 30 30 30 30 31 20 20 20 20 20 2a
+>8104	0d 00		                .byte   $0d,0
+>8106	0d		shortcuts       .byte   $0d
+>8107	20 20 20 20	                .text          "    *---- R A C C O U R C I S -----*"
+>810b	2a 2d 2d 2d 2d 20 d2 20 c1 20 c3 20 c3 20 cf 20
+>811b	d5 20 d2 20 c3 20 c9 20 d3 20 2d 2d 2d 2d 2d 2a
+>812b	0d		                .byte   $0d
+>812c	20 20 20 20	                .text   format("    * Execution.: SYS%05d ($%04X) *",slbug64,slbug64)
+>8130	2a 20 c5 58 45 43 55 54 49 4f 4e 2e 3a 20 d3 d9
+>8140	d3 30 32 31 37 38 20 28 24 30 38 38 32 29 20 2a
+>8150	0d		                .byte   $0d
+>8151	20 20 20 20	                .text   format("    * Aide......: SYS%05d ($%04X) *",help,help)
+>8155	2a 20 c1 49 44 45 2e 2e 2e 2e 2e 2e 3a 20 d3 d9
+>8165	d3 30 32 31 39 39 20 28 24 30 38 39 37 29 20 2a
+>8175	0d		                .byte   $0d
+>8176	20 20 20 20	                .text   format("    * CLS.......: SYS%05d ($%04X) *",cls,cls)
+>817a	2a 20 c3 cc d3 2e 2e 2e 2e 2e 2e 2e 3a 20 d3 d9
+>818a	d3 34 39 34 36 30 20 28 24 c3 31 33 34 29 20 2a
+>819a	0d 00		                .byte   $0d,0
+>819c	20 20 20 20	line            .text          "    *------------------------------*"
+>81a0	2a 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d
+>81b0	2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2a
+>81c0	0d 00		                .byte   $0d,0
+>81c2	20 cc 41 4e	helptext        .text   format(" Lancement de slbug64  : SYS%5d",slbug64)
+>81c6	43 45 4d 45 4e 54 20 44 45 20 53 4c 42 55 47 36
+>81d6	34 20 20 3a 20 d3 d9 d3 20 32 31 37 38
+>81e3	0d		                .byte   $0d
+>81e4	20 45 58 2e	                .text   format(" ex.: SYS%5d",slbug64)
+>81e8	3a 20 d3 d9 d3 20 32 31 37 38
+>81f2	0d 00		                .byte   $0d,0
+
+;******  Return to file: slbug64.asm
+
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/macros-64tass.asm
 
