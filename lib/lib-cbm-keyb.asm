@@ -24,6 +24,8 @@ nokey          lda 203
                cmp #64
                beq nokey
                jsr releasekey
+               lda #0
+               sta 198
                pla
                plp
                rts
