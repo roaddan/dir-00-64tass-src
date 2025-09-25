@@ -13,11 +13,13 @@
 
 ;-------------------------------------------------------------------------------
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou avec 64tass utilisez
-; la syntaxes  
+; la syntaxes ... 
 ;
+;         .include "map-c64-kernal.asm"
+;         .include "map-c64-basic2.asm"
 ;         .include "lib-c64-basic2.asm"
 ;
-;   en prenant soin de placer le fichier dans le meme disque ou répertoire que
+; ... en prenant soin de placer le fichier dans le meme disque ou répertoire que
 ; votre programme.
 ;-------------------------------------------------------------------------------
 ;-------------------------------------------------------------------------------
@@ -48,7 +50,7 @@ cls            .block
                php                 ; Sauvegarde les registres  
                pha                 ;   modifiés.
                lda  #$93           ; Affiche le code basic de  
-               jsr  putch          ;   d'effacement d'écran.
+               jsr  chrout         ;   d'effacement d'écran.
                pla                 ; Récupère les registres  
                plp                 ;   modifiés.
                rts
@@ -61,7 +63,7 @@ cls            .block
 ;---------------------------------------------------------------------
 putnch         .block
                jsr  pushreg        ; Sauvegarde tous les registres.
-again          jsr  $ffd2          ; On affiche A.
+again          jsr  chrout         ; On affiche A.
                dex                 ; Un de moins à faire.
                bne  again          ; Si pas à 0 on en affiche encore.
 out            jsr  popreg         ; Récupère tous les registres.
@@ -76,7 +78,7 @@ out            jsr  popreg         ; Récupère tous les registres.
 ;---------------------------------------------------------------------
 putch          .block
                php                 ; Sauvegarde le registre de status.
-               jsr  $ffd2          ; Affiche le caractère de Acc.
+               jsr  chrout         ; Affiche le caractère de Acc.
                plp                 ; Récupère le registre de status.
                rts
                .bend
@@ -93,7 +95,7 @@ puts           .block
                ldy  #0             ; Initialise l'index du mode (ZP),Y 
 next           lda  (zpage1),y     ; Lit un charactère.
                beq  exit           ; Si $00 on sort.
-               jsr  putch          ; Affiche le caractères.
+               jsr  chrout         ; Affiche le caractères.
                jsr  inczp1         ; Inc. le pointeur ZP1 en 16 bits.
                jmp  next           ; Saute chercher le prochain carac.
 exit           jsr  popall         ; Récupère registre, ZP1 et ZP2.
@@ -303,7 +305,7 @@ putrahexcxy    .block
 setinverse     .block
                pha
                lda  #$12
-               jsr  $ffd2
+               jsr  chrout
                pla
                rts
                .bend
@@ -311,7 +313,7 @@ setinverse     .block
 clrinverse     .block
                pha
                lda  #$92
-               jsr  $ffd2
+               jsr  chrout
                pla
                rts
                .bend

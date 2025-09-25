@@ -20,8 +20,10 @@ main           .block
                jsr  help
                jsr  anykey
                jsr  slbug64
-               jsr  help
-               #mycolor
+               #locate  0,0
+               jsr  anykey
+               ;jsr  help
+               ;#mycolor
                rts
                .bend     
 
@@ -39,6 +41,26 @@ slbug64         .block
                 pla
                 ;sta vicbackcol
                 #locate 0,0
+                ;#db_setvars  top, left, width, height, colour, titre 
+                #mycolor
+;                #drawbox  0,0,23,8,cnoir+$10+0, titre
+                #drawbox  1,1,23,8,cnoir+$10+1, titre
+;                #drawbox  2,2,23,8,cnoir+$10+2, titre
+                #drawbox  3,3,23,8,cnoir+$10+3, titre
+;                #drawbox  4,4,23,8,cnoir+$10+4,titre
+                #drawbox  5,5,23,8,cnoir+$10+5,titre
+;                #drawbox  6,6,23,8,cnoir+$10+6,titre
+                #drawbox  7,7,23,8,cnoir+$10+7,titre
+;                #drawbox  8,8,23,8,cnoir+$10+8,titre
+                #drawbox  9,9,23,8,cnoir+$10+9,titre
+;                #drawbox  10,10,23,8,cnoir+$10+10,titre
+                #drawbox  11,11,23,8,cnoir+$10+11,titre
+;                #drawbox  12,12,23,8,cnoir+$10+12,titre
+                #drawbox  13,13,23,8,cnoir+$10+13,titre
+;                #drawbox  14,14,23,8,cnoir+$10+14,titre
+                #drawbox  15,15,23,8,cnoir+$10+15,titre
+;                #drawbox  22,1,38,2,cnoir+$10+7,titre
+                jsr showregs
                 pla
                 plp
                 rts
@@ -126,5 +148,5 @@ color = cjaune
                 .include    "lib-cbm-hex.asm"
                 .include    "lib-cbm-keyb.asm"
                 .include    "lib-c64-std-showregs.asm"
-           
+                .include    "lib-c64-drawbox.asm"           
  
