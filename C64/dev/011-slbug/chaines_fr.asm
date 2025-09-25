@@ -1,31 +1,18 @@
-headera                        ;0123456789012345678901234567890123456789
-                .text          "    **** SL-BUG 64 Version 4.00 ****"
-                .byte   $0d
-                .text          "    *       Pour Commodore 64      *"
-                .byte   $0d,0
-headerb         .text          "    *  Idee Originale: S. Leblanc  *"
-                .byte   $0d
-                .text          "    * Version originale sur MC6809 *"
-                .byte   $0d,$0
-headerc         .text          "    * Port sur C64 Daniel Lafrance *"
-                .byte   $0d
-                .text          "    *      (c) Septembre 2025      *"
-                .byte   $0d
-                .text   format("    * Version: %-20s*",Version)
-                .byte   $0d,0
+headtcol        =   b_jaune
+normtcol        =   b_jaune    
 
-shortcuts       .byte   $0d
-                .text          "    *---- R A C C O U R C I S -----*"
-                .byte   $0d
-                .text   format("    * Execution.: SYS%05d ($%04X) *",slbug64,slbug64)
-                .byte   $0d
-                .text   format("    * Aide......: SYS%05d ($%04X) *",help,help)
-                .byte   $0d
-                .text   format("    * CLS.......: SYS%05d ($%04X) *",cls,cls)
-                .byte   $0d,0
-line            .text          "    *------------------------------*"
-                .byte   $0d,0
-helptext        .text   format(" Lancement de slbug64  : SYS%5d",slbug64)
-                .byte   $0d
-                .text   format(" ex.: SYS%5d",slbug64)
-                .byte   $0d,0
+                ;0123456789012345678901234567890123456789
+line            .null          "*------------------------------*"
+texta           .null   "* >> SL-BUG 64 Version 4.00 << *"
+textb           .null   "*       Pour Commodore 64      *"
+textc           .null   "*  Idee Originale sur MC-6809  *"
+textd           .null   "*  Par Serge Leblanc mai 1994  *"
+texte           .null   "* Port sur C64 Daniel Lafrance *"
+textf           .null   "*      (c) Septembre 2025      *"
+textg           .null   format("*   Version: %-18s*",Version)
+texth           .null   "*---- R A C C O U R C I S -----*"
+texti           .null   format("* Execution.: SYS%05d ($%04X) *",slbug64,slbug64)
+textj           .null   format("* Aide......: SYS%05d ($%04X) *",help,help)
+textk           .null   format("* CLS.......: SYS%05d ($%04X) *",cls,cls)
+textl           .null   format(" Lancement de slbug64  : SYS%5d",slbug64)
+textm           .null   format(" ex.: SYS%5d",slbug64)

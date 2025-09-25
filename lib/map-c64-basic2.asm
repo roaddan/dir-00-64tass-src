@@ -26,25 +26,43 @@
 ;--------------------------------------------------------------------------------
 ; Colours
 ;--------------------------------------------------------------------------------
-b_black        =    144  ;0,  ctrl-1
-b_white        =    5    ;1,  ctrl-2
-b_red          =    28   ;2,  ctrl-3
-b_cyan         =    159  ;3,  ctrl-4
-b_purple       =    156  ;4,  ctrl-5
-b_green        =    30   ;5,  ctrl-6
-b_blue         =    31   ;6,  ctrl-7
-b_yellow       =    158  ;7,  ctrl-8
-b_orange       =    129  ;8,  C=-1
-b_brown        =    149  ;9,  C=-2
-b_ltred        =    150  ;10, C=-3
-b_gray3        =    155  ;11, C=-4
-b_grey3        =    155  ;11, C=-4
-b_gray2        =    152  ;12, C=-5
-b_grey2        =    152  ;13, C=-5
-b_ltgreen      =    153  ;13, C=-6
-b_ltblue       =    154  ;14, C=-7
-b_gray1        =    151  ;15, C=-8
-b_grey1        =    151  ;15, C=-8
+b_black         =   144  ;0,  ctrl-1
+b_white         =   5    ;1,  ctrl-2
+b_red           =   28   ;2,  ctrl-3
+b_cyan          =   159  ;3,  ctrl-4
+b_purple        =   156  ;4,  ctrl-5
+b_green         =   30   ;5,  ctrl-6
+b_blue          =   31   ;6,  ctrl-7
+b_yellow        =   158  ;7,  ctrl-8
+b_orange        =   129  ;8,  C=-1
+b_brown         =   149  ;9,  C=-2
+b_ltred         =   150  ;10, C=-3
+b_gray3         =   155  ;11, C=-4
+b_grey3         =   155  ;11, C=-4
+b_gray2         =   152  ;12, C=-5
+b_grey2         =   152  ;13, C=-5
+b_ltgreen       =   153  ;13, C=-6
+b_ltblue        =   154  ;14, C=-7
+b_gray1         =   151  ;15, C=-8
+b_grey1         =   151  ;15, C=-8
+; Pour le code francophone.
+b_noir          =   144  ;0,  ctrl-1
+b_blanc         =   5    ;1,  ctrl-2
+b_rouge         =   28   ;2,  ctrl-3
+; b_cyan          =   159  ;3,  ctrl-4 ; Pareil à l'anglais
+b_mauve         =   156  ;4,  ctrl-5
+b_vert          =   30   ;5,  ctrl-6
+b_bleu          =   31   ;6,  ctrl-7
+b_jaune         =   158  ;7,  ctrl-8
+; b_orange        =   129  ;8,  C=-1    ; Pareil à l'anglais
+b_brun          =   149  ;9,  C=-2
+b_rose          =   150  ;10, C=-3
+b_gris3         =   155  ;11, C=-4
+b_gris2         =   152  ;12, C=-5
+b_vert2         =   153  ;13, C=-6
+b_blue2         =   154  ;14, C=-7
+b_gris1         =   151  ;15, C=-8
+b_gris          =   151  ;15, C=-8
 ;--------------------------------------------------------------------------------
 ; Charactersets
 ;--------------------------------------------------------------------------------
@@ -127,7 +145,7 @@ b_findline     = $a613 ; Find line in BASIC.         ;ax-;---; strBAS = $xxaa
 b_new          = $a642 ; Do NEW                      ;---;---;
 b_resetclr     = $a659 ; Reset BASIC and do CLR      ;---;---; 
 b_clr          = $a65e ; Do CLR                      ;---;---;
-;Not in BASIC  2 $xxxx ; Purge Stack of all return values
+;Not in BASIC 2  $xxxx ; Purge Stack of all return values
 b_rstchrget    = $a68e ; Rst CHRGET to BASIC start   ;---;a--; strBAS hi
 b_continue     = $a857 ; Do CONTINUE.                ;a-y;---; curline $yyaa
 b_getint       = $a96b ; Get int from BASIX text.    ;---;---;

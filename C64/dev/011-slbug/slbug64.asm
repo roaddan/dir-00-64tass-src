@@ -18,6 +18,7 @@ main           .block
                sta  bascol
                jsr  cls
                jsr  help
+               jsr  anykey
                jsr  slbug64
                rts
                .bend     
@@ -26,12 +27,11 @@ main           .block
 slbug64         .block
                 php
                 pha
-                jsr anykey
-                lda vicbordcol
+                lda vicbackcol
                 pha
                 lda #$10
-                sta vicbordcol
-                ;jsr anykey
+                sta vicbackcol
+                jsr anykey
                 pla
                 sta vicbordcol
                 pla
@@ -40,27 +40,46 @@ slbug64         .block
                 .bend
 
 help            .block
+left = 4
+top = 5
+color = ccyan
                 jsr pushall      
                 jsr cls
-                #print line
-                #print headera
-                #print line
-                #print headerb
-                #print line
-                #print headerc
-                #print line
-                #print shortcuts
-;                #print helptext
-                #print line
+                lda #$0d
+                jsr putch
+                jsr putch
+                jsr putch
+                jsr putch
+                lda #b_rvs_on
+                jsr putch
+                #print_cxy color, left, top+0, line
+                #print_cxy color, left, top+1, texta
+                #print_cxy color, left, top+2, textb
+                #print_cxy color, left, top+3, textg
+                #print_cxy color, left, top+4, line
+                #print_cxy color, left, top+5, textc
+                #print_cxy color, left, top+6, textd
+                #print_cxy color, left, top+7, line
+                #print_cxy color, left, top+8, texte
+                #print_cxy color, left, top+9, textf
+                #print_cxy color, left, top+10, line
+;                #print_cxy color, left, top+10, texth
+                #print_cxy color, left, top+11, texti
+                #print_cxy color, left, top+12, textj
+                #print_cxy color, left, top+13, textk
+;                #print_cxy color, left, top+14, textl
+                #print_cxy color, left, top+14, line
+                lda #b_rvs_off
+                jsr putch
                 jsr popall
                 rts                                
                .bend
-*=$8000
+;*=$8000
                 .include    "chaines_fr.asm"
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
-*=$c000        
+;*=$c000        
                 .include    "macros-64tass.asm"
                 .include    "map-c64-kernal.asm"
                 .include    "map-c64-vicii.asm"

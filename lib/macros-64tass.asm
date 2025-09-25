@@ -199,6 +199,36 @@ println        .macro pointer
                jsr  popreg
                .endm
 
+print_xy        .macro x,y,pointer
+                jsr  pushreg
+                ldy  #\x
+                ldx  #\y
+                clc
+                jsr  plot
+                ldx  #<\pointer 
+                ldy  #>\pointer
+                jsr  puts
+                jsr  popreg
+                .endm
+
+print_cxy       .macro c,x,y,pointer
+                jsr  pushreg
+                lda  bascol
+                pha  
+                lda  #\c
+                sta  bascol
+                ldy  #\x
+                ldx  #\y
+                clc
+                jsr  plot
+                ldx  #<\pointer 
+                ldy  #>\pointer
+                jsr  puts
+                pla
+                sta  bascol
+                jsr  popreg
+                .endm
+
 printxy        .macro pointer
                jsr  pushreg
                ldx  #<\pointer 

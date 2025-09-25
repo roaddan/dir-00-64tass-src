@@ -51,5 +51,5 @@ bcmd4          .word $0000         ;L'adresse de la commande Basic suivante.
 ; A p p e l   d u  p r o g r a m m e  p r i n c i p a l e .
 ;--------------------------------------------------------------------------------
 hpgmstart     jsr   main           ; Le programme principale doit s'appeler "main" 
-                                   ; ... doit se rerminer par un RTS.
+              rts                  ; ... doit se rerminer par un RTS.
 ;--------------------------------------------------------------------------------
