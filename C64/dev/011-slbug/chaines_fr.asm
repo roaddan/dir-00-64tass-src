@@ -6,7 +6,7 @@ line            .null           "                                "
 texta           .byte           b_rvs_off
                 .text           " SL-BUG 64 Version 4.00 "
                 .byte           b_rvs_on,0
-textb           .null           "       Pour Commodore 64      "
+textb           .null           "     Version Commodore 64     "
 textc           .null           "  Idee Originale sur MC-6809  "
 textd           .null           "  Par Serge Leblanc mai 1994  "
 texte           .null           " Port sur C64 Daniel Lafrance "

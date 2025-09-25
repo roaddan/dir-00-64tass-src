@@ -42,33 +42,27 @@ slbug64         .block
                 ;sta vicbackcol
                 #locate 0,0
                 ;#db_setvars  top, left, width, height, colour, titre 
-                #mycolor
-;                #drawbox  0,0,23,8,cnoir+$10+0, titre
-                #drawbox  1,1,23,8,cnoir+$10+1, titre
-;                #drawbox  2,2,23,8,cnoir+$10+2, titre
-                #drawbox  3,3,23,8,cnoir+$10+3, titre
-;                #drawbox  4,4,23,8,cnoir+$10+4,titre
-                #drawbox  5,5,23,8,cnoir+$10+5,titre
-;                #drawbox  6,6,23,8,cnoir+$10+6,titre
-                #drawbox  7,7,23,8,cnoir+$10+7,titre
-;                #drawbox  8,8,23,8,cnoir+$10+8,titre
-                #drawbox  9,9,23,8,cnoir+$10+9,titre
-;                #drawbox  10,10,23,8,cnoir+$10+10,titre
-                #drawbox  11,11,23,8,cnoir+$10+11,titre
-;                #drawbox  12,12,23,8,cnoir+$10+12,titre
-                #drawbox  13,13,23,8,cnoir+$10+13,titre
-;                #drawbox  14,14,23,8,cnoir+$10+14,titre
-                #drawbox  15,15,23,8,cnoir+$10+15,titre
-;                #drawbox  22,1,38,2,cnoir+$10+7,titre
+                #drawbox  1,1,17,5,cblanc+reverse, titre
+                #drawbox  3,3,17,5,cgris3+reverse, titre
+                #drawbox  5,5,17,5,cgris1+reverse,titre
+                #drawbox  7,7,17,5,cgris0+reverse,titre
+                #drawbox  9,9,17,5,crouge+reverse,titre
+                #drawbox  11,11,17,5,crose+reverse,titre
+                #drawbox  13,13,17,5,cmauve+reverse,titre
+                #drawbox  15,15,17,5,cbleu+reverse,titre
+                #drawbox  17,17,17,5,ccyan+reverse,titre
+                #drawbox  19,19,17,5,cvert+reverse,titre
+
                 jsr showregs
                 pla
                 plp
                 rts
                 .bend
+reverse = $10
 
 help            .block
 left = 4
-top = 3
+top = 2
 color = cjaune
                 jsr pushall      
                 jsr cls
@@ -79,52 +73,20 @@ color = cjaune
                 jsr putch
                 lda #b_rvs_on
                 jsr putch
-                #print_cxy color, left, top+0, tline
-                #print_cxy color, left+1, top+0, texta
-
-                #print_cxy color, left, top+1, eline
-                #print_cxy color, left, top+2, eline
+                #drawbox  top,left,32,10,color+reverse,texta
                 #print_cxy color, left+1, top+2, textb
+                #print_cxy color, left+1, top+3, textc
+                #print_cxy color, left+1, top+4, textd
+                #print_cxy color, left+1, top+6, texte
+                #print_cxy color, left+1, top+7, textf
+                #print_cxy color, left+1, top+8, textg
 
-                #print_cxy color, left, top+3, eline
-                #print_cxy color, left+1, top+3, textg
-
-                #print_cxy color, left, top+4, eline
-                #print_cxy color, left, top+4, eline
-
-                #print_cxy color, left, top+5, eline
-                #print_cxy color, left+1, top+5, textc
-
-                #print_cxy color, left, top+6, eline
-                #print_cxy color, left+1, top+6, textd
-                #print_cxy color, left, top+7, eline
-
-                #print_cxy color, left, top+8, eline
-                #print_cxy color, left+1, top+8, texte
-
-                #print_cxy color, left, top+9, eline
-                #print_cxy color, left+1, top+9, textf
-
-   
-                #print_cxy color, left, top+10, eline
-                #print_cxy color, left, top+11, bline
-
-
-
-                #print_cxy color, left, top+13, tline
-                #print_cxy color, left+1, top+13, texth
-
-                #print_cxy color, left, top+14, eline
-                #print_cxy color, left, top+15, eline
+                #drawbox  top+13,left,32,6,cjaune+reverse,texth
                 #print_cxy color, left+1, top+15, texti
-
-                #print_cxy color, left, top+16, eline
                 #print_cxy color, left+1, top+16, textj
-
-                #print_cxy color, left, top+17, eline
                 #print_cxy color, left+1, top+17, textk
 
-                #print_cxy color, left, top+18, bline
+
                 lda #b_rvs_off
                 jsr putch
                 #print_cxy cblanc, 39-24, 24, textl
