@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20250924-000001"
+                Version = "20250925-190639"
 ;-------------------------------------------------------------------------------                .include    "header-c64.asm"
                 
                 .include    "header-c64.asm"
@@ -62,8 +62,9 @@ reverse = $10
 
 help            .block
 left = 4
-top = 2
-color = cjaune
+top = 4
+color = cblanc
+color2 = crose
                 jsr pushall      
                 jsr cls
                 lda #$0d
@@ -81,10 +82,10 @@ color = cjaune
                 #print_cxy color, left+1, top+7, textf
                 #print_cxy color, left+1, top+8, textg
 
-                #drawbox  top+13,left,32,6,cjaune+reverse,texth
-                #print_cxy color, left+1, top+15, texti
-                #print_cxy color, left+1, top+16, textj
-                #print_cxy color, left+1, top+17, textk
+                #drawbox  top+11,left,32,6,color2+reverse,texth
+                #print_cxy color2, left+1, top+13, texti
+                #print_cxy color2, left+1, top+14, textj
+                #print_cxy color2, left+1, top+15, textk
 
 
                 lda #b_rvs_off

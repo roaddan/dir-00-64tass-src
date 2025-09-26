@@ -9,8 +9,8 @@ texta           .byte           b_rvs_off
 textb           .null           "     Version Commodore 64     "
 textc           .null           "  Idee Originale sur MC-6809  "
 textd           .null           "  Par Serge Leblanc mai 1994  "
-texte           .null           " Port sur C64 Daniel Lafrance "
-textf           .null           "      (c) Septembre 2025      "
+texte           .null           " Port C64 par Daniel Lafrance "
+textf           .null           "       (c) Octobre 2025       "
 textg           .null   format( "   Version: %-17s ",Version)
 texth           .byte           b_rvs_off
                 .text           " RACCOURCIS "
