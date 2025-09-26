@@ -8,11 +8,10 @@ Ces fichiers ont été créé pour expérimenter la programmation en language as
 
 L'assembleur interplateforme 64Tass a été choisi pour sa similarité avec l'assembleur Turbo-Macro-Pro roulant sur les machines CBM64.
 
-Le fichier "makefile" est structuré par des variables en entête pour l'environnement MACOS 10.15.7 et utilise les utilitaires l’émulateur Vice pour la création d'image de disquette *.d64 et l'exécution du programme. 
+Les fichiers "makefile" sont structurés par des variables en entête pour l'environnement MACOS, linux ou Windows et utilise les utilitaires l’émulateur Vice pour la création d'image de disquette *.d64 et l'exécution du programme. 
+Ils contiennent aussi des lignes permettant la transmission des fichiers en mode client FTP vers la cartouche Ultimate II+
 
 De toutes évidences, vous devrez modifier le fichier "Makefile" en fonction de votre configuration.
-
-D'autre version du makefile sont aussi disponnibles. (MacOS, Linux)
 
 Commencer par explorer le répertoire "lib". Celui-ci contien le coeur de mes expérimentations et de mon développement.
 
@@ -28,7 +27,8 @@ Those files where created to experiment assembly lamguage programming for the Co
 
 The 64tass cross assembler was chosen for its similarity with the Turbo-Macro-Pro assembler running under the CBM64 machines.
 
-The "makefile" is structured by variables in it's header for the MACOS 10.15.7 environment and uses the Vice emulator to create the *.d64 disk image and to run the program.
+The "makefile" is structured by variables in it's header for the MACOS, Linux or Windows environment and uses the Vice emulator to create the *.d64 disk image and to run the program.
+It also contains lines that permits ftp transmission of files to the Ultimate II+ cartridge. 
 
 You must evidently modify the "Makefile" to reflect your work environnement.
 
