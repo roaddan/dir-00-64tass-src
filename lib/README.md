@@ -1,8 +1,8 @@
-# dir-00-64tass-src
+# dir-00-64tass-src/lib
 English version below
 ---------------------
 
-Développement pour CBM C64 et Vic20 avec 64tass.
+Librairie pour CBM C64 et Vic20 avec 64tass.
 ================================================
 Ces fichiers ont été créé pour expérimenter la programmation en language assembleur du Commodore 64 et du Vic20 avec un simple éditeur de fichier et de l'utilitaire « Make ».
 
@@ -17,6 +17,24 @@ Commencer par explorer le répertoire "lib". Celui-ci contien le coeur de mes ex
 
 Par choix et aussi parce que le français est peu présent sur le web, tous les commentaire présent dans le code seront graduellement traduit en francais même si les noms des variables et fonctions demeureront principalement en anglais.
 
+Ce répertoire contient les librairies qui sont en développement.
+
+Nomentlature des fichiers librairies:
+  Prefixes : 
+    lib-     Contient du code assembleur relatif à l'environnement décrit par le nom.
+    header-  Contient le code initial des programmes pour être lancer sous basic 2.0.
+    macro-   Contient divers macros ecrite dans la syntaxe 64Tass.
+    map-     contien des déclarations de constantes des éléments décrite par le nom.
+  
+  Préfixe niveau 2:
+      c64-  Code spécifique au Commodore 64.
+      v20-  Code spécifique au Commodore Vic20.
+      cbm-  Code applicable au commodore C64 et Vic20.
+  
+  Suffixe:  Représentatif de l'environnement auquel le code s'applique.
+            ex. kernal, basic2, sid, vicII, vic (vic 20), etc
+            aussi les thermes std et mcd signifie respectivement STandard Display et Multi-Colour-Display.
+      
 Amusez-vous.
 
 English version.

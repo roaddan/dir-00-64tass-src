@@ -212,12 +212,12 @@ print_xy        .macro x,y,pointer
                 .endm
 
 print_cxy       .macro c,x,y,pointer
-                jsr  pushreg
-                lda  bascol
-                pha  
-                lda  #\c
-                sta  bascol
-                ldy  #\x
+                jsr pushreg
+                lda bascol
+                pha 
+                lda #\c
+                sta bascol
+                ldy #\x
                 ldx  #\y
                 clc
                 jsr  plot
