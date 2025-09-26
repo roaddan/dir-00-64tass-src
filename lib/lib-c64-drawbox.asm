@@ -55,8 +55,15 @@ drawbox         .macro top, left, width, height, colour, title
                 plp
                 jsr db_drawbox      ; Dessine la fenêtre.
                                     ; Affiche le titre.
-
-                #print_cxy \colour,\left+1,\top,\title
+                .if \colour < 16 
+                    lda #18         ; le titre zzzzzz
+                    jsr chrout
+                    #print_cxy \colour,\left+1,\top,\title
+                    lda #146
+                    jsr chrout
+                .else                    
+                    #print_cxy \colour,\left+1,\top,\title
+                .endif
                 .endm
 
 ;-------------------------------------------------------------------------------

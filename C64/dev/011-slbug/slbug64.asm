@@ -36,38 +36,44 @@ slbug64         .block
                 lda #cnoir
                 sta vicbackcol
                 sta vicbordcol
-                jsr showregs
+                ;jsr showregs
                 jsr anykey
                 pla
                 ;sta vicbackcol
                 #locate 0,0
+                jsr cls
                 ;#db_setvars  top, left, width, height, colour, titre 
-                #drawbox  1,1,17,5,cblanc+reverse, titre
-                inc titre+6
-                #drawbox  3,3,17,5,cgris3, titre
-                inc titre+6
+                #drawbox  0,0,40,24,cgris1, titre
+                inc titre+8                
+                #drawbox  1,1,38,5,cjaune+reverse, titre
+                inc titre+8
+                #drawbox  6,1,19,17,ccyan+reverse, titre
+                inc titre+8
+                #drawbox  6,20,19,17,cvert, titre
+                jsr anykey
+                inc titre+8
                 #drawbox  5,5,17,5,cgris1+reverse,titre
-                inc titre+6
-                #drawbox  7,7,17,5,cgris0,titre
-                inc titre+6
+                inc titre+8
+                #drawbox  5,20,17,5,cgris0,titre
+                inc titre+8
                 #drawbox  9,9,17,5,crose+reverse,titre
-                inc titre+6
+                inc titre+8
                 #drawbox  11,11,17,5,crouge,titre
-                inc titre+6
+                inc titre+8
                 #drawbox  13,13,17,5,cmauve+reverse,titre
-                inc titre+6
+                inc titre+8
                 #drawbox  15,15,17,5,cbleu,titre
-                inc titre+6
+                inc titre+8
                 #drawbox  17,17,17,5,ccyan+reverse,titre
-                inc titre+6
+                inc titre+8
                 #drawbox  19,19,17,5,cvert,titre
-
+                jsr anykey
                 jsr showregs
                 pla
                 plp
                 rts
                 .bend
-reverse = $10
+reverse = 16
 
 help            .block
 left = 4
