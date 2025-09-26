@@ -43,15 +43,24 @@ slbug64         .block
                 #locate 0,0
                 ;#db_setvars  top, left, width, height, colour, titre 
                 #drawbox  1,1,17,5,cblanc+reverse, titre
-                #drawbox  3,3,17,5,cgris3+reverse, titre
+                inc titre+6
+                #drawbox  3,3,17,5,cgris3, titre
+                inc titre+6
                 #drawbox  5,5,17,5,cgris1+reverse,titre
-                #drawbox  7,7,17,5,cgris0+reverse,titre
-                #drawbox  9,9,17,5,crouge+reverse,titre
-                #drawbox  11,11,17,5,crose+reverse,titre
+                inc titre+6
+                #drawbox  7,7,17,5,cgris0,titre
+                inc titre+6
+                #drawbox  9,9,17,5,crose+reverse,titre
+                inc titre+6
+                #drawbox  11,11,17,5,crouge,titre
+                inc titre+6
                 #drawbox  13,13,17,5,cmauve+reverse,titre
-                #drawbox  15,15,17,5,cbleu+reverse,titre
+                inc titre+6
+                #drawbox  15,15,17,5,cbleu,titre
+                inc titre+6
                 #drawbox  17,17,17,5,ccyan+reverse,titre
-                #drawbox  19,19,17,5,cvert+reverse,titre
+                inc titre+6
+                #drawbox  19,19,17,5,cvert,titre
 
                 jsr showregs
                 pla
