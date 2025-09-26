@@ -2,7 +2,7 @@
 ; Scripteur .......: Daniel Lafrance, G9B-0S5, canada.
 ; Nom du fichier ..: lib-c64-drawbox.asm
 ; Version .........: 20250925-143216
-; Dernière m.à j. .: 20250925-143216
+; Dernière m.à j. .: 20250926-165220
 ; Inspiration  ....: 
 ;-------------------------------------------------------------------------------
 ; lib-c64-drawbox.asm - Fonctions d'affichage de fenetres par l'utilisation des 
