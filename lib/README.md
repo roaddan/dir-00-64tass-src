@@ -1,4 +1,4 @@
-# dir-00-64tass-src
+# dir-00-64tass-src/lib
 ### English version below
 # Développement pour CBM C64 et Vic20 avec 64tass.
 Ces fichiers ont été créé pour expérimenter la programmation en language assembleur du Commodore 64 et du Vic20 avec un simple éditeur de fichier et de l'utilitaire « Make ».
