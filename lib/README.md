@@ -45,7 +45,7 @@ Amusez-vous.
 
 ### __English version.__
 # CBM C64 and Vic20 development using 64tass.
-1 Those files where created to experiment assembly lamguage programming for the Commodore 64 and Vic20 using a simple text editor and the make utility. 
+Those files where created to experiment assembly lamguage programming for the Commodore 64 and Vic20 using a simple text editor and the make utility. 
 
 The 64tass cross assembler was chosen for its similarity with the Turbo-Macro-Pro assembler running under the CBM64 machines.
 
@@ -67,7 +67,8 @@ By choice and also because french is not verry present on the web, all comments 
     - lib-     Contains assembly code relativ to the environnement described by the file suffix.
     - header-  Contains program initial code to allow fireind-up under Basic 2.0.
     - macro-   Contains macros writteh under 64Tass syntax.
-    - map-     Contains declarations and constants relatives to the environnement described by the file suffix.
+    - map-     Contains declarations and constants relatives to the environnement described by 
+               the file suffix.
   
 ###  Préfixes level 2:
 
