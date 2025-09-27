@@ -21,20 +21,21 @@ Ce répertoire contient les librairies qui sont en développement.
 
 Nomentlature des fichiers librairies:
 
-  Prefixes : 
+###  Prefixes : 
 
     - lib-     Contient du code assembleur relatif à l'environnement décrit par le nom.
     - header-  Contient le code initial des programmes pour être lancer sous basic 2.0.
     - macro-   Contient divers macros ecrite dans la syntaxe 64Tass.
     - map-     contien des déclarations de constantes des éléments décrite par le nom.
   
-  Préfixe niveau 2:
+###  Préfixe niveau 2:
 
     -  c64-  Code spécifique au Commodore 64.
     -  v20-  Code spécifique au Commodore Vic20.
     -  cbm-  Code applicable au commodore C64 et Vic20.
   
-  Suffixe:  
+###  Suffixe:  
+
     - Représentatif de l'environnement auquel le code s'applique.
     - ex. kernal, basic2, sid, vicII, vic (vic 20), etc.
     - - aussi les thermes std et mcd signifie respectivement STandard Display et Multi-Colour-Display.
