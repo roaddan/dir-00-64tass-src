@@ -19,14 +19,14 @@ Par choix et aussi parce que le français est peu présent sur le web, tous les 
 
 Ce répertoire contient les librairies qui sont en développement.
 
-Nomentlature des fichiers librairies:
+## Nomentlature des fichiers librairies:
 
 ###  Prefixes : 
 
     - lib-     Contient du code assembleur relatif à l'environnement décrit par le nom.
     - header-  Contient le code initial des programmes pour être lancer sous basic 2.0.
     - macro-   Contient divers macros ecrite dans la syntaxe 64Tass.
-    - map-     contien des déclarations de constantes des éléments décrite par le nom.
+    - map-     Contien des déclarations de constantes des éléments décrite par le nom.
   
 ###  Préfixe niveau 2:
 
@@ -38,7 +38,7 @@ Nomentlature des fichiers librairies:
 
     - Représentatif de l'environnement auquel le code s'applique.
     - ex. kernal, basic2, sid, vicII, vic (vic 20), etc. 
-    - aussi les thermes std et mcd signifie respectivement 
+    - aussi les thermes std et mcd signifie respectivement:
                         STandard Display et Multi-Colour-Display.
       
 Amusez-vous.
@@ -59,5 +59,27 @@ Other versions of the makefile are also available.
 You should start by exploring the "lib" directory. It contains the heart of my experiments and developpements.
 
 By choice and also because french is not verry present on the web, all comments in the code will progressively be translated in french even though the variables and function names will remain mostly in english.
+
+## File naming convention:
+
+###  Prefixes : 
+
+    - lib-     Contains assembly code relativ to the environnement described by the file suffix.
+    - header-  Contains program initial code to allow fireind-up under Basic 2.0.
+    - macro-   Contains macros writteh under 64Tass syntax.
+    - map-     Contains declarations and constants relativ to the environnement described by the file suffix.
+  
+###  Préfixes level 2:
+
+    -  c64-  Commodore 64 specific code.
+    -  v20-  Vic20 specific code.
+    -  cbm-  both C64 et Vic20 applicable code.
+  
+###  Suffix:  
+
+    - Représents the environnement in whish code is applicable.
+    - ex. kernal, basic2, sid, vicII, vic (vic 20), etc. 
+    - also thermes std and mcd indicate respectively: 
+                        STandard Display and Multi-Colour-Display.
 
 Have fun.
