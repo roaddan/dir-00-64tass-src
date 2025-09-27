@@ -3,10 +3,10 @@
 ---------------------
 
 # Librairie pour CBM C64 et Vic20 avec 64tass.
-================================================
-1 Ces fichiers ont été créé pour expérimenter la programmation en language assembleur du Commodore 64 et du Vic20 avec un simple éditeur de fichier et de l'utilitaire « Make ».
 
-2 L'assembleur interplateforme 64Tass a été choisi pour sa similarité avec l'assembleur Turbo-Macro-Pro roulant sur les machines CBM64.
+Ces fichiers ont été créé pour expérimenter la programmation en language assembleur du Commodore 64 et du Vic20 avec un simple éditeur de fichier et de l'utilitaire « Make ».
+
+L'assembleur interplateforme 64Tass a été choisi pour sa similarité avec l'assembleur Turbo-Macro-Pro roulant sur les machines CBM64.
 
 Les fichiers "makefile" sont structurés par des variables en entête pour l'environnement MACOS, linux ou Windows et utilise les utilitaires l’émulateur Vice pour la création d'image de disquette *.d64 et l'exécution du programme. 
 Ils contiennent aussi des lignes permettant la transmission des fichiers en mode client FTP vers la cartouche Ultimate II+
@@ -20,16 +20,19 @@ Par choix et aussi parce que le français est peu présent sur le web, tous les 
 Ce répertoire contient les librairies qui sont en développement.
 
 Nomentlature des fichiers librairies:
+
   Prefixes : 
-    lib-     Contient du code assembleur relatif à l'environnement décrit par le nom.
-    header-  Contient le code initial des programmes pour être lancer sous basic 2.0.
-    macro-   Contient divers macros ecrite dans la syntaxe 64Tass.
-    map-     contien des déclarations de constantes des éléments décrite par le nom.
+
+    - lib-     Contient du code assembleur relatif à l'environnement décrit par le nom.
+    - header-  Contient le code initial des programmes pour être lancer sous basic 2.0.
+    - macro-   Contient divers macros ecrite dans la syntaxe 64Tass.
+    - map-     contien des déclarations de constantes des éléments décrite par le nom.
   
   Préfixe niveau 2:
-      c64-  Code spécifique au Commodore 64.
-      v20-  Code spécifique au Commodore Vic20.
-      cbm-  Code applicable au commodore C64 et Vic20.
+  
+    -  c64-  Code spécifique au Commodore 64.
+    -  v20-  Code spécifique au Commodore Vic20.
+    -  cbm-  Code applicable au commodore C64 et Vic20.
   
   Suffixe:  Représentatif de l'environnement auquel le code s'applique.
             ex. kernal, basic2, sid, vicII, vic (vic 20), etc
