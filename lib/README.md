@@ -39,7 +39,7 @@ Nomentlature des fichiers librairies:
     - Représentatif de l'environnement auquel le code s'applique.
     - ex. kernal, basic2, sid, vicII, vic (vic 20), etc. 
     - aussi les thermes std et mcd signifie respectivement 
-    STandard Display et Multi-Colour-Display.
+    __ST__andard __D__isplay et __M__ulti-__C__olour-__D__isplay.
       
 Amusez-vous.
 
