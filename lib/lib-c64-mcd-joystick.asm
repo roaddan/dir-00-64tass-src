@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: lib-c64-joystick.asm
 ; Version ........: Quelque part en 2023
 ; Cernière m.à j. : 20250521

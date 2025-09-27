@@ -1,5 +1,5 @@
 ;--------------------------------------------------------------------------------
-; Scripteur .......: Daniel Lafrance, G9B-0S5, canada.
+; Scripteur .......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier ..: lib-c64-basic2.asm
 ; Version .........: 20230610-223618
 ; Dernière m.à j. .: 20250523

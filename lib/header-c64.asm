@@ -1,5 +1,5 @@
 ;--------------------------------------------------------------------------------
-; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: header-c64.asm
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------

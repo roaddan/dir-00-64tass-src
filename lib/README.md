@@ -15,7 +15,7 @@ Par choix et aussi parce que le français est peu présent sur le web, tous les 
 
 # Nomenclature des fichiers:
 
-###  Prefixes : 
+###  Prefixe niveau 1: 
 
     - lib-     Contient du code assembleur relatif à l'environnement décrit par le nom.
     - header-  Contient le code initial des programmes pour être lancer sous basic 2.0.

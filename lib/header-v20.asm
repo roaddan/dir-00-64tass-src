@@ -1,5 +1,5 @@
 ;--------------------------------------------------------------------------------
-; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: header-v20.asm
 ; Cernière m.à j. : 20250521-222823
 ; Inspiration ....: 

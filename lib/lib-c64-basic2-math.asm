@@ -1,5 +1,5 @@
 ;--------------------------------------------------------------------------------
-; Scripteur ........: Daniel Lafrance, G9B-0S5, canada.
+; Scripteur ........: Daniel Lafrance, Québec, canada.
 ; Nom du fichier ...: lib-c64-basic2-math.asm
 ; Cernière m.à j. ..: 20250521
 ; Inspiration ......: Vic-20 and Commodore 64 Tool Kit: Basic by Dan Heeb.
