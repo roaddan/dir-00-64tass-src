@@ -29,14 +29,15 @@ Nomentlature des fichiers librairies:
     - map-     contien des déclarations de constantes des éléments décrite par le nom.
   
   Préfixe niveau 2:
-  
+
     -  c64-  Code spécifique au Commodore 64.
     -  v20-  Code spécifique au Commodore Vic20.
     -  cbm-  Code applicable au commodore C64 et Vic20.
   
-  Suffixe:  Représentatif de l'environnement auquel le code s'applique.
-            ex. kernal, basic2, sid, vicII, vic (vic 20), etc
-            aussi les thermes std et mcd signifie respectivement STandard Display et Multi-Colour-Display.
+  Suffixe:  
+    - Représentatif de l'environnement auquel le code s'applique.
+    - ex. kernal, basic2, sid, vicII, vic (vic 20), etc.
+    - - aussi les thermes std et mcd signifie respectivement STandard Display et Multi-Colour-Display.
       
 Amusez-vous.
 
