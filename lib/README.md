@@ -1,3 +1,20 @@
+# dir-00-64tass-src
+### English version below
+# Développement pour CBM C64 et Vic20 avec 64tass.
+Ces fichiers ont été créé pour expérimenter la programmation en language assembleur du Commodore 64 et du Vic20 avec un simple éditeur de fichier et de l'utilitaire « Make ».
+
+L'assembleur interplateforme 64Tass a été choisi pour sa similarité avec l'assembleur Turbo-Macro-Pro roulant sur les machines CBM64.
+
+Les fichiers "makefile" sont structurés par des variables en entête pour l'environnement MACOS, linux ou Windows et utilise les utilitaires l’émulateur Vice pour la création d'image de disquette *.d64 et l'exécution du programme. Ils contiennent aussi des lignes permettant la transmission des fichiers en mode client FTP vers la cartouche Ultimate II+
+
+De toutes évidences, vous devrez modifier le fichier "Makefile" en fonction de votre configuration.
+
+Commencer par explorer le répertoire "lib". Celui-ci contien le coeur de mes expérimentations et de mon développement.
+
+Par choix et aussi parce que le français est peu présent sur le web, tous les commentaire présent dans le code seront graduellement traduit en francais même si les noms des variables et fonctions demeureront principalement en anglais.
+
+
+
 ###  Prefixes : 
 
     - lib-     Contient du code assembleur relatif à l'environnement décrit par le nom.
