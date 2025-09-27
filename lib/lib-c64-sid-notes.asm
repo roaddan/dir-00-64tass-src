@@ -1,5 +1,5 @@
 ;--------------------------------------------------------------------------------
-; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
+; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: lib-c64-sid-notes.asm
 ; Cernière m.à j. : 
 ; Inspiration ....: Programmers guide to the Commodore 64.
