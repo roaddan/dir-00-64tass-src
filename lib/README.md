@@ -13,7 +13,7 @@ Commencer par explorer le répertoire "lib". Celui-ci contien le coeur de mes ex
 
 Par choix et aussi parce que le français est peu présent sur le web, tous les commentaire présent dans le code seront graduellement traduit en francais même si les noms des variables et fonctions demeureront principalement en anglais.
 
-
+# Nomenclature des fichiers:
 
 ###  Prefixes : 
 
