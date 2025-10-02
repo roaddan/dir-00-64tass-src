@@ -144,7 +144,7 @@ device         .byte     8
                .include "strings_fr.asm"
 ;               .include "strings_en.asm"
 
-*=$c000
+;*=$c000
                .include "map-c64-kernal.asm"
                .include "map-c64-vicii.asm"
                .include "map-c64-basic2.asm"
