@@ -20,6 +20,8 @@ wait           jsr  k_stop
 anykey         .block
                php
                pha
+               lda #0
+               sta 198
 nokey          lda 203
                cmp #64
                beq nokey
