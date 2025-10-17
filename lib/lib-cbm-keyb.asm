@@ -24,14 +24,14 @@ anykey      .block      ; Attend qu'une touche du clavier soit appuyée/relaché
 ;--------------------------------------------------------------------------------
             php         ;\ Sauvegarde les drapeaux 
             pha         ;/  et l'accumulateur.
-            lda #0      ;\ Efface le tampon 
-            sta 198     ;/  du clavier.
+;            lda #0      ;\ Efface le tampon 
+;            sta 198     ;/  du clavier.
 nokey       lda 203     ; Lit la matrice de la clef actuelle dans le tampon.     
             cmp #64     ; Si 64 alors aucune clef n'est appuyée.
             beq nokey   ; On attend qu'il y en aie une.
             jsr kbfree  ; On attend que le clavier soit relâché.
-            lda #0      ;\ Efface le tampon 
-            sta 198     ;/  du clavier.
+;            lda #0      ;\ Efface le tampon 
+;            sta 198     ;/  du clavier.
             pla         ;\ Récupère l'accmulateur et 
             plp         ;/  les drapeaux.
             rts

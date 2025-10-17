@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.54.1900 listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L slbug64.txt -o slbug64.prg slbug64.asm
-; Fri Oct 17 16:39:19 2025
+; Fri Oct 17 17:22:40 2025
 
 ;Offset	;Hex		;Source
 
@@ -38,742 +38,748 @@
 ;******  Return to file: slbug64.asm
 
 .0855			main
-.0855	20 c0 11	            jsr scrmaninit  ; Met en place la gestion d'écran.
-.0858	08		               php
-.0859	48		               pha
-.085a	a9 0e		               lda  #14
-.085c	20 d2 ff	               jsr  $ffd2
-.085f	68		               pla
-.0860	28		               plp
-.0861	08		               php
-.0862	48		               pha
-.0863	a9 08		               lda  #$08
-.0865	20 d2 ff	               jsr  $ffd2
-.0868	68		               pla
-.0869	28		               plp
-.086a	20 61 13	               jsr  pushreg
-.086d	48		               pha
-.086e	a9 05		               lda  #cvert
-.0870	8d 20 d0	               sta  $d020
-.0873	68		               pla
-.0874	48		               pha
-.0875	a9 06		               lda  #cbleu
-.0877	8d 21 d0	               sta  $d021
-.087a	68		               pla
-.087b	48		               pha
-.087c	a9 01		               lda  #cblanc
-.087e	8d 86 02	               sta  bascol
-.0881	68		               pla
-.0882	20 90 13	               jsr  popreg
-.0885	20 e0 11	            jsr cls         ; Efface l'écran.
-.0888	20 90 0c	            jsr help        ; Affiche le menu d'aide.
-.088b	20 82 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
-.088e	20 d8 08	            jsr slbug64     ; Lance la fonction principale.
-.0891	20 61 13	               jsr  pushreg
-.0894	a2 00		               ldx  #0
-.0896	a0 00		               ldy  #0
-.0898	20 17 12	               jsr  gotoxy
-.089b	20 90 13	               jsr  popreg
-.089e	20 82 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
-.08a1	20 90 0c	            jsr help        ; Affiche l'écran d'aide.
-.08a4	20 82 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
-.08a7	20 e0 11	            jsr cls         ; Efface l'écran.
-.08aa	20 61 13	               jsr  pushreg
-.08ad	48		               pha
-.08ae	a9 0e		               lda  #cbleupale
-.08b0	8d 20 d0	               sta  $d020
-.08b3	68		               pla
-.08b4	48		               pha
-.08b5	a9 06		               lda  #cbleu
-.08b7	8d 21 d0	               sta  $d021
-.08ba	68		               pla
-.08bb	48		               pha
-.08bc	a9 01		               lda  #cblanc
-.08be	8d 86 02	               sta  bascol
-.08c1	68		               pla
-.08c2	20 90 13	               jsr  popreg
-.08c5	08		               php
-.08c6	48		               pha
-.08c7	a9 09		               lda  #$09
-.08c9	20 d2 ff	               jsr  $ffd2
-.08cc	68		               pla
-.08cd	28		               plp
-.08ce	08		               php
-.08cf	48		               pha
-.08d0	a9 8e		               lda  #b_uppercase
-.08d2	20 d2 ff	               jsr  $ffd2
-.08d5	68		               pla
-.08d6	28		               plp
-.08d7	60		            rts
-.08d8			slbug64
-.08d8	08		            php
-.08d9	48		            pha
-.08da	ad 21 d0	            lda vicbackcol
-.08dd	48		            pha
-.08de	a9 00		            lda #cnoir      ; \
-.08e0	8d 21 d0	            sta vicbackcol  ;  > Bordure et fond en noir.
-.08e3	8d 20 d0	            sta vicbordcol  ; /
-.08e6	20 82 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
-.08e9	68		            pla
-.08ea	20 61 13	               jsr  pushreg
-.08ed	a2 00		               ldx  #0
-.08ef	a0 00		               ldy  #0
-.08f1	20 17 12	               jsr  gotoxy
-.08f4	20 90 13	               jsr  popreg
-.08f7	20 e0 11	            jsr cls
-.08fa	08		               php
-.08fb	48		               pha
-.08fc	a9 0e		               lda  #14
-.08fe	20 d2 ff	               jsr  $ffd2
-.0901	68		               pla
-.0902	28		               plp
-.0903	08		               php
-.0904	48		               pha
-.0905	a9 08		               lda  #$08
-.0907	20 d2 ff	               jsr  $ffd2
-.090a	68		               pla
-.090b	28		               plp
-.090c	08		                php                 ; Sauvegarde les registres.
-.090d	48		                pha
-.090e	a9 00		                lda #0           ; Initialise le paramètre top et la ...
-.0910	8d c3 1a	                sta drawbox_top
-.0913	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0916	a9 00		                lda #0          ; Initialise le paramètre left.
-.0918	8d c4 1a	                sta drawbox_left
-.091b	a9 28		                lda #40         ; Initialise le paramètre width.
-.091d	8d c5 1a	                sta drawbox_width
-.0920	a9 18		                lda #24        ; Initialise le paramètre height.
-.0922	8d c6 1a	                sta drawbox_height
-.0925	a9 0c		                lda #cgris1        ; Initialise le paramètre colour.
-.0927	8d c7 1a	                sta drawbox_colour
-.092a	68		                pla                 ; Récupère les registres.
-.092b	28		                plp
-.092c	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.092f	a9 12		                    lda #18         ; le titre zzzzzz
-.0931	20 d2 ff	                    jsr chrout
-.0934	20 61 13	                jsr pushreg
-.0937	ad 86 02	                lda bascol
-.093a	48		                pha
-.093b	a9 0c		                lda #cgris1
-.093d	8d 86 02	                sta bascol
-.0940	a0 01		                ldy #0+1
-.0942	a2 00		                ldx  #0
-.0944	18		                clc
-.0945	20 f0 ff	                jsr  plot
-.0948	a2 1e		                ldx  #<titre
-.094a	a0 10		                ldy  #>titre
-.094c	20 fd 11	                jsr  puts
-.094f	68		                pla
-.0950	8d 86 02	                sta  bascol
-.0953	20 90 13	                jsr  popreg
-.0956	a9 92		                    lda #146
-.0958	20 d2 ff	                    jsr chrout
-.095b	08		                php                 ; Sauvegarde les registres.
-.095c	48		                pha
-.095d	a9 01		                lda #1           ; Initialise le paramètre top et la ...
-.095f	8d c3 1a	                sta drawbox_top
-.0962	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0965	a9 01		                lda #1          ; Initialise le paramètre left.
-.0967	8d c4 1a	                sta drawbox_left
-.096a	a9 26		                lda #38         ; Initialise le paramètre width.
-.096c	8d c5 1a	                sta drawbox_width
-.096f	a9 05		                lda #5        ; Initialise le paramètre height.
-.0971	8d c6 1a	                sta drawbox_height
-.0974	a9 17		                lda #cjaune+reverse        ; Initialise le paramètre colour.
-.0976	8d c7 1a	                sta drawbox_colour
-.0979	68		                pla                 ; Récupère les registres.
-.097a	28		                plp
-.097b	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.097e	20 61 13	                jsr pushreg
-.0981	ad 86 02	                lda bascol
-.0984	48		                pha
-.0985	a9 17		                lda #cjaune+reverse
-.0987	8d 86 02	                sta bascol
-.098a	a0 02		                ldy #1+1
-.098c	a2 01		                ldx  #1
-.098e	18		                clc
-.098f	20 f0 ff	                jsr  plot
-.0992	a2 1e		                ldx  #<titre
-.0994	a0 10		                ldy  #>titre
-.0996	20 fd 11	                jsr  puts
-.0999	68		                pla
-.099a	8d 86 02	                sta  bascol
-.099d	20 90 13	                jsr  popreg
-.09a0	08		                php                 ; Sauvegarde les registres.
-.09a1	48		                pha
-.09a2	a9 06		                lda #6           ; Initialise le paramètre top et la ...
-.09a4	8d c3 1a	                sta drawbox_top
-.09a7	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.09aa	a9 01		                lda #1          ; Initialise le paramètre left.
-.09ac	8d c4 1a	                sta drawbox_left
-.09af	a9 13		                lda #19         ; Initialise le paramètre width.
-.09b1	8d c5 1a	                sta drawbox_width
-.09b4	a9 11		                lda #17        ; Initialise le paramètre height.
-.09b6	8d c6 1a	                sta drawbox_height
-.09b9	a9 13		                lda #ccyan+reverse        ; Initialise le paramètre colour.
-.09bb	8d c7 1a	                sta drawbox_colour
-.09be	68		                pla                 ; Récupère les registres.
-.09bf	28		                plp
-.09c0	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.09c3	20 61 13	                jsr pushreg
-.09c6	ad 86 02	                lda bascol
-.09c9	48		                pha
-.09ca	a9 13		                lda #ccyan+reverse
-.09cc	8d 86 02	                sta bascol
-.09cf	a0 02		                ldy #1+1
-.09d1	a2 06		                ldx  #6
-.09d3	18		                clc
-.09d4	20 f0 ff	                jsr  plot
-.09d7	a2 1e		                ldx  #<titre
-.09d9	a0 10		                ldy  #>titre
-.09db	20 fd 11	                jsr  puts
-.09de	68		                pla
-.09df	8d 86 02	                sta  bascol
-.09e2	20 90 13	                jsr  popreg
-.09e5	08		                php                 ; Sauvegarde les registres.
-.09e6	48		                pha
-.09e7	a9 06		                lda #6           ; Initialise le paramètre top et la ...
-.09e9	8d c3 1a	                sta drawbox_top
-.09ec	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.09ef	a9 14		                lda #20          ; Initialise le paramètre left.
-.09f1	8d c4 1a	                sta drawbox_left
-.09f4	a9 13		                lda #19         ; Initialise le paramètre width.
-.09f6	8d c5 1a	                sta drawbox_width
-.09f9	a9 11		                lda #17        ; Initialise le paramètre height.
-.09fb	8d c6 1a	                sta drawbox_height
-.09fe	a9 05		                lda #cvert        ; Initialise le paramètre colour.
-.0a00	8d c7 1a	                sta drawbox_colour
-.0a03	68		                pla                 ; Récupère les registres.
-.0a04	28		                plp
-.0a05	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0a08	a9 12		                    lda #18         ; le titre zzzzzz
-.0a0a	20 d2 ff	                    jsr chrout
-.0a0d	20 61 13	                jsr pushreg
-.0a10	ad 86 02	                lda bascol
-.0a13	48		                pha
-.0a14	a9 05		                lda #cvert
-.0a16	8d 86 02	                sta bascol
-.0a19	a0 15		                ldy #20+1
-.0a1b	a2 06		                ldx  #6
-.0a1d	18		                clc
-.0a1e	20 f0 ff	                jsr  plot
-.0a21	a2 1e		                ldx  #<titre
-.0a23	a0 10		                ldy  #>titre
-.0a25	20 fd 11	                jsr  puts
-.0a28	68		                pla
-.0a29	8d 86 02	                sta  bascol
-.0a2c	20 90 13	                jsr  popreg
-.0a2f	a9 92		                    lda #146
-.0a31	20 d2 ff	                    jsr chrout
-.0a34	20 82 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
-.0a37	08		                php                 ; Sauvegarde les registres.
-.0a38	48		                pha
-.0a39	a9 05		                lda #5           ; Initialise le paramètre top et la ...
-.0a3b	8d c3 1a	                sta drawbox_top
-.0a3e	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0a41	a9 05		                lda #5          ; Initialise le paramètre left.
-.0a43	8d c4 1a	                sta drawbox_left
-.0a46	a9 14		                lda #20         ; Initialise le paramètre width.
-.0a48	8d c5 1a	                sta drawbox_width
-.0a4b	a9 05		                lda #5        ; Initialise le paramètre height.
-.0a4d	8d c6 1a	                sta drawbox_height
-.0a50	a9 1c		                lda #cgris1+reverse        ; Initialise le paramètre colour.
-.0a52	8d c7 1a	                sta drawbox_colour
-.0a55	68		                pla                 ; Récupère les registres.
-.0a56	28		                plp
-.0a57	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0a5a	20 61 13	                jsr pushreg
-.0a5d	ad 86 02	                lda bascol
-.0a60	48		                pha
-.0a61	a9 1c		                lda #cgris1+reverse
-.0a63	8d 86 02	                sta bascol
-.0a66	a0 06		                ldy #5+1
-.0a68	a2 05		                ldx  #5
-.0a6a	18		                clc
-.0a6b	20 f0 ff	                jsr  plot
-.0a6e	a2 1e		                ldx  #<titre
-.0a70	a0 10		                ldy  #>titre
-.0a72	20 fd 11	                jsr  puts
-.0a75	68		                pla
-.0a76	8d 86 02	                sta  bascol
-.0a79	20 90 13	                jsr  popreg
-.0a7c	08		                php                 ; Sauvegarde les registres.
-.0a7d	48		                pha
-.0a7e	a9 07		                lda #7           ; Initialise le paramètre top et la ...
-.0a80	8d c3 1a	                sta drawbox_top
-.0a83	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0a86	a9 07		                lda #7          ; Initialise le paramètre left.
-.0a88	8d c4 1a	                sta drawbox_left
-.0a8b	a9 14		                lda #20         ; Initialise le paramètre width.
-.0a8d	8d c5 1a	                sta drawbox_width
-.0a90	a9 05		                lda #5        ; Initialise le paramètre height.
-.0a92	8d c6 1a	                sta drawbox_height
-.0a95	a9 0b		                lda #cgris0        ; Initialise le paramètre colour.
-.0a97	8d c7 1a	                sta drawbox_colour
-.0a9a	68		                pla                 ; Récupère les registres.
-.0a9b	28		                plp
-.0a9c	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0a9f	a9 12		                    lda #18         ; le titre zzzzzz
-.0aa1	20 d2 ff	                    jsr chrout
-.0aa4	20 61 13	                jsr pushreg
-.0aa7	ad 86 02	                lda bascol
-.0aaa	48		                pha
-.0aab	a9 0b		                lda #cgris0
-.0aad	8d 86 02	                sta bascol
-.0ab0	a0 08		                ldy #7+1
-.0ab2	a2 07		                ldx  #7
-.0ab4	18		                clc
-.0ab5	20 f0 ff	                jsr  plot
-.0ab8	a2 1e		                ldx  #<titre
-.0aba	a0 10		                ldy  #>titre
-.0abc	20 fd 11	                jsr  puts
-.0abf	68		                pla
-.0ac0	8d 86 02	                sta  bascol
-.0ac3	20 90 13	                jsr  popreg
-.0ac6	a9 92		                    lda #146
-.0ac8	20 d2 ff	                    jsr chrout
-.0acb	08		                php                 ; Sauvegarde les registres.
-.0acc	48		                pha
-.0acd	a9 09		                lda #9           ; Initialise le paramètre top et la ...
-.0acf	8d c3 1a	                sta drawbox_top
-.0ad2	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0ad5	a9 09		                lda #9          ; Initialise le paramètre left.
-.0ad7	8d c4 1a	                sta drawbox_left
-.0ada	a9 14		                lda #20         ; Initialise le paramètre width.
-.0adc	8d c5 1a	                sta drawbox_width
-.0adf	a9 05		                lda #5        ; Initialise le paramètre height.
-.0ae1	8d c6 1a	                sta drawbox_height
-.0ae4	a9 1a		                lda #crose+reverse        ; Initialise le paramètre colour.
-.0ae6	8d c7 1a	                sta drawbox_colour
-.0ae9	68		                pla                 ; Récupère les registres.
-.0aea	28		                plp
-.0aeb	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0aee	20 61 13	                jsr pushreg
-.0af1	ad 86 02	                lda bascol
-.0af4	48		                pha
-.0af5	a9 1a		                lda #crose+reverse
-.0af7	8d 86 02	                sta bascol
-.0afa	a0 0a		                ldy #9+1
-.0afc	a2 09		                ldx  #9
-.0afe	18		                clc
-.0aff	20 f0 ff	                jsr  plot
-.0b02	a2 1e		                ldx  #<titre
-.0b04	a0 10		                ldy  #>titre
-.0b06	20 fd 11	                jsr  puts
-.0b09	68		                pla
-.0b0a	8d 86 02	                sta  bascol
-.0b0d	20 90 13	                jsr  popreg
-.0b10	08		                php                 ; Sauvegarde les registres.
-.0b11	48		                pha
-.0b12	a9 0b		                lda #11           ; Initialise le paramètre top et la ...
-.0b14	8d c3 1a	                sta drawbox_top
-.0b17	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0b1a	a9 0b		                lda #11          ; Initialise le paramètre left.
-.0b1c	8d c4 1a	                sta drawbox_left
-.0b1f	a9 14		                lda #20         ; Initialise le paramètre width.
-.0b21	8d c5 1a	                sta drawbox_width
-.0b24	a9 05		                lda #5        ; Initialise le paramètre height.
-.0b26	8d c6 1a	                sta drawbox_height
-.0b29	a9 02		                lda #crouge        ; Initialise le paramètre colour.
-.0b2b	8d c7 1a	                sta drawbox_colour
-.0b2e	68		                pla                 ; Récupère les registres.
-.0b2f	28		                plp
-.0b30	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0b33	a9 12		                    lda #18         ; le titre zzzzzz
-.0b35	20 d2 ff	                    jsr chrout
-.0b38	20 61 13	                jsr pushreg
-.0b3b	ad 86 02	                lda bascol
-.0b3e	48		                pha
-.0b3f	a9 02		                lda #crouge
-.0b41	8d 86 02	                sta bascol
-.0b44	a0 0c		                ldy #11+1
-.0b46	a2 0b		                ldx  #11
-.0b48	18		                clc
-.0b49	20 f0 ff	                jsr  plot
-.0b4c	a2 1e		                ldx  #<titre
-.0b4e	a0 10		                ldy  #>titre
-.0b50	20 fd 11	                jsr  puts
-.0b53	68		                pla
-.0b54	8d 86 02	                sta  bascol
-.0b57	20 90 13	                jsr  popreg
-.0b5a	a9 92		                    lda #146
-.0b5c	20 d2 ff	                    jsr chrout
-.0b5f	08		                php                 ; Sauvegarde les registres.
-.0b60	48		                pha
-.0b61	a9 0d		                lda #13           ; Initialise le paramètre top et la ...
-.0b63	8d c3 1a	                sta drawbox_top
-.0b66	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0b69	a9 0d		                lda #13          ; Initialise le paramètre left.
-.0b6b	8d c4 1a	                sta drawbox_left
-.0b6e	a9 14		                lda #20         ; Initialise le paramètre width.
-.0b70	8d c5 1a	                sta drawbox_width
-.0b73	a9 05		                lda #5        ; Initialise le paramètre height.
-.0b75	8d c6 1a	                sta drawbox_height
-.0b78	a9 14		                lda #cmauve+reverse        ; Initialise le paramètre colour.
-.0b7a	8d c7 1a	                sta drawbox_colour
-.0b7d	68		                pla                 ; Récupère les registres.
-.0b7e	28		                plp
-.0b7f	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0b82	20 61 13	                jsr pushreg
-.0b85	ad 86 02	                lda bascol
-.0b88	48		                pha
-.0b89	a9 14		                lda #cmauve+reverse
-.0b8b	8d 86 02	                sta bascol
-.0b8e	a0 0e		                ldy #13+1
-.0b90	a2 0d		                ldx  #13
-.0b92	18		                clc
-.0b93	20 f0 ff	                jsr  plot
-.0b96	a2 1e		                ldx  #<titre
-.0b98	a0 10		                ldy  #>titre
-.0b9a	20 fd 11	                jsr  puts
-.0b9d	68		                pla
-.0b9e	8d 86 02	                sta  bascol
-.0ba1	20 90 13	                jsr  popreg
-.0ba4	08		                php                 ; Sauvegarde les registres.
-.0ba5	48		                pha
-.0ba6	a9 0f		                lda #15           ; Initialise le paramètre top et la ...
-.0ba8	8d c3 1a	                sta drawbox_top
-.0bab	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0bae	a9 0f		                lda #15          ; Initialise le paramètre left.
-.0bb0	8d c4 1a	                sta drawbox_left
-.0bb3	a9 14		                lda #20         ; Initialise le paramètre width.
-.0bb5	8d c5 1a	                sta drawbox_width
-.0bb8	a9 05		                lda #5        ; Initialise le paramètre height.
-.0bba	8d c6 1a	                sta drawbox_height
-.0bbd	a9 06		                lda #cbleu        ; Initialise le paramètre colour.
-.0bbf	8d c7 1a	                sta drawbox_colour
-.0bc2	68		                pla                 ; Récupère les registres.
-.0bc3	28		                plp
-.0bc4	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0bc7	a9 12		                    lda #18         ; le titre zzzzzz
-.0bc9	20 d2 ff	                    jsr chrout
-.0bcc	20 61 13	                jsr pushreg
-.0bcf	ad 86 02	                lda bascol
-.0bd2	48		                pha
-.0bd3	a9 06		                lda #cbleu
-.0bd5	8d 86 02	                sta bascol
-.0bd8	a0 10		                ldy #15+1
-.0bda	a2 0f		                ldx  #15
-.0bdc	18		                clc
-.0bdd	20 f0 ff	                jsr  plot
-.0be0	a2 1e		                ldx  #<titre
-.0be2	a0 10		                ldy  #>titre
-.0be4	20 fd 11	                jsr  puts
-.0be7	68		                pla
-.0be8	8d 86 02	                sta  bascol
-.0beb	20 90 13	                jsr  popreg
-.0bee	a9 92		                    lda #146
-.0bf0	20 d2 ff	                    jsr chrout
-.0bf3	08		                php                 ; Sauvegarde les registres.
-.0bf4	48		                pha
-.0bf5	a9 11		                lda #17           ; Initialise le paramètre top et la ...
-.0bf7	8d c3 1a	                sta drawbox_top
-.0bfa	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0bfd	a9 11		                lda #17          ; Initialise le paramètre left.
-.0bff	8d c4 1a	                sta drawbox_left
-.0c02	a9 14		                lda #20         ; Initialise le paramètre width.
-.0c04	8d c5 1a	                sta drawbox_width
-.0c07	a9 05		                lda #5        ; Initialise le paramètre height.
-.0c09	8d c6 1a	                sta drawbox_height
-.0c0c	a9 13		                lda #ccyan+reverse        ; Initialise le paramètre colour.
-.0c0e	8d c7 1a	                sta drawbox_colour
-.0c11	68		                pla                 ; Récupère les registres.
-.0c12	28		                plp
-.0c13	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0c16	20 61 13	                jsr pushreg
-.0c19	ad 86 02	                lda bascol
-.0c1c	48		                pha
-.0c1d	a9 13		                lda #ccyan+reverse
-.0c1f	8d 86 02	                sta bascol
-.0c22	a0 12		                ldy #17+1
-.0c24	a2 11		                ldx  #17
-.0c26	18		                clc
-.0c27	20 f0 ff	                jsr  plot
-.0c2a	a2 1e		                ldx  #<titre
-.0c2c	a0 10		                ldy  #>titre
-.0c2e	20 fd 11	                jsr  puts
-.0c31	68		                pla
-.0c32	8d 86 02	                sta  bascol
-.0c35	20 90 13	                jsr  popreg
-.0c38	08		                php                 ; Sauvegarde les registres.
-.0c39	48		                pha
-.0c3a	a9 13		                lda #19           ; Initialise le paramètre top et la ...
-.0c3c	8d c3 1a	                sta drawbox_top
-.0c3f	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0c42	a9 13		                lda #19          ; Initialise le paramètre left.
-.0c44	8d c4 1a	                sta drawbox_left
-.0c47	a9 14		                lda #20         ; Initialise le paramètre width.
-.0c49	8d c5 1a	                sta drawbox_width
-.0c4c	a9 05		                lda #5        ; Initialise le paramètre height.
-.0c4e	8d c6 1a	                sta drawbox_height
-.0c51	a9 05		                lda #cvert        ; Initialise le paramètre colour.
-.0c53	8d c7 1a	                sta drawbox_colour
-.0c56	68		                pla                 ; Récupère les registres.
-.0c57	28		                plp
-.0c58	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0c5b	a9 12		                    lda #18         ; le titre zzzzzz
-.0c5d	20 d2 ff	                    jsr chrout
-.0c60	20 61 13	                jsr pushreg
-.0c63	ad 86 02	                lda bascol
-.0c66	48		                pha
-.0c67	a9 05		                lda #cvert
-.0c69	8d 86 02	                sta bascol
-.0c6c	a0 14		                ldy #19+1
-.0c6e	a2 13		                ldx  #19
-.0c70	18		                clc
-.0c71	20 f0 ff	                jsr  plot
-.0c74	a2 1e		                ldx  #<titre
-.0c76	a0 10		                ldy  #>titre
-.0c78	20 fd 11	                jsr  puts
-.0c7b	68		                pla
-.0c7c	8d 86 02	                sta  bascol
-.0c7f	20 90 13	                jsr  popreg
-.0c82	a9 92		                    lda #146
-.0c84	20 d2 ff	                    jsr chrout
-.0c87	20 82 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
-.0c8a	20 f7 17	            jsr showregs
-.0c8d	68		            pla
-.0c8e	28		            plp
-.0c8f	60		            rts
+.0855	20 8a 16	            jsr anykey
+.0858	60		            rts
+.0859			main2
+.0859	20 c8 11	            jsr scrmaninit  ; Met en place la gestion d'écran.
+.085c	08		               php
+.085d	48		               pha
+.085e	a9 0e		               lda  #14
+.0860	20 d2 ff	               jsr  $ffd2
+.0863	68		               pla
+.0864	28		               plp
+.0865	08		               php
+.0866	48		               pha
+.0867	a9 08		               lda  #$08
+.0869	20 d2 ff	               jsr  $ffd2
+.086c	68		               pla
+.086d	28		               plp
+.086e	20 69 13	               jsr  pushreg
+.0871	48		               pha
+.0872	a9 05		               lda  #cvert
+.0874	8d 20 d0	               sta  $d020
+.0877	68		               pla
+.0878	48		               pha
+.0879	a9 06		               lda  #cbleu
+.087b	8d 21 d0	               sta  $d021
+.087e	68		               pla
+.087f	48		               pha
+.0880	a9 01		               lda  #cblanc
+.0882	8d 86 02	               sta  bascol
+.0885	68		               pla
+.0886	20 98 13	               jsr  popreg
+.0889	20 e8 11	            jsr cls         ; Efface l'écran.
+.088c	20 98 0c	            jsr help        ; Affiche le menu d'aide.
+.088f	20 8a 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
+.0892	20 dc 08	            jsr slbug64     ; Lance la fonction principale.
+.0895	20 69 13	               jsr  pushreg
+.0898	a2 00		               ldx  #0
+.089a	a0 00		               ldy  #0
+.089c	20 1f 12	               jsr  gotoxy
+.089f	20 98 13	               jsr  popreg
+.08a2	20 8a 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
+.08a5	20 98 0c	            jsr help        ; Affiche l'écran d'aide.
+.08a8	20 8a 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
+.08ab	20 e8 11	            jsr cls         ; Efface l'écran.
+.08ae	20 69 13	               jsr  pushreg
+.08b1	48		               pha
+.08b2	a9 0e		               lda  #cbleupale
+.08b4	8d 20 d0	               sta  $d020
+.08b7	68		               pla
+.08b8	48		               pha
+.08b9	a9 06		               lda  #cbleu
+.08bb	8d 21 d0	               sta  $d021
+.08be	68		               pla
+.08bf	48		               pha
+.08c0	a9 01		               lda  #cblanc
+.08c2	8d 86 02	               sta  bascol
+.08c5	68		               pla
+.08c6	20 98 13	               jsr  popreg
+.08c9	08		               php
+.08ca	48		               pha
+.08cb	a9 09		               lda  #$09
+.08cd	20 d2 ff	               jsr  $ffd2
+.08d0	68		               pla
+.08d1	28		               plp
+.08d2	08		               php
+.08d3	48		               pha
+.08d4	a9 8e		               lda  #b_uppercase
+.08d6	20 d2 ff	               jsr  $ffd2
+.08d9	68		               pla
+.08da	28		               plp
+.08db	60		            rts
+.08dc			slbug64
+.08dc	20 e0 08	            jsr boxdrawtest
+.08df	60		            rts
+.08e0			boxdrawtest
+.08e0	08		            php
+.08e1	48		            pha
+.08e2	ad 21 d0	            lda vicbackcol
+.08e5	48		            pha
+.08e6	a9 00		            lda #cnoir      ; \
+.08e8	8d 21 d0	            sta vicbackcol  ;  > Bordure et fond en noir.
+.08eb	8d 20 d0	            sta vicbordcol  ; /
+.08ee	20 8a 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
+.08f1	68		            pla
+.08f2	20 69 13	               jsr  pushreg
+.08f5	a2 00		               ldx  #0
+.08f7	a0 00		               ldy  #0
+.08f9	20 1f 12	               jsr  gotoxy
+.08fc	20 98 13	               jsr  popreg
+.08ff	20 e8 11	            jsr cls
+.0902	08		               php
+.0903	48		               pha
+.0904	a9 0e		               lda  #14
+.0906	20 d2 ff	               jsr  $ffd2
+.0909	68		               pla
+.090a	28		               plp
+.090b	08		               php
+.090c	48		               pha
+.090d	a9 08		               lda  #$08
+.090f	20 d2 ff	               jsr  $ffd2
+.0912	68		               pla
+.0913	28		               plp
+.0914	08		                php                 ; Sauvegarde les registres.
+.0915	48		                pha
+.0916	a9 00		                lda #0           ; Initialise le paramètre top et la ...
+.0918	8d c3 1a	                sta drawbox_top
+.091b	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.091e	a9 00		                lda #0          ; Initialise le paramètre left.
+.0920	8d c4 1a	                sta drawbox_left
+.0923	a9 28		                lda #40         ; Initialise le paramètre width.
+.0925	8d c5 1a	                sta drawbox_width
+.0928	a9 18		                lda #24        ; Initialise le paramètre height.
+.092a	8d c6 1a	                sta drawbox_height
+.092d	a9 0c		                lda #cgris1        ; Initialise le paramètre colour.
+.092f	8d c7 1a	                sta drawbox_colour
+.0932	68		                pla                 ; Récupère les registres.
+.0933	28		                plp
+.0934	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0937	a9 12		                    lda #18         ; le titre zzzzzz
+.0939	20 d2 ff	                    jsr chrout
+.093c	20 69 13	                jsr pushreg
+.093f	ad 86 02	                lda bascol
+.0942	48		                pha
+.0943	a9 0c		                lda #cgris1
+.0945	8d 86 02	                sta bascol
+.0948	a0 01		                ldy #0+1
+.094a	a2 00		                ldx  #0
+.094c	18		                clc
+.094d	20 f0 ff	                jsr  plot
+.0950	a2 26		                ldx  #<titre
+.0952	a0 10		                ldy  #>titre
+.0954	20 05 12	                jsr  puts
+.0957	68		                pla
+.0958	8d 86 02	                sta  bascol
+.095b	20 98 13	                jsr  popreg
+.095e	a9 92		                    lda #146
+.0960	20 d2 ff	                    jsr chrout
+.0963	08		                php                 ; Sauvegarde les registres.
+.0964	48		                pha
+.0965	a9 01		                lda #1           ; Initialise le paramètre top et la ...
+.0967	8d c3 1a	                sta drawbox_top
+.096a	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.096d	a9 01		                lda #1          ; Initialise le paramètre left.
+.096f	8d c4 1a	                sta drawbox_left
+.0972	a9 26		                lda #38         ; Initialise le paramètre width.
+.0974	8d c5 1a	                sta drawbox_width
+.0977	a9 05		                lda #5        ; Initialise le paramètre height.
+.0979	8d c6 1a	                sta drawbox_height
+.097c	a9 17		                lda #cjaune+reverse        ; Initialise le paramètre colour.
+.097e	8d c7 1a	                sta drawbox_colour
+.0981	68		                pla                 ; Récupère les registres.
+.0982	28		                plp
+.0983	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0986	20 69 13	                jsr pushreg
+.0989	ad 86 02	                lda bascol
+.098c	48		                pha
+.098d	a9 17		                lda #cjaune+reverse
+.098f	8d 86 02	                sta bascol
+.0992	a0 02		                ldy #1+1
+.0994	a2 01		                ldx  #1
+.0996	18		                clc
+.0997	20 f0 ff	                jsr  plot
+.099a	a2 26		                ldx  #<titre
+.099c	a0 10		                ldy  #>titre
+.099e	20 05 12	                jsr  puts
+.09a1	68		                pla
+.09a2	8d 86 02	                sta  bascol
+.09a5	20 98 13	                jsr  popreg
+.09a8	08		                php                 ; Sauvegarde les registres.
+.09a9	48		                pha
+.09aa	a9 06		                lda #6           ; Initialise le paramètre top et la ...
+.09ac	8d c3 1a	                sta drawbox_top
+.09af	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.09b2	a9 01		                lda #1          ; Initialise le paramètre left.
+.09b4	8d c4 1a	                sta drawbox_left
+.09b7	a9 13		                lda #19         ; Initialise le paramètre width.
+.09b9	8d c5 1a	                sta drawbox_width
+.09bc	a9 11		                lda #17        ; Initialise le paramètre height.
+.09be	8d c6 1a	                sta drawbox_height
+.09c1	a9 13		                lda #ccyan+reverse        ; Initialise le paramètre colour.
+.09c3	8d c7 1a	                sta drawbox_colour
+.09c6	68		                pla                 ; Récupère les registres.
+.09c7	28		                plp
+.09c8	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.09cb	20 69 13	                jsr pushreg
+.09ce	ad 86 02	                lda bascol
+.09d1	48		                pha
+.09d2	a9 13		                lda #ccyan+reverse
+.09d4	8d 86 02	                sta bascol
+.09d7	a0 02		                ldy #1+1
+.09d9	a2 06		                ldx  #6
+.09db	18		                clc
+.09dc	20 f0 ff	                jsr  plot
+.09df	a2 26		                ldx  #<titre
+.09e1	a0 10		                ldy  #>titre
+.09e3	20 05 12	                jsr  puts
+.09e6	68		                pla
+.09e7	8d 86 02	                sta  bascol
+.09ea	20 98 13	                jsr  popreg
+.09ed	08		                php                 ; Sauvegarde les registres.
+.09ee	48		                pha
+.09ef	a9 06		                lda #6           ; Initialise le paramètre top et la ...
+.09f1	8d c3 1a	                sta drawbox_top
+.09f4	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.09f7	a9 14		                lda #20          ; Initialise le paramètre left.
+.09f9	8d c4 1a	                sta drawbox_left
+.09fc	a9 13		                lda #19         ; Initialise le paramètre width.
+.09fe	8d c5 1a	                sta drawbox_width
+.0a01	a9 11		                lda #17        ; Initialise le paramètre height.
+.0a03	8d c6 1a	                sta drawbox_height
+.0a06	a9 05		                lda #cvert        ; Initialise le paramètre colour.
+.0a08	8d c7 1a	                sta drawbox_colour
+.0a0b	68		                pla                 ; Récupère les registres.
+.0a0c	28		                plp
+.0a0d	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0a10	a9 12		                    lda #18         ; le titre zzzzzz
+.0a12	20 d2 ff	                    jsr chrout
+.0a15	20 69 13	                jsr pushreg
+.0a18	ad 86 02	                lda bascol
+.0a1b	48		                pha
+.0a1c	a9 05		                lda #cvert
+.0a1e	8d 86 02	                sta bascol
+.0a21	a0 15		                ldy #20+1
+.0a23	a2 06		                ldx  #6
+.0a25	18		                clc
+.0a26	20 f0 ff	                jsr  plot
+.0a29	a2 26		                ldx  #<titre
+.0a2b	a0 10		                ldy  #>titre
+.0a2d	20 05 12	                jsr  puts
+.0a30	68		                pla
+.0a31	8d 86 02	                sta  bascol
+.0a34	20 98 13	                jsr  popreg
+.0a37	a9 92		                    lda #146
+.0a39	20 d2 ff	                    jsr chrout
+.0a3c	20 8a 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
+.0a3f	08		                php                 ; Sauvegarde les registres.
+.0a40	48		                pha
+.0a41	a9 05		                lda #5           ; Initialise le paramètre top et la ...
+.0a43	8d c3 1a	                sta drawbox_top
+.0a46	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.0a49	a9 05		                lda #5          ; Initialise le paramètre left.
+.0a4b	8d c4 1a	                sta drawbox_left
+.0a4e	a9 14		                lda #20         ; Initialise le paramètre width.
+.0a50	8d c5 1a	                sta drawbox_width
+.0a53	a9 05		                lda #5        ; Initialise le paramètre height.
+.0a55	8d c6 1a	                sta drawbox_height
+.0a58	a9 1c		                lda #cgris1+reverse        ; Initialise le paramètre colour.
+.0a5a	8d c7 1a	                sta drawbox_colour
+.0a5d	68		                pla                 ; Récupère les registres.
+.0a5e	28		                plp
+.0a5f	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0a62	20 69 13	                jsr pushreg
+.0a65	ad 86 02	                lda bascol
+.0a68	48		                pha
+.0a69	a9 1c		                lda #cgris1+reverse
+.0a6b	8d 86 02	                sta bascol
+.0a6e	a0 06		                ldy #5+1
+.0a70	a2 05		                ldx  #5
+.0a72	18		                clc
+.0a73	20 f0 ff	                jsr  plot
+.0a76	a2 26		                ldx  #<titre
+.0a78	a0 10		                ldy  #>titre
+.0a7a	20 05 12	                jsr  puts
+.0a7d	68		                pla
+.0a7e	8d 86 02	                sta  bascol
+.0a81	20 98 13	                jsr  popreg
+.0a84	08		                php                 ; Sauvegarde les registres.
+.0a85	48		                pha
+.0a86	a9 07		                lda #7           ; Initialise le paramètre top et la ...
+.0a88	8d c3 1a	                sta drawbox_top
+.0a8b	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.0a8e	a9 07		                lda #7          ; Initialise le paramètre left.
+.0a90	8d c4 1a	                sta drawbox_left
+.0a93	a9 14		                lda #20         ; Initialise le paramètre width.
+.0a95	8d c5 1a	                sta drawbox_width
+.0a98	a9 05		                lda #5        ; Initialise le paramètre height.
+.0a9a	8d c6 1a	                sta drawbox_height
+.0a9d	a9 0b		                lda #cgris0        ; Initialise le paramètre colour.
+.0a9f	8d c7 1a	                sta drawbox_colour
+.0aa2	68		                pla                 ; Récupère les registres.
+.0aa3	28		                plp
+.0aa4	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0aa7	a9 12		                    lda #18         ; le titre zzzzzz
+.0aa9	20 d2 ff	                    jsr chrout
+.0aac	20 69 13	                jsr pushreg
+.0aaf	ad 86 02	                lda bascol
+.0ab2	48		                pha
+.0ab3	a9 0b		                lda #cgris0
+.0ab5	8d 86 02	                sta bascol
+.0ab8	a0 08		                ldy #7+1
+.0aba	a2 07		                ldx  #7
+.0abc	18		                clc
+.0abd	20 f0 ff	                jsr  plot
+.0ac0	a2 26		                ldx  #<titre
+.0ac2	a0 10		                ldy  #>titre
+.0ac4	20 05 12	                jsr  puts
+.0ac7	68		                pla
+.0ac8	8d 86 02	                sta  bascol
+.0acb	20 98 13	                jsr  popreg
+.0ace	a9 92		                    lda #146
+.0ad0	20 d2 ff	                    jsr chrout
+.0ad3	08		                php                 ; Sauvegarde les registres.
+.0ad4	48		                pha
+.0ad5	a9 09		                lda #9           ; Initialise le paramètre top et la ...
+.0ad7	8d c3 1a	                sta drawbox_top
+.0ada	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.0add	a9 09		                lda #9          ; Initialise le paramètre left.
+.0adf	8d c4 1a	                sta drawbox_left
+.0ae2	a9 14		                lda #20         ; Initialise le paramètre width.
+.0ae4	8d c5 1a	                sta drawbox_width
+.0ae7	a9 05		                lda #5        ; Initialise le paramètre height.
+.0ae9	8d c6 1a	                sta drawbox_height
+.0aec	a9 1a		                lda #crose+reverse        ; Initialise le paramètre colour.
+.0aee	8d c7 1a	                sta drawbox_colour
+.0af1	68		                pla                 ; Récupère les registres.
+.0af2	28		                plp
+.0af3	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0af6	20 69 13	                jsr pushreg
+.0af9	ad 86 02	                lda bascol
+.0afc	48		                pha
+.0afd	a9 1a		                lda #crose+reverse
+.0aff	8d 86 02	                sta bascol
+.0b02	a0 0a		                ldy #9+1
+.0b04	a2 09		                ldx  #9
+.0b06	18		                clc
+.0b07	20 f0 ff	                jsr  plot
+.0b0a	a2 26		                ldx  #<titre
+.0b0c	a0 10		                ldy  #>titre
+.0b0e	20 05 12	                jsr  puts
+.0b11	68		                pla
+.0b12	8d 86 02	                sta  bascol
+.0b15	20 98 13	                jsr  popreg
+.0b18	08		                php                 ; Sauvegarde les registres.
+.0b19	48		                pha
+.0b1a	a9 0b		                lda #11           ; Initialise le paramètre top et la ...
+.0b1c	8d c3 1a	                sta drawbox_top
+.0b1f	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.0b22	a9 0b		                lda #11          ; Initialise le paramètre left.
+.0b24	8d c4 1a	                sta drawbox_left
+.0b27	a9 14		                lda #20         ; Initialise le paramètre width.
+.0b29	8d c5 1a	                sta drawbox_width
+.0b2c	a9 05		                lda #5        ; Initialise le paramètre height.
+.0b2e	8d c6 1a	                sta drawbox_height
+.0b31	a9 02		                lda #crouge        ; Initialise le paramètre colour.
+.0b33	8d c7 1a	                sta drawbox_colour
+.0b36	68		                pla                 ; Récupère les registres.
+.0b37	28		                plp
+.0b38	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0b3b	a9 12		                    lda #18         ; le titre zzzzzz
+.0b3d	20 d2 ff	                    jsr chrout
+.0b40	20 69 13	                jsr pushreg
+.0b43	ad 86 02	                lda bascol
+.0b46	48		                pha
+.0b47	a9 02		                lda #crouge
+.0b49	8d 86 02	                sta bascol
+.0b4c	a0 0c		                ldy #11+1
+.0b4e	a2 0b		                ldx  #11
+.0b50	18		                clc
+.0b51	20 f0 ff	                jsr  plot
+.0b54	a2 26		                ldx  #<titre
+.0b56	a0 10		                ldy  #>titre
+.0b58	20 05 12	                jsr  puts
+.0b5b	68		                pla
+.0b5c	8d 86 02	                sta  bascol
+.0b5f	20 98 13	                jsr  popreg
+.0b62	a9 92		                    lda #146
+.0b64	20 d2 ff	                    jsr chrout
+.0b67	08		                php                 ; Sauvegarde les registres.
+.0b68	48		                pha
+.0b69	a9 0d		                lda #13           ; Initialise le paramètre top et la ...
+.0b6b	8d c3 1a	                sta drawbox_top
+.0b6e	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.0b71	a9 0d		                lda #13          ; Initialise le paramètre left.
+.0b73	8d c4 1a	                sta drawbox_left
+.0b76	a9 14		                lda #20         ; Initialise le paramètre width.
+.0b78	8d c5 1a	                sta drawbox_width
+.0b7b	a9 05		                lda #5        ; Initialise le paramètre height.
+.0b7d	8d c6 1a	                sta drawbox_height
+.0b80	a9 14		                lda #cmauve+reverse        ; Initialise le paramètre colour.
+.0b82	8d c7 1a	                sta drawbox_colour
+.0b85	68		                pla                 ; Récupère les registres.
+.0b86	28		                plp
+.0b87	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0b8a	20 69 13	                jsr pushreg
+.0b8d	ad 86 02	                lda bascol
+.0b90	48		                pha
+.0b91	a9 14		                lda #cmauve+reverse
+.0b93	8d 86 02	                sta bascol
+.0b96	a0 0e		                ldy #13+1
+.0b98	a2 0d		                ldx  #13
+.0b9a	18		                clc
+.0b9b	20 f0 ff	                jsr  plot
+.0b9e	a2 26		                ldx  #<titre
+.0ba0	a0 10		                ldy  #>titre
+.0ba2	20 05 12	                jsr  puts
+.0ba5	68		                pla
+.0ba6	8d 86 02	                sta  bascol
+.0ba9	20 98 13	                jsr  popreg
+.0bac	08		                php                 ; Sauvegarde les registres.
+.0bad	48		                pha
+.0bae	a9 0f		                lda #15           ; Initialise le paramètre top et la ...
+.0bb0	8d c3 1a	                sta drawbox_top
+.0bb3	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.0bb6	a9 0f		                lda #15          ; Initialise le paramètre left.
+.0bb8	8d c4 1a	                sta drawbox_left
+.0bbb	a9 14		                lda #20         ; Initialise le paramètre width.
+.0bbd	8d c5 1a	                sta drawbox_width
+.0bc0	a9 05		                lda #5        ; Initialise le paramètre height.
+.0bc2	8d c6 1a	                sta drawbox_height
+.0bc5	a9 06		                lda #cbleu        ; Initialise le paramètre colour.
+.0bc7	8d c7 1a	                sta drawbox_colour
+.0bca	68		                pla                 ; Récupère les registres.
+.0bcb	28		                plp
+.0bcc	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0bcf	a9 12		                    lda #18         ; le titre zzzzzz
+.0bd1	20 d2 ff	                    jsr chrout
+.0bd4	20 69 13	                jsr pushreg
+.0bd7	ad 86 02	                lda bascol
+.0bda	48		                pha
+.0bdb	a9 06		                lda #cbleu
+.0bdd	8d 86 02	                sta bascol
+.0be0	a0 10		                ldy #15+1
+.0be2	a2 0f		                ldx  #15
+.0be4	18		                clc
+.0be5	20 f0 ff	                jsr  plot
+.0be8	a2 26		                ldx  #<titre
+.0bea	a0 10		                ldy  #>titre
+.0bec	20 05 12	                jsr  puts
+.0bef	68		                pla
+.0bf0	8d 86 02	                sta  bascol
+.0bf3	20 98 13	                jsr  popreg
+.0bf6	a9 92		                    lda #146
+.0bf8	20 d2 ff	                    jsr chrout
+.0bfb	08		                php                 ; Sauvegarde les registres.
+.0bfc	48		                pha
+.0bfd	a9 11		                lda #17           ; Initialise le paramètre top et la ...
+.0bff	8d c3 1a	                sta drawbox_top
+.0c02	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.0c05	a9 11		                lda #17          ; Initialise le paramètre left.
+.0c07	8d c4 1a	                sta drawbox_left
+.0c0a	a9 14		                lda #20         ; Initialise le paramètre width.
+.0c0c	8d c5 1a	                sta drawbox_width
+.0c0f	a9 05		                lda #5        ; Initialise le paramètre height.
+.0c11	8d c6 1a	                sta drawbox_height
+.0c14	a9 13		                lda #ccyan+reverse        ; Initialise le paramètre colour.
+.0c16	8d c7 1a	                sta drawbox_colour
+.0c19	68		                pla                 ; Récupère les registres.
+.0c1a	28		                plp
+.0c1b	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0c1e	20 69 13	                jsr pushreg
+.0c21	ad 86 02	                lda bascol
+.0c24	48		                pha
+.0c25	a9 13		                lda #ccyan+reverse
+.0c27	8d 86 02	                sta bascol
+.0c2a	a0 12		                ldy #17+1
+.0c2c	a2 11		                ldx  #17
+.0c2e	18		                clc
+.0c2f	20 f0 ff	                jsr  plot
+.0c32	a2 26		                ldx  #<titre
+.0c34	a0 10		                ldy  #>titre
+.0c36	20 05 12	                jsr  puts
+.0c39	68		                pla
+.0c3a	8d 86 02	                sta  bascol
+.0c3d	20 98 13	                jsr  popreg
+.0c40	08		                php                 ; Sauvegarde les registres.
+.0c41	48		                pha
+.0c42	a9 13		                lda #19           ; Initialise le paramètre top et la ...
+.0c44	8d c3 1a	                sta drawbox_top
+.0c47	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.0c4a	a9 13		                lda #19          ; Initialise le paramètre left.
+.0c4c	8d c4 1a	                sta drawbox_left
+.0c4f	a9 14		                lda #20         ; Initialise le paramètre width.
+.0c51	8d c5 1a	                sta drawbox_width
+.0c54	a9 05		                lda #5        ; Initialise le paramètre height.
+.0c56	8d c6 1a	                sta drawbox_height
+.0c59	a9 05		                lda #cvert        ; Initialise le paramètre colour.
+.0c5b	8d c7 1a	                sta drawbox_colour
+.0c5e	68		                pla                 ; Récupère les registres.
+.0c5f	28		                plp
+.0c60	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0c63	a9 12		                    lda #18         ; le titre zzzzzz
+.0c65	20 d2 ff	                    jsr chrout
+.0c68	20 69 13	                jsr pushreg
+.0c6b	ad 86 02	                lda bascol
+.0c6e	48		                pha
+.0c6f	a9 05		                lda #cvert
+.0c71	8d 86 02	                sta bascol
+.0c74	a0 14		                ldy #19+1
+.0c76	a2 13		                ldx  #19
+.0c78	18		                clc
+.0c79	20 f0 ff	                jsr  plot
+.0c7c	a2 26		                ldx  #<titre
+.0c7e	a0 10		                ldy  #>titre
+.0c80	20 05 12	                jsr  puts
+.0c83	68		                pla
+.0c84	8d 86 02	                sta  bascol
+.0c87	20 98 13	                jsr  popreg
+.0c8a	a9 92		                    lda #146
+.0c8c	20 d2 ff	                    jsr chrout
+.0c8f	20 8a 16	            jsr anykey      ; Attend une clef et vide le tampon clavier.
+.0c92	20 f7 17	            jsr showregs
+.0c95	68		            pla
+.0c96	28		            plp
+.0c97	60		            rts
 =16			reverse = 16
-.0c90			help
-.0c90	20 f3 12	            jsr pushall
-.0c93	20 e0 11	            jsr cls
-.0c96	08		               php
-.0c97	48		               pha
-.0c98	a9 0e		               lda  #14
-.0c9a	20 d2 ff	               jsr  $ffd2
-.0c9d	68		               pla
-.0c9e	28		               plp
-.0c9f	08		               php
-.0ca0	48		               pha
-.0ca1	a9 08		               lda  #$08
-.0ca3	20 d2 ff	               jsr  $ffd2
-.0ca6	68		               pla
-.0ca7	28		               plp
-.0ca8	a9 0d		            lda #$0d
-.0caa	20 f7 11	            jsr putch
-.0cad	20 f7 11	            jsr putch
-.0cb0	20 f7 11	            jsr putch
-.0cb3	20 f7 11	            jsr putch
-.0cb6	a9 12		            lda #b_rvs_on
-.0cb8	20 f7 11	            jsr putch
-.0cbb	08		                php                 ; Sauvegarde les registres.
-.0cbc	48		                pha
-.0cbd	a9 04		                lda #top           ; Initialise le paramètre top et la ...
-.0cbf	8d c3 1a	                sta drawbox_top
-.0cc2	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0cc5	a9 04		                lda #left          ; Initialise le paramètre left.
-.0cc7	8d c4 1a	                sta drawbox_left
-.0cca	a9 20		                lda #32         ; Initialise le paramètre width.
-.0ccc	8d c5 1a	                sta drawbox_width
-.0ccf	a9 0a		                lda #10        ; Initialise le paramètre height.
-.0cd1	8d c6 1a	                sta drawbox_height
-.0cd4	a9 11		                lda #color+reverse        ; Initialise le paramètre colour.
-.0cd6	8d c7 1a	                sta drawbox_colour
-.0cd9	68		                pla                 ; Récupère les registres.
-.0cda	28		                plp
-.0cdb	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0cde	20 61 13	                jsr pushreg
-.0ce1	ad 86 02	                lda bascol
-.0ce4	48		                pha
-.0ce5	a9 11		                lda #color+reverse
-.0ce7	8d 86 02	                sta bascol
-.0cea	a0 05		                ldy #left+1
-.0cec	a2 04		                ldx  #top
-.0cee	18		                clc
-.0cef	20 f0 ff	                jsr  plot
-.0cf2	a2 c4		                ldx  #<texta
-.0cf4	a0 0e		                ldy  #>texta
-.0cf6	20 fd 11	                jsr  puts
-.0cf9	68		                pla
-.0cfa	8d 86 02	                sta  bascol
-.0cfd	20 90 13	                jsr  popreg
-.0d00	20 61 13	                jsr pushreg
-.0d03	ad 86 02	                lda bascol
-.0d06	48		                pha
-.0d07	a9 01		                lda #color
-.0d09	8d 86 02	                sta bascol
-.0d0c	a0 05		                ldy #left+1
-.0d0e	a2 06		                ldx  #top+2
-.0d10	18		                clc
-.0d11	20 f0 ff	                jsr  plot
-.0d14	a2 df		                ldx  #<textb
-.0d16	a0 0e		                ldy  #>textb
-.0d18	20 fd 11	                jsr  puts
-.0d1b	68		                pla
-.0d1c	8d 86 02	                sta  bascol
-.0d1f	20 90 13	                jsr  popreg
-.0d22	20 61 13	                jsr pushreg
-.0d25	ad 86 02	                lda bascol
-.0d28	48		                pha
-.0d29	a9 01		                lda #color
-.0d2b	8d 86 02	                sta bascol
-.0d2e	a0 05		                ldy #left+1
-.0d30	a2 07		                ldx  #top+3
-.0d32	18		                clc
-.0d33	20 f0 ff	                jsr  plot
-.0d36	a2 fe		                ldx  #<textc
-.0d38	a0 0e		                ldy  #>textc
-.0d3a	20 fd 11	                jsr  puts
-.0d3d	68		                pla
-.0d3e	8d 86 02	                sta  bascol
-.0d41	20 90 13	                jsr  popreg
-.0d44	20 61 13	                jsr pushreg
-.0d47	ad 86 02	                lda bascol
-.0d4a	48		                pha
-.0d4b	a9 01		                lda #color
-.0d4d	8d 86 02	                sta bascol
-.0d50	a0 05		                ldy #left+1
-.0d52	a2 08		                ldx  #top+4
-.0d54	18		                clc
-.0d55	20 f0 ff	                jsr  plot
-.0d58	a2 1d		                ldx  #<textd
-.0d5a	a0 0f		                ldy  #>textd
-.0d5c	20 fd 11	                jsr  puts
-.0d5f	68		                pla
-.0d60	8d 86 02	                sta  bascol
-.0d63	20 90 13	                jsr  popreg
-.0d66	20 61 13	                jsr pushreg
-.0d69	ad 86 02	                lda bascol
-.0d6c	48		                pha
-.0d6d	a9 01		                lda #color
-.0d6f	8d 86 02	                sta bascol
-.0d72	a0 05		                ldy #left+1
-.0d74	a2 0a		                ldx  #top+6
-.0d76	18		                clc
-.0d77	20 f0 ff	                jsr  plot
-.0d7a	a2 3c		                ldx  #<texte
-.0d7c	a0 0f		                ldy  #>texte
-.0d7e	20 fd 11	                jsr  puts
-.0d81	68		                pla
-.0d82	8d 86 02	                sta  bascol
-.0d85	20 90 13	                jsr  popreg
-.0d88	20 61 13	                jsr pushreg
-.0d8b	ad 86 02	                lda bascol
-.0d8e	48		                pha
-.0d8f	a9 01		                lda #color
-.0d91	8d 86 02	                sta bascol
-.0d94	a0 05		                ldy #left+1
-.0d96	a2 0b		                ldx  #top+7
-.0d98	18		                clc
-.0d99	20 f0 ff	                jsr  plot
-.0d9c	a2 5b		                ldx  #<textf
-.0d9e	a0 0f		                ldy  #>textf
-.0da0	20 fd 11	                jsr  puts
-.0da3	68		                pla
-.0da4	8d 86 02	                sta  bascol
-.0da7	20 90 13	                jsr  popreg
-.0daa	20 61 13	                jsr pushreg
-.0dad	ad 86 02	                lda bascol
-.0db0	48		                pha
-.0db1	a9 01		                lda #color
-.0db3	8d 86 02	                sta bascol
-.0db6	a0 05		                ldy #left+1
-.0db8	a2 0c		                ldx  #top+8
-.0dba	18		                clc
-.0dbb	20 f0 ff	                jsr  plot
-.0dbe	a2 7a		                ldx  #<textg
-.0dc0	a0 0f		                ldy  #>textg
-.0dc2	20 fd 11	                jsr  puts
-.0dc5	68		                pla
-.0dc6	8d 86 02	                sta  bascol
-.0dc9	20 90 13	                jsr  popreg
-.0dcc	08		                php                 ; Sauvegarde les registres.
-.0dcd	48		                pha
-.0dce	a9 0f		                lda #top+11           ; Initialise le paramètre top et la ...
-.0dd0	8d c3 1a	                sta drawbox_top
-.0dd3	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
-.0dd6	a9 04		                lda #left          ; Initialise le paramètre left.
-.0dd8	8d c4 1a	                sta drawbox_left
-.0ddb	a9 20		                lda #32         ; Initialise le paramètre width.
-.0ddd	8d c5 1a	                sta drawbox_width
-.0de0	a9 06		                lda #6        ; Initialise le paramètre height.
-.0de2	8d c6 1a	                sta drawbox_height
-.0de5	a9 1a		                lda #color2+reverse        ; Initialise le paramètre colour.
-.0de7	8d c7 1a	                sta drawbox_colour
-.0dea	68		                pla                 ; Récupère les registres.
-.0deb	28		                plp
-.0dec	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
-.0def	20 61 13	                jsr pushreg
-.0df2	ad 86 02	                lda bascol
-.0df5	48		                pha
-.0df6	a9 1a		                lda #color2+reverse
-.0df8	8d 86 02	                sta bascol
-.0dfb	a0 05		                ldy #left+1
-.0dfd	a2 0f		                ldx  #top+11
-.0dff	18		                clc
-.0e00	20 f0 ff	                jsr  plot
-.0e03	a2 99		                ldx  #<texth
-.0e05	a0 0f		                ldy  #>texth
-.0e07	20 fd 11	                jsr  puts
-.0e0a	68		                pla
-.0e0b	8d 86 02	                sta  bascol
-.0e0e	20 90 13	                jsr  popreg
-.0e11	20 61 13	                jsr pushreg
-.0e14	ad 86 02	                lda bascol
-.0e17	48		                pha
-.0e18	a9 0a		                lda #color2
-.0e1a	8d 86 02	                sta bascol
-.0e1d	a0 05		                ldy #left+1
-.0e1f	a2 11		                ldx  #top+13
-.0e21	18		                clc
-.0e22	20 f0 ff	                jsr  plot
-.0e25	a2 a8		                ldx  #<texti
-.0e27	a0 0f		                ldy  #>texti
-.0e29	20 fd 11	                jsr  puts
-.0e2c	68		                pla
-.0e2d	8d 86 02	                sta  bascol
-.0e30	20 90 13	                jsr  popreg
-.0e33	20 61 13	                jsr pushreg
-.0e36	ad 86 02	                lda bascol
-.0e39	48		                pha
-.0e3a	a9 0a		                lda #color2
-.0e3c	8d 86 02	                sta bascol
-.0e3f	a0 05		                ldy #left+1
-.0e41	a2 12		                ldx  #top+14
-.0e43	18		                clc
-.0e44	20 f0 ff	                jsr  plot
-.0e47	a2 c7		                ldx  #<textj
-.0e49	a0 0f		                ldy  #>textj
-.0e4b	20 fd 11	                jsr  puts
-.0e4e	68		                pla
-.0e4f	8d 86 02	                sta  bascol
-.0e52	20 90 13	                jsr  popreg
-.0e55	20 61 13	                jsr pushreg
-.0e58	ad 86 02	                lda bascol
-.0e5b	48		                pha
-.0e5c	a9 0a		                lda #color2
-.0e5e	8d 86 02	                sta bascol
-.0e61	a0 05		                ldy #left+1
-.0e63	a2 13		                ldx  #top+15
-.0e65	18		                clc
-.0e66	20 f0 ff	                jsr  plot
-.0e69	a2 e6		                ldx  #<textk
-.0e6b	a0 0f		                ldy  #>textk
-.0e6d	20 fd 11	                jsr  puts
-.0e70	68		                pla
-.0e71	8d 86 02	                sta  bascol
-.0e74	20 90 13	                jsr  popreg
-.0e77	a9 92		            lda #b_rvs_off
-.0e79	20 f7 11	            jsr putch
-.0e7c	20 61 13	                jsr pushreg
-.0e7f	ad 86 02	                lda bascol
-.0e82	48		                pha
-.0e83	a9 01		                lda #cblanc
-.0e85	8d 86 02	                sta bascol
-.0e88	a0 0f		                ldy #39-24
-.0e8a	a2 18		                ldx  #24
-.0e8c	18		                clc
-.0e8d	20 f0 ff	                jsr  plot
-.0e90	a2 05		                ldx  #<textl
-.0e92	a0 10		                ldy  #>textl
-.0e94	20 fd 11	                jsr  puts
-.0e97	68		                pla
-.0e98	8d 86 02	                sta  bascol
-.0e9b	20 90 13	                jsr  popreg
-.0e9e	20 2e 13	            jsr popall
-.0ea1	60		            rts
+.0c98			help
+.0c98	20 fb 12	            jsr pushall
+.0c9b	20 e8 11	            jsr cls
+.0c9e	08		               php
+.0c9f	48		               pha
+.0ca0	a9 0e		               lda  #14
+.0ca2	20 d2 ff	               jsr  $ffd2
+.0ca5	68		               pla
+.0ca6	28		               plp
+.0ca7	08		               php
+.0ca8	48		               pha
+.0ca9	a9 08		               lda  #$08
+.0cab	20 d2 ff	               jsr  $ffd2
+.0cae	68		               pla
+.0caf	28		               plp
+.0cb0	a9 0d		            lda #$0d
+.0cb2	20 ff 11	            jsr putch
+.0cb5	20 ff 11	            jsr putch
+.0cb8	20 ff 11	            jsr putch
+.0cbb	20 ff 11	            jsr putch
+.0cbe	a9 12		            lda #b_rvs_on
+.0cc0	20 ff 11	            jsr putch
+.0cc3	08		                php                 ; Sauvegarde les registres.
+.0cc4	48		                pha
+.0cc5	a9 04		                lda #top           ; Initialise le paramètre top et la ...
+.0cc7	8d c3 1a	                sta drawbox_top
+.0cca	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.0ccd	a9 04		                lda #left          ; Initialise le paramètre left.
+.0ccf	8d c4 1a	                sta drawbox_left
+.0cd2	a9 20		                lda #32         ; Initialise le paramètre width.
+.0cd4	8d c5 1a	                sta drawbox_width
+.0cd7	a9 0a		                lda #10        ; Initialise le paramètre height.
+.0cd9	8d c6 1a	                sta drawbox_height
+.0cdc	a9 11		                lda #color+reverse        ; Initialise le paramètre colour.
+.0cde	8d c7 1a	                sta drawbox_colour
+.0ce1	68		                pla                 ; Récupère les registres.
+.0ce2	28		                plp
+.0ce3	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0ce6	20 69 13	                jsr pushreg
+.0ce9	ad 86 02	                lda bascol
+.0cec	48		                pha
+.0ced	a9 11		                lda #color+reverse
+.0cef	8d 86 02	                sta bascol
+.0cf2	a0 05		                ldy #left+1
+.0cf4	a2 04		                ldx  #top
+.0cf6	18		                clc
+.0cf7	20 f0 ff	                jsr  plot
+.0cfa	a2 cc		                ldx  #<texta
+.0cfc	a0 0e		                ldy  #>texta
+.0cfe	20 05 12	                jsr  puts
+.0d01	68		                pla
+.0d02	8d 86 02	                sta  bascol
+.0d05	20 98 13	                jsr  popreg
+.0d08	20 69 13	                jsr pushreg
+.0d0b	ad 86 02	                lda bascol
+.0d0e	48		                pha
+.0d0f	a9 01		                lda #color
+.0d11	8d 86 02	                sta bascol
+.0d14	a0 05		                ldy #left+1
+.0d16	a2 06		                ldx  #top+2
+.0d18	18		                clc
+.0d19	20 f0 ff	                jsr  plot
+.0d1c	a2 e7		                ldx  #<textb
+.0d1e	a0 0e		                ldy  #>textb
+.0d20	20 05 12	                jsr  puts
+.0d23	68		                pla
+.0d24	8d 86 02	                sta  bascol
+.0d27	20 98 13	                jsr  popreg
+.0d2a	20 69 13	                jsr pushreg
+.0d2d	ad 86 02	                lda bascol
+.0d30	48		                pha
+.0d31	a9 01		                lda #color
+.0d33	8d 86 02	                sta bascol
+.0d36	a0 05		                ldy #left+1
+.0d38	a2 07		                ldx  #top+3
+.0d3a	18		                clc
+.0d3b	20 f0 ff	                jsr  plot
+.0d3e	a2 06		                ldx  #<textc
+.0d40	a0 0f		                ldy  #>textc
+.0d42	20 05 12	                jsr  puts
+.0d45	68		                pla
+.0d46	8d 86 02	                sta  bascol
+.0d49	20 98 13	                jsr  popreg
+.0d4c	20 69 13	                jsr pushreg
+.0d4f	ad 86 02	                lda bascol
+.0d52	48		                pha
+.0d53	a9 01		                lda #color
+.0d55	8d 86 02	                sta bascol
+.0d58	a0 05		                ldy #left+1
+.0d5a	a2 08		                ldx  #top+4
+.0d5c	18		                clc
+.0d5d	20 f0 ff	                jsr  plot
+.0d60	a2 25		                ldx  #<textd
+.0d62	a0 0f		                ldy  #>textd
+.0d64	20 05 12	                jsr  puts
+.0d67	68		                pla
+.0d68	8d 86 02	                sta  bascol
+.0d6b	20 98 13	                jsr  popreg
+.0d6e	20 69 13	                jsr pushreg
+.0d71	ad 86 02	                lda bascol
+.0d74	48		                pha
+.0d75	a9 01		                lda #color
+.0d77	8d 86 02	                sta bascol
+.0d7a	a0 05		                ldy #left+1
+.0d7c	a2 0a		                ldx  #top+6
+.0d7e	18		                clc
+.0d7f	20 f0 ff	                jsr  plot
+.0d82	a2 44		                ldx  #<texte
+.0d84	a0 0f		                ldy  #>texte
+.0d86	20 05 12	                jsr  puts
+.0d89	68		                pla
+.0d8a	8d 86 02	                sta  bascol
+.0d8d	20 98 13	                jsr  popreg
+.0d90	20 69 13	                jsr pushreg
+.0d93	ad 86 02	                lda bascol
+.0d96	48		                pha
+.0d97	a9 01		                lda #color
+.0d99	8d 86 02	                sta bascol
+.0d9c	a0 05		                ldy #left+1
+.0d9e	a2 0b		                ldx  #top+7
+.0da0	18		                clc
+.0da1	20 f0 ff	                jsr  plot
+.0da4	a2 63		                ldx  #<textf
+.0da6	a0 0f		                ldy  #>textf
+.0da8	20 05 12	                jsr  puts
+.0dab	68		                pla
+.0dac	8d 86 02	                sta  bascol
+.0daf	20 98 13	                jsr  popreg
+.0db2	20 69 13	                jsr pushreg
+.0db5	ad 86 02	                lda bascol
+.0db8	48		                pha
+.0db9	a9 01		                lda #color
+.0dbb	8d 86 02	                sta bascol
+.0dbe	a0 05		                ldy #left+1
+.0dc0	a2 0c		                ldx  #top+8
+.0dc2	18		                clc
+.0dc3	20 f0 ff	                jsr  plot
+.0dc6	a2 82		                ldx  #<textg
+.0dc8	a0 0f		                ldy  #>textg
+.0dca	20 05 12	                jsr  puts
+.0dcd	68		                pla
+.0dce	8d 86 02	                sta  bascol
+.0dd1	20 98 13	                jsr  popreg
+.0dd4	08		                php                 ; Sauvegarde les registres.
+.0dd5	48		                pha
+.0dd6	a9 0f		                lda #top+11           ; Initialise le paramètre top et la ...
+.0dd8	8d c3 1a	                sta drawbox_top
+.0ddb	8d c8 1a	                sta drawbox_curline ; ... position de la ligne à traiter.
+.0dde	a9 04		                lda #left          ; Initialise le paramètre left.
+.0de0	8d c4 1a	                sta drawbox_left
+.0de3	a9 20		                lda #32         ; Initialise le paramètre width.
+.0de5	8d c5 1a	                sta drawbox_width
+.0de8	a9 06		                lda #6        ; Initialise le paramètre height.
+.0dea	8d c6 1a	                sta drawbox_height
+.0ded	a9 1a		                lda #color2+reverse        ; Initialise le paramètre colour.
+.0def	8d c7 1a	                sta drawbox_colour
+.0df2	68		                pla                 ; Récupère les registres.
+.0df3	28		                plp
+.0df4	20 a6 1a	                jsr db_drawbox      ; Dessine la fenêtre.
+.0df7	20 69 13	                jsr pushreg
+.0dfa	ad 86 02	                lda bascol
+.0dfd	48		                pha
+.0dfe	a9 1a		                lda #color2+reverse
+.0e00	8d 86 02	                sta bascol
+.0e03	a0 05		                ldy #left+1
+.0e05	a2 0f		                ldx  #top+11
+.0e07	18		                clc
+.0e08	20 f0 ff	                jsr  plot
+.0e0b	a2 a1		                ldx  #<texth
+.0e0d	a0 0f		                ldy  #>texth
+.0e0f	20 05 12	                jsr  puts
+.0e12	68		                pla
+.0e13	8d 86 02	                sta  bascol
+.0e16	20 98 13	                jsr  popreg
+.0e19	20 69 13	                jsr pushreg
+.0e1c	ad 86 02	                lda bascol
+.0e1f	48		                pha
+.0e20	a9 0a		                lda #color2
+.0e22	8d 86 02	                sta bascol
+.0e25	a0 05		                ldy #left+1
+.0e27	a2 11		                ldx  #top+13
+.0e29	18		                clc
+.0e2a	20 f0 ff	                jsr  plot
+.0e2d	a2 b0		                ldx  #<texti
+.0e2f	a0 0f		                ldy  #>texti
+.0e31	20 05 12	                jsr  puts
+.0e34	68		                pla
+.0e35	8d 86 02	                sta  bascol
+.0e38	20 98 13	                jsr  popreg
+.0e3b	20 69 13	                jsr pushreg
+.0e3e	ad 86 02	                lda bascol
+.0e41	48		                pha
+.0e42	a9 0a		                lda #color2
+.0e44	8d 86 02	                sta bascol
+.0e47	a0 05		                ldy #left+1
+.0e49	a2 12		                ldx  #top+14
+.0e4b	18		                clc
+.0e4c	20 f0 ff	                jsr  plot
+.0e4f	a2 cf		                ldx  #<textj
+.0e51	a0 0f		                ldy  #>textj
+.0e53	20 05 12	                jsr  puts
+.0e56	68		                pla
+.0e57	8d 86 02	                sta  bascol
+.0e5a	20 98 13	                jsr  popreg
+.0e5d	20 69 13	                jsr pushreg
+.0e60	ad 86 02	                lda bascol
+.0e63	48		                pha
+.0e64	a9 0a		                lda #color2
+.0e66	8d 86 02	                sta bascol
+.0e69	a0 05		                ldy #left+1
+.0e6b	a2 13		                ldx  #top+15
+.0e6d	18		                clc
+.0e6e	20 f0 ff	                jsr  plot
+.0e71	a2 ee		                ldx  #<textk
+.0e73	a0 0f		                ldy  #>textk
+.0e75	20 05 12	                jsr  puts
+.0e78	68		                pla
+.0e79	8d 86 02	                sta  bascol
+.0e7c	20 98 13	                jsr  popreg
+.0e7f	a9 92		            lda #b_rvs_off
+.0e81	20 ff 11	            jsr putch
+.0e84	20 69 13	                jsr pushreg
+.0e87	ad 86 02	                lda bascol
+.0e8a	48		                pha
+.0e8b	a9 01		                lda #cblanc
+.0e8d	8d 86 02	                sta bascol
+.0e90	a0 0f		                ldy #39-24
+.0e92	a2 18		                ldx  #24
+.0e94	18		                clc
+.0e95	20 f0 ff	                jsr  plot
+.0e98	a2 0d		                ldx  #<textl
+.0e9a	a0 10		                ldy  #>textl
+.0e9c	20 05 12	                jsr  puts
+.0e9f	68		                pla
+.0ea0	8d 86 02	                sta  bascol
+.0ea3	20 98 13	                jsr  popreg
+.0ea6	20 36 13	            jsr popall
+.0ea9	60		            rts
 =4			left = 4
 =4			top = 4
 =$1			color = cblanc
@@ -783,63 +789,63 @@
 
 =158			headtcol        =   b_jaune
 =158			normtcol        =   b_jaune
->0ea2	00		nextline        .byte   0
->0ea3	20 20 20 20	line            .null           "                                "
->0ea7	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
->0eb7	20 20 20 20 20 20 20 20 20 20 20 20 00
->0ec4	92		texta           .byte           b_rvs_off
->0ec5	20 d3 cc 2d	                .text           " SL-BUG 64 Version 4.00 "
->0ec9	c2 d5 c7 20 36 34 20 d6 45 52 53 49 4f 4e 20 34
->0ed9	2e 30 30 20
->0edd	12 00		                .byte           b_rvs_on,0
->0edf	20 20 20 20	textb           .null           "     Version Commodore 64     "
->0ee3	20 d6 45 52 53 49 4f 4e 20 c3 4f 4d 4d 4f 44 4f
->0ef3	52 45 20 36 34 20 20 20 20 20 00
->0efe	20 20 c9 44	textc           .null           "  Idee Originale sur MC-6809  "
->0f02	45 45 20 cf 52 49 47 49 4e 41 4c 45 20 53 55 52
->0f12	20 cd c3 2d 36 38 30 39 20 20 00
->0f1d	20 20 d0 41	textd           .null           "  Par Serge Leblanc mai 1994  "
->0f21	52 20 d3 45 52 47 45 20 cc 45 42 4c 41 4e 43 20
->0f31	4d 41 49 20 31 39 39 34 20 20 00
->0f3c	20 d0 4f 52	texte           .null           " Port C64 par Daniel Lafrance "
->0f40	54 20 c3 36 34 20 50 41 52 20 c4 41 4e 49 45 4c
->0f50	20 cc 41 46 52 41 4e 43 45 20 00
->0f5b	20 20 20 20	textf           .null           "       (c) Octobre 2025       "
->0f5f	20 20 20 28 43 29 20 cf 43 54 4f 42 52 45 20 32
->0f6f	30 32 35 20 20 20 20 20 20 20 00
->0f7a	20 20 20 d6	textg           .null   format( "   Version: %-17s ",Version)
->0f7e	45 52 53 49 4f 4e 3a 20 32 30 32 35 31 30 31 37
->0f8e	2d 31 32 35 33 30 31 20 20 20 00
->0f99	92		texth           .byte           b_rvs_off
->0f9a	20 d2 c1 c3	                .text           " RACCOURCIS "
->0f9e	c3 cf d5 d2 c3 c9 d3 20
->0fa6	12 00		                .byte           b_rvs_on,0
->0fa8	20 c5 58 45	texti           .null   format( " Execution.: SYS%5d ($%4X) ",slbug64,slbug64)
->0fac	43 55 54 49 4f 4e 2e 3a 20 d3 d9 d3 20 32 32 36
->0fbc	34 20 28 24 20 38 c4 38 29 20 00
->0fc7	20 c1 49 44	textj           .null   format( " Aide......: SYS%5d ($%4X) ",help,help)
->0fcb	45 2e 2e 2e 2e 2e 2e 3a 20 d3 d9 d3 20 33 32 31
->0fdb	36 20 28 24 20 c3 39 30 29 20 00
->0fe6	20 c3 cc d3	textk           .null   format( " CLS.......: SYS%5d ($%4X) ",cls,cls)
->0fea	2e 2e 2e 2e 2e 2e 2e 3a 20 d3 d9 d3 20 34 35 37
->0ffa	36 20 28 24 31 31 c5 30 29 20 00
->1005	d5 4e 45 20	textl           .null           "Une clef pour continuer!"
->1009	43 4c 45 46 20 50 4f 55 52 20 43 4f 4e 54 49 4e
->1019	55 45 52 21 00
->101e	5b c6 45 4e	titre           .null   "[Fenetre]"
->1022	45 54 52 45 5d 00
->1028	b0 c0 c0 c0	tline   .byte   176,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,174,0
->102c	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0
->103c	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 ae 00
->1049	ab c0 c0 c0	mline   .byte   171,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,179,0
->104d	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0
->105d	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 b3 00
->106a	ad c0 c0 c0	bline   .byte   173,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,189,0
->106e	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0
->107e	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 bd 00
->108b	dd 20 20 20	eline   .byte   221,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,221,0
->108f	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
->109f	20 20 20 20 20 20 20 20 20 20 20 dd 00
+>0eaa	00		nextline        .byte   0
+>0eab	20 20 20 20	line            .null           "                                "
+>0eaf	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+>0ebf	20 20 20 20 20 20 20 20 20 20 20 20 00
+>0ecc	92		texta           .byte           b_rvs_off
+>0ecd	20 d3 cc 2d	                .text           " SL-BUG 64 Version 4.00 "
+>0ed1	c2 d5 c7 20 36 34 20 d6 45 52 53 49 4f 4e 20 34
+>0ee1	2e 30 30 20
+>0ee5	12 00		                .byte           b_rvs_on,0
+>0ee7	20 20 20 20	textb           .null           "     Version Commodore 64     "
+>0eeb	20 d6 45 52 53 49 4f 4e 20 c3 4f 4d 4d 4f 44 4f
+>0efb	52 45 20 36 34 20 20 20 20 20 00
+>0f06	20 20 c9 44	textc           .null           "  Idee Originale sur MC-6809  "
+>0f0a	45 45 20 cf 52 49 47 49 4e 41 4c 45 20 53 55 52
+>0f1a	20 cd c3 2d 36 38 30 39 20 20 00
+>0f25	20 20 d0 41	textd           .null           "  Par Serge Leblanc mai 1994  "
+>0f29	52 20 d3 45 52 47 45 20 cc 45 42 4c 41 4e 43 20
+>0f39	4d 41 49 20 31 39 39 34 20 20 00
+>0f44	20 d0 4f 52	texte           .null           " Port C64 par Daniel Lafrance "
+>0f48	54 20 c3 36 34 20 50 41 52 20 c4 41 4e 49 45 4c
+>0f58	20 cc 41 46 52 41 4e 43 45 20 00
+>0f63	20 20 20 20	textf           .null           "       (c) Octobre 2025       "
+>0f67	20 20 20 28 43 29 20 cf 43 54 4f 42 52 45 20 32
+>0f77	30 32 35 20 20 20 20 20 20 20 00
+>0f82	20 20 20 d6	textg           .null   format( "   Version: %-17s ",Version)
+>0f86	45 52 53 49 4f 4e 3a 20 32 30 32 35 31 30 31 37
+>0f96	2d 31 32 35 33 30 31 20 20 20 00
+>0fa1	92		texth           .byte           b_rvs_off
+>0fa2	20 d2 c1 c3	                .text           " RACCOURCIS "
+>0fa6	c3 cf d5 d2 c3 c9 d3 20
+>0fae	12 00		                .byte           b_rvs_on,0
+>0fb0	20 c5 58 45	texti           .null   format( " Execution.: SYS%5d ($%4X) ",slbug64,slbug64)
+>0fb4	43 55 54 49 4f 4e 2e 3a 20 d3 d9 d3 20 32 32 36
+>0fc4	38 20 28 24 20 38 c4 c3 29 20 00
+>0fcf	20 c1 49 44	textj           .null   format( " Aide......: SYS%5d ($%4X) ",help,help)
+>0fd3	45 2e 2e 2e 2e 2e 2e 3a 20 d3 d9 d3 20 33 32 32
+>0fe3	34 20 28 24 20 c3 39 38 29 20 00
+>0fee	20 c3 cc d3	textk           .null   format( " CLS.......: SYS%5d ($%4X) ",cls,cls)
+>0ff2	2e 2e 2e 2e 2e 2e 2e 3a 20 d3 d9 d3 20 34 35 38
+>1002	34 20 28 24 31 31 c5 38 29 20 00
+>100d	d5 4e 45 20	textl           .null           "Une clef pour continuer!"
+>1011	43 4c 45 46 20 50 4f 55 52 20 43 4f 4e 54 49 4e
+>1021	55 45 52 21 00
+>1026	5b c6 45 4e	titre           .null   "[Fenetre]"
+>102a	45 54 52 45 5d 00
+>1030	b0 c0 c0 c0	tline   .byte   176,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,174,0
+>1034	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0
+>1044	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 ae 00
+>1051	ab c0 c0 c0	mline   .byte   171,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,179,0
+>1055	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0
+>1065	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 b3 00
+>1072	ad c0 c0 c0	bline   .byte   173,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192,189,0
+>1076	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0
+>1086	c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 c0 bd 00
+>1093	dd 20 20 20	eline   .byte   221,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,221,0
+>1097	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+>10a7	20 20 20 20 20 20 20 20 20 20 20 dd 00
 
 ;******  Return to file: slbug64.asm
 
@@ -936,8 +942,8 @@
 =$d900			colram1        =    $d900     ; 55552
 =$da00			colram2        =    $da00     ; 55808
 =$db00			colram3        =    $db00     ; 56064
->10ac	00 d8 00 d9	colorptr  .word     colram0,colram1,colram2,colram3
->10b0	00 da 00 db
+>10b4	00 d8 00 d9	colorptr  .word     colram0,colram1,colram2,colram3
+>10b8	00 da 00 db
 =$dc00			cia1           =    $dc00     ; 56320 cia1 base address
 =$dc00			cia1pra        =    $dc00     ; 56320 cia1 dataport A (keyboard column Write)
 =$dc01			cia1prb        =    $dc01     ; 56321 cia1 dataport B (keyboard row read)
@@ -1665,897 +1671,893 @@
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-c64-vicii.asm
 
-.10b4			screendis
-.10b4	08		               php
-.10b5	48		               pha
-.10b6	ad 11 d0	               lda  $d011
-.10b9	29 ef		               and  #%11101111
-.10bb	8d 11 d0	               sta  $d011
-.10be	68		               pla
-.10bf	28		               plp
-.10c0	60		               rts
-.10c1			screenena
-.10c1	08		               php
-.10c2	48		               pha
-.10c3	ad 11 d0	               lda  $d011
-.10c6	09 10		               ora  #%00010000
-.10c8	8d 11 d0	               sta  $d011
-.10cb	68		               pla
-.10cc	28		               plp
-.10cd	60		               rts
+.10bc			screendis
+.10bc	08		               php
+.10bd	48		               pha
+.10be	ad 11 d0	               lda  $d011
+.10c1	29 ef		               and  #%11101111
+.10c3	8d 11 d0	               sta  $d011
+.10c6	68		               pla
+.10c7	28		               plp
+.10c8	60		               rts
+.10c9			screenena
+.10c9	08		               php
+.10ca	48		               pha
+.10cb	ad 11 d0	               lda  $d011
+.10ce	09 10		               ora  #%00010000
+.10d0	8d 11 d0	               sta  $d011
+.10d3	68		               pla
+.10d4	28		               plp
+.10d5	60		               rts
 =8192			bmpram = 8192
-.10ce			victohighres
-.10ce	08		               php
-.10cf	48		               pha
-.10d0	ad 11 d0	               lda  vicmiscfnc
-.10d3	09 20		               ora  #%00100000     ; 32
-.10d5	8d 11 d0	               sta  vicmiscfnc
-.10d8	ad 18 d0	               lda  vicmemptr
-.10db	09 08		               ora  #%00001000     ; $08
-.10dd	8d 18 d0	               sta  vicmemptr
-.10e0	a9 ff		               lda  #$ff           ; 255
-.10e2	85 37		               sta  $0037
-.10e4	a9 1f		               lda  #$1f           ; 31
-.10e6	85 38		               sta  $0038
-.10e8	68		               pla
-.10e9	28		               plp
-.10ea	60		               rts
-.10eb			victonormal
-.10eb	08		               php
-.10ec	48		               pha
-.10ed	ad 11 d0	               lda  vicmiscfnc
-.10f0	29 df		               and  #%11011111     ; 233
-.10f2	8d 11 d0	               sta  vicmiscfnc
-.10f5	ad 18 d0	               lda  vicmemptr
-.10f8	29 f7		               and  #%11110111     ; $08
-.10fa	8d 18 d0	               sta  vicmemptr
-.10fd	a9 00		               lda  #$00
-.10ff	85 37		               sta  $0037
-.1101	a9 a0		               lda  #$a0
-.1103	85 38		               sta  $0038
-.1105	20 e0 11	               jsr  cls
-.1108	68		               pla
-.1109	28		               plp
-.110a	60		               rts
-.110b			vicbmpclear
-.110b	20 f3 12	               jsr  push
-.110e	a9 04		               lda  #cmauve
-.1110	20 39 11	               jsr  setvicbmpbackcol
-.1113	a9 00		               lda  #<8192              ; Place le LSB de 8192 ...
-.1115	85 fb		               sta  zpage1              ; ... dans le lsb de zpage1.
-.1117	a9 20		               lda  #>8192              ; Place le MSB de 8192 ...
-.1119	85 fc		               sta  zpage1+1            ; ... dans le Msb de zpage1.
-.111b	48		               pha
-.111c	a9 ff		               lda  #<$0000+(8191)
-.111e	8d 17 15	               sta  loopcount
-.1121	a9 1f		               lda  #>$0000+(8191)
-.1123	8d 18 15	               sta  loopcount+1
-.1126	68		               pla
-.1127	a0 00		               ldy  #$00
-.1129	a9 0f		next           lda  #$0f
-.112b	91 fb		               sta  (zpage1),y
-.112d	20 48 14	               jsr  inczpage1
-.1130	20 f7 14	               jsr  loop
-.1133	d0 f4		               bne  next
-.1135	20 2e 13	               jsr  pop
-.1138	60		               rts
-.1139			setvicbmpbackcol
-.1139	20 f3 12	               jsr  push
-.113c	29 0f		               and  #$0f
-.113e	8d 6c 11	               sta  vicbmpbackcol
-.1141	a0 00		               ldy  #<1024              ; Place le LSB de 8192 ...
-.1143	84 fb		               sty  zpage1              ; ... dans le lsb de zpage1.
-.1145	a0 04		               ldy  #>1024              ; Place le MSB de 8192 ...
-.1147	84 fc		               sty  zpage1+1            ; ... dans le Msb de zpage1.
-.1149	48		               pha
-.114a	a9 00		               lda  #<$0000+(1024)
-.114c	8d 17 15	               sta  loopcount
-.114f	a9 04		               lda  #>$0000+(1024)
-.1151	8d 18 15	               sta  loopcount+1
-.1154	68		               pla
-.1155	a0 00		               ldy  #$00
-.1157	b1 fb		next           lda  (zpage1),y
-.1159	29 f0		               and  #$f0
-.115b	0d 6c 11	               ora  vicbmpbackcol
-.115e	91 fb		               sta  (zpage1),y
-.1160	20 48 14	               jsr  inczpage1
-.1163	20 f7 14	               jsr  loop
-.1166	d0 ef		               bne  next
-.1168	20 2e 13	               jsr  pop
-.116b	60		               rts
->116c	00		vicbmpbackcol  .byte     $00
-.116d			setvicbmpforecol
-.116d	20 f3 12	               jsr  push
-.1170	2a		               rol
-.1171	2a		               rol
-.1172	2a		               rol
-.1173	2a		               rol
-.1174	29 f0		               and  #$f0
-.1176	8d a4 11	               sta  vicbmpforecol
-.1179	a0 00		               ldy  #<1024              ; Place le LSB de 8192 ...
-.117b	84 fb		               sty  zpage1              ; ... dans le lsb de zpage1.
-.117d	a0 04		               ldy  #>1024              ; Place le MSB de 8192 ...
-.117f	84 fc		               sty  zpage1+1            ; ... dans le Msb de zpage1.
-.1181	48		               pha
-.1182	a9 00		               lda  #<$0000+(1024)
-.1184	8d 17 15	               sta  loopcount
-.1187	a9 04		               lda  #>$0000+(1024)
-.1189	8d 18 15	               sta  loopcount+1
-.118c	68		               pla
-.118d	a0 00		               ldy  #$00
-.118f	b1 fb		next           lda  (zpage1),y
-.1191	29 0f		               and  #$0f
-.1193	0d a4 11	               ora  vicbmpforecol
-.1196	91 fb		               sta  (zpage1),y
-.1198	20 48 14	               jsr  inczpage1
-.119b	20 f7 14	               jsr  loop
-.119e	d0 ef		               bne  next
-.11a0	20 2e 13	               jsr  pop
-.11a3	60		               rts
->11a4	00		vicbmpforecol  .byte     $00
-.11a5			bmphrcalccoords
-.11a5	20 f3 12	               jsr  push
-.11a8	18		               clc       ; On met Carry à 0
-.11a9	6a		               ror       ; le bit 0 de a dans carry  ?/2
-.11aa	8a		               txa       ; x dans a
-.11ab	4a		               lsr       ; ?/4
-.11ac	4a		               lsr       ; ?/8 a = (ax)/8
-.11ad	8d be 11	               sta  bmphrcol
-.11b0	98		               tya       ; Y dans a
-.11b1	4a		               lsr       ; ?/2
-.11b2	4a		               lsr       ; ?/4
-.11b3	4a		               lsr       ; ?/8 a=Y/8
-.11b4	8d bd 11	               sta  bmphrrow
-.11b7	48		               pha
-.11b8	98		               tya
-.11b9	20 2e 13	               jsr  pop
-.11bc	60		               rts
-.11bd			vicbmpfill
->11bd	00		bmphrrow       .byte     $00
->11be	00		bmphrcol       .byte     $00
->11bf	00		bmphrmask      .byte     $00
+.10d6			victohighres
+.10d6	08		               php
+.10d7	48		               pha
+.10d8	ad 11 d0	               lda  vicmiscfnc
+.10db	09 20		               ora  #%00100000     ; 32
+.10dd	8d 11 d0	               sta  vicmiscfnc
+.10e0	ad 18 d0	               lda  vicmemptr
+.10e3	09 08		               ora  #%00001000     ; $08
+.10e5	8d 18 d0	               sta  vicmemptr
+.10e8	a9 ff		               lda  #$ff           ; 255
+.10ea	85 37		               sta  $0037
+.10ec	a9 1f		               lda  #$1f           ; 31
+.10ee	85 38		               sta  $0038
+.10f0	68		               pla
+.10f1	28		               plp
+.10f2	60		               rts
+.10f3			victonormal
+.10f3	08		               php
+.10f4	48		               pha
+.10f5	ad 11 d0	               lda  vicmiscfnc
+.10f8	29 df		               and  #%11011111     ; 233
+.10fa	8d 11 d0	               sta  vicmiscfnc
+.10fd	ad 18 d0	               lda  vicmemptr
+.1100	29 f7		               and  #%11110111     ; $08
+.1102	8d 18 d0	               sta  vicmemptr
+.1105	a9 00		               lda  #$00
+.1107	85 37		               sta  $0037
+.1109	a9 a0		               lda  #$a0
+.110b	85 38		               sta  $0038
+.110d	20 e8 11	               jsr  cls
+.1110	68		               pla
+.1111	28		               plp
+.1112	60		               rts
+.1113			vicbmpclear
+.1113	20 fb 12	               jsr  push
+.1116	a9 04		               lda  #cmauve
+.1118	20 41 11	               jsr  setvicbmpbackcol
+.111b	a9 00		               lda  #<8192              ; Place le LSB de 8192 ...
+.111d	85 fb		               sta  zpage1              ; ... dans le lsb de zpage1.
+.111f	a9 20		               lda  #>8192              ; Place le MSB de 8192 ...
+.1121	85 fc		               sta  zpage1+1            ; ... dans le Msb de zpage1.
+.1123	48		               pha
+.1124	a9 ff		               lda  #<$0000+(8191)
+.1126	8d 1f 15	               sta  loopcount
+.1129	a9 1f		               lda  #>$0000+(8191)
+.112b	8d 20 15	               sta  loopcount+1
+.112e	68		               pla
+.112f	a0 00		               ldy  #$00
+.1131	a9 0f		next           lda  #$0f
+.1133	91 fb		               sta  (zpage1),y
+.1135	20 50 14	               jsr  inczpage1
+.1138	20 ff 14	               jsr  loop
+.113b	d0 f4		               bne  next
+.113d	20 36 13	               jsr  pop
+.1140	60		               rts
+.1141			setvicbmpbackcol
+.1141	20 fb 12	               jsr  push
+.1144	29 0f		               and  #$0f
+.1146	8d 74 11	               sta  vicbmpbackcol
+.1149	a0 00		               ldy  #<1024              ; Place le LSB de 8192 ...
+.114b	84 fb		               sty  zpage1              ; ... dans le lsb de zpage1.
+.114d	a0 04		               ldy  #>1024              ; Place le MSB de 8192 ...
+.114f	84 fc		               sty  zpage1+1            ; ... dans le Msb de zpage1.
+.1151	48		               pha
+.1152	a9 00		               lda  #<$0000+(1024)
+.1154	8d 1f 15	               sta  loopcount
+.1157	a9 04		               lda  #>$0000+(1024)
+.1159	8d 20 15	               sta  loopcount+1
+.115c	68		               pla
+.115d	a0 00		               ldy  #$00
+.115f	b1 fb		next           lda  (zpage1),y
+.1161	29 f0		               and  #$f0
+.1163	0d 74 11	               ora  vicbmpbackcol
+.1166	91 fb		               sta  (zpage1),y
+.1168	20 50 14	               jsr  inczpage1
+.116b	20 ff 14	               jsr  loop
+.116e	d0 ef		               bne  next
+.1170	20 36 13	               jsr  pop
+.1173	60		               rts
+>1174	00		vicbmpbackcol  .byte     $00
+.1175			setvicbmpforecol
+.1175	20 fb 12	               jsr  push
+.1178	2a		               rol
+.1179	2a		               rol
+.117a	2a		               rol
+.117b	2a		               rol
+.117c	29 f0		               and  #$f0
+.117e	8d ac 11	               sta  vicbmpforecol
+.1181	a0 00		               ldy  #<1024              ; Place le LSB de 8192 ...
+.1183	84 fb		               sty  zpage1              ; ... dans le lsb de zpage1.
+.1185	a0 04		               ldy  #>1024              ; Place le MSB de 8192 ...
+.1187	84 fc		               sty  zpage1+1            ; ... dans le Msb de zpage1.
+.1189	48		               pha
+.118a	a9 00		               lda  #<$0000+(1024)
+.118c	8d 1f 15	               sta  loopcount
+.118f	a9 04		               lda  #>$0000+(1024)
+.1191	8d 20 15	               sta  loopcount+1
+.1194	68		               pla
+.1195	a0 00		               ldy  #$00
+.1197	b1 fb		next           lda  (zpage1),y
+.1199	29 0f		               and  #$0f
+.119b	0d ac 11	               ora  vicbmpforecol
+.119e	91 fb		               sta  (zpage1),y
+.11a0	20 50 14	               jsr  inczpage1
+.11a3	20 ff 14	               jsr  loop
+.11a6	d0 ef		               bne  next
+.11a8	20 36 13	               jsr  pop
+.11ab	60		               rts
+>11ac	00		vicbmpforecol  .byte     $00
+.11ad			bmphrcalccoords
+.11ad	20 fb 12	               jsr  push
+.11b0	18		               clc       ; On met Carry à 0
+.11b1	6a		               ror       ; le bit 0 de a dans carry  ?/2
+.11b2	8a		               txa       ; x dans a
+.11b3	4a		               lsr       ; ?/4
+.11b4	4a		               lsr       ; ?/8 a = (ax)/8
+.11b5	8d c6 11	               sta  bmphrcol
+.11b8	98		               tya       ; Y dans a
+.11b9	4a		               lsr       ; ?/2
+.11ba	4a		               lsr       ; ?/4
+.11bb	4a		               lsr       ; ?/8 a=Y/8
+.11bc	8d c5 11	               sta  bmphrrow
+.11bf	48		               pha
+.11c0	98		               tya
+.11c1	20 36 13	               jsr  pop
+.11c4	60		               rts
+.11c5			vicbmpfill
+>11c5	00		bmphrrow       .byte     $00
+>11c6	00		bmphrcol       .byte     $00
+>11c7	00		bmphrmask      .byte     $00
 
 ;******  Return to file: slbug64.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-c64-basic2.asm
 
-.11c0			scrmaninit
-.11c0	20 61 13	               jsr  pushreg        ; Sauvegarde tous les registres
-.11c3	20 b4 10	               jsr  screendis      ; Disable screen
-.11c6	a9 06		               lda  #vbleu         ; Place bleue pour la couleur
-.11c8	8d 21 d0	               sta  vicbackcol     ;   d'arrière plan,
-.11cb	a9 05		               lda  #vvert         ; vert pour la couleur
-.11cd	8d 20 d0	               sta  vicbordcol     ;   de la bordure d'écran,
-.11d0	a9 01		               lda  #vblanc        ;   et blanc pour la couleur du
-.11d2	8d 86 02	               sta  bascol         ; texte.
-.11d5	20 e0 11	               jsr  cls            ; Efface l'écran.
-.11d8	20 c1 10	               jsr  screenena      ; enable screen
-.11db	20 90 13	               jsr  popreg         ; Récupère tous les registres.
-.11de	60		               rts
->11df	8e		characterset   .byte b_uppercase
-.11e0			cls
-.11e0	08		               php                 ; Sauvegarde les registres
-.11e1	48		               pha                 ;   modifiés.
-.11e2	a9 93		               lda  #$93           ; Affiche le code basic de
-.11e4	20 d2 ff	               jsr  chrout         ;   d'effacement d'écran.
-.11e7	68		               pla                 ; Récupère les registres
-.11e8	28		               plp                 ;   modifiés.
-.11e9	60		               rts
-.11ea			putnch
-.11ea	20 61 13	               jsr  pushreg        ; Sauvegarde tous les registres.
-.11ed	20 d2 ff	again          jsr  chrout         ; On affiche A.
-.11f0	ca		               dex                 ; Un de moins à faire.
-.11f1	d0 fa		               bne  again          ; Si pas à 0 on en affiche encore.
-.11f3	20 90 13	out            jsr  popreg         ; Récupère tous les registres.
-.11f6	60		               rts
-.11f7			putch
-.11f7	08		               php                 ; Sauvegarde le registre de status.
-.11f8	20 d2 ff	               jsr  chrout         ; Affiche le caractère de Acc.
-.11fb	28		               plp                 ; Récupère le registre de status.
-.11fc	60		               rts
-.11fd			puts
-.11fd	20 f3 12	               jsr  pushall        ; Sauvegarde registres, ZP1 et ZP2.
-.1200	86 fb		               stx  zpage1         ; Place l'adresse de la chaine
-.1202	84 fc		               sty  zpage1+1       ;   dans ZP1.
-.1204	a0 00		               ldy  #0             ; Initialise l'index du mode (ZP),Y
-.1206	b1 fb		next           lda  (zpage1),y     ; Lit un charactère.
-.1208	f0 09		               beq  exit           ; Si $00 on sort.
-.120a	20 d2 ff	               jsr  chrout         ; Affiche le caractères.
-.120d	20 48 14	               jsr  inczp1         ; Inc. le pointeur ZP1 en 16 bits.
-.1210	4c 06 12	               jmp  next           ; Saute chercher le prochain carac.
-.1213	20 2e 13	exit           jsr  popall         ; Récupère registre, ZP1 et ZP2.
-.1216	60		               rts
-.1217			gotoxy
-.1217	08		               php                 ; Sauvegarde le registre de
-.1218	48		               pha                 ;   status et le registre a.
-.1219	18		               clc                 ; Carry = 1 pour que kplot
-.121a	8a		               txa                 ;   positionne le curseur.
-.121b	48		               pha                 ; On inverse X et Y pcq kplot
-.121c	98		               tya                 ;
-.121d	aa		               tax                 ;   prend X comme la ligne
-.121e	68		               pla                 ;
-.121f	a8		               tay                 ;   et Y comme la colonne.
-.1220	20 f0 ff	               jsr  kplot          ; Positionne le curseur
-.1223	68		               pla                 ; Récupère le registre a et
-.1224	28		               plp                 ;   le registre de status.
-.1225	60		               rts
-.1226			cursor
+.11c8			scrmaninit
+.11c8	20 69 13	               jsr  pushreg        ; Sauvegarde tous les registres
+.11cb	20 bc 10	               jsr  screendis      ; Disable screen
+.11ce	a9 06		               lda  #vbleu         ; Place bleue pour la couleur
+.11d0	8d 21 d0	               sta  vicbackcol     ;   d'arrière plan,
+.11d3	a9 05		               lda  #vvert         ; vert pour la couleur
+.11d5	8d 20 d0	               sta  vicbordcol     ;   de la bordure d'écran,
+.11d8	a9 01		               lda  #vblanc        ;   et blanc pour la couleur du
+.11da	8d 86 02	               sta  bascol         ; texte.
+.11dd	20 e8 11	               jsr  cls            ; Efface l'écran.
+.11e0	20 c9 10	               jsr  screenena      ; enable screen
+.11e3	20 98 13	               jsr  popreg         ; Récupère tous les registres.
+.11e6	60		               rts
+>11e7	8e		characterset   .byte b_uppercase
+.11e8			cls
+.11e8	08		               php                 ; Sauvegarde les registres
+.11e9	48		               pha                 ;   modifiés.
+.11ea	a9 93		               lda  #$93           ; Affiche le code basic de
+.11ec	20 d2 ff	               jsr  chrout         ;   d'effacement d'écran.
+.11ef	68		               pla                 ; Récupère les registres
+.11f0	28		               plp                 ;   modifiés.
+.11f1	60		               rts
+.11f2			putnch
+.11f2	20 69 13	               jsr  pushreg        ; Sauvegarde tous les registres.
+.11f5	20 d2 ff	again          jsr  chrout         ; On affiche A.
+.11f8	ca		               dex                 ; Un de moins à faire.
+.11f9	d0 fa		               bne  again          ; Si pas à 0 on en affiche encore.
+.11fb	20 98 13	out            jsr  popreg         ; Récupère tous les registres.
+.11fe	60		               rts
+.11ff			putch
+.11ff	08		               php                 ; Sauvegarde le registre de status.
+.1200	20 d2 ff	               jsr  chrout         ; Affiche le caractère de Acc.
+.1203	28		               plp                 ; Récupère le registre de status.
+.1204	60		               rts
+.1205			puts
+.1205	20 fb 12	               jsr  pushall        ; Sauvegarde registres, ZP1 et ZP2.
+.1208	86 fb		               stx  zpage1         ; Place l'adresse de la chaine
+.120a	84 fc		               sty  zpage1+1       ;   dans ZP1.
+.120c	a0 00		               ldy  #0             ; Initialise l'index du mode (ZP),Y
+.120e	b1 fb		next           lda  (zpage1),y     ; Lit un charactère.
+.1210	f0 09		               beq  exit           ; Si $00 on sort.
+.1212	20 d2 ff	               jsr  chrout         ; Affiche le caractères.
+.1215	20 50 14	               jsr  inczp1         ; Inc. le pointeur ZP1 en 16 bits.
+.1218	4c 0e 12	               jmp  next           ; Saute chercher le prochain carac.
+.121b	20 36 13	exit           jsr  popall         ; Récupère registre, ZP1 et ZP2.
+.121e	60		               rts
+.121f			gotoxy
+.121f	08		               php                 ; Sauvegarde le registre de
+.1220	48		               pha                 ;   status et le registre a.
+.1221	18		               clc                 ; Carry = 1 pour que kplot
+.1222	8a		               txa                 ;   positionne le curseur.
+.1223	48		               pha                 ; On inverse X et Y pcq kplot
+.1224	98		               tya                 ;
+.1225	aa		               tax                 ;   prend X comme la ligne
+.1226	68		               pla                 ;
+.1227	a8		               tay                 ;   et Y comme la colonne.
+.1228	20 f0 ff	               jsr  kplot          ; Positionne le curseur
+.122b	68		               pla                 ; Récupère le registre a et
+.122c	28		               plp                 ;   le registre de status.
+.122d	60		               rts
+.122e			cursor
 =$0286			bascol    =    $0286               ; debugme
-.1226	20 61 13	               jsr  pushreg        ; Sauvegarde tous les registres.
-.1229	90 12		               bcc  restore        ; Si C=0 c'est une récupération.
-.122b	20 f0 ff	               jsr  kplot          ; On récupère la position du
-.122e	8c 50 12	               sty  cx             ;   curseur et on la sauvegarde
-.1231	8e 51 12	               stx  cy             ;   dans les vars locales.
-.1234	ad 86 02	               lda  bascol         ; On sauvegarde la couleur
-.1237	8d 52 12	               sta  bcol           ; BASIC du texte.
-.123a	4c 4c 12	               jmp  out            ; c'est fini on sort.
-.123d	ae 51 12	restore        ldx  cy             ; Comme C=1, On charge x avec
-.1240	ac 50 12	               ldy  cx             ;   la ligne, y ace  la col.
-.1243	20 f0 ff	               jsr  kplot          ; On positionne le curseur.
-.1246	ad 52 12	               lda  bcol           ; On replace la couleur par basic
-.1249	8d 86 02	               sta  bascol         ;   sauvegardé.
-.124c	20 90 13	out            jsr  popreg         ; Récupère tous les registres.
-.124f	60		               rts
->1250	00		cx   .byte     $00
->1251	00		cy   .byte     $00
->1252	00		bcol .byte     $00
-.1253			cursave
-.1253	08		               php
-.1254	38		               sec
-.1255	20 26 12	               jsr  cursor         ; Voir cette fonction plus haut.
-.1258	28		               plp
-.1259	60		               rts
-.125a			curput
-.125a	08		               php
-.125b	18		               clc
-.125c	20 26 12	               jsr  cursor         ; Voir cette fonction plus haut.
-.125f	28		               plp
-.1260	60		               rts
-.1261			putsxy
-.1261	20 f3 12	               jsr  pushall        ; Sauvegarde registres, ZP1 et ZP2.
-.1264	86 fb		               stx  zpage1         ; On place la position de la
-.1266	84 fc		               sty  zpage1+1       ;   chaine dans le pointeur ZP1.
-.1268	a0 00		               ldy  #$00           ; On charge l'index à 0.
-.126a	b1 fb		               lda  (zpage1),y     ; Charge la coordonné X
-.126c	aa		               tax                 ;   dans X.
-.126d	20 48 14	               jsr  inczp1         ; Inc. le pointeur ZP1 en 16 bits.
-.1270	b1 fb		               lda  (zpage1),y     ; Charge la coordonnée Y
-.1272	a8		               tay                 ; dans Y.
-.1273	20 17 12	               jsr  gotoxy         ; on positionne le curseur.
-.1276	20 48 14	               jsr  inczp1         ; Inc. le pointeur ZP1 en 16 bits.
-.1279	a6 fb		               ldx  zpage1         ; On charge la nouvelle adresse
-.127b	a4 fc		               ldy  zpage1+1       ;   de la chaine et on
-.127d	20 fd 11	               jsr  puts           ;   l'affiche.
-.1280	20 2e 13	               jsr  popall         ; Récupère registre, ZP1 et ZP2.
-.1283	60		               rts
->1284	00 00		straddr   .word     $00
->1286	00		px        .byte     $00
->1287	00		py        .byte     $00
->1288	00 00		zp1       .word     $00
-.128a			putscxy
-.128a	20 f3 12	               jsr  pushall        ; Sauvegarde registres, ZP1 et ZP2.
-.128d	86 fb		               stx  zpage1         ; On place la position de la
-.128f	84 fc		               sty  zpage1+1       ;   chaine dans le pointeur ZP1.
-.1291	a0 00		               ldy  #$00           ; On charge l'index à 0.
-.1293	ad 86 02	               lda  bascol         ; On sauvegarde la couleur
-.1296	48		               pha                 ;   actuelle de basic.
-.1297	b1 fb		               lda  (zpage1),y     ; On charge le paramètre de
-.1299	8d 86 02	               sta  bascol         ;   couleur et le force a Basic.
-.129c	20 48 14	               jsr  inczp1         ; Inc. le pointeur ZP1 en 16 bits.
-.129f	a6 fb		               ldx  zpage1         ; On charge la nouvelle adresse
-.12a1	a4 fc		               ldy  zpage1+1       ;   de la chaine et on
-.12a3	20 61 12	               jsr  putsxy         ;   l'affiche.
-.12a6	68		               pla                 ; On replace la couleur basic
-.12a7	8d 86 02	               sta  bascol         ;   que nous avions sauvegardée.
-.12aa	20 2e 13	               jsr  popall         ; Récupère registre, ZP1 et ZP2.
-.12ad	60		               rts
-.12ae			putrahex
-.12ae	20 61 13	               jsr  pushreg        ; Sauvegarde tous les registres.
-.12b1	20 81 15	               jsr  atohex         ; Conversion de a chaîne hexa.
-.12b4	a2 1e		               ldx  #<a2hexstr     ; Charge l'adresse de la chaîne
-.12b6	a0 15		               ldy  #>a2hexstr     ;   hexa dans $YYXX.
-.12b8	20 fd 11	               jsr  puts           ; Affiche la chaîne.
-.12bb	20 90 13	               jsr  popreg         ; Récupère tous les registres.
-.12be	60		               rts
-.12bf			kputrahexxy
-.12bf			bputrahexxy
-.12bf			putrahexxy
-.12bf	08		               php                 ; Sauvegarde le registre de
-.12c0	48		               pha                 ;   status et le registre a.
-.12c1	20 81 15	               jsr  atohex         ; Convertion de a en hexadécimal.
-.12c4	a2 1b		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
-.12c6	a0 15		               ldy  #>a2hexpos     ;   hexa dans $YYXX.
-.12c8	20 61 12	               jsr  putsxy         ; Positionne et affiche la chaîne.
-.12cb	68		               pla                 ; Récupère le registre a et
-.12cc	28		               plp                 ;   le registre de status.
-.12cd	60		               rts
-.12ce			putrahexcxy
-.12ce	20 61 13	               jsr  pushreg        ; Sauvegarde tous les registres.
-.12d1	20 81 15	               jsr  atohex         ; Convertion de a en hexadécimal.
-.12d4	a2 1b		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
-.12d6	a0 15		               ldy  #>a2hexpos     ;   hexa dans $YYXX.
-.12d8	20 61 12	               jsr  putsxy         ; Colore, positionne et affiche la
-.12db	20 90 13	               jsr  popreg         ; Récupère tous les registres.
-.12de	60		               rts
-.12df			setinverse
-.12df	48		               pha
-.12e0	a9 12		               lda  #$12
-.12e2	20 d2 ff	               jsr  chrout
-.12e5	68		               pla
+.122e	20 69 13	               jsr  pushreg        ; Sauvegarde tous les registres.
+.1231	90 12		               bcc  restore        ; Si C=0 c'est une récupération.
+.1233	20 f0 ff	               jsr  kplot          ; On récupère la position du
+.1236	8c 58 12	               sty  cx             ;   curseur et on la sauvegarde
+.1239	8e 59 12	               stx  cy             ;   dans les vars locales.
+.123c	ad 86 02	               lda  bascol         ; On sauvegarde la couleur
+.123f	8d 5a 12	               sta  bcol           ; BASIC du texte.
+.1242	4c 54 12	               jmp  out            ; c'est fini on sort.
+.1245	ae 59 12	restore        ldx  cy             ; Comme C=1, On charge x avec
+.1248	ac 58 12	               ldy  cx             ;   la ligne, y ace  la col.
+.124b	20 f0 ff	               jsr  kplot          ; On positionne le curseur.
+.124e	ad 5a 12	               lda  bcol           ; On replace la couleur par basic
+.1251	8d 86 02	               sta  bascol         ;   sauvegardé.
+.1254	20 98 13	out            jsr  popreg         ; Récupère tous les registres.
+.1257	60		               rts
+>1258	00		cx   .byte     $00
+>1259	00		cy   .byte     $00
+>125a	00		bcol .byte     $00
+.125b			cursave
+.125b	08		               php
+.125c	38		               sec
+.125d	20 2e 12	               jsr  cursor         ; Voir cette fonction plus haut.
+.1260	28		               plp
+.1261	60		               rts
+.1262			curput
+.1262	08		               php
+.1263	18		               clc
+.1264	20 2e 12	               jsr  cursor         ; Voir cette fonction plus haut.
+.1267	28		               plp
+.1268	60		               rts
+.1269			putsxy
+.1269	20 fb 12	               jsr  pushall        ; Sauvegarde registres, ZP1 et ZP2.
+.126c	86 fb		               stx  zpage1         ; On place la position de la
+.126e	84 fc		               sty  zpage1+1       ;   chaine dans le pointeur ZP1.
+.1270	a0 00		               ldy  #$00           ; On charge l'index à 0.
+.1272	b1 fb		               lda  (zpage1),y     ; Charge la coordonné X
+.1274	aa		               tax                 ;   dans X.
+.1275	20 50 14	               jsr  inczp1         ; Inc. le pointeur ZP1 en 16 bits.
+.1278	b1 fb		               lda  (zpage1),y     ; Charge la coordonnée Y
+.127a	a8		               tay                 ; dans Y.
+.127b	20 1f 12	               jsr  gotoxy         ; on positionne le curseur.
+.127e	20 50 14	               jsr  inczp1         ; Inc. le pointeur ZP1 en 16 bits.
+.1281	a6 fb		               ldx  zpage1         ; On charge la nouvelle adresse
+.1283	a4 fc		               ldy  zpage1+1       ;   de la chaine et on
+.1285	20 05 12	               jsr  puts           ;   l'affiche.
+.1288	20 36 13	               jsr  popall         ; Récupère registre, ZP1 et ZP2.
+.128b	60		               rts
+>128c	00 00		straddr   .word     $00
+>128e	00		px        .byte     $00
+>128f	00		py        .byte     $00
+>1290	00 00		zp1       .word     $00
+.1292			putscxy
+.1292	20 fb 12	               jsr  pushall        ; Sauvegarde registres, ZP1 et ZP2.
+.1295	86 fb		               stx  zpage1         ; On place la position de la
+.1297	84 fc		               sty  zpage1+1       ;   chaine dans le pointeur ZP1.
+.1299	a0 00		               ldy  #$00           ; On charge l'index à 0.
+.129b	ad 86 02	               lda  bascol         ; On sauvegarde la couleur
+.129e	48		               pha                 ;   actuelle de basic.
+.129f	b1 fb		               lda  (zpage1),y     ; On charge le paramètre de
+.12a1	8d 86 02	               sta  bascol         ;   couleur et le force a Basic.
+.12a4	20 50 14	               jsr  inczp1         ; Inc. le pointeur ZP1 en 16 bits.
+.12a7	a6 fb		               ldx  zpage1         ; On charge la nouvelle adresse
+.12a9	a4 fc		               ldy  zpage1+1       ;   de la chaine et on
+.12ab	20 69 12	               jsr  putsxy         ;   l'affiche.
+.12ae	68		               pla                 ; On replace la couleur basic
+.12af	8d 86 02	               sta  bascol         ;   que nous avions sauvegardée.
+.12b2	20 36 13	               jsr  popall         ; Récupère registre, ZP1 et ZP2.
+.12b5	60		               rts
+.12b6			putrahex
+.12b6	20 69 13	               jsr  pushreg        ; Sauvegarde tous les registres.
+.12b9	20 89 15	               jsr  atohex         ; Conversion de a chaîne hexa.
+.12bc	a2 26		               ldx  #<a2hexstr     ; Charge l'adresse de la chaîne
+.12be	a0 15		               ldy  #>a2hexstr     ;   hexa dans $YYXX.
+.12c0	20 05 12	               jsr  puts           ; Affiche la chaîne.
+.12c3	20 98 13	               jsr  popreg         ; Récupère tous les registres.
+.12c6	60		               rts
+.12c7			kputrahexxy
+.12c7			bputrahexxy
+.12c7			putrahexxy
+.12c7	08		               php                 ; Sauvegarde le registre de
+.12c8	48		               pha                 ;   status et le registre a.
+.12c9	20 89 15	               jsr  atohex         ; Convertion de a en hexadécimal.
+.12cc	a2 23		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
+.12ce	a0 15		               ldy  #>a2hexpos     ;   hexa dans $YYXX.
+.12d0	20 69 12	               jsr  putsxy         ; Positionne et affiche la chaîne.
+.12d3	68		               pla                 ; Récupère le registre a et
+.12d4	28		               plp                 ;   le registre de status.
+.12d5	60		               rts
+.12d6			putrahexcxy
+.12d6	20 69 13	               jsr  pushreg        ; Sauvegarde tous les registres.
+.12d9	20 89 15	               jsr  atohex         ; Convertion de a en hexadécimal.
+.12dc	a2 23		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
+.12de	a0 15		               ldy  #>a2hexpos     ;   hexa dans $YYXX.
+.12e0	20 69 12	               jsr  putsxy         ; Colore, positionne et affiche la
+.12e3	20 98 13	               jsr  popreg         ; Récupère tous les registres.
 .12e6	60		               rts
-.12e7			clrinverse
+.12e7			setinverse
 .12e7	48		               pha
-.12e8	a9 92		               lda  #$92
+.12e8	a9 12		               lda  #$12
 .12ea	20 d2 ff	               jsr  chrout
 .12ed	68		               pla
 .12ee	60		               rts
+.12ef			clrinverse
+.12ef	48		               pha
+.12f0	a9 92		               lda  #$92
+.12f2	20 d2 ff	               jsr  chrout
+.12f5	68		               pla
+.12f6	60		               rts
 
 ;******  Return to file: slbug64.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-cbm-pushpop.asm
 
->12ef	00		rp        .byte     0
->12f0	00		ra        .byte     0
->12f1	00 00		pc        .word     0
-.12f3			pushall
-.12f3			push
-.12f3	08		          php            ; stack : flg, pcl, pch
-.12f4	78		          sei
-.12f5	8d f0 12	          sta  ra        ; save a
-.12f8	68		          pla            ; stack : pcl, pch
-.12f9	8d ef 12	          sta  rp        ; save rp
-.12fc	68		          pla            ; stack : pch
-.12fd	8d f1 12	          sta  pc        ; save pcl
-.1300	68		          pla            ; stack : -
-.1301	8d f2 12	          sta  pc+1      ; save pch
-.1304	a5 fb		          lda  zpage1    ; get zpage1 low byte
-.1306	48		          pha            ; stack : zp1l
-.1307	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
-.1309	48		          pha            ; stack : zp1h, zp1l
-.130a	a5 fd		          lda  zpage2    ; get zpage2 low byte
-.130c	48		          pha            ; stack : zp2l, zp1h, zp1l
-.130d	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
-.130f	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
-.1310	ad ef 12	          lda  rp        ; get rp
-.1313	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
-.1314	ad f0 12	          lda  ra        ; get a
-.1317	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
-.1318	8a		          txa            ; get x
-.1319	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
-.131a	98		          tya            ; get y
-.131b	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.131c	ad f2 12	          lda  pc+1      ; get pch
-.131f	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.1320	ad f1 12	          lda  pc        ; get pcl
-.1323	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.1324	ad ef 12	          lda  rp        ; get rp
-.1327	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.1328	ad f0 12	          lda  ra        ; get a
-.132b	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.132c	58		          cli
-.132d	60		          rts
-.132e			pullall
-.132e			pull
-.132e			popall
-.132e			pop
-.132e	78		          sei
-.132f	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.1330	8d f1 12	          sta  pc        ; save pcl
-.1333	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.1334	8d f2 12	          sta  pc+1      ; save pch
-.1337	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
-.1338	a8		          tay            ; set y
-.1339	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
-.133a	aa		          tax            ; set x
-.133b	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
-.133c	8d f0 12	          sta  ra        ; save a
-.133f	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
-.1340	8d ef 12	          sta  rp        ; save rp
-.1343	68		          pla            ; stack : zp2l, zp1h, zp1l
-.1344	85 fe		          sta  zpage2+1  ; get zpage1 low byte
-.1346	68		          pla            ; stack : zp1h, zp1l
-.1347	85 fd		          sta  zpage2    ; get zpage2 High byte
-.1349	68		          pla            ; stack : zp1l
-.134a	85 fc		          sta  zpage1+1  ; get zpage2 low byte
-.134c	68		          pla            ; stack :
-.134d	85 fb		          sta  zpage1    ; get zpage1 High byte
-.134f	ad f2 12	          lda  pc+1      ; get pch
-.1352	48		          pha            ; stack : pch
-.1353	ad f1 12	          lda  pc
-.1356	48		          pha            ; stack : pcl, pch
-.1357	ad ef 12	          lda  rp        ; get rp
-.135a	48		          pha            ; stack : rp, pcl, pch
-.135b	ad f0 12	          lda  ra        ; set ra
-.135e	58		          cli
-.135f	28		          plp            ; stack : pcl, pch
-.1360	60		          rts
-.1361			pushreg
-.1361	08		          php            ; stack : flg, pcl, pch
-.1362	78		          sei
-.1363	8d f0 12	          sta  ra        ; save a
-.1366	68		          pla            ; stack : pcl, pch
-.1367	8d ef 12	          sta  rp        ; save rp
-.136a	68		          pla            ; stack : pch
-.136b	8d f1 12	          sta  pc        ; save pcl
-.136e	68		          pla            ; stack : -
-.136f	8d f2 12	          sta  pc+1      ; save pch
-.1372	ad ef 12	          lda  rp        ; get rp
-.1375	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
-.1376	ad f0 12	          lda  ra        ; get a
-.1379	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
-.137a	8a		          txa            ; get x
-.137b	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
-.137c	98		          tya            ; get y
-.137d	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.137e	ad f2 12	          lda  pc+1      ; get pch
-.1381	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.1382	ad f1 12	          lda  pc        ; get pcl
-.1385	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.1386	ad ef 12	          lda  rp        ; get rp
-.1389	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.138a	ad f0 12	          lda  ra        ; get a
-.138d	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.138e	58		          cli
-.138f	60		          rts
-.1390			pullreg
-.1390			popreg
-.1390	78		          sei
-.1391	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.1392	8d f1 12	          sta  pc        ; save pcl
-.1395	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.1396	8d f2 12	          sta  pc+1      ; save pch
-.1399	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
-.139a	a8		          tay            ; set y
-.139b	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
-.139c	aa		          tax            ; set x
-.139d	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
-.139e	8d f0 12	          sta  ra        ; save a
-.13a1	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
-.13a2	8d ef 12	          sta  rp        ; save rp
-.13a5	ad f2 12	          lda  pc+1      ; get pch
-.13a8	48		          pha            ; stack : pch
-.13a9	ad f1 12	          lda  pc
-.13ac	48		          pha            ; stack : pcl, pch
-.13ad	ad ef 12	          lda  rp        ; get rp
-.13b0	48		          pha            ; stack : rp, pcl, pch
-.13b1	ad f0 12	          lda  ra        ; set ra
-.13b4	58		          cli
-.13b5	28		          plp            ; stack : pcl, pch
-.13b6	60		          rts
+>12f7	00		rp        .byte     0
+>12f8	00		ra        .byte     0
+>12f9	00 00		pc        .word     0
+.12fb			pushall
+.12fb			push
+.12fb	08		          php            ; stack : flg, pcl, pch
+.12fc	78		          sei
+.12fd	8d f8 12	          sta  ra        ; save a
+.1300	68		          pla            ; stack : pcl, pch
+.1301	8d f7 12	          sta  rp        ; save rp
+.1304	68		          pla            ; stack : pch
+.1305	8d f9 12	          sta  pc        ; save pcl
+.1308	68		          pla            ; stack : -
+.1309	8d fa 12	          sta  pc+1      ; save pch
+.130c	a5 fb		          lda  zpage1    ; get zpage1 low byte
+.130e	48		          pha            ; stack : zp1l
+.130f	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
+.1311	48		          pha            ; stack : zp1h, zp1l
+.1312	a5 fd		          lda  zpage2    ; get zpage2 low byte
+.1314	48		          pha            ; stack : zp2l, zp1h, zp1l
+.1315	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
+.1317	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
+.1318	ad f7 12	          lda  rp        ; get rp
+.131b	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
+.131c	ad f8 12	          lda  ra        ; get a
+.131f	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.1320	8a		          txa            ; get x
+.1321	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1322	98		          tya            ; get y
+.1323	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1324	ad fa 12	          lda  pc+1      ; get pch
+.1327	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1328	ad f9 12	          lda  pc        ; get pcl
+.132b	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.132c	ad f7 12	          lda  rp        ; get rp
+.132f	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1330	ad f8 12	          lda  ra        ; get a
+.1333	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1334	58		          cli
+.1335	60		          rts
+.1336			pullall
+.1336			pull
+.1336			popall
+.1336			pop
+.1336	78		          sei
+.1337	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1338	8d f9 12	          sta  pc        ; save pcl
+.133b	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.133c	8d fa 12	          sta  pc+1      ; save pch
+.133f	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1340	a8		          tay            ; set y
+.1341	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.1342	aa		          tax            ; set x
+.1343	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
+.1344	8d f8 12	          sta  ra        ; save a
+.1347	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
+.1348	8d f7 12	          sta  rp        ; save rp
+.134b	68		          pla            ; stack : zp2l, zp1h, zp1l
+.134c	85 fe		          sta  zpage2+1  ; get zpage1 low byte
+.134e	68		          pla            ; stack : zp1h, zp1l
+.134f	85 fd		          sta  zpage2    ; get zpage2 High byte
+.1351	68		          pla            ; stack : zp1l
+.1352	85 fc		          sta  zpage1+1  ; get zpage2 low byte
+.1354	68		          pla            ; stack :
+.1355	85 fb		          sta  zpage1    ; get zpage1 High byte
+.1357	ad fa 12	          lda  pc+1      ; get pch
+.135a	48		          pha            ; stack : pch
+.135b	ad f9 12	          lda  pc
+.135e	48		          pha            ; stack : pcl, pch
+.135f	ad f7 12	          lda  rp        ; get rp
+.1362	48		          pha            ; stack : rp, pcl, pch
+.1363	ad f8 12	          lda  ra        ; set ra
+.1366	58		          cli
+.1367	28		          plp            ; stack : pcl, pch
+.1368	60		          rts
+.1369			pushreg
+.1369	08		          php            ; stack : flg, pcl, pch
+.136a	78		          sei
+.136b	8d f8 12	          sta  ra        ; save a
+.136e	68		          pla            ; stack : pcl, pch
+.136f	8d f7 12	          sta  rp        ; save rp
+.1372	68		          pla            ; stack : pch
+.1373	8d f9 12	          sta  pc        ; save pcl
+.1376	68		          pla            ; stack : -
+.1377	8d fa 12	          sta  pc+1      ; save pch
+.137a	ad f7 12	          lda  rp        ; get rp
+.137d	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
+.137e	ad f8 12	          lda  ra        ; get a
+.1381	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.1382	8a		          txa            ; get x
+.1383	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1384	98		          tya            ; get y
+.1385	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1386	ad fa 12	          lda  pc+1      ; get pch
+.1389	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.138a	ad f9 12	          lda  pc        ; get pcl
+.138d	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.138e	ad f7 12	          lda  rp        ; get rp
+.1391	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1392	ad f8 12	          lda  ra        ; get a
+.1395	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.1396	58		          cli
+.1397	60		          rts
+.1398			pullreg
+.1398			popreg
+.1398	78		          sei
+.1399	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.139a	8d f9 12	          sta  pc        ; save pcl
+.139d	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.139e	8d fa 12	          sta  pc+1      ; save pch
+.13a1	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.13a2	a8		          tay            ; set y
+.13a3	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.13a4	aa		          tax            ; set x
+.13a5	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
+.13a6	8d f8 12	          sta  ra        ; save a
+.13a9	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
+.13aa	8d f7 12	          sta  rp        ; save rp
+.13ad	ad fa 12	          lda  pc+1      ; get pch
+.13b0	48		          pha            ; stack : pch
+.13b1	ad f9 12	          lda  pc
+.13b4	48		          pha            ; stack : pcl, pch
+.13b5	ad f7 12	          lda  rp        ; get rp
+.13b8	48		          pha            ; stack : rp, pcl, pch
+.13b9	ad f8 12	          lda  ra        ; set ra
+.13bc	58		          cli
+.13bd	28		          plp            ; stack : pcl, pch
+.13be	60		          rts
 
 ;******  Return to file: slbug64.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-cbm-mem.asm
 
-.13b7			blkfill
-.13b7	20 f3 12	bf0            jsr  push
-.13ba	20 82 14	               jsr  savezp1
-.13bd	84 fc		               sty  zpage1+1
-.13bf	a0 00		               ldy  #$00
-.13c1	84 fb		               sty  zpage1
-.13c3	91 fb		bf1            sta  (zpage1),y
-.13c5	c8		               iny
-.13c6	d0 fb		               bne  bf1
-.13c8	20 91 14	               jsr  restzp1
-.13cb	20 2e 13	               jsr  pop
-.13ce	60		               rts
-.13cf			memfill
-.13cf	20 f3 12	               jsr  push
-.13d2	20 b7 13	mf1            jsr  blkfill
-.13d5	c8		               iny
-.13d6	ca		               dex
-.13d7	d0 f9		               bne  mf1
-.13d9	20 2e 13	               jsr  pop
-.13dc	60		               rts
-.13dd			memmove
-.13dd	20 f3 12	               jsr  push
-.13e0	ba		               tsx            ; On se crée un pointeur ...
-.13e1	8a		               txa
-.13e2	18		               clc
-.13e3	69 0b		               adc  #11
-.13e5	a8		               tay
-.13e6	a2 06		               ldx  #$06
-.13e8	b9 00 01	nextbyte       lda  $0100,y
-.13eb	99 37 14	               sta  words,y
-.13ee	c8		               iny
-.13ef	ca		               dex
-.13f0	d0 f6		               bne  nextbyte
-.13f2	ad 37 14	               lda  s
-.13f5	8d 0e 14	               sta  source+1
-.13f8	ad 38 14	               lda  s+1
-.13fb	8d 0f 14	               sta  source+2
-.13fe	ad 39 14	               lda  d
-.1401	8d 0b 14	               sta  destin+1
-.1404	ad 3a 14	               lda  d+1
-.1407	8d 0c 14	               sta  destin+2
-.140a	ad ff ff	destin         lda  $ffff
-.140d	8d ff ff	source         sta  $ffff
-.1410	ee 0b 14	               inc  destin+1
-.1413	d0 03		               bne  src
-.1415	ee 0c 14	               inc  destin+2
-.1418	ee 0e 14	src            inc  source+1
-.141b	d0 03		               bne  cnt
-.141d	ee 0f 14	               inc  source+2
-.1420	ad 3b 14	cnt            lda  compte
-.1423	d0 08		               bne  decit
-.1425	ad 3c 14	               lda  compte+1
-.1428	f0 09		               beq  fini
-.142a	ce 3c 14	               dec  compte+1
-.142d	ce 3b 14	decit          dec  compte
-.1430	4c 0a 14	               jmp  destin
-.1433	20 2e 13	fini           jsr  pop
-.1436	60		               rts
-.1437			words
->1437	00 00		s         .word     $0000
->1439	00 00		d         .word     $0000
->143b	00 00		compte    .word     $0000
-.143d			decword
-.143d	20 f3 12	               jsr  push
-.1440	86 fd		               stx  zpage2
-.1442	84 fe		               sty  zpage2+1
-.1444	20 2e 13	               jsr  pop
-.1447	60		               rts
-.1448			inczpage1
-.1448			inczp1
-.1448	08		               php
-.1449	48		               pha
-.144a	e6 fb		               inc  zpage1
-.144c	a5 fb		               lda  zpage1
-.144e	d0 02		               bne  nopage
-.1450	e6 fc		               inc  zpage1+1
-.1452	68		nopage         pla
-.1453	28		               plp
-.1454	60		               rts
-.1455			deczpage1
-.1455			deczp1
-.1455	08		               php
-.1456	48		               pha
-.1457	c6 fb		               dec  zpage1
-.1459	a5 fb		               lda  zpage1
-.145b	c9 ff		               cmp  #$ff
-.145d	f0 02		               beq  report
-.145f	d0 02		               bne  nopage
-.1461	c6 fc		report         dec  zpage1+1
-.1463	68		nopage         pla
-.1464	28		               plp
-.1465	60		               rts
-.1466			inczpage2
-.1466			inczp2
-.1466	08		               php
-.1467	48		               pha
-.1468	e6 fd		               inc  zpage2
-.146a	a5 fd		               lda  zpage2
-.146c	d0 02		               bne  nopage
-.146e	e6 fe		               inc  zpage2+1
-.1470	68		nopage         pla
-.1471	28		               plp
-.1472	60		               rts
-.1473			deczpage2
-.1473			deczp2
-.1473	08		               php
-.1474	c6 fd		               dec  zpage2
-.1476	a5 fd		               lda  zpage2
-.1478	c9 ff		               cmp  #$ff
-.147a	f0 02		               beq  report
-.147c	d0 02		               bne  nopage
-.147e	c6 fe		report         dec  zpage2+1
-.1480	28		nopage         plp
-.1481	60		               rts
-.1482			savezp1
-.1482	08		               php
-.1483	48		               pha
-.1484	a5 fb		               lda  zpage1
-.1486	8d 13 15	               sta  zp1
-.1489	a5 fc		               lda  zpage1+1
-.148b	8d 14 15	               sta  zp1+1
-.148e	68		               pla
-.148f	28		               plp
-.1490	60		               rts
-.1491			restzp1
-.1491	08		               php
-.1492	48		               pha
-.1493	ad 13 15	               lda  zp1
-.1496	85 fb		               sta  zpage1
-.1498	ad 14 15	               lda  zp1+1
-.149b	85 fc		               sta  zpage1+1
-.149d	68		               pla
-.149e	28		               plp
-.149f	60		               rts
-.14a0			savezp2
-.14a0	08		               php
-.14a1	48		               pha
-.14a2	a5 fd		               lda  zpage2
-.14a4	8d 15 15	               sta  zp2
-.14a7	a5 fe		               lda  zpage2+1
-.14a9	8d 16 15	               sta  zp2+1
-.14ac	68		               pla
-.14ad	28		               plp
-.14ae	60		               rts
-.14af			restzp2
-.14af	08		               php
-.14b0	48		               pha
-.14b1	ad 15 15	               lda  zp2
-.14b4	85 fd		               sta  zpage2
-.14b6	ad 16 15	               lda  zp2+1
-.14b9	85 fe		               sta  zpage2+1
-.14bb	68		               pla
-.14bc	28		               plp
-.14bd	60		               rts
-.14be			xy2addr
-.14be	08		               php
-.14bf	48		               pha
-.14c0	8a		               txa
-.14c1	48		               pha
-.14c2	98		               tya
-.14c3	48		               pha
-.14c4	ad 0e 15	               lda  addr1+1
-.14c7	8d 10 15	               sta  addr2+1
-.14ca	ad 0d 15	               lda  addr1
-.14cd	8d 0f 15	               sta  addr2
-.14d0	c0 00		               cpy  #$00
-.14d2	f0 0f		               beq  addx
-.14d4	18		moreline       clc
-.14d5	6d 0c 15	               adc  ymult
-.14d8	90 03		               bcc  norepy
-.14da	ee 10 15	               inc  addr2+1
-.14dd	8d 0f 15	norepy         sta  addr2
-.14e0	88		               dey
-.14e1	d0 f1		               bne  moreline
-.14e3	8a		addx           txa
-.14e4	18		               clc
-.14e5	6d 0f 15	               adc  addr2
-.14e8	90 03		               bcc  thatsit
-.14ea	ee 10 15	               inc  addr2+1
-.14ed	8d 0f 15	thatsit        sta  addr2
-.14f0	68		               pla
-.14f1	a8		               tay
-.14f2	68		               pla
-.14f3	aa		               tax
-.14f4	68		               pla
-.14f5	28		               plp
-.14f6	60		               rts
-.14f7			loop
-.14f7	ce 17 15	               dec  loopcount
-.14fa	d0 03		               bne  norep
-.14fc	ce 18 15	               dec  loopcount+1
-.14ff	ad 17 15	norep          lda  loopcount
-.1502	c9 00		               cmp  #$00
-.1504	d0 05		               bne  out
-.1506	4d 18 15	               eor  loopcount+1
-.1509	c9 ff		               cmp  #$ff
-.150b	60		out            rts
->150c	28		ymult          .byte     40
->150d	00 00		addr1          .word     $0000
->150f	00 00		addr2          .word     $0000
->1511	00 00		bytecnt        .word     $0000
->1513	00 00		zp1            .word     $0000
->1515	00 00		zp2            .word     $0000
->1517	00 00		loopcount      .word     $0000
+.13bf			blkfill
+.13bf	20 fb 12	bf0            jsr  push
+.13c2	20 8a 14	               jsr  savezp1
+.13c5	84 fc		               sty  zpage1+1
+.13c7	a0 00		               ldy  #$00
+.13c9	84 fb		               sty  zpage1
+.13cb	91 fb		bf1            sta  (zpage1),y
+.13cd	c8		               iny
+.13ce	d0 fb		               bne  bf1
+.13d0	20 99 14	               jsr  restzp1
+.13d3	20 36 13	               jsr  pop
+.13d6	60		               rts
+.13d7			memfill
+.13d7	20 fb 12	               jsr  push
+.13da	20 bf 13	mf1            jsr  blkfill
+.13dd	c8		               iny
+.13de	ca		               dex
+.13df	d0 f9		               bne  mf1
+.13e1	20 36 13	               jsr  pop
+.13e4	60		               rts
+.13e5			memmove
+.13e5	20 fb 12	               jsr  push
+.13e8	ba		               tsx            ; On se crée un pointeur ...
+.13e9	8a		               txa
+.13ea	18		               clc
+.13eb	69 0b		               adc  #11
+.13ed	a8		               tay
+.13ee	a2 06		               ldx  #$06
+.13f0	b9 00 01	nextbyte       lda  $0100,y
+.13f3	99 3f 14	               sta  words,y
+.13f6	c8		               iny
+.13f7	ca		               dex
+.13f8	d0 f6		               bne  nextbyte
+.13fa	ad 3f 14	               lda  s
+.13fd	8d 16 14	               sta  source+1
+.1400	ad 40 14	               lda  s+1
+.1403	8d 17 14	               sta  source+2
+.1406	ad 41 14	               lda  d
+.1409	8d 13 14	               sta  destin+1
+.140c	ad 42 14	               lda  d+1
+.140f	8d 14 14	               sta  destin+2
+.1412	ad ff ff	destin         lda  $ffff
+.1415	8d ff ff	source         sta  $ffff
+.1418	ee 13 14	               inc  destin+1
+.141b	d0 03		               bne  src
+.141d	ee 14 14	               inc  destin+2
+.1420	ee 16 14	src            inc  source+1
+.1423	d0 03		               bne  cnt
+.1425	ee 17 14	               inc  source+2
+.1428	ad 43 14	cnt            lda  compte
+.142b	d0 08		               bne  decit
+.142d	ad 44 14	               lda  compte+1
+.1430	f0 09		               beq  fini
+.1432	ce 44 14	               dec  compte+1
+.1435	ce 43 14	decit          dec  compte
+.1438	4c 12 14	               jmp  destin
+.143b	20 36 13	fini           jsr  pop
+.143e	60		               rts
+.143f			words
+>143f	00 00		s         .word     $0000
+>1441	00 00		d         .word     $0000
+>1443	00 00		compte    .word     $0000
+.1445			decword
+.1445	20 fb 12	               jsr  push
+.1448	86 fd		               stx  zpage2
+.144a	84 fe		               sty  zpage2+1
+.144c	20 36 13	               jsr  pop
+.144f	60		               rts
+.1450			inczpage1
+.1450			inczp1
+.1450	08		               php
+.1451	48		               pha
+.1452	e6 fb		               inc  zpage1
+.1454	a5 fb		               lda  zpage1
+.1456	d0 02		               bne  nopage
+.1458	e6 fc		               inc  zpage1+1
+.145a	68		nopage         pla
+.145b	28		               plp
+.145c	60		               rts
+.145d			deczpage1
+.145d			deczp1
+.145d	08		               php
+.145e	48		               pha
+.145f	c6 fb		               dec  zpage1
+.1461	a5 fb		               lda  zpage1
+.1463	c9 ff		               cmp  #$ff
+.1465	f0 02		               beq  report
+.1467	d0 02		               bne  nopage
+.1469	c6 fc		report         dec  zpage1+1
+.146b	68		nopage         pla
+.146c	28		               plp
+.146d	60		               rts
+.146e			inczpage2
+.146e			inczp2
+.146e	08		               php
+.146f	48		               pha
+.1470	e6 fd		               inc  zpage2
+.1472	a5 fd		               lda  zpage2
+.1474	d0 02		               bne  nopage
+.1476	e6 fe		               inc  zpage2+1
+.1478	68		nopage         pla
+.1479	28		               plp
+.147a	60		               rts
+.147b			deczpage2
+.147b			deczp2
+.147b	08		               php
+.147c	c6 fd		               dec  zpage2
+.147e	a5 fd		               lda  zpage2
+.1480	c9 ff		               cmp  #$ff
+.1482	f0 02		               beq  report
+.1484	d0 02		               bne  nopage
+.1486	c6 fe		report         dec  zpage2+1
+.1488	28		nopage         plp
+.1489	60		               rts
+.148a			savezp1
+.148a	08		               php
+.148b	48		               pha
+.148c	a5 fb		               lda  zpage1
+.148e	8d 1b 15	               sta  zp1
+.1491	a5 fc		               lda  zpage1+1
+.1493	8d 1c 15	               sta  zp1+1
+.1496	68		               pla
+.1497	28		               plp
+.1498	60		               rts
+.1499			restzp1
+.1499	08		               php
+.149a	48		               pha
+.149b	ad 1b 15	               lda  zp1
+.149e	85 fb		               sta  zpage1
+.14a0	ad 1c 15	               lda  zp1+1
+.14a3	85 fc		               sta  zpage1+1
+.14a5	68		               pla
+.14a6	28		               plp
+.14a7	60		               rts
+.14a8			savezp2
+.14a8	08		               php
+.14a9	48		               pha
+.14aa	a5 fd		               lda  zpage2
+.14ac	8d 1d 15	               sta  zp2
+.14af	a5 fe		               lda  zpage2+1
+.14b1	8d 1e 15	               sta  zp2+1
+.14b4	68		               pla
+.14b5	28		               plp
+.14b6	60		               rts
+.14b7			restzp2
+.14b7	08		               php
+.14b8	48		               pha
+.14b9	ad 1d 15	               lda  zp2
+.14bc	85 fd		               sta  zpage2
+.14be	ad 1e 15	               lda  zp2+1
+.14c1	85 fe		               sta  zpage2+1
+.14c3	68		               pla
+.14c4	28		               plp
+.14c5	60		               rts
+.14c6			xy2addr
+.14c6	08		               php
+.14c7	48		               pha
+.14c8	8a		               txa
+.14c9	48		               pha
+.14ca	98		               tya
+.14cb	48		               pha
+.14cc	ad 16 15	               lda  addr1+1
+.14cf	8d 18 15	               sta  addr2+1
+.14d2	ad 15 15	               lda  addr1
+.14d5	8d 17 15	               sta  addr2
+.14d8	c0 00		               cpy  #$00
+.14da	f0 0f		               beq  addx
+.14dc	18		moreline       clc
+.14dd	6d 14 15	               adc  ymult
+.14e0	90 03		               bcc  norepy
+.14e2	ee 18 15	               inc  addr2+1
+.14e5	8d 17 15	norepy         sta  addr2
+.14e8	88		               dey
+.14e9	d0 f1		               bne  moreline
+.14eb	8a		addx           txa
+.14ec	18		               clc
+.14ed	6d 17 15	               adc  addr2
+.14f0	90 03		               bcc  thatsit
+.14f2	ee 18 15	               inc  addr2+1
+.14f5	8d 17 15	thatsit        sta  addr2
+.14f8	68		               pla
+.14f9	a8		               tay
+.14fa	68		               pla
+.14fb	aa		               tax
+.14fc	68		               pla
+.14fd	28		               plp
+.14fe	60		               rts
+.14ff			loop
+.14ff	ce 1f 15	               dec  loopcount
+.1502	d0 03		               bne  norep
+.1504	ce 20 15	               dec  loopcount+1
+.1507	ad 1f 15	norep          lda  loopcount
+.150a	c9 00		               cmp  #$00
+.150c	d0 05		               bne  out
+.150e	4d 20 15	               eor  loopcount+1
+.1511	c9 ff		               cmp  #$ff
+.1513	60		out            rts
+>1514	28		ymult          .byte     40
+>1515	00 00		addr1          .word     $0000
+>1517	00 00		addr2          .word     $0000
+>1519	00 00		bytecnt        .word     $0000
+>151b	00 00		zp1            .word     $0000
+>151d	00 00		zp2            .word     $0000
+>151f	00 00		loopcount      .word     $0000
 
 ;******  Return to file: slbug64.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-cbm-hex.asm
 
->1519	01		a2hexcol       .byte     1              ; pour aputscxy
->151a	00		a2hexbkcol     .byte     %00000000
-.151b			a2hexpos
->151b	00		a2hexpx        .byte     0              ; pour aputsxy
->151c	00		a2hexpy        .byte     0
->151d	24		a2hexprefix    .byte     "$"            ; pour aputs
->151e	00 00		a2hexstr       .word     $00
->1520	00 00		               .word     $00
->1522	00		               .byte     0              ; 0 end string
->1523	01		abincol        .byte     1
->1524	00		abinbkcol      .byte     %00000000
->1525	30 30 30 30	abin           .null     "00000000"
->1529	30 30 30 30 00
->152e	20 20 20 00	adec           .null     "   "
-.1532			putahexfmtxy
-.1532	20 f3 12	               jsr  push
-.1535	20 81 15	               jsr  atohex
-.1538	ae 1b 15	               ldx  a2hexpx
-.153b	ac 1c 15	               ldy  a2hexpy
-.153e	20 17 12	               jsr  gotoxy
-.1541	a2 1d		               ldx  #<a2hexprefix
-.1543	a0 15		               ldy  #>a2hexprefix
-.1545	20 fd 11	               jsr  puts
-.1548	20 2e 13	               jsr  pop
-.154b	60		               rts
-.154c			putahexfmt
-.154c	20 f3 12	               jsr  push
-.154f	20 81 15	               jsr  atohex
-.1552	a2 1d		               ldx  #<a2hexprefix
-.1554	a0 15		               ldy  #>a2hexprefix
-.1556	20 fd 11	               jsr  puts
-.1559	20 2e 13	               jsr  pop
-.155c	60		               rts
-.155d			putahex
-.155d	20 f3 12	               jsr  push
-.1560	20 81 15	               jsr  atohex
-.1563	a2 1e		               ldx  #<a2hexstr
-.1565	a0 15		               ldy  #>a2hexstr
-.1567	20 fd 11	               jsr  puts
-.156a	20 2e 13	               jsr  pop
-.156d	60		               rts
-.156e			nibtohex
-.156e	08		               php
-.156f	29 0f		               and  #$0f
-.1571	f8		               sed
-.1572	18		               clc
-.1573	69 90		               adc  #$90
-.1575	69 40		               adc  #$40
-.1577	d8		               cld
-.1578	28		               plp
-.1579	60		               rts
-.157a			lsra4bits
-.157a	08		               php
-.157b	4a		               lsr
-.157c	4a		               lsr
-.157d	4a		               lsr
-.157e	4a		               lsr
-.157f	28		               plp
-.1580	60		               rts
-.1581			atohex
-.1581	08		               php
-.1582	48		               pha
-.1583	48		               pha
-.1584	20 7a 15	               jsr  lsra4bits
-.1587	20 6e 15	               jsr  nibtohex
-.158a	8d 1e 15	               sta  a2hexstr
-.158d	68		               pla
-.158e	20 6e 15	               jsr  nibtohex
-.1591	8d 1f 15	               sta  a2hexstr+1
-.1594	a9 00		               lda  #$00                ; set end of string
-.1596	8d 20 15	               sta  a2hexstr+2
-.1599	68		               pla
-.159a	28		               plp
-.159b	60		               rts
-.159c			xy2hex
-.159c	20 f3 12	               jsr  push
-.159f	20 81 15	               jsr  atohex
-.15a2	8a		               txa
-.15a3	48		               pha
-.15a4	20 7a 15	               jsr  lsra4bits
-.15a7	20 6e 15	               jsr  nibtohex
-.15aa	8d 1e 15	               sta  a2hexstr
-.15ad	68		               pla
-.15ae	20 6e 15	               jsr  nibtohex
-.15b1	8d 1f 15	               sta  a2hexstr+1
-.15b4	98		               tya
-.15b5	48		               pha
-.15b6	20 7a 15	               jsr  lsra4bits
-.15b9	20 6e 15	               jsr  nibtohex
-.15bc	8d 20 15	               sta  a2hexstr+2
-.15bf	68		               pla
-.15c0	20 6e 15	               jsr  nibtohex
-.15c3	8d 21 15	               sta  a2hexstr+3
-.15c6	a9 00		               lda  #$00                ; 0 ended string
-.15c8	8d 22 15	               sta  a2hexstr+4
-.15cb	20 2e 13	               jsr  pop
-.15ce			atobin
-.15ce	20 f3 12	               jsr  push
-.15d1	a2 08		               ldx  #8
-.15d3	a0 00		               ldy  #0
-.15d5	18		               clc
-.15d6	2a		nextbit        rol
-.15d7	48		               pha
-.15d8	69 00		               adc  #$00
-.15da	29 01		               and  #$01
-.15dc	20 6e 15	               jsr  nibtohex
-.15df	99 25 15	               sta  abin,y
-.15e2	68		               pla
-.15e3	c8		               iny
-.15e4	ca		               dex
-.15e5	d0 ef		               bne  nextbit
-.15e7	a9 00		               lda  #0
-.15e9	99 25 15	               sta  abin,y
-.15ec	20 2e 13	               jsr  pull
-.15ef	60		               rts
-.15f0			abinsetmccol
-.15f0	20 61 13	               jsr  pushreg
-.15f3	20 90 13	               jsr  popreg
-.15f6	60		               rts
-.15f7			putabin
-.15f7	20 ce 15	               jsr     atobin
-.15fa	20 f3 12	               jsr     push
-.15fd	a2 25		               ldx     #<abin
-.15ff	a0 15		               ldy     #>abin
-.1601	20 fd 11	               jsr     puts
-.1604	20 2e 13	               jsr     pop
-.1607	60		               rts
-.1608			printabin
-.1608	20 f3 12	               jsr     push
-.160b	a2 25		               ldx     #<abin
-.160d	a0 15		               ldy     #>abin
-.160f	20 fd 11	               jsr     puts
-.1612	20 2e 13	               jsr     pop
-.1615	60		               rts
-.1616			putabinfmt
-.1616	08		               php
-.1617	48		               pha
-.1618	a9 25		               lda     #"%"
-.161a	20 f7 11	               jsr     putch
-.161d	68		               pla
-.161e	20 f7 15	               jsr     putabin
-.1621	28		               plp
-.1622	60		               rts
-.1623			putabinxy
-.1623	20 17 12	               jsr     gotoxy
-.1626	20 f7 15	               jsr     putabin
-.1629	60		               rts
-.162a			putabinfmtxy
-.162a	20 17 12	               jsr     gotoxy
-.162d	20 16 16	               jsr     putabinfmt
-.1630	60		               rts
-.1631			atodec
-.1631	20 f3 12	               jsr  push
-.1634	f8		               sed            ; On se place en mode décimal.
-.1635	aa		               tax            ; On déplace a dans x.
-.1636	a0 00		               ldy  #$00      ; On pointe Y au début de la str.
-.1638	a9 00		               lda  #$00      ; 0 dans A.
-.163a	18		nextbit        clc            ; Bit carry a 0.
-.163b	69 01		               adc  #$01      ; Ajoute 1 a A.
-.163d	90 01		               bcc  decx      ; Pas de carry, pas de report.
-.163f	c8		               iny            ; On incrémente Y
-.1640	ca		decx           dex            ; X=X-1
-.1641	d0 f7		               bne  nextbit   ; Pas encore a 0, on boucle.
-.1643	48		               pha            ; A sur le stack.
-.1644	98		               tya            ; Y dans A (MSB)
-.1645	20 6e 15	               jsr  nibtohex  ; a hex petsci ...
-.1648	8d 2e 15	               sta  adec      ; ... dans tampon.
-.164b	68		               pla            ; Récupere A
-.164c	48		               pha            ;
-.164d	20 6e 15	               jsr  nibtohex
-.1650	8d 30 15	               sta  adec+2
-.1653	68		               pla
-.1654	6a		               ror
-.1655	6a		               ror
-.1656	6a		               ror
-.1657	6a		               ror
-.1658	20 6e 15	               jsr  nibtohex
-.165b	8d 2f 15	               sta  adec+1
-.165e	d8		               cld            ; On revient en mode binaire.
-.165f	20 2e 13	               jsr  pull
-.1662	60		               rts
-.1663			putadec
-.1663	20 f3 12	               jsr  push
-.1666	20 31 16	               jsr  atodec
-.1669	a2 2e		               ldx  #<adec
-.166b	a0 15		               ldy  #>adec+1
-.166d	20 fd 11	               jsr  puts
-.1670	20 2e 13	               jsr  pop
-.1673	60		               rts
+>1521	01		a2hexcol       .byte     1              ; pour aputscxy
+>1522	00		a2hexbkcol     .byte     %00000000
+.1523			a2hexpos
+>1523	00		a2hexpx        .byte     0              ; pour aputsxy
+>1524	00		a2hexpy        .byte     0
+>1525	24		a2hexprefix    .byte     "$"            ; pour aputs
+>1526	00 00		a2hexstr       .word     $00
+>1528	00 00		               .word     $00
+>152a	00		               .byte     0              ; 0 end string
+>152b	01		abincol        .byte     1
+>152c	00		abinbkcol      .byte     %00000000
+>152d	30 30 30 30	abin           .null     "00000000"
+>1531	30 30 30 30 00
+>1536	20 20 20 00	adec           .null     "   "
+.153a			putahexfmtxy
+.153a	20 fb 12	               jsr  push
+.153d	20 89 15	               jsr  atohex
+.1540	ae 23 15	               ldx  a2hexpx
+.1543	ac 24 15	               ldy  a2hexpy
+.1546	20 1f 12	               jsr  gotoxy
+.1549	a2 25		               ldx  #<a2hexprefix
+.154b	a0 15		               ldy  #>a2hexprefix
+.154d	20 05 12	               jsr  puts
+.1550	20 36 13	               jsr  pop
+.1553	60		               rts
+.1554			putahexfmt
+.1554	20 fb 12	               jsr  push
+.1557	20 89 15	               jsr  atohex
+.155a	a2 25		               ldx  #<a2hexprefix
+.155c	a0 15		               ldy  #>a2hexprefix
+.155e	20 05 12	               jsr  puts
+.1561	20 36 13	               jsr  pop
+.1564	60		               rts
+.1565			putahex
+.1565	20 fb 12	               jsr  push
+.1568	20 89 15	               jsr  atohex
+.156b	a2 26		               ldx  #<a2hexstr
+.156d	a0 15		               ldy  #>a2hexstr
+.156f	20 05 12	               jsr  puts
+.1572	20 36 13	               jsr  pop
+.1575	60		               rts
+.1576			nibtohex
+.1576	08		               php
+.1577	29 0f		               and  #$0f
+.1579	f8		               sed
+.157a	18		               clc
+.157b	69 90		               adc  #$90
+.157d	69 40		               adc  #$40
+.157f	d8		               cld
+.1580	28		               plp
+.1581	60		               rts
+.1582			lsra4bits
+.1582	08		               php
+.1583	4a		               lsr
+.1584	4a		               lsr
+.1585	4a		               lsr
+.1586	4a		               lsr
+.1587	28		               plp
+.1588	60		               rts
+.1589			atohex
+.1589	08		               php
+.158a	48		               pha
+.158b	48		               pha
+.158c	20 82 15	               jsr  lsra4bits
+.158f	20 76 15	               jsr  nibtohex
+.1592	8d 26 15	               sta  a2hexstr
+.1595	68		               pla
+.1596	20 76 15	               jsr  nibtohex
+.1599	8d 27 15	               sta  a2hexstr+1
+.159c	a9 00		               lda  #$00                ; set end of string
+.159e	8d 28 15	               sta  a2hexstr+2
+.15a1	68		               pla
+.15a2	28		               plp
+.15a3	60		               rts
+.15a4			xy2hex
+.15a4	20 fb 12	               jsr  push
+.15a7	20 89 15	               jsr  atohex
+.15aa	8a		               txa
+.15ab	48		               pha
+.15ac	20 82 15	               jsr  lsra4bits
+.15af	20 76 15	               jsr  nibtohex
+.15b2	8d 26 15	               sta  a2hexstr
+.15b5	68		               pla
+.15b6	20 76 15	               jsr  nibtohex
+.15b9	8d 27 15	               sta  a2hexstr+1
+.15bc	98		               tya
+.15bd	48		               pha
+.15be	20 82 15	               jsr  lsra4bits
+.15c1	20 76 15	               jsr  nibtohex
+.15c4	8d 28 15	               sta  a2hexstr+2
+.15c7	68		               pla
+.15c8	20 76 15	               jsr  nibtohex
+.15cb	8d 29 15	               sta  a2hexstr+3
+.15ce	a9 00		               lda  #$00                ; 0 ended string
+.15d0	8d 2a 15	               sta  a2hexstr+4
+.15d3	20 36 13	               jsr  pop
+.15d6			atobin
+.15d6	20 fb 12	               jsr  push
+.15d9	a2 08		               ldx  #8
+.15db	a0 00		               ldy  #0
+.15dd	18		               clc
+.15de	2a		nextbit        rol
+.15df	48		               pha
+.15e0	69 00		               adc  #$00
+.15e2	29 01		               and  #$01
+.15e4	20 76 15	               jsr  nibtohex
+.15e7	99 2d 15	               sta  abin,y
+.15ea	68		               pla
+.15eb	c8		               iny
+.15ec	ca		               dex
+.15ed	d0 ef		               bne  nextbit
+.15ef	a9 00		               lda  #0
+.15f1	99 2d 15	               sta  abin,y
+.15f4	20 36 13	               jsr  pull
+.15f7	60		               rts
+.15f8			abinsetmccol
+.15f8	20 69 13	               jsr  pushreg
+.15fb	20 98 13	               jsr  popreg
+.15fe	60		               rts
+.15ff			putabin
+.15ff	20 d6 15	               jsr     atobin
+.1602	20 fb 12	               jsr     push
+.1605	a2 2d		               ldx     #<abin
+.1607	a0 15		               ldy     #>abin
+.1609	20 05 12	               jsr     puts
+.160c	20 36 13	               jsr     pop
+.160f	60		               rts
+.1610			printabin
+.1610	20 fb 12	               jsr     push
+.1613	a2 2d		               ldx     #<abin
+.1615	a0 15		               ldy     #>abin
+.1617	20 05 12	               jsr     puts
+.161a	20 36 13	               jsr     pop
+.161d	60		               rts
+.161e			putabinfmt
+.161e	08		               php
+.161f	48		               pha
+.1620	a9 25		               lda     #"%"
+.1622	20 ff 11	               jsr     putch
+.1625	68		               pla
+.1626	20 ff 15	               jsr     putabin
+.1629	28		               plp
+.162a	60		               rts
+.162b			putabinxy
+.162b	20 1f 12	               jsr     gotoxy
+.162e	20 ff 15	               jsr     putabin
+.1631	60		               rts
+.1632			putabinfmtxy
+.1632	20 1f 12	               jsr     gotoxy
+.1635	20 1e 16	               jsr     putabinfmt
+.1638	60		               rts
+.1639			atodec
+.1639	20 fb 12	               jsr  push
+.163c	f8		               sed            ; On se place en mode décimal.
+.163d	aa		               tax            ; On déplace a dans x.
+.163e	a0 00		               ldy  #$00      ; On pointe Y au début de la str.
+.1640	a9 00		               lda  #$00      ; 0 dans A.
+.1642	18		nextbit        clc            ; Bit carry a 0.
+.1643	69 01		               adc  #$01      ; Ajoute 1 a A.
+.1645	90 01		               bcc  decx      ; Pas de carry, pas de report.
+.1647	c8		               iny            ; On incrémente Y
+.1648	ca		decx           dex            ; X=X-1
+.1649	d0 f7		               bne  nextbit   ; Pas encore a 0, on boucle.
+.164b	48		               pha            ; A sur le stack.
+.164c	98		               tya            ; Y dans A (MSB)
+.164d	20 76 15	               jsr  nibtohex  ; a hex petsci ...
+.1650	8d 36 15	               sta  adec      ; ... dans tampon.
+.1653	68		               pla            ; Récupere A
+.1654	48		               pha            ;
+.1655	20 76 15	               jsr  nibtohex
+.1658	8d 38 15	               sta  adec+2
+.165b	68		               pla
+.165c	6a		               ror
+.165d	6a		               ror
+.165e	6a		               ror
+.165f	6a		               ror
+.1660	20 76 15	               jsr  nibtohex
+.1663	8d 37 15	               sta  adec+1
+.1666	d8		               cld            ; On revient en mode binaire.
+.1667	20 36 13	               jsr  pull
+.166a	60		               rts
+.166b			putadec
+.166b	20 fb 12	               jsr  push
+.166e	20 39 16	               jsr  atodec
+.1671	a2 36		               ldx  #<adec
+.1673	a0 15		               ldy  #>adec+1
+.1675	20 05 12	               jsr  puts
+.1678	20 36 13	               jsr  pop
+.167b	60		               rts
 
 ;******  Return to file: slbug64.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/lib-cbm-keyb.asm
 
-.1674			waitstop
-.1674	08		            php         ;\ Sauvegarde les drapeaux
-.1675	48		            pha         ;/  et l'accumulateur.
-.1676	a9 00		            lda #0      ;\ Efface le tampon
-.1678	85 c6		            sta 198     ;/  du clavier.
-.167a	20 ed f6	wait        jsr k_stop  ; Cherche la clef [RUN/STOP].
-.167d	d0 fb		            bne  wait   ;  Elle n'est pas pesée.
-.167f	68		            pla         ;\ Récupère l'accmulateur et
-.1680	28		            plp         ;/  les drapeaux.
-.1681	60		            rts
-.1682			anykey
-.1682	08		            php         ;\ Sauvegarde les drapeaux
-.1683	48		            pha         ;/  et l'accumulateur.
-.1684	a9 00		            lda #0      ;\ Efface le tampon
-.1686	85 c6		            sta 198     ;/  du clavier.
-.1688	a5 cb		nokey       lda 203     ; Lit la matrice de la clef actuelle dans le tampon.
-.168a	c9 40		            cmp #64     ; Si 64 alors aucune clef n'est appuyée.
-.168c	f0 fa		            beq nokey   ; On attend qu'il y en aie une.
-.168e	20 98 16	            jsr kbfree  ; On attend que le clavier soit relâché.
-.1691	a9 00		            lda #0      ;\ Efface le tampon
-.1693	85 c6		            sta 198     ;/  du clavier.
+.167c			waitstop
+.167c	08		            php         ;\ Sauvegarde les drapeaux
+.167d	48		            pha         ;/  et l'accumulateur.
+.167e	a9 00		            lda #0      ;\ Efface le tampon
+.1680	85 c6		            sta 198     ;/  du clavier.
+.1682	20 ed f6	wait        jsr k_stop  ; Cherche la clef [RUN/STOP].
+.1685	d0 fb		            bne  wait   ;  Elle n'est pas pesée.
+.1687	68		            pla         ;\ Récupère l'accmulateur et
+.1688	28		            plp         ;/  les drapeaux.
+.1689	60		            rts
+.168a			anykey
+.168a	08		            php         ;\ Sauvegarde les drapeaux
+.168b	48		            pha         ;/  et l'accumulateur.
+.168c	a5 cb		nokey       lda 203     ; Lit la matrice de la clef actuelle dans le tampon.
+.168e	c9 40		            cmp #64     ; Si 64 alors aucune clef n'est appuyée.
+.1690	f0 fa		            beq nokey   ; On attend qu'il y en aie une.
+.1692	20 98 16	            jsr kbfree  ; On attend que le clavier soit relâché.
 .1695	68		            pla         ;\ Récupère l'accmulateur et
 .1696	28		            plp         ;/  les drapeaux.
 .1697	60		            rts
@@ -2684,43 +2686,43 @@
 .1814	8d f9 19	               sta  regpch2        ; ... une seconde fois.
 .1817	ad f2 19	               lda  rega           ; On commence par le registre Acc.
 .181a	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.181b	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.181b	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .181e	8d 8f 19	               sta  vala+1         ; ... et le place dans la chaine.
 .1821	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.1822	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.1825	20 6e 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.1822	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.1825	20 76 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
 .1828	8d 8e 19	               sta  vala           ; ... et le place dans la chaine.
 .182b	ad f4 19	               lda  regy           ; Ensuite, le registre Y.
 .182e	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.182f	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.182f	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .1832	8d a6 19	               sta  valy+1         ; ... et le place dans la chaine.
 .1835	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.1836	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.1839	20 6e 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.1836	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.1839	20 76 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
 .183c	8d a5 19	               sta  valy           ; ... et le place dans la chaine.
 .183f	ad f3 19	               lda  regx           ; Ensuite, le registre X.
 .1842	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.1843	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.1843	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .1846	8d 9a 19	               sta  valx+1         ; ... et le place dans la chaine.
 .1849	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.184a	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.184d	20 6e 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.184a	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.184d	20 76 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
 .1850	8d 99 19	               sta  valx           ; ... et le place dans la chaine.
 .1853	ad f5 19	               lda  regp           ; Ensuite, le registre de status.
 .1856	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.1857	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.1857	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .185a	8d b1 19	               sta  valp+1         ; ... et le place dans la chaine.
 .185d	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.185e	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.1861	20 6e 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.185e	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.1861	20 76 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
 .1864	8d b0 19	               sta  valp           ; ... et le place dans la chaine.
 .1867	ad f6 19	               lda  regs           ; Ensuite, le pointeur de stack.
 .186a	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.186b	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.186b	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .186e	8d bc 19	               sta  vals+1         ; ... et le place dans la chaine.
 .1871	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.1872	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.1875	20 6e 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.1872	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.1875	20 76 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
 .1878	8d bb 19	               sta  vals           ; ... et le place dans la chaine.
 .187b	38		               sec                 ; Prépade le ADC en plaçant 0 dans Carry.
 .187c	ad fa 19	               lda  regpcl2        ; On charge la LSB de l'adresse de retour.
@@ -2730,94 +2732,94 @@
 .1886	8d fa 19	noreport       sta  regpcl2        ; On le sauvegarde.
 .1889	ad fa 19	               lda  regpcl2        ; On récupère la partie basse du compteur.
 .188c	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.188d	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.188d	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .1890	8d cc 19	               sta  valpcl+1       ; ... et lace le code à la position "---X".
 .1893	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.1894	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.1897	20 6e 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.1894	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.1897	20 76 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
 .189a	8d cb 19	               sta  valpcl         ; ... et lace le code à la position "--X-".
 .189d	ad f9 19	               lda regpch2         ; On récupère la partie haute du compteur.
 .18a0	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.18a1	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.18a1	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .18a4	8d ca 19	               sta  valpch+1       ; ... et lace le code à la position "-X--".
 .18a7	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.18a8	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.18ab	20 6e 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.18a8	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.18ab	20 76 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
 .18ae	8d c9 19	               sta  valpch         ; ... et lace le code à la position "X---".
 .18b1	a5 fb		               lda  zpage1         ; On charge le LSB de ZP1 ($fb).
 .18b3	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.18b4	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.18b4	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .18b7	8d dd 19	               sta  valz1l+1       ; ... et lace le code à la position "---X".
 .18ba	68		               pla
-.18bb	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.18be	20 6e 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.18bb	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.18be	20 76 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
 .18c1	8d dc 19	               sta  valz1l         ; ... et lace le code à la position "--X-".
 .18c4	a5 fc		               lda  zpage1+1         ; On charge le MSB de ZP1 ($fc).
 .18c6	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.18c7	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.18c7	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .18ca	8d db 19	               sta  valz1h+1       ; ... et lace le code à la position "-X--".
 .18cd	68		               pla
-.18ce	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.18d1	20 6e 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.18ce	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.18d1	20 76 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
 .18d4	8d da 19	               sta  valz1h         ; ... et lace le code à la position "X---".
 .18d7	a5 fd		               lda  zpage2         ; On charge le LSB de ZP2 ($fd).
 .18d9	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.18da	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.18da	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .18dd	8d ee 19	               sta  valz2l+1       ; ... et lace le code à la position "---X".
 .18e0	68		               pla
-.18e1	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.18e4	20 6e 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.18e1	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.18e4	20 76 15	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
 .18e7	8d ed 19	               sta  valz2l         ; ... et lace le code à la position "--X-".
 .18ea	a5 fe		               lda  zpage2+1       ; On charge le MSB de ZP2 ($fc).
 .18ec	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.18ed	20 6e 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.18ed	20 76 15	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
 .18f0	8d ec 19	               sta  valz2h+1       ; ... et lace le code à la position "-X--".
 .18f3	68		               pla
-.18f4	20 7a 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.18f7	20 6e 15	               jsr  nibtohex
+.18f4	20 82 15	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.18f7	20 76 15	               jsr  nibtohex
 .18fa	8d eb 19	               sta  valz2h         ; ... et lace le code à la position "X---".
-.18fd	20 df 12	               jsr  setinverse     ; On se place en mode inverse vidéo.
-.1900	20 61 13	               jsr  pushreg
+.18fd	20 e7 12	               jsr  setinverse     ; On se place en mode inverse vidéo.
+.1900	20 69 13	               jsr  pushreg
 .1903	a2 86		               ldx  #<srega
 .1905	a0 19		               ldy  #>srega
-.1907	20 8a 12	               jsr  putscxy
-.190a	20 90 13	               jsr  popreg
-.190d	20 61 13	               jsr  pushreg
+.1907	20 92 12	               jsr  putscxy
+.190a	20 98 13	               jsr  popreg
+.190d	20 69 13	               jsr  pushreg
 .1910	a2 92		               ldx  #<sregx
 .1912	a0 19		               ldy  #>sregx
-.1914	20 8a 12	               jsr  putscxy
-.1917	20 90 13	               jsr  popreg
-.191a	20 61 13	               jsr  pushreg
+.1914	20 92 12	               jsr  putscxy
+.1917	20 98 13	               jsr  popreg
+.191a	20 69 13	               jsr  pushreg
 .191d	a2 9d		               ldx  #<sregy
 .191f	a0 19		               ldy  #>sregy
-.1921	20 8a 12	               jsr  putscxy
-.1924	20 90 13	               jsr  popreg
-.1927	20 61 13	               jsr  pushreg
+.1921	20 92 12	               jsr  putscxy
+.1924	20 98 13	               jsr  popreg
+.1927	20 69 13	               jsr  pushreg
 .192a	a2 a9		               ldx  #<sregp
 .192c	a0 19		               ldy  #>sregp
-.192e	20 8a 12	               jsr  putscxy
-.1931	20 90 13	               jsr  popreg
-.1934	20 61 13	               jsr  pushreg
+.192e	20 92 12	               jsr  putscxy
+.1931	20 98 13	               jsr  popreg
+.1934	20 69 13	               jsr  pushreg
 .1937	a2 b4		               ldx  #<sregs
 .1939	a0 19		               ldy  #>sregs
-.193b	20 8a 12	               jsr  putscxy
-.193e	20 90 13	               jsr  popreg
-.1941	20 61 13	               jsr  pushreg
+.193b	20 92 12	               jsr  putscxy
+.193e	20 98 13	               jsr  popreg
+.1941	20 69 13	               jsr  pushreg
 .1944	a2 c0		               ldx  #<sregpc
 .1946	a0 19		               ldy  #>sregpc
-.1948	20 8a 12	               jsr  putscxy
-.194b	20 90 13	               jsr  popreg
-.194e	20 61 13	               jsr  pushreg
+.1948	20 92 12	               jsr  putscxy
+.194b	20 98 13	               jsr  popreg
+.194e	20 69 13	               jsr  pushreg
 .1951	a2 d0		               ldx  #<sregz1
 .1953	a0 19		               ldy  #>sregz1
-.1955	20 8a 12	               jsr  putscxy
-.1958	20 90 13	               jsr  popreg
-.195b	20 61 13	               jsr  pushreg
+.1955	20 92 12	               jsr  putscxy
+.1958	20 98 13	               jsr  popreg
+.195b	20 69 13	               jsr  pushreg
 .195e	a2 e1		               ldx  #<sregz2
 .1960	a0 19		               ldy  #>sregz2
-.1962	20 8a 12	               jsr  putscxy
-.1965	20 90 13	               jsr  popreg
-.1968	20 e7 12	               jsr  clrinverse     ; On quitte le mode inverse vidéo.
+.1962	20 92 12	               jsr  putscxy
+.1965	20 98 13	               jsr  popreg
+.1968	20 ef 12	               jsr  clrinverse     ; On quitte le mode inverse vidéo.
 .196b	ad f7 19	               lda  regpch         ; On replace ls MSB l'adresse de retour ...
 .196e	48		               pha                 ; ... à la bonne position sur la pile.
 .196f	ad f8 19	               lda  regpcl         ; On replace ls LSB l'adresse de retour ...
@@ -2939,7 +2941,7 @@
 .1a57	20 5b 1a	                jsr db_drawline
 .1a5a	60		                rts
 .1a5b			db_drawline
-.1a5b	20 61 13	                jsr pushreg         ; Sauvegarde les registres.
+.1a5b	20 69 13	                jsr pushreg         ; Sauvegarde les registres.
 .1a5e	ad 86 02	                lda bascol          ; Sauvegarde de la ...
 .1a61	8d c9 1a	                sta drawbox_bascol  ; ... couleur basic.
 .1a64	ad c7 1a	                lda drawbox_colour  ; Sélectionne la couleur...
@@ -2958,7 +2960,7 @@
 .1a86	ae c5 1a	                ldx drawbox_width   ; ... selon la largeur voulue ...
 .1a89	ca		                dex                 ; ... de la fenêtre moins les ...
 .1a8a	ca		                dex                 ; ... deux caractères d'extrémité.
-.1a8b	20 ea 11	                jsr putnch
+.1a8b	20 f2 11	                jsr putnch
 .1a8e	ad c1 1a	                lda db_right        ; On dessine le dernier caractère.
 .1a91	20 d2 ff	                jsr chrout
 .1a94	a9 92		                lda #146            ; On met fin à l'inverse vidéo.
@@ -2966,10 +2968,10 @@
 .1a99	ad c9 1a	                lda drawbox_bascol  ; On récupère et replace la ...
 .1a9c	8d 86 02	                sta bascol          ; ... couleur de basic.
 .1a9f	ee c8 1a	                inc drawbox_curline ; Passe à la ligne suivante.
-.1aa2	20 90 13	                jsr popreg          ; Récupère les registres.
+.1aa2	20 98 13	                jsr popreg          ; Récupère les registres.
 .1aa5	60		                rts
 .1aa6			db_drawbox
-.1aa6	20 61 13	                jsr pushreg         ; Sauvegarde les registres.
+.1aa6	20 69 13	                jsr pushreg         ; Sauvegarde les registres.
 .1aa9	ae c6 1a	                ldx drawbox_height  ; Récupère la hauteur de la fenètre.
 .1aac	20 ff 19	                jsr db_tline        ; Dessine la ligne suppérieure.
 .1aaf	ca		                dex                 ; Soustrait 2 pour tenir compte des ...
@@ -2979,7 +2981,7 @@
 .1ab6	ca		                dex                 ; Une ligne de moins à faire.
 .1ab7	d0 fa		                bne moreline        ; On passe à la prochaine s'il en reste.
 .1ab9	20 16 1a	lastline        jsr db_bline        ; Dessine la ligne inférieure.
-.1abc	20 90 13	                jsr popreg          ; Récupère les registres.
+.1abc	20 98 13	                jsr popreg          ; Récupère les registres.
 .1abf	60		                rts
 =176			tleft           =       176         ; Coin suppérieur gauche.
 =174			tright          =       174         ; Coin suppérieur droit.
