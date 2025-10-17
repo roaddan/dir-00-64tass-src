@@ -5,15 +5,16 @@
 ;-------------------------------------------------------------------------------
                .enc    "none"
 main           .block
-               jsr  scrmaninit
-               #tolower
-               #disable
-               lda  #cvert
-               sta  vicbordcol
-               lda  #cbleu
-               sta  vicbackcol
-               lda  #cblanc
-               sta  bascol
+               jsr  scrmaninit  ; Met en place la gestion d'écran
+               #tolower         ; Place en mode police minuscule.
+               #disable         ; Interdit le changement de police [C=]+[SHIFT]
+               #mycolor
+               ;lda  #cvert      ; MET LA BORDURE EN VERT
+               ;sta  vicbordcol
+               ;lda  #cbleu
+               ;sta  vicbackcol
+               ;lda  #cblanc
+               ;sta  bascol
                jsr  cls
                jsr  help
                jsr  anykey
@@ -22,9 +23,10 @@ main           .block
                jsr  anykey
                ;jsr  help
                jsr  cls
-               #mycolor
+               #c64col
                #enable
-               jsr  $a642
+               #toupper
+               jsr  $a69c
                rts
                .bend     
 

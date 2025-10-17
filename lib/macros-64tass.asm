@@ -121,7 +121,7 @@ c64col         .macro
                jsr  pushreg
                #changebord cbleupale
                #changeback cbleu
-               #color cbleupale
+               #color cblanc
                jsr  popreg
                .endm
 
