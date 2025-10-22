@@ -60,56 +60,18 @@ main        .block
             ;-----------------------------------------------------------------
             ; Affiche le bonjour
             ;-----------------------------------------------------------------
-            jsr bonjour
+            #print titre
+            #print startcmd
             ;-----------------------------------------------------------------
             ; L'appel du programme ci-dessoous.
             ;-----------------------------------------------------------------
-            ;jsr bip
-            #sid_prog vic_son
-            jsr ti_croche
-            #sid_v1note re4
-            jsr ti_noire
-            #sid_v1note mi4
-            jsr ti_blanche
-            #sid_v1note fa4
-            jsr ti_ronde
-            #sid_v1note sol4
-            jsr ti_blanche
-            #sid_v1note la4
-            jsr ti_noire
-            #sid_v1note si4
-            jsr ti_croche
-            #sid_v1note do5
-            #sid_prog vic_son2
-            #sid_prog vic_son3
-            jsr ti_ronde
-            jsr sid_alloff
+            jsr sid_tada
             ;-----------------------------------------------------------------
             ; Prépare le retour à basic.
             ;-----------------------------------------------------------------
 maindone    jsr popall
             rts
             .bend
-;-----------------------------------------------------------------------------
-; bonjour
-;-----------------------------------------------------------------------------
-bonjour     .block
-            php
-            pha
-            tya
-            pha
-            ldy #>str0          ;on pointe la chaine
-            lda #<str0  
-            jsr $ab1e
-            pla
-            tay
-            pla
-            plp
-            rts
-            .bend
-str0        .null   "  [  sidtest02 par daniel lafrance.  ]"
-
-
 ;-----------------------------------------------------------------------------
 ; Inclusion des constantes et des librairies.
 ;-----------------------------------------------------------------------------
@@ -120,6 +82,7 @@ str0        .null   "  [  sidtest02 par daniel lafrance.  ]"
             .include    "lib-cbm-pushpop.asm"
             .include    "lib-cbm-hex.asm"
             .include    "lib-cbm-mem.asm"
+            .include    "chaines_fr.asm"
             .include    "map-c64-basic2.asm"
             .include    "map-c64-kernal.asm"
             .include    "map-c64-sid-2.asm"

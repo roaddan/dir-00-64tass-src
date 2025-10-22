@@ -181,37 +181,37 @@ color          .macro    col
                pla
                .endm
 
-print          .macro pointer
+print          .macro strptr
                jsr  pushreg
-               ldx  #<\pointer
-               ldy  #>\pointer
+               ldx  #<\strptr
+               ldy  #>\strptr
                jsr  puts
                jsr  popreg
                .endm
 
-println        .macro pointer
+println        .macro strptr
                jsr  pushreg
-               ldx  #<\pointer
-               ldy  #>\pointer
+               ldx  #<\strptr
+               ldy  #>\strptr
                jsr  puts
                lda  #$0d
                jsr  putch
                jsr  popreg
                .endm
 
-print_xy        .macro x,y,pointer
+print_xy        .macro x,y,strptr
                 jsr  pushreg
                 ldy  #\x
                 ldx  #\y
                 clc
                 jsr  plot
-                ldx  #<\pointer 
-                ldy  #>\pointer
+                ldx  #<\strptr 
+                ldy  #>\strptr
                 jsr  puts
                 jsr  popreg
                 .endm
 
-print_cxy       .macro c,x,y,pointer
+print_cxy       .macro c,x,y,strptr
                 jsr pushreg
                 lda bascol
                 pha 
@@ -221,50 +221,50 @@ print_cxy       .macro c,x,y,pointer
                 ldx  #\y
                 clc
                 jsr  plot
-                ldx  #<\pointer 
-                ldy  #>\pointer
+                ldx  #<\strptr 
+                ldy  #>\strptr
                 jsr  puts
                 pla
                 sta  bascol
                 jsr  popreg
                 .endm
 
-printxy        .macro pointer
+printxy        .macro strptr
                jsr  pushreg
-               ldx  #<\pointer 
-               ldy  #>\pointer
+               ldx  #<\strptr 
+               ldy  #>\strptr
                jsr  putsxy
                jsr  popreg
                .endm
 
-printcxy       .macro pointer
+printcxy       .macro strptr
                jsr  pushreg
-               ldx  #<\pointer 
-               ldy  #>\pointer
+               ldx  #<\strptr 
+               ldy  #>\strptr
                jsr  putscxy
                jsr  popreg
                .endm
 
-printfmt       .macro prefix, pointer
+printfmt       .macro prefix, strptr
                jsr  pushreg
                lda  #\prefix
                jsr  putch
-               #print \pointer
+               #print \strptr
                jsr  popreg
                .endm
 
-printpos       .macro x,y,pointer
+printpos       .macro x,y,strptr
                jsr  pushreg
                #locate \x,\y
-               #print \pointer
+               #print \strptr
                jsr  popreg
                .endm
 
 
-printfmtxy     .macro x,y,prefix,pointer
+printfmtxy     .macro x,y,prefix,strptr
                jsr  pushreg
                #locate \x,\y
-               #printfmt \prefix,\pointer
+               #printfmt \prefix,\strptr
                jsr  popreg
                .endm
 

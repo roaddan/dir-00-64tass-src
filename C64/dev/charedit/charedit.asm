@@ -29,6 +29,7 @@ main           .block
                jsr  scrmaninit
                #disable
                jsr  drawcredits
+               jsr sid_tada
                #printcxy menu_msg
                jsr  screendis
                jsr  copycharset
@@ -140,24 +141,31 @@ device         .byte     8
 ;-------------------------------------------------------------------------------
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
-               .include "routines.asm"
-               .include "strings_fr.asm"
+                .include "routines.asm"
+                .include "strings_fr.asm"
 ;               .include "strings_en.asm"
 
 *=$c000
-               .include "map-c64-kernal.asm"
-               .include "map-c64-vicii.asm"
-               .include "map-c64-basic2.asm"
-               .include "lib-c64-vicii.asm"
-               .include "lib-c64-basic2.asm" 
-               .include "lib-cbm-pushpop.asm"
-               .include "lib-cbm-mem.asm"
-               .include "lib-cbm-hex.asm"
-               .include "lib-cbm-keyb.asm"
-               .include "lib-cbm-disk.asm"
-               .include "lib-c64-std-showregs.asm"
+                .include "lib-c64-sid.asm"
+                .include "lib-c64-vicii.asm"
+                .include "lib-c64-basic2.asm" 
+                .include "lib-cbm-pushpop.asm"
+                .include "lib-cbm-mem.asm"
+                .include "lib-cbm-hex.asm"
+                .include "lib-cbm-keyb.asm"
+                .include "lib-cbm-disk.asm"
+                .include "lib-c64-std-showregs.asm"
+
 ;               .include "lib-c64-std-text.asm"
 ;               .include "lib-c64-mcd-text.asm"
 ;               .include "lib-c64-mcd-showregs.asm"                
 ;               .include "lib-c64-mcd-joystick.asm"
 ;               .include "lib-c64-mcd-spriteman.asm"
+
+                .include "map-c64-kernal.asm"
+                .include "map-c64-vicii.asm"
+                .include "map-c64-basic2.asm"
+                .include "map-c64-sid-2.asm"
+                .include "map-c64-sid-notes-ntsc.asm"
+
+
