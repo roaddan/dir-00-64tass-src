@@ -67,21 +67,21 @@ main        .block
             ;jsr bip
             #sid_prog vic_son
             jsr delai
-            #sid_v1note do3
-            jsr delai
-            #sid_v1note re3
-            jsr delai
-            #sid_v1note mi3
-            jsr delai
-            #sid_v1note fa3
-            jsr delai
-            #sid_v1note sol3
-            jsr delai
-            #sid_v1note la3
-            jsr delai
-            #sid_v1note si3
-            jsr delai
             #sid_v1note do4
+            jsr delai
+            #sid_v1note re4
+            jsr delai
+            #sid_v1note mi4
+            jsr delai
+            #sid_v1note fa4
+            jsr delai
+            #sid_v1note sol4
+            jsr delai
+            #sid_v1note la4
+            jsr delai
+            #sid_v1note si4
+            jsr delai
+            #sid_v1note do5
 
 ;            jsr delai
 ;            jsr sid_v1off

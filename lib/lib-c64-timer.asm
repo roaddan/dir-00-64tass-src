@@ -15,11 +15,6 @@ delai       .block
             nop
             nop
             nop
-            nop
-            nop
-            nop
-            nop
-            nop
             dey
             bne delaiy
             dex
