@@ -66,44 +66,24 @@ main        .block
             ;-----------------------------------------------------------------
             ;jsr bip
             #sid_prog vic_son
-            jsr delai
-            #sid_v1note do4
-            jsr delai
+            jsr ti_croche
             #sid_v1note re4
-            jsr delai
+            jsr ti_noire
             #sid_v1note mi4
-            jsr delai
+            jsr ti_blanche
             #sid_v1note fa4
-            jsr delai
+            jsr ti_ronde
             #sid_v1note sol4
-            jsr delai
+            jsr ti_blanche
             #sid_v1note la4
-            jsr delai
+            jsr ti_noire
             #sid_v1note si4
-            jsr delai
+            jsr ti_croche
             #sid_v1note do5
-
-;            jsr delai
-;            jsr sid_v1off
-
             #sid_prog vic_son2
-;            jsr delai
-;            jsr delai
-;            jsr sid_v2off
-
             #sid_prog vic_son3
-            jsr delai
-            jsr delai
-
- ;           jsr sid_v3off
+            jsr ti_ronde
             jsr sid_alloff
-;            jsr delai
-;            jsr sid_v2off
-;            jsr delai
-;            jsr sid_v3off
-            ;jsr sid_clear
-            ;jsr bip2
-            ;jsr delai
             ;-----------------------------------------------------------------
             ; Prépare le retour à basic.
             ;-----------------------------------------------------------------
@@ -135,11 +115,17 @@ str0        .null   "  [  sidtest02 par daniel lafrance.  ]"
 ;-----------------------------------------------------------------------------
             .include    "lib-c64-timer.asm"
             .include    "lib-c64-sid.asm"
+            .include    "lib-c64-vicii.asm"
+            .include    "lib-c64-basic2.asm"
             .include    "lib-cbm-pushpop.asm"
+            .include    "lib-cbm-hex.asm"
+            .include    "lib-cbm-mem.asm"
             .include    "map-c64-basic2.asm"
             .include    "map-c64-kernal.asm"
             .include    "map-c64-sid-2.asm"
             .include    "map-c64-sid-notes-ntsc.asm"
+            .include    "map-c64-vicii.asm"
+            .include    "macros-64tass.asm"
 ;-----------------------------------------------------------------------------
 ; Fin du code.
 ;-----------------------------------------------------------------------------
