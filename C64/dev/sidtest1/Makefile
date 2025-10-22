@@ -49,7 +49,7 @@ OUTDIRV20=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
 #
 # 64tass allows to include libraries of code and routines of your making.
 # The Complete path to your library directory.
-LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
+LIBDIR=$(BASEDIR)/d-00-64tass-src/lib/
 #
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
@@ -61,7 +61,9 @@ LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
 # Complete path to the Vic20 emulator's programs.
 VICEBIN=/usr/bin
 # Complete path to the 64tass assembler program.
-TASS=$(VICEBIN)/64tass
+ASSEMBLER=$(VICEBIN)/64tass
+# ASSEMBLER=$(VICEBIN)/tmpx
+
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
@@ -203,7 +205,10 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 
 # Assembling and distributing resulting files.
 $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
-		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
+		# 64tass
+		$(ASSEMBLER) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
+		# TMPx
+		#$(ASSEMBLER) --include-path "$(LIBDIR)" -i $(SOURCENAME).asm -l $(SOURCENAME).txt -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)
 		cp -f  $(SOURCENAME).txt $(BASEDIR)/$(PRGDIR)/txt
