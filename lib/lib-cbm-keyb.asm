@@ -98,12 +98,9 @@ waitspace   .block      ; Attend que la touche espace soit appuyée.
             pha         ;/  et l'accumulateur.
             lda #0      ;\ Efface le tampon 
             sta 198     ;/  du clavier.
-nospace     lda #203    ; Lit la matrice du clavier. 
+nospace     jsr showregsrev
+            lda #203    ; Lit la matrice du clavier. 
             cmp #60     ; 60 dans la matrice = barre d'espace appuyée. 
-            php         ; Sauvegarde les drapeaux pour la comparaison.
-            lda #0      ;\ Efface le tampon 
-            sta 198     ;/  du clavier.
-            plp         ; Récupère les drapeaux pour la comparaison.
             bne nospace    
             pla         ;\ Récupère l'accmulateur et 
             plp         ;/  les drapeaux.

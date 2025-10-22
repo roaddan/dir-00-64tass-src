@@ -1,0 +1,263 @@
+
+; 64tass Turbo Assembler Macro V1.54.1900 listing file
+; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L sidtest02.txt -o sidtest02.prg sidtest02.asm
+; Mon Oct 20 23:36:12 2025
+
+;Offset	;Hex		;Source
+
+;******  Processing input file: sidtest02.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/header-c64.asm
+
+>0801	29 08		bcmd1          .word bcmd2         ;Adresse de la commande basic suivante.
+>0803	01 00		               .word 1             ;Numero de la ligne Basic.
+>0805	8f		               .byte $8F           ;Le token de la commande REM du Basic
+>0806	20 50 52 4f	               .text " programmation assembleur sur c64."
+>080a	47 52 41 4d 4d 41 54 49 4f 4e 20 41 53 53 45 4d
+>081a	42 4c 45 55 52 20 53 55 52 20 43 36 34 2e
+>0828	00		               .byte $00           ;Un zéro pour indiquer la fin de cette
+>0829	44 08		bcmd2          .word bcmd3         ;Adresse de la commande basic suivante.
+>082b	02 00		               .word 2             ;Numero de la ligne Basic.
+>082d	8f		               .byte $8F           ;Le token de la commande REM du Basic
+>082e	20 50 41 52	               .text " par daniel lafrance."
+>0832	20 44 41 4e 49 45 4c 20 4c 41 46 52 41 4e 43 45
+>0842	2e
+>0843	00		               .byte $00           ;Un zéro pour indiquer la fin de cette
+>0844	4f 08		bcmd3          .word bcmd4         ;Adresse de la commande basic suivante.
+>0846	03 00		               .word 3             ;Numero de la ligne Basic.
+>0848	9e		               .byte $9e           ;Le token de la commande SYS du Basic
+>0849	30 32 31 32	               .text format("%05d",hpgmstart)
+>084d	39
+>084e	00		               .byte $00           ;Un zéro pour indiquer la fin de cette
+>084f	00 00		bcmd4          .word $0000         ;L'adresse de la commande Basic suivante.
+.0851	20 55 08	hpgmstart     jsr   main           ; Le programme principale doit s'appeler "main"
+.0854	60		              rts                  ; ... doit se rerminer par un RTS.
+
+;******  Return to file: sidtest02.asm
+
+=0			noir    =   0
+=1			blanc   =   1
+=2			rouge   =   2
+=3			cyan    =   3
+=4			mauve   =   4
+=5			vert    =   5
+=6			bleu    =   6
+=7			jaune   =   7
+=8			orange  =   8
+=9			brun    =   9
+=10			rose    =   10
+=11			grisf   =   11
+=12			gris    =   12
+=13			vertp   =   13
+=14			bleup   =   14
+=15			grisp   =   15
+=$d020			border  =   $d020
+=$d021			back    =   $d021
+=$0286			charcol =   $0286
+=$0400			vidram  =   $0400
+=$d800			colram  =   $d800
+=$d600			sid     =   $d600
+.0855	08		main        php             ; Sauvegarde les flags, ...
+.0856	48		            pha             ; ... et les registres, ...
+.0857	8a		            txa
+.0858	48		            pha
+.0859	98		            tya
+.085a	48		            pha
+.085b	a5 fb		            lda $fb         ; ... et les pointeurs de zero page.
+.085d	48		            pha
+.085e	a5 fc		            lda $fc
+.0860	48		            pha
+.0861	a5 fd		            lda $fd
+.0863	48		            pha
+.0864	a5 fe		            lda $fe
+.0866	48		            pha
+.0867	a9 03		            lda #cyan       ; Bleu ocean pour ...
+.0869	8d 20 d0	            sta border      ; ... la bordure, ...
+.086c	a9 01		            lda #blanc      ; ... blanc pour  ...
+.086e	8d 21 d0	            sta back        ; ... le fond et  ...
+.0871	a9 00		            lda #noir       ; ... noir pour   ...
+.0873	8d 86 02	            sta charcol     ; ... les caractères.
+.0876	a9 93		            lda #147        ; 147 = Effacement d'éctan.
+.0878	20 d2 ff	            jsr $ffd2       ; On efface l'écran
+.087b	20 be 08	            jsr bonjour
+.087e	a2 14		            ldx #20
+.0880	ca		loop        dex
+.0881	f0 0c		            beq maindone
+.0883	20 61 09	            jsr bip
+.0886	20 a3 08	            jsr delai
+.0889	20 87 09	            jsr bip2
+.088c	20 a3 08	            jsr delai
+.088f	ea		maindone    nop
+.0890	68		            pla             ; On récupère les pointeurs zero-page, ...
+.0891	85 fe		            sta $fe
+.0893	68		            pla
+.0894	85 fd		            sta $fd
+.0896	68		            pla
+.0897	85 fc		            sta $fc
+.0899	68		            pla
+.089a	85 fb		            sta $fb
+.089c	68		            pla             ; ... les registres, ...
+.089d	a8		            tay
+.089e	68		            pla
+.089f	aa		            tax
+.08a0	68		            pla
+.08a1	28		            plp
+.08a2	60		            rts
+.08a3	08		delai       php
+.08a4	48		            pha
+.08a5	8a		            txa
+.08a6	48		            pha
+.08a7	98		            tya
+.08a8	48		            pha
+.08a9	a9 00		            lda #$00
+.08ab	aa		            tax
+.08ac	a8		 delx       tay
+.08ad	c8		 dely       iny
+.08ae	c0 00		            cpy #$00
+.08b0	d0 fb		            bne dely
+.08b2	e8		            inx
+.08b3	e0 00		            cpx #$00
+.08b5	d0 f5		            bne delx
+.08b7	68		            pla
+.08b8	a8		            tay
+.08b9	68		            pla
+.08ba	aa		            tax
+.08bb	68		            pla
+.08bc	28		            plp
+.08bd	60		            rts
+.08be	08		bonjour     php
+.08bf	48		            pha
+.08c0	98		            tya
+.08c1	48		            pha
+.08c2	a0 08		            ldy #>str0          ;on pointe la chaine
+.08c4	a9 ce		            lda #<str0
+.08c6	20 1e ab	            jsr $ab1e
+.08c9	68		            pla
+.08ca	a8		            tay
+.08cb	68		            pla
+.08cc	28		            plp
+.08cd	60		            rts
+>08ce	20 20 5b 20	str0        .null   "  [  sidtest02 par daniel lafrance.  ]"
+>08d2	20 53 49 44 54 45 53 54 30 32 20 50 41 52 20 44
+>08e2	41 4e 49 45 4c 20 4c 41 46 52 41 4e 43 45 2e 20
+>08f2	20 5d 00
+.08f5	08		outbit7     php
+.08f6	48		            pha
+.08f7	8a		            txa
+.08f8	48		            pha
+.08f9	98		            tya
+.08fa	48		            pha
+.08fb	a5 fb		            lda $fb
+.08fd	48		            pha
+.08fe	a5 fc		            lda $fc
+.0900	48		            pha
+.0901	84 fc		            sty $fc             ; STRPTR dans ZP1.
+.0903	86 fb		            stx $fb
+.0905	a0 00		            ldy #$00            ; Offset à 0.
+.0907	b1 fb		nextst7     lda ($fb),y         ; On charge le caractère.
+.0909	c8		            iny                 ; Offset = offset +1
+.090a	48		            pha                 ; Sauve une copie
+.090b	29 7f		            and #$7f            ; On masque le bit 7 pour ...
+.090d	20 f2 dd	            jsr $ddf2           ; ... l'afficher.
+.0910	68		            pla                 ; On reprend la copie.
+.0911	29 80		            and #$80            ; Si le bit 7 est à 0 ...
+.0913	f0 f2		            beq nextst7         ; ... on passe au prochain caractère.
+.0915	68		            pla
+.0916	85 fc		            sta $fc
+.0918	68		            pla
+.0919	85 fb		            sta $fb
+.091b	68		            pla
+.091c	a8		            tay
+.091d	68		            pla
+.091e	aa		            tax
+.091f	68		            pla
+.0920	28		            plp
+.0921	60		            rts
+.0922	08		inczp1      php
+.0923	48		            pha
+.0924	a5 fb		            lda $fb             ; Charge le LSB.
+.0926	18		            clc
+.0927	69 01		            adc #$01            ; On aditionne 1 à l'accumulateur.
+.0929	90 02		            bcc norepzp1        ; Pas de report si le carry bit est à 0.
+.092b	e6 fc		            inc $fc
+.092d	85 fb		norepzp1    sta $fb
+.092f	68		            pla
+.0930	28		            plp
+.0931	60		            rts
+.0932	08		inczp2      php
+.0933	48		            pha
+.0934	a5 fb		            lda $fb             ; Charge le LSB.
+.0936	18		            clc
+.0937	69 01		            adc #$01            ; On aditionne 1 à l'accumulateur.
+.0939	90 02		            bcc norepzp2        ; Pas de report si le carry bit est à 0.
+.093b	e6 fe		            inc $fe
+.093d	85 fd		norepzp2    sta $fd
+.093f	68		            pla
+.0940	28		            plp
+.0941	60		            rts
+.0942	08		clearsid    php
+.0943	48		            pha
+.0944	98		            tya
+.0945	48		            pha
+.0946	a9 00		            lda #$00
+.0948	a0 1d		            ldy #$1d
+.094a	99 00 d6	clrsidreg   sta sid,y
+.094d	88		            dey
+.094e	d0 fa		            bne clrsidreg
+.0950	68		            pla
+.0951	a8		            tay
+.0952	68		            pla
+.0953	28		            plp
+.0954	60		            rts
+>0955	18 0f		bipson      .byte   24, 15      ; Volume au maximum.
+>0957	01 14		            .byte   1,  20      ; Frequence = 20 * 256
+>0959	05 00		            .byte   5,  0       ; A.D.S = 0.
+>095b	06 f9		            .byte   6,  15*16+9 ; S=Max, r=15
+>095d	04 11		            .byte   4,  1+16    ; V1S = Triangle.
+>095f	04 10		            .byte   4,  16      ; V1R = Triangle
+.0961	20 42 09	bip         jsr clearsid
+.0964	08		            php
+.0965	48		            pha
+.0966	8a		            txa
+.0967	48		            pha
+.0968	98		            tya
+.0969	48		            pha
+.096a	a9 00		            lda #$00
+.096c	aa		            tax
+.096d	a8		            tay
+.096e	be 55 09	bipcmd      ldx bipson,y        ; On programme le SID pour le son.
+.0971	c8		            iny
+.0972	b9 55 09	            lda bipson,y
+.0975	c8		            iny
+.0976	c0 ff		            cpy #$ff
+.0978	f0 06		            beq bipout
+.097a	9d 00 d6	            sta sid,x
+.097d	4c 6e 09	            jmp bipcmd
+.0980	68		bipout      pla
+.0981	a8		            tay
+.0982	68		            pla
+.0983	aa		            tax
+.0984	68		            pla
+.0985	28		            plp
+.0986	60		            rts
+.0987	20 42 09	bip2        jsr clearsid
+.098a	08		            php
+.098b	48		            pha
+.098c	a9 0f		            lda #15
+.098e	8d 18 d6	            sta sid+24
+.0991	a9 1e		            lda #30
+.0993	8d 01 d6	            sta sid+1
+.0996	a9 05		            lda #5
+.0998	8d 00 d6	            sta sid
+.099b	a9 f9		            lda #(15*16+9)
+.099d	8d 06 d6	            sta sid+6
+.09a0	a9 11		            lda #(16+1)
+.09a2	8d 04 d6	            sta sid+4
+.09a5	a9 10		            lda #16
+.09a7	8d 04 d6	            sta sid+4
+.09aa	68		            pla
+.09ab	28		            plp
+.09ac	60		            rts
+
+;******  End of listing
