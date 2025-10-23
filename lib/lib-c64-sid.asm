@@ -168,6 +168,28 @@ sid_tada        .block
                 jsr sid_alloff
                 rts
                 .bend
+
+sid_guitar        .block
+                #sid_prog vic_son
+                jsr ti_dcroche
+                #sid_v1note mi3
+                jsr ti_blanche
+                #sid_v1note la3
+                jsr ti_blanche
+                #sid_v1note re4
+                jsr ti_blanche
+                #sid_v1note sol4
+                jsr ti_blanche
+                #sid_v1note si4
+                jsr ti_blanche
+                #sid_v1note mi5
+                jsr ti_ronde
+                jsr sid_alloff
+                rts
+                .bend
+
+
+
 sid_lib_vector  .word   sid_v1off,sid_v2off,sid_v3off
 
 ti_dcroche  .block

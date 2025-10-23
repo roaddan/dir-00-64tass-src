@@ -3,7 +3,7 @@
 ; IDE..............: Sublime text, Make, 64TASS + 1541 Ultimate II + C64.
 ; Système..........: Commodore 64 et 64c.
 ; Programmeur......: Daniel Lafrance.
-; Date de création.: Octobre 2025.
+; Date de création.: Octobre 25 2025.
 ;-----------------------------------------------------------------------------
 
 ;-----------------------------------------------------------------------------
@@ -66,6 +66,8 @@ main        .block
             ; L'appel du programme ci-dessoous.
             ;-----------------------------------------------------------------
             jsr sid_tada
+            jsr ti_ronde
+            jsr sid_guitar
             ;-----------------------------------------------------------------
             ; Prépare le retour à basic.
             ;-----------------------------------------------------------------

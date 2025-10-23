@@ -2,8 +2,6 @@
 version  = "20250925-000001"  
 ;-------------------------------------------------------------------------------
                .include "header-c64.asm"
-               .include "macros-64tass.asm"
-               .include "localmacro.asm"
                .enc     "none"
 fkeyleft       =    18
 f1top          =    9 
@@ -29,7 +27,7 @@ main           .block
                jsr  scrmaninit
                #disable
                jsr  drawcredits
-               jsr sid_tada
+               jsr  sid_tada
                #printcxy menu_msg
                jsr  screendis
                jsr  copycharset
@@ -141,11 +139,14 @@ device         .byte     8
 ;-------------------------------------------------------------------------------
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
+                .include "macros-64tass.asm"
+                .include "localmacro.asm"
                 .include "routines.asm"
                 .include "strings_fr.asm"
 ;               .include "strings_en.asm"
 
 *=$c000
+                .include "lib-c64-timer.asm"
                 .include "lib-c64-sid.asm"
                 .include "lib-c64-vicii.asm"
                 .include "lib-c64-basic2.asm" 
