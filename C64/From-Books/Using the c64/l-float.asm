@@ -4,3 +4,10 @@
 ; Version..: 1.0.1 pour T.M.P.
 ; Revision.: 20251117
 ;---------------------------------------
+prnf1dbl
+            .block
+            jsr pushregs
+
+            jsr popreg
+            rts
+            .bend
