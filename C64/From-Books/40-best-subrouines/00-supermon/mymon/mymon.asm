@@ -107,7 +107,7 @@ getin           = $ffe4             ; get a character
 ; set up origin
 
                 .weak
-org             = $c3e0 - 144
+org             = $c3e0-$31-$af
                 .endweak
 
 
