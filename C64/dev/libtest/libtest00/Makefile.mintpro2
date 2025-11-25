@@ -28,12 +28,21 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.
-SOURCENAME=libtest02
-DEPSLOCALES=strings_fr.asm  strings_en.asm
+SOURCENAME=template
+DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
+# DEPSLOCALES=strings_fr.asm  strings_en.asm
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
-LIBDEPS=$(shell find /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -maxdepth 1 -type f -iname "*.asm")
+LIBDEP1=./lib/header-c64.asm ./lib/header.asm ./lib/lib-c64-basic2.asm ./lib/lib-c64-joystick.asm 
+LIBDEP2=./lib/lib-c64-math.asm ./lib/lib-c64-nmi.asm ./lib/lib-c64-showregs.asm ./lib/lib-c64-sid-notes.asm
+LIBDEP3=./lib/lib-c64-spriteman.asm ./lib/lib-c64-text-mc.asm ./lib/lib-c64-text-sd.asm ./lib/lib-c64-tmpjb.asm
+LIBDEP4=./lib/lib-c64-ultimateii.asm ./lib/lib-c64-vicii.asm ./lib/lib-c64-words.asm ./lib/lib-cbm-chargen.asm
+LIBDEP5=./lib/lib-cbm-disk.asm ./lib/lib-cbm-hex.asm ./lib/lib-cbm-keyb.asm ./lib/lib-cbm-mem.asm
+LIBDEP6=./lib/lib-cbm-pushpop.asm ./lib/lib-vic20-basic2.asm ./lib/macro-c64-ultimateii.asm ./lib/macros-64tass.asm
+LIBDEP7=./lib/map-c64-basic2.asm ./lib/map-c64-kernal.asm ./lib/map-c64-sid-2.asm ./lib/map-c64-sid-notes-ntsc.asm
+LIBDEP8=./lib/map-c64-sid-notes-pal.asm ./lib/map-c64-sid.asm ./lib/map-c64-vicii.asm ./lib/toolkitbasic.asm
+LIBDEPS=$(LIBDEP1) $(LIBDEP2) $(LIBDEP3) $(LIBDEP4) $(LIBDEP5) $(LIBDEP6) $(LIBDEP7) $(LIBDEP8) 
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 # The lowest common project shared directory complete path for things like ... 
 # librairies, data files, images, etc.
@@ -81,7 +90,7 @@ X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
 #-------------------------------------------------------------------------------
 # These options enable you to mount utility disk image in drive 9.
 # Complete path to the c64 Utility disk to be mounted on drive 9.
-TMPSEP06=-9 $(BASEDIR)/d-disk-img/d64/turbo-macro-pro-sep06.d64
+TMPSEP06=-9 $(BASEDIR)/d-tmp-dskimg/turbo-macro-pro-sep06.d64
 # Complete path to the Vic20 Utility disk to be mounted on drive 9.
 V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # Complete local path to be mounted as a disk on drive 8 and/or 9.  
@@ -89,7 +98,7 @@ V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 DISK8DIR=
 DISK9DIR=
 DBC=/Users/Locals/C64/00-usbkey32go/dbc
-JBMON64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/40-best-subrouines/00-supermon/jbmon/jbmon64
+JBMON64=/Users/Locals/C64/00-usbkey32go/d-mes-utils/jbmon.prg
 CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
 J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
 #
@@ -102,8 +111,7 @@ OUTDIR=$(OUTDIRC64)
 #OUTDIR=$(OUTDIRV20)
 
 # The Vice autostart parameters. 
-#AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
-AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81:$(SOURCENAME)
+AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 # -----------------------------------------------------------------------------
 # --------------------- O P T I O N N A L   S E C T I O N ---------------------
 # -----------------------------------------------------------------------------
@@ -155,7 +163,7 @@ all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 #		$(FTPASMCMD)	# To transfer the source ASM file.
 #		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
-		$(VICE) $(AUTOSTART) $(TMPSEP06) & # to load vice with arguments.
+		$(VICE) $(AUTOSTART) $(TMPSEP06) # to load vice with arguments.
 
 # -----------------------------------------------------------------------------
 # When called with "make ftp". 
@@ -172,7 +180,7 @@ ftp:
 # -----------------------------------------------------------------------------
 # To clean and start project fresh. (seldome used). 
 clean:	
-		rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 $(SOURCENAME).d81
+		rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 
 		rm $(BASEDIR)/$(PRGDIR)/prg/$(SOURCENAME).prg
 		rm $(BASEDIR)/$(PRGDIR)/txt/$(SOURCENAME).txt
 		rm $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64
