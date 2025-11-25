@@ -1,0 +1,38 @@
+
+; 64tass Turbo Assembler Macro V1.54.1900 listing file
+; 64tass --line-numbers --tab-size=4 --cbm-prg -C -m -a -I "/home/daniel/Documents/Mes Sources/C64/Assembleur/64tass/Sources/lib" -i -L ex-3-6.txt -o ex-3-6.prg ex-3-6.asm
+; Mon Apr 18 09:13:55 2022
+
+;Line	;Offset	;Hex			;Source
+
+:1		;******  Processing input file: ex-3-6.asm
+
+9		=$d000					vic     =   $d000
+10		=$0340					addr    =   $0340
+13		.c000	20 29 c0		main    jsr drwsprt
+14		.c003	20 07 c0		        jsr initlz
+15		.c006	60				        rts
+17		.c007	a9 0d			initlz  lda #$0d    ; Sprite to #0 memory pointer
+18		.c009	8d f8 07		stop    sta $07f8
+19		.c00c	a9 01			        lda #$01    ; Turn on Sptite #0 on VIC.
+20		.c00e	8d 15 d0		        sta vic+$15
+21		.c011	a9 07			        lda #$07    ; Select a Yellow Background.
+22		.c013	8d 21 d0		        sta vic+$21
+23		.c016	a9 06			        lda #$06    ; Select Blue for the sprite.
+24		.c018	8d 27 d0		        sta vic+$27
+25		.c01b	8d 20 d0		        sta vic+$20 ; Select Blue border color.
+26		.c01e	a2 80			        ldx #$80    ; $80=128 for X coordinate
+27		.c020	8e 00 d0		        stx vic+$00 ;  of sprite #0
+28		.c023	a0 80			        ldy #$80    ; $80=128 for Y coordinate
+29		.c025	8c 01 d0		        sty vic+$01 ;  of sprite #0
+30		.c028	60				        rts
+32		.c029	a9 aa			drwsprt lda #$aa
+33		.c02b	a0 00			        ldy #$00
+34		.c02d	99 40 03		more    sta addr,y
+35		.c030	49 f0			        eor #$f0
+36		.c032	c8				        iny
+37		.c033	c0 64			        cpy #$64
+38		.c035	d0 f6			        bne more
+39		.c037	60				        rts
+
+;******  End of listing
