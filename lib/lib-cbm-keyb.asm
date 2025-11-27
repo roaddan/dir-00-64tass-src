@@ -98,7 +98,7 @@ waitspace   .block      ; Attend que la touche espace soit appuyée.
             pha         ;/  et l'accumulateur.
             lda #0      ;\ Efface le tampon 
             sta 198     ;/  du clavier.
-nospace     jsr showregsrev
+nospace     jsr showregs
             lda #203    ; Lit la matrice du clavier. 
             cmp #60     ; 60 dans la matrice = barre d'espace appuyée. 
             bne nospace    

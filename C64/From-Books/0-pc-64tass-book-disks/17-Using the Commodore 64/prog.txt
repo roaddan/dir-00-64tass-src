@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.54.1900 listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L prog.txt -o prog.prg prog.asm
-; Tue Nov 25 11:39:27 2025
+; Wed Nov 26 12:49:35 2025
 
 ;Offset	;Hex		;Source
 
@@ -52,7 +52,7 @@
 =$bc58			ff1abs   = $bc58 ;f1=abs(f1)
 =$bc5b			ffvcmp   = $bc5b ;f1=f1 comp fv ($yyaa)
 =$bc44			fi62tf1  = $bc44 ;Conv f1 word 62,63
-=$bc3b			fiaatf1  = $bc3b ;Conv Acc to FP in f1
+=$bc3c			fiaatf1  = $bc3c ;Conv Acc to FP in f1
 =$bdcd			fixatf1  = $bdcd ;f1=float($XXAA)+print
 =$b3a2			fiyytf1  = $b3a2 ;f1=float(y)
 =$bcf3			fasctf1  = $bcf3 ;f1=float(ascii) $0200
@@ -152,485 +152,489 @@
 ;******  Return to file: prog.asm
 
 .082d			main
-.082d	20 17 0b	         jsr floattest
+.082d	20 31 08	         jsr floattest
 .0830	60		         rts
-.0831			putahexdec
-.0831	20 74 09	         jsr pushregs
-.0834	48		         pha
-.0835	a9 9e		         lda #kjaune
-.0837	20 d2 ff	         jsr $ffd2
-.083a	68		         pla
-.083b	20 1e 0a	         jsr putahex
-.083e	aa		         tax
-.083f	a9 20		         lda #$20
-.0841	20 d2 ff	         jsr $ffd2
-.0844	a9 00		         lda #$00
-.0846	20 cd bd	         jsr fixatf1
-.0849	20 a3 09	         jsr popregs
-.084c	a9 0d		         lda #$0d
-.084e	20 d2 ff	         jsr $ffd2
-.0851	a9 9b		         lda #kgris3
-.0853	20 d2 ff	         jsr $ffd2
-.0856	60		         rts
-.0857			bmapinit
-.0857	08		         php
-.0858	48		         pha
-.0859	ad 18 d0	         lda vic+$18
-.085c	09 08		         ora #$08
-.085e	8d 18 d0	         sta vic+$18
-.0861	ad 11 d0	         lda vic+$11
-.0864	09 20		         ora #$20
-.0866	8d 11 d0	         sta vic+$11
-.0869	68		         pla
-.086a	28		         plp
-.086b	60		         rts
-.086c			bmapclr
-.086c	20 06 09	         jsr pushall
-.086f	a9 00		         lda #<vidstart
-.0871	85 fb		         sta zp1
-.0873	a9 20		         lda #>vidstart
-.0875	85 fc		         sta zp1+1
-.0877	a0 00		         ldy #$00
-.0879	a9 00		more     lda #$00
-.087b	91 fb		         sta (zp1),y
-.087d	20 ca 09	         jsr inczp1
-.0880	a5 fc		         lda zp1+1
-.0882	c9 3f		         cmp #$3f
-.0884	d0 f3		         bne more
-.0886	a5 fb		         lda zp1
-.0888	c9 3f		         cmp #$3f
-.088a	d0 ed		         bne more
-.088c	20 41 09	         jsr popall
-.088f	60		         rts
-.0890			bmpfillbk
-.0890	20 06 09	         jsr pushall
-.0893	a9 00		         lda #<bakmem
-.0895	85 fb		         sta zp1
-.0897	a9 04		         lda #>bakmem
-.0899	85 fc		         sta zp1+1
-.089b	a2 08		         ldx #$08
-.089d	a0 00		         ldy #$00
-.089f	a9 01		         lda #$01
-.08a1	91 fb		more     sta (zp1),y
-.08a3	20 ca 09	         jsr inczp1
-.08a6	e4 fc		         cpx zp1+1
-.08a8	d0 f7		         bne more
-.08aa	20 41 09	         jsr popall
-.08ad	60		         rts
+.0831			floattest
+.0831	08		        php
+.0832	48		        pha
+.0833	a9 07		        lda #$07
+.0835	8d 86 02	        sta kcol
+.0838	ae 52 08	        ldx tword
+.083b	ad 53 08	        lda tword+1
+.083e	20 cd bd	        jsr fixatf1
+.0841	a9 03		        lda #$03
+.0843	8d 86 02	        sta kcol
+.0846	20 29 0b	        jsr prnfac1
+.0849	a9 01		        lda #$01
+.084b	8d 86 02	        sta kcol
+.084e	68		        pla
+.084f	28		        plp
+.0850	60		        rts
+>0851	55		tbyte   .byte   $55
+>0852	00 20		tword   .word   $2000
+.0854			putahexdec
+.0854	20 97 09	         jsr pushregs
+.0857	48		         pha
+.0858	a9 9e		         lda #kjaune
+.085a	20 d2 ff	         jsr $ffd2
+.085d	68		         pla
+.085e	20 41 0a	         jsr putahex
+.0861	aa		         tax
+.0862	a9 20		         lda #$20
+.0864	20 d2 ff	         jsr $ffd2
+.0867	a9 00		         lda #$00
+.0869	20 cd bd	         jsr fixatf1
+.086c	20 c6 09	         jsr popregs
+.086f	a9 0d		         lda #$0d
+.0871	20 d2 ff	         jsr $ffd2
+.0874	a9 9b		         lda #kgris3
+.0876	20 d2 ff	         jsr $ffd2
+.0879	60		         rts
+.087a			bmapinit
+.087a	08		         php
+.087b	48		         pha
+.087c	ad 18 d0	         lda vic+$18
+.087f	09 08		         ora #$08
+.0881	8d 18 d0	         sta vic+$18
+.0884	ad 11 d0	         lda vic+$11
+.0887	09 20		         ora #$20
+.0889	8d 11 d0	         sta vic+$11
+.088c	68		         pla
+.088d	28		         plp
+.088e	60		         rts
+.088f			bmapclr
+.088f	20 29 09	         jsr pushall
+.0892	a9 00		         lda #<vidstart
+.0894	85 fb		         sta zp1
+.0896	a9 20		         lda #>vidstart
+.0898	85 fc		         sta zp1+1
+.089a	a0 00		         ldy #$00
+.089c	a9 00		more     lda #$00
+.089e	91 fb		         sta (zp1),y
+.08a0	20 ed 09	         jsr inczp1
+.08a3	a5 fc		         lda zp1+1
+.08a5	c9 3f		         cmp #$3f
+.08a7	d0 f3		         bne more
+.08a9	a5 fb		         lda zp1
+.08ab	c9 3f		         cmp #$3f
+.08ad	d0 ed		         bne more
+.08af	20 64 09	         jsr popall
+.08b2	60		         rts
+.08b3			bmpfillbk
+.08b3	20 29 09	         jsr pushall
+.08b6	a9 00		         lda #<bakmem
+.08b8	85 fb		         sta zp1
+.08ba	a9 04		         lda #>bakmem
+.08bc	85 fc		         sta zp1+1
+.08be	a2 08		         ldx #$08
+.08c0	a0 00		         ldy #$00
+.08c2	a9 01		         lda #$01
+.08c4	91 fb		more     sta (zp1),y
+.08c6	20 ed 09	         jsr inczp1
+.08c9	e4 fc		         cpx zp1+1
+.08cb	d0 f7		         bne more
+.08cd	20 64 09	         jsr popall
+.08d0	60		         rts
 =$0400			bakmem   = $0400    ; 1024 end at $0800
-.08ae			calcdot
-.08ae	20 06 09	         jsr pushall
-.08b1	98		         tya     ;Y contien la ligne
-.08b2	4a		         lsr a   ; On divise par 8
-.08b3	4a		         lsr a
-.08b4	4a		         lsr a
-.08b5	8d d8 08	         sta row ; et on sauvegarde
-.08b8	8a		         txa     ;X contien la colonne
-.08b9	4a		         lsr a   ; On divise par 8
-.08ba	4a		         lsr a
-.08bb	4a		         lsr a
-.08bc	8d df 08	         sta col ; et on sauvegarde
-.08bf	98		         tya     ;Y masque avec 7 donne
-.08c0	29 07		         and #$07; la ligne caractere
-.08c2	8d e6 08	         sta lin ; du pixel.
-.08c5	8a		         txa     ;7-(X and 7) donne le
-.08c6	29 07		         and #$07; no du bit de l'octet
-.08c8	8d ed 08	         sta sbit; du pixel.
-.08cb	a9 07		         lda #$07
-.08cd	38		         sec
-.08ce	ed ed 08	         sbc sbit
-.08d1	8d ed 08	         sta sbit
-.08d4	20 41 09	         jsr popall
-.08d7	60		         rts
+.08d1			calcdot
+.08d1	20 29 09	         jsr pushall
+.08d4	98		         tya     ;Y contien la ligne
+.08d5	4a		         lsr a   ; On divise par 8
+.08d6	4a		         lsr a
+.08d7	4a		         lsr a
+.08d8	8d fb 08	         sta row ; et on sauvegarde
+.08db	8a		         txa     ;X contien la colonne
+.08dc	4a		         lsr a   ; On divise par 8
+.08dd	4a		         lsr a
+.08de	4a		         lsr a
+.08df	8d 02 09	         sta col ; et on sauvegarde
+.08e2	98		         tya     ;Y masque avec 7 donne
+.08e3	29 07		         and #$07; la ligne caractere
+.08e5	8d 09 09	         sta lin ; du pixel.
+.08e8	8a		         txa     ;7-(X and 7) donne le
+.08e9	29 07		         and #$07; no du bit de l'octet
+.08eb	8d 10 09	         sta sbit; du pixel.
+.08ee	a9 07		         lda #$07
+.08f0	38		         sec
+.08f1	ed 10 09	         sbc sbit
+.08f4	8d 10 09	         sta sbit
+.08f7	20 64 09	         jsr popall
+.08fa	60		         rts
 =320			screenw = 320
->08d8	00		row      .byte $00
->08d9	00 00 00 00	frow     .word $00,$00,$00
->08dd	00 00
->08df	00		col      .byte $00
->08e0	00 00 00 00	fcol     .word $00,$00,$00
->08e4	00 00
->08e6	00		lin      .byte $00
->08e7	00 00 00 00	flin     .word $00,$00,$00
->08eb	00 00
->08ed	00		sbit     .byte $00
->08ee	00 00 00 00	fbit     .word $00,$00,$00
->08f2	00 00
->08f4	00 00		adrs     .word $00
->08f6	00 20		baseaddr .word $2000 ;8192
->08f8	40 01		scrwidth .word $0140 ;320
->08fa	00 00 00 00	fvar1    .word $00,$00,$00
->08fe	00 00
->0900	00 00 00 00	fvar2    .word $00,$00,$00
->0904	00 00
+>08fb	00		row      .byte $00
+>08fc	00 00 00 00	frow     .word $00,$00,$00
+>0900	00 00
+>0902	00		col      .byte $00
+>0903	00 00 00 00	fcol     .word $00,$00,$00
+>0907	00 00
+>0909	00		lin      .byte $00
+>090a	00 00 00 00	flin     .word $00,$00,$00
+>090e	00 00
+>0910	55		sbit     .byte $55
+>0911	00 00 00 00	fbit     .word $00,$00,$00
+>0915	00 00
+>0917	00 00		adrs     .word $00
+>0919	00 20		baseaddr .word $2000 ;8192
+>091b	40 01		scrwidth .word $0140 ;320
+>091d	00 00 00 00	fvar1    .word $00,$00,$00
+>0921	00 00
+>0923	00 00 00 00	fvar2    .word $00,$00,$00
+>0927	00 00
 
 ;******  Processing file: l-push.asm
 
-.0906			pushall
-.0906	08		         php     ;s;p,pcl,pch
-.0907	78		         sei
-.0908	8d a8 02	         sta ra  ;save a
-.090b	68		         pla     ;s:pcl,pch
-.090c	8d a7 02	         sta rp  ;save rp
-.090f	68		         pla     ;s:pch
-.0910	8d a9 02	         sta pc  ;save pcl
-.0913	68		         pla     ;s:
-.0914	8d aa 02	         sta pc+1;save pch
-.0917	a5 fb		         lda $fb ;save fb
-.0919	48		         pha     ;s:fb
-.091a	a5 fc		         lda $fc ;save fc
-.091c	48		         pha     ;s:fc,fb
-.091d	a5 fd		         lda $fd ;save fd
-.091f	48		         pha     ;s:fd,fc,fb
-.0920	a5 fe		         lda $fe ;save fe
-.0922	48		         pha     ;s:fe,fd,fc,fb
-.0923	ad a7 02	         lda rp  ;save rp
-.0926	48		         pha     ;s:rp,fe,fd,fc,fb
-.0927	ad a8 02	         lda ra  ;save ra
-.092a	48		         pha     ;s:ra,rp,fe,fd,fc,fb
-.092b	8a		         txa     ;save rx
-.092c	48		         pha     ;s:rx,ra,rp,fe-fb
-.092d	98		         tya     ;save y
-.092e	48		         pha     ;s:ry,rx,ra,rp,fe-fb
-.092f	ad aa 02	         lda pc+1;Replace l'adresse
-.0932	48		         pha     ;s:pch,ry,rx,ra,...
-.0933	ad a9 02	         lda pc  ; de retour.
-.0936	48		         pha     ;s:pcl,pch,ru,rx,ra,...
-.0937	ad a7 02	         lda rp  ;Place les flags
-.093a	48		         pha     ; sur le stack.
-.093b	ad a8 02	         lda ra  ;Recupere ra
-.093e	28		         plp     ;Recupere les flags.
-.093f	58		         cli
-.0940	60		         rts
-.0941			popall
-.0941	78		         sei     ;s:pcl,pch,ry,rx,...
-.0942	68		         pla     ;s:pch,ry,rx,ra,rp,...
-.0943	8d a9 02	         sta pc  ;sauve pcl
-.0946	68		         pla     ;s:ry,rx,ra,rp,fe...fb
-.0947	8d aa 02	         sta pc+1;sauve pch
-.094a	68		         pla     ;s:rx,ra,rp,fe,fd,fc,fb
-.094b	a8		         tay     ;recupere ry
-.094c	68		         pla     ;s:ra,rp,fe,fd,fc,fb
-.094d	aa		         tax     ;recupere rx
-.094e	68		         pla     ;s:rp,fe,fd,fc,fb
-.094f	8d a8 02	         sta ra  ;recupere ra
-.0952	68		         pla     ;s:fe,fd,fc,fb
-.0953	8d a7 02	         sta rp  ;recupere les flags.
-.0956	68		         pla     ;s:fd,fc,fb
-.0957	85 fe		         sta $fe ;reccupere fe
-.0959	68		         pla     ;s:fc,fb
-.095a	85 fd		         sta $fd ;recupere fd
-.095c	68		         pla     ;s:fb
-.095d	85 fc		         sta $fc ;recupere fc
-.095f	68		         pla     ;s:
-.0960	85 fb		         sta $fb ;recupere fb
-.0962	ad aa 02	         lda pc+1;Replaace l'adresse de
-.0965	48		         pha     ;s:pch
-.0966	ad a9 02	         lda pc  ;retour sur la pile
-.0969	48		         pha     ;s:pcl,pch
-.096a	ad a7 02	         lda rp  ;recupere les flags
-.096d	48		         pha     ;s:rp,pcl,pch
-.096e	ad a8 02	         lda ra  ;recupere ra
-.0971	58		         cli     ;
-.0972	28		         plp     ;s:pcl,pch
-.0973	60		         rts
-.0974			pushregs
-.0974	08		         php     ;s;p,pcl,pch
-.0975	78		         sei
-.0976	8d a8 02	         sta ra  ;save a
-.0979	68		         pla     ;s:pcl,pch
-.097a	8d a7 02	         sta rp  ;save rp
-.097d	68		         pla     ;s:pch
-.097e	8d a9 02	         sta pc  ;save pcl
-.0981	68		         pla     ;s:
-.0982	8d aa 02	         sta pc+1;save pch
-.0985	ad a7 02	         lda rp  ;save rp
-.0988	48		         pha     ;s:rp
-.0989	ad a8 02	         lda ra  ;save ra
-.098c	48		         pha     ;s:ra,rp
-.098d	8a		         txa     ;save rx
-.098e	48		         pha     ;s:rx,ra,rp
-.098f	98		         tya     ;save y
-.0990	48		         pha     ;s:ry,rx,ra,rp
-.0991	ad aa 02	         lda pc+1;Replace l'adresse
-.0994	48		         pha     ;s:pch,ry,rx,ra,rp
-.0995	ad a9 02	         lda pc  ; de retour.
-.0998	48		         pha     ;s:pcl,pch,ru,rx,ra,rp
-.0999	ad a7 02	         lda rp  ;Place les flags
-.099c	48		         pha     ; sur le stack.
-.099d	ad a8 02	         lda ra  ;Recupere ra
-.09a0	28		         plp     ;Recupere les flags.
-.09a1	58		         cli
-.09a2	60		         rts
-.09a3			popregs
-.09a3	78		         sei     ;s:pcl,pch,ry,rx,ra,rp
-.09a4	68		         pla     ;s:pch,ry,rx,ra,rp
-.09a5	8d a9 02	         sta pc  ;sauve pcl
-.09a8	68		         pla     ;s:ry,rx,ra,rp
-.09a9	8d aa 02	         sta pc+1;sauve pch
-.09ac	68		         pla     ;s:rx,ra,rp
-.09ad	a8		         tay     ;recupere ry
-.09ae	68		         pla     ;s:ra,rp
-.09af	aa		         tax     ;recupere rx
-.09b0	68		         pla     ;s:rp
-.09b1	8d a8 02	         sta ra  ;recupere ra
-.09b4	68		         pla     ;s:
-.09b5	8d a7 02	         sta rp  ;recupere les flags.
-.09b8	ad aa 02	         lda pc+1;Replaace l'adresse de
-.09bb	48		         pha     ;s:pch
-.09bc	ad a9 02	         lda pc  ;retour sur la pile
-.09bf	48		         pha     ;s:pcl,pch
-.09c0	ad a7 02	         lda rp  ;recupere les flags
-.09c3	48		         pha     ;s:rp,pcl,pch
-.09c4	ad a8 02	         lda ra  ;recupere ra
-.09c7	58		         cli     ;
-.09c8	28		         plp     ;s:pcl,pch
-.09c9	60		         rts
+.0929			pushall
+.0929	08		         php     ;s;p,pcl,pch
+.092a	78		         sei
+.092b	8d a8 02	         sta ra  ;save a
+.092e	68		         pla     ;s:pcl,pch
+.092f	8d a7 02	         sta rp  ;save rp
+.0932	68		         pla     ;s:pch
+.0933	8d a9 02	         sta pc  ;save pcl
+.0936	68		         pla     ;s:
+.0937	8d aa 02	         sta pc+1;save pch
+.093a	a5 fb		         lda $fb ;save fb
+.093c	48		         pha     ;s:fb
+.093d	a5 fc		         lda $fc ;save fc
+.093f	48		         pha     ;s:fc,fb
+.0940	a5 fd		         lda $fd ;save fd
+.0942	48		         pha     ;s:fd,fc,fb
+.0943	a5 fe		         lda $fe ;save fe
+.0945	48		         pha     ;s:fe,fd,fc,fb
+.0946	ad a7 02	         lda rp  ;save rp
+.0949	48		         pha     ;s:rp,fe,fd,fc,fb
+.094a	ad a8 02	         lda ra  ;save ra
+.094d	48		         pha     ;s:ra,rp,fe,fd,fc,fb
+.094e	8a		         txa     ;save rx
+.094f	48		         pha     ;s:rx,ra,rp,fe-fb
+.0950	98		         tya     ;save y
+.0951	48		         pha     ;s:ry,rx,ra,rp,fe-fb
+.0952	ad aa 02	         lda pc+1;Replace l'adresse
+.0955	48		         pha     ;s:pch,ry,rx,ra,...
+.0956	ad a9 02	         lda pc  ; de retour.
+.0959	48		         pha     ;s:pcl,pch,ru,rx,ra,...
+.095a	ad a7 02	         lda rp  ;Place les flags
+.095d	48		         pha     ; sur le stack.
+.095e	ad a8 02	         lda ra  ;Recupere ra
+.0961	28		         plp     ;Recupere les flags.
+.0962	58		         cli
+.0963	60		         rts
+.0964			popall
+.0964	78		         sei     ;s:pcl,pch,ry,rx,...
+.0965	68		         pla     ;s:pch,ry,rx,ra,rp,...
+.0966	8d a9 02	         sta pc  ;sauve pcl
+.0969	68		         pla     ;s:ry,rx,ra,rp,fe...fb
+.096a	8d aa 02	         sta pc+1;sauve pch
+.096d	68		         pla     ;s:rx,ra,rp,fe,fd,fc,fb
+.096e	a8		         tay     ;recupere ry
+.096f	68		         pla     ;s:ra,rp,fe,fd,fc,fb
+.0970	aa		         tax     ;recupere rx
+.0971	68		         pla     ;s:rp,fe,fd,fc,fb
+.0972	8d a8 02	         sta ra  ;recupere ra
+.0975	68		         pla     ;s:fe,fd,fc,fb
+.0976	8d a7 02	         sta rp  ;recupere les flags.
+.0979	68		         pla     ;s:fd,fc,fb
+.097a	85 fe		         sta $fe ;reccupere fe
+.097c	68		         pla     ;s:fc,fb
+.097d	85 fd		         sta $fd ;recupere fd
+.097f	68		         pla     ;s:fb
+.0980	85 fc		         sta $fc ;recupere fc
+.0982	68		         pla     ;s:
+.0983	85 fb		         sta $fb ;recupere fb
+.0985	ad aa 02	         lda pc+1;Replaace l'adresse de
+.0988	48		         pha     ;s:pch
+.0989	ad a9 02	         lda pc  ;retour sur la pile
+.098c	48		         pha     ;s:pcl,pch
+.098d	ad a7 02	         lda rp  ;recupere les flags
+.0990	48		         pha     ;s:rp,pcl,pch
+.0991	ad a8 02	         lda ra  ;recupere ra
+.0994	58		         cli     ;
+.0995	28		         plp     ;s:pcl,pch
+.0996	60		         rts
+.0997			pushregs
+.0997	08		         php     ;s;p,pcl,pch
+.0998	78		         sei
+.0999	8d a8 02	         sta ra  ;save a
+.099c	68		         pla     ;s:pcl,pch
+.099d	8d a7 02	         sta rp  ;save rp
+.09a0	68		         pla     ;s:pch
+.09a1	8d a9 02	         sta pc  ;save pcl
+.09a4	68		         pla     ;s:
+.09a5	8d aa 02	         sta pc+1;save pch
+.09a8	ad a7 02	         lda rp  ;save rp
+.09ab	48		         pha     ;s:rp
+.09ac	ad a8 02	         lda ra  ;save ra
+.09af	48		         pha     ;s:ra,rp
+.09b0	8a		         txa     ;save rx
+.09b1	48		         pha     ;s:rx,ra,rp
+.09b2	98		         tya     ;save y
+.09b3	48		         pha     ;s:ry,rx,ra,rp
+.09b4	ad aa 02	         lda pc+1;Replace l'adresse
+.09b7	48		         pha     ;s:pch,ry,rx,ra,rp
+.09b8	ad a9 02	         lda pc  ; de retour.
+.09bb	48		         pha     ;s:pcl,pch,ru,rx,ra,rp
+.09bc	ad a7 02	         lda rp  ;Place les flags
+.09bf	48		         pha     ; sur le stack.
+.09c0	ad a8 02	         lda ra  ;Recupere ra
+.09c3	28		         plp     ;Recupere les flags.
+.09c4	58		         cli
+.09c5	60		         rts
+.09c6			popregs
+.09c6	78		         sei     ;s:pcl,pch,ry,rx,ra,rp
+.09c7	68		         pla     ;s:pch,ry,rx,ra,rp
+.09c8	8d a9 02	         sta pc  ;sauve pcl
+.09cb	68		         pla     ;s:ry,rx,ra,rp
+.09cc	8d aa 02	         sta pc+1;sauve pch
+.09cf	68		         pla     ;s:rx,ra,rp
+.09d0	a8		         tay     ;recupere ry
+.09d1	68		         pla     ;s:ra,rp
+.09d2	aa		         tax     ;recupere rx
+.09d3	68		         pla     ;s:rp
+.09d4	8d a8 02	         sta ra  ;recupere ra
+.09d7	68		         pla     ;s:
+.09d8	8d a7 02	         sta rp  ;recupere les flags.
+.09db	ad aa 02	         lda pc+1;Replaace l'adresse de
+.09de	48		         pha     ;s:pch
+.09df	ad a9 02	         lda pc  ;retour sur la pile
+.09e2	48		         pha     ;s:pcl,pch
+.09e3	ad a7 02	         lda rp  ;recupere les flags
+.09e6	48		         pha     ;s:rp,pcl,pch
+.09e7	ad a8 02	         lda ra  ;recupere ra
+.09ea	58		         cli     ;
+.09eb	28		         plp     ;s:pcl,pch
+.09ec	60		         rts
 
 ;******  Return to file: prog.asm
 
 
 ;******  Processing file: l-mem.asm
 
-.09ca			inczp1
-.09ca	08		         php
-.09cb	e6 fb		         inc zp1
-.09cd	d0 02		         bne repzp1
-.09cf	e6 fc		         inc zp1+1
-.09d1	28		repzp1   plp
-.09d2	60		         rts
-.09d3			inczp2
-.09d3	08		         php
-.09d4	e6 fd		         inc zp2
-.09d6	d0 02		         bne repzp2
-.09d8	e6 fe		         inc zp2+1
-.09da	28		repzp2   plp
-.09db	60		         rts
-.09dc			deczp1
-.09dc	08		         php
-.09dd	48		         pha
-.09de	c6 fb		         dec zp1
-.09e0	a5 fb		         lda zp1
-.09e2	c9 ff		         cmp #$ff
-.09e4	d0 02		         bne pullzp1
-.09e6	c6 fc		         dec zp1+1
-.09e8	68		pullzp1  pla
-.09e9	28		         plp
-.09ea	60		         rts
-.09eb			deczp2
-.09eb	08		         php
-.09ec	48		         pha
-.09ed	c6 fd		         dec zp2
-.09ef	a5 fd		         lda zp2
-.09f1	c9 ff		         cmp #$ff
-.09f3	d0 02		         bne pullzp2
-.09f5	c6 fe		         dec zp2+1
-.09f7	68		pullzp2  pla
-.09f8	28		         plp
-.09f9	60		         rts
+.09ed			inczp1
+.09ed	08		         php
+.09ee	e6 fb		         inc zp1
+.09f0	d0 02		         bne repzp1
+.09f2	e6 fc		         inc zp1+1
+.09f4	28		repzp1   plp
+.09f5	60		         rts
+.09f6			inczp2
+.09f6	08		         php
+.09f7	e6 fd		         inc zp2
+.09f9	d0 02		         bne repzp2
+.09fb	e6 fe		         inc zp2+1
+.09fd	28		repzp2   plp
+.09fe	60		         rts
+.09ff			deczp1
+.09ff	08		         php
+.0a00	48		         pha
+.0a01	c6 fb		         dec zp1
+.0a03	a5 fb		         lda zp1
+.0a05	c9 ff		         cmp #$ff
+.0a07	d0 02		         bne pullzp1
+.0a09	c6 fc		         dec zp1+1
+.0a0b	68		pullzp1  pla
+.0a0c	28		         plp
+.0a0d	60		         rts
+.0a0e			deczp2
+.0a0e	08		         php
+.0a0f	48		         pha
+.0a10	c6 fd		         dec zp2
+.0a12	a5 fd		         lda zp2
+.0a14	c9 ff		         cmp #$ff
+.0a16	d0 02		         bne pullzp2
+.0a18	c6 fe		         dec zp2+1
+.0a1a	68		pullzp2  pla
+.0a1b	28		         plp
+.0a1c	60		         rts
 
 ;******  Return to file: prog.asm
 
 
 ;******  Processing file: l-conv.asm
 
-.09fa			putyxhex
-.09fa	20 06 09	         jsr pushall
-.09fd	98		         tya
-.09fe	48		         pha
-.09ff	20 53 0a	         jsr lsr4bits
-.0a02	20 5a 0a	         jsr nibtohex
-.0a05	8d 6a 0a	         sta hexstr+0
-.0a08	68		         pla
-.0a09	20 5a 0a	         jsr nibtohex
-.0a0c	8d 6b 0a	         sta hexstr+1
-.0a0f	8a		         txa
-.0a10	20 38 0a	         jsr atohex
-.0a13	a2 6a		         ldx #<hexstr+0
-.0a15	a0 0a		         ldy #>hexstr+0
-.0a17	20 9c 0a	         jsr putsyx
-.0a1a	20 41 09	         jsr popall
-.0a1d	60		         rts
-.0a1e			putahex
-.0a1e	08		         php
-.0a1f	48		         pha
-.0a20	8d 37 0a	         sta thisra
-.0a23	98		         tya
-.0a24	48		         pha
-.0a25	ad 37 0a	         lda thisra
-.0a28	20 38 0a	         jsr atohex
-.0a2b	a2 6c		         ldx #<hexstr+2
-.0a2d	a0 0a		         ldy #>hexstr+2
-.0a2f	20 9c 0a	         jsr putsyx
-.0a32	68		         pla
-.0a33	a8		         tay
-.0a34	68		         pla
-.0a35	28		         plp
-.0a36	60		         rts
->0a37	00		thisra   .byte $00
-.0a38			atohex
-.0a38	08		         php
-.0a39	48		         pha
-.0a3a	48		         pha
-.0a3b	20 53 0a	         jsr lsr4bits
-.0a3e	20 5a 0a	         jsr nibtohex
-.0a41	8d 6c 0a	         sta hexstr+2
-.0a44	68		         pla
-.0a45	20 5a 0a	         jsr nibtohex
-.0a48	8d 6d 0a	         sta hexstr+3
-.0a4b	a9 00		         lda #$00
-.0a4d	8d 6e 0a	         sta hexstr+4
-.0a50	68		         pla
-.0a51	28		         plp
-.0a52	60		         rts
-.0a53			lsr4bits
-.0a53	08		         php
-.0a54	4a		         lsr a
-.0a55	4a		         lsr a
-.0a56	4a		         lsr a
-.0a57	4a		         lsr a
+.0a1d			putyxhex
+.0a1d	20 29 09	         jsr pushall
+.0a20	98		         tya
+.0a21	48		         pha
+.0a22	20 76 0a	         jsr lsr4bits
+.0a25	20 7d 0a	         jsr nibtohex
+.0a28	8d 8d 0a	         sta hexstr+0
+.0a2b	68		         pla
+.0a2c	20 7d 0a	         jsr nibtohex
+.0a2f	8d 8e 0a	         sta hexstr+1
+.0a32	8a		         txa
+.0a33	20 5b 0a	         jsr atohex
+.0a36	a2 8d		         ldx #<hexstr+0
+.0a38	a0 0a		         ldy #>hexstr+0
+.0a3a	20 bf 0a	         jsr putsyx
+.0a3d	20 64 09	         jsr popall
+.0a40	60		         rts
+.0a41			putahex
+.0a41	08		         php
+.0a42	48		         pha
+.0a43	8d 5a 0a	         sta thisra
+.0a46	98		         tya
+.0a47	48		         pha
+.0a48	ad 5a 0a	         lda thisra
+.0a4b	20 5b 0a	         jsr atohex
+.0a4e	a2 8f		         ldx #<hexstr+2
+.0a50	a0 0a		         ldy #>hexstr+2
+.0a52	20 bf 0a	         jsr putsyx
+.0a55	68		         pla
+.0a56	a8		         tay
+.0a57	68		         pla
 .0a58	28		         plp
 .0a59	60		         rts
-.0a5a			nibtohex
-.0a5a	08		         php
-.0a5b	29 0f		         and #$0f
-.0a5d	f8		         sed
-.0a5e	18		         clc
-.0a5f	69 90		         adc #$90
-.0a61	69 40		         adc #$40
-.0a63	d8		         cld
-.0a64	28		         plp
-.0a65	60		         rts
->0a66	01		a2hexcol .byte $01
-.0a67			a2hexpos
->0a67	01		a2hexpx  .byte $01
->0a68	01		a2hexpy  .byte $01
->0a69	24		a2hexpfx .byte 36
->0a6a	00 00 00 00	hexstr   .byte $00,$00,$00,$00,$00
->0a6e	00
->0a6f	01		a2bincol .byte $01
-.0a70			a2binpos
->0a70	01		a2binpx  .byte $01
->0a71	01		a2binpy  .byte $01
->0a72	25		a2binpfx .byte 37
->0a73	30 30 30 30	binstr   .null "00000000"
->0a77	30 30 30 30 00
->0a7c	01		a2deccol .byte $01
-.0a7d			a2decpos
->0a7d	01		a2decpx  .byte $01
->0a7e	01		a2decpy  .byte $01
->0a7f	25		a2decpfx .byte 37
->0a80	30 30 30 30	decstr   .null "00000"
->0a84	30 00
+>0a5a	00		thisra   .byte $00
+.0a5b			atohex
+.0a5b	08		         php
+.0a5c	48		         pha
+.0a5d	48		         pha
+.0a5e	20 76 0a	         jsr lsr4bits
+.0a61	20 7d 0a	         jsr nibtohex
+.0a64	8d 8f 0a	         sta hexstr+2
+.0a67	68		         pla
+.0a68	20 7d 0a	         jsr nibtohex
+.0a6b	8d 90 0a	         sta hexstr+3
+.0a6e	a9 00		         lda #$00
+.0a70	8d 91 0a	         sta hexstr+4
+.0a73	68		         pla
+.0a74	28		         plp
+.0a75	60		         rts
+.0a76			lsr4bits
+.0a76	08		         php
+.0a77	4a		         lsr a
+.0a78	4a		         lsr a
+.0a79	4a		         lsr a
+.0a7a	4a		         lsr a
+.0a7b	28		         plp
+.0a7c	60		         rts
+.0a7d			nibtohex
+.0a7d	08		         php
+.0a7e	29 0f		         and #$0f
+.0a80	f8		         sed
+.0a81	18		         clc
+.0a82	69 90		         adc #$90
+.0a84	69 40		         adc #$40
+.0a86	d8		         cld
+.0a87	28		         plp
+.0a88	60		         rts
+>0a89	01		a2hexcol .byte $01
+.0a8a			a2hexpos
+>0a8a	01		a2hexpx  .byte $01
+>0a8b	01		a2hexpy  .byte $01
+>0a8c	24		a2hexpfx .byte 36
+>0a8d	00 00 00 00	hexstr   .byte $00,$00,$00,$00,$00
+>0a91	00
+>0a92	01		a2bincol .byte $01
+.0a93			a2binpos
+>0a93	01		a2binpx  .byte $01
+>0a94	01		a2binpy  .byte $01
+>0a95	25		a2binpfx .byte 37
+>0a96	30 30 30 30	binstr   .null "00000000"
+>0a9a	30 30 30 30 00
+>0a9f	01		a2deccol .byte $01
+.0aa0			a2decpos
+>0aa0	01		a2decpx  .byte $01
+>0aa1	01		a2decpy  .byte $01
+>0aa2	25		a2decpfx .byte 37
+>0aa3	30 30 30 30	decstr   .null "00000"
+>0aa7	30 00
 
 ;******  Return to file: prog.asm
 
 
 ;******  Processing file: l-string.asm
 
-.0a86			puts
-.0a86	08		         php        ;Sauve. registres
-.0a87	48		         pha        ; ...
-.0a88	98		         tya        ; ...
-.0a89	48		         pha        ; ...
-.0a8a	a0 00		         ldy #$00   ; Y = offset
-.0a8c	b1 fb		nextc    lda ($fb),y;lit un caractere
-.0a8e	f0 07		         beq out    ;si 0 on sort
-.0a90	20 d2 ff	         jsr $ffd2  ;On l'affiche
-.0a93	c8		         iny        ;Pointe le prochain
-.0a94	4c 8c 0a	         jmp nextc  ; et l'affiche
-.0a97	68		out      pla        ;Recup. registres
-.0a98	a8		         tay        ; ...
-.0a99	68		         pla        ; ...
-.0a9a	28		         plp        ; ...
-.0a9b	60		         rts
-.0a9c			putsyx
-.0a9c	20 06 09	         jsr pushall;Sauve reg + zps
-.0a9f	86 fb		         stx $fb    ;$YYXX dans
-.0aa1	84 fc		         sty $fb+1  ; zp1
-.0aa3	20 86 0a	         jsr puts
-.0aa6	20 41 09	         jsr popall ;Recup reg + zps
-.0aa9	60		         rts
-.0aaa			putsc
-.0aaa	08		         php        ;Flag sur stack
-.0aab	48		         pha        ;Acc sur stack
-.0aac	48		         pha        ;Sauvegarde acc
-.0aad	ad 86 02	         lda kcol   ;Recup coul. carac.
-.0ab0	8d ab 02	         sta curcol ; et la sauvegarde
-.0ab3	68		         pla        ;Recup. Acc
-.0ab4	8d 86 02	         sta kcol   ;Place coul. voulue
-.0ab7	20 86 0a	         jsr puts   ;Affiche la chaine
-.0aba	ad ab 02	         lda curcol ;Recup coul. carac.
-.0abd	8d 86 02	         sta kcol   ; et la replace
-.0ac0	68		         pla        ;Recup Acc
-.0ac1	28		         plp        ;Recup flag
-.0ac2	60		         rts
-.0ac3			putxcxy
-.0ac3	08		         php       ;Sauve registres
-.0ac4	48		         pha       ; ...
-.0ac5	48		         pha       ;Sauve Acc
-.0ac6	ad 86 02	         lda kcol  ;Recup couleur carac.
-.0ac9	8d ab 02	         sta curcol; et sauvegarde
-.0acc	68		         pla       ;Recup Acc
-.0acd	8d 86 02	         sta kcol  ;Place couleur carac.
-.0ad0	20 9c 0a	         jsr putsyx;Affiche la chaine
-.0ad3	ad ab 02	         lda curcol
-.0ad6	8d 86 02	         sta kcol
-.0ad9	68		         pla
-.0ada	28		         plp
-.0adb	60		         rts
+.0aa9			puts
+.0aa9	08		         php        ;Sauve. registres
+.0aaa	48		         pha        ; ...
+.0aab	98		         tya        ; ...
+.0aac	48		         pha        ; ...
+.0aad	a0 00		         ldy #$00   ; Y = offset
+.0aaf	b1 fb		nextc    lda ($fb),y;lit un caractere
+.0ab1	f0 07		         beq out    ;si 0 on sort
+.0ab3	20 d2 ff	         jsr $ffd2  ;On l'affiche
+.0ab6	c8		         iny        ;Pointe le prochain
+.0ab7	4c af 0a	         jmp nextc  ; et l'affiche
+.0aba	68		out      pla        ;Recup. registres
+.0abb	a8		         tay        ; ...
+.0abc	68		         pla        ; ...
+.0abd	28		         plp        ; ...
+.0abe	60		         rts
+.0abf			putsyx
+.0abf	20 29 09	         jsr pushall;Sauve reg + zps
+.0ac2	86 fb		         stx $fb    ;$YYXX dans
+.0ac4	84 fc		         sty $fb+1  ; zp1
+.0ac6	20 a9 0a	         jsr puts
+.0ac9	20 64 09	         jsr popall ;Recup reg + zps
+.0acc	60		         rts
+.0acd			putsc
+.0acd	08		         php        ;Flag sur stack
+.0ace	48		         pha        ;Acc sur stack
+.0acf	48		         pha        ;Sauvegarde acc
+.0ad0	ad 86 02	         lda kcol   ;Recup coul. carac.
+.0ad3	8d ab 02	         sta curcol ; et la sauvegarde
+.0ad6	68		         pla        ;Recup. Acc
+.0ad7	8d 86 02	         sta kcol   ;Place coul. voulue
+.0ada	20 a9 0a	         jsr puts   ;Affiche la chaine
+.0add	ad ab 02	         lda curcol ;Recup coul. carac.
+.0ae0	8d 86 02	         sta kcol   ; et la replace
+.0ae3	68		         pla        ;Recup Acc
+.0ae4	28		         plp        ;Recup flag
+.0ae5	60		         rts
+.0ae6			putxcxy
+.0ae6	08		         php       ;Sauve registres
+.0ae7	48		         pha       ; ...
+.0ae8	48		         pha       ;Sauve Acc
+.0ae9	ad 86 02	         lda kcol  ;Recup couleur carac.
+.0aec	8d ab 02	         sta curcol; et sauvegarde
+.0aef	68		         pla       ;Recup Acc
+.0af0	8d 86 02	         sta kcol  ;Place couleur carac.
+.0af3	20 bf 0a	         jsr putsyx;Affiche la chaine
+.0af6	ad ab 02	         lda curcol
+.0af9	8d 86 02	         sta kcol
+.0afc	68		         pla
+.0afd	28		         plp
+.0afe	60		         rts
 
 ;******  Return to file: prog.asm
 
 
 ;******  Processing file: l-float.asm
 
-.0adc			clrbasbuf
-.0adc	08		        php
-.0add	48		        pha
-.0ade	98		        tya
-.0adf	48		        pha
-.0ae0	a9 00		        lda #$00
-.0ae2	a0 59		        ldy #$59
-.0ae4	99 00 02	again   sta $0200,y
-.0ae7	88		        dey
-.0ae8	d0 fa		        bne again
-.0aea	68		        pla
-.0aeb	a8		        tay
-.0aec	68		        pla
-.0aed	28		        plp
-.0aee	60		        rts
-.0aef			getfac1
-.0aef	20 74 09	        jsr pushregs
-.0af2	20 dc 0a	        jsr clrbasbuf
-.0af5	20 f9 ab	        jsr prompt
-.0af8	86 7a		        stx $7a
-.0afa	84 7b		        sty $7b
-.0afc	20 73 00	        jsr chrget
-.0aff	20 f3 bc	        jsr fasctf1 ;conv. ascii->float
-.0b02	20 a3 09	        jsr popregs
-.0b05	60		        rts
-.0b06			prnfac1
-.0b06	20 06 09	        jsr pushall
-.0b09	20 dd bd	        jsr ff1tasc
-.0b0c	a0 01		        ldy >#fascii
-.0b0e	a2 00		        ldx <#fascii
-.0b10	20 9c 0a	        jsr putsyx
-.0b13	20 41 09	        jsr popall
-.0b16	60		        rts
-.0b17			floattest
-.0b17	08		        php
-.0b18	48		        pha
-.0b19	a9 07		        lda #$07
-.0b1b	8d 86 02	        sta kcol
-.0b1e	20 ef 0a	        jsr getfac1
-.0b21	a9 03		        lda #$03
-.0b23	8d 86 02	        sta kcol
-.0b26	20 06 0b	        jsr prnfac1
-.0b29	a9 01		        lda #$01
-.0b2b	8d 86 02	        sta kcol
-.0b2e	68		        pla
-.0b2f	28		        plp
-.0b30	60		        rts
+.0aff			clrbasbuf
+.0aff	08		        php
+.0b00	48		        pha
+.0b01	98		        tya
+.0b02	48		        pha
+.0b03	a9 00		        lda #$00
+.0b05	a0 59		        ldy #$59
+.0b07	99 00 02	again   sta $0200,y
+.0b0a	88		        dey
+.0b0b	d0 fa		        bne again
+.0b0d	68		        pla
+.0b0e	a8		        tay
+.0b0f	68		        pla
+.0b10	28		        plp
+.0b11	60		        rts
+.0b12			getfac1
+.0b12	20 97 09	        jsr pushregs
+.0b15	20 ff 0a	        jsr clrbasbuf
+.0b18	20 f9 ab	        jsr prompt
+.0b1b	86 7a		        stx $7a
+.0b1d	84 7b		        sty $7b
+.0b1f	20 73 00	        jsr chrget
+.0b22	20 f3 bc	        jsr fasctf1 ;conv. ascii->float
+.0b25	20 c6 09	        jsr popregs
+.0b28	60		        rts
+.0b29			prnfac1
+.0b29	20 29 09	        jsr pushall
+.0b2c	20 dd bd	        jsr ff1tasc
+.0b2f	a0 01		        ldy >#fascii
+.0b31	a2 00		        ldx <#fascii
+.0b33	20 bf 0a	        jsr putsyx
+.0b36	20 64 09	        jsr popall
+.0b39	60		        rts
 
 ;******  Return to file: prog.asm
 

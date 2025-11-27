@@ -28,7 +28,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.""
-SOURCENAME=template
+SOURCENAME=p027ex03
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 # DEPSLOCALES=strings_fr.asm  strings_en.asm
 # -----------------------------------------------------------------------------

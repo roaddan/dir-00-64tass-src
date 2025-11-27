@@ -50,20 +50,3 @@ prnfac1
         rts
         .bend
 ;---------------------------------------
-floattest
-        .block
-        php
-        pha
-        lda #$07
-        sta kcol
-        jsr getfac1
-        lda #$03
-        sta kcol
-        jsr prnfac1
-        lda #$01
-        sta kcol
-        pla
-        plp
-        rts
-        .bend
-;---------------------------------------

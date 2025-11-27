@@ -82,7 +82,7 @@ pop       .block         ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1
           plp            ; stack : pcl, pch              
           rts
           .bend       
-
+pushregs
 pushreg   .block         ; stack : pcl, pch
           php            ; stack : flg, pcl, pch  
           sei
@@ -113,6 +113,8 @@ pushreg   .block         ; stack : pcl, pch
           rts
           .bend
 
+popregs
+pullregs
 pullreg
 popreg    .block         ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
           sei

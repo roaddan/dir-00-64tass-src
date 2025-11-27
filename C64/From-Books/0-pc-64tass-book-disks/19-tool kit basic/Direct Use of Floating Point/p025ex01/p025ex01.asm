@@ -31,9 +31,6 @@ akey      .block
           jsr  kbflushbuff
           jsr  anykey
           rts
-kmsg      .byte $0d
-          .null               "Une clef pour continuer!"
-kmsgend                      
           .bend
 
 main      .block
@@ -51,7 +48,7 @@ main      .block
           rts
           .bend
             
-help           .block      
+help      .block      
           #lowercase
           jsr       cls
           #print    line
@@ -62,43 +59,8 @@ help           .block
           #print    helptext
           #print    line
           rts
-                     
-headera                       ;0123456789012345678901234567890123456789
-          .text               " *       Vic-20 and Commodore 64      *"
-          .byte     $0d
-          .text               " *           Tool Kit: BASIC          *"
-          .byte     $0d
-          .text               " *          Book by Dan Heeb.         *"
-          .byte     $0d
-          .null               " *         ISBN: 0-942386-32-9        *"
-
-headerb   .byte     $0d
-          .text               " *    Direct Use of Floating Point    *"
-          .byte     $0d
-          .text               " *         page 25, exemple #1        *"
-          .byte     $0d
-          .text               " *    Programmeur Daniel Lafrance.    *"
-          .byte     $0d
-          .null     format(   " *      Version: %s.     * ",Version)
-
-
-shortcuts .text               "        RACCOURCIS DES EXEMPLES       "
-          .byte     $0d,$0d
-          .text     format(   " p025ex01: SYS %d ($%04X)",p025ex01, p025ex01)
-          .byte     $0d
-          .text     format(   " help....: SYS %d ($%04X)",help, help)
-          .byte     $0d
-          .text     format(   " cls.....: SYS %d ($%04X)",cls, cls)
-          .byte     $0d,0
-helptext  .byte     $0d
-          .text     format(   " ex.: SYS%d",p025ex01)
-;          .byte     $0d
-;          .text     format(   "      for i=0to100:SYS%05d:next",p025ex01)
-          .byte     $0d,0
-line      .text               " --------------------------------------"
-          .byte     $0d,0
           .bend
-;*=$4000
+        .include "string-fr.asm"                     
 
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
@@ -107,8 +69,10 @@ line      .text               " --------------------------------------"
           .include "map-c64-kernal.asm"
           .include "map-c64-vicii.asm" 
           .include "map-c64-basic2.asm"
+          .include "lib-c64-vicii.asm"
           .include "lib-c64-basic2.asm"
           .include "lib-cbm-pushpop.asm"
+          .include "lib-c64-std-showregs.asm"
           .include "lib-cbm-mem.asm"
           .include "lib-cbm-hex.asm"
           .include "lib-cbm-keyb.asm"
