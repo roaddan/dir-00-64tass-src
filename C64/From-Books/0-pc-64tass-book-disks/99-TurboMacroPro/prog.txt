@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.54.1900 listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L prog.txt -o prog.prg prog.asm
-; Thu Nov 27 01:03:44 2025
+; Sun Nov 30 00:45:41 2025
 
 ;Offset	;Hex		;Source
 
@@ -385,14 +385,14 @@
 ;******  Return to file: prog.asm
 
 .082d			main
-.082d	20 b8 0b	         jsr anykey
+.082d	20 b7 0b	         jsr anykey
 .0830	a2 c8		         ldx #200
 .0832	a0 96		         ldy #150
 .0834	20 05 09	         jsr calcdot
-.0837	20 b8 0b	         jsr anykey
+.0837	20 b7 0b	         jsr anykey
 .083a	ad 5d 09	         lda col
 .083d	20 92 08	         jsr putahexdec
-.0840	20 b8 0b	         jsr anykey
+.0840	20 b7 0b	         jsr anykey
 .0843	08		         php
 .0844	48		         pha
 .0845	a9 0d		         lda #$0d
@@ -401,7 +401,7 @@
 .084b	28		         plp
 .084c	ad 5c 09	         lda row
 .084f	20 92 08	         jsr putahexdec
-.0852	20 b8 0b	         jsr anykey
+.0852	20 b7 0b	         jsr anykey
 .0855	08		         php
 .0856	48		         pha
 .0857	a9 0d		         lda #$0d
@@ -410,7 +410,7 @@
 .085d	28		         plp
 .085e	ad 5e 09	         lda lin
 .0861	20 92 08	         jsr putahexdec
-.0864	20 b8 0b	         jsr anykey
+.0864	20 b7 0b	         jsr anykey
 .0867	08		         php
 .0868	48		         pha
 .0869	a9 0d		         lda #$0d
@@ -419,7 +419,7 @@
 .086f	28		         plp
 .0870	ad 5f 09	         lda sbit
 .0873	20 92 08	         jsr putahexdec
-.0876	20 b8 0b	         jsr anykey
+.0876	20 b7 0b	         jsr anykey
 .0879	08		         php
 .087a	48		         pha
 .087b	a9 0d		         lda #$0d
@@ -427,7 +427,7 @@
 .0880	68		         pla
 .0881	28		         plp
 .0882	20 3f 09	         jsr floattest
-.0885	20 b8 0b	         jsr anykey
+.0885	20 b7 0b	         jsr anykey
 .0888	08		         php
 .0889	48		         pha
 .088a	a9 0d		         lda #$0d
@@ -923,55 +923,53 @@
 .0baa			waitstop
 .0baa	08		            php   ;\ sauve les flags
 .0bab	48		            pha   ;/  et l'acc.
-.0bac	a9 00		            lda #0 ;\ efface le tampon
-.0bae	85 c6		            sta 198;/  du clavier.
-.0bb0	20 ed f6	wait        jsr k_stop;cherche la clef
-.0bb3	d0 fb		            bne  wait ;loop pas pesee.
-.0bb5	68		            pla    ;\ recup. acc et
-.0bb6	28		            plp    ;/  les flags.
-.0bb7	60		            rts
-.0bb8			anykey
-.0bb8	08		            php     ;\ sauve les flags
-.0bb9	48		            pha     ;/  et l'acc.
-.0bba	a5 cb		wait        lda 203 ;lit la matrice de
-.0bbc	c9 40		            cmp #64 ; si 64 alors aucune
-.0bbe	f0 fa		            beq wait; on attend qu'il y
-.0bc0	20 ca 0b	            jsr kbfree ; on attend que
-.0bc3	a9 00		            lda #0 ;\ efface le tampon
-.0bc5	85 c6		            sta 198;/  du clavier.
-.0bc7	68		            pla     ;\ recup. l'acc et
-.0bc8	28		            plp     ;/  les flags.
-.0bc9	60		            rts
-.0bca			kbfree
-.0bca	08		            php     ;\ sauve les flags
-.0bcb	48		            pha     ;/  et l'acc.
-.0bcc	a5 cb		wait        lda 203 ;lit la matrice de
-.0bce	c9 40		            cmp #64 ; si 64 alors aucune
-.0bd0	d0 fa		            bne wait;on attend qu'il y
-.0bd2	68		            pla     ;\ recup. l'acc et
-.0bd3	28		            plp     ;/  les flags.
-.0bd4	60		            rts
-.0bd5			getkey
-.0bd5	08		            php     ; sauve les flags.
-.0bd6	20 e4 ff	try         jsr getin ;tente de lire
-.0bd9	c9 00		            cmp #0  ; 0 si aucune.
-.0bdb	f0 f9		            beq try ; aucune, on attend.
-.0bdd	08		            php     ; recup. les flags.
-.0bde	60		            rts
-.0bdf			kbflushbuff
-.0bdf	08		            php     ;\ sauve les flags
-.0be0	48		            pha     ;/  et l'acc.
-.0be1	a9 00		            lda #0  ;\ efface le tampon
-.0be3	85 c6		            sta 198 ;/  du clavier.
-.0be5	68		            pla     ;\ recup. l'acc et
-.0be6	28		            plp     ;/  les flags.
-.0be7	60		            rts
-.0be8			waitkey
-.0be8	08		            php      ;\ sauve les flags
-.0be9	48		            pha      ;/  et l'acc.
-.0bea	8d 21 0c	            sta clef ; sauve cle voulue.
-.0bed	a9 00		            lda #0   ;\ efface le tampon
-.0bef	85 c6		            sta 198  ;/  du clavier.
+.0bac	20 e0 0b	            jsr clrkbbuf
+.0baf	20 ed f6	wait        jsr k_stop;cherche la clef
+.0bb2	d0 fb		            bne  wait ;loop pas pesee.
+.0bb4	68		            pla    ;\ recup. acc et
+.0bb5	28		            plp    ;/  les flags.
+.0bb6	60		            rts
+.0bb7			anykey
+.0bb7	08		            php     ;\ sauve les flags
+.0bb8	48		            pha     ;/  et l'acc.
+.0bb9	20 e0 0b	            jsr clrkbbuf
+.0bbc	a5 cb		wait        lda 203 ;lit la matrice de
+.0bbe	c9 40		            cmp #64 ; si 64 alors aucune
+.0bc0	f0 fa		            beq wait; on attend qu'il y
+.0bc2	20 cb 0b	            jsr kbfree ; on attend que
+.0bc5	20 e0 0b	            jsr clrkbbuf
+.0bc8	68		            pla     ;\ recup. l'acc et
+.0bc9	28		            plp     ;/  les flags.
+.0bca	60		            rts
+.0bcb			kbfree
+.0bcb	08		            php     ;\ sauve les flags
+.0bcc	48		            pha     ;/  et l'acc.
+.0bcd	a5 cb		wait        lda 203 ;lit la matrice de
+.0bcf	c9 40		            cmp #64 ; si 64 alors aucune
+.0bd1	d0 fa		            bne wait;on attend qu'il y
+.0bd3	68		            pla     ;\ recup. l'acc et
+.0bd4	28		            plp     ;/  les flags.
+.0bd5	60		            rts
+.0bd6			getkey
+.0bd6	08		            php     ; sauve les flags.
+.0bd7	20 e4 ff	try         jsr getin ;tente de lire
+.0bda	c9 00		            cmp #0  ; 0 si aucune.
+.0bdc	f0 f9		            beq try ; aucune, on attend.
+.0bde	08		            php     ; recup. les flags.
+.0bdf	60		            rts
+.0be0			clrkbbuf
+.0be0	08		            php     ;\ sauve les flags
+.0be1	48		            pha     ;/  et l'acc.
+.0be2	a9 00		            lda #0  ;\ efface le tampon
+.0be4	85 c6		            sta 198 ;/  du clavier.
+.0be6	68		            pla     ;\ recup. l'acc et
+.0be7	28		            plp     ;/  les flags.
+.0be8	60		            rts
+.0be9			waitkey
+.0be9	08		            php      ;\ sauve les flags
+.0bea	48		            pha      ;/  et l'acc.
+.0beb	8d 21 0c	            sta clef ; sauve cle voulue.
+.0bee	20 e0 0b	            jsr clrkbbuf
 .0bf1	20 e4 ff	wait        jsr getin; tente lire clef.
 .0bf4	cd 21 0c	            cmp clef ;compare avec clef
 .0bf7	d0 f8		            bne wait ;pas la bonne.

@@ -1,7 +1,7 @@
 ;---------------------------------------
+; nom du fichier .:
 ; scripteur ......: daniel lafrance, 
 ;                   quebec, canada.
-; nom du fichier .:
 ; cerniere m.à j. : 
 ; inspiration ....: 
 ;---------------------------------------
@@ -11,8 +11,7 @@ waitstop
             .block
             php   ;\ sauve les flags
             pha   ;/  et l'acc.
-            lda #0 ;\ efface le tampon 
-            sta 198;/  du clavier.
+            jsr clrkbbuf
 wait        jsr k_stop;cherche la clef
                       ; [run/stop].
             bne  wait ;loop pas pesee.
@@ -28,8 +27,7 @@ anykey
             .block
             php     ;\ sauve les flags 
             pha     ;/  et l'acc.
-;            lda #0  ;\ efface le tampon 
-;            sta 198 ;/  du clavier.
+            jsr clrkbbuf
 wait        lda 203 ;lit la matrice de 
                     ; la clef actuelle 
                     ; dans le tampon.     
@@ -40,8 +38,7 @@ wait        lda 203 ;lit la matrice de
             jsr kbfree ; on attend que 
                        ;le clavier soit 
                        ;relache.
-            lda #0 ;\ efface le tampon 
-            sta 198;/  du clavier.
+            jsr clrkbbuf
             pla     ;\ recup. l'acc et 
             plp     ;/  les flags.
             rts
@@ -79,7 +76,7 @@ try         jsr getin ;tente de lire
             rts
             .bend
 ;---------------------------------------
-kbflushbuff
+clrkbbuf
 ;---------------------------------------
             .block
             php     ;\ sauve les flags 
@@ -99,8 +96,7 @@ waitkey
             php      ;\ sauve les flags 
             pha      ;/  et l'acc.
             sta clef ; sauve cle voulue.          
-            lda #0   ;\ efface le tampon 
-            sta 198  ;/  du clavier.
+            jsr clrkbbuf
 wait        jsr getin; tente lire clef. 
             ;jsr chrout  ; l'affiche.
             cmp clef ;compare avec clef
