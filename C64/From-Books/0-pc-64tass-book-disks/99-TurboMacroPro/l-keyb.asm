@@ -36,25 +36,25 @@ wait      jsr k_stop  ; Veri [run/stop]
 ; appuyee/relachee.
 anykey
 ;---------------------------------------
-            .block
-            php     ;\ sauve les flags 
-            pha     ;/  et l'acc.
-            jsr clrkbbuf
-wait        lda 203 ;lit la matrice de 
-                    ; la clef actuelle 
-                    ; dans le tampon.    
-            cmp #64 ; si 64 alors aucune
-                    ; clef appuyee.
-            beq wait; on attend qu'il y 
-                    ; en aie une.
-            jsr kbfree ; on attend que 
-                       ;le clavier soit 
-                       ;relache.
-            jsr clrkbbuf
-            pla     ;\ recup. l'acc et 
-            plp     ;/  les flags.
-            rts
-            .bend
+        .block
+        php     ;\ sauve les flags 
+        pha     ;/  et l'acc.
+        jsr clrkbbuf
+wait    lda 203 ;lit la matrice de 
+                ; la clef actuelle 
+                ; dans le tampon.    
+        cmp #64 ; si 64 alors aucune
+                ; clef appuyee.
+        beq wait; on attend qu'il y 
+                ; en aie une.
+        jsr kbfree ; on attend que 
+                   ;le clavier soit 
+                   ;relache.
+        jsr clrkbbuf
+        pla     ;\ recup. l'acc et 
+        plp     ;/  les flags.
+        rts
+        .bend
 ;---------------------------------------
 ; attend que les touches du clavier 
 ; soient relachees.
