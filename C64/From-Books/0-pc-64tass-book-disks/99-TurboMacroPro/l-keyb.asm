@@ -16,7 +16,7 @@ clrkbbuf
             sta 198
             pla
             plp
-            rta
+            rts
             .bend
 ;---------------------------------------
 waitstop
@@ -42,12 +42,12 @@ anykey
             jsr clrkbbuf
 wait        lda 203 ;lit la matrice de 
                     ; la clef actuelle 
-                    ; dans le tampon.     
+                    ; dans le tampon.    
             cmp #64 ; si 64 alors aucune
                     ; clef appuyee.
             beq wait; on attend qu'il y 
                     ; en aie une.
-            ;jsr kbfree ; on attend que 
+            jsr kbfree ; on attend que 
                        ;le clavier soit 
                        ;relache.
             jsr clrkbbuf
