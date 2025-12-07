@@ -25,7 +25,7 @@ waitstop
           php    ;\ sauve les flags
           pha    ;/  et l'acc.
           jsr clrkbbuf
-wait      jsr k_stop  ; Veri [run/stop]
+wait      jsr stop    ; Veri [run/stop]
           bne  wait   ;loop pas pesee.
           pla    ;\ recup. acc et 
           plp    ;/  les flags.
