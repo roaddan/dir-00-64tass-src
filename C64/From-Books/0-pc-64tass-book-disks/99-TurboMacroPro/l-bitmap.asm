@@ -1,4 +1,10 @@
 ;---------------------------------------
+; nom fichier..: l-bitmap.asm (seq)
+; type fichier.: source pour t.m.p.
+; auteur.......: daniel lafrance
+; version......: 20151207
+; revision.....: 0.0.1
+;---------------------------------------
 bmapinit
          .block
          php

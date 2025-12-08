@@ -94,6 +94,7 @@ DBC=/Users/Locals/C64/00-usbkey32go/dbc
 JBMON64=/Users/Locals/C64/00-usbkey32go/d-mes-utils/jbmon.prg
 CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
 J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
+TMPREU=/Users/Locals/C64/00-usbkey32go/tmpreu.prg
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
@@ -151,11 +152,11 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # ** Using comment, you can mask or enable anny action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
+		$(FTPPRGCMD)	# To transfer the resulting PRG program file.;
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
 		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
-		$(FTPASMCMD)	# To transfer the source ASM file.
-		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
+#		$(FTPASMCMD)	# To transfer the source ASM file.
+#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
 		$(VICE) $(AUTOSTART) $(TMPSEP06) & # to load vice with arguments.
 
@@ -189,6 +190,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
+		-write $(TMPREU) tmpreu \
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
@@ -197,6 +199,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
+		-write $(TMPREU) tmpreu \
 		-write $(JBMON64) jbmon64 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
