@@ -39,21 +39,29 @@ drawbox .block  ;tp,lf,wd,ht,co,titre
         stx zp1
         ldy #$00       
         lda (zp1),y
-        iny
-        sta dbtop
+        jsr inczp1
+        sta dbleft  ;Initialise gauche
+n        lda (zp1),y 
+        jsr inczp1
+        sta dbtop   ;initialise top
+        lda (zp1),y ;
+        jsr inczp1
+        sta dbwdth  ;Initialise width. 
+        lda (zp1),y 
+        jsr inczp1
+        sta dbhght  ;Initialise height.
+
+        lda dbtop   ;initialise top
         sta dbclin  ;position de ligne
-        lda (zp1),y ;Initialise left.
-        iny
-        sta dbleft
-        lda (zp1),y ;Initialise width.
-        iny
-        sta dbwdth
-        lda (zp1),y ;Initialise height.
-        iny
-        sta dbhght
-        lda (zp1),y    ;Initialise couleur.
-        iny
+
+        lda kcol
+        sta curcol
+
+        lda (zp1),y ;Initialise couleur.
+        sta kcol
         sta dbcoul
+
+        jsr inczp1
         jsr dbdraw  ;Dessine la fenêtre.
                     ;Affiche le titre.
         ldx dbleft
@@ -61,8 +69,11 @@ drawbox .block  ;tp,lf,wd,ht,co,titre
         inx
         ldy dbtop
         jsr gotoxy
-        lda dbcoul
-        jsr putsc
+        jsr puts
+
+        lda curcol
+        sta kcol
+
         jsr popall
         rts
         .bend
@@ -179,7 +190,7 @@ dbdrawline
         .block
         jsr pushregs;Sauve registres
         lda kcol    ;Sauvegarde de la-
-        sta dbbcoul ;-couleur basic.
+        sta curcol ;-couleur basic.
         lda dbcoul  ;Sélect. couleur-     
         sta kcol    ;-fenêtre.
         cmp #$10    ;Couleur inverse?
@@ -201,7 +212,7 @@ norev   ldx dbclin  ;posit curseur au-
         jsr chrout
         lda #146    ;fin inverse vidéo
         jsr chrout
-        lda dbbcoul ;replace la couleur
+        lda curcol ;replace la couleur
         sta kcol    ;basic.
         inc dbclin;ligne suivante.
         jsr popregs ;Récup registres
@@ -249,4 +260,4 @@ dbwdth  .byte   0   ;Larg de la boîte.
 dbhght  .byte   0   ;Haut de la boîte.
 dbcoul  .byte   0   ;Coul de la boîte.
 dbclin  .byte   0   ;No ligne courante
-dbbcoul .byte   0   ;couleur Basic.   
+ 

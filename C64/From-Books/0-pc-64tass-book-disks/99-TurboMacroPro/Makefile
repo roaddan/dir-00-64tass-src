@@ -30,7 +30,7 @@ PRGDIR=d-00-64tass-bin
 # Could be different for every project.""
 SOURCENAME=dlbug64
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
-# DEPSLOCALES=strings_fr.asm  strings_en.asm
+#DEPSLOCALES=strings_fr.asm  strings_en.asm
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
