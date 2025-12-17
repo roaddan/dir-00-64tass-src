@@ -33,34 +33,39 @@
 ;      >16=inverse.
 ; 6) titre: Titre de la fenêtre.
 ;---------------------------------------
-drawbox .macro tp,lf,wd,ht,co,ti
-        php         ;Sauve registres.
-        pha
-        lda #\tp    ;Init lparam top
+drawbox .block  ;tp,lf,wd,ht,co,titre
+        jsr pushall
+        sty zp1+1
+        stx zp1
+        ldy #$00       
+        lda (zp1),y
+        iny
         sta dbtop
-        sta dbclin;position de ligne
-        lda #\lf    ;Initialise left.
+        sta dbclin  ;position de ligne
+        lda (zp1),y ;Initialise left.
+        iny
         sta dbleft
-        lda #\wd    ;Initialise width.
+        lda (zp1),y ;Initialise width.
+        iny
         sta dbwdth
-        lda #\ht    ;Initialise height.
+        lda (zp1),y ;Initialise height.
+        iny
         sta dbhght
-        lda #\co    ;Initialise couleur.
+        lda (zp1),y    ;Initialise couleur.
+        iny
         sta dbcoul
-        pla         ;Récupère registres.
-        plp
         jsr dbdraw  ;Dessine la fenêtre.
                     ;Affiche le titre.
-        .if \co < 16 
-        lda #18     ;le titre zzzzzz
-        jsr chrout
-        #outcxy \co,\lf+1,\tp,\ti
-        lda #146
-        jsr chrout
-        .else            
-        #outcxy \co,\lf+1,\tp,\ti
-        .endif
-        .endm
+        ldx dbleft
+        inx
+        inx
+        ldy dbtop
+        jsr gotoxy
+        lda dbcoul
+        jsr putsc
+        jsr popall
+        rts
+        .bend
 ;---------------------------------------
 ;Fonction: dbtline
 ;Description:  

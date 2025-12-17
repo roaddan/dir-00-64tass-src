@@ -28,7 +28,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.""
-SOURCENAME=slbug64
+SOURCENAME=dlbug64
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 # DEPSLOCALES=strings_fr.asm  strings_en.asm
 # -----------------------------------------------------------------------------
@@ -152,7 +152,7 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # ** Using comment, you can mask or enable anny action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-		$(FTPPRGCMD)	# To transfer the resulting PRG program file.;
+#		$(FTPPRGCMD)	# To transfer the resulting PRG program file.;
 #		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
 #		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
 #		$(FTPASMCMD)	# To transfer the source ASM file.
