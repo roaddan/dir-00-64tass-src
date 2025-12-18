@@ -47,7 +47,7 @@ menu1   .byte 1,19
         .byte kjaune,221,kblanc
         .text " [F1] Aide       "
         .byte kjaune,182,kblanc
-        .text " [F2] Retour      "
+        .text " [F2] Menu Princ. "
         .byte kjaune,221,kblanc
         .byte 0        
 menu2   .byte 1,20
@@ -91,17 +91,34 @@ menu6   .byte 1,24
         .byte 189,kblanc
         .byte 0
 ;---------------------------------------
-alft = 10
-argt = 7
-awdt = 20
-ahgt = 10
-abox  .byte alft,argt,awdt,ahgt,svertp
+boxax   = 7
+boxay   = 7
+boxaw   = 26
+boxah   = 10
+boxac   = svertp
+boxa    .byte boxax,boxay
+        .byte boxaw,boxah
+        .byte boxac
         .null "[Adresse]"
+boxat1  .byte boxax+2,boxay+1
+        .null "Entrez une adresse en"
+boxat2  .byte boxax+2,boxay+2
+        .null "hexadecimal : $"
 ;---------------------------------------
-hlft = 1
-hrgt = 0
-hwdt = 38
-hhgt = 25
-hbox .byte hlft,hrgt,hwdt,hhgt,srose
+boxhx   = 1
+boxhy   = 0
+boxhw   = 38
+boxhh   = 25
+boxhc   = srose
+boxh    .byte boxhx,boxhy
+        .byte boxhw,boxhh
+        .byte boxhc
         .null "[Aide]"
 ;---------------------------------------
+printboxt  .macro  ptr
+        ldx \ptr
+        ldy \ptr+1
+        jsr gotoxy
+        #ldyximm \ptr+2 ;un test
+        jsr putscyx
+           .endm     
