@@ -47,7 +47,7 @@ menu1   .byte 1,19
         .byte kjaune,221,kblanc
         .text " [F1] Aide       "
         .byte kjaune,182,kblanc
-        .text " [F2] Menu Princ. "
+        .text " [F2] aller $0000 "
         .byte kjaune,221,kblanc
         .byte 0        
 menu2   .byte 1,20
@@ -66,16 +66,18 @@ menu3   .byte 1,21
         .byte 0        
 menu4   .byte 1,22
         .byte kjaune,221,kblanc
-        .text " [F7]+4096 octets"
+        .text " [F7] +4K octets "
         .byte kjaune,182,kblanc
-        .text " [F8]-4096 octets "
+        .text " [F8] -4K octets  "
         .byte kjaune,221,kblanc
         .byte 0        
 menu5   .byte 1,23
         .byte kjaune,221,kblanc
-        .text " [N] entrer adre."
+        .text "  [G] Aller a ?  "
         .byte kjaune,182,kblanc
-        .text " [Q] Quitter      "
+        .text "  ["
+        .byte 95
+        .text "] Quitter     "
         .byte kjaune,221,kblanc
         .byte 0        
 menu6   .byte 1,24
@@ -89,12 +91,12 @@ menu6   .byte 1,24
         .byte 192,192,192,192,192,192
         .byte 192,192,192,192,192,192
         .byte 189,kblanc
-        .byte 0
+        .byte 0 
 ;---------------------------------------
 boxax   = 7
 boxay   = 7
 boxaw   = 26
-boxah   = 10
+boxah   = 4
 boxac   = svertp
 boxa    .byte boxax,boxay
         .byte boxaw,boxah
@@ -119,6 +121,6 @@ printboxt  .macro  ptr
         ldx \ptr
         ldy \ptr+1
         jsr gotoxy
-        #ldyximm \ptr+2 ;un test
+        #ldyximm \ptr+2
         jsr putscyx
            .endm     

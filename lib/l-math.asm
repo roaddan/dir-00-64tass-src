@@ -47,5 +47,18 @@ noemp   sta reponse
         rts
         .bend
 ;---------------------------------------
-reponse .word $00       
+; rol reponse sur 16 bits
+; nombre de rol dans a
+rolword
+        .block
+        jsr pushregs
+        tay
+again   clc
+        rol reponse
+        rol reponse+1
+        dey
+        bne again
+        jsr popregs
+        rts
+        .bend
 ;---------------------------------------

@@ -107,5 +107,26 @@ waitspace
             rts
             .bend
 ;---------------------------------------
+showkey .block
+        jsr pushregs
+        sec
+        jsr plot
+        stx curx
+        sty cury
+        #locate 39-11,24
+        jsr chrout
+        #outcar 32
+        #outcar 36
+        jsr putahexdec
+        clc
+        ldy cury
+        ldx curx
+        jsr plot
+        jsr popregs
+        rts
+curx    .byte 0
+cury    .byte 0
+        .bend
+;---------------------------------------
 clef        .byte   0
 ;---------------------------------------
