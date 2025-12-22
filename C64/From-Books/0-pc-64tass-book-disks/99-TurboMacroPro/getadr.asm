@@ -12,9 +12,8 @@ getadr  .block
         ldy #>boxa
         ldx #<boxa
         jsr drawbox
-        lda #boxac
-        #printboxt boxat1
-        #printboxt boxat2
+        #printboxt boxat1,#boxac
+        #printboxt boxat2,#boxac
         ldy #$05
         lda #$00
         sta hexptr
