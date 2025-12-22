@@ -146,13 +146,13 @@ boxht7  .byte boxhx+4,boxhy+8
         .text " choisie"
         .byte eot
 boxht8  .byte boxhx+4,boxhy+9
-        .text " sera tronquer a $xxx0 "
+        .text " sera tronquee a $xxx0 "
         .text "ou $xxx8"
 
         .byte eot
 boxht9  .byte boxhx+4,boxhy+10
-        .text " de facon a ce l'adresse"
-        .text " demandee"
+        .text " de facon a ce que"
+        .text " l'adresse"
         .byte eot
 boxht10 .byte boxhx+4,boxhy+11
         .text " soit sur les 2 premi"
@@ -174,7 +174,7 @@ boxht0  .byte boxhx+1,boxhy+13
         .byte eot
 boxhta  .byte boxhx+1,boxhy+14
         .text " Ce programme cons"
-        .text "titu la premiere "
+        .text "titue la premiere"
         .byte eot
 boxhtb  .byte boxhx+1,boxhy+15
         .text " section d'un proj"
