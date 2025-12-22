@@ -138,7 +138,7 @@ boxht5  .byte boxhx+1,boxhy+6
         .text " = +/- 4096 octets"
         .byte eot
 boxht6  .byte boxhx+1,boxhy+7
-        .text "[G] permet d'entrer une "
+        .text "[G] Permet d'entrer une "
         .text "adresse "
         .byte eot
 boxht7  .byte boxhx+4,boxhy+8
@@ -156,7 +156,7 @@ boxht9  .byte boxhx+4,boxhy+10
         .byte eot
 boxht10 .byte boxhx+4,boxhy+11
         .text " soit sur les 2 premi"
-        .text "eres ligne."
+        .text "eres lignes."
         .byte eot
 boxht11 .byte boxhx+1,boxhy+12
         .text "["
@@ -198,7 +198,7 @@ boxhtf  .byte boxhx+1,boxhy+20
         .byte eot
 boxhtg  .byte boxhx+1,boxhy+21
         .text " pour le com"
-        .text "modore 64."
+        .text "modore 64 (6510/6502)."
         .byte eot
 boxhth  .byte boxhx+15,boxhy+23
         .text "Une clef pour sortir."

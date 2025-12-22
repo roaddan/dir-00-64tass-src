@@ -14,6 +14,20 @@ ramprobe
         #outcar 147
         jsr showmenu
         jmp runit
+ava16   clc
+        lda dumpadr
+        adc #$10
+        bcc nrep128
+        inc dumpadr+1   
+nrep16 sta dumpadr
+        jmp runit
+arr16   sec
+        lda dumpadr
+        sbc #$10
+        bcs nemp128
+        dec dumpadr+1   
+nemp16 sta dumpadr
+        jmp runit
 ava128  clc
         lda dumpadr
         adc #$80
@@ -58,12 +72,18 @@ chkf1   cmp #133   ; touche [F1]
         jmp runit
         jmp morekey; +128     
 chkf2   cmp #137   ; touche [F2]
-        bne chkf3 
+        bne chk11 
         ldy #$00
         ldx #$00
         #styxptr dumpadr
         jmp runit
         jmp morekey;-128
+chk11   cmp #$11
+        bne chk91
+        jmp ava16  ;+16
+chk91   cmp #$91
+        bne chkf3
+        jmp arr16  ;-16
 chkf3   cmp #134   ; touche [F3]
         bne chkf4
         jmp ava128 ;+128

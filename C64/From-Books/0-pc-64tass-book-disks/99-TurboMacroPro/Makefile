@@ -189,6 +189,8 @@ clean:
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
+		-write $(SOURCENAME)-fr.prg $(SOURCENAME)-fr \
+		-write $(SOURCENAME)-en.prg $(SOURCENAME)-en \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
 		-write $(JBMON64) jbmon64 \
@@ -198,6 +200,8 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
+		-write $(SOURCENAME)-fr.prg $(SOURCENAME)-fr \
+		-write $(SOURCENAME)-en.prg $(SOURCENAME)-en \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
 		-write $(JBMON64) jbmon64 \
