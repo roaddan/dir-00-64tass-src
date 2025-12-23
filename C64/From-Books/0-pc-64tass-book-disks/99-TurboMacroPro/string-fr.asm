@@ -47,7 +47,7 @@ menu1   .byte 1,19
         .byte kjaune,221,kblanc
         .text " [F1] A propos   "
         .byte kjaune,182,kblanc
-        .text " [F2] aller $0000 "
+        .text " [F2] Aller $0000 "
         .byte kjaune,221,kblanc
         .byte eot       
 menu2   .byte 1,20
