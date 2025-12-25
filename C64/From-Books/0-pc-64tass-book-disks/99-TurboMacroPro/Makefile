@@ -193,7 +193,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(SOURCENAME)-en.prg $(SOURCENAME)en \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
-		-write $(JBMON64) jbmon64 \
+		-write $(JBMON64) jbmon-36000 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
@@ -204,7 +204,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(SOURCENAME)-en.prg $(SOURCENAME)en \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
-		-write $(JBMON64) jbmon64 \
+		-write $(JBMON64) jbmon-36000 \
 		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
