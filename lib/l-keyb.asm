@@ -107,7 +107,8 @@ waitspace
             rts
             .bend
 ;---------------------------------------
-showkey .block
+showkey 
+        .block
         jsr pushregs
         sec
         jsr plot

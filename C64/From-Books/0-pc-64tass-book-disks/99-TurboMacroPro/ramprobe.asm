@@ -118,3 +118,53 @@ quitter jsr popregs
         rts
         .bend 
 ;---------------------------------------
+showmenu
+        .block
+        #locate 1,0
+        #outstr dmphead 
+        #locate 1,1
+        #outstr dmphead2 
+        #locate 1,20
+        #outstrxy menu0
+        #outstrxy menu1
+        #outstrxy menu2
+        #outstrxy menu3
+        #outstrxy menu4
+        #outstrxy menu5
+        #outstrxy menu6
+        rts
+        .bend
+;---------------------------------------
+aide    .block
+        jsr pushall
+        jsr scrnsave
+        ldy #>boxh
+        ldx #<boxh
+        jsr drawbox
+        #printboxt boxht0,#sgris3
+        #printboxt boxht1,#sgris3
+        #printboxt boxht2,#sgris3
+        #printboxt boxht3,#sgris3
+        #printboxt boxht4,#sgris3
+        #printboxt boxht5,#sgris3
+        #printboxt boxht6,#sgris3
+        #printboxt boxht7,#sgris3
+        #printboxt boxht8,#sgris3
+        #printboxt boxht9,#sgris3
+        #printboxt boxht10,#sgris3
+        #printboxt boxht11,#sgris3
+        #printboxt boxhta,#sgris3
+        #printboxt boxhtb,#sgris3
+        #printboxt boxhtc,#sgris3
+        #printboxt boxhtd,#sgris3
+        #printboxt boxhte,#sgris3
+        #printboxt boxhtf,#sgris3
+        #printboxt boxhtg,#sgris3
+        #printboxt boxhth,#srose
+        #printboxt boxhti,#sgris2
+        jsr getkey
+        jsr scrnrest
+        jsr popall
+        rts
+        .bend
+;---------------------------------------

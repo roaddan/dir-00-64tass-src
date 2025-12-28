@@ -41,26 +41,21 @@ drawbox .block  ;tp,lf,wd,ht,co,titre
         lda (zp1),y
         jsr inczp1
         sta dbleft  ;Initialise gauche
-n        lda (zp1),y 
+        lda (zp1),y 
         jsr inczp1
         sta dbtop   ;initialise top
+        sta dbclin  ;position de ligne
         lda (zp1),y ;
         jsr inczp1
         sta dbwdth  ;Initialise width. 
         lda (zp1),y 
         jsr inczp1
         sta dbhght  ;Initialise height.
-
-        lda dbtop   ;initialise top
-        sta dbclin  ;position de ligne
-
         lda kcol
         sta curcol
-
         lda (zp1),y ;Initialise couleur.
         sta kcol
         sta dbcoul
-
         jsr inczp1
         jsr dbdraw  ;Dessine la fenêtre.
                     ;Affiche le titre.
@@ -70,7 +65,6 @@ n        lda (zp1),y
         ldy dbtop
         jsr gotoxy
         jsr puts
-
         lda curcol
         sta kcol
 
@@ -80,11 +74,8 @@ n        lda (zp1),y
 ;---------------------------------------
 ;Fonction: dbtline
 ;Description:  
-;Fonction qui dessine la ligne 
-;supp. d'une boite texte en 
-;utilisant les caractères graphiques 
-;disponnibles dans les modes
-;majuscule et minuscule.
+;Fonction qui dessine la ligne supp.
+;d'une boite texte 
 ;---------------------------------------
 dbtline
         .block
@@ -104,11 +95,8 @@ dbtline
 ;---------------------------------------
 ;Fonction: dbbline
 ;Description:  
-;Fonction qui dessine la ligne 
-;inf.e d'une boite texte en 
-;utilisant les caractères graphiques 
-;disponnibles dans les modes
-;majuscule et minuscule.
+;Fonction qui dessine la ligne inf.
+;d'une boite texte.
 ;---------------------------------------
 dbbline 
         .block
@@ -129,9 +117,7 @@ dbbline
 ;Fonction: dbeline
 ;Description:  
 ;Fonction qui dessine une ligne vide 
-;d'une boite texte en utilisant les 
-;caractères graphiques disponnibles 
-;dans les modes majuscule et minuscule.
+;d'une boite texte.
 ;---------------------------------------
 dbeline 
         .block
@@ -152,10 +138,7 @@ dbeline
 ;Fonction: dbmline
 ;Description:  
 ;Fonction qui dessine une ligne 
-;horizontale d'une boite texte en 
-;utilisant les caractères graphiques 
-;disponnibles dans les modes
-;majuscule et minuscule.
+;horizontale d'une boite texte.
 ;---------------------------------------
 dbhline        
         .block
@@ -177,14 +160,11 @@ dbhline
 ;Fonction: dbdrawline
 ;Description:  
 ;Fonction qui dessine une ligne 
-;horizontale d'une boite texte en 
-;utilisant les caractères graphiques 
-;disponnibles dans les modes majuscule
-;et minuscule.
+;horizontale d'une boite texte.
 ;
 ;Note :  
 ;Appelé par les fonction suivantes:
-; dbtline, dbbline, dbeline ou dbhline
+; dbtline, dbbline, dbeline et dbhline
 ;---------------------------------------
 dbdrawline     
         .block
@@ -222,15 +202,11 @@ norev   ldx dbclin  ;posit curseur au-
 ;---------------------------------------
 ;Fonction: dbdraw
 ;Description:  
-;Fonction qui dessine une boite texte  
-;en utilisant les caractères graphiques
-;disponnibles dans les modes
-;majuscule et minuscule.
-;
+;Fonction qui dessine une boite texte;
 ;Note :  Appelé par la macro drawbox.
 ;        
 ;Utilise les fonctions : 
-;dbtline, dbbline, dbeline ou dbhline
+;dbtline, dbbline, dbeline et dbhline.
 ;---------------------------------------
 dbdraw      
         .block
@@ -260,4 +236,4 @@ dbwdth  .byte   0   ;Larg de la boîte.
 dbhght  .byte   0   ;Haut de la boîte.
 dbcoul  .byte   0   ;Coul de la boîte.
 dbclin  .byte   0   ;No ligne courante
- 
+;---------------------------------------
