@@ -223,17 +223,3 @@ linfin  jsr dbbline ;Dessine ligne inf.
         jsr popregs ;Récup registres
         rts
         .bend
-;---------------------------------------
-;Variables globales des paramètres de 
-;dessin de boite texte.
-;---------------------------------------
-cleft   .byte   0   ;Carac Gauche lin 
-cright  .byte   0   ;Carac droit lin
-cmid    .byte   0   ;Carac centr lin
-dbtop   .byte   0   ;Coord haut boite.
-dbleft  .byte   0   ;Coord gauche boîte
-dbwdth  .byte   0   ;Larg de la boîte.
-dbhght  .byte   0   ;Haut de la boîte.
-dbcoul  .byte   0   ;Coul de la boîte.
-dbclin  .byte   0   ;No ligne courante
-;---------------------------------------

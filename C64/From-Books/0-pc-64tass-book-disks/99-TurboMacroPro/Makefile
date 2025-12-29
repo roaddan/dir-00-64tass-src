@@ -90,11 +90,14 @@ V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # **** tests not yet conclusive.
 DISK8DIR=
 DISK9DIR=
+ROM9000=$(BASEDIR)/$(PRGDIR)/prg/rom9000.prg
+ROMC000=$(BASEDIR)/$(PRGDIR)/prg/romc000.prg
 DBC=/Users/Locals/C64/00-usbkey32go/dbc
 JBMON64=/Users/Locals/C64/00-usbkey32go/d-mes-utils/jbmon.prg
 CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
 J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
 TMPREU=/Users/Locals/C64/00-usbkey32go/tmpreu.prg
+
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
@@ -189,6 +192,8 @@ clean:
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
+		-write $(ROM9000) rom9000 \
+		-write $(ROMC000) romc000 \
 		-write $(SOURCENAME)-fr.prg $(SOURCENAME)fr \
 		-write $(SOURCENAME)-en.prg $(SOURCENAME)en \
 		-write $(DBC) dbc \
@@ -200,6 +205,8 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
+		-write $(ROM9000) rom9000 \
+		-write $(ROMC000) romc000 \
 		-write $(SOURCENAME)-fr.prg $(SOURCENAME)fr \
 		-write $(SOURCENAME)-en.prg $(SOURCENAME)en \
 		-write $(DBC) dbc \
@@ -212,7 +219,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 
 # Assembling and distributing resulting files.
 $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
-		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -l $(SOURCENAME).lbl --simple-labels -L $(SOURCENAME).txt -o $(SOURCENAME).prg
+		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -l $(SOURCENAME).lbl -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)
 		cp -f  $(SOURCENAME).txt $(BASEDIR)/$(PRGDIR)/txt

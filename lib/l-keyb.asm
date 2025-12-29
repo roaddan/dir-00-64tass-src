@@ -125,9 +125,5 @@ showkey
         jsr plot
         jsr popregs
         rts
-curx    .byte 0
-cury    .byte 0
         .bend
-;---------------------------------------
-clef        .byte   0
 ;---------------------------------------

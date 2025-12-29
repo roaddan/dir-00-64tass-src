@@ -42,17 +42,3 @@ nligne  .byte $16
         .bend
 dumpadr .word $f000
 ;---------------------------------------
-putahexdec
-        .block
-        jsr pushregs
-        #outcar kjaune
-        jsr putahex
-        #outcar $20
-        #outcar kcyan
-        tax
-        lda #$00
-        jsr fiaxtf1
-        jsr popregs
-        rts
-        .bend
-;---------------------------------------
