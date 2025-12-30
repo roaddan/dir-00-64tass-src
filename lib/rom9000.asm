@@ -1,5 +1,5 @@
 ;--------------------------------------
-; version: 0.0.0
+; version: 0.0.1
 ;--------------------------------------
 
      *=$9000
@@ -19,3 +19,9 @@
      .include "l-string.asm"
      .include "l-disk.asm"
      .include "m-utils.asm"
+;     *=$c000
+;     .include "l-opmneumo.asm"
+;     .include "l-opcodes.asm"
+;     .include "l-opcycles.asm"
+;     .include "l-oplenght.asm"
+;     .include "l-opmodes.asm"

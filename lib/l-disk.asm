@@ -244,6 +244,7 @@ dputsavemesg
      ldy  #>dmsg0
      jmp  putmsg
      .bend
+
 dputsloadmesg    
      .block
      #mpushr
@@ -267,21 +268,21 @@ putmsg
 ;--------------------------------------
 ; Miscilinaous file message.
 ;--------------------------------------
-dmsg0   .byte 141 
+dmsg0   .byte $0d,141 
      .null "sauvegarde de "
-dmsgc   .byte 141 
+dmsgc   .byte $0d,141 
      .null "chargement de "
-dmsg1   .byte 141
+dmsg1   .byte $0d,141
      .null "reussi" 
-dmsge1  .byte 141
+dmsge1  .byte $0d,141
      .null "fichier non ouvert"
-dmsge2  .byte 17
+dmsge2  .byte $0d,17
      .null "erreur d'ecriture"
-dmsge5  .byte 17
+dmsge5  .byte $0d,17
      .null "lecteur absent"
-dmsge4  .byte 17
+dmsge4  .byte $0d,17
      .null "fichier introuvable"
-dmsge1d .byte 17
+dmsge1d .byte $0d,17
      .null "erreur de chargement"
-dmsge0  .byte 17
+dmsge0  .byte $0d,17
      .null "break error"
