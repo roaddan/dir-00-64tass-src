@@ -19,8 +19,3 @@
      .include "l-string.asm"
      .include "l-disk.asm"
      .include "m-utils.asm"
-     .include "l-opmneumo.asm"
-     .include "l-opcodes.asm"
-     .include "l-opcycles.asm"
-     .include "l-oplenght.asm"
-     .include "l-opmodes.asm"
