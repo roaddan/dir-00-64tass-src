@@ -1,5 +1,5 @@
 ;--------------------------------------
-; version: 0.0.1
+; version: 0.0.0
 ;--------------------------------------
 
      *=$c000
@@ -17,4 +17,5 @@
      .include "l-push.asm"
      .include "l-screen.asm"
      .include "l-string.asm"
+;     .include "l-disk.asm"
      .include "m-utils.asm"

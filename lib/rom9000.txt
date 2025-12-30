@@ -1,7 +1,7 @@
 
-; 64tass Turbo Assembler Macro V1.59.3120 listing file
-; 64tass -C -m -a -T -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -l l-rom9000.asm -L rom9000.txt -o rom9000.prg rom9000.asm
-; Mon Dec 29 11:02:35 2025
+; 64tass Turbo Assembler Macro V1.54.1900 listing file
+; 64tass -C -m -a -T -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -l e-rom9000.asm -L rom9000.txt -o rom9000.prg rom9000.asm
+; Mon Dec 29 16:27:02 2025
 
 ;Offset	;Hex		;Source
 
@@ -15,6 +15,7 @@
 =$00			eot      = $00
 =$73			chrget   = $73   ;Recup Basic car texte
 =$79			chrgot   = $79   ; ...une seconde fois.
+=$c1			stal     = $c1
 =$d1			scrnlin  = $d1   ;acresse ligne courante
 =$fb			zp1      = $fb   ;1er Zpage prog. usager
 =$fd			zp2      = $fd   ;2em Zpage prog. usager
@@ -242,7 +243,15 @@
 =53133			loop16   = loops-2      ; 2 byte $cf9a
 =52109			scrncar  = loop16-1024  ;1k byte $cb9a
 =51085			scrncol  = scrncar-1024 ;1k byte $c79a
-=51084			nextvar  = scrncol-1    ; 1 byte $c799
+=51085			diskvar = scrncol
+=51083			ddatas  = diskvar-2 ;2 byte Data start
+=51081			ddatae  = diskvar-4 ;2 byte Data end
+=51080			ddev    = diskvar-5 ;1 byte Dev number
+=51079			dlfsno  = diskvar-6 ;1 byte Lfs
+=51077			dfnptr  = diskvar-8 ;2 byte Ptrnfichier
+=51076			dfnlen  = diskvar-9 ;1 byte lenfilename
+=51075			genbyte1 = dfnlen-1    ; 1 byte $c799
+=51073			genword1 = dfnlen-3    ; 2 byte $c799
 
 ;******  Return to file: rom9000.asm
 
@@ -1268,6 +1277,285 @@
 .96ba	20 cd bd	        jsr fiaxtf1
 .96bd	20 19 95	        jsr popregs
 .96c0	60		        rts
+
+;******  Return to file: rom9000.asm
+
+
+;******  Processing file: l-disk.asm
+
+.96c1			diskerror
+.96c1	08		        php
+.96c2	48		        pha
+.96c3	8a		        txa
+.96c4	48		        pha
+.96c5	98		        tya
+.96c6	48		        pha
+.96c7	ad 88 c7	     lda  ddev ;Device 8
+.96ca	85 ba		     sta  $ba  ;
+.96cc	20 b4 ff	     jsr  $ffb4;talk
+.96cf	a9 6f		     lda  #$6f
+.96d1	85 b9		     sta  $b9
+.96d3	20 96 ff	     jsr  $ff96;tksa
+.96d6	20 a5 ff	next jsr  $ffa5;acptr
+.96d9	20 d2 ff	     jsr  $ffd2;chrout
+.96dc	c9 0d		     cmp  #$0d ;Est-ce un CR ?
+.96de	d0 f6		     bne  next ;Non, au prochain
+.96e0	20 ab ff	     jsr  $ffab;untlk
+.96e3	68		        pla
+.96e4	a8		        tay
+.96e5	68		        pla
+.96e6	aa		        tax
+.96e7	68		        pla
+.96e8	28		        plp
+.96e9	60		     rts
+.96ea			diskdir
+.96ea	08		        php
+.96eb	48		        pha
+.96ec	8a		        txa
+.96ed	48		        pha
+.96ee	98		        tya
+.96ef	48		        pha
+.96f0	a9 24		     lda  #$24 ;nfichier = "$"
+.96f2	85 fb		     sta  $fb  ;zp1 msb
+.96f4	a9 fb		     lda  #$fb ;Set nom-fichier actuel
+.96f6	85 bb		     sta  $bb  ;mab nfichier actuel.
+.96f8	a9 00		     lda  #$00 ;vers zp1
+.96fa	85 bc		     sta  $bc  ;lsb nfichier actuel.
+.96fc	a9 01		     lda  #$01 ;Indique -
+.96fe	85 b7		     sta  $b7  ;- longueur de nfichier
+.9700	ad 88 c7	     lda  ddev ;Indique 8 as comme -
+.9703	85 ba		     sta  $ba  ;- periph serie actuel
+.9705	a9 60		     lda  #$60 ;Peuple $60 a l'adresse-
+.9707	85 b9		     sta  $b9  ;- secondaire.
+.9709	20 d5 f3	     jsr  $f3d5;sfopen ouvert. fichier
+.970c	a5 ba		     lda  $ba  ;Cmd dev $ba %10111010
+.970e	20 b4 ff	     jsr  $ffb4;talk.
+.9711	a5 b9		     lda  $b9  ;Cmd sec. adr. ($60) ...
+.9713	20 96 ff	     jsr  $ff96;tksa ... to talk.
+.9716	a9 00		     lda  #$00 ;Met $00 dans ...
+.9718	85 90		     sta  $90  ;... kernal status word.
+.971a	a0 03		     ldy  #$03 ;pour lire 3 Byt, -
+.971c			loop1
+.971c	84 fb		     sty  $fb  ;-mettre $3 dans zp1 Msb
+.971e	20 a5 ff	     jsr  $ffa5;acptr Recoit un byte.
+.9721	85 fc		     sta  $fc  ;Met octet dans zp1 lsb
+.9723	a4 90		     ldy  $90  ;Lit kernal status word.
+.9725	d0 2f		     bne  exit ;Si erreur, EXIT.
+.9727	20 a5 ff	     jsr  $ffa5;acptr
+.972a	a4 90		     ldy  $90  ;Lit compteur d'octet.
+.972c	d0 28		     bne  exit
+.972e	a4 fb		     ldy  $fb
+.9730	88		     dey
+.9731	d0 e9		     bne  loop1;si pas dernier, loop
+.9733	a6 fc		     ldx  $fc  ;Chrg Octet recu dans x.
+.9735	20 cd bd	     jsr  $bdcd;bputint print file size
+.9738	a9 20		     lda  #$20 ;Chrg Espace et ...
+.973a	20 d2 ff	     jsr  $ffd2;chrout ... l'affiche.
+.973d			loop3
+.973d	20 a5 ff	     jsr  $ffa5;acptr Recoit un byte.
+.9740	a6 90		     ldx  $90  ;Chrg kernal status word
+.9742	d0 12		     bne  exit ;Si erreur, EXIT.
+.9744	aa		     tax       ;tfr a dans x
+.9745	f0 06		     beq  loop2;Byte est =0 loop1
+.9747	20 d2 ff	     jsr  $ffd2;chrout,  >0 l'affiche.
+.974a	4c 3d 97	     jmp  loop3;Chrg un autre octets
+.974d			loop2
+.974d	a9 0d		     lda  #$0d ;Chrg CR dans a ...
+.974f	20 d2 ff	     jsr  $ffd2;chrout ... l'affiche.
+.9752	a0 02		     ldy  #$02 ;Met 2 dans y.
+.9754	d0 c6		     bne  loop1;-a la prochaine entree.
+.9756			exit
+.9756	20 42 f6	     jsr  $f642;sfclose ... close file.
+.9759	68		        pla
+.975a	a8		        tay
+.975b	68		        pla
+.975c	aa		        tax
+.975d	68		        pla
+.975e	28		        plp
+.975f	60		     rts
+.9760			directory
+.9760	20 ea 96	     jsr  diskdir
+.9763	20 c1 96	     jsr  diskerror
+.9766	60		     rts
+.9767			memtofile
+.9767	20 28 98	     jsr  dputsavemesg
+.976a	08		        php
+.976b	48		        pha
+.976c	8a		        txa
+.976d	48		        pha
+.976e	98		        tya
+.976f	48		        pha
+.9770	ad 84 c7	     lda  dfnlen
+.9773	ae 85 c7	     ldx  dfnptr    ;Chrg fn addr. lsb
+.9776	ac 86 c7	     ldy  dfnptr+1  ;Chrg fn addr. msb
+.9779	20 bd ff	     jsr  $ffbd     ;setnam
+.977c	ad 87 c7	     lda  dlfsno
+.977f	ae 88 c7	     ldx  ddev      ;Periph. specifie
+.9782			skip
+.9782	a0 00		     ldy  #$00
+.9784	20 ba ff	     jsr  $ffba     ;setlfs
+.9787	ad 8b c7	     lda  ddatas    ;ddatas lsb->stal
+.978a	85 c1		     sta  stal
+.978c	ad 8c c7	     lda  ddatas+1  ;ddatas msb->stal+1
+.978f	85 c2		     sta  stal+1
+.9791	ae 89 c7	     ldx  ddatae    ;Met ddatae lsb->x
+.9794	ac 8a c7	     ldy  ddatae+1  ;Met ddatae msb->y
+.9797	a9 c1		     lda  #stal     ;Adr debut->$c1/$c2
+.9799	20 d8 ff	     jsr  $ffd8     ;save
+.979c	90 00		     bcc  noerror   ;Si C=1, erreur
+.979e			noerror
+.979e	68		        pla
+.979f	a8		        tay
+.97a0	68		        pla
+.97a1	aa		        tax
+.97a2	68		        pla
+.97a3	28		        plp
+.97a4	60		     rts
+.97a5			filetomem
+.97a5	08		        php
+.97a6	48		        pha
+.97a7	8a		        txa
+.97a8	48		        pha
+.97a9	98		        tya
+.97aa	48		        pha
+.97ab	20 35 98	     jsr dputsloadmesg
+.97ae	ad 84 c7	     lda dfnlen  ;Chrg nfichier len.
+.97b1	ae 85 c7	     ldx dfnptr  ;Pointe $yyxx sur ptr-
+.97b4	ac 86 c7	     ldy dfnptr+1;- nfichier
+.97b7	20 bd ff	     jsr $ffbd   ;setnam
+.97ba	ad 87 c7	     lda dlfsno  ;Chrg lfn dans a
+.97bd	ae 88 c7	     ldx ddev    ;Periph #8
+.97c0	a0 01		     ldy #$01    ;$00:adresse<-yyxx
+.97c2	20 ba ff	     jsr $ffba   ;setlfs
+.97c5	a9 00		     lda #$00    ;$00:Chrg en memoire
+.97c7	20 d5 ff	     jsr $ffd5   ;load
+.97ca	90 03		     bcc noerror ;C=1, Erreur
+.97cc	20 d6 97	     jsr dskerror
+.97cf			noerror
+.97cf	68		        pla
+.97d0	a8		        tay
+.97d1	68		        pla
+.97d2	aa		        tax
+.97d3	68		        pla
+.97d4	28		        plp
+.97d5	60		     rts
+.97d6			dskerror
+.97d6	08		        php
+.97d7	48		        pha
+.97d8	8a		        txa
+.97d9	48		        pha
+.97da	98		        tya
+.97db	48		        pha
+.97dc			isit01
+.97dc	c9 01		     cmp  #$01
+.97de	d0 07		     bne  isit02
+.97e0	a2 88		     ldx  #<dmsge1
+.97e2	a0 98		     ldy  #>dmsge1
+.97e4	4c 1e 98	     jmp  printerror
+.97e7			isit02
+.97e7	c9 02		     cmp  #$02
+.97e9	d0 07		     bne  isit05
+.97eb	a2 9c		     ldx  #<dmsge2
+.97ed	a0 98		     ldy  #>dmsge2
+.97ef	4c 1e 98	     jmp  printerror
+.97f2			isit05
+.97f2	c9 05		     cmp  #$05
+.97f4	d0 07		     bne  isit04
+.97f6	a2 af		     ldx  #<dmsge5
+.97f8	a0 98		     ldy  #>dmsge5
+.97fa	4c 1e 98	     jmp  printerror
+.97fd			isit04
+.97fd	c9 04		     cmp  #$04
+.97ff	d0 07		     bne  isit1d
+.9801	a2 bf		     ldx  #<dmsge4
+.9803	a0 98		     ldy  #>dmsge4
+.9805	4c 1e 98	     jmp  printerror
+.9808			isit1d
+.9808	c9 1d		     cmp  #$1d
+.980a	d0 07		     bne  isit00
+.980c	a2 d4		     ldx  #<dmsge1d
+.980e	a0 98		     ldy  #>dmsge1d
+.9810	4c 1e 98	     jmp  printerror
+.9813			isit00
+.9813	c9 00		     cmp  #$00
+.9815	d0 0a		     bne  noerror
+.9817	a2 ea		     ldx  #<dmsge0
+.9819	a0 98		     ldy  #>dmsge0
+.981b	4c 1e 98	     jmp  printerror
+.981e			printerror
+.981e	20 ca 95	     jsr  putsyx
+.9821			noerror
+.9821	68		        pla
+.9822	a8		        tay
+.9823	68		        pla
+.9824	aa		        tax
+.9825	68		        pla
+.9826	28		        plp
+.9827	60		     rts
+.9828			dputsavemesg
+.9828	08		        php
+.9829	48		        pha
+.982a	8a		        txa
+.982b	48		        pha
+.982c	98		        tya
+.982d	48		        pha
+.982e	a2 60		     ldx  #<dmsg0
+.9830	a0 98		     ldy  #>dmsg0
+.9832	4c 42 98	     jmp  putmsg
+.9835			dputsloadmesg
+.9835	08		        php
+.9836	48		        pha
+.9837	8a		        txa
+.9838	48		        pha
+.9839	98		        tya
+.983a	48		        pha
+.983b	a2 70		     ldx  #<dmsgc
+.983d	a0 98		     ldy  #>dmsgc
+.983f	4c 42 98	     jmp  putmsg
+.9842			putmsg
+.9842	20 ca 95	     jsr  putsyx
+.9845	ae 85 c7	     ldx  dfnptr
+.9848	ac 86 c7	     ldy  dfnptr+1
+.984b	20 ca 95	     jsr  putsyx
+.984e	a9 21		     lda  #33
+.9850	20 d2 ff	     jsr  $ffd2
+.9853	ad 87 c7	     lda  dlfsno
+.9856	20 c3 ff	     jsr  close
+.9859	68		        pla
+.985a	a8		        tay
+.985b	68		        pla
+.985c	aa		        tax
+.985d	68		        pla
+.985e	28		        plp
+.985f	60		     rts
+>9860	8d		dmsg0   .byte 141
+>9861	53 41 55 56	     .null "sauvegarde de "
+>9865	45 47 41 52 44 45 20 44 45 20 00
+>9870	8d		dmsgc   .byte 141
+>9871	43 48 41 52	     .null "chargement de "
+>9875	47 45 4d 45 4e 54 20 44 45 20 00
+>9880	8d		dmsg1   .byte 141
+>9881	52 45 55 53	     .null "reussi"
+>9885	53 49 00
+>9888	8d		dmsge1  .byte 141
+>9889	46 49 43 48	     .null "fichier non ouvert"
+>988d	49 45 52 20 4e 4f 4e 20 4f 55 56 45 52 54 00
+>989c	11		dmsge2  .byte 17
+>989d	45 52 52 45	     .null "erreur d'ecriture"
+>98a1	55 52 20 44 27 45 43 52 49 54 55 52 45 00
+>98af	11		dmsge5  .byte 17
+>98b0	4c 45 43 54	     .null "lecteur absent"
+>98b4	45 55 52 20 41 42 53 45 4e 54 00
+>98bf	11		dmsge4  .byte 17
+>98c0	46 49 43 48	     .null "fichier introuvable"
+>98c4	49 45 52 20 49 4e 54 52 4f 55 56 41 42 4c 45 00
+>98d4	11		dmsge1d .byte 17
+>98d5	45 52 52 45	     .null "erreur de chargement"
+>98d9	55 52 20 44 45 20 43 48 41 52 47 45 4d 45 4e 54
+>98e9	00
+>98ea	11		dmsge0  .byte 17
+>98eb	42 52 45 41	     .null "break error"
+>98ef	4b 20 45 52 52 4f 52 00
 
 ;******  Return to file: rom9000.asm
 

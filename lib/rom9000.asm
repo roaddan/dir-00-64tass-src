@@ -17,4 +17,5 @@
      .include "l-push.asm"
      .include "l-screen.asm"
      .include "l-string.asm"
+     .include "l-disk.asm"
      .include "m-utils.asm"
