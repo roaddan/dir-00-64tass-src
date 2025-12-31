@@ -19,3 +19,4 @@
      .include "l-string.asm"
      .include "l-disk.asm"
      .include "m-utils.asm"
+     .include "l-vectors.asm"

@@ -18,4 +18,5 @@
      .include "l-screen.asm"
      .include "l-string.asm"
      .include "l-disk.asm"
+     .include "l-vectors.asm"
      .include "m-utils.asm"
