@@ -209,6 +209,10 @@ boxhti  .byte boxhx+2,boxhy+24
         .text " - decembre 2025. "
         .byte 146, eot
 
+msg   .byte $0d,$0d,29,29,29  
+      .text "chargement de "
+fname .null "rom9000. un instant!"
+
 ;---------------------------------------
 printboxt  .macro  ptr,col
         ldx \ptr

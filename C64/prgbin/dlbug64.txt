@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.54.1900 listing file
 ; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -l dlbug64.lbl -L dlbug64.txt -o dlbug64.prg dlbug64.asm
-; Tue Dec 30 23:40:57 2025
+; Wed Dec 31 00:03:54 2025
 
 ;Offset	;Hex		;Source
 
@@ -418,7 +418,7 @@
 .0811	20 5e a6	        jsr $a65e
 .0814	20 1d 08	        jsr initscr
 .0817	20 36 08	        jsr islib
-.081a	4c b1 08	noload  jmp main
+.081a	4c 89 08	noload  jmp main
 .081d			initscr
 .081d	08		        php
 .081e	48		        pha
@@ -448,9 +448,9 @@
 .084f			ldlibs
 .084f	a9 0d		      lda #$0d
 .0851	20 d2 ff	      jsr $ffd2
-.0854	a9 89		      lda #<msg
+.0854	a9 db		      lda #<msg
 .0856	85 fb		      sta $fb
-.0858	a9 08		      lda #>msg
+.0858	a9 13		      lda #>msg
 .085a	85 fc		      sta $fc
 .085c	a0 00		      ldy #$00
 .085e			nextc
@@ -461,8 +461,8 @@
 .0866	4c 5e 08	      jmp nextc
 .0869			doit
 .0869	a9 07		      lda #7      ;Chrg nfichier len.
-.086b	a2 9c		      ldx #<fname ;Pointe $yyxx sur ptr
-.086d	a0 08		      ldy #>fname ;  nfichier
+.086b	a2 ee		      ldx #<fname ;Pointe $yyxx sur ptr
+.086d	a0 13		      ldy #>fname ;  nfichier
 .086f	20 bd ff	      jsr $ffbd   ;setnam
 .0872	a9 01		      lda #$01    ;Chrg lfn dans a
 .0874	a2 08		      ldx #8      ;Periph #8
@@ -474,1524 +474,1535 @@
 .0882	20 d2 ff	      jsr $ffd2
 .0885	20 d2 ff	      jsr $ffd2
 .0888	60		      rts
->0889	0d 0d 1d 1d	msg   .byte $0d,$0d,29,29,29
->088d	1d
->088e	43 48 41 52	      .text "chargement de "
->0892	47 45 4d 45 4e 54 20 44 45 20
->089c	52 4f 4d 39	fname .null "rom9000. un instant!"
->08a0	30 30 30 2e 20 55 4e 20 49 4e 53 54 41 4e 54 21
->08b0	00
 
 ;******  Return to file: dlbug64.asm
 
-.08b1			main
-.08b1	08		        php
-.08b2	48		        pha
-.08b3	a9 0e		        lda #14
-.08b5	20 d2 ff	        jsr chrout
-.08b8	68		        pla
-.08b9	28		        plp
-.08ba	08		        php
-.08bb	48		        pha
-.08bc	a9 08		        lda #8
-.08be	20 d2 ff	        jsr chrout
-.08c1	68		        pla
-.08c2	28		        plp
-.08c3	a9 08		        lda #$08
-.08c5	8d 88 c7	        sta ddev
-.08c8	08		        php
-.08c9	48		        pha
-.08ca	a9 93		        lda #147
-.08cc	20 d2 ff	        jsr chrout
-.08cf	68		        pla
-.08d0	28		        plp
-.08d1	08		        php
-.08d2	48		        pha
-.08d3	a9 0d		        lda #13
-.08d5	20 d2 ff	        jsr chrout
-.08d8	68		        pla
-.08d9	28		        plp
-.08da	08		        php
-.08db	a0 90		        ldy #>$9000
-.08dd	a2 00		        ldx #<$9000
-.08df	28		        plp
-.08e0	20 7e 0b	        jsr ramprobe
-.08e3	08		        php
-.08e4	48		        pha
-.08e5	a9 9b		        lda #kgris3
-.08e7	20 d2 ff	        jsr chrout
-.08ea	68		        pla
-.08eb	28		        plp
-.08ec	a0 00		        ldy #$00
-.08ee	20 ec 94	        jsr pushregs
-.08f1	a0 94		        ldy #>pushall
-.08f3	a2 7a		        ldx #<pushall
-.08f5	84 fe		        sty zp2+1
-.08f7	86 fd		        stx zp2
-.08f9	20 19 95	        jsr popregs
-.08fc			nextop
-.08fc	08		        php
-.08fd	48		        pha
-.08fe	a9 0d		        lda #$0d
-.0900	20 d2 ff	        jsr chrout
-.0903	68		        pla
-.0904	28		        plp
-.0905	08		        php
-.0906	48		        pha
-.0907	a9 24		        lda #36
-.0909	20 d2 ff	        jsr chrout
-.090c	68		        pla
-.090d	28		        plp
-.090e	a4 fe		        ldy zp2+1
-.0910	a6 fd		        ldx zp2
-.0912	20 5e 90	        jsr putyxhex
-.0915	08		        php
-.0916	48		        pha
-.0917	a9 20		        lda #32
-.0919	20 d2 ff	        jsr chrout
-.091c	68		        pla
-.091d	28		        plp
-.091e	a0 00		        ldy #$00
-.0920	b1 fd		        lda (zp2),y
-.0922	20 5e 09	        jsr decode
-.0925	e0 00		        cpx #$00
-.0927	f0 d3		        beq nextop
-.0929	c9 60		        cmp #$60
-.092b	f0 09		        beq out
-.092d	20 60 99	skip    jsr vinczp2
-.0930	ca		        dex
-.0931	d0 fa		        bne skip
-.0933	4c fc 08	        jmp nextop
-.0936			out
-.0936	08		        php
-.0937	48		        pha
-.0938	a9 0d		        lda #$0d
-.093a	20 d2 ff	        jsr chrout
-.093d	68		        pla
-.093e	28		        plp
-.093f	08		        php
-.0940	48		        pha
-.0941	a9 0d		        lda #$0d
-.0943	20 d2 ff	        jsr chrout
-.0946	68		        pla
-.0947	28		        plp
-.0948	08		        php
-.0949	48		        pha
-.094a	a9 9e		        lda #kjaune
-.094c	20 d2 ff	        jsr chrout
-.094f	68		        pla
-.0950	28		        plp
-.0951	20 60 97	        jsr directory
-.0954	08		        php
-.0955	48		        pha
-.0956	a9 05		        lda #kblanc
-.0958	20 d2 ff	        jsr chrout
-.095b	68		        pla
-.095c	28		        plp
-.095d	60		        rts
-.095e			 decode
-.095e	20 7a 94	        jsr pushall
-.0961	20 ec 94	        jsr pushregs
-.0964	a0 13		        ldy #>opmneumo
-.0966	a2 cb		        ldx #<opmneumo
-.0968	84 fc		        sty zp1+1
-.096a	86 fb		        stx zp1
-.096c	20 19 95	        jsr popregs
-.096f	48		        pha
-.0970	c9 00		        cmp #$00
-.0972	f0 10		        beq print
-.0974	a8		        tay
-.0975	20 d6 93	 again  jsr inczp1
-.0978	20 d6 93	        jsr inczp1
-.097b	20 d6 93	        jsr inczp1
-.097e	20 d6 93	        jsr inczp1
-.0981	88		        dey
-.0982	d0 f1		        bne again
-.0984	20 36 0a	 print  jsr comaputs
-.0987	20 ec 94	        jsr pushregs
-.098a	a0 17		        ldy #>opcodes
-.098c	a2 cc		        ldx #<opcodes
-.098e	84 fc		        sty zp1+1
-.0990	86 fb		        stx zp1
-.0992	20 19 95	        jsr popregs
-.0995	08		        php
-.0996	48		        pha
-.0997	a9 20		        lda #32
-.0999	20 d2 ff	        jsr chrout
-.099c	68		        pla
-.099d	28		        plp
+.0889			main
+.0889	08		        php
+.088a	48		        pha
+.088b	a9 0e		        lda #14
+.088d	20 d2 ff	        jsr chrout
+.0890	68		        pla
+.0891	28		        plp
+.0892	08		        php
+.0893	48		        pha
+.0894	a9 08		        lda #8
+.0896	20 d2 ff	        jsr chrout
+.0899	68		        pla
+.089a	28		        plp
+.089b	a9 08		        lda #$08
+.089d	8d 88 c7	        sta ddev
+.08a0	08		        php
+.08a1	48		        pha
+.08a2	a9 93		        lda #147
+.08a4	20 d2 ff	        jsr chrout
+.08a7	68		        pla
+.08a8	28		        plp
+.08a9	08		        php
+.08aa	48		        pha
+.08ab	a9 0d		        lda #13
+.08ad	20 d2 ff	        jsr chrout
+.08b0	68		        pla
+.08b1	28		        plp
+.08b2	08		        php
+.08b3	a0 90		        ldy #>$9000
+.08b5	a2 00		        ldx #<$9000
+.08b7	28		        plp
+.08b8	20 5c 0b	        jsr ramprobe
+.08bb	08		        php
+.08bc	48		        pha
+.08bd	a9 9b		        lda #kgris3
+.08bf	20 d2 ff	        jsr chrout
+.08c2	68		        pla
+.08c3	28		        plp
+.08c4	a0 00		        ldy #$00
+.08c6	20 ec 94	        jsr pushregs
+.08c9	a0 94		        ldy #>pushall
+.08cb	a2 7a		        ldx #<pushall
+.08cd	84 fe		        sty zp2+1
+.08cf	86 fd		        stx zp2
+.08d1	20 19 95	        jsr popregs
+.08d4			nextop
+.08d4	08		        php
+.08d5	48		        pha
+.08d6	a9 0d		        lda #$0d
+.08d8	20 d2 ff	        jsr chrout
+.08db	68		        pla
+.08dc	28		        plp
+.08dd	08		        php
+.08de	48		        pha
+.08df	a9 24		        lda #36
+.08e1	20 d2 ff	        jsr chrout
+.08e4	68		        pla
+.08e5	28		        plp
+.08e6	a4 fe		        ldy zp2+1
+.08e8	a6 fd		        ldx zp2
+.08ea	20 5e 90	        jsr putyxhex
+.08ed	08		        php
+.08ee	48		        pha
+.08ef	a9 20		        lda #32
+.08f1	20 d2 ff	        jsr chrout
+.08f4	68		        pla
+.08f5	28		        plp
+.08f6	a0 00		        ldy #$00
+.08f8	b1 fd		        lda (zp2),y
+.08fa	20 3c 09	        jsr decode
+.08fd	e0 00		        cpx #$00
+.08ff	f0 d3		        beq nextop
+.0901	c9 60		        cmp #$60
+.0903	f0 09		        beq out
+.0905	20 60 99	skip    jsr vinczp2
+.0908	ca		        dex
+.0909	d0 fa		        bne skip
+.090b	4c d4 08	        jmp nextop
+.090e			out
+.090e	08		        php
+.090f	48		        pha
+.0910	a9 0d		        lda #$0d
+.0912	20 d2 ff	        jsr chrout
+.0915	68		        pla
+.0916	28		        plp
+.0917	08		        php
+.0918	48		        pha
+.0919	a9 0d		        lda #$0d
+.091b	20 d2 ff	        jsr chrout
+.091e	68		        pla
+.091f	28		        plp
+.0920	08		        php
+.0921	48		        pha
+.0922	a9 9e		        lda #kjaune
+.0924	20 d2 ff	        jsr chrout
+.0927	68		        pla
+.0928	28		        plp
+.0929	20 60 97	        jsr directory
+.092c	08		        php
+.092d	48		        pha
+.092e	a9 05		        lda #kblanc
+.0930	20 d2 ff	        jsr chrout
+.0933	68		        pla
+.0934	28		        plp
+.0935	20 24 93	        jsr getkey
+.0938	20 e2 fc	        jsr $fce2
+.093b	60		        rts
+.093c			 decode
+.093c	20 7a 94	        jsr pushall
+.093f	20 ec 94	        jsr pushregs
+.0942	a0 14		        ldy #>opmneumo
+.0944	a2 03		        ldx #<opmneumo
+.0946	84 fc		        sty zp1+1
+.0948	86 fb		        stx zp1
+.094a	20 19 95	        jsr popregs
+.094d	48		        pha
+.094e	c9 00		        cmp #$00
+.0950	f0 10		        beq print
+.0952	a8		        tay
+.0953	20 d6 93	 again  jsr inczp1
+.0956	20 d6 93	        jsr inczp1
+.0959	20 d6 93	        jsr inczp1
+.095c	20 d6 93	        jsr inczp1
+.095f	88		        dey
+.0960	d0 f1		        bne again
+.0962	20 14 0a	 print  jsr comaputs
+.0965	20 ec 94	        jsr pushregs
+.0968	a0 18		        ldy #>opcodes
+.096a	a2 04		        ldx #<opcodes
+.096c	84 fc		        sty zp1+1
+.096e	86 fb		        stx zp1
+.0970	20 19 95	        jsr popregs
+.0973	08		        php
+.0974	48		        pha
+.0975	a9 20		        lda #32
+.0977	20 d2 ff	        jsr chrout
+.097a	68		        pla
+.097b	28		        plp
+.097c	08		        php
+.097d	48		        pha
+.097e	a9 24		        lda #36
+.0980	20 d2 ff	        jsr chrout
+.0983	68		        pla
+.0984	28		        plp
+.0985	68		        pla
+.0986	48		        pha
+.0987	a8		        tay
+.0988	b1 fb		        lda (zp1),y
+.098a	8d 13 0a	        sta numbytes
+.098d	20 82 90	        jsr putahex
+.0990	20 ec 94	        jsr pushregs
+.0993	a0 1a		        ldy #>oplenght
+.0995	a2 04		        ldx #<oplenght
+.0997	84 fc		        sty zp1+1
+.0999	86 fb		        stx zp1
+.099b	20 19 95	        jsr popregs
 .099e	08		        php
 .099f	48		        pha
-.09a0	a9 24		        lda #36
+.09a0	a9 20		        lda #32
 .09a2	20 d2 ff	        jsr chrout
 .09a5	68		        pla
 .09a6	28		        plp
-.09a7	68		        pla
+.09a7	08		        php
 .09a8	48		        pha
-.09a9	a8		        tay
-.09aa	b1 fb		        lda (zp1),y
-.09ac	8d 35 0a	        sta numbytes
-.09af	20 82 90	        jsr putahex
-.09b2	20 ec 94	        jsr pushregs
-.09b5	a0 19		        ldy #>oplenght
-.09b7	a2 cc		        ldx #<oplenght
-.09b9	84 fc		        sty zp1+1
-.09bb	86 fb		        stx zp1
-.09bd	20 19 95	        jsr popregs
-.09c0	08		        php
-.09c1	48		        pha
-.09c2	a9 20		        lda #32
-.09c4	20 d2 ff	        jsr chrout
-.09c7	68		        pla
-.09c8	28		        plp
+.09a9	a9 24		        lda #36
+.09ab	20 d2 ff	        jsr chrout
+.09ae	68		        pla
+.09af	28		        plp
+.09b0	68		        pla
+.09b1	48		        pha
+.09b2	a8		        tay
+.09b3	b1 fb		        lda (zp1),y
+.09b5	8d 13 0a	        sta numbytes
+.09b8	20 82 90	        jsr putahex
+.09bb	20 ec 94	        jsr pushregs
+.09be	a0 19		        ldy #>opcycles
+.09c0	a2 04		        ldx #<opcycles
+.09c2	84 fc		        sty zp1+1
+.09c4	86 fb		        stx zp1
+.09c6	20 19 95	        jsr popregs
 .09c9	08		        php
 .09ca	48		        pha
-.09cb	a9 24		        lda #36
+.09cb	a9 20		        lda #32
 .09cd	20 d2 ff	        jsr chrout
 .09d0	68		        pla
 .09d1	28		        plp
-.09d2	68		        pla
+.09d2	08		        php
 .09d3	48		        pha
-.09d4	a8		        tay
-.09d5	b1 fb		        lda (zp1),y
-.09d7	8d 35 0a	        sta numbytes
-.09da	20 82 90	        jsr putahex
-.09dd	20 ec 94	        jsr pushregs
-.09e0	a0 18		        ldy #>opcycles
-.09e2	a2 cc		        ldx #<opcycles
-.09e4	84 fc		        sty zp1+1
-.09e6	86 fb		        stx zp1
-.09e8	20 19 95	        jsr popregs
-.09eb	08		        php
-.09ec	48		        pha
-.09ed	a9 20		        lda #32
-.09ef	20 d2 ff	        jsr chrout
-.09f2	68		        pla
-.09f3	28		        plp
-.09f4	08		        php
-.09f5	48		        pha
-.09f6	a9 24		        lda #36
-.09f8	20 d2 ff	        jsr chrout
-.09fb	68		        pla
-.09fc	28		        plp
-.09fd	68		        pla
-.09fe	48		        pha
-.09ff	a8		        tay
-.0a00	b1 fb		        lda (zp1),y
-.0a02	20 82 90	        jsr putahex
-.0a05	20 ec 94	        jsr pushregs
-.0a08	a0 1a		        ldy #>opmodes
-.0a0a	a2 cc		        ldx #<opmodes
-.0a0c	84 fc		        sty zp1+1
-.0a0e	86 fb		        stx zp1
-.0a10	20 19 95	        jsr popregs
-.0a13	08		        php
-.0a14	48		        pha
-.0a15	a9 20		        lda #32
-.0a17	20 d2 ff	        jsr chrout
-.0a1a	68		        pla
-.0a1b	28		        plp
-.0a1c	08		        php
-.0a1d	48		        pha
-.0a1e	a9 24		        lda #36
-.0a20	20 d2 ff	        jsr chrout
-.0a23	68		        pla
-.0a24	28		        plp
-.0a25	68		        pla
-.0a26	48		        pha
-.0a27	a8		        tay
-.0a28	b1 fb		        lda (zp1),y
-.0a2a	20 82 90	        jsr putahex
-.0a2d	68		        pla
-.0a2e	20 b3 94	        jsr popall
-.0a31	ae 35 0a	        ldx numbytes
-.0a34	60		        rts
->0a35	00		numbytes .byte 0
-.0a36			comaputs
-.0a36	20 7a 94	        jsr pushall
-.0a39	a0 00		        ldy #$00
-.0a3b	b1 fb		next    lda (zp1),y
-.0a3d	c9 2c		        cmp #44
-.0a3f	f0 07		        beq out
-.0a41	20 d2 ff	        jsr chrout
-.0a44	c8		        iny
-.0a45	4c 3b 0a	        jmp next
-.0a48	20 b3 94	out     jsr popall
-.0a4b	60		        rts
-.0a4c	20 ec 94	testprg jsr pushregs
-.0a4f	a9 05		        lda #$05
-.0a51	8d 02 c0	        sta $c002
-.0a54	b9 02 c0	        lda $c002,y
-.0a57	20 19 95	        jsr popregs
-.0a5a	60		        rts
+.09d4	a9 24		        lda #36
+.09d6	20 d2 ff	        jsr chrout
+.09d9	68		        pla
+.09da	28		        plp
+.09db	68		        pla
+.09dc	48		        pha
+.09dd	a8		        tay
+.09de	b1 fb		        lda (zp1),y
+.09e0	20 82 90	        jsr putahex
+.09e3	20 ec 94	        jsr pushregs
+.09e6	a0 1b		        ldy #>opmodes
+.09e8	a2 04		        ldx #<opmodes
+.09ea	84 fc		        sty zp1+1
+.09ec	86 fb		        stx zp1
+.09ee	20 19 95	        jsr popregs
+.09f1	08		        php
+.09f2	48		        pha
+.09f3	a9 20		        lda #32
+.09f5	20 d2 ff	        jsr chrout
+.09f8	68		        pla
+.09f9	28		        plp
+.09fa	08		        php
+.09fb	48		        pha
+.09fc	a9 24		        lda #36
+.09fe	20 d2 ff	        jsr chrout
+.0a01	68		        pla
+.0a02	28		        plp
+.0a03	68		        pla
+.0a04	48		        pha
+.0a05	a8		        tay
+.0a06	b1 fb		        lda (zp1),y
+.0a08	20 82 90	        jsr putahex
+.0a0b	68		        pla
+.0a0c	20 b3 94	        jsr popall
+.0a0f	ae 13 0a	        ldx numbytes
+.0a12	60		        rts
+>0a13	00		numbytes .byte 0
+.0a14			comaputs
+.0a14	20 7a 94	        jsr pushall
+.0a17	a0 00		        ldy #$00
+.0a19	b1 fb		next    lda (zp1),y
+.0a1b	c9 2c		        cmp #44
+.0a1d	f0 07		        beq out
+.0a1f	20 d2 ff	        jsr chrout
+.0a22	c8		        iny
+.0a23	4c 19 0a	        jmp next
+.0a26	20 b3 94	out     jsr popall
+.0a29	60		        rts
+.0a2a	20 ec 94	testprg jsr pushregs
+.0a2d	a9 05		        lda #$05
+.0a2f	8d 02 c0	        sta $c002
+.0a32	b9 02 c0	        lda $c002,y
+.0a35	20 19 95	        jsr popregs
+.0a38	60		        rts
 
 ;******  Processing file: memdump.asm
 
-.0a5b			memdump
-.0a5b	20 ec 94	        jsr pushregs
-.0a5e	8d ac 0a	        sta nligne ;sauve ligne
-.0a61	8d 8f cf	        sta loops  ;init boucle
-.0a64	08		        php
-.0a65	8c ae 0a	        sty dumpadr+1
-.0a68	8e ad 0a	        stx dumpadr
-.0a6b	28		        plp
-.0a6c	ad ae 0a	        lda dumpadr+1
-.0a6f	48		        pha
-.0a70	ad ad 0a	        lda dumpadr
-.0a73	48		        pha
-.0a74			again
-.0a74	08		        php
-.0a75	ac ae 0a	        ldy dumpadr+1
-.0a78	ae ad 0a	        ldx dumpadr
-.0a7b	28		        plp
-.0a7c	a9 08		        lda #$08
-.0a7e	08		        php
-.0a7f	48		        pha
-.0a80	a9 0d		        lda #$0d
-.0a82	20 d2 ff	        jsr chrout
-.0a85	68		        pla
-.0a86	28		        plp
-.0a87	20 c0 90	        jsr bytestohex
-.0a8a	20 3e 94	        jsr yxtoptr
-.0a8d	20 69 94	        jsr incptr8
-.0a90	20 45 94	        jsr ptrtoyx
-.0a93	08		        php
-.0a94	8c ae 0a	        sty dumpadr+1
-.0a97	8e ad 0a	        stx dumpadr
-.0a9a	28		        plp
-.0a9b	ce 8f cf	        dec loops
-.0a9e	d0 d4		        bne again
-.0aa0	68		        pla
-.0aa1	8d ad 0a	        sta dumpadr
-.0aa4	68		        pla
-.0aa5	8d ae 0a	        sta dumpadr+1
-.0aa8	20 19 95	        jsr popregs
-.0aab	60		        rts
->0aac	16		nligne  .byte $16
->0aad	00 f0		dumpadr .word $f000
+.0a39			memdump
+.0a39	20 ec 94	        jsr pushregs
+.0a3c	8d 8a 0a	        sta nligne ;sauve ligne
+.0a3f	8d 8f cf	        sta loops  ;init boucle
+.0a42	08		        php
+.0a43	8c 8c 0a	        sty dumpadr+1
+.0a46	8e 8b 0a	        stx dumpadr
+.0a49	28		        plp
+.0a4a	ad 8c 0a	        lda dumpadr+1
+.0a4d	48		        pha
+.0a4e	ad 8b 0a	        lda dumpadr
+.0a51	48		        pha
+.0a52			again
+.0a52	08		        php
+.0a53	ac 8c 0a	        ldy dumpadr+1
+.0a56	ae 8b 0a	        ldx dumpadr
+.0a59	28		        plp
+.0a5a	a9 08		        lda #$08
+.0a5c	08		        php
+.0a5d	48		        pha
+.0a5e	a9 0d		        lda #$0d
+.0a60	20 d2 ff	        jsr chrout
+.0a63	68		        pla
+.0a64	28		        plp
+.0a65	20 c0 90	        jsr bytestohex
+.0a68	20 3e 94	        jsr yxtoptr
+.0a6b	20 69 94	        jsr incptr8
+.0a6e	20 45 94	        jsr ptrtoyx
+.0a71	08		        php
+.0a72	8c 8c 0a	        sty dumpadr+1
+.0a75	8e 8b 0a	        stx dumpadr
+.0a78	28		        plp
+.0a79	ce 8f cf	        dec loops
+.0a7c	d0 d4		        bne again
+.0a7e	68		        pla
+.0a7f	8d 8b 0a	        sta dumpadr
+.0a82	68		        pla
+.0a83	8d 8c 0a	        sta dumpadr+1
+.0a86	20 19 95	        jsr popregs
+.0a89	60		        rts
+>0a8a	16		nligne  .byte $16
+>0a8b	00 f0		dumpadr .word $f000
 
 ;******  Return to file: dlbug64.asm
 
 
 ;******  Processing file: getadr.asm
 
-.0aaf			getadr
-.0aaf	20 7a 94	        jsr pushall
-.0ab2	20 46 95	        jsr scrnsave
-.0ab5	a0 10		        ldy #>boxa
-.0ab7	a2 f7		        ldx #<boxa
-.0ab9	20 98 91	        jsr drawbox
-.0abc	ae 06 11	        ldx boxat1
-.0abf	ac 07 11	        ldy boxat1+1
-.0ac2	20 42 96	        jsr gotoxy
-.0ac5	a9 0d		        lda #boxac    ;verification
-.0ac7	08		        php
-.0ac8	a0 11		        ldy #>boxat1+2
-.0aca	a2 08		        ldx #<boxat1+2
-.0acc	28		        plp
-.0acd	20 10 96	        jsr putscyx
-.0ad0	ae 1e 11	        ldx boxat2
-.0ad3	ac 1f 11	        ldy boxat2+1
-.0ad6	20 42 96	        jsr gotoxy
-.0ad9	a9 0d		        lda #boxac    ;verification
-.0adb	08		        php
-.0adc	a0 11		        ldy #>boxat2+2
-.0ade	a2 20		        ldx #<boxat2+2
-.0ae0	28		        plp
-.0ae1	20 10 96	        jsr putscyx
-.0ae4	a0 05		        ldy #$05
-.0ae6	a9 00		        lda #$00
-.0ae8	8d 7c 0b	        sta hexptr
-.0aeb	99 77 0b	more0   sta hexadr,y
-.0aee	88		        dey
-.0aef	10 fa		        bpl more0
-.0af1	a9 04		        lda #$04
-.0af3	8d 7d 0b	        sta counter
-.0af6	20 24 93	hexread jsr getkey
-.0af9	c9 0d		        cmp #$0d
-.0afb	f0 5d		        beq out
-.0afd	c9 14		        cmp #$14        ; touche bkspc
-.0aff	f0 28		        beq bkspc
-.0b01	c9 5f		        cmp #$5f        ; touche esc
-.0b03	f0 55		        beq out
-.0b05	c9 30		        cmp #$30        ;<0
-.0b07	90 ed		        bcc hexread     ; less than
-.0b09	c9 a7		        cmp #$a7        ;>F
-.0b0b	b0 e9		        bcs hexread     ; greater than
-.0b0d	c9 3a		        cmp #$3a        ;>9
-.0b0f	90 04		        bcc ok
-.0b11	c9 41		        cmp #$41        ;
-.0b13	90 e1		        bcc hexread
-.0b15	20 d2 ff	ok      jsr chrout
-.0b18	ac 7c 0b	        ldy hexptr
-.0b1b	99 77 0b	        sta hexadr,y
-.0b1e	ee 7c 0b	        inc hexptr
-.0b21	ce 7d 0b	        dec counter
-.0b24	f0 34		        beq out
-.0b26	4c f6 0a	        jmp hexread
-.0b29	ad 7c 0b	bkspc   lda hexptr
-.0b2c	f0 29		        beq nothing
-.0b2e	08		        php
-.0b2f	48		        pha
-.0b30	a9 9d		        lda #157
-.0b32	20 d2 ff	        jsr chrout
-.0b35	68		        pla
-.0b36	28		        plp
-.0b37	08		        php
-.0b38	48		        pha
-.0b39	a9 20		        lda #32
-.0b3b	20 d2 ff	        jsr chrout
-.0b3e	68		        pla
-.0b3f	28		        plp
-.0b40	08		        php
-.0b41	48		        pha
-.0b42	a9 9d		        lda #157
-.0b44	20 d2 ff	        jsr chrout
-.0b47	68		        pla
-.0b48	28		        plp
-.0b49	ee 7d 0b	        inc counter
-.0b4c	ce 7c 0b	        dec hexptr
-.0b4f	ac 7c 0b	        ldy hexptr
-.0b52	a9 00		        lda #$00
-.0b54	99 77 0b	        sta hexadr,y
-.0b57	4c f6 0a	nothing jmp hexread
-.0b5a	20 59 95	out     jsr scrnrest
-.0b5d	08		        php
-.0b5e	a0 0b		        ldy #>hexadr
-.0b60	a2 77		        ldx #<hexadr
-.0b62	28		        plp
-.0b63	20 4a 91	        jsr strhexval
-.0b66	b0 09		        bcs nogood
-.0b68	8a		        txa
-.0b69	29 f0		        and #$f0
-.0b6b	8d ad 0a	        sta dumpadr
-.0b6e	8c ae 0a	        sty dumpadr+1
-.0b71			nogood
-.0b71	20 b3 94	        jsr popall
-.0b74	60		        rts
->0b75	03 18		hexpos .byte 3,24
->0b77	00 00 00 00	hexadr .byte 0,0,0,0,0
->0b7b	00
->0b7c	00		hexptr .byte $00
->0b7d	00		counter .byte $00
+.0a8d			getadr
+.0a8d	20 7a 94	        jsr pushall
+.0a90	20 46 95	        jsr scrnsave
+.0a93	a0 10		        ldy #>boxa
+.0a95	a2 d5		        ldx #<boxa
+.0a97	20 98 91	        jsr drawbox
+.0a9a	ae e4 10	        ldx boxat1
+.0a9d	ac e5 10	        ldy boxat1+1
+.0aa0	20 42 96	        jsr gotoxy
+.0aa3	a9 0d		        lda #boxac    ;verification
+.0aa5	08		        php
+.0aa6	a0 10		        ldy #>boxat1+2
+.0aa8	a2 e6		        ldx #<boxat1+2
+.0aaa	28		        plp
+.0aab	20 10 96	        jsr putscyx
+.0aae	ae fc 10	        ldx boxat2
+.0ab1	ac fd 10	        ldy boxat2+1
+.0ab4	20 42 96	        jsr gotoxy
+.0ab7	a9 0d		        lda #boxac    ;verification
+.0ab9	08		        php
+.0aba	a0 10		        ldy #>boxat2+2
+.0abc	a2 fe		        ldx #<boxat2+2
+.0abe	28		        plp
+.0abf	20 10 96	        jsr putscyx
+.0ac2	a0 05		        ldy #$05
+.0ac4	a9 00		        lda #$00
+.0ac6	8d 5a 0b	        sta hexptr
+.0ac9	99 55 0b	more0   sta hexadr,y
+.0acc	88		        dey
+.0acd	10 fa		        bpl more0
+.0acf	a9 04		        lda #$04
+.0ad1	8d 5b 0b	        sta counter
+.0ad4	20 24 93	hexread jsr getkey
+.0ad7	c9 0d		        cmp #$0d
+.0ad9	f0 5d		        beq out
+.0adb	c9 14		        cmp #$14        ; touche bkspc
+.0add	f0 28		        beq bkspc
+.0adf	c9 5f		        cmp #$5f        ; touche esc
+.0ae1	f0 55		        beq out
+.0ae3	c9 30		        cmp #$30        ;<0
+.0ae5	90 ed		        bcc hexread     ; less than
+.0ae7	c9 a7		        cmp #$a7        ;>F
+.0ae9	b0 e9		        bcs hexread     ; greater than
+.0aeb	c9 3a		        cmp #$3a        ;>9
+.0aed	90 04		        bcc ok
+.0aef	c9 41		        cmp #$41        ;
+.0af1	90 e1		        bcc hexread
+.0af3	20 d2 ff	ok      jsr chrout
+.0af6	ac 5a 0b	        ldy hexptr
+.0af9	99 55 0b	        sta hexadr,y
+.0afc	ee 5a 0b	        inc hexptr
+.0aff	ce 5b 0b	        dec counter
+.0b02	f0 34		        beq out
+.0b04	4c d4 0a	        jmp hexread
+.0b07	ad 5a 0b	bkspc   lda hexptr
+.0b0a	f0 29		        beq nothing
+.0b0c	08		        php
+.0b0d	48		        pha
+.0b0e	a9 9d		        lda #157
+.0b10	20 d2 ff	        jsr chrout
+.0b13	68		        pla
+.0b14	28		        plp
+.0b15	08		        php
+.0b16	48		        pha
+.0b17	a9 20		        lda #32
+.0b19	20 d2 ff	        jsr chrout
+.0b1c	68		        pla
+.0b1d	28		        plp
+.0b1e	08		        php
+.0b1f	48		        pha
+.0b20	a9 9d		        lda #157
+.0b22	20 d2 ff	        jsr chrout
+.0b25	68		        pla
+.0b26	28		        plp
+.0b27	ee 5b 0b	        inc counter
+.0b2a	ce 5a 0b	        dec hexptr
+.0b2d	ac 5a 0b	        ldy hexptr
+.0b30	a9 00		        lda #$00
+.0b32	99 55 0b	        sta hexadr,y
+.0b35	4c d4 0a	nothing jmp hexread
+.0b38	20 59 95	out     jsr scrnrest
+.0b3b	08		        php
+.0b3c	a0 0b		        ldy #>hexadr
+.0b3e	a2 55		        ldx #<hexadr
+.0b40	28		        plp
+.0b41	20 4a 91	        jsr strhexval
+.0b44	b0 09		        bcs nogood
+.0b46	8a		        txa
+.0b47	29 f0		        and #$f0
+.0b49	8d 8b 0a	        sta dumpadr
+.0b4c	8c 8c 0a	        sty dumpadr+1
+.0b4f			nogood
+.0b4f	20 b3 94	        jsr popall
+.0b52	60		        rts
+>0b53	03 18		hexpos .byte 3,24
+>0b55	00 00 00 00	hexadr .byte 0,0,0,0,0
+>0b59	00
+>0b5a	00		hexptr .byte $00
+>0b5b	00		counter .byte $00
 
 ;******  Return to file: dlbug64.asm
 
 
 ;******  Processing file: ramprobe.asm
 
-.0b7e			ramprobe
-.0b7e	20 ec 94	        jsr pushregs
-.0b81	20 ef 92	        jsr clrkbbuf
-.0b84	08		        php
-.0b85	8c ae 0a	        sty dumpadr+1
-.0b88	8e ad 0a	        stx dumpadr
-.0b8b	28		        plp
-.0b8c	08		        php
-.0b8d	48		        pha
-.0b8e	a9 93		        lda #147
-.0b90	20 d2 ff	        jsr chrout
-.0b93	68		        pla
-.0b94	28		        plp
-.0b95	20 b9 0c	        jsr showmenu
-.0b98	4c 0f 0c	        jmp runit
-.0b9b	18		ava16   clc
-.0b9c	ad ad 0a	        lda dumpadr
-.0b9f	69 10		        adc #$10
-.0ba1	90 25		        bcc nrep128
-.0ba3	ee ae 0a	        inc dumpadr+1
-.0ba6	8d ad 0a	nrep16 sta dumpadr
-.0ba9	4c 0f 0c	        jmp runit
-.0bac	38		arr16   sec
-.0bad	ad ad 0a	        lda dumpadr
-.0bb0	e9 10		        sbc #$10
-.0bb2	b0 25		        bcs nemp128
-.0bb4	ce ae 0a	        dec dumpadr+1
-.0bb7	8d ad 0a	nemp16 sta dumpadr
-.0bba	4c 0f 0c	        jmp runit
-.0bbd	18		ava128  clc
-.0bbe	ad ad 0a	        lda dumpadr
-.0bc1	69 80		        adc #$80
-.0bc3	90 03		        bcc nrep128
-.0bc5	ee ae 0a	        inc dumpadr+1
-.0bc8	8d ad 0a	nrep128 sta dumpadr
-.0bcb	4c 0f 0c	        jmp runit
-.0bce	38		arr128  sec
-.0bcf	ad ad 0a	        lda dumpadr
-.0bd2	e9 80		        sbc #$80
-.0bd4	b0 03		        bcs nemp128
-.0bd6	ce ae 0a	        dec dumpadr+1
-.0bd9	8d ad 0a	nemp128 sta dumpadr
-.0bdc	4c 0f 0c	        jmp runit
-.0bdf	ee ae 0a	ava256  inc dumpadr+1
-.0be2	4c 0f 0c	        jmp runit
-.0be5	ce ae 0a	arr256  dec dumpadr+1
-.0be8	4c 0f 0c	        jmp runit
-.0beb	ee ae 0a	ava512  inc dumpadr+1
-.0bee	4c 0f 0c	        jmp runit
-.0bf1	ce ae 0a	arr512  dec dumpadr+1
-.0bf4	4c 0f 0c	        jmp runit
-.0bf7	ad ae 0a	arr1k   lda dumpadr+1
-.0bfa	38		        sec
-.0bfb	e9 10		        sbc #$10
-.0bfd	8d ae 0a	        sta dumpadr+1
-.0c00	4c 0f 0c	        jmp runit
-.0c03	ad ae 0a	ava1k   lda dumpadr+1
-.0c06	18		        clc
-.0c07	69 10		        adc #$10
-.0c09	8d ae 0a	        sta dumpadr+1
-.0c0c	4c 0f 0c	        jmp runit
-.0c0f			runit
-.0c0f	20 ec 94	        jsr pushregs
-.0c12	a2 01		        ldx #1
-.0c14	a0 01		        ldy #1
-.0c16	20 42 96	        jsr gotoxy
-.0c19	20 19 95	        jsr popregs
-.0c1c	a9 10		        lda #16
-.0c1e	08		        php
-.0c1f	ac ae 0a	        ldy dumpadr+1
-.0c22	ae ad 0a	        ldx dumpadr
-.0c25	28		        plp
-.0c26	20 5b 0a	        jsr memdump
-.0c29	20 24 93	morekey jsr getkey
-.0c2c	c9 85		chkf1   cmp #133   ; touche [F1]
-.0c2e	d0 09		        bne chkf2
-.0c30	20 95 0d	        jsr aide
-.0c33	4c 0f 0c	        jmp runit
-.0c36	4c 29 0c	        jmp morekey; +128
-.0c39	c9 89		chkf2   cmp #137   ; touche [F2]
-.0c3b	d0 12		        bne chk11
-.0c3d	a0 00		        ldy #$00
-.0c3f	a2 00		        ldx #$00
-.0c41	08		        php
-.0c42	8c ae 0a	        sty dumpadr+1
-.0c45	8e ad 0a	        stx dumpadr
-.0c48	28		        plp
-.0c49	4c 0f 0c	        jmp runit
-.0c4c	4c 29 0c	        jmp morekey;-128
-.0c4f	c9 11		chk11   cmp #$11
-.0c51	d0 03		        bne chk91
-.0c53	4c 9b 0b	        jmp ava16  ;+16
-.0c56	c9 91		chk91   cmp #$91
-.0c58	d0 03		        bne chkf3
-.0c5a	4c ac 0b	        jmp arr16  ;-16
-.0c5d	c9 86		chkf3   cmp #134   ; touche [F3]
-.0c5f	d0 03		        bne chkf4
-.0c61	4c bd 0b	        jmp ava128 ;+128
-.0c64	c9 8a		chkf4   cmp #138   ; touche [F4]
-.0c66	d0 03		        bne chkf5
-.0c68	4c ce 0b	        jmp arr128 ;-128
-.0c6b	c9 87		chkf5   cmp #135   ; touche [F6]
-.0c6d	d0 03		        bne chkf6
-.0c6f	4c eb 0b	        jmp ava512  ;+512
-.0c72	c9 8b		chkf6   cmp #139   ; touche [F6]
-.0c74	d0 03		        bne chkf7
-.0c76	4c f1 0b	        jmp arr512 ;-512
-.0c79	c9 88		chkf7   cmp #136   ; touche [F7]
-.0c7b	d0 03		        bne chkf8
-.0c7d	4c 03 0c	        jmp ava1k  ;+1024
-.0c80	c9 8c		chkf8   cmp #140   ; touche [F8]
-.0c82	d0 03		        bne chk20
-.0c84	4c f7 0b	        jmp arr1k  ;-1024
-.0c87	c9 20		chk20   cmp #$20   ; touche espace
-.0c89	d0 03		        bne chkn
-.0c8b	4c 0f 0c	        jmp runit
-.0c8e	c9 47		chkn    cmp #71    ; touche G
-.0c90	d0 06		        bne chkq
-.0c92	20 af 0a	        jsr getadr ; demande adresse
-.0c95	20 0f 0c	        jsr runit
-.0c98	c9 5f		chkq    cmp #$5f   ; touche [<-]
-.0c9a	f0 03		        beq quitter
-.0c9c	4c 29 0c	        jmp morekey
-.0c9f	20 19 95	quitter jsr popregs
-.0ca2	08		        php
-.0ca3	48		        pha
-.0ca4	a9 93		        lda #147
-.0ca6	20 d2 ff	        jsr chrout
-.0ca9	68		        pla
-.0caa	28		        plp
-.0cab	20 ec 94	        jsr pushregs
-.0cae	a2 00		        ldx #0
-.0cb0	a0 00		        ldy #0
-.0cb2	20 42 96	        jsr gotoxy
-.0cb5	20 19 95	        jsr popregs
-.0cb8	60		        rts
-.0cb9			showmenu
-.0cb9	20 ec 94	        jsr pushregs
-.0cbc	a2 01		        ldx #1
-.0cbe	a0 00		        ldy #0
-.0cc0	20 42 96	        jsr gotoxy
-.0cc3	20 19 95	        jsr popregs
-.0cc6	20 ec 94	        jsr pushregs
-.0cc9	a0 0f		        ldy #>dmphead+1
-.0ccb	a2 5b		        ldx #<dmphead
-.0ccd	20 ca 95	        jsr putsyx
-.0cd0	20 19 95	        jsr popregs
-.0cd3	20 ec 94	        jsr pushregs
-.0cd6	a2 01		        ldx #1
-.0cd8	a0 01		        ldy #1
-.0cda	20 42 96	        jsr gotoxy
-.0cdd	20 19 95	        jsr popregs
-.0ce0	20 ec 94	        jsr pushregs
-.0ce3	a0 0f		        ldy #>dmphead2+1
-.0ce5	a2 87		        ldx #<dmphead2
-.0ce7	20 ca 95	        jsr putsyx
-.0cea	20 19 95	        jsr popregs
-.0ced	20 ec 94	        jsr pushregs
-.0cf0	a2 01		        ldx #1
-.0cf2	a0 14		        ldy #20
-.0cf4	20 42 96	        jsr gotoxy
-.0cf7	20 19 95	        jsr popregs
-.0cfa	20 ec 94	        jsr pushregs
-.0cfd	ae b3 0f	        ldx menu0
-.0d00	ac b4 0f	        ldy menu0+1
-.0d03	20 42 96	        jsr gotoxy
-.0d06	a0 0f		        ldy #>menu0+2
-.0d08	a2 b5		        ldx #<menu0+2
-.0d0a	20 ca 95	        jsr putsyx
-.0d0d	20 19 95	        jsr popregs
-.0d10	20 ec 94	        jsr pushregs
-.0d13	ae df 0f	        ldx menu1
-.0d16	ac e0 0f	        ldy menu1+1
-.0d19	20 42 96	        jsr gotoxy
-.0d1c	a0 0f		        ldy #>menu1+2
-.0d1e	a2 e1		        ldx #<menu1+2
-.0d20	20 ca 95	        jsr putsyx
-.0d23	20 19 95	        jsr popregs
-.0d26	20 ec 94	        jsr pushregs
-.0d29	ae 0e 10	        ldx menu2
-.0d2c	ac 0f 10	        ldy menu2+1
-.0d2f	20 42 96	        jsr gotoxy
-.0d32	a0 10		        ldy #>menu2+2
-.0d34	a2 10		        ldx #<menu2+2
-.0d36	20 ca 95	        jsr putsyx
-.0d39	20 19 95	        jsr popregs
-.0d3c	20 ec 94	        jsr pushregs
-.0d3f	ae 3d 10	        ldx menu3
-.0d42	ac 3e 10	        ldy menu3+1
-.0d45	20 42 96	        jsr gotoxy
-.0d48	a0 10		        ldy #>menu3+2
-.0d4a	a2 3f		        ldx #<menu3+2
-.0d4c	20 ca 95	        jsr putsyx
-.0d4f	20 19 95	        jsr popregs
-.0d52	20 ec 94	        jsr pushregs
-.0d55	ae 6c 10	        ldx menu4
-.0d58	ac 6d 10	        ldy menu4+1
-.0d5b	20 42 96	        jsr gotoxy
-.0d5e	a0 10		        ldy #>menu4+2
-.0d60	a2 6e		        ldx #<menu4+2
-.0d62	20 ca 95	        jsr putsyx
-.0d65	20 19 95	        jsr popregs
-.0d68	20 ec 94	        jsr pushregs
-.0d6b	ae 9b 10	        ldx menu5
-.0d6e	ac 9c 10	        ldy menu5+1
-.0d71	20 42 96	        jsr gotoxy
-.0d74	a0 10		        ldy #>menu5+2
-.0d76	a2 9d		        ldx #<menu5+2
-.0d78	20 ca 95	        jsr putsyx
-.0d7b	20 19 95	        jsr popregs
-.0d7e	20 ec 94	        jsr pushregs
-.0d81	ae ca 10	        ldx menu6
-.0d84	ac cb 10	        ldy menu6+1
-.0d87	20 42 96	        jsr gotoxy
-.0d8a	a0 10		        ldy #>menu6+2
-.0d8c	a2 cc		        ldx #<menu6+2
-.0d8e	20 ca 95	        jsr putsyx
-.0d91	20 19 95	        jsr popregs
-.0d94	60		        rts
-.0d95			aide
-.0d95	20 7a 94	        jsr pushall
-.0d98	20 46 95	        jsr scrnsave
-.0d9b	a0 11		        ldy #>boxh
-.0d9d	a2 2c		        ldx #<boxh
-.0d9f	20 98 91	        jsr drawbox
-.0da2	ae 78 12	        ldx boxht0
-.0da5	ac 79 12	        ldy boxht0+1
-.0da8	20 42 96	        jsr gotoxy
-.0dab	a9 0f		        lda #sgris3    ;verification
-.0dad	08		        php
-.0dae	a0 12		        ldy #>boxht0+2
-.0db0	a2 7a		        ldx #<boxht0+2
-.0db2	28		        plp
-.0db3	20 10 96	        jsr putscyx
-.0db6	ae 39 11	        ldx boxht1
-.0db9	ac 3a 11	        ldy boxht1+1
-.0dbc	20 42 96	        jsr gotoxy
-.0dbf	a9 0f		        lda #sgris3    ;verification
-.0dc1	08		        php
-.0dc2	a0 11		        ldy #>boxht1+2
-.0dc4	a2 3b		        ldx #<boxht1+2
-.0dc6	28		        plp
-.0dc7	20 10 96	        jsr putscyx
-.0dca	ae 52 11	        ldx boxht2
-.0dcd	ac 53 11	        ldy boxht2+1
-.0dd0	20 42 96	        jsr gotoxy
-.0dd3	a9 0f		        lda #sgris3    ;verification
-.0dd5	08		        php
-.0dd6	a0 11		        ldy #>boxht2+2
-.0dd8	a2 54		        ldx #<boxht2+2
-.0dda	28		        plp
-.0ddb	20 10 96	        jsr putscyx
-.0dde	ae 72 11	        ldx boxht3
-.0de1	ac 73 11	        ldy boxht3+1
-.0de4	20 42 96	        jsr gotoxy
-.0de7	a9 0f		        lda #sgris3    ;verification
-.0de9	08		        php
-.0dea	a0 11		        ldy #>boxht3+2
-.0dec	a2 74		        ldx #<boxht3+2
-.0dee	28		        plp
-.0def	20 10 96	        jsr putscyx
-.0df2	ae 8f 11	        ldx boxht4
-.0df5	ac 90 11	        ldy boxht4+1
-.0df8	20 42 96	        jsr gotoxy
-.0dfb	a9 0f		        lda #sgris3    ;verification
-.0dfd	08		        php
-.0dfe	a0 11		        ldy #>boxht4+2
-.0e00	a2 91		        ldx #<boxht4+2
-.0e02	28		        plp
-.0e03	20 10 96	        jsr putscyx
-.0e06	ae ac 11	        ldx boxht5
-.0e09	ac ad 11	        ldy boxht5+1
-.0e0c	20 42 96	        jsr gotoxy
-.0e0f	a9 0f		        lda #sgris3    ;verification
-.0e11	08		        php
-.0e12	a0 11		        ldy #>boxht5+2
-.0e14	a2 ae		        ldx #<boxht5+2
-.0e16	28		        plp
-.0e17	20 10 96	        jsr putscyx
-.0e1a	ae ca 11	        ldx boxht6
-.0e1d	ac cb 11	        ldy boxht6+1
-.0e20	20 42 96	        jsr gotoxy
-.0e23	a9 0f		        lda #sgris3    ;verification
-.0e25	08		        php
-.0e26	a0 11		        ldy #>boxht6+2
-.0e28	a2 cc		        ldx #<boxht6+2
-.0e2a	28		        plp
-.0e2b	20 10 96	        jsr putscyx
-.0e2e	ae e1 11	        ldx boxht7
-.0e31	ac e2 11	        ldy boxht7+1
-.0e34	20 42 96	        jsr gotoxy
-.0e37	a9 0f		        lda #sgris3    ;verification
-.0e39	08		        php
-.0e3a	a0 11		        ldy #>boxht7+2
-.0e3c	a2 e3		        ldx #<boxht7+2
-.0e3e	28		        plp
-.0e3f	20 10 96	        jsr putscyx
-.0e42	ae 05 12	        ldx boxht8
-.0e45	ac 06 12	        ldy boxht8+1
-.0e48	20 42 96	        jsr gotoxy
-.0e4b	a9 0f		        lda #sgris3    ;verification
-.0e4d	08		        php
-.0e4e	a0 12		        ldy #>boxht8+2
-.0e50	a2 07		        ldx #<boxht8+2
-.0e52	28		        plp
-.0e53	20 10 96	        jsr putscyx
-.0e56	ae 25 12	        ldx boxht9
-.0e59	ac 26 12	        ldy boxht9+1
-.0e5c	20 42 96	        jsr gotoxy
-.0e5f	a9 0f		        lda #sgris3    ;verification
-.0e61	08		        php
-.0e62	a0 12		        ldy #>boxht9+2
-.0e64	a2 27		        ldx #<boxht9+2
-.0e66	28		        plp
-.0e67	20 10 96	        jsr putscyx
-.0e6a	ae 46 12	        ldx boxht10
-.0e6d	ac 47 12	        ldy boxht10+1
-.0e70	20 42 96	        jsr gotoxy
-.0e73	a9 0f		        lda #sgris3    ;verification
-.0e75	08		        php
-.0e76	a0 12		        ldy #>boxht10+2
-.0e78	a2 48		        ldx #<boxht10+2
-.0e7a	28		        plp
-.0e7b	20 10 96	        jsr putscyx
-.0e7e	ae 61 12	        ldx boxht11
-.0e81	ac 62 12	        ldy boxht11+1
-.0e84	20 42 96	        jsr gotoxy
-.0e87	a9 0f		        lda #sgris3    ;verification
-.0e89	08		        php
-.0e8a	a0 12		        ldy #>boxht11+2
-.0e8c	a2 63		        ldx #<boxht11+2
-.0e8e	28		        plp
-.0e8f	20 10 96	        jsr putscyx
-.0e92	ae 9f 12	        ldx boxhta
-.0e95	ac a0 12	        ldy boxhta+1
-.0e98	20 42 96	        jsr gotoxy
-.0e9b	a9 0f		        lda #sgris3    ;verification
-.0e9d	08		        php
-.0e9e	a0 12		        ldy #>boxhta+2
-.0ea0	a2 a1		        ldx #<boxhta+2
-.0ea2	28		        plp
-.0ea3	20 10 96	        jsr putscyx
-.0ea6	ae c3 12	        ldx boxhtb
-.0ea9	ac c4 12	        ldy boxhtb+1
-.0eac	20 42 96	        jsr gotoxy
-.0eaf	a9 0f		        lda #sgris3    ;verification
-.0eb1	08		        php
-.0eb2	a0 12		        ldy #>boxhtb+2
-.0eb4	a2 c5		        ldx #<boxhtb+2
-.0eb6	28		        plp
-.0eb7	20 10 96	        jsr putscyx
-.0eba	ae e9 12	        ldx boxhtc
-.0ebd	ac ea 12	        ldy boxhtc+1
-.0ec0	20 42 96	        jsr gotoxy
-.0ec3	a9 0f		        lda #sgris3    ;verification
-.0ec5	08		        php
-.0ec6	a0 12		        ldy #>boxhtc+2
-.0ec8	a2 eb		        ldx #<boxhtc+2
-.0eca	28		        plp
-.0ecb	20 10 96	        jsr putscyx
-.0ece	ae 10 13	        ldx boxhtd
-.0ed1	ac 11 13	        ldy boxhtd+1
-.0ed4	20 42 96	        jsr gotoxy
-.0ed7	a9 0f		        lda #sgris3    ;verification
-.0ed9	08		        php
-.0eda	a0 13		        ldy #>boxhtd+2
-.0edc	a2 12		        ldx #<boxhtd+2
-.0ede	28		        plp
-.0edf	20 10 96	        jsr putscyx
-.0ee2	ae 31 13	        ldx boxhte
-.0ee5	ac 32 13	        ldy boxhte+1
-.0ee8	20 42 96	        jsr gotoxy
-.0eeb	a9 0f		        lda #sgris3    ;verification
-.0eed	08		        php
-.0eee	a0 13		        ldy #>boxhte+2
-.0ef0	a2 33		        ldx #<boxhte+2
-.0ef2	28		        plp
-.0ef3	20 10 96	        jsr putscyx
-.0ef6	ae 50 13	        ldx boxhtf
-.0ef9	ac 51 13	        ldy boxhtf+1
-.0efc	20 42 96	        jsr gotoxy
-.0eff	a9 0f		        lda #sgris3    ;verification
-.0f01	08		        php
-.0f02	a0 13		        ldy #>boxhtf+2
-.0f04	a2 52		        ldx #<boxhtf+2
-.0f06	28		        plp
-.0f07	20 10 96	        jsr putscyx
-.0f0a	ae 74 13	        ldx boxhtg
-.0f0d	ac 75 13	        ldy boxhtg+1
-.0f10	20 42 96	        jsr gotoxy
-.0f13	a9 0f		        lda #sgris3    ;verification
-.0f15	08		        php
-.0f16	a0 13		        ldy #>boxhtg+2
-.0f18	a2 76		        ldx #<boxhtg+2
-.0f1a	28		        plp
-.0f1b	20 10 96	        jsr putscyx
-.0f1e	ae 91 13	        ldx boxhth
-.0f21	ac 92 13	        ldy boxhth+1
-.0f24	20 42 96	        jsr gotoxy
-.0f27	a9 0a		        lda #srose    ;verification
-.0f29	08		        php
-.0f2a	a0 13		        ldy #>boxhth+2
-.0f2c	a2 93		        ldx #<boxhth+2
-.0f2e	28		        plp
-.0f2f	20 10 96	        jsr putscyx
-.0f32	ae a4 13	        ldx boxhti
-.0f35	ac a5 13	        ldy boxhti+1
-.0f38	20 42 96	        jsr gotoxy
-.0f3b	a9 0c		        lda #sgris2    ;verification
-.0f3d	08		        php
-.0f3e	a0 13		        ldy #>boxhti+2
-.0f40	a2 a6		        ldx #<boxhti+2
-.0f42	28		        plp
-.0f43	20 10 96	        jsr putscyx
-.0f46	20 24 93	        jsr getkey
-.0f49	20 59 95	        jsr scrnrest
-.0f4c	20 b3 94	        jsr popall
-.0f4f	60		        rts
+.0b5c			ramprobe
+.0b5c	20 ec 94	        jsr pushregs
+.0b5f	20 ef 92	        jsr clrkbbuf
+.0b62	08		        php
+.0b63	8c 8c 0a	        sty dumpadr+1
+.0b66	8e 8b 0a	        stx dumpadr
+.0b69	28		        plp
+.0b6a	08		        php
+.0b6b	48		        pha
+.0b6c	a9 93		        lda #147
+.0b6e	20 d2 ff	        jsr chrout
+.0b71	68		        pla
+.0b72	28		        plp
+.0b73	20 97 0c	        jsr showmenu
+.0b76	4c ed 0b	        jmp runit
+.0b79	18		ava16   clc
+.0b7a	ad 8b 0a	        lda dumpadr
+.0b7d	69 10		        adc #$10
+.0b7f	90 25		        bcc nrep128
+.0b81	ee 8c 0a	        inc dumpadr+1
+.0b84	8d 8b 0a	nrep16 sta dumpadr
+.0b87	4c ed 0b	        jmp runit
+.0b8a	38		arr16   sec
+.0b8b	ad 8b 0a	        lda dumpadr
+.0b8e	e9 10		        sbc #$10
+.0b90	b0 25		        bcs nemp128
+.0b92	ce 8c 0a	        dec dumpadr+1
+.0b95	8d 8b 0a	nemp16 sta dumpadr
+.0b98	4c ed 0b	        jmp runit
+.0b9b	18		ava128  clc
+.0b9c	ad 8b 0a	        lda dumpadr
+.0b9f	69 80		        adc #$80
+.0ba1	90 03		        bcc nrep128
+.0ba3	ee 8c 0a	        inc dumpadr+1
+.0ba6	8d 8b 0a	nrep128 sta dumpadr
+.0ba9	4c ed 0b	        jmp runit
+.0bac	38		arr128  sec
+.0bad	ad 8b 0a	        lda dumpadr
+.0bb0	e9 80		        sbc #$80
+.0bb2	b0 03		        bcs nemp128
+.0bb4	ce 8c 0a	        dec dumpadr+1
+.0bb7	8d 8b 0a	nemp128 sta dumpadr
+.0bba	4c ed 0b	        jmp runit
+.0bbd	ee 8c 0a	ava256  inc dumpadr+1
+.0bc0	4c ed 0b	        jmp runit
+.0bc3	ce 8c 0a	arr256  dec dumpadr+1
+.0bc6	4c ed 0b	        jmp runit
+.0bc9	ee 8c 0a	ava512  inc dumpadr+1
+.0bcc	4c ed 0b	        jmp runit
+.0bcf	ce 8c 0a	arr512  dec dumpadr+1
+.0bd2	4c ed 0b	        jmp runit
+.0bd5	ad 8c 0a	arr1k   lda dumpadr+1
+.0bd8	38		        sec
+.0bd9	e9 10		        sbc #$10
+.0bdb	8d 8c 0a	        sta dumpadr+1
+.0bde	4c ed 0b	        jmp runit
+.0be1	ad 8c 0a	ava1k   lda dumpadr+1
+.0be4	18		        clc
+.0be5	69 10		        adc #$10
+.0be7	8d 8c 0a	        sta dumpadr+1
+.0bea	4c ed 0b	        jmp runit
+.0bed			runit
+.0bed	20 ec 94	        jsr pushregs
+.0bf0	a2 01		        ldx #1
+.0bf2	a0 01		        ldy #1
+.0bf4	20 42 96	        jsr gotoxy
+.0bf7	20 19 95	        jsr popregs
+.0bfa	a9 10		        lda #16
+.0bfc	08		        php
+.0bfd	ac 8c 0a	        ldy dumpadr+1
+.0c00	ae 8b 0a	        ldx dumpadr
+.0c03	28		        plp
+.0c04	20 39 0a	        jsr memdump
+.0c07	20 24 93	morekey jsr getkey
+.0c0a	c9 85		chkf1   cmp #133   ; touche [F1]
+.0c0c	d0 09		        bne chkf2
+.0c0e	20 73 0d	        jsr aide
+.0c11	4c ed 0b	        jmp runit
+.0c14	4c 07 0c	        jmp morekey; +128
+.0c17	c9 89		chkf2   cmp #137   ; touche [F2]
+.0c19	d0 12		        bne chk11
+.0c1b	a0 00		        ldy #$00
+.0c1d	a2 00		        ldx #$00
+.0c1f	08		        php
+.0c20	8c 8c 0a	        sty dumpadr+1
+.0c23	8e 8b 0a	        stx dumpadr
+.0c26	28		        plp
+.0c27	4c ed 0b	        jmp runit
+.0c2a	4c 07 0c	        jmp morekey;-128
+.0c2d	c9 11		chk11   cmp #$11
+.0c2f	d0 03		        bne chk91
+.0c31	4c 79 0b	        jmp ava16  ;+16
+.0c34	c9 91		chk91   cmp #$91
+.0c36	d0 03		        bne chkf3
+.0c38	4c 8a 0b	        jmp arr16  ;-16
+.0c3b	c9 86		chkf3   cmp #134   ; touche [F3]
+.0c3d	d0 03		        bne chkf4
+.0c3f	4c 9b 0b	        jmp ava128 ;+128
+.0c42	c9 8a		chkf4   cmp #138   ; touche [F4]
+.0c44	d0 03		        bne chkf5
+.0c46	4c ac 0b	        jmp arr128 ;-128
+.0c49	c9 87		chkf5   cmp #135   ; touche [F6]
+.0c4b	d0 03		        bne chkf6
+.0c4d	4c c9 0b	        jmp ava512  ;+512
+.0c50	c9 8b		chkf6   cmp #139   ; touche [F6]
+.0c52	d0 03		        bne chkf7
+.0c54	4c cf 0b	        jmp arr512 ;-512
+.0c57	c9 88		chkf7   cmp #136   ; touche [F7]
+.0c59	d0 03		        bne chkf8
+.0c5b	4c e1 0b	        jmp ava1k  ;+1024
+.0c5e	c9 8c		chkf8   cmp #140   ; touche [F8]
+.0c60	d0 03		        bne chk20
+.0c62	4c d5 0b	        jmp arr1k  ;-1024
+.0c65	c9 20		chk20   cmp #$20   ; touche espace
+.0c67	d0 03		        bne chkn
+.0c69	4c ed 0b	        jmp runit
+.0c6c	c9 47		chkn    cmp #71    ; touche G
+.0c6e	d0 06		        bne chkq
+.0c70	20 8d 0a	        jsr getadr ; demande adresse
+.0c73	20 ed 0b	        jsr runit
+.0c76	c9 5f		chkq    cmp #$5f   ; touche [<-]
+.0c78	f0 03		        beq quitter
+.0c7a	4c 07 0c	        jmp morekey
+.0c7d	20 19 95	quitter jsr popregs
+.0c80	08		        php
+.0c81	48		        pha
+.0c82	a9 93		        lda #147
+.0c84	20 d2 ff	        jsr chrout
+.0c87	68		        pla
+.0c88	28		        plp
+.0c89	20 ec 94	        jsr pushregs
+.0c8c	a2 00		        ldx #0
+.0c8e	a0 00		        ldy #0
+.0c90	20 42 96	        jsr gotoxy
+.0c93	20 19 95	        jsr popregs
+.0c96	60		        rts
+.0c97			showmenu
+.0c97	20 ec 94	        jsr pushregs
+.0c9a	a2 01		        ldx #1
+.0c9c	a0 00		        ldy #0
+.0c9e	20 42 96	        jsr gotoxy
+.0ca1	20 19 95	        jsr popregs
+.0ca4	20 ec 94	        jsr pushregs
+.0ca7	a0 0f		        ldy #>dmphead+1
+.0ca9	a2 39		        ldx #<dmphead
+.0cab	20 ca 95	        jsr putsyx
+.0cae	20 19 95	        jsr popregs
+.0cb1	20 ec 94	        jsr pushregs
+.0cb4	a2 01		        ldx #1
+.0cb6	a0 01		        ldy #1
+.0cb8	20 42 96	        jsr gotoxy
+.0cbb	20 19 95	        jsr popregs
+.0cbe	20 ec 94	        jsr pushregs
+.0cc1	a0 0f		        ldy #>dmphead2+1
+.0cc3	a2 65		        ldx #<dmphead2
+.0cc5	20 ca 95	        jsr putsyx
+.0cc8	20 19 95	        jsr popregs
+.0ccb	20 ec 94	        jsr pushregs
+.0cce	a2 01		        ldx #1
+.0cd0	a0 14		        ldy #20
+.0cd2	20 42 96	        jsr gotoxy
+.0cd5	20 19 95	        jsr popregs
+.0cd8	20 ec 94	        jsr pushregs
+.0cdb	ae 91 0f	        ldx menu0
+.0cde	ac 92 0f	        ldy menu0+1
+.0ce1	20 42 96	        jsr gotoxy
+.0ce4	a0 0f		        ldy #>menu0+2
+.0ce6	a2 93		        ldx #<menu0+2
+.0ce8	20 ca 95	        jsr putsyx
+.0ceb	20 19 95	        jsr popregs
+.0cee	20 ec 94	        jsr pushregs
+.0cf1	ae bd 0f	        ldx menu1
+.0cf4	ac be 0f	        ldy menu1+1
+.0cf7	20 42 96	        jsr gotoxy
+.0cfa	a0 0f		        ldy #>menu1+2
+.0cfc	a2 bf		        ldx #<menu1+2
+.0cfe	20 ca 95	        jsr putsyx
+.0d01	20 19 95	        jsr popregs
+.0d04	20 ec 94	        jsr pushregs
+.0d07	ae ec 0f	        ldx menu2
+.0d0a	ac ed 0f	        ldy menu2+1
+.0d0d	20 42 96	        jsr gotoxy
+.0d10	a0 0f		        ldy #>menu2+2
+.0d12	a2 ee		        ldx #<menu2+2
+.0d14	20 ca 95	        jsr putsyx
+.0d17	20 19 95	        jsr popregs
+.0d1a	20 ec 94	        jsr pushregs
+.0d1d	ae 1b 10	        ldx menu3
+.0d20	ac 1c 10	        ldy menu3+1
+.0d23	20 42 96	        jsr gotoxy
+.0d26	a0 10		        ldy #>menu3+2
+.0d28	a2 1d		        ldx #<menu3+2
+.0d2a	20 ca 95	        jsr putsyx
+.0d2d	20 19 95	        jsr popregs
+.0d30	20 ec 94	        jsr pushregs
+.0d33	ae 4a 10	        ldx menu4
+.0d36	ac 4b 10	        ldy menu4+1
+.0d39	20 42 96	        jsr gotoxy
+.0d3c	a0 10		        ldy #>menu4+2
+.0d3e	a2 4c		        ldx #<menu4+2
+.0d40	20 ca 95	        jsr putsyx
+.0d43	20 19 95	        jsr popregs
+.0d46	20 ec 94	        jsr pushregs
+.0d49	ae 79 10	        ldx menu5
+.0d4c	ac 7a 10	        ldy menu5+1
+.0d4f	20 42 96	        jsr gotoxy
+.0d52	a0 10		        ldy #>menu5+2
+.0d54	a2 7b		        ldx #<menu5+2
+.0d56	20 ca 95	        jsr putsyx
+.0d59	20 19 95	        jsr popregs
+.0d5c	20 ec 94	        jsr pushregs
+.0d5f	ae a8 10	        ldx menu6
+.0d62	ac a9 10	        ldy menu6+1
+.0d65	20 42 96	        jsr gotoxy
+.0d68	a0 10		        ldy #>menu6+2
+.0d6a	a2 aa		        ldx #<menu6+2
+.0d6c	20 ca 95	        jsr putsyx
+.0d6f	20 19 95	        jsr popregs
+.0d72	60		        rts
+.0d73			aide
+.0d73	20 7a 94	        jsr pushall
+.0d76	20 46 95	        jsr scrnsave
+.0d79	a0 11		        ldy #>boxh
+.0d7b	a2 0e		        ldx #<boxh
+.0d7d	20 98 91	        jsr drawbox
+.0d80	ae 79 12	        ldx boxht0
+.0d83	ac 7a 12	        ldy boxht0+1
+.0d86	20 42 96	        jsr gotoxy
+.0d89	a9 0f		        lda #sgris3    ;verification
+.0d8b	08		        php
+.0d8c	a0 12		        ldy #>boxht0+2
+.0d8e	a2 7b		        ldx #<boxht0+2
+.0d90	28		        plp
+.0d91	20 10 96	        jsr putscyx
+.0d94	ae 1e 11	        ldx boxht1
+.0d97	ac 1f 11	        ldy boxht1+1
+.0d9a	20 42 96	        jsr gotoxy
+.0d9d	a9 0f		        lda #sgris3    ;verification
+.0d9f	08		        php
+.0da0	a0 11		        ldy #>boxht1+2
+.0da2	a2 20		        ldx #<boxht1+2
+.0da4	28		        plp
+.0da5	20 10 96	        jsr putscyx
+.0da8	ae 3b 11	        ldx boxht2
+.0dab	ac 3c 11	        ldy boxht2+1
+.0dae	20 42 96	        jsr gotoxy
+.0db1	a9 0f		        lda #sgris3    ;verification
+.0db3	08		        php
+.0db4	a0 11		        ldy #>boxht2+2
+.0db6	a2 3d		        ldx #<boxht2+2
+.0db8	28		        plp
+.0db9	20 10 96	        jsr putscyx
+.0dbc	ae 60 11	        ldx boxht3
+.0dbf	ac 61 11	        ldy boxht3+1
+.0dc2	20 42 96	        jsr gotoxy
+.0dc5	a9 0f		        lda #sgris3    ;verification
+.0dc7	08		        php
+.0dc8	a0 11		        ldy #>boxht3+2
+.0dca	a2 62		        ldx #<boxht3+2
+.0dcc	28		        plp
+.0dcd	20 10 96	        jsr putscyx
+.0dd0	ae 7d 11	        ldx boxht4
+.0dd3	ac 7e 11	        ldy boxht4+1
+.0dd6	20 42 96	        jsr gotoxy
+.0dd9	a9 0f		        lda #sgris3    ;verification
+.0ddb	08		        php
+.0ddc	a0 11		        ldy #>boxht4+2
+.0dde	a2 7f		        ldx #<boxht4+2
+.0de0	28		        plp
+.0de1	20 10 96	        jsr putscyx
+.0de4	ae 9a 11	        ldx boxht5
+.0de7	ac 9b 11	        ldy boxht5+1
+.0dea	20 42 96	        jsr gotoxy
+.0ded	a9 0f		        lda #sgris3    ;verification
+.0def	08		        php
+.0df0	a0 11		        ldy #>boxht5+2
+.0df2	a2 9c		        ldx #<boxht5+2
+.0df4	28		        plp
+.0df5	20 10 96	        jsr putscyx
+.0df8	ae b8 11	        ldx boxht6
+.0dfb	ac b9 11	        ldy boxht6+1
+.0dfe	20 42 96	        jsr gotoxy
+.0e01	a9 0f		        lda #sgris3    ;verification
+.0e03	08		        php
+.0e04	a0 11		        ldy #>boxht6+2
+.0e06	a2 ba		        ldx #<boxht6+2
+.0e08	28		        plp
+.0e09	20 10 96	        jsr putscyx
+.0e0c	ae db 11	        ldx boxht7
+.0e0f	ac dc 11	        ldy boxht7+1
+.0e12	20 42 96	        jsr gotoxy
+.0e15	a9 0f		        lda #sgris3    ;verification
+.0e17	08		        php
+.0e18	a0 11		        ldy #>boxht7+2
+.0e1a	a2 dd		        ldx #<boxht7+2
+.0e1c	28		        plp
+.0e1d	20 10 96	        jsr putscyx
+.0e20	ae fc 11	        ldx boxht8
+.0e23	ac fd 11	        ldy boxht8+1
+.0e26	20 42 96	        jsr gotoxy
+.0e29	a9 0f		        lda #sgris3    ;verification
+.0e2b	08		        php
+.0e2c	a0 11		        ldy #>boxht8+2
+.0e2e	a2 fe		        ldx #<boxht8+2
+.0e30	28		        plp
+.0e31	20 10 96	        jsr putscyx
+.0e34	ae 1e 12	        ldx boxht9
+.0e37	ac 1f 12	        ldy boxht9+1
+.0e3a	20 42 96	        jsr gotoxy
+.0e3d	a9 0f		        lda #sgris3    ;verification
+.0e3f	08		        php
+.0e40	a0 12		        ldy #>boxht9+2
+.0e42	a2 20		        ldx #<boxht9+2
+.0e44	28		        plp
+.0e45	20 10 96	        jsr putscyx
+.0e48	ae 3d 12	        ldx boxht10
+.0e4b	ac 3e 12	        ldy boxht10+1
+.0e4e	20 42 96	        jsr gotoxy
+.0e51	a9 0f		        lda #sgris3    ;verification
+.0e53	08		        php
+.0e54	a0 12		        ldy #>boxht10+2
+.0e56	a2 3f		        ldx #<boxht10+2
+.0e58	28		        plp
+.0e59	20 10 96	        jsr putscyx
+.0e5c	ae 61 12	        ldx boxht11
+.0e5f	ac 62 12	        ldy boxht11+1
+.0e62	20 42 96	        jsr gotoxy
+.0e65	a9 0f		        lda #sgris3    ;verification
+.0e67	08		        php
+.0e68	a0 12		        ldy #>boxht11+2
+.0e6a	a2 63		        ldx #<boxht11+2
+.0e6c	28		        plp
+.0e6d	20 10 96	        jsr putscyx
+.0e70	ae a0 12	        ldx boxhta
+.0e73	ac a1 12	        ldy boxhta+1
+.0e76	20 42 96	        jsr gotoxy
+.0e79	a9 0f		        lda #sgris3    ;verification
+.0e7b	08		        php
+.0e7c	a0 12		        ldy #>boxhta+2
+.0e7e	a2 a2		        ldx #<boxhta+2
+.0e80	28		        plp
+.0e81	20 10 96	        jsr putscyx
+.0e84	ae c6 12	        ldx boxhtb
+.0e87	ac c7 12	        ldy boxhtb+1
+.0e8a	20 42 96	        jsr gotoxy
+.0e8d	a9 0f		        lda #sgris3    ;verification
+.0e8f	08		        php
+.0e90	a0 12		        ldy #>boxhtb+2
+.0e92	a2 c8		        ldx #<boxhtb+2
+.0e94	28		        plp
+.0e95	20 10 96	        jsr putscyx
+.0e98	ae ed 12	        ldx boxhtc
+.0e9b	ac ee 12	        ldy boxhtc+1
+.0e9e	20 42 96	        jsr gotoxy
+.0ea1	a9 0f		        lda #sgris3    ;verification
+.0ea3	08		        php
+.0ea4	a0 12		        ldy #>boxhtc+2
+.0ea6	a2 ef		        ldx #<boxhtc+2
+.0ea8	28		        plp
+.0ea9	20 10 96	        jsr putscyx
+.0eac	ae 11 13	        ldx boxhtd
+.0eaf	ac 12 13	        ldy boxhtd+1
+.0eb2	20 42 96	        jsr gotoxy
+.0eb5	a9 0f		        lda #sgris3    ;verification
+.0eb7	08		        php
+.0eb8	a0 13		        ldy #>boxhtd+2
+.0eba	a2 13		        ldx #<boxhtd+2
+.0ebc	28		        plp
+.0ebd	20 10 96	        jsr putscyx
+.0ec0	ae 30 13	        ldx boxhte
+.0ec3	ac 31 13	        ldy boxhte+1
+.0ec6	20 42 96	        jsr gotoxy
+.0ec9	a9 0f		        lda #sgris3    ;verification
+.0ecb	08		        php
+.0ecc	a0 13		        ldy #>boxhte+2
+.0ece	a2 32		        ldx #<boxhte+2
+.0ed0	28		        plp
+.0ed1	20 10 96	        jsr putscyx
+.0ed4	ae 54 13	        ldx boxhtf
+.0ed7	ac 55 13	        ldy boxhtf+1
+.0eda	20 42 96	        jsr gotoxy
+.0edd	a9 0f		        lda #sgris3    ;verification
+.0edf	08		        php
+.0ee0	a0 13		        ldy #>boxhtf+2
+.0ee2	a2 56		        ldx #<boxhtf+2
+.0ee4	28		        plp
+.0ee5	20 10 96	        jsr putscyx
+.0ee8	ae 77 13	        ldx boxhtg
+.0eeb	ac 78 13	        ldy boxhtg+1
+.0eee	20 42 96	        jsr gotoxy
+.0ef1	a9 0f		        lda #sgris3    ;verification
+.0ef3	08		        php
+.0ef4	a0 13		        ldy #>boxhtg+2
+.0ef6	a2 79		        ldx #<boxhtg+2
+.0ef8	28		        plp
+.0ef9	20 10 96	        jsr putscyx
+.0efc	ae 9c 13	        ldx boxhth
+.0eff	ac 9d 13	        ldy boxhth+1
+.0f02	20 42 96	        jsr gotoxy
+.0f05	a9 0a		        lda #srose    ;verification
+.0f07	08		        php
+.0f08	a0 13		        ldy #>boxhth+2
+.0f0a	a2 9e		        ldx #<boxhth+2
+.0f0c	28		        plp
+.0f0d	20 10 96	        jsr putscyx
+.0f10	ae b4 13	        ldx boxhti
+.0f13	ac b5 13	        ldy boxhti+1
+.0f16	20 42 96	        jsr gotoxy
+.0f19	a9 0c		        lda #sgris2    ;verification
+.0f1b	08		        php
+.0f1c	a0 13		        ldy #>boxhti+2
+.0f1e	a2 b6		        ldx #<boxhti+2
+.0f20	28		        plp
+.0f21	20 10 96	        jsr putscyx
+.0f24	20 24 93	        jsr getkey
+.0f27	20 59 95	        jsr scrnrest
+.0f2a	20 b3 94	        jsr popall
+.0f2d	60		        rts
 
 ;******  Return to file: dlbug64.asm
 
 
-;******  Processing file: string-en.asm
+;******  Processing file: string-fr.asm
 
->0f50	00		row      .byte $00
->0f51	00		col      .byte $00
->0f52	00		lin      .byte $00
->0f53	55		sbit     .byte $55
->0f54	00 00		adrs     .word $00
->0f56	00		counter  .byte $00
->0f57	00 20		baseaddr .word $2000 ;8192
->0f59	40 01		scrwidth .word $0140 ;320
->0f5b	12 05		dmphead .byte 18,5
->0f5d	41 44 44 52	        .text "addre"
->0f61	45
->0f62	9f		        .byte 159
->0f63	20 30 30 20	        .text " 00 01 02 03"
->0f67	30 31 20 30 32 20 30 33
->0f6f	20 30 34 20	        .text " 04 05 06 07 "
->0f73	30 35 20 30 36 20 30 37 20
->0f7c	99		        .byte 153
->0f7d	50 45 54 53	        .text "petsciis"
->0f81	43 49 49 53
->0f85	92 00		        .byte 146,eot
->0f87	12 05		dmphead2 .byte 18,5
->0f89	20 20 20 20	        .text "     "
->0f8d	20
->0f8e	9f		        .byte 159
->0f8f	20 30 38 20	        .text " 08 09 0A 0B"
->0f93	30 39 20 30 c1 20 30 c2
->0f9b	20 30 c3 20	        .text " 0C 0D 0E 0F "
->0f9f	30 c4 20 30 c5 20 30 c6 20
->0fa8	99		        .byte 153
->0fa9	20 20 20 20	        .text "        "
->0fad	20 20 20 20
->0fb1	92 00		        .byte 146,eot
->0fb3	01 12		menu0   .byte 1,18
->0fb5	9e b0		        .byte kjaune,176
->0fb7	c0 c0 c0	        .byte 192,192,192
->0fba	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
->0fbe	c0 c0
->0fc0	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
->0fc4	c0 c0
->0fc6	12		        .byte 18
->0fc7	20 cd c5 ce	        .text " MENU "
->0fcb	d5 20
->0fcd	92		        .byte 146
->0fce	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
->0fd2	c0 c0
->0fd4	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
->0fd8	c0 c0
->0fda	c0 c0 c0	        .byte 192,192,192
->0fdd	ae		        .byte 174
->0fde	00		        .byte eot
->0fdf	01 13		menu1   .byte 1,19
->0fe1	9e dd 05	        .byte kjaune,221,kblanc
->0fe4	20 5b c6 31	        .text " [F1] About      "
->0fe8	5d 20 c1 42 4f 55 54 20 20 20 20 20 20
->0ff5	9e b6 05	        .byte kjaune,182,kblanc
->0ff8	20 5b c6 32	        .text " [F2] Goto $0000  "
->0ffc	5d 20 c7 4f 54 4f 20 24 30 30 30 30 20 20
->100a	9e dd 05	        .byte kjaune,221,kblanc
->100d	00		        .byte eot
->100e	01 14		menu2   .byte 1,20
->1010	9e dd 05	        .byte kjaune,221,kblanc
->1013	20 5b c6 33	        .text " [F3] +128 bytes "
->1017	5d 20 2b 31 32 38 20 42 59 54 45 53 20
->1024	9e b6 05	        .byte kjaune,182,kblanc
->1027	20 5b c6 34	        .text " [F4] -128 bytes  "
->102b	5d 20 2d 31 32 38 20 42 59 54 45 53 20 20
->1039	9e dd 05	        .byte kjaune,221,kblanc
->103c	00		        .byte eot
->103d	01 15		menu3   .byte 1,21
->103f	9e dd 05	        .byte kjaune,221,kblanc
->1042	20 5b c6 35	        .text " [F5] +512 bytes "
->1046	5d 20 2b 35 31 32 20 42 59 54 45 53 20
->1053	9e b6 05	        .byte kjaune,182,kblanc
->1056	20 5b c6 36	        .text " [F6] -512 bytes  "
->105a	5d 20 2d 35 31 32 20 42 59 54 45 53 20 20
->1068	9e dd 05	        .byte kjaune,221,kblanc
->106b	00		        .byte eot
->106c	01 16		menu4   .byte 1,22
->106e	9e dd 05	        .byte kjaune,221,kblanc
->1071	20 5b c6 37	        .text " [F7] +4K bytes  "
->1075	5d 20 2b 34 cb 20 42 59 54 45 53 20 20
->1082	9e b6 05	        .byte kjaune,182,kblanc
->1085	20 5b c6 38	        .text " [F8] -4K bytes   "
->1089	5d 20 2d 34 cb 20 42 59 54 45 53 20 20 20
->1097	9e dd 05	        .byte kjaune,221,kblanc
->109a	00		        .byte eot
->109b	01 17		menu5   .byte 1,23
->109d	9e dd 05	        .byte kjaune,221,kblanc
->10a0	20 5b c7 5d	        .text " [G] goto addr ? "
->10a4	20 47 4f 54 4f 20 41 44 44 52 20 3f 20
->10b1	9e b6 05	        .byte kjaune,182,kblanc
->10b4	20 5b		        .text " ["
->10b6	5f		        .byte 95
->10b7	5d 20 20 d1	        .text "]  Quit        "
->10bb	55 49 54 20 20 20 20 20 20 20 20
->10c6	9e dd 05	        .byte kjaune,221,kblanc
->10c9	00		        .byte eot
->10ca	01 18		menu6   .byte 1,24
->10cc	9e ad		        .byte kjaune,173
->10ce	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
->10d2	c0 c0
->10d4	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
->10d8	c0 c0
->10da	c0		        .byte 192
->10db	12		        .byte 18
->10dc	20 c4 cc c2	        .text " DLBUG-64 "
->10e0	d5 c7 2d 36 34 20
->10e6	92 c0		        .byte 146,192
->10e8	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
->10ec	c0 c0
->10ee	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
->10f2	c0 c0
->10f4	bd 05		        .byte 189,kblanc
->10f6	00		        .byte eot
+>0f2e	00		row      .byte $00
+>0f2f	00		col      .byte $00
+>0f30	00		lin      .byte $00
+>0f31	55		sbit     .byte $55
+>0f32	00 00		adrs     .word $00
+>0f34	00		counter  .byte $00
+>0f35	00 20		baseaddr .word $2000 ;8192
+>0f37	40 01		scrwidth .word $0140 ;320
+>0f39	12 05		dmphead .byte 18,5
+>0f3b	41 44 52 45	        .text "adres"
+>0f3f	53
+>0f40	9f		        .byte 159
+>0f41	20 30 30 20	        .text " 00 01 02 03"
+>0f45	30 31 20 30 32 20 30 33
+>0f4d	20 30 34 20	        .text " 04 05 06 07 "
+>0f51	30 35 20 30 36 20 30 37 20
+>0f5a	99		        .byte 153
+>0f5b	50 45 54 53	        .text "petsciis"
+>0f5f	43 49 49 53
+>0f63	92 00		        .byte 146,eot
+>0f65	12 05		dmphead2 .byte 18,5
+>0f67	20 20 20 20	        .text "     "
+>0f6b	20
+>0f6c	9f		        .byte 159
+>0f6d	20 30 38 20	        .text " 08 09 0A 0B"
+>0f71	30 39 20 30 c1 20 30 c2
+>0f79	20 30 c3 20	        .text " 0C 0D 0E 0F "
+>0f7d	30 c4 20 30 c5 20 30 c6 20
+>0f86	99		        .byte 153
+>0f87	20 20 20 20	        .text "        "
+>0f8b	20 20 20 20
+>0f8f	92 00		        .byte 146,eot
+>0f91	01 12		menu0   .byte 1,18
+>0f93	9e b0		        .byte kjaune,176
+>0f95	c0 c0 c0	        .byte 192,192,192
+>0f98	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
+>0f9c	c0 c0
+>0f9e	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
+>0fa2	c0 c0
+>0fa4	12		        .byte 18
+>0fa5	20 cd c5 ce	        .text " MENU "
+>0fa9	d5 20
+>0fab	92		        .byte 146
+>0fac	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
+>0fb0	c0 c0
+>0fb2	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
+>0fb6	c0 c0
+>0fb8	c0 c0 c0	        .byte 192,192,192
+>0fbb	ae		        .byte 174
+>0fbc	00		        .byte eot
+>0fbd	01 13		menu1   .byte 1,19
+>0fbf	9e dd 05	        .byte kjaune,221,kblanc
+>0fc2	20 5b c6 31	        .text " [F1] A propos   "
+>0fc6	5d 20 c1 20 50 52 4f 50 4f 53 20 20 20
+>0fd3	9e b6 05	        .byte kjaune,182,kblanc
+>0fd6	20 5b c6 32	        .text " [F2] Aller $0000 "
+>0fda	5d 20 c1 4c 4c 45 52 20 24 30 30 30 30 20
+>0fe8	9e dd 05	        .byte kjaune,221,kblanc
+>0feb	00		        .byte eot
+>0fec	01 14		menu2   .byte 1,20
+>0fee	9e dd 05	        .byte kjaune,221,kblanc
+>0ff1	20 5b c6 33	        .text " [F3] +128 octets"
+>0ff5	5d 20 2b 31 32 38 20 4f 43 54 45 54 53
+>1002	9e b6 05	        .byte kjaune,182,kblanc
+>1005	20 5b c6 34	        .text " [F4] -128 octets "
+>1009	5d 20 2d 31 32 38 20 4f 43 54 45 54 53 20
+>1017	9e dd 05	        .byte kjaune,221,kblanc
+>101a	00		        .byte eot
+>101b	01 15		menu3   .byte 1,21
+>101d	9e dd 05	        .byte kjaune,221,kblanc
+>1020	20 5b c6 35	        .text " [F5] +512 octets"
+>1024	5d 20 2b 35 31 32 20 4f 43 54 45 54 53
+>1031	9e b6 05	        .byte kjaune,182,kblanc
+>1034	20 5b c6 36	        .text " [F6] -512 octets "
+>1038	5d 20 2d 35 31 32 20 4f 43 54 45 54 53 20
+>1046	9e dd 05	        .byte kjaune,221,kblanc
+>1049	00		        .byte eot
+>104a	01 16		menu4   .byte 1,22
+>104c	9e dd 05	        .byte kjaune,221,kblanc
+>104f	20 5b c6 37	        .text " [F7] +4K octets "
+>1053	5d 20 2b 34 cb 20 4f 43 54 45 54 53 20
+>1060	9e b6 05	        .byte kjaune,182,kblanc
+>1063	20 5b c6 38	        .text " [F8] -4K octets  "
+>1067	5d 20 2d 34 cb 20 4f 43 54 45 54 53 20 20
+>1075	9e dd 05	        .byte kjaune,221,kblanc
+>1078	00		        .byte eot
+>1079	01 17		menu5   .byte 1,23
+>107b	9e dd 05	        .byte kjaune,221,kblanc
+>107e	20 20 5b c7	        .text "  [G] Aller a ?  "
+>1082	5d 20 c1 4c 4c 45 52 20 41 20 3f 20 20
+>108f	9e b6 05	        .byte kjaune,182,kblanc
+>1092	20 20 5b	        .text "  ["
+>1095	5f		        .byte 95
+>1096	5d 20 d1 55	        .text "] Quitter     "
+>109a	49 54 54 45 52 20 20 20 20 20
+>10a4	9e dd 05	        .byte kjaune,221,kblanc
+>10a7	00		        .byte eot
+>10a8	01 18		menu6   .byte 1,24
+>10aa	9e ad		        .byte kjaune,173
+>10ac	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
+>10b0	c0 c0
+>10b2	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
+>10b6	c0 c0
+>10b8	c0		        .byte 192
+>10b9	12		        .byte 18
+>10ba	20 c4 cc c2	        .text " DLBUG-64 "
+>10be	d5 c7 2d 36 34 20
+>10c4	92 c0		        .byte 146,192
+>10c6	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
+>10ca	c0 c0
+>10cc	c0 c0 c0 c0	        .byte 192,192,192,192,192,192
+>10d0	c0 c0
+>10d2	bd 05		        .byte 189,kblanc
+>10d4	00		        .byte eot
 =7			boxax   = 7
 =7			boxay   = 7
 =26			boxaw   = 26
 =4			boxah   = 4
 =13			boxac   = svertp
->10f7	07 07		boxa    .byte boxax,boxay
->10f9	1a 04		        .byte boxaw,boxah
->10fb	0d		        .byte boxac
->10fc	5b c1 44 44	        .null "[Address]"
->1100	52 45 53 53 5d 00
->1106	09 08		boxat1  .byte boxax+2,boxay+1
->1108	c5 4e 54 45	        .null "Enter an hexadecimal "
->110c	52 20 41 4e 20 48 45 58 41 44 45 43 49 4d 41 4c
->111c	20 00
->111e	09 09		boxat2  .byte boxax+2,boxay+2
->1120	41 44 52 45	        .null "adresse : $"
->1124	53 53 45 20 3a 20 24 00
+>10d5	07 07		boxa    .byte boxax,boxay
+>10d7	1a 04		        .byte boxaw,boxah
+>10d9	0d		        .byte boxac
+>10da	5b c1 44 52	        .null "[Adresse]"
+>10de	45 53 53 45 5d 00
+>10e4	09 08		boxat1  .byte boxax+2,boxay+1
+>10e6	c5 4e 54 52	        .null "Entrez une adresse en"
+>10ea	45 5a 20 55 4e 45 20 41 44 52 45 53 53 45 20 45
+>10fa	4e 00
+>10fc	09 09		boxat2  .byte boxax+2,boxay+2
+>10fe	48 45 58 41	        .null "hexadecimal : $"
+>1102	44 45 43 49 4d 41 4c 20 3a 20 24 00
 =1			boxhx   = 1
 =0			boxhy   = 0
 =38			boxhw   = 38
 =25			boxhh   = 25
 =10			boxhc   = srose
->112c	01 00		boxh    .byte boxhx,boxhy
->112e	26 19		        .byte boxhw,boxhh
->1130	0c		        .byte sgris2
->1131	5b c1 42 4f	        .null "[About]"
->1135	55 54 5d 00
->1139	02 02		boxht1  .byte boxhx+1,boxhy+2
->113b	5b c6 31 5d	        .text "[F1]"
->113f	20 3d 20 d3	        .text " = Show this page."
->1143	48 4f 57 20 54 48 49 53 20 50 41 47 45 2e
->1151	00		        .byte eot
->1152	02 03		boxht2  .byte boxhx+1,boxhy+3
->1154	5b c6 32 5d	        .text "[F2]"
->1158	20 3d 20 c2	        .text " = Bring's back to"
->115c	52 49 4e 47 27 53 20 42 41 43 4b 20 54 4f
->116a	20 24 30 30	        .text " $0000."
->116e	30 30 2e
->1171	00		        .byte eot
->1172	02 04		boxht3  .byte boxhx+1,boxhy+4
->1174	5b c6 33 5d	        .text "[F3]/[F4]"
->1178	2f 5b c6 34 5d
->117d	20 3d 20 2b	        .text " = +/- 128 bytes."
->1181	2f 2d 20 31 32 38 20 42 59 54 45 53 2e
->118e	00		        .byte eot
->118f	02 05		boxht4  .byte boxhx+1,boxhy+5
->1191	5b c6 34 5d	        .text "[F4]/[F5]"
->1195	2f 5b c6 35 5d
->119a	20 3d 20 2b	        .text " = +/- 512 bytes."
->119e	2f 2d 20 35 31 32 20 42 59 54 45 53 2e
->11ab	00		        .byte eot
->11ac	02 06		boxht5  .byte boxhx+1,boxhy+6
->11ae	5b c6 36 5d	        .text "[F6]/[F7]"
->11b2	2f 5b c6 37 5d
->11b7	20 3d 20 2b	        .text " = +/- 4096 bytes."
->11bb	2f 2d 20 34 30 39 36 20 42 59 54 45 53 2e
->11c9	00		        .byte eot
->11ca	02 07		boxht6  .byte boxhx+1,boxhy+7
->11cc	5b c7 5d 20	        .text "[G] Show a delected "
->11d0	d3 48 4f 57 20 41 20 44 45 4c 45 43 54 45 44 20
->11e0	00		        .byte eot
->11e1	05 08		boxht7  .byte boxhx+4,boxhy+8
->11e3	20 41 44 44	        .text " address. The chosen"
->11e7	52 45 53 53 2e 20 d4 48 45 20 43 48 4f 53 45 4e
->11f7	20 41 44 44	        .text " address will"
->11fb	52 45 53 53 20 57 49 4c 4c
->1204	00		        .byte eot
->1205	05 09		boxht8  .byte boxhx+4,boxhy+9
->1207	20 42 45 20	        .text " be rounded to $xxx0 "
->120b	52 4f 55 4e 44 45 44 20 54 4f 20 24 58 58 58 30
->121b	20
->121c	4f 52 20 24	        .text "or $xxx8"
->1220	58 58 58 38
->1224	00		        .byte eot
->1225	05 0a		boxht9  .byte boxhx+4,boxhy+10
->1227	20 54 4f 20	        .text " to be shown on the"
->122b	42 45 20 53 48 4f 57 4e 20 4f 4e 20 54 48 45
->123a	20 46 49 52	        .text " first two "
->123e	53 54 20 54 57 4f 20
->1245	00		        .byte eot
->1246	05 0b		boxht10 .byte boxhx+4,boxhy+11
->1248	20 4c 49 4e	        .text " lines of the "
->124c	45 53 20 4f 46 20 54 48 45 20
->1256	49 4e 54 45	        .text "interface."
->125a	52 46 41 43 45 2e
+>110e	01 00		boxh    .byte boxhx,boxhy
+>1110	26 19		        .byte boxhw,boxhh
+>1112	0c		        .byte sgris2
+>1113	5b c1 20 50	        .null "[A propos]"
+>1117	52 4f 50 4f 53 5d 00
+>111e	02 02		boxht1  .byte boxhx+1,boxhy+2
+>1120	5b c6 31 5d	        .text "[F1]"
+>1124	20 3d 20 c1	        .text " = Affiche cette page."
+>1128	46 46 49 43 48 45 20 43 45 54 54 45 20 50 41 47
+>1138	45 2e
+>113a	00		        .byte eot
+>113b	02 03		boxht2  .byte boxhx+1,boxhy+3
+>113d	5b c6 32 5d	        .text "[F2]"
+>1141	20 3d 20 d2	        .text " = Ramene l'afficheur a"
+>1145	41 4d 45 4e 45 20 4c 27 41 46 46 49 43 48 45 55
+>1155	52 20 41
+>1158	20 24 30 30	        .text " $0000."
+>115c	30 30 2e
+>115f	00		        .byte eot
+>1160	02 04		boxht3  .byte boxhx+1,boxhy+4
+>1162	5b c6 33 5d	        .text "[F3]/[F4]"
+>1166	2f 5b c6 34 5d
+>116b	20 3d 20 2b	        .text " = +/- 128 octets"
+>116f	2f 2d 20 31 32 38 20 4f 43 54 45 54 53
+>117c	00		        .byte eot
+>117d	02 05		boxht4  .byte boxhx+1,boxhy+5
+>117f	5b c6 34 5d	        .text "[F4]/[F5]"
+>1183	2f 5b c6 35 5d
+>1188	20 3d 20 2b	        .text " = +/- 512 octets"
+>118c	2f 2d 20 35 31 32 20 4f 43 54 45 54 53
+>1199	00		        .byte eot
+>119a	02 06		boxht5  .byte boxhx+1,boxhy+6
+>119c	5b c6 36 5d	        .text "[F6]/[F7]"
+>11a0	2f 5b c6 37 5d
+>11a5	20 3d 20 2b	        .text " = +/- 4096 octets"
+>11a9	2f 2d 20 34 30 39 36 20 4f 43 54 45 54 53
+>11b7	00		        .byte eot
+>11b8	02 07		boxht6  .byte boxhx+1,boxhy+7
+>11ba	5b c7 5d 20	        .text "[G] Permet d'entrer une "
+>11be	d0 45 52 4d 45 54 20 44 27 45 4e 54 52 45 52 20
+>11ce	55 4e 45 20
+>11d2	41 44 52 45	        .text "adresse "
+>11d6	53 53 45 20
+>11da	00		        .byte eot
+>11db	05 08		boxht7  .byte boxhx+4,boxhy+8
+>11dd	20 41 20 41	        .text " a afficher. L'adresse"
+>11e1	46 46 49 43 48 45 52 2e 20 cc 27 41 44 52 45 53
+>11f1	53 45
+>11f3	20 43 48 4f	        .text " choisie"
+>11f7	49 53 49 45
+>11fb	00		        .byte eot
+>11fc	05 09		boxht8  .byte boxhx+4,boxhy+9
+>11fe	20 53 45 52	        .text " sera tronquee a $xxx0 "
+>1202	41 20 54 52 4f 4e 51 55 45 45 20 41 20 24 58 58
+>1212	58 30 20
+>1215	4f 55 20 24	        .text "ou $xxx8"
+>1219	58 58 58 38
+>121d	00		        .byte eot
+>121e	05 0a		boxht9  .byte boxhx+4,boxhy+10
+>1220	20 44 45 20	        .text " de facon a ce que"
+>1224	46 41 43 4f 4e 20 41 20 43 45 20 51 55 45
+>1232	20 4c 27 41	        .text " l'adresse"
+>1236	44 52 45 53 53 45
+>123c	00		        .byte eot
+>123d	05 0b		boxht10 .byte boxhx+4,boxhy+11
+>123f	20 53 4f 49	        .text " soit sur les 2 premi"
+>1243	54 20 53 55 52 20 4c 45 53 20 32 20 50 52 45 4d
+>1253	49
+>1254	45 52 45 53	        .text "eres lignes."
+>1258	20 4c 49 47 4e 45 53 2e
 >1260	00		        .byte eot
 >1261	02 0c		boxht11 .byte boxhx+1,boxhy+12
 >1263	5b		        .text "["
 >1264	5f		        .byte 95
->1265	5d 20 3d 20	        .text "] = Back to "
->1269	c2 41 43 4b 20 54 4f 20
->1271	c2 41 53 49	        .text "Basic."
->1275	43 2e
->1277	00		        .byte eot
->1278	02 0d		boxht0  .byte boxhx+1,boxhy+13
->127a	3d 3d 3d 3d	        .text "=================="
->127e	3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d
->128c	3d 3d 3d 3d	        .text "=================="
->1290	3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d
->129e	00		        .byte eot
->129f	02 0e		boxhta  .byte boxhx+1,boxhy+14
->12a1	d4 48 49 53	        .text "This program cons"
->12a5	20 50 52 4f 47 52 41 4d 20 43 4f 4e 53
->12b2	54 49 54 55	        .text "titus the first "
->12b6	53 20 54 48 45 20 46 49 52 53 54 20
->12c2	00		        .byte eot
->12c3	02 0f		boxhtb  .byte boxhx+1,boxhy+15
->12c5	20 53 45 43	        .text " section of a proj"
->12c9	54 49 4f 4e 20 4f 46 20 41 20 50 52 4f 4a
->12d7	45 54 20 57	        .text "et whoms goal is "
->12db	48 4f 4d 53 20 47 4f 41 4c 20 49 53 20
->12e8	00		        .byte eot
->12e9	02 10		boxhtc  .byte boxhx+1,boxhy+16
->12eb	20 54 48 45	        .text " the creation of a "
->12ef	20 43 52 45 41 54 49 4f 4e 20 4f 46 20 41 20
->12fe	41 53 53 45	        .text "assembly language"
->1302	4d 42 4c 59 20 4c 41 4e 47 55 41 47 45
->130f	00		        .byte eot
->1310	02 11		boxhtd  .byte boxhx+1,boxhy+17
->1312	20 4d 4f 4e	        .text " monitor for the com"
->1316	49 54 4f 52 20 46 4f 52 20 54 48 45 20 43 4f 4d
->1326	4d 4f 44 4f	        .text "modore 64."
->132a	52 45 20 36 34 2e
->1330	00		        .byte eot
->1331	02 13		boxhte  .byte boxhx+1,boxhy+19
->1333	20 d4 48 45	        .text " The next step is"
->1337	20 4e 45 58 54 20 53 54 45 50 20 49 53
->1344	54 4f 20 43	        .text "to create a"
->1348	52 45 41 54 45 20 41
->134f	00		        .byte eot
->1350	02 14		boxhtf  .byte boxhx+1,boxhy+20
->1352	20 44 49 53	        .text " dissassembling"
->1356	53 41 53 53 45 4d 42 4c 49 4e 47
->1361	20 54 4f 4f	        .text " tool also for the"
->1365	4c 20 41 4c 53 4f 20 46 4f 52 20 54 48 45
->1373	00		        .byte eot
->1374	02 15		boxhtg  .byte boxhx+1,boxhy+21
->1376	20 43 4f 4d	        .text " commodore 64"
->137a	4d 4f 44 4f 52 45 20 36 34
->1383	20 28 36 35	        .text " (6510/6502)."
->1387	31 30 2f 36 35 30 32 29 2e
->1390	00		        .byte eot
->1391	15 17		boxhth  .byte boxhx+20,boxhy+23
->1393	c1 4e 59 20	        .text "Any key to exit."
->1397	4b 45 59 20 54 4f 20 45 58 49 54 2e
->13a3	00		        .byte eot
->13a4	03 18		boxhti  .byte boxhx+2,boxhy+24
->13a6	12		        .byte 18
->13a7	20 c4 41 4e	        .text " Daniel Lafrance"
->13ab	49 45 4c 20 cc 41 46 52 41 4e 43 45
->13b7	20 2d 20 44	        .text " - december 2025. "
->13bb	45 43 45 4d 42 45 52 20 32 30 32 35 2e 20
->13c9	92 00		        .byte 146, eot
+>1265	5d 20 3d 20	        .text "] = retour a "
+>1269	52 45 54 4f 55 52 20 41 20
+>1272	c2 41 53 49	        .text "Basic."
+>1276	43 2e
+>1278	00		        .byte eot
+>1279	02 0d		boxht0  .byte boxhx+1,boxhy+13
+>127b	3d 3d 3d 3d	        .text "=================="
+>127f	3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d
+>128d	3d 3d 3d 3d	        .text "=================="
+>1291	3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d 3d
+>129f	00		        .byte eot
+>12a0	02 0e		boxhta  .byte boxhx+1,boxhy+14
+>12a2	20 c3 45 20	        .text " Ce programme cons"
+>12a6	50 52 4f 47 52 41 4d 4d 45 20 43 4f 4e 53
+>12b4	54 49 54 55	        .text "titue la premiere"
+>12b8	45 20 4c 41 20 50 52 45 4d 49 45 52 45
+>12c5	00		        .byte eot
+>12c6	02 0f		boxhtb  .byte boxhx+1,boxhy+15
+>12c8	20 53 45 43	        .text " section d'un proj"
+>12cc	54 49 4f 4e 20 44 27 55 4e 20 50 52 4f 4a
+>12da	45 54 20 51	        .text "et qui a pour but "
+>12de	55 49 20 41 20 50 4f 55 52 20 42 55 54 20
+>12ec	00		        .byte eot
+>12ed	02 10		boxhtc  .byte boxhx+1,boxhy+16
+>12ef	20 4c 41 20	        .text " la creation d'un "
+>12f3	43 52 45 41 54 49 4f 4e 20 44 27 55 4e 20
+>1301	4d 4f 4e 49	        .text "moniteur assem-"
+>1305	54 45 55 52 20 41 53 53 45 4d 2d
+>1310	00		        .byte eot
+>1311	02 11		boxhtd  .byte boxhx+1,boxhy+17
+>1313	20 42 4c 45	        .text " bleur pour le com"
+>1317	55 52 20 50 4f 55 52 20 4c 45 20 43 4f 4d
+>1325	4d 4f 44 4f	        .text "modore 64."
+>1329	52 45 20 36 34 2e
+>132f	00		        .byte eot
+>1330	02 13		boxhte  .byte boxhx+1,boxhy+19
+>1332	20 cc 41 20	        .text " La prochaine eta"
+>1336	50 52 4f 43 48 41 49 4e 45 20 45 54 41
+>1343	50 45 20 53	        .text "pe sera de creer"
+>1347	45 52 41 20 44 45 20 43 52 45 45 52
+>1353	00		        .byte eot
+>1354	02 14		boxhtf  .byte boxhx+1,boxhy+20
+>1356	20 55 4e 20	        .text " un outil de"
+>135a	4f 55 54 49 4c 20 44 45
+>1362	20 44 45 53	        .text " desassemblage aussi"
+>1366	41 53 53 45 4d 42 4c 41 47 45 20 41 55 53 53 49
+>1376	00		        .byte eot
+>1377	02 15		boxhtg  .byte boxhx+1,boxhy+21
+>1379	20 50 4f 55	        .text " pour le com"
+>137d	52 20 4c 45 20 43 4f 4d
+>1385	4d 4f 44 4f	        .text "modore 64 (6510/6502)."
+>1389	52 45 20 36 34 20 28 36 35 31 30 2f 36 35 30 32
+>1399	29 2e
+>139b	00		        .byte eot
+>139c	10 17		boxhth  .byte boxhx+15,boxhy+23
+>139e	d5 4e 45 20	        .text "Une clef pour sortir."
+>13a2	43 4c 45 46 20 50 4f 55 52 20 53 4f 52 54 49 52
+>13b2	2e
+>13b3	00		        .byte eot
+>13b4	03 18		boxhti  .byte boxhx+2,boxhy+24
+>13b6	12		        .byte 18
+>13b7	20 c4 41 4e	        .text " Daniel Lafrance"
+>13bb	49 45 4c 20 cc 41 46 52 41 4e 43 45
+>13c7	20 2d 20 44	        .text " - decembre 2025. "
+>13cb	45 43 45 4d 42 52 45 20 32 30 32 35 2e 20
+>13d9	92 00		        .byte 146, eot
+>13db	0d 0d 1d 1d	msg   .byte $0d,$0d,29,29,29
+>13df	1d
+>13e0	43 48 41 52	      .text "chargement de "
+>13e4	47 45 4d 45 4e 54 20 44 45 20
+>13ee	52 4f 4d 39	fname .null "rom9000. un instant!"
+>13f2	30 30 30 2e 20 55 4e 20 49 4e 53 54 41 4e 54 21
+>1402	00
 
 ;******  Return to file: dlbug64.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/l-opmneumo.asm
 
-.13cb			opmneumo
->13cb	42 52 4b 2c		.text "brk,ora,---,---,---,ora,asl,---," ;$00-$07
->13cf	4f 52 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->13df	4f 52 41 2c 41 53 4c 2c 2d 2d 2d 2c
->13eb	50 48 50 2c		.text "php,ora,asl,---,---,ora,asl,---," ;$08-$0f
->13ef	4f 52 41 2c 41 53 4c 2c 2d 2d 2d 2c 2d 2d 2d 2c
->13ff	4f 52 41 2c 41 53 4c 2c 2d 2d 2d 2c
->140b	42 50 4c 2c		.text "bpl,ora,---,---,---,ora,asl,---," ;$10-$17
->140f	4f 52 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->141f	4f 52 41 2c 41 53 4c 2c 2d 2d 2d 2c
->142b	43 4c 43 2c		.text "clc,ora,---,---,---,ora,asl,---," ;$18-$1f
->142f	4f 52 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->143f	4f 52 41 2c 41 53 4c 2c 2d 2d 2d 2c
->144b	4a 53 52 2c		.text "jsr,and,---,---,bit,and,rol,---," ;$20-$27
->144f	41 4e 44 2c 2d 2d 2d 2c 2d 2d 2d 2c 42 49 54 2c
->145f	41 4e 44 2c 52 4f 4c 2c 2d 2d 2d 2c
->146b	50 4c 50 2c		.text "plp,and,rol,---,bit,and,rol,---," ;$28-$2f
->146f	41 4e 44 2c 52 4f 4c 2c 2d 2d 2d 2c 42 49 54 2c
->147f	41 4e 44 2c 52 4f 4c 2c 2d 2d 2d 2c
->148b	42 4d 49 2c		.text "bmi,and,---,---,---,and,rol,---," ;$30-$37
->148f	41 4e 44 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->149f	41 4e 44 2c 52 4f 4c 2c 2d 2d 2d 2c
->14ab	53 45 43 2c		.text "sec,and,---,---,---,and,rol,---," ;$38-$3f
->14af	41 4e 44 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->14bf	41 4e 44 2c 52 4f 4c 2c 2d 2d 2d 2c
->14cb	52 54 49 2c		.text "rti,eor,---,---,---,eor,lsr,---," ;$40-$47
->14cf	45 4f 52 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->14df	45 4f 52 2c 4c 53 52 2c 2d 2d 2d 2c
->14eb	50 48 41 2c		.text "pha,eor,lsr,---,jmp,eor,lsr,---," ;$48-$4f
->14ef	45 4f 52 2c 4c 53 52 2c 2d 2d 2d 2c 4a 4d 50 2c
->14ff	45 4f 52 2c 4c 53 52 2c 2d 2d 2d 2c
->150b	42 56 43 2c		.text "bvc,eor,---,---,---,eor,lsr,---," ;$50-$57
->150f	45 4f 52 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->151f	45 4f 52 2c 4c 53 52 2c 2d 2d 2d 2c
->152b	43 4c 49 2c		.text "cli,eor,---,---,---,eor,lsr,---," ;$58-$5f
->152f	45 4f 52 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->153f	45 4f 52 2c 4c 53 52 2c 2d 2d 2d 2c
->154b	52 54 53 2c		.text "rts,adc,---,---,---,adc,ror,---," ;$60-$67
->154f	41 44 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->155f	41 44 43 2c 52 4f 52 2c 2d 2d 2d 2c
->156b	50 4c 41 2c		.text "pla,adc,ror,---,jmp,adc,ror,---," ;$68-$6f
->156f	41 44 43 2c 52 4f 52 2c 2d 2d 2d 2c 4a 4d 50 2c
->157f	41 44 43 2c 52 4f 52 2c 2d 2d 2d 2c
->158b	42 56 53 2c		.text "bvs,adc,---,---,---,adc,ror,---," ;$70-$77
->158f	41 44 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->159f	41 44 43 2c 52 4f 52 2c 2d 2d 2d 2c
->15ab	53 45 49 2c		.text "sei,adc,---,---,---,adc,ror,---," ;$78-$7f
->15af	41 44 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->15bf	41 44 43 2c 52 4f 52 2c 2d 2d 2d 2c
->15cb	2d 2d 2d 2c		.text "---,sta,---,---,sty,sta,stx,---," ;$80-$87
->15cf	53 54 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 53 54 59 2c
->15df	53 54 41 2c 53 54 58 2c 2d 2d 2d 2c
->15eb	44 45 59 2c		.text "dey,---,txa,---,sty,sta,stx,---," ;$88-$8f
->15ef	2d 2d 2d 2c 54 58 41 2c 2d 2d 2d 2c 53 54 59 2c
->15ff	53 54 41 2c 53 54 58 2c 2d 2d 2d 2c
->160b	42 43 43 2c		.text "bcc,sta,---,---,sty,sta,stx,---," ;$90-$97
->160f	53 54 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 53 54 59 2c
->161f	53 54 41 2c 53 54 58 2c 2d 2d 2d 2c
->162b	54 59 41 2c		.text "tya,sta,txs,---,---,sta,---,---," ;$98-$9f
->162f	53 54 41 2c 54 58 53 2c 2d 2d 2d 2c 2d 2d 2d 2c
->163f	53 54 41 2c 2d 2d 2d 2c 2d 2d 2d 2c
->164b	4c 44 59 2c		.text "ldy,lda,ldx,---,ldy,lda,ldx,---," ;$a0-$a7
->164f	4c 44 41 2c 4c 44 58 2c 2d 2d 2d 2c 4c 44 59 2c
->165f	4c 44 41 2c 4c 44 58 2c 2d 2d 2d 2c
->166b	54 41 59 2c		.text "tay,lda,tax,---,ldy,lda,ldx,---,"
->166f	4c 44 41 2c 54 41 58 2c 2d 2d 2d 2c 4c 44 59 2c
->167f	4c 44 41 2c 4c 44 58 2c 2d 2d 2d 2c
->168b	42 43 53 2c		.text "bcs,lda,---,---,ldy,lda,ldx,---,"
->168f	4c 44 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 4c 44 59 2c
->169f	4c 44 41 2c 4c 44 58 2c 2d 2d 2d 2c
->16ab	43 4c 56 2c		.text "clv,lda,tsx,---,ldy,lda,ldx,---,"
->16af	4c 44 41 2c 54 53 58 2c 2d 2d 2d 2c 4c 44 59 2c
->16bf	4c 44 41 2c 4c 44 58 2c 2d 2d 2d 2c
->16cb	43 50 59 2c		.text "cpy,cmp,---,---,cpy,cmp,dec,---,"
->16cf	43 4d 50 2c 2d 2d 2d 2c 2d 2d 2d 2c 43 50 59 2c
->16df	43 4d 50 2c 44 45 43 2c 2d 2d 2d 2c
->16eb	49 4e 59 2c		.text "iny,cmp,dex,---,cpy,cmp,dec,---,"
->16ef	43 4d 50 2c 44 45 58 2c 2d 2d 2d 2c 43 50 59 2c
->16ff	43 4d 50 2c 44 45 43 2c 2d 2d 2d 2c
->170b	42 4e 45 2c		.text "bne,cmp,---,---,---,cmp,dec,---,"
->170f	43 4d 50 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->171f	43 4d 50 2c 44 45 43 2c 2d 2d 2d 2c
->172b	43 4c 44 2c		.text "cld,cmp,---,---,---,cmp,dec,---,"
->172f	43 4d 50 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->173f	43 4d 50 2c 44 45 43 2c 2d 2d 2d 2c
->174b	43 50 58 2c		.text "cpx,sbc,---,---,cpx,sbc,inc,---,"
->174f	53 42 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 43 50 58 2c
->175f	53 42 43 2c 49 4e 43 2c 2d 2d 2d 2c
->176b	49 4e 58 2c		.text "inx,sbc,nop,---,cpx,sbc,inc,---,"
->176f	53 42 43 2c 4e 4f 50 2c 2d 2d 2d 2c 43 50 58 2c
->177f	53 42 43 2c 49 4e 43 2c 2d 2d 2d 2c
->178b	42 45 51 2c		.text "beq,sbc,---,---,---,sbc,inc,---,"
->178f	53 42 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->179f	53 42 43 2c 49 4e 43 2c 2d 2d 2d 2c
->17ab	53 45 44 2c		.text "sed,sbc,---,---,---,sbc,inc,---,"
->17af	53 42 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
->17bf	53 42 43 2c 49 4e 43 2c 2d 2d 2d 2c
->17cb	00			.byte 0
+.1403			opmneumo
+>1403	42 52 4b 2c		.text "brk,ora,---,---,---,ora,asl,---," ;$00-$07
+>1407	4f 52 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1417	4f 52 41 2c 41 53 4c 2c 2d 2d 2d 2c
+>1423	50 48 50 2c		.text "php,ora,asl,---,---,ora,asl,---," ;$08-$0f
+>1427	4f 52 41 2c 41 53 4c 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1437	4f 52 41 2c 41 53 4c 2c 2d 2d 2d 2c
+>1443	42 50 4c 2c		.text "bpl,ora,---,---,---,ora,asl,---," ;$10-$17
+>1447	4f 52 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1457	4f 52 41 2c 41 53 4c 2c 2d 2d 2d 2c
+>1463	43 4c 43 2c		.text "clc,ora,---,---,---,ora,asl,---," ;$18-$1f
+>1467	4f 52 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1477	4f 52 41 2c 41 53 4c 2c 2d 2d 2d 2c
+>1483	4a 53 52 2c		.text "jsr,and,---,---,bit,and,rol,---," ;$20-$27
+>1487	41 4e 44 2c 2d 2d 2d 2c 2d 2d 2d 2c 42 49 54 2c
+>1497	41 4e 44 2c 52 4f 4c 2c 2d 2d 2d 2c
+>14a3	50 4c 50 2c		.text "plp,and,rol,---,bit,and,rol,---," ;$28-$2f
+>14a7	41 4e 44 2c 52 4f 4c 2c 2d 2d 2d 2c 42 49 54 2c
+>14b7	41 4e 44 2c 52 4f 4c 2c 2d 2d 2d 2c
+>14c3	42 4d 49 2c		.text "bmi,and,---,---,---,and,rol,---," ;$30-$37
+>14c7	41 4e 44 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>14d7	41 4e 44 2c 52 4f 4c 2c 2d 2d 2d 2c
+>14e3	53 45 43 2c		.text "sec,and,---,---,---,and,rol,---," ;$38-$3f
+>14e7	41 4e 44 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>14f7	41 4e 44 2c 52 4f 4c 2c 2d 2d 2d 2c
+>1503	52 54 49 2c		.text "rti,eor,---,---,---,eor,lsr,---," ;$40-$47
+>1507	45 4f 52 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1517	45 4f 52 2c 4c 53 52 2c 2d 2d 2d 2c
+>1523	50 48 41 2c		.text "pha,eor,lsr,---,jmp,eor,lsr,---," ;$48-$4f
+>1527	45 4f 52 2c 4c 53 52 2c 2d 2d 2d 2c 4a 4d 50 2c
+>1537	45 4f 52 2c 4c 53 52 2c 2d 2d 2d 2c
+>1543	42 56 43 2c		.text "bvc,eor,---,---,---,eor,lsr,---," ;$50-$57
+>1547	45 4f 52 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1557	45 4f 52 2c 4c 53 52 2c 2d 2d 2d 2c
+>1563	43 4c 49 2c		.text "cli,eor,---,---,---,eor,lsr,---," ;$58-$5f
+>1567	45 4f 52 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1577	45 4f 52 2c 4c 53 52 2c 2d 2d 2d 2c
+>1583	52 54 53 2c		.text "rts,adc,---,---,---,adc,ror,---," ;$60-$67
+>1587	41 44 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1597	41 44 43 2c 52 4f 52 2c 2d 2d 2d 2c
+>15a3	50 4c 41 2c		.text "pla,adc,ror,---,jmp,adc,ror,---," ;$68-$6f
+>15a7	41 44 43 2c 52 4f 52 2c 2d 2d 2d 2c 4a 4d 50 2c
+>15b7	41 44 43 2c 52 4f 52 2c 2d 2d 2d 2c
+>15c3	42 56 53 2c		.text "bvs,adc,---,---,---,adc,ror,---," ;$70-$77
+>15c7	41 44 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>15d7	41 44 43 2c 52 4f 52 2c 2d 2d 2d 2c
+>15e3	53 45 49 2c		.text "sei,adc,---,---,---,adc,ror,---," ;$78-$7f
+>15e7	41 44 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>15f7	41 44 43 2c 52 4f 52 2c 2d 2d 2d 2c
+>1603	2d 2d 2d 2c		.text "---,sta,---,---,sty,sta,stx,---," ;$80-$87
+>1607	53 54 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 53 54 59 2c
+>1617	53 54 41 2c 53 54 58 2c 2d 2d 2d 2c
+>1623	44 45 59 2c		.text "dey,---,txa,---,sty,sta,stx,---," ;$88-$8f
+>1627	2d 2d 2d 2c 54 58 41 2c 2d 2d 2d 2c 53 54 59 2c
+>1637	53 54 41 2c 53 54 58 2c 2d 2d 2d 2c
+>1643	42 43 43 2c		.text "bcc,sta,---,---,sty,sta,stx,---," ;$90-$97
+>1647	53 54 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 53 54 59 2c
+>1657	53 54 41 2c 53 54 58 2c 2d 2d 2d 2c
+>1663	54 59 41 2c		.text "tya,sta,txs,---,---,sta,---,---," ;$98-$9f
+>1667	53 54 41 2c 54 58 53 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1677	53 54 41 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1683	4c 44 59 2c		.text "ldy,lda,ldx,---,ldy,lda,ldx,---," ;$a0-$a7
+>1687	4c 44 41 2c 4c 44 58 2c 2d 2d 2d 2c 4c 44 59 2c
+>1697	4c 44 41 2c 4c 44 58 2c 2d 2d 2d 2c
+>16a3	54 41 59 2c		.text "tay,lda,tax,---,ldy,lda,ldx,---,"
+>16a7	4c 44 41 2c 54 41 58 2c 2d 2d 2d 2c 4c 44 59 2c
+>16b7	4c 44 41 2c 4c 44 58 2c 2d 2d 2d 2c
+>16c3	42 43 53 2c		.text "bcs,lda,---,---,ldy,lda,ldx,---,"
+>16c7	4c 44 41 2c 2d 2d 2d 2c 2d 2d 2d 2c 4c 44 59 2c
+>16d7	4c 44 41 2c 4c 44 58 2c 2d 2d 2d 2c
+>16e3	43 4c 56 2c		.text "clv,lda,tsx,---,ldy,lda,ldx,---,"
+>16e7	4c 44 41 2c 54 53 58 2c 2d 2d 2d 2c 4c 44 59 2c
+>16f7	4c 44 41 2c 4c 44 58 2c 2d 2d 2d 2c
+>1703	43 50 59 2c		.text "cpy,cmp,---,---,cpy,cmp,dec,---,"
+>1707	43 4d 50 2c 2d 2d 2d 2c 2d 2d 2d 2c 43 50 59 2c
+>1717	43 4d 50 2c 44 45 43 2c 2d 2d 2d 2c
+>1723	49 4e 59 2c		.text "iny,cmp,dex,---,cpy,cmp,dec,---,"
+>1727	43 4d 50 2c 44 45 58 2c 2d 2d 2d 2c 43 50 59 2c
+>1737	43 4d 50 2c 44 45 43 2c 2d 2d 2d 2c
+>1743	42 4e 45 2c		.text "bne,cmp,---,---,---,cmp,dec,---,"
+>1747	43 4d 50 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1757	43 4d 50 2c 44 45 43 2c 2d 2d 2d 2c
+>1763	43 4c 44 2c		.text "cld,cmp,---,---,---,cmp,dec,---,"
+>1767	43 4d 50 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>1777	43 4d 50 2c 44 45 43 2c 2d 2d 2d 2c
+>1783	43 50 58 2c		.text "cpx,sbc,---,---,cpx,sbc,inc,---,"
+>1787	53 42 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 43 50 58 2c
+>1797	53 42 43 2c 49 4e 43 2c 2d 2d 2d 2c
+>17a3	49 4e 58 2c		.text "inx,sbc,nop,---,cpx,sbc,inc,---,"
+>17a7	53 42 43 2c 4e 4f 50 2c 2d 2d 2d 2c 43 50 58 2c
+>17b7	53 42 43 2c 49 4e 43 2c 2d 2d 2d 2c
+>17c3	42 45 51 2c		.text "beq,sbc,---,---,---,sbc,inc,---,"
+>17c7	53 42 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>17d7	53 42 43 2c 49 4e 43 2c 2d 2d 2d 2c
+>17e3	53 45 44 2c		.text "sed,sbc,---,---,---,sbc,inc,---,"
+>17e7	53 42 43 2c 2d 2d 2d 2c 2d 2d 2d 2c 2d 2d 2d 2c
+>17f7	53 42 43 2c 49 4e 43 2c 2d 2d 2d 2c
+>1803	00			.byte 0
 
 ;******  Return to file: dlbug64.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/l-opcodes.asm
 
-.17cc			opcodes
->17cc	00 01 ff ff		.byte $00,$01,$ff,$ff,$ff,$05,$06,$ff
->17d0	ff 05 06 ff
->17d4	08 09 0a ff		.byte $08,$09,$0a,$ff,$ff,$0d,$0e,$ff
->17d8	ff 0d 0e ff
->17dc	10 11 ff ff		.byte $10,$11,$ff,$ff,$ff,$15,$16,$ff
->17e0	ff 15 16 ff
->17e4	18 19 ff ff		.byte $18,$19,$ff,$ff,$ff,$1d,$1e,$ff
->17e8	ff 1d 1e ff
->17ec	20 21 ff ff		.byte $20,$21,$ff,$ff,$24,$25,$26,$ff
->17f0	24 25 26 ff
->17f4	28 29 2a ff		.byte $28,$29,$2a,$ff,$2c,$2d,$2e,$ff
->17f8	2c 2d 2e ff
->17fc	30 31 ff ff		.byte $30,$31,$ff,$ff,$ff,$35,$36,$ff
->1800	ff 35 36 ff
->1804	38 39 ff ff		.byte $38,$39,$ff,$ff,$ff,$3d,$3e,$ff
->1808	ff 3d 3e ff
->180c	40 41 ff ff		.byte $40,$41,$ff,$ff,$ff,$45,$46,$ff
->1810	ff 45 46 ff
->1814	48 49 4a ff		.byte $48,$49,$4a,$ff,$4c,$4d,$4e,$ff
->1818	4c 4d 4e ff
->181c	50 51 ff ff		.byte $50,$51,$ff,$ff,$ff,$55,$56,$ff
->1820	ff 55 56 ff
->1824	58 59 ff ff		.byte $58,$59,$ff,$ff,$ff,$5d,$5e,$ff
->1828	ff 5d 5e ff
->182c	60 61 ff ff		.byte $60,$61,$ff,$ff,$ff,$65,$66,$ff
->1830	ff 65 66 ff
->1834	68 69 6a ff		.byte $68,$69,$6a,$ff,$6c,$6d,$6e,$ff
->1838	6c 6d 6e ff
->183c	70 71 ff ff		.byte $70,$71,$ff,$ff,$ff,$75,$76,$ff
->1840	ff 75 76 ff
->1844	78 79 ff ff		.byte $78,$79,$ff,$ff,$ff,$7d,$7e,$ff
->1848	ff 7d 7e ff
->184c	ff 81 ff ff		.byte $ff,$81,$ff,$ff,$84,$85,$86,$ff
->1850	84 85 86 ff
->1854	88 ff 8a ff		.byte $88,$ff,$8a,$ff,$8c,$8d,$8e,$ff
->1858	8c 8d 8e ff
->185c	90 91 ff ff		.byte $90,$91,$ff,$ff,$94,$95,$96,$ff
->1860	94 95 96 ff
->1864	98 99 9a ff		.byte $98,$99,$9a,$ff,$ff,$9d,$ff,$ff
->1868	ff 9d ff ff
->186c	a0 a1 a2 ff		.byte $a0,$a1,$a2,$ff,$a4,$a5,$a6,$ff
->1870	a4 a5 a6 ff
->1874	a8 a9 aa ff		.byte $a8,$a9,$aa,$ff,$ac,$ad,$ae,$ff
->1878	ac ad ae ff
->187c	b0 b1 ff ff		.byte $b0,$b1,$ff,$ff,$b4,$b5,$b6,$ff
->1880	b4 b5 b6 ff
->1884	b8 b9 ba ff		.byte $b8,$b9,$ba,$ff,$bc,$bd,$be,$ff
->1888	bc bd be ff
->188c	c0 c1 ff ff		.byte $c0,$c1,$ff,$ff,$c4,$c5,$c6,$ff
->1890	c4 c5 c6 ff
->1894	c8 c9 ca ff		.byte $c8,$c9,$ca,$ff,$cc,$cd,$ce,$ff
->1898	cc cd ce ff
->189c	d0 d1 ff ff		.byte $d0,$d1,$ff,$ff,$ff,$d5,$d6,$ff
->18a0	ff d5 d6 ff
->18a4	d8 d9 ff ff		.byte $d8,$d9,$ff,$ff,$ff,$dd,$de,$ff
->18a8	ff dd de ff
->18ac	e0 e1 ff ff		.byte $e0,$e1,$ff,$ff,$e4,$e5,$e6,$ff
->18b0	e4 e5 e6 ff
->18b4	e8 e9 ea ff		.byte $e8,$e9,$ea,$ff,$ec,$ed,$ee,$ff
->18b8	ec ed ee ff
->18bc	f0 f1 ff ff		.byte $f0,$f1,$ff,$ff,$ff,$f5,$f6,$ff
->18c0	ff f5 f6 ff
->18c4	f8 f9 ff ff		.byte $f8,$f9,$ff,$ff,$ff,$fd,$fe,$ff
->18c8	ff fd fe ff
+.1804			opcodes
+>1804	00 01 ff ff		.byte $00,$01,$ff,$ff,$ff,$05,$06,$ff
+>1808	ff 05 06 ff
+>180c	08 09 0a ff		.byte $08,$09,$0a,$ff,$ff,$0d,$0e,$ff
+>1810	ff 0d 0e ff
+>1814	10 11 ff ff		.byte $10,$11,$ff,$ff,$ff,$15,$16,$ff
+>1818	ff 15 16 ff
+>181c	18 19 ff ff		.byte $18,$19,$ff,$ff,$ff,$1d,$1e,$ff
+>1820	ff 1d 1e ff
+>1824	20 21 ff ff		.byte $20,$21,$ff,$ff,$24,$25,$26,$ff
+>1828	24 25 26 ff
+>182c	28 29 2a ff		.byte $28,$29,$2a,$ff,$2c,$2d,$2e,$ff
+>1830	2c 2d 2e ff
+>1834	30 31 ff ff		.byte $30,$31,$ff,$ff,$ff,$35,$36,$ff
+>1838	ff 35 36 ff
+>183c	38 39 ff ff		.byte $38,$39,$ff,$ff,$ff,$3d,$3e,$ff
+>1840	ff 3d 3e ff
+>1844	40 41 ff ff		.byte $40,$41,$ff,$ff,$ff,$45,$46,$ff
+>1848	ff 45 46 ff
+>184c	48 49 4a ff		.byte $48,$49,$4a,$ff,$4c,$4d,$4e,$ff
+>1850	4c 4d 4e ff
+>1854	50 51 ff ff		.byte $50,$51,$ff,$ff,$ff,$55,$56,$ff
+>1858	ff 55 56 ff
+>185c	58 59 ff ff		.byte $58,$59,$ff,$ff,$ff,$5d,$5e,$ff
+>1860	ff 5d 5e ff
+>1864	60 61 ff ff		.byte $60,$61,$ff,$ff,$ff,$65,$66,$ff
+>1868	ff 65 66 ff
+>186c	68 69 6a ff		.byte $68,$69,$6a,$ff,$6c,$6d,$6e,$ff
+>1870	6c 6d 6e ff
+>1874	70 71 ff ff		.byte $70,$71,$ff,$ff,$ff,$75,$76,$ff
+>1878	ff 75 76 ff
+>187c	78 79 ff ff		.byte $78,$79,$ff,$ff,$ff,$7d,$7e,$ff
+>1880	ff 7d 7e ff
+>1884	ff 81 ff ff		.byte $ff,$81,$ff,$ff,$84,$85,$86,$ff
+>1888	84 85 86 ff
+>188c	88 ff 8a ff		.byte $88,$ff,$8a,$ff,$8c,$8d,$8e,$ff
+>1890	8c 8d 8e ff
+>1894	90 91 ff ff		.byte $90,$91,$ff,$ff,$94,$95,$96,$ff
+>1898	94 95 96 ff
+>189c	98 99 9a ff		.byte $98,$99,$9a,$ff,$ff,$9d,$ff,$ff
+>18a0	ff 9d ff ff
+>18a4	a0 a1 a2 ff		.byte $a0,$a1,$a2,$ff,$a4,$a5,$a6,$ff
+>18a8	a4 a5 a6 ff
+>18ac	a8 a9 aa ff		.byte $a8,$a9,$aa,$ff,$ac,$ad,$ae,$ff
+>18b0	ac ad ae ff
+>18b4	b0 b1 ff ff		.byte $b0,$b1,$ff,$ff,$b4,$b5,$b6,$ff
+>18b8	b4 b5 b6 ff
+>18bc	b8 b9 ba ff		.byte $b8,$b9,$ba,$ff,$bc,$bd,$be,$ff
+>18c0	bc bd be ff
+>18c4	c0 c1 ff ff		.byte $c0,$c1,$ff,$ff,$c4,$c5,$c6,$ff
+>18c8	c4 c5 c6 ff
+>18cc	c8 c9 ca ff		.byte $c8,$c9,$ca,$ff,$cc,$cd,$ce,$ff
+>18d0	cc cd ce ff
+>18d4	d0 d1 ff ff		.byte $d0,$d1,$ff,$ff,$ff,$d5,$d6,$ff
+>18d8	ff d5 d6 ff
+>18dc	d8 d9 ff ff		.byte $d8,$d9,$ff,$ff,$ff,$dd,$de,$ff
+>18e0	ff dd de ff
+>18e4	e0 e1 ff ff		.byte $e0,$e1,$ff,$ff,$e4,$e5,$e6,$ff
+>18e8	e4 e5 e6 ff
+>18ec	e8 e9 ea ff		.byte $e8,$e9,$ea,$ff,$ec,$ed,$ee,$ff
+>18f0	ec ed ee ff
+>18f4	f0 f1 ff ff		.byte $f0,$f1,$ff,$ff,$ff,$f5,$f6,$ff
+>18f8	ff f5 f6 ff
+>18fc	f8 f9 ff ff		.byte $f8,$f9,$ff,$ff,$ff,$fd,$fe,$ff
+>1900	ff fd fe ff
 
 ;******  Return to file: dlbug64.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/l-opcycles.asm
 
-.18cc			opcycles
->18cc	07 06 00 00		.byte   7,  6,  0,  0,  0,  3,  5,  0
->18d0	00 03 05 00
->18d4	03 05 02 00		.byte   3,  5,  2,  0,  0,  4,  6,  0
->18d8	00 04 06 00
->18dc	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
->18e0	00 04 06 00
->18e4	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
->18e8	00 04 07 00
->18ec	06 06 00 00		.byte   6,  6,  0,  0,  3,  3,  5,  0
->18f0	03 03 05 00
->18f4	04 02 02 00		.byte   4,  2,  2,  0,  4,  4,  6,  0
->18f8	04 04 06 00
->18fc	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
->1900	00 04 06 00
->1904	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
->1908	00 04 07 00
->190c	06 06 00 00		.byte   6,  6,  0,  0,  0,  3,  5,  0
->1910	00 03 05 00
->1914	03 02 02 00		.byte   3,  2,  2,  0,  3,  4,  6,  0
->1918	03 04 06 00
->191c	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
->1920	00 04 06 00
->1924	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
->1928	00 04 07 00
->192c	06 06 00 00		.byte   6,  6,  0,  0,  0,  3,  5,  0
->1930	00 03 05 00
->1934	04 02 02 00		.byte   4,  2,  2,  0,  5,  4,  6,  0
->1938	05 04 06 00
->193c	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
->1940	00 04 06 00
->1944	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
->1948	00 04 07 00
->194c	00 06 00 00		.byte   0,  6,  0,  0,  3,  3,  3,  0
->1950	03 03 03 00
->1954	02 00 02 00		.byte   2,  0,  2,  0,  4,  4,  4,  0
->1958	04 04 04 00
->195c	02 06 00 00		.byte   2,  6,  0,  0,  4,  4,  4,  0
->1960	04 04 04 00
->1964	02 05 02 00		.byte   2,  5,  2,  0,  0,  5,  0,  0
->1968	00 05 00 00
->196c	02 06 02 00		.byte   2,  6,  2,  0,  3,  3,  3,  0
->1970	03 03 03 00
->1974	02 02 02 00		.byte   2,  2,  2,  0,  4,  4,  4,  0
->1978	04 04 04 00
->197c	02 05 00 00		.byte   2,  5,  0,  0,  4,  4,  4,  0
->1980	04 04 04 00
->1984	02 04 02 00		.byte   2,  4,  2,  0,  4,  4,  4,  0
->1988	04 04 04 00
->198c	02 06 00 00		.byte   2,  6,  0,  0,  3,  3,  5,  0
->1990	03 03 05 00
->1994	02 02 02 00		.byte   2,  2,  2,  0,  4,  4,  6,  0
->1998	04 04 06 00
->199c	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
->19a0	00 04 06 00
->19a4	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
->19a8	00 04 07 00
->19ac	02 06 00 00		.byte   2,  6,  0,  0,  3,  3,  5,  0
->19b0	03 03 05 00
->19b4	02 02 02 00		.byte   2,  2,  2,  0,  4,  4,  6,  0
->19b8	04 04 06 00
->19bc	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
->19c0	00 04 06 00
->19c4	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
->19c8	00 04 07 00
+.1904			opcycles
+>1904	07 06 00 00		.byte   7,  6,  0,  0,  0,  3,  5,  0
+>1908	00 03 05 00
+>190c	03 05 02 00		.byte   3,  5,  2,  0,  0,  4,  6,  0
+>1910	00 04 06 00
+>1914	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
+>1918	00 04 06 00
+>191c	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
+>1920	00 04 07 00
+>1924	06 06 00 00		.byte   6,  6,  0,  0,  3,  3,  5,  0
+>1928	03 03 05 00
+>192c	04 02 02 00		.byte   4,  2,  2,  0,  4,  4,  6,  0
+>1930	04 04 06 00
+>1934	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
+>1938	00 04 06 00
+>193c	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
+>1940	00 04 07 00
+>1944	06 06 00 00		.byte   6,  6,  0,  0,  0,  3,  5,  0
+>1948	00 03 05 00
+>194c	03 02 02 00		.byte   3,  2,  2,  0,  3,  4,  6,  0
+>1950	03 04 06 00
+>1954	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
+>1958	00 04 06 00
+>195c	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
+>1960	00 04 07 00
+>1964	06 06 00 00		.byte   6,  6,  0,  0,  0,  3,  5,  0
+>1968	00 03 05 00
+>196c	04 02 02 00		.byte   4,  2,  2,  0,  5,  4,  6,  0
+>1970	05 04 06 00
+>1974	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
+>1978	00 04 06 00
+>197c	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
+>1980	00 04 07 00
+>1984	00 06 00 00		.byte   0,  6,  0,  0,  3,  3,  3,  0
+>1988	03 03 03 00
+>198c	02 00 02 00		.byte   2,  0,  2,  0,  4,  4,  4,  0
+>1990	04 04 04 00
+>1994	02 06 00 00		.byte   2,  6,  0,  0,  4,  4,  4,  0
+>1998	04 04 04 00
+>199c	02 05 02 00		.byte   2,  5,  2,  0,  0,  5,  0,  0
+>19a0	00 05 00 00
+>19a4	02 06 02 00		.byte   2,  6,  2,  0,  3,  3,  3,  0
+>19a8	03 03 03 00
+>19ac	02 02 02 00		.byte   2,  2,  2,  0,  4,  4,  4,  0
+>19b0	04 04 04 00
+>19b4	02 05 00 00		.byte   2,  5,  0,  0,  4,  4,  4,  0
+>19b8	04 04 04 00
+>19bc	02 04 02 00		.byte   2,  4,  2,  0,  4,  4,  4,  0
+>19c0	04 04 04 00
+>19c4	02 06 00 00		.byte   2,  6,  0,  0,  3,  3,  5,  0
+>19c8	03 03 05 00
+>19cc	02 02 02 00		.byte   2,  2,  2,  0,  4,  4,  6,  0
+>19d0	04 04 06 00
+>19d4	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
+>19d8	00 04 06 00
+>19dc	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
+>19e0	00 04 07 00
+>19e4	02 06 00 00		.byte   2,  6,  0,  0,  3,  3,  5,  0
+>19e8	03 03 05 00
+>19ec	02 02 02 00		.byte   2,  2,  2,  0,  4,  4,  6,  0
+>19f0	04 04 06 00
+>19f4	02 05 00 00		.byte   2,  5,  0,  0,  0,  4,  6,  0
+>19f8	00 04 06 00
+>19fc	02 04 00 00		.byte   2,  4,  0,  0,  0,  4,  7,  0
+>1a00	00 04 07 00
 
 ;******  Return to file: dlbug64.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/l-oplenght.asm
 
-.19cc			oplenght
->19cc	01 02 00 00		.byte   1,  2,  0,  0,  0,  2,  2,  0
->19d0	00 02 02 00
->19d4	01 01 01 00		.byte   1,  1,  1,  0,  0,  3,  3,  0
->19d8	00 03 03 00
->19dc	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
->19e0	00 02 02 00
->19e4	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
->19e8	00 03 03 00
->19ec	03 02 00 00		.byte   3,  2,  0,  0,  2,  2,  2,  0
->19f0	02 02 02 00
->19f4	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
->19f8	03 03 03 00
->19fc	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
->1a00	00 02 02 00
->1a04	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
->1a08	00 03 03 00
->1a0c	01 02 00 00		.byte   1,  2,  0,  0,  0,  2,  2,  0
->1a10	00 02 02 00
->1a14	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
->1a18	03 03 03 00
->1a1c	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
->1a20	00 02 02 00
->1a24	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
->1a28	00 03 03 00
->1a2c	01 02 00 00		.byte   1,  2,  0,  0,  0,  2,  2,  0
->1a30	00 02 02 00
->1a34	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
->1a38	03 03 03 00
->1a3c	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
->1a40	00 02 02 00
->1a44	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
->1a48	00 03 03 00
->1a4c	00 02 00 00		.byte   0,  2,  0,  0,  2,  2,  2,  0
->1a50	02 02 02 00
->1a54	01 00 01 00		.byte   1,  0,  1,  0,  3,  3,  3,  0
->1a58	03 03 03 00
->1a5c	02 02 00 00		.byte   2,  2,  0,  0,  2,  2,  2,  0
->1a60	02 02 02 00
->1a64	01 03 01 00		.byte   1,  3,  1,  0,  0,  3,  0,  0
->1a68	00 03 00 00
->1a6c	02 02 02 00		.byte   2,  2,  2,  0,  2,  2,  2,  0
->1a70	02 02 02 00
->1a74	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
->1a78	03 03 03 00
->1a7c	02 02 00 00		.byte   2,  2,  0,  0,  2,  2,  2,  0
->1a80	02 02 02 00
->1a84	01 03 01 00		.byte   1,  3,  1,  0,  3,  3,  3,  0
->1a88	03 03 03 00
->1a8c	02 02 00 00		.byte   2,  2,  0,  0,  2,  2,  2,  0
->1a90	02 02 02 00
->1a94	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
->1a98	03 03 03 00
->1a9c	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
->1aa0	00 02 02 00
->1aa4	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
->1aa8	00 03 03 00
->1aac	02 02 00 00		.byte   2,  2,  0,  0,  2,  2,  2,  0
->1ab0	02 02 02 00
->1ab4	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
->1ab8	03 03 03 00
->1abc	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
->1ac0	00 02 02 00
->1ac4	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
->1ac8	00 03 03 00
+.1a04			oplenght
+>1a04	01 02 00 00		.byte   1,  2,  0,  0,  0,  2,  2,  0
+>1a08	00 02 02 00
+>1a0c	01 01 01 00		.byte   1,  1,  1,  0,  0,  3,  3,  0
+>1a10	00 03 03 00
+>1a14	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
+>1a18	00 02 02 00
+>1a1c	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
+>1a20	00 03 03 00
+>1a24	03 02 00 00		.byte   3,  2,  0,  0,  2,  2,  2,  0
+>1a28	02 02 02 00
+>1a2c	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
+>1a30	03 03 03 00
+>1a34	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
+>1a38	00 02 02 00
+>1a3c	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
+>1a40	00 03 03 00
+>1a44	01 02 00 00		.byte   1,  2,  0,  0,  0,  2,  2,  0
+>1a48	00 02 02 00
+>1a4c	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
+>1a50	03 03 03 00
+>1a54	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
+>1a58	00 02 02 00
+>1a5c	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
+>1a60	00 03 03 00
+>1a64	01 02 00 00		.byte   1,  2,  0,  0,  0,  2,  2,  0
+>1a68	00 02 02 00
+>1a6c	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
+>1a70	03 03 03 00
+>1a74	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
+>1a78	00 02 02 00
+>1a7c	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
+>1a80	00 03 03 00
+>1a84	00 02 00 00		.byte   0,  2,  0,  0,  2,  2,  2,  0
+>1a88	02 02 02 00
+>1a8c	01 00 01 00		.byte   1,  0,  1,  0,  3,  3,  3,  0
+>1a90	03 03 03 00
+>1a94	02 02 00 00		.byte   2,  2,  0,  0,  2,  2,  2,  0
+>1a98	02 02 02 00
+>1a9c	01 03 01 00		.byte   1,  3,  1,  0,  0,  3,  0,  0
+>1aa0	00 03 00 00
+>1aa4	02 02 02 00		.byte   2,  2,  2,  0,  2,  2,  2,  0
+>1aa8	02 02 02 00
+>1aac	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
+>1ab0	03 03 03 00
+>1ab4	02 02 00 00		.byte   2,  2,  0,  0,  2,  2,  2,  0
+>1ab8	02 02 02 00
+>1abc	01 03 01 00		.byte   1,  3,  1,  0,  3,  3,  3,  0
+>1ac0	03 03 03 00
+>1ac4	02 02 00 00		.byte   2,  2,  0,  0,  2,  2,  2,  0
+>1ac8	02 02 02 00
+>1acc	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
+>1ad0	03 03 03 00
+>1ad4	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
+>1ad8	00 02 02 00
+>1adc	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
+>1ae0	00 03 03 00
+>1ae4	02 02 00 00		.byte   2,  2,  0,  0,  2,  2,  2,  0
+>1ae8	02 02 02 00
+>1aec	01 02 01 00		.byte   1,  2,  1,  0,  3,  3,  3,  0
+>1af0	03 03 03 00
+>1af4	02 02 00 00		.byte   2,  2,  0,  0,  0,  2,  2,  0
+>1af8	00 02 02 00
+>1afc	01 03 00 00		.byte   1,  3,  0,  0,  0,  3,  3,  0
+>1b00	00 03 03 00
 
 ;******  Return to file: dlbug64.asm
 
 
 ;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/l-opmodes.asm
 
-.1acc			opmodes
->1acc	00 0a 00 00		.byte   0, 10,  0,  0,  0,  7,  7,  0
->1ad0	00 07 07 00
->1ad4	00 02 00 00		.byte   0,  2,  0,  0,  0,  3,  3,  0
->1ad8	00 03 03 00
->1adc	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
->1ae0	00 08 08 00
->1ae4	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  5,  0
->1ae8	00 05 05 00
->1aec	03 0a 00 00		.byte   3, 10,  0,  0,  7,  7,  7,  0
->1af0	07 07 07 00
->1af4	00 02 01 00		.byte   0,  2,  1,  0,  3,  3,  3,  0
->1af8	03 03 03 00
->1afc	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
->1b00	00 08 08 00
->1b04	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  5,  0
->1b08	00 05 05 00
->1b0c	00 0a 00 00		.byte   0, 10,  0,  0,  0,  7,  7,  0
->1b10	00 07 07 00
->1b14	00 02 01 00		.byte   0,  2,  1,  0,  3,  3,  3,  0
->1b18	03 03 03 00
->1b1c	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
->1b20	00 08 08 00
->1b24	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  5,  0
->1b28	00 05 05 00
->1b2c	00 0a 00 00		.byte   0, 10,  0,  0,  0,  7,  7,  0
->1b30	00 07 07 00
->1b34	00 02 01 00		.byte   0,  2,  1,  0, 12,  3,  3,  0
->1b38	0c 03 03 00
->1b3c	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
->1b40	00 08 08 00
->1b44	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  5,  0
->1b48	00 05 05 00
->1b4c	00 0a 00 00		.byte   0, 10,  0,  0,  7,  7,  7,  0
->1b50	07 07 07 00
->1b54	00 00 00 00		.byte   0,  0,  0,  0,  3,  3,  3,  0
->1b58	03 03 03 00
->1b5c	04 0b 00 00		.byte   4, 11,  0,  0,  8,  8,  9,  0
->1b60	08 08 09 00
->1b64	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  0,  0
->1b68	00 05 00 00
->1b6c	02 0a 02 00		.byte   2, 10,  2,  0,  7,  7,  7,  0
->1b70	07 07 07 00
->1b74	00 02 00 00		.byte   0,  2,  0,  0,  3,  3,  3,  0
->1b78	03 03 03 00
->1b7c	04 0b 00 00		.byte   4, 11,  0,  0,  8,  8,  9,  0
->1b80	08 08 09 00
->1b84	00 06 00 00		.byte   0,  6,  0,  0,  5,  5,  6,  0
->1b88	05 05 06 00
->1b8c	02 0a 00 00		.byte   2, 10,  0,  0,  7,  7,  7,  0
->1b90	07 07 07 00
->1b94	00 02 00 00		.byte   0,  2,  0,  0,  3,  3,  3,  0
->1b98	03 03 03 00
->1b9c	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
->1ba0	00 08 08 00
->1ba4	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  5,  0
->1ba8	00 05 05 00
->1bac	02 0a 00 00		.byte   2, 10,  0,  0,  7,  7,  7,  0
->1bb0	07 07 07 00
->1bb4	00 02 00 00		.byte   0,  2,  0,  0,  3,  3,  3,  0
->1bb8	03 03 03 00
->1bbc	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
->1bc0	00 08 08 00
-.1bc4			opmoddesc
->1bc4	49 4d 50 2e	opmod0	.null "imp."
->1bc8	00
->1bc9	41 43 43 2e	opmod1	.null "acc."
->1bcd	00
->1bce	49 4d 4d 2e	opmod2	.null "imm."
->1bd2	00
->1bd3	41 42 53 2e	opmod3	.null "abs."
->1bd7	00
->1bd8	52 45 4c 2e	opmod4	.null "rel."
->1bdc	00
->1bdd	41 42 53 2e	opmod5	.null "abs.,indx"
->1be1	2c 49 4e 44 58 00
->1be7	41 42 53 2e	opmod6	.null "abs.,indy"
->1beb	2c 49 4e 44 59 00
->1bf1	5a 50 41 47	opmod7	.null "zpage indirect"
->1bf5	45 20 49 4e 44 49 52 45 43 54 00
->1c00	5a 50 41 47	opmod8	.null "zpage,indx"
->1c04	45 2c 49 4e 44 58 00
->1c0b	5a 50 41 47	opmod9	.null "zpage,indy"
->1c0f	45 2c 49 4e 44 59 00
->1c16	28 5a 50 41	opmod10	.null "(zpage,indx)"
->1c1a	47 45 2c 49 4e 44 58 29 00
->1c23	28 5a 50 41	opmod11	.null "(zpage),indy"
->1c27	47 45 29 2c 49 4e 44 59 00
->1c30	28 41 42 53	opmod12	.null "(abs. ind)"
->1c34	2e 20 49 4e 44 29 00
-.1c3b			opmodvec
->1c3b	c4 1b c9 1b		.word opmod0,opmod1,opmod2,opmod3
->1c3f	ce 1b d3 1b
->1c43	d8 1b dd 1b		.word opmod4,opmod5,opmod6,opmod7
->1c47	e7 1b f1 1b
->1c4b	00 1c 0b 1c		.word opmod8,opmod9,opmod10,opmod11
->1c4f	16 1c 23 1c
->1c53	30 1c			.word opmod12
+.1b04			opmodes
+>1b04	00 0a 00 00		.byte   0, 10,  0,  0,  0,  7,  7,  0
+>1b08	00 07 07 00
+>1b0c	00 02 00 00		.byte   0,  2,  0,  0,  0,  3,  3,  0
+>1b10	00 03 03 00
+>1b14	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
+>1b18	00 08 08 00
+>1b1c	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  5,  0
+>1b20	00 05 05 00
+>1b24	03 0a 00 00		.byte   3, 10,  0,  0,  7,  7,  7,  0
+>1b28	07 07 07 00
+>1b2c	00 02 01 00		.byte   0,  2,  1,  0,  3,  3,  3,  0
+>1b30	03 03 03 00
+>1b34	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
+>1b38	00 08 08 00
+>1b3c	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  5,  0
+>1b40	00 05 05 00
+>1b44	00 0a 00 00		.byte   0, 10,  0,  0,  0,  7,  7,  0
+>1b48	00 07 07 00
+>1b4c	00 02 01 00		.byte   0,  2,  1,  0,  3,  3,  3,  0
+>1b50	03 03 03 00
+>1b54	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
+>1b58	00 08 08 00
+>1b5c	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  5,  0
+>1b60	00 05 05 00
+>1b64	00 0a 00 00		.byte   0, 10,  0,  0,  0,  7,  7,  0
+>1b68	00 07 07 00
+>1b6c	00 02 01 00		.byte   0,  2,  1,  0, 12,  3,  3,  0
+>1b70	0c 03 03 00
+>1b74	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
+>1b78	00 08 08 00
+>1b7c	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  5,  0
+>1b80	00 05 05 00
+>1b84	00 0a 00 00		.byte   0, 10,  0,  0,  7,  7,  7,  0
+>1b88	07 07 07 00
+>1b8c	00 00 00 00		.byte   0,  0,  0,  0,  3,  3,  3,  0
+>1b90	03 03 03 00
+>1b94	04 0b 00 00		.byte   4, 11,  0,  0,  8,  8,  9,  0
+>1b98	08 08 09 00
+>1b9c	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  0,  0
+>1ba0	00 05 00 00
+>1ba4	02 0a 02 00		.byte   2, 10,  2,  0,  7,  7,  7,  0
+>1ba8	07 07 07 00
+>1bac	00 02 00 00		.byte   0,  2,  0,  0,  3,  3,  3,  0
+>1bb0	03 03 03 00
+>1bb4	04 0b 00 00		.byte   4, 11,  0,  0,  8,  8,  9,  0
+>1bb8	08 08 09 00
+>1bbc	00 06 00 00		.byte   0,  6,  0,  0,  5,  5,  6,  0
+>1bc0	05 05 06 00
+>1bc4	02 0a 00 00		.byte   2, 10,  0,  0,  7,  7,  7,  0
+>1bc8	07 07 07 00
+>1bcc	00 02 00 00		.byte   0,  2,  0,  0,  3,  3,  3,  0
+>1bd0	03 03 03 00
+>1bd4	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
+>1bd8	00 08 08 00
+>1bdc	00 06 00 00		.byte   0,  6,  0,  0,  0,  5,  5,  0
+>1be0	00 05 05 00
+>1be4	02 0a 00 00		.byte   2, 10,  0,  0,  7,  7,  7,  0
+>1be8	07 07 07 00
+>1bec	00 02 00 00		.byte   0,  2,  0,  0,  3,  3,  3,  0
+>1bf0	03 03 03 00
+>1bf4	04 0b 00 00		.byte   4, 11,  0,  0,  0,  8,  8,  0
+>1bf8	00 08 08 00
+.1bfc			opmoddesc
+>1bfc	49 4d 50 2e	opmod0	.null "imp."
+>1c00	00
+>1c01	41 43 43 2e	opmod1	.null "acc."
+>1c05	00
+>1c06	49 4d 4d 2e	opmod2	.null "imm."
+>1c0a	00
+>1c0b	41 42 53 2e	opmod3	.null "abs."
+>1c0f	00
+>1c10	52 45 4c 2e	opmod4	.null "rel."
+>1c14	00
+>1c15	41 42 53 2e	opmod5	.null "abs.,indx"
+>1c19	2c 49 4e 44 58 00
+>1c1f	41 42 53 2e	opmod6	.null "abs.,indy"
+>1c23	2c 49 4e 44 59 00
+>1c29	5a 50 41 47	opmod7	.null "zpage indirect"
+>1c2d	45 20 49 4e 44 49 52 45 43 54 00
+>1c38	5a 50 41 47	opmod8	.null "zpage,indx"
+>1c3c	45 2c 49 4e 44 58 00
+>1c43	5a 50 41 47	opmod9	.null "zpage,indy"
+>1c47	45 2c 49 4e 44 59 00
+>1c4e	28 5a 50 41	opmod10	.null "(zpage,indx)"
+>1c52	47 45 2c 49 4e 44 58 29 00
+>1c5b	28 5a 50 41	opmod11	.null "(zpage),indy"
+>1c5f	47 45 29 2c 49 4e 44 59 00
+>1c68	28 41 42 53	opmod12	.null "(abs. ind)"
+>1c6c	2e 20 49 4e 44 29 00
+.1c73			opmodvec
+>1c73	fc 1b 01 1c		.word opmod0,opmod1,opmod2,opmod3
+>1c77	06 1c 0b 1c
+>1c7b	10 1c 15 1c		.word opmod4,opmod5,opmod6,opmod7
+>1c7f	1f 1c 29 1c
+>1c83	38 1c 43 1c		.word opmod8,opmod9,opmod10,opmod11
+>1c87	4e 1c 5b 1c
+>1c8b	68 1c			.word opmod12
 
 ;******  Return to file: dlbug64.asm
 
