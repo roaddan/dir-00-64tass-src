@@ -14,6 +14,9 @@ counter  .byte $00
 baseaddr .word $2000 ;8192
 scrwidth .word $0140 ;320
 ;---------------------------------------
+msg   .byte $0d,$0d,29,29,29  
+      .text "un instant! chargement de "
+fname .null "romc000"
 dmphead .byte 18,5
         .text "adres"
         .byte 159
@@ -208,11 +211,6 @@ boxhti  .byte boxhx+2,boxhy+24
         .text " Daniel Lafrance"
         .text " - decembre 2025. "
         .byte 146, eot
-
-msg   .byte $0d,$0d,29,29,29  
-      .text "chargement de "
-fname .null "rom9000. un instant!"
-
 ;---------------------------------------
 printboxt  .macro  ptr,col
         ldx \ptr

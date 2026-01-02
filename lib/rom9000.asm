@@ -6,7 +6,8 @@
      .null "libc64"
      .include "e-64map.asm"
      .include "e-float.asm"
-     .include "e-vars.asm"
+     ;Code dans $9000 vars dans $c000
+     .include "e-varsc000.asm"
      .include "l-bitmap.asm"
      .include "l-conv.asm"
      .include "l-drawbox.asm"

@@ -1,13 +1,14 @@
-;---------------------------------------
+;--------------------------------------
 ; fichier......: l-math.asm (seq)
 ; type fichier.: equates
 ; auteur.......: Daniel Lafrance
 ; version......: 0.0.2
 ; revision.....: 20151210
-;---------------------------------------
+;--------------------------------------
 ;$(yyxx) = pointeur sur le mot
 ;acc     = valeur a ajouter.
 ;rep     = $yyxx
+addtoword
 addatoyx 
         .block
         php
@@ -25,10 +26,11 @@ norep   sta reponse
         plp
         rts
         .bend
-;---------------------------------------
+;--------------------------------------
 ;$(yyxx) = pointeur sur le mot
 ;acc     = valeur a soustraire.
 ;rep     = $yyxx
+subtoword
 subatoyx 
         .block
         php
@@ -46,7 +48,7 @@ noemp   sta reponse
         plp
         rts
         .bend
-;---------------------------------------
+;--------------------------------------
 ; rol reponse sur 16 bits
 ; nombre de rol dans a
 rolword
@@ -61,4 +63,4 @@ again   clc
         jsr popregs
         rts
         .bend
-;---------------------------------------
+;--------------------------------------

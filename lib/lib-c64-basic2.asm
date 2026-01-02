@@ -106,23 +106,34 @@ exit           jsr  popall         ; Récupère registre, ZP1 et ZP2.
 ; Positionne le curseyr à la position X et Y. 
 ; Entrée  : X = colonne, Y = ligne.
 ; Sortie  : Aucune.
-;---------------------------------------------------------------------
-gotoxy         .block
-               php                 ; Sauvegarde le registre de  
-               pha                 ;   status et le registre a.
-               clc                 ; Carry = 1 pour que kplot  
-               txa                 ;   positionne le curseur.
-               pha                 ; On inverse X et Y pcq kplot  
-               tya                 ;  
-               tax                 ;   prend X comme la ligne                    
-               pla                 ;  
-               tay                 ;   et Y comme la colonne.
-               jsr  kplot          ; Positionne le curseur
-               pla                 ; Récupère le registre a et  
-               plp                 ;   le registre de status.
-               rts
-               .bend
-
+; limites x(0-39), Y(0-24)
+gotoxy
+;---------------------------------------
+        .block
+        jsr pushregs
+        txa ; interchange x et y
+        pha ; ...
+        tya ; ...
+        tax ; ...
+        pla ; ...
+        tay ; ...
+txlow   cpy #0
+        bpl txhigh
+        ldx #0
+txhigh  cpx #25
+        bmi tylow
+        ldx #24
+tylow   cpy #0
+        bpl tyhigh
+        ldy #0
+tyhigh  cpy #40
+        bmi allok
+        ldy #39
+allok   clc
+        jsr plot
+        jsr popregs
+        rts
+        .bend
 ;---------------------------------------------------------------------
 ; Positionne C=1 ou Sauvegarde C=0 le curseur et la couleur par défaut.
 ; Entrée  : Carry = 0 pour sauvegarder, carry = 1 pour récupérer.
