@@ -4,9 +4,6 @@
 ; Cernière m.à j. : 
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
-rp        .byte     0
-ra        .byte     0
-pc        .word     0
 pushall
 push      .block         ; stack : pcl, pch
           php            ; stack : flg, pcl, pch  

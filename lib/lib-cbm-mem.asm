@@ -271,16 +271,6 @@ norep          lda  loopcount
                cmp  #$ff
 out            rts
                .bend
-
-setloop        .macro lcount
-               pha
-               lda  #<\lcount
-               sta  loopcount
-               lda  #>\lcount
-               sta  loopcount+1
-               pla
-               .endm
-
 ;-------------------------------------------------------------------------------
 ; Variables globales
 ;-------------------------------------------------------------------------------
@@ -290,6 +280,6 @@ addr2          .word     $0000
 bytecnt        .word     $0000       
 zp1            .word     $0000
 zp2            .word     $0000
-loopcount      .word     $0000
+;loopcount      .word     $0000
 
 

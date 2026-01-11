@@ -13,11 +13,6 @@
 ; Fonction utilitaires de conversion en hexadécimal.
 ; ** Note: Utilise: butils.asm
 ;-------------------------------------------------------------------------------
-a2hexcol       .byte     1              ; pour aputscxy
-a2hexbkcol     .byte     %00000000
-a2hexpos  
-a2hexpx        .byte     0              ; pour aputsxy
-a2hexpy        .byte     0
 a2hexprefix    .byte     "$"            ; pour aputs
 a2hexstr       .word     $00
                .word     $00
