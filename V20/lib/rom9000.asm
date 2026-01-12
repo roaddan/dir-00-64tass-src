@@ -3,7 +3,7 @@
 ;--------------------------------------
 
      *=$9000
-     .null "libc64"
+     .null "libv20"
      .include "e-64map.asm"
      .include "e-float.asm"
      ;Code dans $9000 vars dans $c000
