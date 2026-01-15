@@ -1,4 +1,4 @@
-SOURCENAME=v20start
+SOURCENAME=template
 BASEDIR=/Users/Locals/C64/00-usbkey32go
 VICEDIR=/Users/Locals/temp/Vice
 SD2IEC=/media/daniel/SD2IECV20/d-remote
@@ -7,7 +7,7 @@ X64=/usr/bin/x64
 X64SC=/usr/bin/x64sc
 C1541=/usr/bin/c1541
 TASS=/usr/bin/64tass
-TASSLIB=./libV20
+TASSLIB=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/V20/lib
 TMPSEP06=-9 $(BASEDIR)/dir-tmp-dskimg/turbo-macro-pro-sep06.d64
 V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 V20MON=-9 /Users/Locals/Vic20/d64/vicmon-6000.d64
@@ -29,15 +29,15 @@ all: $(SOURCENAME).d64
 $(SOURCENAME).d64: $(SOURCENAME).prg
 	$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 -write $(SOURCENAME).prg $(SOURCENAME) 
 	cp -f  ${SOURCENAME}.d64 ${BASEDIR}/${PRGDIR}/d64
-	cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64
+	#cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64
 	cp -f  ${SOURCENAME}.d64 ${VICEDIR}
 $(SOURCENAME).prg: $(SOURCENAME).asm
 	$(TASS) -C -m -a -I $(TASSLIB) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 	cp -f  ${SOURCENAME}.prg ${BASEDIR}/${PRGDIR}/prg
-	cp -f  ${SOURCENAME}.prg ${SD2IEC}/prg
+	#cp -f  ${SOURCENAME}.prg ${SD2IEC}/prg
 	cp -f  ${SOURCENAME}.prg ${VICEDIR}
 	cp -f  ${SOURCENAME}.txt ${BASEDIR}/${PRGDIR}/txt
-	cp -f  ${SOURCENAME}.txt ${SD2IEC}/txt
+	#cp -f  ${SOURCENAME}.txt ${SD2IEC}/txt
 	cp -f  ${SOURCENAME}.txt ${VICEDIR}
 
 clean:

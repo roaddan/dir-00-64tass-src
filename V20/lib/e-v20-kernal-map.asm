@@ -17,7 +17,7 @@
 ; ... en prenant soin de placer le fichier dans le meme disque ou répertoire que
 ; votre programme.
 ;--------------------------------------------------------------------------------
-;* Equates sur les elements importants *
+; C O N S T A N T E S   S U R   L E S   E L E M E N T S   I M P O R T A N T S
 ;--------------------------------------------------------------------------------
 eot       = $00
 memmapreg = $01
@@ -43,7 +43,7 @@ basicrom  = $a000
 chargen   = $d000
 vicii     = $d000
 sid       = $d400     ;sid base address
-colourram  = $d800     ;video colour ram
+colourram = $d800     ;video colour ram
 colram0   = $d800
 colram1   = $d900
 colram2   = $da00
@@ -52,8 +52,21 @@ cia1      = $dc00     ;cia1  base address
 cia2      = $dd00     ;cia2 base address
 kernalrom = $e000
 ;--------------------------------------------------------------------------------
-;* basic petscii control characters *
+; C A R A C T E R E S   D E   C O N T R O L E   P E T S C I I
 ;--------------------------------------------------------------------------------
+discase   =    8
+enacase   =    9
+locase    =    14
+crsdown   =    17
+enarevs   =    18
+gohome    =    19
+delete    =    20
+crsright  =    29
+upcase    =    142
+crsup     =    145
+crsleft   =    157
+disrevs   =    146
+clrhome   =    147
 bstop     =   $03      ;stop
 bwhite    =   $05      ;set colour white
 block     =   $08      ;lock the charset
@@ -102,9 +115,6 @@ bcyan     =   $9f
 ;--------------------------------------------------------------------------------
 carcol  = $0286
 ieval   = $030a
-; vecteurs du basic
-chrget  = $73
-chrgot  = $79
 ;+----+----------------------+-------------------------------------------------------------------------------------------------------+
 ;|    |                      |                                Peek from $dc01 (code in paranthesis):                                 |
 ;|row:| $dc00:               +------------+------------+------------+------------+------------+------------+------------+------------+
@@ -133,40 +143,36 @@ chrgot  = $79
 ; | 12  | $0  | b00001100 | gris moyen || 13  | $d  | b00001101 | vert pâle  |
 ; | 14  | $0  | b00001110 | blue pale  || 15  | $f  | b00001111 | gris pâle  |
 ; +-----+-----+-----------+------------++-----+-----+-----------+------------+
-; constantes de couleurs en franÃ§ais.
-cnoir       = $0
-cblanc      = $1
-crouge      = $2
-cocean      = $3
-cmauve      = $4
-cvert       = $5
-cbleu       = $6
-cjaune      = $7
-corange     = $8
-cbrun       = $9
-crose       = $a
-cgrisfonce  = $b
-cgrismoyen  = $c
-cvertpale   = $d
-cbleupale   = $e
-cgrispale   = $f
-; pour anglosaxons
-cblack      = $0
-cwhite      = $1
-cred        = $2
-ccyan       = $3
-cpurple     = $4
-cgreen      = $5
-cblue       = $6
-cyellow     = $7
-;corange     = $8 ; same as french :-)
-cbrown      = $9
-clightred   = $a
-cdarkgray   = $b
-cmidgray    = $c
-clightgreen = $d
-clightblue  = $e
-clightgray  = $f
+;-----------------------------------------------------------------------------
+; Constantes de couleurs pour la memoire couleur.
+;-----------------------------------------------------------------------------
+enoir       = $0
+eblanc      = $1
+erouge      = $2
+eocean      = $3
+emauve      = $4
+evert       = $5
+ebleu       = $6
+ejaune      = $7
+eorange     = $8
+ebrun       = $9
+erose       = $a
+egrisfonce  = $b
+egrismoyen  = $c
+evertpale   = $d
+ebleupale   = $e
+egrispale   = $f
+;-----------------------------------------------------------------------------
+; Constantes couleur pour les chaines de caractères, $ffd2
+;-----------------------------------------------------------------------------
+snoir       = 144
+sblanc      = 5
+srouge      = 28
+socean      = 159
+smauve      = 156
+svert       = 30
+sbleu       = 31
+sjaune      = 158
 ;--------------------------------------
 ;vic - registres de contrôle
 ;--------------------------------------
@@ -219,21 +225,21 @@ vic15     = $900f;XXXXYZZZ
                 ;Z =Border colour (8)
 ;--------------------------------------------------------------------------------
 ;* vic code couleur en francais *
-; couleur %xxxx0000
-;              |||+-> bit 0   : Inverse tous les autres bits
-;              |++--> bit 1,2 : 00=rgb, 01=Rgb, 10=rGb, 11=rgB 
-;              +----> bit 3   : Intensité          
+; couleur %XXXXYZZZ   X=Couleur de l'ecran
+;              ||||  
+;              |+++-> Z bit 0,1,2 : Couleur de la bordure
+;              +----> Y bit 3   : Inverse video         
+;    |-C O U L E U R S   D E   F O N   D ' E C R A N-|      
 ;     0000=noir,  0001=Blanc, 1000=orange, 1001=brun        
-;     0010=rouge, 0010=Cyan,  1010=rose  , 1011=gris      
-;     0100=vert,  0101=mauve, 1100=gris1 , 1101=vert2           
-;     0110=vleu,  0111=jaune, 1110=bleu1 , 1111=gris2           
-;           
+;     0010=rouge, 0011=Cyan,  1010=rose  , 1011=gris      
+;     0100=mauve, 0101=vert,  1100=gris1 , 1101=vert1           
+;     0110=vleu,  0111=jaune, 1110=bleu1 , 1111=jaune           
+;    |--couleur de bordure--|
 ;--------------------------------------------------------------------------------
 vnoir   =   %00000000
 vblanc  =   %00000001
 vrouge  =   %00000010
 vocean  =   %00000011
-vcyan   =   %00000011
 vmauve  =   %00000100
 vvert   =   %00000101
 vbleu   =   %00000110
@@ -247,23 +253,23 @@ vvert1  =   %00001101
 vbleu1  =   %00001110
 vgris2  =   %00001111
 bknoir  =   %00000000
-bkcol1  =   %00010000
-bkcol2  =   %00100000
-bkcol3  =   %00110000
-bkcol4  =   %01000000
-bkcol5  =   %01010000
-bkcol6  =   %01100000
-bkcol7  =   %01110000
-bkcol8  =   %10000000
-bkcol9  =   %10010000
-bkcola  =   %10100000
-bkcolb  =   %10110000
-bkcolc  =   %11000000
-bkcold  =   %11010000
-bkcole  =   %11100000
-bkcolf  =   %11110000
+bkblanc =   %00010000
+bkrouge =   %00100000
+bkocean =   %00110000
+bkmauve =   %01000000
+bkvert  =   %01010000
+bkbleu  =   %01100000
+bkjaune =   %01110000
+bkorange=   %10000000
+bkrose  =   %10010000
+bkgris  =   %10100000
+bkgris1 =   %10110000
+bkgris2 =   %11000000
+bkvert1 =   %11010000
+bkbleu1 =   %11100000
+bkjaune2=   %11110000
 ;-------------------------------------------------------------------------------
-; R o u t i n e s   B a s i c  d e   c o m m u n i c a t i o n   s é r i e
+; R o u t i n e s   D u  K E R N A L  d u   C o m m o d o r e   V I C - 2 0
 ;-------------------------------------------------------------------------------
 serout1 = $e4a0 ; Serial: Output a 1 on the serial data line.
 ;-------------------------------------------------------------------------------
@@ -380,7 +386,7 @@ cnvrtcd = $e929 ; Code conversion table.
 ;-------------------------------------------------------------------------------
 scrl    = $e975 ; Scroll the screen.
 ;-------------------------------------------------------------------------------
-openlin = $e9ee : Open up a blank physical line on the screen for inserts.
+openlin = $e9ee ; Open up a blank physical line on the screen for inserts.
 ;-------------------------------------------------------------------------------
 movline = $ea56 ; Move screen line.
 ;-------------------------------------------------------------------------------
@@ -400,7 +406,6 @@ colorsyn= $eab2 ; The address of the color map byte for screen map byte is
 irq     = $eabf ; IRQ interupt handler.
 ;-------------------------------------------------------------------------------
 scnkey  = $eb1e ; Scan the keyboard
-cscnkey = $ff9f ;---------------------------------------------------------------
 ;-------------------------------------------------------------------------------
 setkeys = $ebdc ; Set keyboard decode table address in 245-246 ($f6-$f6).
 ;-------------------------------------------------------------------------------
@@ -828,9 +833,9 @@ save    = $f675 ; Save memory to a device.
 ;-------------------------------------------------------------------------------
 saveser = $f692 ; Save RAM to serial device (except: RS-232,screen or keyboard).
 ;-------------------------------------------------------------------------------
-savetp  = $f6f1 : Save RAM to tape.
+savetp  = $f6f1 ; Save RAM to tape.
 ;-------------------------------------------------------------------------------
-saving  = $f728 : Display SAVING message.
+saving  = $f728 ; Display SAVING message.
 ;-------------------------------------------------------------------------------
 udtim   = $f734 ; Update the system clock
                 ;---------------------------------------------------------------
@@ -1265,11 +1270,7 @@ ksave       =   save        ;   , sauve mem->dev
 ksettim     =   settim      ;axy, init sysclock
 krdtim      =   rdtim       ;axy, lecture sysclock
 kstop       =   stop        ;a  , ret. stopkey stat
-kgetin      =   getin        2521   25212521
-
-
-
-     ;a  , recup. car. #dev.
+kgetin      =   getin       ;a  , recup. car. #dev.
 kclall      =   clall       ;   , ferme fichiers.
 kudtim      =   udtim       ;   , maj sysclock
 kscreen     =   screen      ; yx, get format ecran
