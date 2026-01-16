@@ -26,7 +26,7 @@ outstr  .macro string
         sty zp1+1
         ldx #<\string
         stx zp1
-        jsr putszp1
+        jsr puts
         jsr popall
         .endm
 ;--------------------------------------
@@ -282,35 +282,43 @@ graycolor      .macro
                .endm
 ;--------------------------------------
 setzpage1      .macro addr
+               php
                pha
                lda  \addr
                sta  $fb
                lda  \addr+1
                sta  $fc
                pla
+               plp
                .endm
 ;--------------------------------------
 setzpage2      .macro addr
+               php
                pha
                lda  \addr
                sta  $fd
                lda  \addr+1
                sta  $fe
                pla
+               plp
                .endm
 ;--------------------------------------
-scrcolors      .macro fg, bg         
+scrcolors      .macro fg, bg  
+               php       
                pha
                lda #(\bg*16+(\fg|8))
                sta  vic15
                pla
+               plp
                .endm
 ;--------------------------------------
 color          .macro    col
+               php
                pha
                lda  #\col
                sta  kcol
                pla
+               plp
                .endm
 ;--------------------------------------
 print          .macro strptr
