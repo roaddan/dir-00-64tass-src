@@ -13,10 +13,14 @@ DIFF=$5
 main           
                #tolower
                #scrcolors vbleu, vnoir
-               #color vblanc
+               #color 5
+               #outcar revson
                #printxy string3
-               #color vmauve               
+               #outcar revsoff
+               #outcar revson
+               #color vocean           
                #printxy string1
+               #outcar revsoff
                #color vblanc              
                #printxy string2
                #color vvert               
@@ -103,6 +107,7 @@ continue       pha
                jmp next
                #printwordbin adresse
 out            jsr getkey
+
                rts 
 
 delay65536     .block
@@ -117,7 +122,6 @@ waitx          dex
                rts
                .bend
 
-string0        .text    1,1,"Par: Daniel Lafrance",0
 string1        .text    1,0,"Test de Drapeaux CPU",0
 string2        .text    BINCOLM-5,BINLINE-3,"FLAGS:NV-BDIZC",0
 string3        .text    1,21,"Par: Daniel Lafrance",0
@@ -129,6 +133,9 @@ string8        .byte    0,9,32,32,32,32,'$',13,32,32,32,'-','$',32,32,32,32,'-'
                .byte    13,32,32,32,32,32,45,45,45,32,32,45,45,45,45,45,45,45,45,45,13
                .byte    32,32,32
                .null    "=$    ="  
+teststr        .byte    revson,32,32
+               .text     "                    "
+               .byte    revsoff,eot
 count          .byte    XVAL
 tstval         .byte    XCPX
 result         .byte    0
