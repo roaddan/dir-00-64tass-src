@@ -32,17 +32,28 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 	$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 	-write ${V20UTILDIR}/fb fb \
 	-write $(SOURCENAME).prg $(SOURCENAME) \
+	-write ${V20UTILDIR}/screenfmt.P00 screenfmt \
 	-write ${V20UTILDIR}/vicmonb-sys45056.prg vicmonb-sys45056 \
 	-write ${V20UTILDIR}/Vicmon-2-b000.prg vicmon-2-b000 \
 	-write ${V20UTILDIR}/fb20 fb20 \
 	-write ${V20UTILDIR}/fb20-3k fb20-3k \
 	-write ${V20UTILDIR}/fb20-8k fb20-8k \
 	-write ${V20UTILDIR}/fb20-mc fb20-mc
-
-
+	$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
+	-write ${V20UTILDIR}/fb fb \
+	-write $(SOURCENAME).prg $(SOURCENAME) \
+	-write ${V20UTILDIR}/screenfmt.P00 screenfmt \
+	-write ${V20UTILDIR}/vicmonb-sys45056.prg vicmonb-sys45056 \
+	-write ${V20UTILDIR}/Vicmon-2-b000.prg vicmon-2-b000 \
+	-write ${V20UTILDIR}/fb20 fb20 \
+	-write ${V20UTILDIR}/fb20-3k fb20-3k \
+	-write ${V20UTILDIR}/fb20-8k fb20-8k \
+	-write ${V20UTILDIR}/fb20-mc fb20-mc
 	cp -f  ${SOURCENAME}.d64 ${BASEDIR}/${PRGDIR}/d64
+	cp -f  ${SOURCENAME}.d81 ${BASEDIR}/${PRGDIR}/d81
 	#cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64
 	cp -f  ${SOURCENAME}.d64 ${VICEDIR}
+	cp -f  ${SOURCENAME}.d81 ${VICEDIR}
 $(SOURCENAME).prg: $(SOURCENAME).asm
 	$(TASS) -C -m -a -I $(TASSLIB) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 	cp -f  ${SOURCENAME}.prg ${BASEDIR}/${PRGDIR}/prg

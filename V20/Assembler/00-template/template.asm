@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------
-Version = "20240704-2343040"
+Version = "20240704-2343040x"
 ;-----------------------------------------------------------
 .include  "l-bashead-v20e.asm"
 .enc "none"
@@ -186,5 +186,6 @@ adresse   .word     main
 .include  "l-keyb.asm"         
 .include  "e-vars.asm"
 .include  "m-v20-utils.asm"
-.include  "e-float.asm"
+.include  "e-v20-float.asm"
+.include  "e-v20-basic-map.asm"
 .include  "e-v20-kernal-map.asm"
