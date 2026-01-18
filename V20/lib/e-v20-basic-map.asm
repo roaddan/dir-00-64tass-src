@@ -99,7 +99,7 @@ bnext   =   $cd1e   ; Commande BASIC NEXT.
 btypchk =   $cd8a   ; Vérification du type de variable.
 bfrmevl =   $cd9e   ; Évaluation de formules/expressions.
 beval   =   $ce83   ; Évaluer un seul terme d'une expression.
-bpival  =   $ce8a   ; Le nombre à virgule flottante PI = $82 $49 $0f $da $a1.
+bpival  =   $ce8a   ; Le NVF. PI = $82 $49 $0f $da $a1.
 bnot    =   $ced4   ; Commande BASIC NOT.
 bparexp =   $cef1   ; L'évaluation entre parenthèses est effectuée.
 brpachk =   $cef7   ; Vérification syntaxique pour ")".
@@ -115,7 +115,10 @@ bfacti2 =   $cf28   ; Obtenir le nom et le type de la variable à partir de
                     ; EVLVAR ($d08b).
 bfacti7 =   $cfa7   ; Appel une fonction.
 borr    =   $cfe6   ; Commande BASIC OR.
+ffpor   =   $Cfe6   ; FONCTION NVF.: f1=f1 or f2.
 bandd   =   $cfe9   ; Commande BASIC AND.
+ffpand  =   $cfe9   ; FONCTION NVF.: f1=f1 and f2.
+
 bcompar =   $d016   ; Comparer des nombres ou des chaînes de caractères.
 bcmpst  =   $d02e   ; Comparez les chaînes de caractères.
 bdim    =   $d081   ; Commande BASIC DIM.
@@ -125,14 +128,15 @@ bchrtst =   $d113   ; Vérifie si le caractère ASCII est alphabétique.
 bmakvar =   $d11d   ; Créez une nouvelle variable.
 bretvp  =   $d185   ; Renvoie l'adresse de la variable trouvée ou créée.
 baryhed =   $d194   ; Calculer la longueur d'un descripteur de tableau.
-bmaxint =   $d1a5   ; Valeur entière maximale de 32768 en virgule flottante.
+bmaxint =   $d1a5   ; Valeur entière maximale de 32768 en Fonction NVF.:
 bintidx =   $d1aa   ; Convertir les nombres à virgule flottante en nombres à 
                     ; virgule fixe de deux octets dans les formats .A et .Y.
-ff1wrday=   $d1aa   ; VIRGULE FLOTTANTE. f1=word->$aayy                    
+ff1wrday=   $d1aa   ; FONCTION NVF.: f1=word->$aayy                    
 bgetsub =   $d1b2   ; Convertir une expression en nombre entier.
-bmakint =   $d1bf   ; Convertir un nombre à virgule flottante en entier signé.
-ff1swd64=   $d1bf   ; VIRGULE FLOTTANTE. f1=sw(f1)->64
+bmakint =   $d1bf   ; Convertir un NVF. en entier signé.
+ff1swd64=   $d1bf   ; FONCTION NVF.: f1=sw(f1)->64
 bary    =   $d1d1   ; Trouver un élément d'un tableau ou créer un tableau.
+ff1wrd64=   $d1d2   ; FONCTION NVF.: f1=uw(f1)->64
 bbadsub =   $d245   ; Affiche le message "BAD SUBSCRIPT".
 bilquan =   $d248   ; Afficher le message "ILLEGAL QUANTITY".
 bary2   =   $d24d   ; Tableau trouvé, vérifiez la plage d'indices.
@@ -142,8 +146,9 @@ bmi6    =   $d34c   ; Calculer la taille du tableau multidimensionnel.
 bfre    =   $d37d   ; Commande BASIC FRE.
 bmkfp   =   $d391   ; Convertir l'entier .AAYY .Y (LSB) et .A (MSB) en virgule
                     ; flottante.
-fwrdayf1=   $d391   ; VIRGULE FLOTTANTE. $aayy->f1
+fwrdayf1=   $d391   ; FONCTION NVF.: $aayy->f1
 mpos    =   $d39e   ; Commande BASIC POS.
+fiyytf1 =   $d3a2   ; FONCTION NVF.: f1=float(y)
 bnidirm =   $d3a6   ; Vérifiez si l'instruction est saisie en mode direct.
 bundef  =   $d3ae   ; Émet un message « UNDEF'D FUNCTION » pour EVALFN ($d3f4).
 bdef    =   $d3b3   ; Commande BASIC DEF.
@@ -172,121 +177,160 @@ blen    =   $d77c   ; Commande BASIC LEN.
 bgsinfo =   $d782   ; Obtenez des informations sur la chaîne.
 basc    =   $d78b   ; Commande BASIC ASC.
 bgetbyt =   $d79b   ; Obtenir un nombre compris entre 0 et 255.
+ff1evalx=   $d79e   ; FONCTION NVF.: eval. expr. f1 to x.
+ff1bytxx=   $d7a1   ; FONCTION NVF.: f1 to byte in x
 bval    =   $d7ad   ; Commande BASIC VAL.
 bgetad  =   $d7eb   ; Récupération de deux paramètres pour POKE et WAIT.
-bmakadr =   $d7f7   ; Convertir le nombre à virgule flottante FAC en un entier
+bmakadr =   $d7f7   ; Convertir le NVF. FAC en un entier
                     ; positif de deux octets.
-ff1to20 =   $d7f7   ; VIRGULE FLOTTANTE. f1 -> int($14,$15)
+ff1to20 =   $d7f7   ; FONCTION NVF.: f1 -> int($14,$15)
 bpeek   =   $d80d   ; Commande BASIC PEEK.
 bpoke   =   $d824   ; Commande BASIC POKE.
 bwait   =   $d82d   ; Commande BASIC WAIT.
 badd05  =   $d849   ; Additionner 0,5 à f1.
-ff1p05  =   $d849   ; VIRGULE FLOTTANTE. f1=f1+0,5.
+ff1p05  =   $d849   ; FONCTION NVF.: f1=f1+0,5.
 blamin  =   $d850   ; Soustraction du contenu de la mémoire de f1.
-ffvsf1  =   $d850   ; VIRGULE FLOTTANTE. f1=fv-f1 ($yyaa)
+ffvsf1  =   $d850   ; FONCTION NVF.: f1=fv-f1 ($yyaa)
 bsub    =   $d853   ; Commande BASIC "-" (Soustraction)
-ff2sf1  =   $d853   ; VIRGULE FLOTTANTE. f1=f2-f1.
+ff2sf1  =   $d853   ; FONCTION NVF.: f1=f2-f1.
 bplus1  =   $d862   ; Effectuer un prédécalage d'exposant (?) et continue
                     ; ci-dessous.
 blaplus =   $d867   ; Ajoute FV à f1.
-ffvpf1  =   $d867   ; VIRGULE FLOTTANTE. f1=fv+f1 ($yyaa)
+ffvpf1  =   $d867   ; FONCTION NVF.: f1=fv+f1 ($yyaa)
 bplus   =   $d86a   ; Commande BASIC"+".
-ff2pf1  =   $d86a   ; VIRGULE FLOTTANTE. f1=f2+f1
+ff2pf1  =   $d86a   ; FONCTION NVF.: f1=f2+f1
 bplus6  =   $d8a7   ; Rendre le résultat négatif si un emprunt a été effectué.
 bzerfac =   $d8f7   ; Met f1 à zéro et rend le signe positif puisque le
                     ; résultat est nul.
-fzerof1 =   $d8f7   ; VIRGULE FLOTTANTE. f1=0.0
+fzerof1 =   $d8f7   ; FONCTION NVF.: f1=0.0
 bnormlz =   $d8fe   ; Renormaliser le résultat f1.
 bcomfac =   $d947   ; Complément à 2 de f1 entièrement.
-ff1com2 =   $d947   ; VIRGULE FLOTTANTE. f1=two's compl f1
+ff1com2 =   $d947   ; FONCTION NVF.: f1=two's compl f1
 boverfl =   $d97e   ; Affiche le message OVERFLOW et quitte.
 basrres =   $d983   ; Effectuer un prédécalage d'exposant (?) et continue
                     ; ci-dessous.
-bfpci   =   $d9bc   ; Constante de un pour un accumulateur à virgule flottante.
+bfpci   =   $d9bc   ; Constante de un pour un accumulateur à Fonction NVF.:
 bloggon =   $d9c1   ; Constantes de la fonction LOG.
 blog    =   $d9ea   ; Commande BASIC LOG.
 btimes  =   $da28   ; Commande BASIC "*".
-ff1xfv  =   $da28   ; VIRGULE FLOTTANTE. f1=f1*fv ($yyaa)
-ff1xf2  =   $da2b   ; VIRGULE FLOTTANTE. f1=f1*f2
+ff1xfv  =   $da28   ; FONCTION NVF.: f1=f1*fv ($yyaa)
+ff1xf2  =   $da2b   ; FONCTION NVF.: f1=f1*f2
 btimes3 =   $da59   ; Sous-programme de multiplication de .A.
-ff1maa  =   $da59   ; VIRGULE FLOTTANTE. f1=f1*.A
+ff1maa  =   $da59   ; FONCTION NVF.: f1=f1*.A
 blodarg =   $da8c   ; Déplacer la mémoire à virgule flottante vers FAC2.
-ffvtf2  =   $da8c   ; VIRGULE FLOTTANTE. fv $(yyaa) -> f2
+ffvtf2  =   $da8c   ; FONCTION NVF.: fv $(yyaa) -> f2
 bmuldiv =   $dab7   ; Additionne les exposants de f1 et f2
 bmulten =   $dae2   ; Multiplie f1 par 10.
-ff1x10  =   $dae2   ; VIRGULE FLOTTANTE. f1=f1*10
+ff1x10  =   $dae2   ; FONCTION NVF.: f1=f1*10
 bfpcten =   $daf9   ; +10 constante à virgule flottante : $84,$20,$00,$00,$00.
 bdivten =   $dafe   ; Divise F1 par 10.
-ff1d10  =   $dafe   ; VIRGULE FLOTTANTE. f1=f1/10
-bladiv  =   $db0f   ; Déplace le nombre à virgule flottante en mémoire vers f2.
-ffvdf1  =   $db0f   ; VIRGULE FLOTTANTE. f1=fv/f1 ($yyaa)
+ff1d10  =   $dafe   ; FONCTION NVF.: f1=f1/10
+bladiv  =   $db0f   ; Déplace le NVF. en mémoire vers f2.
+ffvdf1  =   $db0f   ; FONCTION NVF.: f1=fv/f1 ($yyaa)
 bdivide =   $db12   ; Commande BASIC "/".
-ff2df1  =   $db12   ; VIRGULE FLOTTANTE. f1=f2/f1
-blodfac =   $dba2   ; Déplace le nombre à virgule flottante en mémoire dans f1.
+ff2df1  =   $db12   ; FONCTION NVF.: f1=f2/f1
+blodfac =   $dba2   ; Déplace le NVF. en mémoire dans f1.
 ffvtf1  =   $dba2   ; copie fv $(yyaa) to f1
 bfactf2 =   $dbc7   ; Déplace f1 en mémoire.
-ff1t5c  =   $dbc7   ; VIRGULE FLOTTANTE. Copie f1 vers $5c-$60.
+ff1t5c  =   $dbc7   ; FONCTION NVF.: Copie f1 vers $5c-$60.
 bfactf1 =   $dbca   ; Déplace f1 en mémoire.
-ff1t57  =   $dbca   ; VIRGULE FLOTTANTE. copie f1 vers $57-$5b.
+ff1t57  =   $dbca   ; FONCTION NVF.: copie f1 vers $57-$5b.
 bfactfp =   $dbd0   ; Déplace f1 en mémoire.
-ff1t49  =   $dbd0   ; VIRGULE FLOTTANTE. copie f1 vers $49-$4a.
-
-
-
-
-
-
-
-
-
-
-ffpor   =   $afe6   ; f1=f1 or f2
-ffpand  =   $afe9   ; f1=f1 and f2
-
-
-ff1wrd64=   $d1d2   ; f1=uw(f1)->64
-
-fiyytf1 =   $d3a2   ; f1=float(y)
-
-
-ff1bytxx=   $d7a1   ; f1 to byte in x
-ff1evalx=   $d79e   ; eval. expr. f1 to x
-
-
-
-
-
-
-
-60
-
-ff1t49  =   $dbd0   ; copie f1 to $49.
-ff1tyx  =   $dbd4   ; copie f1 mem $yyxx.
-ff2tf1  =   $dbfc   ; copie f2 to f1
-
-ff1tf2  =   $dc0c   ; copie f1 to f2
-ff1rnd  =   $dc1b   ; f1=round(f1)
-fsngf1  =   $dc2b   ; check f1 sign.
-ff1sign =   $dc39   ; f1=sgn(f1)
-fiaatf1 =   $dc3c   ; conv acc to fp in f1
-fi62tf1 =   $dc44   ; conv f1 word 62,63
-ff1abs  =   $dc58   ; f1=abs(f1)
-ffvcmp  =   $dc5b   ; f1=f1 comp fv ($yyaa)
-ff1int  =   $dccc   ; f1=int(f1)
-ff1pac  =   $dd7e   ; f1=f1+ra val ra=0-9
-ff1tudw =   $dc9b   ; f1=unsighed dw(f1)
-fasctf1 =   $dcf3   ; f1=float(ascii)
-
-
-fiaxtf1 =   $ddcd   ; f1=float($aaxx)+print
-ff1tasc =   $dddd   ; f1 to ascii ($yyaa)
-
-
-ff1sqr  =   $df71   ; f1=sqrt(f1)
-ff1ef2  =   $df7b   ; f1=f1^f2
-
-ff1cos  =   $e264   ; f1=sin(f1+(pi/2))
-ff1sin  =   $e26b   ; f1=sin(f1)
-ff1tan  =   $e2b4   ; f1=sin(f1)/cos(f1)
-
-ff1atn  =   $e30e   ; f1=atn(f1)
+ff1t49  =   $dbd0   ; FONCTION NVF.: copie f1 vers $49-$4a.
+bstorfac=   $dbd4   ; Déplace FAC1 en mémoire.  
+ff1tyx  =   $dbd4   ; FONCTION NVF.: Copie f1 mem $yyxx.
+batof   =   $dbfc   ; Transférer FAC2 vers FAC1.
+ff2tf1  =   $dbfc   ; FONCTION NVF.: copie f2 to f1.
+brftoa  =   $dc0c   ; Déplace FAC1 vers FAC2, avec arrondissement.
+ff1tf2r =   $dc0c   ; FONCTION NVF.: Copie f1 to f2 avec arrondissement.
+bftoa   =   $dc0f   ; Déplace FAC1 vers FAC2, sans arrondissement.
+ff1tf2  =   $dc0f   ; FONCTION NVF.: Copie f1 to f2 sans arrondissement.
+bround  =   $dc1b   ; Arrondir FAC1 en ajustant l'octet d'arrondi.
+ff1rnd  =   $dc1b   ; FONCTION NVF.: f1=round(f1). 
+bshgfac =   $dc2b   ; Tester le signe de FAC1.
+fsngf1  =   $dc2b   ; FONCTION NVF.: Tester le signe de FAC1.
+bsgn    =   $dc39   ; Commande BASIC SGN.
+ff1sign =   $dc39   ; FONCTION NVF.: f1=sgn(f1).
+bintfp  =   $dc3c   ; Convertie .A en NVF. dans FAC1.
+fiaatf1 =   $dc3c   ; FONCTION NVF.: Conv. .A->F1.
+bintfp1 =   $dc44   ; Convertir un entier 16 bits ($62,$63) en NVF. dans FAC1.
+fi62tf1 =   $dc44   ; FONCTION NVF.: Conv. mot 16 bits $62,$63 a f1.
+babs    =   $dc58   ; Commande BASIC ABS.
+ff1abs  =   $dc58   ; FONCTION NVF.: f1=abs(f1).
+bcmpfac =   $dc5b   ; Comparez FAC1 à la mémoire ($YYAA).
+ffvcmp  =   $dc5b   ; FONCTION NVF.: f1=f1 comp fv ($yyaa)
+bfpint  =   $dc9b   ; Convertir FAC1 en entier signé. dans $62-$65 Double-mot
+ff1tudw =   $dc9b   ; FONCTION NVF.: f1-> 32 octets signé ($62-$65)
+bint    =   $dccc   ; Commande BASIC INT.
+ff1int  =   $dccc   ; FONCTION NVF.: f1=int(f1).
+bfilfac =   $dce9   ; Stockez le contenu de .A dans les emplacements ($62-$65).
+bascflt =   $dcf3   ; Convertir une chaîne ASCII en un NVF. dans FAC1.
+fasctf1 =   $dcf3   ; FONCTION NVF.: f1=float(ascii)
+basc18  =   $dd7e   ; Aditionne .A à FAC1.
+ff1pac  =   $dd7e   ; FONCTION NVF.: f1=f1+ra val ra=0-9
+bfpc12  =   $ddb3   ; Constante de conversion de chaîne de caractères en NVF.
+bprtin  =   $ddc2   ; Émet le message IN.
+bprtfix =   $ddcd   ; Routine d'affichage des nombres décimaux.
+fiaxtf1 =   $ddcd   ; FONCTION NVF.: f1=float($aaxx)+print
+bfltasc =   $dddd   ; Convertir FAC en TI$ ou en chaîne ASCII.
+ff1tasc =   $dddd   ; FONCTION NVF.: f1 to ascii ($yyaa)
+bflp05  =   $df11   ; 0,5 constante pour l'arrondi et SQR.
+bfltcon =   $df16   ; Table des puissances de 10, au format entier fixe de
+                    ; quatre octets.
+bhmscon =   $df3a   ; Constantes pour la conversion de division TI$, au format
+                    ; entier fixe de quatre octets
+bsqr    =   $df71   ; Commande BASIC SQR.
+ff1sqr  =   $df71   ; FONCTION NVF.: f1=sqrt(f1).
+bexpont =   $df7b   ; Commande BASIC Puissance (touche flêche vers le haut).
+ff1ef2  =   $df7b   ; FONCTION NVF.: f1=f1^f2
+bnegfac =   $dfb4   ; Commande BASIC - monadique.
+ff1nf1  =   $dfb4   ; FONCTION NVF.: f1=-f1.
+bexpcon =   $dfbf   ; Tableau pour EXP, au format à virgule flottante.
+bexp    =   $dfed   ; Commande BASIC EXP.
+;------------------------------------------------------------------------------
+; $e000 - $e49f Debordement de basic dans la puce du Kernal.
+;------------------------------------------------------------------------------
+bserevl =   $e040   ; Routine d’évaluation des séries.
+bser2   =   $e056   ; Routine d'évaluation des séries mathématiques.
+brndc1  =   $e08a   ; Tableau des constantes pour RND.
+brnd    =   $e094   ; Commande BASIC RND.
+bpatchbas=  $e0f6   ; Routines de patch BASIC.
+bsystem =   $e127   ; Commande BASIC SYS.
+bsave   =   $e153   ; Commande BASIC SAVE.
+bbverif =   $e162   ; Commande BASIC VERIFY.
+bbload  =   $e165   ; Commande BASIC LOAD.
+bfopen  =   $e1bb   ; Commande BASIC OPEN.
+bfclose =   $e1c4   ; Commande BASIC CLOSE.
+bparsl  =   $e1d1   ; Définie les paramètres LOAD, VERIFY et SAVE.
+bifchrg =   $e203   ; Vérifiez si la commande actuelle contient d'autres
+                    ; caractères.
+bskpcom =   $e20b   ; Ignorer toute virgule dans les paramètres analysés.
+bchrerr =   $e20e   ; S'assurez qu'un paramètre soit présent après une virgule.
+bparoc  =   $e216   ; Gérer les paramètres de OPEN et CLOSE.
+bcos    =   $e261   ; Commande BASIC COS.
+ff1cos  =   $e261   ; FONCTION NVF.: f1=sin(f1+(pi/2)).. FAC1 copié en ram.
+ff1cos  =   $e264   ; FONCTION NVF.: f1=sin(f1+(pi/2)).
+bsin    =   $e268   ; Commande BASIC SIN.
+fFAC1sin=   $e26b   ; FONCTION NVF.: f1=sin(f1). FAC1 copié en ram.
+ff1sin  =   $e26b   ; FONCTION NVF.: f1=sin(f1)
+btan    =   $e2b1   ; Commande BASIC TAN.
+fFAC1tan=   $e2b1   ; FONCTION NVF.: f1=sin(f1)/cos(f1). FAC1 copié en ram.
+ff1tan  =   $e2b4   ; FONCTION NVF.: f1=sin(f1)/cos(f1)
+bfpc20  =   $e2dd   ; Valeurs des constantes d'évaluation trigonométriques
+                    ; utilisées pour COS, SIN et TAN.
+batn    =   $e30b   ; Commande BASIC ATN.
+ffac1atn=   $e30e   ; FONCTION NVF.: ff1=atn(f1). FAC1 copié en ram.
+ff1atn  =   $e30e   ; FONCTION NVF.: ff1=atn(f1).
+batncon =   $e33b   ; Tableau des valeurs constantes pour l'évaluation ATN.
+bcoldba =   $e378   ; Effectue un démarrage à froid de BASIC.
+bcgimag =   $e387   ; La routine CHRGET et la graine RND doivent être copiées
+                    ; dans la page zéro de la RAM.
+binitba =   $e3a4   ; Initialisation de BASIC : Restauration de CHRGET et des
+                    ; pointeurs de page zéro.
+bfremsg =   $e404   ; Afficher le message de démarrage à froid de BASIC.
+bcbmmsg =   $e429   ; Message de démarrage à froid de BASIC.
+bbasvctrs=  $e44f   ; Six vecteurs BASIC à copier à l'emplacement 768 ($300).
+binitvctrs= $e45b   ; Copie des vecteurs BASIC de la ROM vers la RAM.
+bwarmbas=   $e467   ; Effectue un démarrage à chaud de BASIC.
+bpatcher=   $e476   ; Zone de "patch" programme.
+;------------------------------------------------------------------------------
