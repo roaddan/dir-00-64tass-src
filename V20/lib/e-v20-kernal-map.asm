@@ -12,29 +12,13 @@
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou sans 64tass utilisez
 ; la syntaxes ...
 ;
-;         .include "ee-v20-kernal-map.asm"
+;         .include "e-v20-kernal-map.asm"
 ;
 ; ... en prenant soin de placer le fichier dans le meme disque ou répertoire 
 ; que votre programme.
 ;------------------------------------------------------------------------------
 ; C O N S T A N T E S   S U R   L E S   E L E M E N T S   I M P O R T A N T S
 ;------------------------------------------------------------------------------
-eot       = $00
-memmapreg = $01
-chrget    = $73     ;Recup Basic car texte
-chrgot    = $79     ;...une seconde fois.
-chrtst    = $7c
-kiostatus = $90     ; Kernal I/O status word (st) (byte) 
-curfnlen  = $b7     ; Current filename length (byte)
-cursecadd = $b9     ; Current secondary address (byte)
-curdevno  = $ba     ; Current device number (byte)
-curfptr   = $bb     ; Current file pointer (word)  
-stal      = $c1     ;word
-scrnlin   = $d1     ;pnt cur-scrn-line
-zp1       = $fb     ;1er Zpage prog. usager address (word)
-zpage1    = $fb     ; zero page 1 
-zp2       = $fd     ;2em Zpage prog. usager address (word)
-zpage2    = $fd     ; zero page 2 address (word)
 fascii    = $0100;region conv FP a ascii
 kcol      = $0286;Couleur car affiche.
 basstart  = $1001     ;basic start address std

@@ -13,6 +13,7 @@ V20UTILDIR=/Users/Locals/Vic20/utils
 V20MKASM=-9 ${V20UTILDIR}/V20MikroAsmbler.d64
 V20MON=-9 ${V20UTILDIR}/vicmon.d64
 V20MON6000=-9 ${V20UTILDIR}/vicmon-6000.d64
+PRGBIN=/d-00-64tass-src/V20/prgbin
 VICE=$(V20)
 DISK8DIR=
 PRGDIR=d-00-64tass-bin
@@ -26,7 +27,7 @@ FTPCRTARG=cd /Usb0/d-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
 all: $(SOURCENAME).d64
 	#cp -f  ${SOURCENAME}.crt ${BASEDIR}/${PRGDIR}/crt
 	#cp -f  ${SOURCENAME}.crt ${VICEDIR}
-	$(VICE) $(V20MON) -autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME) 
+	$(VICE) $(V20MON) -autostart $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81:$(SOURCENAME) 
 
 $(SOURCENAME).d64: $(SOURCENAME).prg
 	$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
@@ -49,6 +50,14 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 	-write ${V20UTILDIR}/fb20-3k fb20-3k \
 	-write ${V20UTILDIR}/fb20-8k fb20-8k \
 	-write ${V20UTILDIR}/fb20-mc fb20-mc
+	cp -f  ${SOURCENAME}.asm ${BASEDIR}/${PRGBIN}/asm
+	cp -f  ${SOURCENAME}.prg ${BASEDIR}/${PRGBIN}/prg
+	cp -f  ${SOURCENAME}.txt ${BASEDIR}/${PRGBIN}/txt
+	cp -f  ${SOURCENAME}.d81 ${BASEDIR}/${PRGBIN}/d81
+	cp -f  ${SOURCENAME}.d64 ${BASEDIR}/${PRGBIN}/d64
+	cp -f  ${SOURCENAME}.d81 ${BASEDIR}/${PRGBIN}/d81
+
+
 	cp -f  ${SOURCENAME}.d64 ${BASEDIR}/${PRGDIR}/d64
 	cp -f  ${SOURCENAME}.d81 ${BASEDIR}/${PRGDIR}/d81
 	#cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64
