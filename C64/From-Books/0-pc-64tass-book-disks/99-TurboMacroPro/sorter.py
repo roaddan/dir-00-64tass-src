@@ -1,6 +1,15 @@
 #!/usr/bin/python3
 #import grub as g
+
+
 def main():
+    srcf="/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/0-pc-64tass-book-disks/99-TurboMacroPro/lib/e-c64-romc000.asm"
+    srcfptr=open(srcf,"r")
+    items=
+
+
+
+def sortedfiles():
     srcf="e-romx000.txt"
     srcptr=open(srcf,"r")
     items=srcptr.readlines()
