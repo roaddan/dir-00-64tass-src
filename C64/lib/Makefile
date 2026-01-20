@@ -31,14 +31,20 @@ PRGDIR=d-00-64tass-bin
 SOURCENAME=romc000
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 #DEPSLOCALES=strings_fr.asm  strings_en.asm
+# The lowest common project shared directory complete path for things like ...
+# librairies, data files, images, etc.
+BASEDIR=/Users/Locals/CBM/00-usbkey32go
+THISBASEDIR=$(BASEDIR)/d-00-64tass-src/C64
+#
+# 64tass allows to include libraries of code and routines of your making.
+# The Complete path to your library directory.
+LIBDIR=$(THISBASEDIR)/lib
+
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
-LIBDEPS=$(shell find /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -maxdepth 1 -type f -iname "*.asm")
+LIBDEPS=$(shell find $(LIBDIR) -maxdepth 1 -type f -iname "*.asm")
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
-# The lowest common project shared directory complete path for things like ...
-# librairies, data files, images, etc.
-BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project ...
 # ... the following detail is used to specify where the resulting ...
 # ... files will be placed. # Complete path where the compiled files will be
@@ -46,12 +52,7 @@ BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project the following
 # detail is used to specify where the resulting files will be placed.
 # >> Complete path where the compiled files will be placed.
-OUTDIRC64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
-OUTDIRV20=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
-#
-# 64tass allows to include libraries of code and routines of your making.
-# The Complete path to your library directory.
-LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
+OUTDIRC64=$(THISBASEDIR)/prgbin
 #
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
@@ -90,11 +91,11 @@ V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # **** tests not yet conclusive.
 DISK8DIR=
 DISK9DIR=
-DBC=/Users/Locals/C64/00-usbkey32go/dbc
-JBMON64=/Users/Locals/C64/00-usbkey32go/d-mes-utils/jbmon.prg
-CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
-J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
-TMPREU=/Users/Locals/C64/00-usbkey32go/tmpreu.prg
+DBC=$(THISBASEDIR)/utils/dbc
+JBMON64=$(THISBASEDIR)/utils/jbmon.prg
+CHAREDIT=$(THISBASEDIR)/dev/charedit/charedit-fr.prg
+J2TESTER=$(THISBASEDIR)/dev/joystick/j2tester.prg
+TMPREU=$(THISBASEDIR)/utils/tmpreu.prg
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.

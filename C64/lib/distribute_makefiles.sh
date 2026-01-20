@@ -1,10 +1,10 @@
 #!/usr/bin/bash
-cd /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib
+cd /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/C64/lib
 clear
-for I in Makefile Makefile.linux Makefile.macbpro Makefile.macos Makefile.macmini Makefile.mintpro2
+for I in Makefile
 do
 export MAKFIL=${I}
 echo ${MAKFIL}
-find /Users/Locals/C64/00-usbkey32go/d-00-64tass-src -type f -iname "${MAKFIL}" -exec cp /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/${MAKFIL} {} \;
+find /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/C64/sources -type f -iname "${MAKFIL}" -exec cp /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/C64/lib/${MAKFIL} {} \;
 done
 #endscript

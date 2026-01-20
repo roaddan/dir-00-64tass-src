@@ -31,14 +31,20 @@ PRGDIR=d-00-64tass-bin
 SOURCENAME=disklibtest
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 #DEPSLOCALES=strings_fr.asm  strings_en.asm
+# The lowest common project shared directory complete path for things like ...
+# librairies, data files, images, etc.
+BASEDIR=/Users/Locals/CBM/00-usbkey32go
+THISBASEDIR=$(BASEDIR)/d-00-64tass-src/C64
+#
+# 64tass allows to include libraries of code and routines of your making.
+# The Complete path to your library directory.
+LIBDIR=$(THISBASEDIR)/lib
+
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
-LIBDEPS=$(shell find /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -maxdepth 1 -type f -iname "*.asm")
+LIBDEPS=$(shell find $(LIBDIR) -maxdepth 1 -type f -iname "*.asm")
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
-# The lowest common project shared directory complete path for things like ...
-# librairies, data files, images, etc.
-BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project ...
 # ... the following detail is used to specify where the resulting ...
 # ... files will be placed. # Complete path where the compiled files will be
@@ -46,12 +52,7 @@ BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project the following
 # detail is used to specify where the resulting files will be placed.
 # >> Complete path where the compiled files will be placed.
-OUTDIRC64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
-OUTDIRV20=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
-#
-# 64tass allows to include libraries of code and routines of your making.
-# The Complete path to your library directory.
-LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
+OUTDIRC64=$(THISBASEDIR)/prgbin
 #
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
@@ -90,14 +91,11 @@ V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # **** tests not yet conclusive.
 DISK8DIR=
 DISK9DIR=
-ROM9000=$(BASEDIR)/$(PRGDIR)/prg/rom9000.prg
-ROMC000=$(BASEDIR)/$(PRGDIR)/prg/romc000.prg
-DBC=/Users/Locals/C64/00-usbkey32go/dbc
-JBMON64=/Users/Locals/C64/00-usbkey32go/d-mes-utils/jbmon.prg
-CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
-J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
-TMPREU=/Users/Locals/C64/00-usbkey32go/tmpreu.prg
-
+DBC=$(THISBASEDIR)/utils/dbc
+JBMON64=$(THISBASEDIR)/utils/jbmon.prg
+CHAREDIT=$(THISBASEDIR)/dev/charedit/charedit-fr.prg
+J2TESTER=$(THISBASEDIR)/dev/joystick/j2tester.prg
+TMPREU=$(THISBASEDIR)/utils/tmpreu.prg
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
@@ -155,13 +153,13 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # ** Using comment, you can mask or enable anny action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-		$(FTPPRGCMD)	# To transfer the resulting PRG program file.;
-		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
-		$(FTPASMCMD)	# To transfer the source ASM file.
-		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
+#		$(FTPPRGCMD)	# To transfer the resulting PRG program file.;
+#		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+#		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
+#		$(FTPASMCMD)	# To transfer the source ASM file.
+#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
-#		killall x64; $(VICE) $(AUTOSTART) $(TMPSEP06) & # to load vice with arguments.
+		killall $(VICE);$(VICE) $(AUTOSTART) $(TMPSEP06) & # to load vice with arguments.
 
 # -----------------------------------------------------------------------------
 # When called with "make ftp".
@@ -170,10 +168,10 @@ ftp:
 		$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
 		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-		$(FTPD81CMD)	# To transfer the resulting D81 disk file.#
+		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
 		$(FTPASMCMD)	# To transfer the source ASM file.
 		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
-		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
+#		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
 
 # -----------------------------------------------------------------------------
 # To clean and start project fresh. (seldome used).
@@ -192,8 +190,6 @@ clean:
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
-		-write $(ROM9000) rom9000 \
-		-write $(ROMC000) romc000 \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
 		-write $(JBMON64) jbmon-36000 \
@@ -203,8 +199,6 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
-		-write $(ROM9000) rom9000 \
-		-write $(ROMC000) romc000 \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
 		-write $(JBMON64) jbmon-36000 \
@@ -215,7 +209,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 
 # Assembling and distributing resulting files.
 $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
-		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -l $(SOURCENAME).lbl -L $(SOURCENAME).txt -o $(SOURCENAME).prg
+		$(TASS) -C -m -a -T -I $(LIBDIR) -i $(SOURCENAME).asm -l e-$(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)
 		cp -f  $(SOURCENAME).txt $(BASEDIR)/$(PRGDIR)/txt
