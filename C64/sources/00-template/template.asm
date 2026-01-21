@@ -11,7 +11,7 @@
 main           .block
                #outcar locase
                #disable
-               #graycolor
+               #c64col
                #outcar 147
                jsr aide
 
@@ -52,6 +52,7 @@ template       .block
 byte           .byte 0
                        
 headera                       ;0123456789012345678901234567890123456789
+               .byte   $01
                .text          "       UN LIVRE SUR LE COMMODORE "
                .byte   $0d
                .text          "     POUR LE COMMODORE 64 OU VIC 20"
