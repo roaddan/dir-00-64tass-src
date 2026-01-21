@@ -18,10 +18,13 @@ main           .block
                ;jsr anykey
                ;jsr template
                #enable
-
+               #printptr16bin unmot
+               #outcar 13
+               #printval16bin unmot
                rts
                .bend
-                 
+unmot .word $0812 
+
 aide           .block      
                #outcar 14
                #outcar 147
@@ -49,36 +52,36 @@ template       .block
 byte           .byte 0
                        
 headera                       ;0123456789012345678901234567890123456789
-               .text          "       SOME COMMODORE BOOK TITLE"
+               .text          "       UN LIVRE SUR LE COMMODORE "
                .byte   $0d
-               .text          "     FOR THE COMMODORE 64 OR VIC 20"
+               .text          "     POUR LE COMMODORE 64 OU VIC 20"
                .byte   $0d 
-               .text          "       Book wtitten by Some Author"
+               .text          "       Livre ecrit par un Auteur"
                .byte   $0d
-               .text          "          ISBN 0-7156-1899-7"
+               .text          "           ISBN 0-7156-1899-7"
                .byte   $0d,0
 
 headerb        .text          "            template (pxx)"
                .byte   $0d
-               .text          "     (c) XXXX nom du Programmeur"
+               .text          "       (c) 2026 nom du Programmeur"
                .byte   $0d
-               .text          "      Code par Daniel Lafrance."
+               .text          "        Code par Daniel Lafrance."
                .byte   $0d
-               .text   format('      Version: %s.', Version)
+               .text   format('        Version: %s.', Version)
                .byte   $0d,0
 
 shortcuts      .byte   $0d
-               .text          " -------- S H O R T - C U T S ---------"
+               .text          " -------- R A C C O U R C I S ---------"
                .byte   $0d, $0d
-               .text   format(" template.: SYS%05d ($%04X)",main, main)
+               .text   format(" template.: SYS%5d ($%04X)",main, main)
                .byte   $0d
-               .text   format(" aide.....: SYS%05d ($%04X)",aide, aide)
+               .text   format(" aide.....: SYS%5d ($%04X)",aide, aide)
                .byte   $0d,0
-aidetext       .text   format(" Lancement: SYS%05d ($%04X)",template, template)
+aidetext       .text   format(" Lancement: SYS%5d ($%04X)",template, template)
                .byte   $0d, $0d
-               .text   format("    ex.: SYS%05d",template)
+               .text   format("    ex.: SYS%5d",template)
                .byte   $0d
-               .text   format("    for i=0to100:SYS%05d:next",template)
+               .text   format("    for i=0to100:SYS%5d:next",template)
                .byte   $0d,0
 dashline       .text          " --------------------------------------"
                .byte   $0d,0
@@ -116,4 +119,4 @@ dashline       .text          " --------------------------------------"
                .include "l-c64-showregs.asm"
                .include "l-c64-string.asm"
                .include "l-c64-vectors.asm"
-
+;-------------------------------------------------------------------------------
