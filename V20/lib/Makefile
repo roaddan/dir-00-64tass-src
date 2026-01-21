@@ -1,10 +1,10 @@
 SOURCENAME=v20start
-BASEDIR=/Users/Locals/C64/00-usbkey32go
+BASEDIR=/Users/Locals/CBM/00-usbkey32go
 VICEDIR=/Users/Locals/temp/Vice
 V20=/usr/bin/xvic
 C1541=/usr/bin/c1541
 TASS=/usr/bin/64tass
-TASSLIB=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/V20/lib
+TASSLIB=/Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib
 V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 V20MON=-9 /Users/Locals/Vic20/d64/vicmon-6000.d64
 VICE=$(V20)
