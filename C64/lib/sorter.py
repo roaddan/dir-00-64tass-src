@@ -33,66 +33,28 @@ def sortsrc(srcf):
     sorted_num = sorted(new_items, key=lambda line: int(line.split(';')[1].strip()))
     sorted_alpha = sorted(new_items, key=lambda line: line.split(';')[0].strip())
     fnum =  fpath + fname.replace("-","-c64-").replace(".","-num.")
+    fntmp =  fpath + fname.replace("-","-c64-").replace(".","-ntmp.")
+
     outptr = open(fnum,"w")
+    tmpnptr = open(fntmp,"w")
     for i in sorted_num:
         outptr.writelines(i+"\r")
+        tmpnptr.writelines(i.upper()+"\r")
     outptr.close()
+    tmpnptr.close()
+
     falpha = fpath + fname.replace("-","-c64-").replace(".","-alpha.")
+    fatmp = fpath + fname.replace("-","-c64-").replace(".","-atmp.")
     outptr = open(falpha,"w")
+    tmpaptr = open(fatmp,"w")
     for i in sorted_alpha:
         outptr.writelines(i+"\r")
+        tmpaptr.writelines(i.upper()+"\r")
     outptr.close()
+    tmpaptr.close()
     print(fnum)
     print(falpha)
 
-
-def sortfile(srcf):
-    srcfptr=open(srcf,"r")
-    items=srcfptr.readlines()
-    srcfptr.close()
-    new_items=[]
-    count = 0
-    for item in items:
-        count +=1
-        if len(item.strip())>5:
-            item = item.replace(" ","")
-            #print(item, end='')
-            parts = item.split("=")
-            nom=parts[0]
-            number=parts[1]
-            nums=number.split(";")
-            if number.startswith("$"):
-                hex_num=nums[0].replace("$","").strip()
-                dec_num=int(hex_num,16)
-            else:
-                dec_num=nums[0].strip()
-                hex_num=hex(int(nums[0])).replace("0x","")
-            new_items.append("%-16s= %5s;%6s ; %3d" % (nom, "$"+hex_num,dec_num,count))
-            # print("%-16s= %5s;%6s ; %3d" % (nom, "$"+hex_num,dec_num,count))
-    sorted_data = sorted(new_items, key=lambda line: int(line.split(';')[1].strip()))
-    srcf=basedir + c64lib + "e-c64-rom9000.asm"
-    srcfptr = open(srcf, "w")
-    for item in sorted_data:
-        srcfptr.write(item+"\n")
-        print(item)
-    srcfptr.close()
-
-def sortedfiles():
-    srcf="e-romx000.txt"
-    srcptr=open(srcf,"r")
-    items=srcptr.readlines()
-    for lib in ( "e-64map","e-float","e-vars","l-bitmap", "l-conv", "l-float", "l-keyb", "l-conv","l-mem","l-push",\
-                "l-string","" ):
-        dstptr=open(lib+".ref","w")
-        for item in items:
-            if lib in item:
-                dstptr.write(item.replace("\n","\r"))
-
-
-                print(item)
-        dstptr.close()
-    print("It's alive!")
-    srcptr.close()
 
 if __name__ == "__main__":
     main()

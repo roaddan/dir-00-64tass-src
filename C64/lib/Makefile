@@ -28,7 +28,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.""
-SOURCENAME=romc000
+SOURCENAME=rom9000
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 #DEPSLOCALES=strings_fr.asm  strings_en.asm
 # The lowest common project shared directory complete path for things like ...
@@ -190,6 +190,8 @@ clean:
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
+		-write e-c64-rom9000-atmp.asm e-c64-rom9000.asm \
+		-write e-c64-romc000-atmp.asm e-c64-romc000.asm \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
 		-write $(JBMON64) jbmon-36000 
@@ -197,6 +199,8 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
+		-write e-c64-rom9000-atmp.asm e-c64-rom9000.asm \
+		-write e-c64-romc000-atmp.asm e-c64-romc000.asm \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
 		-write $(JBMON64) jbmon-36000 
