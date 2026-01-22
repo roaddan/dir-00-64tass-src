@@ -1,5 +1,5 @@
 ;-------------------------------------------------------------------------------
-                Version = "20241122-125638"
+                Version = "20260121-200745"
 ;-------------------------------------------------------------------------------                
                ;.include "l-c64-bashead-c000.asm"
                ;.include "l-c64-bashead-e000.asm"
@@ -11,16 +11,24 @@
 main           .block
                #outcar locase
                #disable
-               #c64col
+               #v20col
                #outcar 147
                jsr aide
 
                ;jsr anykey
                ;jsr template
                #enable
-               #printptr16bin unmot
                #outcar 13
+               #outcar 32
+               #outcar 32
+               #color svertp
+               #printptr16bin unmot
+               #outcar 32
+               #outcar 32
+               #color sjaune
                #printval16bin unmot
+               #color snoir              
+               #outcar 13
                rts
                .bend
 unmot .word $0812 
@@ -52,7 +60,7 @@ template       .block
 byte           .byte 0
                        
 headera                       ;0123456789012345678901234567890123456789
-               .byte   $01
+               .byte   kcyan
                .text          "       UN LIVRE SUR LE COMMODORE "
                .byte   $0d
                .text          "     POUR LE COMMODORE 64 OU VIC 20"
@@ -62,29 +70,33 @@ headera                       ;0123456789012345678901234567890123456789
                .text          "           ISBN 0-7156-1899-7"
                .byte   $0d,0
 
-headerb        .text          "            template (pxx)"
+headerb        .byte   kmauve
+               .text          "            template (pxx)"
                .byte   $0d
-               .text          "       (c) 2026 nom du Programmeur"
+               .text          "      (c) 2026 nom du Programmeur"
                .byte   $0d
-               .text          "        Code par Daniel Lafrance."
+               .text          "       Code par: Daniel Lafrance"
                .byte   $0d
-               .text   format('        Version: %s.', Version)
+               .text   format('       Version.: %s', Version)
                .byte   $0d,0
 
-shortcuts      .byte   $0d
+shortcuts      .byte   $0d, krose
                .text          " -------- R A C C O U R C I S ---------"
                .byte   $0d, $0d
                .text   format(" template.: SYS%5d ($%04X)",main, main)
                .byte   $0d
                .text   format(" aide.....: SYS%5d ($%04X)",aide, aide)
                .byte   $0d,0
+
 aidetext       .text   format(" Lancement: SYS%5d ($%04X)",template, template)
                .byte   $0d, $0d
                .text   format("    ex.: SYS%5d",template)
                .byte   $0d
                .text   format("    for i=0to100:SYS%5d:next",template)
                .byte   $0d,0
-dashline       .text          " --------------------------------------"
+
+dashline       .byte   knoir
+               .text          " --------------------------------------"
                .byte   $0d,0
 ;*=$4000
 
