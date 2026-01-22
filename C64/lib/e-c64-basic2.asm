@@ -213,7 +213,7 @@ b_fmult        = $ba2b ; FAC1 = FAC1 * FAC2
 b_conupk       = $ba8c ; Copy FVAR to FAC2.          ;a-y;---; ptr = $yyaa
 b_mul10        = $bae2 ; FAC1 = FAC1 * 10.
 b_acc1mul10    = $bae2 ; Multiply Acc#1 by 10.       ;---;---; ptr = $yyaa
-B_fdiv10       = $bafe ; FAC1 = FAC1 / 10.
+b_fdiv10       = $bafe ; FAC1 = FAC1 / 10.
 b_fdiv         = $bb0f ;                      
 b_vdivf        = $bb0f ; FAC1 = FVAR / FAC1.         ;a-y;---; ptr = $yyaa
 b_fdivt        = $bb12 ; FAC1 = FAC2 / FAC1.

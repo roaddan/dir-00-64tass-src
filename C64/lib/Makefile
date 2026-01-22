@@ -28,7 +28,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.""
-SOURCENAME=romc000
+SOURCENAME=rom9000
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 #DEPSLOCALES=strings_fr.asm  strings_en.asm
 # The lowest common project shared directory complete path for things like ...
@@ -92,10 +92,10 @@ V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 DISK8DIR=
 DISK9DIR=
 DBC=$(THISBASEDIR)/utils/dbc
-JBMON64=$(THISBASEDIR)/utils/jbmon.prg
+JBMON64=$(THISBASEDIR)/utils/jbmon
 CHAREDIT=$(THISBASEDIR)/dev/charedit/charedit-fr.prg
 J2TESTER=$(THISBASEDIR)/dev/joystick/j2tester.prg
-TMPREU=$(THISBASEDIR)/utils/tmpreu.prg
+TMPREU=$(THISBASEDIR)/utils/tmpreu
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
@@ -192,24 +192,20 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
-		-write $(JBMON64) jbmon-36000 \
-		-write $(CHAREDIT) charedit \
-		-write $(J2TESTER) j2tester
+		-write $(JBMON64) jbmon-36000 
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
-		-write $(JBMON64) jbmon-36000 \
-		-write $(CHAREDIT) charedit \
-		-write $(J2TESTER) j2tester
+		-write $(JBMON64) jbmon-36000 
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
 # Assembling and distributing resulting files.
 $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
-		$(TASS) -C -m -a -T -I $(LIBDIR) -i $(SOURCENAME).asm -l e-$(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
+		$(TASS) -C -m -a --dump-labels -I $(LIBDIR) -i $(SOURCENAME).asm -l e-$(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)
 		cp -f  $(SOURCENAME).txt $(BASEDIR)/$(PRGDIR)/txt

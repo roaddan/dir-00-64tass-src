@@ -1,9 +1,48 @@
 #!/usr/bin/python3
-#import grub as g
-
+import os
 
 def main():
-    srcf="/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/0-pc-64tass-book-disks/99-TurboMacroPro/lib/e-c64-rom9000-back.asm"
+    basedir="/Users/Locals/CBM/00-usbkey32go/d-00-64tass-src"
+    c64lib="/C64/lib"
+    src=basedir + c64lib + "/e-rom9000.asm"
+    sortsrc(src)
+
+
+def sortsrc(srcf):
+    fname = os.path.basename(srcf)
+    fpath = srcf.replace(fname,"")
+    srcfptr=open(srcf,"r")
+    items=srcfptr.readlines()
+    srcfptr.close()
+    new_items=[]
+    for item in items:
+        equs=item.strip().replace(" ","").split(":")[3].split("=")
+        nom=equs[0]
+        val=equs[1]
+        if val.startswith("$"):
+            hex_val=val.replace("$","").strip()
+            dec_val=int(hex_val,16)
+        else:
+            dec_val=val.strip()
+            hex_val=hex(int(val)).replace("0x","")
+        new_items.append("%-16s= %5s;%6s" % (nom, "$"+hex_val, dec_val))
+    sorted_num = sorted(new_items, key=lambda line: int(line.split(';')[1].strip()))
+    sorted_alpha = sorted(new_items, key=lambda line: line.split(';')[0].strip())
+    fnum =  fpath + fname.replace("-","-c64-").replace(".","-num.")
+    outptr = open(fnum,"w")
+    for i in sorted_num:
+        outptr.writelines(i+"\r")
+    outptr.close()
+    falpha = fpath + fname.replace("-","-c64-").replace(".","-alpha.")
+    outptr = open(falpha,"w")
+    for i in sorted_alpha:
+        outptr.writelines(i+"\r")
+    outptr.close()
+    print(fnum)
+    print(falpha)
+
+
+def sortfile(srcf):
     srcfptr=open(srcf,"r")
     items=srcfptr.readlines()
     srcfptr.close()
@@ -19,7 +58,6 @@ def main():
             number=parts[1]
             nums=number.split(";")
             if number.startswith("$"):
-                pass
                 hex_num=nums[0].replace("$","").strip()
                 dec_num=int(hex_num,16)
             else:
@@ -28,7 +66,7 @@ def main():
             new_items.append("%-16s= %5s;%6s ; %3d" % (nom, "$"+hex_num,dec_num,count))
             # print("%-16s= %5s;%6s ; %3d" % (nom, "$"+hex_num,dec_num,count))
     sorted_data = sorted(new_items, key=lambda line: int(line.split(';')[1].strip()))
-    srcf="/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/From-Books/0-pc-64tass-book-disks/99-TurboMacroPro/lib/e-c64-rom9000.asm"
+    srcf=basedir + c64lib + "e-c64-rom9000.asm"
     srcfptr = open(srcf, "w")
     for item in sorted_data:
         srcfptr.write(item+"\n")
