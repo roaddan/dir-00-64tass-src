@@ -28,7 +28,7 @@ PRGDIR=d-00-64tass-bin
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.""
-SOURCENAME=rom9000
+SOURCENAME=romc
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 #DEPSLOCALES=strings_fr.asm  strings_en.asm
 # The lowest common project shared directory complete path for things like ...
@@ -153,11 +153,11 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # ** Using comment, you can mask or enable anny action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-#		$(FTPPRGCMD)	# To transfer the resulting PRG program file.;
-#		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-#		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
-#		$(FTPASMCMD)	# To transfer the source ASM file.
-#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
+		$(FTPPRGCMD)	# To transfer the resulting PRG program file.;
+		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
+		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
+		$(FTPASMCMD)	# To transfer the source ASM file.
+		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
 #		killall x64;$(VICE) $(AUTOSTART) $(TMPSEP06) & # to load vice with arguments.
 
@@ -190,8 +190,7 @@ clean:
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
-		-write e-c64-rom9000-atmp.asm e-c64-rom9000.asm \
-		-write e-c64-romc000-atmp.asm e-c64-romc000.asm \
+		-write e-c64-${SOURCENAME}-atmp.asm e-c64-${SOURCENAME}.asm \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
 		-write $(JBMON64) jbmon-36000 
@@ -199,8 +198,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
-		-write e-c64-rom9000-atmp.asm e-c64-rom9000.asm \
-		-write e-c64-romc000-atmp.asm e-c64-romc000.asm \
+		-write e-c64-${SOURCENAME}-atmp.asm e-c64-${SOURCENAME}.asm \
 		-write $(DBC) dbc \
 		-write $(TMPREU) tmpreu \
 		-write $(JBMON64) jbmon-36000 

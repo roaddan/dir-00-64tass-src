@@ -1,4 +1,4 @@
-SOURCENAME=v20rom
+SOURCENAME=screenfmt
 BASEDIR=/Users/Locals/CBM/00-usbkey32go
 VICEDIR=/Users/Locals/temp/Vice
 SD2IEC=/media/daniel/SD2IECV20/d-remote
@@ -27,12 +27,12 @@ FTPCRTARG=cd /Usb0/d-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
 
 
 all: $(SOURCENAME).d64
-	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:$(SOURCENAME) 
+	$(VICE) $(V20MON) -autostart $(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME) 
 
 $(SOURCENAME).d64: $(SOURCENAME).prg
 	$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
-	-write $(SOURCENAME).prg $(SOURCENAME) \
 	-write ${V20UTILDIR}/fb fb \
+	-write $(SOURCENAME).prg $(SOURCENAME) \
 	-write ${V20UTILDIR}/vicmonb-sys45056.prg vicmonb-sys45056 \
 	-write ${V20UTILDIR}/Vicmon-2-b000.prg vicmon-2-b000 \
 	-write ${V20UTILDIR}/fb20 fb20 \
@@ -40,8 +40,8 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 	-write ${V20UTILDIR}/fb20-8k fb20-8k \
 	-write ${V20UTILDIR}/fb20-mc fb20-mc
 	$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
-	-write $(SOURCENAME).prg $(SOURCENAME) \
 	-write ${V20UTILDIR}/fb fb \
+	-write $(SOURCENAME).prg $(SOURCENAME) \
 	-write ${V20UTILDIR}/vicmonb-sys45056.prg vicmonb-sys45056 \
 	-write ${V20UTILDIR}/Vicmon-2-b000.prg vicmon-2-b000 \
 	-write ${V20UTILDIR}/fb20 fb20 \

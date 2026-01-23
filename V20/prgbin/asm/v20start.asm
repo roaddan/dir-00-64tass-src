@@ -6,7 +6,7 @@ Version = "20260123-101151"
 ;-----------------------------------------------------------
 main      .block        
           #outcar locase
-          #scrcolors vbleu, vbleup, vblanc
+          #scrcolors vbleu, vbleu, vblanc
           #printxy string3
           #color vrouge               
           #printxy string1

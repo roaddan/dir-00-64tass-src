@@ -1,5 +1,5 @@
-SOURCENAME=v20test1
-BASEDIR=/Users/Locals/C64/00-usbkey32go
+SOURCENAME=template
+BASEDIR=/Users/Locals/CBM/00-usbkey32go
 VICEDIR=/Users/Locals/temp/Vice
 SD2IEC=/media/daniel/SD2IECV20/d-remote
 V20=/usr/bin/xvic
@@ -7,7 +7,7 @@ X64=/usr/bin/x64
 X64SC=/usr/bin/x64sc
 C1541=/usr/bin/c1541
 TASS=/usr/bin/64tass
-TASSLIB=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/V20/lib
+TASSLIB=/Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib
 TMPSEP06=-9 $(BASEDIR)/dir-tmp-dskimg/turbo-macro-pro-sep06.d64
 V20UTILDIR=/Users/Locals/Vic20/utils
 V20MKASM=-9 ${V20UTILDIR}/V20MikroAsmbler.d64
@@ -56,8 +56,6 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 	cp -f  ${SOURCENAME}.d81 ${BASEDIR}/${PRGBIN}/d81
 	cp -f  ${SOURCENAME}.d64 ${BASEDIR}/${PRGBIN}/d64
 	cp -f  ${SOURCENAME}.d81 ${BASEDIR}/${PRGBIN}/d81
-
-
 	cp -f  ${SOURCENAME}.d64 ${BASEDIR}/${PRGDIR}/d64
 	cp -f  ${SOURCENAME}.d81 ${BASEDIR}/${PRGDIR}/d81
 	#cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64

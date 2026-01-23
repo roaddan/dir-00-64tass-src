@@ -4,7 +4,7 @@ import os
 def main():
     basedir="/Users/Locals/CBM/00-usbkey32go/d-00-64tass-src"
     c64lib="/C64/lib"
-    for src in {basedir + c64lib + "/e-rom9000.asm", basedir + c64lib + "/e-romc000.asm"}:
+    for src in {basedir + c64lib + "/e-rom9.asm", basedir + c64lib + "/e-romc.asm"}:
         sortsrc(src)
 
 
@@ -39,7 +39,7 @@ def sortsrc(srcf):
     tmpnptr = open(fntmp,"w")
     for i in sorted_num:
         outptr.writelines(i+"\r")
-        tmpnptr.writelines(i.upper()+"\r")
+        tmpnptr.writelines(i.upper()+"%c"%(13))
     outptr.close()
     tmpnptr.close()
 
@@ -49,7 +49,7 @@ def sortsrc(srcf):
     tmpaptr = open(fatmp,"w")
     for i in sorted_alpha:
         outptr.writelines(i+"\r")
-        tmpaptr.writelines(i.upper()+"\r")
+        tmpaptr.writelines(i.upper()+"%c"%(13))
     outptr.close()
     tmpaptr.close()
     print(fnum)
