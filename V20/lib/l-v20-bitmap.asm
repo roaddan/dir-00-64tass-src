@@ -5,9 +5,7 @@
 ; version......: 20151207
 ; revision.....: 0.0.1
 ;---------------------------------------
-bmapinit
-;---------------------------------------
-         .block
+bmapinit  .block
          php
          pha
          lda vic+$18
@@ -21,9 +19,7 @@ bmapinit
          rts
          .bend
 ;---------------------------------------
-bmapclr
-;---------------------------------------
-         .block
+bmapclr   .block
          jsr pushall
          lda #<vidstart
          sta zp1
@@ -43,9 +39,8 @@ more     lda #$00
          rts
          .bend
 ;---------------------------------------
-bmpfillbk
+bmpfillbk .block
 ;---------------------------------------
-         .block
          jsr pushall
          lda #<bakmem
          sta zp1

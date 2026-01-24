@@ -89,8 +89,6 @@ bmagenta  =   $9c
 bculeft   =   $9d
 byellow   =   $9e
 bcyan     =   $9f
-zp1       =    $fb
-zp2       =    $fc
 ;------------------------------------------------------------------------------
 ; registre basic contienant la couleur du prochain caractÃ¨re. 
 ;------------------------------------------------------------------------------
