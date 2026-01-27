@@ -3,8 +3,13 @@
 ; Auteur..: Daniel Lafrance
 Version = "20260123-101151g"
 ;-----------------------------------------------------------
-.include  "l-v20-bashead-ex.asm"
 .enc "none"
+     .include  "l-v20-bashead-ex.asm"
+     .include  "m-v20-utils.asm"
+     .include  "e-v20-page0.asm"
+     .include  "e-v20-float.asm"
+     .include  "e-v20-basic-map.asm"
+     .include  "e-v20-kernal-map.asm"
 ;-----------------------------------------------------------
 
 
@@ -21,7 +26,7 @@ prnligne  .macro lcar, rcar, pointeur
           .endm
 
 main           .block
-               #scrcolors vocean, vbleu, vblanc
+               #scrcolors vocean, vblanc, vbleu
                jsr fillscreen
                jsr scrnsave
                #outcar locase
@@ -38,22 +43,22 @@ main           .block
                jsr scrnrest
                jsr anykey
                #outcar 147
-               #outcar sjaune
+               #outcar sbleu
                               rts
                .bend
 regdemo        .block
 
                .bend
 
-texte0         .byte 32,sjaune,revson        ;0-2
+texte0         .byte 32,snoir,revson        ;0-2
                .text " CPU REGISTERS HEX " ;3-23
                .byte snoir,revsoff,32,$0d
                .byte 0  
-texte1         .byte 32,socean,revsoff
+texte1         .byte 32,sbleu,revsoff
                .text " PC  RA RX RY SR SP"
                .byte snoir,revsoff,32,$0d
                .byte 0  
-texte2         .byte 32,sblanc,revsoff        ;0-2 - 0
+texte2         .byte 32,srouge,revsoff        ;0-2 - 0
                .text "0000 00 00 00 00 00" ;3-23
                .byte snoir,revsoff,32,$0d    ;24-27
                .byte 0  
@@ -74,9 +79,4 @@ ligne          .byte 32,snoir,revsoff        ;0-2
      .include  "l-v20-keyb.asm" 
      .include  "l-v20-screen.asm"
      .include  "e-v20-vars.asm"
-     .include  "e-v20-page0.asm"
-     .include  "m-v20-utils.asm"
-     .include  "e-v20-float.asm"
-     .include  "e-v20-basic-map.asm"
-     .include  "e-v20-kernal-map.asm"
 
