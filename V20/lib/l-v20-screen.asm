@@ -24,8 +24,8 @@ scrnrest
 ;---------------------------------------        
 zp1tozp2
         .block
-        ldx #$04
-        ldy #$00
+        ldx #>scrlen
+        ldy #<scrlen
 nextcar lda (zp1),y
         sta (zp2),y
         iny
@@ -39,8 +39,8 @@ nextcar lda (zp1),y
 ;---------------------------------------        
 zp2tozp1
         .block
-        ldx #$04
-        ldy #$00
+        ldx #>scrlen
+        ldy #<scrlen
 nextcar lda (zp2),y
         sta (zp1),y
         iny
@@ -54,9 +54,9 @@ nextcar lda (zp2),y
 ;---------------------------------------        
 setcarptr 
         .block
-        lda #$00
+        lda #<scrtxt
         sta zp1
-        lda #$04
+        lda #>scrtxt
         sta zp1+1
         lda #<scrncar
         sta zp2
@@ -67,9 +67,9 @@ setcarptr
 ;---------------------------------------        
 setcolptr 
         .block
-        lda #$00
+        lda #<scrcol
         sta zp1
-        lda #$d8
+        lda #>scrcol
         sta zp1+1
         lda #<scrncol
         sta zp2
@@ -78,3 +78,25 @@ setcolptr
         rts
         .bend
 ;---------------------------------------
+fillscreen
+        .block
+        jsr pushall
+        ldx #$01
+        ldy #$00
+again   sta scrtxt,y
+        sta scrtxt+256,y
+        pha
+        inc col
+        lda col
+        and #$7f
+        and #$07
+        ora #$18
+        sta scrcol,y
+        sta scrcol+256,y
+        pla
+        iny
+        bne again
+        jsr popall
+        rts
+col     .byte 0
+        .bend

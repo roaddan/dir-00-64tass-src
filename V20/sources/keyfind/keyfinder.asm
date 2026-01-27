@@ -1,11 +1,13 @@
 ;-----------------------------------------------------------
 ; Fichier : keyfinder.asm
 ; Auteur..: Daniel Lafrance
-Version = "20260123-101151b"
+Version = "20260123-101151g"
 ;-----------------------------------------------------------
 .include  "l-v20-bashead-ex.asm"
 .enc "none"
 ;-----------------------------------------------------------
+
+
 prnligne  .macro lcar, rcar, pointeur
           jsr  pushregs
           lda #\lcar
@@ -20,20 +22,30 @@ prnligne  .macro lcar, rcar, pointeur
 
 main           .block
                #scrcolors vocean, vbleu, vblanc
+               jsr fillscreen
+               jsr scrnsave
                #outcar locase
                #outcar snoir
-;               #prnligne 176,174,ligne
                #prnligne 176,174,texte0
                #prnligne 221,221,texte1
                #prnligne 221,221,texte2
                #prnligne 173,189,ligne
-               rts
+               jsr anykey
+               jsr scrnrest
+               jsr anykey
+               #outcar 147
+               jsr anykey
+               jsr scrnrest
+               jsr anykey
+               #outcar 147
+               #outcar sjaune
+                              rts
                .bend
 regdemo        .block
 
                .bend
 
-texte0         .byte 32,snoir,revson        ;0-2
+texte0         .byte 32,sjaune,revson        ;0-2
                .text " CPU REGISTERS HEX " ;3-23
                .byte snoir,revsoff,32,$0d
                .byte 0  
@@ -57,11 +69,12 @@ ligne          .byte 32,snoir,revsoff        ;0-2
      .include  "l-v20-push.asm" 
      .include  "l-v20-string.asm" 
      .include  "l-v20-mem.asm"           
-;     .include  "l-v20-math.asm"           
-;     .include  "l-v20-conv.asm" 
-;     .include  "l-v20-keyb.asm" 
-     .include  "e-v20-page0.asm"
+     .include  "l-v20-math.asm"           
+     .include  "l-v20-conv.asm" 
+     .include  "l-v20-keyb.asm" 
+     .include  "l-v20-screen.asm"
      .include  "e-v20-vars.asm"
+     .include  "e-v20-page0.asm"
      .include  "m-v20-utils.asm"
      .include  "e-v20-float.asm"
      .include  "e-v20-basic-map.asm"

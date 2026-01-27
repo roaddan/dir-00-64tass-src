@@ -1,5 +1,12 @@
 SOURCENAME=template
 BASEDIR=/Users/Locals/CBM/00-usbkey32go
+DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
+#DEPSLOCALES=strings_fr.asm  strings_en.asm
+# -----------------------------------------------------------------------------
+# Dépendances des libraries pour valider tous les changements.
+# -----------------------------------------------------------------------------
+LIBDEPS=$(shell find $(BASEDIR)/d-00-64tass-src/V20/lib -maxdepth 1 -type f -iname "*.asm")
+DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 VICEDIR=/Users/Locals/temp/Vice
 SD2IEC=/media/daniel/SD2IECV20/d-remote
 V20=/usr/bin/xvic
@@ -61,7 +68,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 	#cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64
 	cp -f  ${SOURCENAME}.d64 ${VICEDIR}
 	cp -f  ${SOURCENAME}.d81 ${VICEDIR}
-$(SOURCENAME).prg: $(SOURCENAME).asm
+$(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 	$(TASS) -C -m -a -I $(TASSLIB) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
 	cp -f  ${SOURCENAME}.prg ${BASEDIR}/${PRGDIR}/prg
 	#cp -f  ${SOURCENAME}.prg ${SD2IEC}/prg

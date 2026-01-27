@@ -29,16 +29,16 @@ PRGDIR=d-00-64tass-bin
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.""
 SOURCENAME=dlbug64
+# The lowest common project shared directory complete path for things like ...
+# librairies, data files, images, etc.
+BASEDIR=/Users/Locals/CBM/00-usbkey32go
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 #DEPSLOCALES=strings_fr.asm  strings_en.asm
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
-LIBDEPS=$(shell find /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -maxdepth 1 -type f -iname "*.asm")
+LIBDEPS=$(shell find $(BASEDIR)/d-00-64tass-src/lib -maxdepth 1 -type f -iname "*.asm")
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
-# The lowest common project shared directory complete path for things like ...
-# librairies, data files, images, etc.
-BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project ...
 # ... the following detail is used to specify where the resulting ...
 # ... files will be placed. # Complete path where the compiled files will be
@@ -46,8 +46,8 @@ BASEDIR=/Users/Locals/C64/00-usbkey32go
 # Since the make file will be executed from within your project the following
 # detail is used to specify where the resulting files will be placed.
 # >> Complete path where the compiled files will be placed.
-OUTDIRC64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
-OUTDIRV20=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
+OUTDIRC64=$(BASEDIR)/d-00-64tass-src/C64/prgbin
+OUTDIRV20=$(BASEDIR)/d-00-64tass-src/C64/prgbin
 #
 # 64tass allows to include libraries of code and routines of your making.
 # The Complete path to your library directory.
@@ -92,11 +92,11 @@ DISK8DIR=
 DISK9DIR=
 ROM9000=$(BASEDIR)/$(PRGDIR)/prg/rom9000.prg
 ROMC000=$(BASEDIR)/$(PRGDIR)/prg/romc000.prg
-DBC=/Users/Locals/C64/00-usbkey32go/dbc
-JBMON64=/Users/Locals/C64/00-usbkey32go/d-mes-utils/jbmon.prg
-CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
-J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
-TMPREU=/Users/Locals/C64/00-usbkey32go/tmpreu.prg
+DBC=$(BASEDIR)/dbc
+JBMON64=$(BASEDIR)/d-mes-utils/jbmon.prg
+CHAREDIT=$(BASEDIR)/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
+J2TESTER=$(BASEDIR)/d-00-64tass-src/C64/dev/joystick/j2tester.prg
+TMPREU=$(BASEDIR)/tmpreu.prg
 
 #
 #-------------------------------------------------------------------------------
