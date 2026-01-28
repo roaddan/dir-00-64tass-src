@@ -329,11 +329,13 @@ color       .macro       col
             .endm
 ;--------------------------------------
 print       .macro    strptr
-            jsr  pushregs
+            jsr  pushall
             ldx  #<\strptr
+            stx  $fb
             ldy  #>\strptr
-            jsr  putsyx
-            jsr  popregs
+            sty  $fc
+            jsr  puts
+            jsr  popall
             .endm
 ;--------------------------------------
 println     .macro    strptr

@@ -36,7 +36,7 @@ FTPCRTARG=cd /Usb0/d-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
 all: $(SOURCENAME).d64
 	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:$(SOURCENAME) 
 
-$(SOURCENAME).d64: $(SOURCENAME).prg
+$(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 	$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 	-write $(SOURCENAME).prg $(SOURCENAME) \
 	-write ${V20UTILDIR}/fb fb \
@@ -60,9 +60,12 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 	cp -f  ${SOURCENAME}.d64 ${PRGBIN}/d64
 	cp -f  ${SOURCENAME}.d81 ${EXPORTDIR}/d81
 	cp -f  ${SOURCENAME}.d64 ${EXPORTDIR}/d64
-	#cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64
+	cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm
+	cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg
+	cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt
 	cp -f  ${SOURCENAME}.d64 ${VICEDIR}
 	cp -f  ${SOURCENAME}.d81 ${VICEDIR}
+	#cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64
 
 $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 	$(TASS) -C -m -a -I $(TASSLIB) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
@@ -73,11 +76,11 @@ $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 	cp -f  ${SOURCENAME}.asm ${PRGBIN}/asm
 	cp -f  ${SOURCENAME}.prg ${PRGBIN}/prg
 	cp -f  ${SOURCENAME}.txt ${PRGBIN}/txt
-	#cp -f  ${SOURCENAME}.prg ${SD2IEC}/prg
-	#cp -f  ${SOURCENAME}.txt ${SD2IEC}/txt
 	cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm
 	cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg
 	cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt
+	#cp -f  ${SOURCENAME}.prg ${SD2IEC}/prg
+	#cp -f  ${SOURCENAME}.txt ${SD2IEC}/txt
 
 clean:
 	rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 
