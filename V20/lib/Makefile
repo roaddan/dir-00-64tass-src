@@ -1,4 +1,4 @@
-SOURCENAME=v20rom
+SOURCENAME=srcname
 BASEDIR=/Users/Locals/CBM/00-usbkey32go
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 #DEPSLOCALES=strings_fr.asm  strings_en.asm
@@ -55,10 +55,14 @@ $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 	-write ${V20UTILDIR}/fb20-3k fb20-3k \
 	-write ${V20UTILDIR}/fb20-8k fb20-8k \
 	-write ${V20UTILDIR}/fb20-mc fb20-mc
+
 	cp -f  ${SOURCENAME}.d81 ${PRGBIN}/d81
 	cp -f  ${SOURCENAME}.d64 ${PRGBIN}/d64
 	cp -f  ${SOURCENAME}.d81 ${EXPORTDIR}/d81
 	cp -f  ${SOURCENAME}.d64 ${EXPORTDIR}/d64
+	cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm
+	cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg
+	cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt
 	cp -f  ${SOURCENAME}.d64 ${VICEDIR}
 	cp -f  ${SOURCENAME}.d81 ${VICEDIR}
 	#cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64
@@ -73,8 +77,8 @@ $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 	cp -f  ${SOURCENAME}.prg ${PRGBIN}/prg
 	cp -f  ${SOURCENAME}.txt ${PRGBIN}/txt
 	cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm
-	cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt
 	cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg
+	cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt
 	#cp -f  ${SOURCENAME}.prg ${SD2IEC}/prg
 	#cp -f  ${SOURCENAME}.txt ${SD2IEC}/txt
 

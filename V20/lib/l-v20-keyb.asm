@@ -69,7 +69,7 @@ wait    lda 203    ; lit la matrice
 getkey
 ;---------------------------------------
         .block
-        php     
+        php
 try     jsr getin  ;tente de lire 
         cmp #0     ; 0 si aucune.
         beq try    ; on reessaye
@@ -96,7 +96,7 @@ wait    jsr getin  ;Sonde le clavier
         rts
         .bend
 ;---------------------------------------
-; attend que la touche  dans acc soit 
+; attend que la touche dans acc soit 
 ; appuyee.
 waitspace
 ;---------------------------------------
@@ -114,7 +114,7 @@ showkey
         jsr plot
         stx curx
         sty cury
-        #locate 39-11,24
+        #locate 8,22
         jsr chrout
         #outcar 32
         #outcar 36
