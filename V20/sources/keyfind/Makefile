@@ -1,4 +1,4 @@
-SOURCENAME=srcname
+SOURCENAME=keyfinder
 BASEDIR=/Users/Locals/CBM/00-usbkey32go
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 #DEPSLOCALES=strings_fr.asm  strings_en.asm

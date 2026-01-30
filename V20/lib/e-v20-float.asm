@@ -69,9 +69,9 @@ ff1ef2  =   $df7b   ; f1=f1^f2
 ff1nf1  =   $dfb4   ; f1=-f1.
 ffac1cos=   $e261   ; f1=sin(f1+(pi/2)).. FAC1 copié en ram.
 ff1cos  =   $e264   ; f1=sin(f1+(pi/2)).
-fFAC1sin=   $e26b   ; f1=sin(f1). FAC1 copié en ram.
+ffac1sin=   $e26b   ; f1=sin(f1). FAC1 copié en ram.
 ff1sin  =   $e26b   ; f1=sin(f1)
-fFAC1tan=   $e2b1   ; f1=sin(f1)/cos(f1). FAC1 copié en ram.
+ffac1tan=   $e2b1   ; f1=sin(f1)/cos(f1). FAC1 copié en ram.
 ff1tan  =   $e2b4   ; f1=sin(f1)/cos(f1)
-ffac1atn=   $e30e   ; ff1=atn(f1). FAC1 copié en ram.
-ff1atn  =   $e30e   ; ff1=atn(f1).
+ffac1atn=   $e30e   ; f1=atn(f1). FAC1 copié en ram.
+ff1atn  =   $e30e   ; f1=atn(f1).

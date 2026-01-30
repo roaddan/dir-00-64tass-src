@@ -1,6 +1,6 @@
-spaces         .null "     "
+spaces         .null " "
 bonjour        .byte $0d
-               .text "Thanks and good day."
+               .text "Thanks and good day!"
                .byte $0d,0
 texte0         .byte 32,snoir,revson        ;0-2
                .text "  key code finder  " ;3-23

@@ -1,26 +1,27 @@
-;---------------------------------------
+;--------------------------------------
 ; Fichier......: l-keyb.asm (seq)
 ; Type fichier.: code pour T.M.P.
 ; Auteur.......: daniel lafrance, 
 ; version......: 0.0.1 
 ; revision.....: 20151119 
-;---------------------------------------
-;---------------------------------------
+;--------------------------------------
+;--------------------------------------
 ; Vide le tampon du clavier
 clrkbbuf
-;---------------------------------------
-            .block
-            php
-            pha
-            lda #0
-            sta 198
-            pla
-            plp
-            rts
-            .bend
-;---------------------------------------
+;--------------------------------------
+          .block
+          php
+          pha
+          lda #0
+          sta 198
+          jsr $ffe1
+          pla
+          plp
+          rts
+          .bend
+;--------------------------------------
 waitstop
-;---------------------------------------
+;--------------------------------------
           .block
           php    ;\ sauve les flags
           pha    ;/  et l'acc.
@@ -31,29 +32,29 @@ wait      jsr stop ; Veri [run/stop]
           plp    ;/  les flags.
           rts
           .bend
-;---------------------------------------
+;--------------------------------------
 ; attend qu'une touche du clavier soit 
 ; appuyee/relachee.
 anykey
-;---------------------------------------
-        .block
-        php         
-        pha        
-        jsr clrkbbuf
-wait    lda 203    ;lit la matrice de 
-        cmp #64    ; 64 = aucune clef
-        beq wait   ; on en attend une.
-        jsr kbfree ; Clavier relache.
-        jsr clrkbbuf
-        pla         
-        plp
-        rts
-        .bend
-;---------------------------------------
+;--------------------------------------
+          .block
+          php         
+          pha        
+          jsr clrkbbuf
+wait      lda 203    ;lit la matrice de 
+          cmp #64    ; 64 = aucune clef
+          beq wait   ; on en attend une.
+          jsr kbfree ; Clavier relache.
+          jsr clrkbbuf
+          pla         
+          plp
+          rts
+          .bend
+;--------------------------------------
 ; attend que les touches du clavier 
 ; soient relachees.
 kbfree
-;---------------------------------------
+;--------------------------------------
         .block
         php 
         pha
@@ -64,49 +65,48 @@ wait    lda 203    ; lit la matrice
         plp
         rts
         .bend
-;---------------------------------------
+;--------------------------------------
 ; retourne une clef appuyee dans acc.
 getkey
-;---------------------------------------
+;--------------------------------------
         .block
         php
+        jsr $ffe1
 try     jsr getin  ;tente de lire 
         cmp #0     ; 0 si aucune.
         beq try    ; on reessaye
         plp
         rts
         .bend
-;---------------------------------------
+;--------------------------------------
 ; attend une cle en particulier donnee 
 ; dans acc..
 waitkey
-;---------------------------------------
+;--------------------------------------
         .block
         php  
         pha 
         sta clef   ;Sauve clef voulue          
         jsr clrkbbuf
 wait    jsr getin  ;Sonde le clavier 
-        ;jsr chrout ; l'affiche.
         cmp clef   ;Compare avec clef
         bne wait   ;Pas la bonne. 
-        ;jsr chrout ; l'affiche.
         pla 
         plp
         rts
         .bend
-;---------------------------------------
+;--------------------------------------
 ; attend que la touche dans acc soit 
 ; appuyee.
 waitspace
-;---------------------------------------
-            .block
-            lda #$20
-            jsr waitkey
-            jsr clrkbbuf
-            rts
-            .bend
-;---------------------------------------
+;--------------------------------------
+          .block
+          lda #$20
+          jsr waitkey
+          jsr clrkbbuf
+          rts
+          .bend
+;--------------------------------------
 showkey 
         .block
         jsr pushregs
@@ -114,11 +114,9 @@ showkey
         jsr plot
         stx curx
         sty cury
-        #locate 8,22
+        #locate 0,22
         jsr chrout
-        #outcar 32
-        #outcar 36
-        jsr putahexdec
+        jsr showra
         clc
         ldy cury
         ldx curx
@@ -126,4 +124,4 @@ showkey
         jsr popregs
         rts
         .bend
-;---------------------------------------
+;--------------------------------------

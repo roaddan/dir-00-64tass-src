@@ -1,4 +1,4 @@
-spaces         .null "     "
+spaces         .null " "
 bonjour        .byte $0d,$0d,32,32,revson
                .text " bonjour & merci! "
                .byte revsoff,$0d,0

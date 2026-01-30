@@ -24,6 +24,7 @@ scrnrest
 ;---------------------------------------        
 zp1tozp2
         .block
+        jsr pushall
         ldx #>scrlen
         ldy #<scrlen
 nextcar lda (zp1),y
@@ -34,11 +35,13 @@ nextcar lda (zp1),y
         inc zp2+1
         dex
         bne nextcar
+        jsr popall
         rts
         .bend
 ;---------------------------------------        
 zp2tozp1
         .block
+        jsr pushall
         ldx #>scrlen
         ldy #<scrlen
 nextcar lda (zp2),y
@@ -49,11 +52,13 @@ nextcar lda (zp2),y
         inc zp2+1
         dex
         bne nextcar
+        jsr popall
         rts
         .bend
 ;---------------------------------------        
 setcarptr 
         .block
+        jsr pushregs
         lda #<scrtxt
         sta zp1
         lda #>scrtxt
@@ -62,11 +67,13 @@ setcarptr
         sta zp2
         lda #>scrncar
         sta zp2+1
+        jsr popregs
         rts
         .bend
 ;---------------------------------------        
 setcolptr 
         .block
+        jsr pushregs
         lda #<scrcol
         sta zp1
         lda #>scrcol
@@ -75,28 +82,25 @@ setcolptr
         sta zp2
         lda #>scrncol
         sta zp2+1
+        jsr popregs
         rts
         .bend
 ;---------------------------------------
 fillscreen
-        .block
-        jsr pushall
-        ldx #$01
-        ldy #$00
-again   sta scrtxt,y
-        sta scrtxt+256,y
-        pha
-        inc col
-        lda col
-        and #$7f
-        and #$07
-        ora #$18
-        sta scrcol,y
-        sta scrcol+256,y
-        pla
-        iny
-        bne again
-        jsr popall
-        rts
-col     .byte 0
-        .bend
+          .block
+          jsr pushall
+          ldx #$03
+          ldy #$00
+          lda #102
+again     sta scrtxt,y
+          sta scrtxt+256,y
+          pha
+          txa
+          sta scrcol,y
+          sta scrcol+256,y
+          pla
+          iny
+          bne again
+          jsr popall
+          rts
+          .bend
