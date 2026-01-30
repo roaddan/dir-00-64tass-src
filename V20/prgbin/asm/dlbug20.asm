@@ -10,7 +10,7 @@ Version = "20260123-101151a"
 main      .block
           #scrcolors vocean,vblanc,vbleu
           #outcar locase
-          jsr fillscreen
+          ;jsr fillscreen
 ;--------------------------------------
           lda  #7
           sta  $fe
