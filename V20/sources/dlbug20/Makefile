@@ -58,14 +58,14 @@ $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 
 	cp -f  ${SOURCENAME}.d81 ${PRGBIN}/d81
 	cp -f  ${SOURCENAME}.d64 ${PRGBIN}/d64
-	cp -f  ${SOURCENAME}.d81 ${EXPORTDIR}/d81
-	cp -f  ${SOURCENAME}.d64 ${EXPORTDIR}/d64
-	cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm
-	cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg
-	cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.d81 ${EXPORTDIR}/d81;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.d64 ${EXPORTDIR}/d64;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt;fi
 	cp -f  ${SOURCENAME}.d64 ${VICEDIR}
 	cp -f  ${SOURCENAME}.d81 ${VICEDIR}
-	#cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64;fi
 
 $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 	$(TASS) -C -m -a -I $(TASSLIB) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
@@ -76,11 +76,11 @@ $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 	cp -f  ${SOURCENAME}.asm ${PRGBIN}/asm
 	cp -f  ${SOURCENAME}.prg ${PRGBIN}/prg
 	cp -f  ${SOURCENAME}.txt ${PRGBIN}/txt
-	cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm
-	cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg
-	cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt
-	#cp -f  ${SOURCENAME}.prg ${SD2IEC}/prg
-	#cp -f  ${SOURCENAME}.txt ${SD2IEC}/txt
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.prg ${SD2IEC}/prg;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.txt ${SD2IEC}/txt;fi
 
 clean:
 	rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 
