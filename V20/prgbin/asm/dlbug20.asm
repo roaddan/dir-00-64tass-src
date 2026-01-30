@@ -1,7 +1,7 @@
 ;-----------------------------------------------------------
 ; Fichier : keyfinder.asm
 ; Auteur..: Daniel Lafrance
-Version = "20260123-101151"
+Version = "20260123-101151a"
 ;--------------------------------------
 .enc "none"
      .include  "l-v20-bashead-ex.asm"
