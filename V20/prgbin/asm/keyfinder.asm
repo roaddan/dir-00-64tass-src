@@ -25,22 +25,31 @@ main           .block
           #scrcolors vocean, vblanc, vbleu
           jsr scrnsave
           #outcar upcase
-          #outcar snoir
+help      #outcar snoir
+          #outcar 19
+          ;jsr fillscreen
           #prnligne 176,174,texte0
           #prnligne 221,221,texte1
           #prnligne 173,189,ligne
           #print revision
+          #outcar 13
 morekey   jsr getkey
+          #outcar 29
+          #outcar 29
           jsr showra
-          cmp #95
+          #outcar 13
+          cmp #17   ;[CTRL]-[Q]
           beq out
-          jmp morekey
+          cmp #8    ;[CTRL]-[H]
+          bne chkmore
+          jmp help
+chkmore   jmp morekey
 out       #outcar sbleu
           #print bonjour
           rts
           .bend
 revision  .byte $0d
-          .null format(" ver:%15s",version)
+          .null format(" ver:%15s ",version)
 ;-----------------------------------------------------------
      .include  "l-v20-push.asm" 
      .include  "l-v20-string.asm" 
