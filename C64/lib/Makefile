@@ -29,12 +29,12 @@ PRGDIR=d-00-64tass-bin
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.""
 SOURCENAME=romc
-DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
-#DEPSLOCALES=strings_fr.asm  strings_en.asm
 # The lowest common project shared directory complete path for things like ...
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/CBM/00-usbkey32go
 THISBASEDIR=$(BASEDIR)/d-00-64tass-src/C64
+DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
+#DEPSLOCALES=strings_fr.asm  strings_en.asm
 #
 # 64tass allows to include libraries of code and routines of your making.
 # The Complete path to your library directory.
@@ -75,10 +75,6 @@ X64SC=$(VICEBIN)/x64sc
 C1541=$(VICEBIN)/c1541
 # Complete path to the cartconv cartridge converter program.
 CARTCONV=$(VICEBIN)/cartconv
-# Complete path to some other emulator programs.
-X64SCSDL=/Applications/vice-x86-64-sdl2-3.6.1/x64sc.app/Contents/MacOS/x64sc
-X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
-#
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
 #-------------------------------------------------------------------------------

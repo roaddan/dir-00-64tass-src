@@ -1,7 +1,7 @@
 ; ********************************
 ; * supermon+ 64 jim butterfield *
 ; * v1.2   august 20 1985        *
-; * Assembled mai 25 2023        *
+; * Assembled mai 25 2023         *
 ; ********************************
 
 ; reformatted and annotated in late 2016/early 2017 by j.b. langston.
@@ -101,7 +101,7 @@ getin   = $ffe4             ; get a character
 ; set up origin
 
         .weak
-org     = $8000 ;36000;$9519
+org     = $c000;36000;$9519
         .endweak
 
 *       = org
@@ -139,12 +139,11 @@ super   jsr setcolors
 setcolors       .block
                 php
                 pha   
-                lda     #$0e ;and #$0a #$0b 
+                lda     #12  ;and #$0a #$0b 
                              ;eor $01,$0e   
-                sta     screen
-                and     #$07
-                ; eor     #$07
                 sta     border
+                lda     #11
+                sta     screen
                 lda     #$01
                 sta     texte
                 lda     #147
@@ -1439,8 +1438,8 @@ msg6    .text " erro"           ; i/o error: display " error"
 msg7    .byte $41,$20+$80       ; assemble next instruction: "a " + addr
 msg8    .text "  "              ; pad non-existent byte: skip 3 spaces
         .byte $20+$80
-; msg9    .text "      < < < < < supermon > > > > >" 
-msg9    .text "      < < < < < supermon > > > > >" 
+msg9    .byte 29,29,29,29,29,29
+        .text "< < < < < supermon > > > > >" 
         .byte $0d+$80
 msga    .text " by jim butterfield  (r.i.p. 1936-2007)"
         .byte $0d+$80

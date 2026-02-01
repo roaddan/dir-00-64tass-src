@@ -17,41 +17,33 @@
 #	   Drive name should be specified under windows. (ex: C:\path...)
 #
 # -----------------------------------------------------------------------------
-# ----------------------- 6 4 T A S S   S E C T I O N -------------------------
-# -----------------------------------------------------------------------------
-# This can be change to any assembler of your liking.
-# Final location where the assembled files must be copied.
-PRGDIR=d-00-64tass-bin
-#
-# -----------------------------------------------------------------------------
 # ----------------------- P R O J E C T   S E C T I O N -----------------------
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.""
-SOURCENAME=template
-DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
-# DEPSLOCALES=strings_fr.asm  strings_en.asm
+SOURCENAME=jbmon64
+# -----------------------------------------------------------------------------
+# ----------------------- 6 4 T A S S   S E C T I O N -------------------------
+# -----------------------------------------------------------------------------
+# The lowest common project shared directory complete path for things like ...
+# librairies, data files, images, etc.
+BASEDIR=/Users/Locals/CBM/00-usbkey32go
+# 64tass allows to include libraries of code and routines of your making.
+# The Complete path to your library directory.
+LIBDIR=$(BASEDIR)/d-00-64tass-src/C64/lib
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
-LIBDEPS=$(shell find /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -maxdepth 1 -type f -iname "*.asm")
+LIBDEPS=$(shell find $(LIBDIR) -maxdepth 1 -type f -iname "*.asm")
+DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
+# DEPSLOCALES=strings_fr.asm  strings_en.asm
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
-# The lowest common project shared directory complete path for things like ...
-# librairies, data files, images, etc.
-BASEDIR=/Users/Locals/C64/00-usbkey32go
-# Since the make file will be executed from within your project ...
-# ... the following detail is used to specify where the resulting ...
-# ... files will be placed. # Complete path where the compiled files will be
-# ... deposited.
+#
 # Since the make file will be executed from within your project the following
 # detail is used to specify where the resulting files will be placed.
 # >> Complete path where the compiled files will be placed.
-OUTDIRC64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
-OUTDIRV20=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
-#
-# 64tass allows to include libraries of code and routines of your making.
-# The Complete path to your library directory.
-LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
+OUTDIRC64=$(BASEDIR)/d-00-64tass-src/C64/prgbin
+PRGDIR=d-00-64tass-bin
 #
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
@@ -64,8 +56,6 @@ LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
 VICEBIN=/usr/bin
 # Complete path to the 64tass assembler program.
 TASS=$(VICEBIN)/64tass
-# Complete path to the Vic20 emulator program.
-V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
 X64=$(VICEBIN)/x64
 # Complete path to the C64sc emulator program.
@@ -84,16 +74,14 @@ X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
 # These options enable you to mount utility disk image in drive 9.
 # Complete path to the c64 Utility disk to be mounted on drive 9.
 TMPSEP06=-9 $(BASEDIR)/d-disk-img/d64/turbo-macro-pro-sep06.d64
-# Complete path to the Vic20 Utility disk to be mounted on drive 9.
-V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # Complete local path to be mounted as a disk on drive 8 and/or 9.
 # **** tests not yet conclusive.
 DISK8DIR=
 DISK9DIR=
-DBC=/Users/Locals/C64/00-usbkey32go/dbc
-JBMON64=/Users/Locals/C64/00-usbkey32go/d-mes-utils/jbmon.prg
-CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
-J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
+DBC=$(BASEDIR)/dbc
+JBMON=$(BASEDIR)/d-00-64tass-src/C64/utils/jbmon
+CHAREDIT=$(BASEDIR)/d-00-64tass-src/C64/utils/charedit-fr.prg
+J2TESTER=$(BASEDIR)/d-00-64tass-src/C64/utils/j2tester.prg
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
@@ -189,17 +177,19 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
-		-write $(JBMON64) jbmon64 \
-		-write $(CHAREDIT) charedit \
-		-write $(J2TESTER) j2tester
+		-write $(JBMON) jbmon 
+		#\
+		#-write $(CHAREDIT) charedit \
+		#-write $(J2TESTER) j2tester
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
-		-write $(JBMON64) jbmon64 \
-		-write $(CHAREDIT) charedit \
-		-write $(J2TESTER) j2tester
+		-write $(JBMON) jbmon
+		# \
+		#-write $(CHAREDIT) charedit \
+		#-write $(J2TESTER) j2tester
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 

@@ -107,7 +107,9 @@ org     = $c000
 
 ; -----------------------------------------------------------------------------
 ; initial entry point
-super   ldy #msg4-msgbas    ; display "..sys "
+super   lda #147
+        jsr $ffd2
+        ldy #msg4-msgbas    ; display "..sys "
         jsr sndmsg
         lda supad           ; store entry point address in tmp0
         sta tmp0
@@ -314,7 +316,7 @@ dmemgo  lda (tmp2),y        ; load byte from start address + y
 dchar   lda (tmp2),y        ; load byte at start address + y
         tax                 ; stash in x
         and #$bf            ; clear 6th bit
-        cmp #$22            ; is it a quote (")?
+        cmp #$22            ; is it a quote (")?"
         beq ddot            ; if so, print . instead
         txa                 ; if not, restore character
         and #$7f            ; clear top bit
@@ -322,7 +324,7 @@ dchar   lda (tmp2),y        ; load byte at start address + y
         txa                 ; restore character
         bcs dchrok          ; if printable, output character
 ddot    lda #$2e            ; if not, output '.' instaed
-dchrok  jsr chrout
+dchrok  jsr chrout          ; send it
         iny                 ; next byte
         cpy #8              ; have we output 8 bytes yet?
         bcc dchar           ; if not, output next byte
