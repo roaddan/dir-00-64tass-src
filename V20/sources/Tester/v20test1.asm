@@ -1,5 +1,11 @@
-.include  "l-v20-bashead-ex.asm"
+;--------------------------------------
+; Fichier : v20test1.asm
+; Auteur..: Daniel Lafrance
+version  = "20260131-192144"
+;--------------------------------------
 .enc "none"
+     .include  "l-v20-bashead-ex.asm"
+;--------------------------------------
 
 main
         .block        
@@ -42,17 +48,19 @@ col       .byte     0
 row       .byte     0
 lin       .byte     0
 adress    .byte     0     
-    
-  
-.include  "l-push.asm" 
-.include  "l-string.asm" 
-.include  "l-mem.asm"           
-.include  "l-math.asm"           
-.include  "l-conv.asm" 
-.include  "l-keyb.asm"         
-.include  "e-vars.asm"
-.include  "m-v20-utils.asm"
-.include  "e-v20-float.asm"
-.include  "e-v20-basic-map.asm"
-.include  "e-v20-kernal-map.asm"
-.include  "e-v20-page0.asm"
+;--------------------------------------
+     .include  "l-v20-push.asm" 
+     .include  "l-v20-string.asm" 
+     .include  "l-v20-mem.asm"           
+     .include  "l-v20-math.asm"           
+     .include  "l-v20-conv.asm" 
+     .include  "l-v20-keyb.asm" 
+     .include  "l-v20-screen.asm"
+     .include  "e-v20-vars.asm"
+     .include  "m-v20-utils.asm"
+     .include  "e-v20-page0.asm"
+     .include  "e-v20-float.asm"
+     .include  "e-v20-basic-map.asm"
+     .include  "e-v20-kernal-map.asm"
+     .include  "e-v20-vic.asm"
+

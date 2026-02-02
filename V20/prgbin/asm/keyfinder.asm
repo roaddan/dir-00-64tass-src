@@ -22,7 +22,7 @@ prnligne  .macro lcar, rcar, pointeur
           .endm
 
 main           .block
-          #scrcolors vocean, vblanc, vbleu
+          #colecran vocean,vblanc,vbleu,8
           jsr scrnsave
           #outcar upcase
 help      #outcar snoir
@@ -64,4 +64,5 @@ revision  .byte $0d
      .include  "e-v20-float.asm"
      .include  "e-v20-basic-map.asm"
      .include  "e-v20-kernal-map.asm"
+     .include  "e-v20-vic.asm"
 

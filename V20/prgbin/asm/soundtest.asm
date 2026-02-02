@@ -1,14 +1,70 @@
 ;--------------------------------------
-; Fichier : keyfinder.asm
+; Fichier : v20test1.asm
 ; Auteur..: Daniel Lafrance
 version  = "20260131-192144"
 ;--------------------------------------
 .enc "none"
      .include  "l-v20-bashead-ex.asm"
 ;--------------------------------------
+main    .block
+        #volume 4
+here    jsr piano
+        #voicesoff
+        jmp here
+        rts
+        .bend
 
-main
-        .block        
+piano   .block
+        jsr pushall
+next    jsr getkey
+testa   cmp #$41
+        bne testw
+        #sopplay v2do4
+testw   cmp #$57
+        bne tests
+        #sopplay v2dod4
+tests   cmp #$53
+        bne teste
+        #sopplay v2re4
+teste   cmp #$45
+        bne testd
+        #sopplay v2red4
+testd   cmp #$44
+        bne testf
+        #sopplay v2mi4
+testf   cmp #$46
+        bne testt
+        #sopplay v2fa4
+testt   cmp #$54
+        bne testg
+        #sopplay v2fad4
+testg   cmp #$47
+        bne testy
+        #sopplay v2so4
+testy   cmp #$59
+        bne testh
+        #sopplay v2sod4
+testh   cmp #$48
+        bne testu
+        #sopplay v2la4
+testu   cmp #$55
+        bne testj
+        #sopplay v2lad4
+testj   cmp #$4a
+        bne testk
+        #sopplay v2si4
+testk   cmp #$4b
+        bne testesc
+        #sopplay v2do5
+testesc cmp #$5f
+        beq out
+        jmp next
+out     jsr popall
+        rts
+        .bend
+
+
+colortest  .block        
         ldx #0
 put     lda chr
         bne skipit      ; Charge le caractere a afficher.
@@ -24,9 +80,7 @@ skipit  sta $1000,x     ;Affiche le caractere.
         bne go
         clc
         adc #$81
-
         and #%11110111
-
 go      sta COLMEM,x
         inc chr
         inx
