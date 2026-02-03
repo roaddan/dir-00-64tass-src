@@ -1,37 +1,18 @@
 ;-----------------------------------------------------------
-Version = "20260123-101151"
+; Fichier: screenfmt.asm
+; Auteur: Daniel Lafrance
+; version: 0.0.1
+; Révision: 20260203-103448
+Version = "20260203-103448"
 ;-----------------------------------------------------------
 .include  "l-v20-bashead-ex.asm"
 .enc "none"
 ;-----------------------------------------------------------
 main           .block
-               ;#colecran vbleu, vblanc, vnoir,0
                #mescouleurs
                #outcar 147
-               ;#print ligne
                rts
                .bend
-regdemo        .block
-
-               .bend
-
-text0          .byte $0d
-               .text " CPU REGISTERS HEX "
-               .byte 0
-text1          .byte $0d
-               .text "  pc  ra rx ry sr sp "
-               .byte 0
-text2          .byte $0d
-               .text " 0000 00 00 00 00 00 "
-               .byte 0
-text3          .byte $0d
-               .text " "
-               .byte 0
-ligne          .byte 192,192,192,192,192,192
-               .byte 192,192,192,192,192,192
-               .byte 192,192,192,192,192,192
-               .byte 0               
-
 ;-----------------------------------------------------------
      .include  "l-v20-push.asm" 
      .include  "l-v20-string.asm" 
@@ -42,8 +23,8 @@ ligne          .byte 192,192,192,192,192,192
      .include  "e-v20-page0.asm"
      .include  "e-v20-vars.asm"
      .include  "m-v20-utils.asm"
-     .include  "e-v20-float.asm"
-     .include  "e-v20-basic-map.asm"
+;     .include  "e-v20-float.asm"
+;     .include  "e-v20-basic-map.asm"
      .include  "e-v20-kernal-map.asm"
      .include  "e-v20-vic.asm"
 

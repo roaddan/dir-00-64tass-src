@@ -269,8 +269,8 @@ couleursc64 .macro
 ;--------------------------------------
 mescouleurs .macro   
             #changebord vvert
-            #changeback vbleu
-            #color vblanc
+            #changeback vblanc
+            #color vbleu
             .endm
 ;--------------------------------------
 c64blanc    .macro   
