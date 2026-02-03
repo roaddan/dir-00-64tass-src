@@ -231,56 +231,69 @@ uppercase   .macro
             .endm
 ;--------------------------------------
 changebord  .macro    c
+            php
             pha
-            lda  #\c
-            sta  $d020
+            lda #\c
+            and #%00000111
+            sta freevar
+            lda vic15
+            and #%11111000
+            ora freevar
+            sta vic15
             pla
+            plp
             .endm
 ;--------------------------------------
 changeback  .macro    c
+            php
             pha
             lda  #\c
-            sta  $d021
+            asl
+            asl
+            asl
+            asl
+            sta freevar
+            lda vic15
+            and #%00001111
+            ora freevar
+            sta vic15
             pla
+            plp
             .endm
 ;--------------------------------------
-c64color    .macro   
+couleursc64 .macro   
+            #changebord vbleu
+            #changeback vbleup
+            #color vbleu
+            .endm
+;--------------------------------------
+mescouleurs .macro   
+            #changebord vvert
+            #changeback vbleu
+            #color vblanc
+            .endm
+;--------------------------------------
+c64blanc    .macro   
             jsr  pushregs
-            #changebord cbleupale
-            #changeback cbleu
-            #color cbleupale
+            #changebord vbleu
+            #changeback vbleup
+            #color vblanc
             jsr  popregs
             .endm
 ;--------------------------------------
-mycolor     .macro   
+couleursv20 .macro   
             jsr  pushregs
-            #changebord cvert
-            #changeback cbleu
-            #color cblanc
+            #changebord vcyan
+            #changeback vblanc
+            #color vbleu
             jsr  popregs
             .endm
 ;--------------------------------------
-c64col      .macro   
+grisaille   .macro   
             jsr  pushregs
-            #changebord cbleupale
-            #changeback cbleu
-            #color cblanc
-            jsr  popregs
-            .endm
-;--------------------------------------
-v20col      .macro   
-            jsr  pushregs
-            #changebord ccyan
-            #changeback cblanc
-            #color cbleu
-            jsr  popregs
-            .endm
-;--------------------------------------
-graycolor   .macro   
-            jsr  pushregs
-            #changebord cgrismoyen
-            #changeback cgrisfonce
-            #color cgrispale
+            #changebord vnoir
+            #changeback vnoir
+            #color vblanc
             jsr  popregs
             .endm
 ;--------------------------------------
@@ -310,7 +323,7 @@ scrcolors   .macro    fg, bg, tx
             php       
             pha
             lda #(\bg*16+(\fg|8))
-            sta  vic15
+            sta vic15
             lda #\tx
             sta kcol
             lda #147

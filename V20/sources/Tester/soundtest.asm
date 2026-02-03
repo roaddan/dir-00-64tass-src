@@ -7,7 +7,7 @@ version  = "20260131-192144"
      .include  "l-v20-bashead-ex.asm"
 ;--------------------------------------
 main    .block
-        #volume 4
+        #volume 4ws
 here    jsr piano
         #voicesoff
         jmp here

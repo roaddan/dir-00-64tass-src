@@ -1,12 +1,14 @@
 ;-----------------------------------------------------------
-Version = "20260123-101151b"
+Version = "20260123-101151"
 ;-----------------------------------------------------------
 .include  "l-v20-bashead-ex.asm"
 .enc "none"
 ;-----------------------------------------------------------
 main           .block
-               #scrcolors vocean, vbleu, vblanc
-               #print ligne
+               ;#colecran vbleu, vblanc, vnoir,0
+               #mescouleurs
+               #outcar 147
+               ;#print ligne
                rts
                .bend
 regdemo        .block
@@ -43,4 +45,5 @@ ligne          .byte 192,192,192,192,192,192
      .include  "e-v20-float.asm"
      .include  "e-v20-basic-map.asm"
      .include  "e-v20-kernal-map.asm"
+     .include  "e-v20-vic.asm"
 
