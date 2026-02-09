@@ -25,7 +25,6 @@
 ;--------------------------------------
 ;vic - registres de contrôle
 ;--------------------------------------
-vic       = $9000;debut du vic
 vic0      = $9000;ABBBBBBB 
                 ;A =interlace 
                 ;B =screen hor. origin
