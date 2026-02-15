@@ -3,13 +3,13 @@
 ; Auteur: Daniel Lafrance
 ; version: 0.0.1
 ; Révision: 20260203-103448
-Version = "20260203-103448b"
+Version = "20260203-103448"
 ;-----------------------------------------------------------
 .include  "l-v20-bashead-ex.asm"
 .enc "none"
 ;-----------------------------------------------------------
 main           .block
-               #couleursc64
+               #monoscreen 0,3
                #outcar 147
                rts
                .bend

@@ -268,9 +268,9 @@ couleursc64 .macro
             .endm
 ;--------------------------------------
 mescouleurs .macro   
-            #changebord vvert
+            #changebord vjaune
             #changeback vblanc
-            #color vbleu
+            #color vnoir
             .endm
 ;--------------------------------------
 c64blanc    .macro   
@@ -283,7 +283,7 @@ c64blanc    .macro
 ;--------------------------------------
 couleursv20 .macro   
             jsr  pushregs
-            #changebord vcyan
+            #changebord vocean
             #changeback vblanc
             #color vbleu
             jsr  popregs
@@ -294,6 +294,22 @@ grisaille   .macro
             #changebord vnoir
             #changeback vnoir
             #color vblanc
+            jsr  popregs
+            .endm
+;--------------------------------------
+colrose     .macro   
+            jsr  pushregs
+            #changebord vrouge
+            #changeback vrose
+            #color vmauve
+            jsr  popregs
+            .endm
+;--------------------------------------
+monoscreen  .macro thiscol, thisback
+            jsr  pushregs
+            #changebord \thisback
+            #changeback \thisback
+            #color \thiscol
             jsr  popregs
             .endm
 ;--------------------------------------
