@@ -16,7 +16,7 @@ C1541=/usr/bin/c1541
 TASS=/usr/bin/64tass
 
 TASSLIB=$(BASEDIR)/d-00-64tass-src/V20/lib
-EXPORTDIR=/media/daniel/DATASSET/vic20/d-remote
+EXPORTDIR=/media/daniel/DATASSET/d-remote
 TMPSEP06=-9 $(BASEDIR)/dir-tmp-dskimg/turbo-macro-pro-sep06.d64
 V20UTILDIR=$(BASEDIR)/d-00-64tass-src/V20/utils
 V20MKASM=-9 ${V20UTILDIR}/V20MikroAsmbler.d64

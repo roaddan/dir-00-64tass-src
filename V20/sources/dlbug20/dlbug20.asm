@@ -78,8 +78,8 @@ spch      .byte     00
      .include  "e-v20-basic-map.asm"
      .include  "e-v20-kernal-map.asm"
 ;**************************************
-     ;.include  "string-fr.asm"
-     .include  "string-en.asm"
+     .include  "string-fr.asm"
+     ;.include  "string-en.asm"
 ;**************************************
      .include  "l-v20-push.asm" 
      .include  "l-v20-string.asm" 
@@ -90,4 +90,5 @@ spch      .byte     00
      .include  "l-v20-screen.asm"
      .include  "l-v20-showregs.asm"
      .include  "e-v20-vars.asm"
+     .include  "e-v20-vic.asm"
 
