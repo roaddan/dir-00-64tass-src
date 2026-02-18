@@ -45,28 +45,28 @@ outstrxy    .macro string
 ;--------------------------------------
 ; charge le contenu du ptr dans $YYXX
 ;--------------------------------------
-ldyxptr     .macro pointeur
-            php
-            ldy \pointeur+1
-            ldx \pointeur
-            plp
-            .endm
-;--------------------------------------
-; charge le contenu du ptr dans $YYXX
-;--------------------------------------
-styxptr     .macro pointeur
+styxmem     .macro pointeur
             php
             sty \pointeur+1
             stx \pointeur
             plp
             .endm
 ;--------------------------------------
+; charge l'adresse 16 bits dans $yyxx
+;--------------------------------------
+ldyxptr     .macro pointeur
+            php
+            ldy #>\pointeur
+            ldx #<\pointeur
+            plp
+            .endm
+;--------------------------------------
 ; charge la valeur 16 bits dans $yyxx
 ;--------------------------------------
-ldyximm     .macro immval
+ldyxval     .macro pointeur
             php
-            ldy #>\immval
-            ldx #<\immval
+            ldy \pointeur+1
+            ldx \pointeur
             plp
             .endm
 ;--------------------------------------

@@ -30,6 +30,14 @@ main      .block
           jsr kmenu
           #outcar sbleu
           #outcar 19
+          #outcar '$'
+          #ldyxptr prgend
+          jsr putyxhex
+          #outcar 13
+          #outcar '$'
+          #ldyxval prgend
+          jsr putyxhex
+          #outcar 13
           rts
           .bend
 ;**************************************
@@ -41,8 +49,8 @@ uneclef   jsr  getkey
           jsr  putahexdec
           ; Affiche .a en 
           ; ascii, hexa, bin et dec.
-          cmp  #$11 ;[CTRL][Q] 
-          ; Est-ce la lettre 'Ctrl+Q'?
+          cmp  #$5f ;[ESC] 
+          ; Est-ce la touche 'ESC'?
           bne  keyr      
           ; Non on verifie une autre.
           jmp  out       
@@ -59,24 +67,6 @@ out       jsr  popregs
           ; Récupère les rehgistres.
           rts
           .bend
-sra       .byte     00
-srx       .byte     00
-sry       .byte     00
-ssr       .byte     00
-ssp       .byte     00
-spcl      .byte     00
-spch      .byte     00
-
-
-;**************************************
-;
-;**************************************
-
-;**************************************
-     .include  "e-v20-page0.asm"
-     .include  "e-v20-float.asm"
-     .include  "e-v20-basic-map.asm"
-     .include  "e-v20-kernal-map.asm"
 ;**************************************
      .include  "string-fr.asm"
      ;.include  "string-en.asm"
@@ -89,6 +79,13 @@ spch      .byte     00
      .include  "l-v20-keyb.asm" 
      .include  "l-v20-screen.asm"
      .include  "l-v20-showregs.asm"
+prgend    .word $1234     
+;**************************************
+     .include  "e-v20-page0.asm"
+     .include  "e-v20-float.asm"
+     .include  "e-v20-basic-map.asm"
+     .include  "e-v20-kernal-map.asm"
      .include  "e-v20-vars.asm"
      .include  "e-v20-vic.asm"
+;**************************************
 

@@ -19,15 +19,13 @@
 ;------------------------------------------------------------------------------
 ; C O N S T A N T E S   S U R   L E S   E L E M E N T S   I M P O R T A N T S
 ;------------------------------------------------------------------------------
-fascii    = $0100;region conv FP a ascii
-kcol      = $0286;Couleur car affiche.
-basstart  = $1001     ;basic start address std
-basstartx = $1201     ;basic start address exram
+fascii    = $0100   ;region conv FP a ascii
+kcol      = $0286   ;Couleur car affiche.
 basicrom  = $a000
 chargen   = $d000
 vic       = $9000
-via1      = $9110     ;cia1  base address
-via2      = $dd00     ;cia2 base address
+via1      = $9110   ;cia1 base address
+via2      = $dd00   ;cia2 base address
 kernalrom = $e000
 ;------------------------------------------------------------------------------
 ; C A R A C T E R E S   D E   C O N T R O L E   P E T S C I I
