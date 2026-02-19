@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.54.1900 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib -i -L dlbug20.txt -o dlbug20.prg dlbug20.asm
-; Thu Feb 19 00:14:31 2026
+; Thu Feb 19 00:33:36 2026
 
 ;Offset	;Hex		;Source
 
@@ -27,7 +27,7 @@
 .1213	ea		          nop
 .1214	ea		          nop
 .1215	ea		          nop
-.1216	20 57 12	basnold   jsr main
+.1216	20 56 12	basnold   jsr main
 .1219	60		          rts
 .121a			bhscrini
 .121a	08		        php
@@ -56,1660 +56,1660 @@
 
 ;******  Return to file: dlbug20.asm
 
->1246	32 32 30 32	     Version .null "220260131-192144"
->124a	36 30 31 33 31 2d 31 39 32 31 34 34 00
+>1246	32 30 32 36	     Version .null "20260219-003227"
+>124a	30 32 31 39 2d 30 30 33 32 32 37 00
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib/m-v20-utils.asm
 
-.1257			R
+.1256			R
 
 ;******  Return to file: dlbug20.asm
 
-.1257			main
-.1257	08		            php
-.1258	48		            pha
-.1259	a9 1d		            lda #(vblanc*16+(vvert|8))
-.125b	8d 0f 90	            sta vic15
-.125e	a9 00		            lda #vnoir
-.1260	8d 86 02	            sta kcol
-.1263	a9 93		            lda #147
-.1265	20 d2 ff	            jsr $ffd2
-.1268	68		            pla
-.1269	28		            plp
-.126a	08		            php
-.126b	48		            pha
-.126c	a9 0e		            lda #locase
-.126e	20 7a f2	            jsr chrout
-.1271	68		            pla
-.1272	28		            plp
-.1273	a9 20		          lda  #' '
-.1275	20 e1 1c	          jsr fillscreen
-.1278	08		            php
-.1279	a0 e0		            ldy #>$e000
-.127b	a2 00		            ldx #<$e000
-.127d	28		            plp
-.127e	08		            php
-.127f	8c 6d 0b	            sty adrptr+1
-.1282	8e 6c 0b	            stx adrptr
-.1285	28		            plp
-.1286	20 dd 12	          jsr kmenu
-.1289	08		            php
-.128a	48		            pha
-.128b	a9 1f		            lda #sbleu
-.128d	20 7a f2	            jsr chrout
-.1290	68		            pla
-.1291	28		            plp
-.1292	08		            php
-.1293	48		            pha
-.1294	a9 93		            lda #147
-.1296	20 7a f2	            jsr chrout
-.1299	68		            pla
-.129a	28		            plp
-.129b	08		            php
-.129c	48		            pha
-.129d	a9 13		            lda #19
-.129f	20 7a f2	            jsr chrout
-.12a2	68		            pla
-.12a3	28		            plp
-.12a4	08		            php
-.12a5	48		            pha
-.12a6	a9 24		            lda #'$'
-.12a8	20 7a f2	            jsr chrout
-.12ab	68		            pla
-.12ac	28		            plp
-.12ad	08		            php
-.12ae	a0 1e		            ldy #>prgend
-.12b0	a2 59		            ldx #<prgend
-.12b2	28		            plp
-.12b3	20 76 19	          jsr putyxhex
-.12b6	08		            php
-.12b7	48		            pha
-.12b8	a9 0d		            lda #13
-.12ba	20 7a f2	            jsr chrout
-.12bd	68		            pla
-.12be	28		            plp
-.12bf	08		            php
-.12c0	48		            pha
-.12c1	a9 24		            lda #'$'
-.12c3	20 7a f2	            jsr chrout
-.12c6	68		            pla
-.12c7	28		            plp
-.12c8	08		            php
-.12c9	ac 5a 1e	            ldy prgend+1
-.12cc	ae 59 1e	            ldx prgend
-.12cf	28		            plp
-.12d0	20 76 19	          jsr putyxhex
-.12d3	08		            php
-.12d4	48		            pha
-.12d5	a9 0d		            lda #13
-.12d7	20 7a f2	            jsr chrout
-.12da	68		            pla
-.12db	28		            plp
-.12dc	60		          rts
-.12dd			kmenu
-.12dd	20 d3 16	          jsr  pushregs                 ; Sauvegarde les registres.
-.12e0			uneclef
-.12e0	20 85 1b	          jsr  putahexdec               ; Affiche .a en
-.12e3	20 0e 13	          jsr  prompt
-.12e6	20 03 1c	          jsr  getkey                   ; Attend une clef.
-.12e9	20 7a f2	          jsr  chrout
-.12ec	c9 5f		keyesc    cmp  #$5f ;[ESC]              ; Est-ce la touche 'ESC'?
-.12ee	d0 03		          bne  keyr                     ; Non on verifie une autre.
-.12f0	4c 0a 13	          jmp  out                      ; Oui, on quitte la fonction
-.12f3	c9 12		keyr      cmp  #$12 ;[CTRL][R]          ; Est-ce la lettre 'Ctrl+R'?
-.12f5	d0 06		          bne  keym                     ; Non on verifie une autre.
-.12f7	20 fe 1c	          jsr  showregs                 ; Oui, affiche les registres.
-.12fa	4c e0 12	          jmp  uneclef
-.12fd	c9 4d		keym      cmp  #$4d
-.12ff	d0 06		          bne  nextkey
-.1301	20 3e 14	          jsr  mvmenu
-.1304	4c e0 12	          jmp  uneclef
-.1307	4c e0 12	nextkey   jmp  uneclef
-.130a	20 00 17	out       jsr  popregs
-.130d	60		          rts
-.130e			prompt
-.130e	20 d3 16	          jsr  pushregs
-.1311	a2 16		          ldx  #22
-.1313	a0 00		          ldy  #0
-.1315	18		          clc
-.1316	20 0a e5	          jsr  plot
-.1319	08		            php
-.131a	48		            pha
-.131b	a9 9c		            lda #smauve
-.131d	20 7a f2	            jsr chrout
-.1320	68		            pla
-.1321	28		            plp
-.1322	08		            php
-.1323	48		            pha
-.1324	a9 3e		            lda #'>'
-.1326	20 7a f2	            jsr chrout
-.1329	68		            pla
-.132a	28		            plp
-.132b	08		            php
-.132c	48		            pha
-.132d	a9 90		            lda #snoir
-.132f	20 7a f2	            jsr chrout
-.1332	68		            pla
-.1333	28		            plp
-.1334	20 00 17	          jsr  popregs
-.1337	60		          rts
+.1256			main
+.1256	08		            php
+.1257	48		            pha
+.1258	a9 1d		            lda #(vblanc*16+(vvert|8))
+.125a	8d 0f 90	            sta vic15
+.125d	a9 00		            lda #vnoir
+.125f	8d 86 02	            sta kcol
+.1262	a9 93		            lda #147
+.1264	20 d2 ff	            jsr $ffd2
+.1267	68		            pla
+.1268	28		            plp
+.1269	08		            php
+.126a	48		            pha
+.126b	a9 0e		            lda #locase
+.126d	20 7a f2	            jsr chrout
+.1270	68		            pla
+.1271	28		            plp
+.1272	a9 20		          lda  #' '
+.1274	20 e0 1c	          jsr fillscreen
+.1277	08		            php
+.1278	a0 e0		            ldy #>$e000
+.127a	a2 00		            ldx #<$e000
+.127c	28		            plp
+.127d	08		            php
+.127e	8c 6d 0b	            sty adrptr+1
+.1281	8e 6c 0b	            stx adrptr
+.1284	28		            plp
+.1285	20 dc 12	          jsr kmenu
+.1288	08		            php
+.1289	48		            pha
+.128a	a9 1f		            lda #sbleu
+.128c	20 7a f2	            jsr chrout
+.128f	68		            pla
+.1290	28		            plp
+.1291	08		            php
+.1292	48		            pha
+.1293	a9 93		            lda #147
+.1295	20 7a f2	            jsr chrout
+.1298	68		            pla
+.1299	28		            plp
+.129a	08		            php
+.129b	48		            pha
+.129c	a9 13		            lda #19
+.129e	20 7a f2	            jsr chrout
+.12a1	68		            pla
+.12a2	28		            plp
+.12a3	08		            php
+.12a4	48		            pha
+.12a5	a9 24		            lda #'$'
+.12a7	20 7a f2	            jsr chrout
+.12aa	68		            pla
+.12ab	28		            plp
+.12ac	08		            php
+.12ad	a0 1e		            ldy #>prgend
+.12af	a2 58		            ldx #<prgend
+.12b1	28		            plp
+.12b2	20 75 19	          jsr putyxhex
+.12b5	08		            php
+.12b6	48		            pha
+.12b7	a9 0d		            lda #13
+.12b9	20 7a f2	            jsr chrout
+.12bc	68		            pla
+.12bd	28		            plp
+.12be	08		            php
+.12bf	48		            pha
+.12c0	a9 24		            lda #'$'
+.12c2	20 7a f2	            jsr chrout
+.12c5	68		            pla
+.12c6	28		            plp
+.12c7	08		            php
+.12c8	ac 59 1e	            ldy prgend+1
+.12cb	ae 58 1e	            ldx prgend
+.12ce	28		            plp
+.12cf	20 75 19	          jsr putyxhex
+.12d2	08		            php
+.12d3	48		            pha
+.12d4	a9 0d		            lda #13
+.12d6	20 7a f2	            jsr chrout
+.12d9	68		            pla
+.12da	28		            plp
+.12db	60		          rts
+.12dc			kmenu
+.12dc	20 d2 16	          jsr  pushregs                 ; Sauvegarde les registres.
+.12df			uneclef
+.12df	20 84 1b	          jsr  putahexdec               ; Affiche .a en
+.12e2	20 0d 13	          jsr  prompt
+.12e5	20 02 1c	          jsr  getkey                   ; Attend une clef.
+.12e8	20 7a f2	          jsr  chrout
+.12eb	c9 5f		keyesc    cmp  #$5f ;[ESC]              ; Est-ce la touche 'ESC'?
+.12ed	d0 03		          bne  keyr                     ; Non on verifie une autre.
+.12ef	4c 09 13	          jmp  out                      ; Oui, on quitte la fonction
+.12f2	c9 12		keyr      cmp  #$12 ;[CTRL][R]          ; Est-ce la lettre 'Ctrl+R'?
+.12f4	d0 06		          bne  keym                     ; Non on verifie une autre.
+.12f6	20 fd 1c	          jsr  showregs                 ; Oui, affiche les registres.
+.12f9	4c df 12	          jmp  uneclef
+.12fc	c9 4d		keym      cmp  #$4d
+.12fe	d0 06		          bne  nextkey
+.1300	20 3d 14	          jsr  mvmenu
+.1303	4c df 12	          jmp  uneclef
+.1306	4c df 12	nextkey   jmp  uneclef
+.1309	20 ff 16	out       jsr  popregs
+.130c	60		          rts
+.130d			prompt
+.130d	20 d2 16	          jsr  pushregs
+.1310	a2 16		          ldx  #22
+.1312	a0 00		          ldy  #0
+.1314	18		          clc
+.1315	20 0a e5	          jsr  plot
+.1318	08		            php
+.1319	48		            pha
+.131a	a9 9c		            lda #smauve
+.131c	20 7a f2	            jsr chrout
+.131f	68		            pla
+.1320	28		            plp
+.1321	08		            php
+.1322	48		            pha
+.1323	a9 3e		            lda #'>'
+.1325	20 7a f2	            jsr chrout
+.1328	68		            pla
+.1329	28		            plp
+.132a	08		            php
+.132b	48		            pha
+.132c	a9 90		            lda #snoir
+.132e	20 7a f2	            jsr chrout
+.1331	68		            pla
+.1332	28		            plp
+.1333	20 ff 16	          jsr  popregs
+.1336	60		          rts
 
 ;******  Processing file: string-fr.asm
 
->1338	92 b0 90 12	rtitle         .byte revsoff,176,snoir,revson
->133c	20 43 50 55	               .text " cpu registers hex "
->1340	20 52 45 47 49 53 54 45 52 53 20 48 45 58 20
->134f	90 92 ae 0d	               .byte snoir,revsoff,174,$0d
->1353	00		               .byte 0
->1354	dd 1f 92	rlable         .byte 221,sbleu,revsoff
->1357	20 50 43 20	               .text " pc  ra rx ry sr sp"
->135b	20 52 41 20 52 58 20 52 59 20 53 52 20 53 50
->136a	90 92 dd 0d	               .byte snoir,revsoff,221,$0d
->136e	00		               .byte 0
->136f	dd 1c 92	rvalues        .byte 221,srouge,revsoff
->1372	30 30 30 30	               .text "0000 00 00 00 00 00"
->1376	20 30 30 20 30 30 20 30 30 20 30 30 20 30 30
->1385	90 92 dd 0d	               .byte snoir,revsoff,221,$0d
->1389	00		               .byte 0
->138a	ad 90 92	rbline         .byte 173,snoir,revsoff        ;0-2
->138d	c0		               .byte 192    ;9-13
->138e	53 4f 52 54	               .text "sortir=[une-clef]"
->1392	49 52 3d 5b 55 4e 45 2d 43 4c 45 46 5d
->139f	c0		               .byte 192         ;19-23
->13a0	90 92 bd 0d	               .byte snoir,revsoff,189,$0d    ;24-27
->13a4	00		               .byte 0
->13a5	92 b0 90 12	mvaide1        .byte revsoff,176,snoir,revson
->13a9	20 41 46 46	               .text " affichage  memoire "
->13ad	49 43 48 41 47 45 20 20 4d 45 4d 4f 49 52 45 20
->13bd	90 92 ae	               .byte snoir,revsoff,174
->13c0	00		               .byte 0
->13c1	dd 90		mvaide2        .byte 221,snoir
->13c3	20 43 52 53	               .text " crs up/dn -/+ 64   "
->13c7	20 55 50 2f 44 4e 20 2d 2f 2b 20 36 34 20 20 20
->13d7	90 dd		               .byte snoir,221
->13d9	00		               .byte 0
->13da	dd 90		mvaide3        .byte 221,snoir
->13dc	20 43 52 53	               .text " crs lf/rt -/+ 128  "
->13e0	20 4c 46 2f 52 54 20 2d 2f 2b 20 31 32 38 20 20
->13f0	90 dd		               .byte snoir,221
->13f2	00		               .byte 0
->13f3	dd 90		mvaide4        .byte 221,snoir
->13f5	20 46 31 2f	               .text " f1/f3     -/+ 4096 "
->13f9	46 33 20 20 20 20 20 2d 2f 2b 20 34 30 39 36 20
->1409	90 dd		               .byte snoir,221
->140b	00		               .byte 0
->140c	dd 90		mvaide5        .byte  221,snoir
->140e	20 45 53 43	               .text " esc = main memu    "
->1412	20 3d 20 4d 41 49 4e 20 4d 45 4d 55 20 20 20 20
->1422	90 dd		               .byte snoir,221
->1424	00		               .byte 0
->1425	ad 90		mvaide6        .byte 173,snoir
->1427	c0 c0 c0 c0	               .byte 192,192,192,192,192
->142b	c0
->142c	c0 c0 c0 c0	               .byte 192,192,192,192,192
->1430	c0
->1431	c0 c0 c0 c0	               .byte 192,192,192,192,192
->1435	c0
->1436	c0 c0 c0 c0	               .byte 192,192,192,192,192
->143a	c0
->143b	90 bd		               .byte snoir,189
->143d	00		               .byte 0
+>1337	92 b0 90 12	rtitle         .byte revsoff,176,snoir,revson
+>133b	20 43 50 55	               .text " cpu registers hex "
+>133f	20 52 45 47 49 53 54 45 52 53 20 48 45 58 20
+>134e	90 92 ae 0d	               .byte snoir,revsoff,174,$0d
+>1352	00		               .byte 0
+>1353	dd 1f 92	rlable         .byte 221,sbleu,revsoff
+>1356	20 50 43 20	               .text " pc  ra rx ry sr sp"
+>135a	20 52 41 20 52 58 20 52 59 20 53 52 20 53 50
+>1369	90 92 dd 0d	               .byte snoir,revsoff,221,$0d
+>136d	00		               .byte 0
+>136e	dd 1c 92	rvalues        .byte 221,srouge,revsoff
+>1371	30 30 30 30	               .text "0000 00 00 00 00 00"
+>1375	20 30 30 20 30 30 20 30 30 20 30 30 20 30 30
+>1384	90 92 dd 0d	               .byte snoir,revsoff,221,$0d
+>1388	00		               .byte 0
+>1389	ad 90 92	rbline         .byte 173,snoir,revsoff        ;0-2
+>138c	c0		               .byte 192    ;9-13
+>138d	53 4f 52 54	               .text "sortir=[une-clef]"
+>1391	49 52 3d 5b 55 4e 45 2d 43 4c 45 46 5d
+>139e	c0		               .byte 192         ;19-23
+>139f	90 92 bd 0d	               .byte snoir,revsoff,189,$0d    ;24-27
+>13a3	00		               .byte 0
+>13a4	92 b0 90 12	mvaide1        .byte revsoff,176,snoir,revson
+>13a8	20 41 46 46	               .text " affichage  memoire "
+>13ac	49 43 48 41 47 45 20 20 4d 45 4d 4f 49 52 45 20
+>13bc	90 92 ae	               .byte snoir,revsoff,174
+>13bf	00		               .byte 0
+>13c0	dd 90		mvaide2        .byte 221,snoir
+>13c2	20 43 52 53	               .text " crs up/dn -/+ 64   "
+>13c6	20 55 50 2f 44 4e 20 2d 2f 2b 20 36 34 20 20 20
+>13d6	90 dd		               .byte snoir,221
+>13d8	00		               .byte 0
+>13d9	dd 90		mvaide3        .byte 221,snoir
+>13db	20 43 52 53	               .text " crs lf/rt -/+ 128  "
+>13df	20 4c 46 2f 52 54 20 2d 2f 2b 20 31 32 38 20 20
+>13ef	90 dd		               .byte snoir,221
+>13f1	00		               .byte 0
+>13f2	dd 90		mvaide4        .byte 221,snoir
+>13f4	20 46 31 2f	               .text " f1/f3     -/+ 4096 "
+>13f8	46 33 20 20 20 20 20 2d 2f 2b 20 34 30 39 36 20
+>1408	90 dd		               .byte snoir,221
+>140a	00		               .byte 0
+>140b	dd 90		mvaide5        .byte  221,snoir
+>140d	20 45 53 43	               .text " esc = main memu    "
+>1411	20 3d 20 4d 41 49 4e 20 4d 45 4d 55 20 20 20 20
+>1421	90 dd		               .byte snoir,221
+>1423	00		               .byte 0
+>1424	ad 90		mvaide6        .byte 173,snoir
+>1426	c0 c0 c0 c0	               .byte 192,192,192,192,192
+>142a	c0
+>142b	c0 c0 c0 c0	               .byte 192,192,192,192,192
+>142f	c0
+>1430	c0 c0 c0 c0	               .byte 192,192,192,192,192
+>1434	c0
+>1435	c0 c0 c0 c0	               .byte 192,192,192,192,192
+>1439	c0
+>143a	90 bd		               .byte snoir,189
+>143c	00		               .byte 0
 
 ;******  Return to file: dlbug20.asm
 
 
 ;******  Processing file: memview.asm
 
-.143e			mvmenu
-.143e	20 d3 16	          jsr  pushregs
-.1441	20 06 15	          jsr  mvaide
-.1444	20 7b 15	another   jsr  memdump
-.1447	20 03 1c	          jsr  getkey
-.144a	c9 5f		          cmp  #$5f
-.144c	d0 03		          bne  upar
-.144e	4c f9 14	          jmp  out
-.1451	c9 91		upar      cmp  #$91      ; crsr-up
-.1453	d0 18		          bne  dnar      ; -128
-.1455	a9 80		          lda  #128
-.1457	08		            php
-.1458	ac 6d 0b	            ldy adrptr+1
-.145b	ae 6c 0b	            ldx adrptr
-.145e	28		            plp
-.145f	20 50 19	          jsr  subatoyx
-.1462	08		            php
-.1463	8c 6d 0b	            sty adrptr+1
-.1466	8e 6c 0b	            stx adrptr
-.1469	28		            plp
-.146a	4c 44 14	          jmp  another
-.146d	c9 11		dnar      cmp  #$11      ; crsr-down
-.146f	d0 03		          bne  lfar      ; asis
-.1471	4c 44 14	          jmp  another
-.1474	c9 9d		lfar      cmp  #$9d      ; crsr-left
-.1476	d0 18		          bne  rtar      ; -192
-.1478	a9 c0		          lda  #192
-.147a	08		            php
-.147b	ac 6d 0b	            ldy adrptr+1
-.147e	ae 6c 0b	            ldx adrptr
-.1481	28		            plp
-.1482	20 50 19	          jsr  subatoyx
-.1485	08		            php
-.1486	8c 6d 0b	            sty adrptr+1
-.1489	8e 6c 0b	            stx adrptr
-.148c	28		            plp
-.148d	4c 44 14	          jmp  another
-.1490	c9 1d		rtar      cmp  #$1d      ; crsr-right
-.1492	d0 18		          bne  kf1        ; +64
-.1494	a9 40		          lda  #64
-.1496	08		            php
-.1497	ac 6d 0b	            ldy adrptr+1
-.149a	ae 6c 0b	            ldx adrptr
-.149d	28		            plp
-.149e	20 33 19	          jsr  addatoyx
-.14a1	08		            php
-.14a2	8c 6d 0b	            sty adrptr+1
-.14a5	8e 6c 0b	            stx adrptr
-.14a8	28		            plp
-.14a9	4c 44 14	          jmp  another
-.14ac	c9 85		kf1       cmp  #$85       ; f1
-.14ae	d0 21		          bne  kf3        ; +1024
-.14b0	a9 40		          lda  #64
-.14b2	08		            php
-.14b3	ac 6d 0b	            ldy adrptr+1
-.14b6	ae 6c 0b	            ldx adrptr
-.14b9	28		            plp
-.14ba	20 50 19	          jsr  subatoyx
-.14bd	08		            php
-.14be	8c 6d 0b	            sty adrptr+1
-.14c1	8e 6c 0b	            stx adrptr
-.14c4	28		            plp
-.14c5	ad 6d 0b	          lda  adrptr+1
-.14c8	38		          sec
-.14c9	e9 10		          sbc  #$10
-.14cb	8d 6d 0b	          sta  adrptr+1
-.14ce	4c 44 14	          jmp  another
-.14d1	c9 86		kf3       cmp  #$86      ; crsr-right
-.14d3	d0 21		          bne  chkkey        ; +64
-.14d5	a9 40		          lda  #64
-.14d7	08		            php
-.14d8	ac 6d 0b	            ldy adrptr+1
-.14db	ae 6c 0b	            ldx adrptr
-.14de	28		            plp
-.14df	20 50 19	          jsr  subatoyx
-.14e2	08		            php
-.14e3	8c 6d 0b	            sty adrptr+1
-.14e6	8e 6c 0b	            stx adrptr
-.14e9	28		            plp
-.14ea	ad 6d 0b	          lda  adrptr+1
-.14ed	18		          clc
-.14ee	69 10		          adc  #$10
-.14f0	8d 6d 0b	          sta  adrptr+1
-.14f3	4c 44 14	          jmp  another
-.14f6	4c 44 14	chkkey    jmp  another
-.14f9			out
-.14f9	08		            php
-.14fa	48		            pha
-.14fb	a9 93		            lda #147
-.14fd	20 7a f2	            jsr chrout
-.1500	68		            pla
-.1501	28		            plp
-.1502	20 00 17	          jsr  popregs
-.1505	60		          rts
-.1506			mvaide
-.1506	20 d3 16	          jsr  pushregs
-.1509	a2 10		          ldx  #16
-.150b	a0 00		          ldy  #00
-.150d	18		          clc
-.150e	20 0a e5	          jsr  plot
-.1511	20 61 16	            jsr  pushall
-.1514	a2 a5		            ldx  #<mvaide1
-.1516	86 fb		            stx  $fb
-.1518	a0 13		            ldy  #>mvaide1
-.151a	84 fc		            sty  $fc
-.151c	20 2d 17	            jsr  puts
-.151f	20 9a 16	            jsr  popall
-.1522	20 61 16	            jsr  pushall
-.1525	a2 c1		            ldx  #<mvaide2
-.1527	86 fb		            stx  $fb
-.1529	a0 13		            ldy  #>mvaide2
-.152b	84 fc		            sty  $fc
-.152d	20 2d 17	            jsr  puts
-.1530	20 9a 16	            jsr  popall
-.1533	20 61 16	            jsr  pushall
-.1536	a2 da		            ldx  #<mvaide3
-.1538	86 fb		            stx  $fb
-.153a	a0 13		            ldy  #>mvaide3
-.153c	84 fc		            sty  $fc
-.153e	20 2d 17	            jsr  puts
-.1541	20 9a 16	            jsr  popall
-.1544	20 61 16	            jsr  pushall
-.1547	a2 f3		            ldx  #<mvaide4
-.1549	86 fb		            stx  $fb
-.154b	a0 13		            ldy  #>mvaide4
-.154d	84 fc		            sty  $fc
-.154f	20 2d 17	            jsr  puts
-.1552	20 9a 16	            jsr  popall
-.1555	20 61 16	            jsr  pushall
-.1558	a2 0c		            ldx  #<mvaide5
-.155a	86 fb		            stx  $fb
-.155c	a0 14		            ldy  #>mvaide5
-.155e	84 fc		            sty  $fc
-.1560	20 2d 17	            jsr  puts
-.1563	20 9a 16	            jsr  popall
-.1566	20 61 16	            jsr  pushall
-.1569	a2 25		            ldx  #<mvaide6
-.156b	86 fb		            stx  $fb
-.156d	a0 14		            ldy  #>mvaide6
-.156f	84 fc		            sty  $fc
-.1571	20 2d 17	            jsr  puts
-.1574	20 9a 16	            jsr  popall
-.1577	20 00 17	          jsr  popregs
-.157a	60		          rts
-.157b			memdump
-.157b	08		            php
-.157c	48		            pha
-.157d	a9 13		            lda #19
-.157f	20 7a f2	            jsr chrout
-.1582	68		            pla
-.1583	28		            plp
-.1584	20 d3 16	          jsr  pushregs
-.1587	a0 10		          ldy  #16
-.1589	20 93 15	another   jsr  put4mem
-.158c	88		          dey
-.158d	d0 fa		          bne  another
-.158f	20 00 17	          jsr  popregs
-.1592	60		          rts
-.1593			put4mem
-.1593	20 61 16	          jsr  pushall
-.1596	ad 86 02	          lda  kcol
-.1599	48		          pha
-.159a	08		            php
-.159b	48		            pha
-.159c	a9 90		            lda #snoir
-.159e	20 7a f2	            jsr chrout
-.15a1	68		            pla
-.15a2	28		            plp
-.15a3	08		            php
-.15a4	ac 6d 0b	            ldy adrptr+1
-.15a7	ae 6c 0b	            ldx adrptr
-.15aa	28		            plp
-.15ab	08		            php
-.15ac	48		            pha
-.15ad	a9 24		            lda #'$'
-.15af	20 7a f2	            jsr chrout
-.15b2	68		            pla
-.15b3	28		            plp
-.15b4	20 76 19	          jsr  putyxhex
-.15b7	20 d3 16	        jsr pushregs
-.15ba	84 fc		        sty zp1+1
-.15bc	86 fb		        stx zp1
-.15be	20 00 17	        jsr popregs
-.15c1	08		            php
-.15c2	a4 d2		            ldy scrnlin+1
-.15c4	a6 d1		            ldx scrnlin
-.15c6	28		            plp
-.15c7	a9 12		          lda  #$12                     ; On y aditionne 18 pour la position
-.15c9	20 33 19	          jsr  addatoyx
-.15cc	08		            php
-.15cd	8c 6b 0b	            sty scraddr+1
-.15d0	8e 6a 0b	            stx scraddr
-.15d3	28		            plp
-.15d4	08		            php
-.15d5	8c 69 0b	            sty coladdr+1
-.15d8	8e 68 0b	            stx coladdr
-.15db	28		            plp
-.15dc	ad 69 0b	          lda  coladdr+1                ; On ajuste l'adresse couleur en
-.15df	09 94		          ora  #%10010100               ; sur le MSB seulement.
-.15e1	8d 69 0b	          sta  coladdr+1
-.15e4	08		            php
-.15e5	ac 6d 0b	            ldy adrptr+1
-.15e8	ae 6c 0b	            ldx adrptr
-.15eb	28		            plp
-.15ec	20 d3 16	        jsr pushregs
-.15ef	84 fc		        sty zp1+1
-.15f1	86 fb		        stx zp1
-.15f3	20 00 17	        jsr popregs
-.15f6	a0 00		          ldy  #$00
-.15f8			nxtbyte
-.15f8	08		            php
-.15f9	48		            pha
-.15fa	a9 1c		            lda #srouge
-.15fc	20 7a f2	            jsr chrout
-.15ff	68		            pla
-.1600	28		            plp
-.1601	08		            php
-.1602	48		            pha
-.1603	a9 1d		            lda #29
-.1605	20 7a f2	            jsr chrout
-.1608	68		            pla
-.1609	28		            plp
-.160a	b1 fb		          lda  (zp1),y
-.160c	20 9a 19	          jsr  putahex
-.160f	20 d3 16	        jsr pushregs
-.1612	ac 6b 0b	        ldy scraddr+1
-.1615	ae 6a 0b	        ldx scraddr
-.1618	84 fe		        sty zp2+1
-.161a	86 fd		        stx zp2
-.161c	20 00 17	        jsr popregs
-.161f	91 fd		          sta  (zp2),y
-.1621	20 d3 16	        jsr pushregs
-.1624	ac 69 0b	        ldy coladdr+1
-.1627	ae 68 0b	        ldx coladdr
-.162a	84 fe		        sty zp2+1
-.162c	86 fd		        stx zp2
-.162e	20 00 17	        jsr popregs
-.1631	98		          tya
-.1632	18		          clc
-.1633	2a		          rol
-.1634	91 fd		          sta  (zp2),y
-.1636	c8		          iny
-.1637	c0 04		          cpy  #$04
-.1639	d0 bd		          bne  nxtbyte
-.163b	08		            php
-.163c	ac 6d 0b	            ldy adrptr+1
-.163f	ae 6c 0b	            ldx adrptr
-.1642	28		            plp
-.1643	a9 04		          lda  #$4                      ;   pour afficher
-.1645	20 33 19	          jsr  addatoyx                 ;   les quatres
-.1648	08		            php
-.1649	8c 6d 0b	            sty adrptr+1
-.164c	8e 6c 0b	            stx adrptr
-.164f	28		            plp
-.1650	08		            php
-.1651	48		            pha
-.1652	a9 0d		            lda #13
-.1654	20 7a f2	            jsr chrout
-.1657	68		            pla
-.1658	28		            plp
-.1659	68		          pla
-.165a	8d 86 02	          sta  kcol
-.165d	20 9a 16	          jsr  popall
-.1660	60		          rts
+.143d			mvmenu
+.143d	20 d2 16	          jsr  pushregs
+.1440	20 05 15	          jsr  mvaide
+.1443	20 7a 15	another   jsr  memdump
+.1446	20 02 1c	          jsr  getkey
+.1449	c9 5f		          cmp  #$5f
+.144b	d0 03		          bne  upar
+.144d	4c f8 14	          jmp  out
+.1450	c9 91		upar      cmp  #$91      ; crsr-up
+.1452	d0 18		          bne  dnar      ; -128
+.1454	a9 80		          lda  #128
+.1456	08		            php
+.1457	ac 6d 0b	            ldy adrptr+1
+.145a	ae 6c 0b	            ldx adrptr
+.145d	28		            plp
+.145e	20 4f 19	          jsr  subatoyx
+.1461	08		            php
+.1462	8c 6d 0b	            sty adrptr+1
+.1465	8e 6c 0b	            stx adrptr
+.1468	28		            plp
+.1469	4c 43 14	          jmp  another
+.146c	c9 11		dnar      cmp  #$11      ; crsr-down
+.146e	d0 03		          bne  lfar      ; asis
+.1470	4c 43 14	          jmp  another
+.1473	c9 9d		lfar      cmp  #$9d      ; crsr-left
+.1475	d0 18		          bne  rtar      ; -192
+.1477	a9 c0		          lda  #192
+.1479	08		            php
+.147a	ac 6d 0b	            ldy adrptr+1
+.147d	ae 6c 0b	            ldx adrptr
+.1480	28		            plp
+.1481	20 4f 19	          jsr  subatoyx
+.1484	08		            php
+.1485	8c 6d 0b	            sty adrptr+1
+.1488	8e 6c 0b	            stx adrptr
+.148b	28		            plp
+.148c	4c 43 14	          jmp  another
+.148f	c9 1d		rtar      cmp  #$1d      ; crsr-right
+.1491	d0 18		          bne  kf1        ; +64
+.1493	a9 40		          lda  #64
+.1495	08		            php
+.1496	ac 6d 0b	            ldy adrptr+1
+.1499	ae 6c 0b	            ldx adrptr
+.149c	28		            plp
+.149d	20 32 19	          jsr  addatoyx
+.14a0	08		            php
+.14a1	8c 6d 0b	            sty adrptr+1
+.14a4	8e 6c 0b	            stx adrptr
+.14a7	28		            plp
+.14a8	4c 43 14	          jmp  another
+.14ab	c9 85		kf1       cmp  #$85       ; f1
+.14ad	d0 21		          bne  kf3        ; +1024
+.14af	a9 40		          lda  #64
+.14b1	08		            php
+.14b2	ac 6d 0b	            ldy adrptr+1
+.14b5	ae 6c 0b	            ldx adrptr
+.14b8	28		            plp
+.14b9	20 4f 19	          jsr  subatoyx
+.14bc	08		            php
+.14bd	8c 6d 0b	            sty adrptr+1
+.14c0	8e 6c 0b	            stx adrptr
+.14c3	28		            plp
+.14c4	ad 6d 0b	          lda  adrptr+1
+.14c7	38		          sec
+.14c8	e9 10		          sbc  #$10
+.14ca	8d 6d 0b	          sta  adrptr+1
+.14cd	4c 43 14	          jmp  another
+.14d0	c9 86		kf3       cmp  #$86      ; crsr-right
+.14d2	d0 21		          bne  chkkey        ; +64
+.14d4	a9 40		          lda  #64
+.14d6	08		            php
+.14d7	ac 6d 0b	            ldy adrptr+1
+.14da	ae 6c 0b	            ldx adrptr
+.14dd	28		            plp
+.14de	20 4f 19	          jsr  subatoyx
+.14e1	08		            php
+.14e2	8c 6d 0b	            sty adrptr+1
+.14e5	8e 6c 0b	            stx adrptr
+.14e8	28		            plp
+.14e9	ad 6d 0b	          lda  adrptr+1
+.14ec	18		          clc
+.14ed	69 10		          adc  #$10
+.14ef	8d 6d 0b	          sta  adrptr+1
+.14f2	4c 43 14	          jmp  another
+.14f5	4c 43 14	chkkey    jmp  another
+.14f8			out
+.14f8	08		            php
+.14f9	48		            pha
+.14fa	a9 93		            lda #147
+.14fc	20 7a f2	            jsr chrout
+.14ff	68		            pla
+.1500	28		            plp
+.1501	20 ff 16	          jsr  popregs
+.1504	60		          rts
+.1505			mvaide
+.1505	20 d2 16	          jsr  pushregs
+.1508	a2 10		          ldx  #16
+.150a	a0 00		          ldy  #00
+.150c	18		          clc
+.150d	20 0a e5	          jsr  plot
+.1510	20 60 16	            jsr  pushall
+.1513	a2 a4		            ldx  #<mvaide1
+.1515	86 fb		            stx  $fb
+.1517	a0 13		            ldy  #>mvaide1
+.1519	84 fc		            sty  $fc
+.151b	20 2c 17	            jsr  puts
+.151e	20 99 16	            jsr  popall
+.1521	20 60 16	            jsr  pushall
+.1524	a2 c0		            ldx  #<mvaide2
+.1526	86 fb		            stx  $fb
+.1528	a0 13		            ldy  #>mvaide2
+.152a	84 fc		            sty  $fc
+.152c	20 2c 17	            jsr  puts
+.152f	20 99 16	            jsr  popall
+.1532	20 60 16	            jsr  pushall
+.1535	a2 d9		            ldx  #<mvaide3
+.1537	86 fb		            stx  $fb
+.1539	a0 13		            ldy  #>mvaide3
+.153b	84 fc		            sty  $fc
+.153d	20 2c 17	            jsr  puts
+.1540	20 99 16	            jsr  popall
+.1543	20 60 16	            jsr  pushall
+.1546	a2 f2		            ldx  #<mvaide4
+.1548	86 fb		            stx  $fb
+.154a	a0 13		            ldy  #>mvaide4
+.154c	84 fc		            sty  $fc
+.154e	20 2c 17	            jsr  puts
+.1551	20 99 16	            jsr  popall
+.1554	20 60 16	            jsr  pushall
+.1557	a2 0b		            ldx  #<mvaide5
+.1559	86 fb		            stx  $fb
+.155b	a0 14		            ldy  #>mvaide5
+.155d	84 fc		            sty  $fc
+.155f	20 2c 17	            jsr  puts
+.1562	20 99 16	            jsr  popall
+.1565	20 60 16	            jsr  pushall
+.1568	a2 24		            ldx  #<mvaide6
+.156a	86 fb		            stx  $fb
+.156c	a0 14		            ldy  #>mvaide6
+.156e	84 fc		            sty  $fc
+.1570	20 2c 17	            jsr  puts
+.1573	20 99 16	            jsr  popall
+.1576	20 ff 16	          jsr  popregs
+.1579	60		          rts
+.157a			memdump
+.157a	08		            php
+.157b	48		            pha
+.157c	a9 13		            lda #19
+.157e	20 7a f2	            jsr chrout
+.1581	68		            pla
+.1582	28		            plp
+.1583	20 d2 16	          jsr  pushregs
+.1586	a0 10		          ldy  #16
+.1588	20 92 15	another   jsr  put4mem
+.158b	88		          dey
+.158c	d0 fa		          bne  another
+.158e	20 ff 16	          jsr  popregs
+.1591	60		          rts
+.1592			put4mem
+.1592	20 60 16	          jsr  pushall
+.1595	ad 86 02	          lda  kcol
+.1598	48		          pha
+.1599	08		            php
+.159a	48		            pha
+.159b	a9 90		            lda #snoir
+.159d	20 7a f2	            jsr chrout
+.15a0	68		            pla
+.15a1	28		            plp
+.15a2	08		            php
+.15a3	ac 6d 0b	            ldy adrptr+1
+.15a6	ae 6c 0b	            ldx adrptr
+.15a9	28		            plp
+.15aa	08		            php
+.15ab	48		            pha
+.15ac	a9 24		            lda #'$'
+.15ae	20 7a f2	            jsr chrout
+.15b1	68		            pla
+.15b2	28		            plp
+.15b3	20 75 19	          jsr  putyxhex
+.15b6	20 d2 16	        jsr pushregs
+.15b9	84 fc		        sty zp1+1
+.15bb	86 fb		        stx zp1
+.15bd	20 ff 16	        jsr popregs
+.15c0	08		            php
+.15c1	a4 d2		            ldy scrnlin+1
+.15c3	a6 d1		            ldx scrnlin
+.15c5	28		            plp
+.15c6	a9 12		          lda  #$12                     ; On y aditionne 18 pour la position
+.15c8	20 32 19	          jsr  addatoyx
+.15cb	08		            php
+.15cc	8c 6b 0b	            sty scraddr+1
+.15cf	8e 6a 0b	            stx scraddr
+.15d2	28		            plp
+.15d3	08		            php
+.15d4	8c 69 0b	            sty coladdr+1
+.15d7	8e 68 0b	            stx coladdr
+.15da	28		            plp
+.15db	ad 69 0b	          lda  coladdr+1                ; On ajuste l'adresse couleur en
+.15de	09 94		          ora  #%10010100               ; sur le MSB seulement.
+.15e0	8d 69 0b	          sta  coladdr+1
+.15e3	08		            php
+.15e4	ac 6d 0b	            ldy adrptr+1
+.15e7	ae 6c 0b	            ldx adrptr
+.15ea	28		            plp
+.15eb	20 d2 16	        jsr pushregs
+.15ee	84 fc		        sty zp1+1
+.15f0	86 fb		        stx zp1
+.15f2	20 ff 16	        jsr popregs
+.15f5	a0 00		          ldy  #$00
+.15f7			nxtbyte
+.15f7	08		            php
+.15f8	48		            pha
+.15f9	a9 1c		            lda #srouge
+.15fb	20 7a f2	            jsr chrout
+.15fe	68		            pla
+.15ff	28		            plp
+.1600	08		            php
+.1601	48		            pha
+.1602	a9 1d		            lda #29
+.1604	20 7a f2	            jsr chrout
+.1607	68		            pla
+.1608	28		            plp
+.1609	b1 fb		          lda  (zp1),y
+.160b	20 99 19	          jsr  putahex
+.160e	20 d2 16	        jsr pushregs
+.1611	ac 6b 0b	        ldy scraddr+1
+.1614	ae 6a 0b	        ldx scraddr
+.1617	84 fe		        sty zp2+1
+.1619	86 fd		        stx zp2
+.161b	20 ff 16	        jsr popregs
+.161e	91 fd		          sta  (zp2),y
+.1620	20 d2 16	        jsr pushregs
+.1623	ac 69 0b	        ldy coladdr+1
+.1626	ae 68 0b	        ldx coladdr
+.1629	84 fe		        sty zp2+1
+.162b	86 fd		        stx zp2
+.162d	20 ff 16	        jsr popregs
+.1630	98		          tya
+.1631	18		          clc
+.1632	2a		          rol
+.1633	91 fd		          sta  (zp2),y
+.1635	c8		          iny
+.1636	c0 04		          cpy  #$04
+.1638	d0 bd		          bne  nxtbyte
+.163a	08		            php
+.163b	ac 6d 0b	            ldy adrptr+1
+.163e	ae 6c 0b	            ldx adrptr
+.1641	28		            plp
+.1642	a9 04		          lda  #$4                      ;   pour afficher
+.1644	20 32 19	          jsr  addatoyx                 ;   les quatres
+.1647	08		            php
+.1648	8c 6d 0b	            sty adrptr+1
+.164b	8e 6c 0b	            stx adrptr
+.164e	28		            plp
+.164f	08		            php
+.1650	48		            pha
+.1651	a9 0d		            lda #13
+.1653	20 7a f2	            jsr chrout
+.1656	68		            pla
+.1657	28		            plp
+.1658	68		          pla
+.1659	8d 86 02	          sta  kcol
+.165c	20 99 16	          jsr  popall
+.165f	60		          rts
 
 ;******  Return to file: dlbug20.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib/l-v20-push.asm
 
-.1661			pushall
-.1661	08		         php     ;s;rp,pcl,pch
-.1662	8d fd 0f	         sta ra  ;sauve a
-.1665	68		         pla     ;s:pcl,pch
-.1666	8d fe 0f	         sta rp  ;sauve rp
-.1669	68		         pla     ;s:pch
-.166a	8d f8 0f	         sta pc  ;sauve pcl
-.166d	68		         pla     ;s:
-.166e	8d f9 0f	         sta pc+1;sauve pch
-.1671	a5 fb		         lda $fb ;sauve fb
-.1673	48		         pha     ;s:fb
-.1674	a5 fc		         lda $fc ;sauve fc
-.1676	48		         pha     ;s:fc,fb
-.1677	a5 fd		         lda $fd ;sauve fd
-.1679	48		         pha     ;s:fd,fc,fb
-.167a	a5 fe		         lda $fe ;sauve fe
-.167c	48		         pha     ;s:fe,fd,fc,fb
-.167d	ad fe 0f	         lda rp  ;sauve rp
-.1680	48		         pha     ;s:rp,fe,fd,fc,fb
-.1681	ad fd 0f	         lda ra  ;sauve ra
-.1684	48		         pha     ;s:ra,rp,fe,fd,fc,fb
-.1685	8a		         txa     ;sauve rx
-.1686	48		         pha     ;s:rx,ra,rp,fe-fb
-.1687	98		         tya     ;sauve y
-.1688	48		         pha     ;s:ry,rx,ra,rp,fe-fb
-.1689	ad f9 0f	         lda pc+1;replace l'adresse
-.168c	48		         pha     ;s:pch,ry,rx,ra,...
-.168d	ad f8 0f	         lda pc  ; de retour.
-.1690	48		         pha     ;s:pcl,pch,ru,rx,ra,...
-.1691	ad fe 0f	         lda rp  ;place les flags
-.1694	48		         pha     ; sur le stack.
-.1695	ad fd 0f	         lda ra  ;recupere ra
-.1698	28		         plp     ;recupere les flags.
-.1699	60		         rts
-.169a			popall
-.169a	08		         php     ;s:rp,pcl,pch,ry,rx,...
-.169b	8d fd 0f	         sta ra
-.169e	68		         pla     ;s:pcl,pch,ry,rx,...
-.169f	8d fe 0f	         sta rp  ;s:pch,ry,rx,ra,rp,...
-.16a2	68		         pla
-.16a3	8d f8 0f	         sta pc  ;sauve pcl
-.16a6	68		         pla     ;s:ry,rx,ra,rp,fe...fb
-.16a7	8d f9 0f	         sta pc+1;sauve pch
-.16aa	68		         pla     ;s:rx,ra,rp,fe,fd,fc,fb
-.16ab	a8		         tay     ;recupere ry
-.16ac	68		         pla     ;s:ra,rp,fe,fd,fc,fb
-.16ad	aa		         tax     ;recupere rx
-.16ae	68		         pla     ;s:rp,fe,fd,fc,fb
-.16af	8d fd 0f	         sta ra  ;recupere ra
-.16b2	68		         pla     ;s:fe,fd,fc,fb
-.16b3	8d fe 0f	         sta rp  ;recupere les flags.
-.16b6	68		         pla     ;s:fd,fc,fb
-.16b7	85 fe		         sta $fe ;reccupere fe
-.16b9	68		         pla     ;s:fc,fb
-.16ba	85 fd		         sta $fd ;recupere fd
-.16bc	68		         pla     ;s:fb
-.16bd	85 fc		         sta $fc ;recupere fc
-.16bf	68		         pla     ;s:
-.16c0	85 fb		         sta $fb ;recupere fb
-.16c2	ad f9 0f	         lda pc+1;replaace l'adresse de
-.16c5	48		         pha     ;s:pch
-.16c6	ad f8 0f	         lda pc  ;retour sur la pile
-.16c9	48		         pha     ;s:pcl,pch
-.16ca	ad fe 0f	         lda rp  ;recupere les flags
-.16cd	48		         pha     ;s:rp,pcl,pch
-.16ce	ad fd 0f	         lda ra  ;recupere ra
-.16d1	28		         plp     ;s:pcl,pch
-.16d2	60		         rts
-.16d3			pushregs
-.16d3	08		         php     ;s;rp,pcl,pch
-.16d4	8d fd 0f	         sta ra  ; -- sauve a
-.16d7	68		         pla     ;s:pcl,pch
-.16d8	8d fe 0f	         sta rp  ; -- sauve rp
-.16db	68		         pla     ;s:pch
-.16dc	8d f8 0f	         sta pc  ; -- sauve pcl
-.16df	68		         pla     ;s:
-.16e0	8d f9 0f	         sta pc+1; -- sauve pch
-.16e3	ad fe 0f	         lda rp  ; -- sauve rp
-.16e6	48		         pha     ;s:rp
-.16e7	ad fd 0f	         lda ra  ; -- sauve ra
-.16ea	48		         pha     ;s:ra,rp
-.16eb	8a		         txa     ; -- tfr rx
-.16ec	48		         pha     ;s:rx,ra,rp
-.16ed	98		         tya     ; -- tfr ry
-.16ee	48		         pha     ;s:ry,rx,ra,rp
-.16ef	ad f9 0f	         lda pc+1; -- replace l'adresse
-.16f2	48		         pha     ;s:pch,ry,rx,ra,rp
-.16f3	ad f8 0f	         lda pc  ; -- de retour.
-.16f6	48		         pha     ;s:pcl,pch,ru,rx,ra,rp
-.16f7	ad fe 0f	         lda rp  ; -- place les flags
-.16fa	48		         pha     ;    sur le stack.
-.16fb	ad fd 0f	         lda ra  ; -- recupere ra
-.16fe	28		         plp     ; -- recupere flags.
-.16ff	60		         rts     ;s:pcl,pch,ru,rx,ra,rp
-.1700			popregs
-.1700	08		         php
-.1701	8d fd 0f	         sta ra
-.1704	68		         pla
-.1705	8d fe 0f	         sta rp
-.1708	68		         pla     ;s:pch,ry,rx,ra,rp
-.1709	8d f8 0f	         sta pc  ; -- sauve pcl
-.170c	68		         pla     ;s:ry,rx,ra,rp
-.170d	8d f9 0f	         sta pc+1; -- sauve pch
-.1710	68		         pla     ;s:rx,ra,rp
-.1711	a8		         tay     ;recupere ry
-.1712	68		         pla     ;s:ra,rp
-.1713	aa		         tax     ;recupere rx
-.1714	68		         pla     ;s:rp
-.1715	8d fd 0f	         sta ra  ;recupere ra
-.1718	68		         pla     ;s:
-.1719	8d fe 0f	         sta rp  ;recupere les flags.
-.171c	ad f9 0f	         lda pc+1;replace l'adresse de
-.171f	48		         pha     ;s:pch
-.1720	ad f8 0f	         lda pc  ;retour sur la pile
-.1723	48		         pha     ;s:pcl,pch
-.1724	ad fe 0f	         lda rp  ;recupere les flags
-.1727	48		         pha     ;s:rp,pcl,pch
-.1728	ad fd 0f	         lda ra  ;recupere ra
-.172b	28		         plp     ;s:pcl,pch
-.172c	60		         rts
+.1660			pushall
+.1660	08		         php     ;s;rp,pcl,pch
+.1661	8d fd 0f	         sta ra  ;sauve a
+.1664	68		         pla     ;s:pcl,pch
+.1665	8d fe 0f	         sta rp  ;sauve rp
+.1668	68		         pla     ;s:pch
+.1669	8d f8 0f	         sta pc  ;sauve pcl
+.166c	68		         pla     ;s:
+.166d	8d f9 0f	         sta pc+1;sauve pch
+.1670	a5 fb		         lda $fb ;sauve fb
+.1672	48		         pha     ;s:fb
+.1673	a5 fc		         lda $fc ;sauve fc
+.1675	48		         pha     ;s:fc,fb
+.1676	a5 fd		         lda $fd ;sauve fd
+.1678	48		         pha     ;s:fd,fc,fb
+.1679	a5 fe		         lda $fe ;sauve fe
+.167b	48		         pha     ;s:fe,fd,fc,fb
+.167c	ad fe 0f	         lda rp  ;sauve rp
+.167f	48		         pha     ;s:rp,fe,fd,fc,fb
+.1680	ad fd 0f	         lda ra  ;sauve ra
+.1683	48		         pha     ;s:ra,rp,fe,fd,fc,fb
+.1684	8a		         txa     ;sauve rx
+.1685	48		         pha     ;s:rx,ra,rp,fe-fb
+.1686	98		         tya     ;sauve y
+.1687	48		         pha     ;s:ry,rx,ra,rp,fe-fb
+.1688	ad f9 0f	         lda pc+1;replace l'adresse
+.168b	48		         pha     ;s:pch,ry,rx,ra,...
+.168c	ad f8 0f	         lda pc  ; de retour.
+.168f	48		         pha     ;s:pcl,pch,ru,rx,ra,...
+.1690	ad fe 0f	         lda rp  ;place les flags
+.1693	48		         pha     ; sur le stack.
+.1694	ad fd 0f	         lda ra  ;recupere ra
+.1697	28		         plp     ;recupere les flags.
+.1698	60		         rts
+.1699			popall
+.1699	08		         php     ;s:rp,pcl,pch,ry,rx,...
+.169a	8d fd 0f	         sta ra
+.169d	68		         pla     ;s:pcl,pch,ry,rx,...
+.169e	8d fe 0f	         sta rp  ;s:pch,ry,rx,ra,rp,...
+.16a1	68		         pla
+.16a2	8d f8 0f	         sta pc  ;sauve pcl
+.16a5	68		         pla     ;s:ry,rx,ra,rp,fe...fb
+.16a6	8d f9 0f	         sta pc+1;sauve pch
+.16a9	68		         pla     ;s:rx,ra,rp,fe,fd,fc,fb
+.16aa	a8		         tay     ;recupere ry
+.16ab	68		         pla     ;s:ra,rp,fe,fd,fc,fb
+.16ac	aa		         tax     ;recupere rx
+.16ad	68		         pla     ;s:rp,fe,fd,fc,fb
+.16ae	8d fd 0f	         sta ra  ;recupere ra
+.16b1	68		         pla     ;s:fe,fd,fc,fb
+.16b2	8d fe 0f	         sta rp  ;recupere les flags.
+.16b5	68		         pla     ;s:fd,fc,fb
+.16b6	85 fe		         sta $fe ;reccupere fe
+.16b8	68		         pla     ;s:fc,fb
+.16b9	85 fd		         sta $fd ;recupere fd
+.16bb	68		         pla     ;s:fb
+.16bc	85 fc		         sta $fc ;recupere fc
+.16be	68		         pla     ;s:
+.16bf	85 fb		         sta $fb ;recupere fb
+.16c1	ad f9 0f	         lda pc+1;replaace l'adresse de
+.16c4	48		         pha     ;s:pch
+.16c5	ad f8 0f	         lda pc  ;retour sur la pile
+.16c8	48		         pha     ;s:pcl,pch
+.16c9	ad fe 0f	         lda rp  ;recupere les flags
+.16cc	48		         pha     ;s:rp,pcl,pch
+.16cd	ad fd 0f	         lda ra  ;recupere ra
+.16d0	28		         plp     ;s:pcl,pch
+.16d1	60		         rts
+.16d2			pushregs
+.16d2	08		         php     ;s;rp,pcl,pch
+.16d3	8d fd 0f	         sta ra  ; -- sauve a
+.16d6	68		         pla     ;s:pcl,pch
+.16d7	8d fe 0f	         sta rp  ; -- sauve rp
+.16da	68		         pla     ;s:pch
+.16db	8d f8 0f	         sta pc  ; -- sauve pcl
+.16de	68		         pla     ;s:
+.16df	8d f9 0f	         sta pc+1; -- sauve pch
+.16e2	ad fe 0f	         lda rp  ; -- sauve rp
+.16e5	48		         pha     ;s:rp
+.16e6	ad fd 0f	         lda ra  ; -- sauve ra
+.16e9	48		         pha     ;s:ra,rp
+.16ea	8a		         txa     ; -- tfr rx
+.16eb	48		         pha     ;s:rx,ra,rp
+.16ec	98		         tya     ; -- tfr ry
+.16ed	48		         pha     ;s:ry,rx,ra,rp
+.16ee	ad f9 0f	         lda pc+1; -- replace l'adresse
+.16f1	48		         pha     ;s:pch,ry,rx,ra,rp
+.16f2	ad f8 0f	         lda pc  ; -- de retour.
+.16f5	48		         pha     ;s:pcl,pch,ru,rx,ra,rp
+.16f6	ad fe 0f	         lda rp  ; -- place les flags
+.16f9	48		         pha     ;    sur le stack.
+.16fa	ad fd 0f	         lda ra  ; -- recupere ra
+.16fd	28		         plp     ; -- recupere flags.
+.16fe	60		         rts     ;s:pcl,pch,ru,rx,ra,rp
+.16ff			popregs
+.16ff	08		         php
+.1700	8d fd 0f	         sta ra
+.1703	68		         pla
+.1704	8d fe 0f	         sta rp
+.1707	68		         pla     ;s:pch,ry,rx,ra,rp
+.1708	8d f8 0f	         sta pc  ; -- sauve pcl
+.170b	68		         pla     ;s:ry,rx,ra,rp
+.170c	8d f9 0f	         sta pc+1; -- sauve pch
+.170f	68		         pla     ;s:rx,ra,rp
+.1710	a8		         tay     ;recupere ry
+.1711	68		         pla     ;s:ra,rp
+.1712	aa		         tax     ;recupere rx
+.1713	68		         pla     ;s:rp
+.1714	8d fd 0f	         sta ra  ;recupere ra
+.1717	68		         pla     ;s:
+.1718	8d fe 0f	         sta rp  ;recupere les flags.
+.171b	ad f9 0f	         lda pc+1;replace l'adresse de
+.171e	48		         pha     ;s:pch
+.171f	ad f8 0f	         lda pc  ;retour sur la pile
+.1722	48		         pha     ;s:pcl,pch
+.1723	ad fe 0f	         lda rp  ;recupere les flags
+.1726	48		         pha     ;s:rp,pcl,pch
+.1727	ad fd 0f	         lda ra  ;recupere ra
+.172a	28		         plp     ;s:pcl,pch
+.172b	60		         rts
 
 ;******  Return to file: dlbug20.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib/l-v20-string.asm
 
-.172d			puts
-.172d	20 61 16	          jsr pushall
-.1730	a0 00		          ldy #$00   ; y = offset
-.1732	b1 fb		nextc     lda ($fb),y;lit un caractere
-.1734	f0 09		          beq out    ;si 0 on sort
-.1736	20 7a f2	          jsr chrout ;on l'affiche
-.1739	20 7a 18	          jsr inczp1 ;pointe le prochain
-.173c	4c 32 17	          jmp nextc  ; et l'affiche
-.173f	20 9a 16	out       jsr popall
-.1742	60		          rts
-.1743			putsyx
-.1743	20 61 16	          jsr pushall;sauve reg + zps
-.1746	86 fb		          stx $fb    ;$yyxx dans
-.1748	84 fc		          sty $fb+1  ; zp1
-.174a	20 2d 17	          jsr puts
-.174d	20 9a 16	          jsr popall ;recup reg + zps
-.1750	60		          rts
-.1751			putsxy
-.1751	20 61 16	        jsr pushall;sauve reg + zps
-.1754	86 fb		        stx $fb    ;$yyxx dans
-.1756	84 fc		        sty $fb+1  ; zp1
-.1758	a0 00		        ldy #$00
-.175a	b1 fb		        lda ($fb),y
-.175c	aa		        tax
-.175d	20 7a 18	        jsr inczp1
-.1760	b1 fb		        lda ($fb),y
-.1762	20 7a 18	        jsr inczp1
-.1765	a8		        tay
-.1766	20 bb 17	        jsr gotoxy
-.1769	20 2d 17	        jsr puts
-.176c	20 9a 16	        jsr popall ;recup reg + zps
-.176f	60		        rts
-.1770			putsc
-.1770	08		          php       ;flag sur stack
-.1771	48		          pha       ;acc sur stack
-.1772	48		          pha       ;sauvegarde acc
-.1773	ad 86 02	          lda kcol  ;recup coul. carac.
-.1776	8d f7 0f	          sta curcol; et la sauvegarde
-.1779	68		          pla       ;recup. acc
-.177a	8d 86 02	          sta kcol  ;place coul. voulue
-.177d	20 2d 17	          jsr puts  ;affiche la chaine
-.1780	ad f7 0f	          lda curcol;recup coul. carac.
-.1783	8d 86 02	          sta kcol  ; et la replace
-.1786	68		          pla       ;recup acc
-.1787	28		          plp       ;recup flag
-.1788	60		          rts
-.1789			putscyx
-.1789	08		          php       ;sauve registres
-.178a	48		          pha       ; ...
-.178b	48		          pha       ;sauve acc
-.178c	ad 86 02	          lda kcol  ;recup couleur carac.
-.178f	8d f7 0f	          sta curcol; et sauvegarde
-.1792	68		          pla       ;recup acc
-.1793	8d 86 02	          sta kcol  ;place couleur carac.
-.1796	20 43 17	          jsr putsyx;affiche la chaine
-.1799	ad f7 0f	          lda curcol
-.179c	8d 86 02	          sta kcol
-.179f	68		          pla
-.17a0	28		          plp
-.17a1	60		          rts
-.17a2			putscxy
-.17a2	08		          php       ;sauve registres
-.17a3	48		          pha       ; ...
-.17a4	48		          pha       ;sauve acc
-.17a5	ad 86 02	          lda kcol  ;recup couleur carac.
-.17a8	8d f7 0f	          sta curcol; et sauvegarde
-.17ab	68		          pla       ;recup acc
-.17ac	8d 86 02	          sta kcol   ;place couleur carac.
-.17af	20 43 17	          jsr putsyx ;affiche la chaine
-.17b2	ad f7 0f	          lda curcol
-.17b5	8d 86 02	          sta kcol
-.17b8	68		          pla
-.17b9	28		          plp
-.17ba	60		          rts
-.17bb			gotoxy
-.17bb	20 d3 16	          jsr pushregs
-.17be	8a		          txa ; interchange x et y
-.17bf	48		          pha ; ...
-.17c0	98		          tya ; ...
-.17c1	aa		          tax ; ...
-.17c2	68		          pla ; ...
-.17c3	a8		          tay ; ...
-.17c4	c0 00		txlow     cpy #0
-.17c6	10 02		          bpl txhigh
-.17c8	a2 00		          ldx #0
-.17ca	e0 19		txhigh    cpx #25
-.17cc	30 02		          bmi tylow
-.17ce	a2 18		          ldx #24
-.17d0	c0 00		tylow     cpy #0
-.17d2	10 02		          bpl tyhigh
-.17d4	a0 00		          ldy #0
-.17d6	c0 28		tyhigh    cpy #40
-.17d8	30 02		          bmi allok
-.17da	a0 27		          ldy #39
-.17dc	18		allok     clc
-.17dd	20 0a e5	          jsr plot
-.17e0	20 00 17	          jsr popregs
-.17e3	60		          rts
-.17e4			putnch
-.17e4	20 d3 16	        jsr pushregs
-.17e7	20 7a f2	again   jsr chrout
-.17ea	ca		        dex
-.17eb	d0 fa		        bne again
-.17ed	20 00 17	        jsr popregs
-.17f0	60		        rts
-.17f1			strlen
-.17f1	20 61 16	        jsr pushall
-.17f4	84 fc		        sty zp1+1
-.17f6	86 fb		        stx zp1
-.17f8	a0 00		        ldy #$00
-.17fa	8c 88 0f	        sty len
-.17fd	b1 fb		next    lda (zp1),y
-.17ff	f0 07		        beq out
-.1801	ee 88 0f	        inc len
-.1804	c8		        iny
-.1805	4c fd 17	        jmp next
-.1808	20 9a 16	out     jsr popall
-.180b	ad 88 0f	        lda len
-.180e	60		        rts
-.180f			cursor
-.180f	20 d3 16	          jsr  pushregs
-.1812	90 12		          bcc  get    ;C=0 récupération.
-.1814	20 0a e5	          jsr  plot  ;récupère position
-.1817	8c 87 0f	          sty  cx     ;curseur et sauve
-.181a	8e 86 0f	          stx  cy     ;dans vars locales.
-.181d	ad 86 02	          lda  kcol   ;Sauve couleur
-.1820	8d 85 0f	          sta  bcol   ; BASIC du texte.
-.1823	4c 35 18	          jmp  out    ;Fini on sort.
-.1826	ae 86 0f	get       ldx  cy     ;C=1, charge x
-.1829	ac 87 0f	          ldy  cx     ; ligne, y col.
-.182c	20 0a e5	          jsr  plot  ;Position curseur.
-.182f	ad 85 0f	          lda  bcol   ;replace couleur
-.1832	8d 86 02	          sta  kcol ; basic sauvegardé.
-.1835	20 00 17	out       jsr  popregs
-.1838	60		          rts
-.1839			curget
-.1839			cursave
-.1839	08		          php
-.183a	38		          sec
-.183b	20 0f 18	          jsr  cursor
-.183e	28		          plp
-.183f	60		          rts
-.1840			curput
-.1840			currest
-.1840	08		          php
-.1841	18		          clc
-.1842	20 0f 18	          jsr  cursor
-.1845	28		          plp
-.1846	60		          rts
-.1847			isprnable
-.1847	08		          php
-.1848	c9 a0		          cmp  #160
-.184a	b0 0b		          bcs  yes
-.184c	c5 85		          cmp  133
-.184e	b0 04		          bcs  no
-.1850	c9 20		          cmp  #32
-.1852	b0 03		          bcs  yes
-.1854	28		no        plp
-.1855	18		          clc
-.1856	60		          rts
-.1857	28		yes       plp
-.1858	38		          sec
-.1859	60		          rts
+.172c			puts
+.172c	20 60 16	          jsr pushall
+.172f	a0 00		          ldy #$00   ; y = offset
+.1731	b1 fb		nextc     lda ($fb),y;lit un caractere
+.1733	f0 09		          beq out    ;si 0 on sort
+.1735	20 7a f2	          jsr chrout ;on l'affiche
+.1738	20 79 18	          jsr inczp1 ;pointe le prochain
+.173b	4c 31 17	          jmp nextc  ; et l'affiche
+.173e	20 99 16	out       jsr popall
+.1741	60		          rts
+.1742			putsyx
+.1742	20 60 16	          jsr pushall;sauve reg + zps
+.1745	86 fb		          stx $fb    ;$yyxx dans
+.1747	84 fc		          sty $fb+1  ; zp1
+.1749	20 2c 17	          jsr puts
+.174c	20 99 16	          jsr popall ;recup reg + zps
+.174f	60		          rts
+.1750			putsxy
+.1750	20 60 16	        jsr pushall;sauve reg + zps
+.1753	86 fb		        stx $fb    ;$yyxx dans
+.1755	84 fc		        sty $fb+1  ; zp1
+.1757	a0 00		        ldy #$00
+.1759	b1 fb		        lda ($fb),y
+.175b	aa		        tax
+.175c	20 79 18	        jsr inczp1
+.175f	b1 fb		        lda ($fb),y
+.1761	20 79 18	        jsr inczp1
+.1764	a8		        tay
+.1765	20 ba 17	        jsr gotoxy
+.1768	20 2c 17	        jsr puts
+.176b	20 99 16	        jsr popall ;recup reg + zps
+.176e	60		        rts
+.176f			putsc
+.176f	08		          php       ;flag sur stack
+.1770	48		          pha       ;acc sur stack
+.1771	48		          pha       ;sauvegarde acc
+.1772	ad 86 02	          lda kcol  ;recup coul. carac.
+.1775	8d f7 0f	          sta curcol; et la sauvegarde
+.1778	68		          pla       ;recup. acc
+.1779	8d 86 02	          sta kcol  ;place coul. voulue
+.177c	20 2c 17	          jsr puts  ;affiche la chaine
+.177f	ad f7 0f	          lda curcol;recup coul. carac.
+.1782	8d 86 02	          sta kcol  ; et la replace
+.1785	68		          pla       ;recup acc
+.1786	28		          plp       ;recup flag
+.1787	60		          rts
+.1788			putscyx
+.1788	08		          php       ;sauve registres
+.1789	48		          pha       ; ...
+.178a	48		          pha       ;sauve acc
+.178b	ad 86 02	          lda kcol  ;recup couleur carac.
+.178e	8d f7 0f	          sta curcol; et sauvegarde
+.1791	68		          pla       ;recup acc
+.1792	8d 86 02	          sta kcol  ;place couleur carac.
+.1795	20 42 17	          jsr putsyx;affiche la chaine
+.1798	ad f7 0f	          lda curcol
+.179b	8d 86 02	          sta kcol
+.179e	68		          pla
+.179f	28		          plp
+.17a0	60		          rts
+.17a1			putscxy
+.17a1	08		          php       ;sauve registres
+.17a2	48		          pha       ; ...
+.17a3	48		          pha       ;sauve acc
+.17a4	ad 86 02	          lda kcol  ;recup couleur carac.
+.17a7	8d f7 0f	          sta curcol; et sauvegarde
+.17aa	68		          pla       ;recup acc
+.17ab	8d 86 02	          sta kcol   ;place couleur carac.
+.17ae	20 42 17	          jsr putsyx ;affiche la chaine
+.17b1	ad f7 0f	          lda curcol
+.17b4	8d 86 02	          sta kcol
+.17b7	68		          pla
+.17b8	28		          plp
+.17b9	60		          rts
+.17ba			gotoxy
+.17ba	20 d2 16	          jsr pushregs
+.17bd	8a		          txa ; interchange x et y
+.17be	48		          pha ; ...
+.17bf	98		          tya ; ...
+.17c0	aa		          tax ; ...
+.17c1	68		          pla ; ...
+.17c2	a8		          tay ; ...
+.17c3	c0 00		txlow     cpy #0
+.17c5	10 02		          bpl txhigh
+.17c7	a2 00		          ldx #0
+.17c9	e0 19		txhigh    cpx #25
+.17cb	30 02		          bmi tylow
+.17cd	a2 18		          ldx #24
+.17cf	c0 00		tylow     cpy #0
+.17d1	10 02		          bpl tyhigh
+.17d3	a0 00		          ldy #0
+.17d5	c0 28		tyhigh    cpy #40
+.17d7	30 02		          bmi allok
+.17d9	a0 27		          ldy #39
+.17db	18		allok     clc
+.17dc	20 0a e5	          jsr plot
+.17df	20 ff 16	          jsr popregs
+.17e2	60		          rts
+.17e3			putnch
+.17e3	20 d2 16	        jsr pushregs
+.17e6	20 7a f2	again   jsr chrout
+.17e9	ca		        dex
+.17ea	d0 fa		        bne again
+.17ec	20 ff 16	        jsr popregs
+.17ef	60		        rts
+.17f0			strlen
+.17f0	20 60 16	        jsr pushall
+.17f3	84 fc		        sty zp1+1
+.17f5	86 fb		        stx zp1
+.17f7	a0 00		        ldy #$00
+.17f9	8c 88 0f	        sty len
+.17fc	b1 fb		next    lda (zp1),y
+.17fe	f0 07		        beq out
+.1800	ee 88 0f	        inc len
+.1803	c8		        iny
+.1804	4c fc 17	        jmp next
+.1807	20 99 16	out     jsr popall
+.180a	ad 88 0f	        lda len
+.180d	60		        rts
+.180e			cursor
+.180e	20 d2 16	          jsr  pushregs
+.1811	90 12		          bcc  get    ;C=0 récupération.
+.1813	20 0a e5	          jsr  plot  ;récupère position
+.1816	8c 87 0f	          sty  cx     ;curseur et sauve
+.1819	8e 86 0f	          stx  cy     ;dans vars locales.
+.181c	ad 86 02	          lda  kcol   ;Sauve couleur
+.181f	8d 85 0f	          sta  bcol   ; BASIC du texte.
+.1822	4c 34 18	          jmp  out    ;Fini on sort.
+.1825	ae 86 0f	get       ldx  cy     ;C=1, charge x
+.1828	ac 87 0f	          ldy  cx     ; ligne, y col.
+.182b	20 0a e5	          jsr  plot  ;Position curseur.
+.182e	ad 85 0f	          lda  bcol   ;replace couleur
+.1831	8d 86 02	          sta  kcol ; basic sauvegardé.
+.1834	20 ff 16	out       jsr  popregs
+.1837	60		          rts
+.1838			curget
+.1838			cursave
+.1838	08		          php
+.1839	38		          sec
+.183a	20 0e 18	          jsr  cursor
+.183d	28		          plp
+.183e	60		          rts
+.183f			curput
+.183f			currest
+.183f	08		          php
+.1840	18		          clc
+.1841	20 0e 18	          jsr  cursor
+.1844	28		          plp
+.1845	60		          rts
+.1846			isprnable
+.1846	08		          php
+.1847	c9 a0		          cmp  #160
+.1849	b0 0b		          bcs  yes
+.184b	c5 85		          cmp  133
+.184d	b0 04		          bcs  no
+.184f	c9 20		          cmp  #32
+.1851	b0 03		          bcs  yes
+.1853	28		no        plp
+.1854	18		          clc
+.1855	60		          rts
+.1856	28		yes       plp
+.1857	38		          sec
+.1858	60		          rts
 
 ;******  Return to file: dlbug20.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib/l-v20-mem.asm
 
-.185a			blkfill
-.185a	20 61 16	bf0     jsr pushall
-.185d	84 fc		        sty zp1+1
-.185f	a0 00		        ldy #$00
-.1861	84 fb		        sty zp1
-.1863	91 fb		bf1     sta (zp1),y
-.1865	c8		        iny
-.1866	d0 fb		        bne bf1
-.1868	20 9a 16	        jsr popall
-.186b	60		        rts
-.186c			memfill
-.186c	20 d3 16	        jsr pushregs
-.186f	20 5a 18	mf1     jsr blkfill
-.1872	c8		        iny
-.1873	ca		        dex
-.1874	d0 f9		        bne mf1
-.1876	20 00 17	        jsr popregs
-.1879	60		        rts
-.187a			inczp1
-.187a	08		         php
-.187b	e6 fb		         inc zp1
-.187d	d0 02		         bne repzp1
-.187f	e6 fc		         inc zp1+1
-.1881	28		repzp1   plp
-.1882	60		         rts
-.1883			inczp2
-.1883	08		         php
-.1884	e6 fd		         inc zp2
-.1886	d0 02		         bne repzp2
-.1888	e6 fe		         inc zp2+1
-.188a	28		repzp2   plp
-.188b	60		         rts
-.188c			deczp1
-.188c	08		         php
-.188d	48		         pha
-.188e	a5 fb		         lda zp1
-.1890	d0 02		         bne noemp
-.1892	c6 fc		         dec zp1+1
-.1894	c6 fb		noemp    dec zp1
-.1896	68		         pla
-.1897	28		         plp
-.1898	60		         rts
-.1899			deczp2
-.1899	08		         php
-.189a	48		         pha
-.189b	a5 fd		         lda zp2
-.189d	d0 02		         bne noemp
-.189f	c6 fe		         dec zp2+1
-.18a1	c6 fd		noemp    dec zp2
-.18a3	68		         pla
-.18a4	28		         plp
-.18a5	60		         rts
-.18a6			rolzp1
-.18a6	08		        php
-.18a7	48		        pha
-.18a8	18		        clc
-.18a9	a5 fb		        lda zp1
-.18ab	2a		        rol
-.18ac	85 fb		        sta zp1
-.18ae	a5 fc		        lda zp1+1
-.18b0	2a		        rol
-.18b1	85 fc		        sta zp1+1
-.18b3	68		        pla
-.18b4	28		        plp
-.18b5			rorzp1
-.18b5	08		        php
-.18b6	48		        pha
-.18b7	18		        clc
-.18b8	a5 fc		        lda zp1+1
-.18ba	6a		        ror
-.18bb	85 fc		        sta zp1+1
-.18bd	a5 fb		        lda zp1
-.18bf	6a		        ror
-.18c0	85 fb		        sta zp1
-.18c2	68		        pla
-.18c3	28		        plp
-.18c4			rolzp2
-.18c4	08		        php
-.18c5	48		        pha
-.18c6	18		        clc
-.18c7	a5 fd		        lda zp2
-.18c9	2a		        rol
-.18ca	85 fd		        sta zp2
-.18cc	a5 fe		        lda zp2+1
-.18ce	2a		        rol
-.18cf	85 fe		        sta zp2+1
-.18d1	68		        pla
-.18d2	28		        plp
-.18d3			rorzp2
-.18d3	08		        php
-.18d4	48		        pha
-.18d5	18		        clc
-.18d6	a5 fe		        lda zp2+1
-.18d8	6a		        ror
-.18d9	85 fe		        sta zp2+1
-.18db	a5 fd		        lda zp2
-.18dd	6a		        ror
-.18de	85 fd		        sta zp2
-.18e0	68		        pla
-.18e1	28		        plp
-.18e2			yxtoptr
-.18e2	8c f6 0f	        sty memptr+1
-.18e5	8e f5 0f	        stx memptr
-.18e8	60		        rts
-.18e9			ptrtoyx
-.18e9	08		        php
-.18ea	ac f6 0f	        ldy memptr+1
-.18ed	ae f5 0f	        ldx memptr
-.18f0	28		        plp
-.18f1	60		        rts
-.18f2			incptr
-.18f2	08		        php
-.18f3	ee f5 0f	        inc memptr
-.18f6	d0 03		        bne norep
-.18f8	ee f6 0f	        inc memptr+1
-.18fb	28		norep   plp
-.18fc	60		        rts
-.18fd			decptr
-.18fd	08		        php
-.18fe	48		        pha
-.18ff	ad f5 0f	        lda memptr
-.1902	d0 03		        bne noemp
-.1904	ee f6 0f	        inc memptr+1
-.1907	ee f5 0f	noemp   inc memptr
-.190a	68		        pla
-.190b	28		        plp
-.190c	60		        rts
-.190d			incptr8
-.190d	08		        php
-.190e	48		        pha
-.190f	98		        tya
-.1910	48		        pha
-.1911	a0 08		        ldy #8
-.1913	20 f2 18	again   jsr incptr
-.1916	88		        dey
-.1917	d0 fa		        bne again
-.1919	68		        pla
-.191a	a8		        tay
-.191b	68		        pla
-.191c	28		        plp
-.191d	60		        rts
-.191e			loop
-.191e	ce ef 0f	               dec  loopcount
-.1921	d0 03		               bne  norep
-.1923	ce f0 0f	               dec  loopcount+1
-.1926	ad ef 0f	norep          lda  loopcount
-.1929	c9 00		               cmp  #$00
-.192b	d0 05		               bne  out
-.192d	4d f0 0f	               eor  loopcount+1
-.1930	c9 ff		               cmp  #$ff
-.1932	60		out            rts
+.1859			blkfill
+.1859	20 60 16	bf0     jsr pushall
+.185c	84 fc		        sty zp1+1
+.185e	a0 00		        ldy #$00
+.1860	84 fb		        sty zp1
+.1862	91 fb		bf1     sta (zp1),y
+.1864	c8		        iny
+.1865	d0 fb		        bne bf1
+.1867	20 99 16	        jsr popall
+.186a	60		        rts
+.186b			memfill
+.186b	20 d2 16	        jsr pushregs
+.186e	20 59 18	mf1     jsr blkfill
+.1871	c8		        iny
+.1872	ca		        dex
+.1873	d0 f9		        bne mf1
+.1875	20 ff 16	        jsr popregs
+.1878	60		        rts
+.1879			inczp1
+.1879	08		         php
+.187a	e6 fb		         inc zp1
+.187c	d0 02		         bne repzp1
+.187e	e6 fc		         inc zp1+1
+.1880	28		repzp1   plp
+.1881	60		         rts
+.1882			inczp2
+.1882	08		         php
+.1883	e6 fd		         inc zp2
+.1885	d0 02		         bne repzp2
+.1887	e6 fe		         inc zp2+1
+.1889	28		repzp2   plp
+.188a	60		         rts
+.188b			deczp1
+.188b	08		         php
+.188c	48		         pha
+.188d	a5 fb		         lda zp1
+.188f	d0 02		         bne noemp
+.1891	c6 fc		         dec zp1+1
+.1893	c6 fb		noemp    dec zp1
+.1895	68		         pla
+.1896	28		         plp
+.1897	60		         rts
+.1898			deczp2
+.1898	08		         php
+.1899	48		         pha
+.189a	a5 fd		         lda zp2
+.189c	d0 02		         bne noemp
+.189e	c6 fe		         dec zp2+1
+.18a0	c6 fd		noemp    dec zp2
+.18a2	68		         pla
+.18a3	28		         plp
+.18a4	60		         rts
+.18a5			rolzp1
+.18a5	08		        php
+.18a6	48		        pha
+.18a7	18		        clc
+.18a8	a5 fb		        lda zp1
+.18aa	2a		        rol
+.18ab	85 fb		        sta zp1
+.18ad	a5 fc		        lda zp1+1
+.18af	2a		        rol
+.18b0	85 fc		        sta zp1+1
+.18b2	68		        pla
+.18b3	28		        plp
+.18b4			rorzp1
+.18b4	08		        php
+.18b5	48		        pha
+.18b6	18		        clc
+.18b7	a5 fc		        lda zp1+1
+.18b9	6a		        ror
+.18ba	85 fc		        sta zp1+1
+.18bc	a5 fb		        lda zp1
+.18be	6a		        ror
+.18bf	85 fb		        sta zp1
+.18c1	68		        pla
+.18c2	28		        plp
+.18c3			rolzp2
+.18c3	08		        php
+.18c4	48		        pha
+.18c5	18		        clc
+.18c6	a5 fd		        lda zp2
+.18c8	2a		        rol
+.18c9	85 fd		        sta zp2
+.18cb	a5 fe		        lda zp2+1
+.18cd	2a		        rol
+.18ce	85 fe		        sta zp2+1
+.18d0	68		        pla
+.18d1	28		        plp
+.18d2			rorzp2
+.18d2	08		        php
+.18d3	48		        pha
+.18d4	18		        clc
+.18d5	a5 fe		        lda zp2+1
+.18d7	6a		        ror
+.18d8	85 fe		        sta zp2+1
+.18da	a5 fd		        lda zp2
+.18dc	6a		        ror
+.18dd	85 fd		        sta zp2
+.18df	68		        pla
+.18e0	28		        plp
+.18e1			yxtoptr
+.18e1	8c f6 0f	        sty memptr+1
+.18e4	8e f5 0f	        stx memptr
+.18e7	60		        rts
+.18e8			ptrtoyx
+.18e8	08		        php
+.18e9	ac f6 0f	        ldy memptr+1
+.18ec	ae f5 0f	        ldx memptr
+.18ef	28		        plp
+.18f0	60		        rts
+.18f1			incptr
+.18f1	08		        php
+.18f2	ee f5 0f	        inc memptr
+.18f5	d0 03		        bne norep
+.18f7	ee f6 0f	        inc memptr+1
+.18fa	28		norep   plp
+.18fb	60		        rts
+.18fc			decptr
+.18fc	08		        php
+.18fd	48		        pha
+.18fe	ad f5 0f	        lda memptr
+.1901	d0 03		        bne noemp
+.1903	ee f6 0f	        inc memptr+1
+.1906	ee f5 0f	noemp   inc memptr
+.1909	68		        pla
+.190a	28		        plp
+.190b	60		        rts
+.190c			incptr8
+.190c	08		        php
+.190d	48		        pha
+.190e	98		        tya
+.190f	48		        pha
+.1910	a0 08		        ldy #8
+.1912	20 f1 18	again   jsr incptr
+.1915	88		        dey
+.1916	d0 fa		        bne again
+.1918	68		        pla
+.1919	a8		        tay
+.191a	68		        pla
+.191b	28		        plp
+.191c	60		        rts
+.191d			loop
+.191d	ce ef 0f	               dec  loopcount
+.1920	d0 03		               bne  norep
+.1922	ce f0 0f	               dec  loopcount+1
+.1925	ad ef 0f	norep          lda  loopcount
+.1928	c9 00		               cmp  #$00
+.192a	d0 05		               bne  out
+.192c	4d f0 0f	               eor  loopcount+1
+.192f	c9 ff		               cmp  #$ff
+.1931	60		out            rts
 
 ;******  Return to file: dlbug20.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib/l-v20-math.asm
 
-.1933			addtoword
-.1933			addatoyx
-.1933	08		        php
-.1934	48		        pha
-.1935	8c 96 0f	        sty reponse+1
-.1938	8e 95 0f	        stx reponse
-.193b	18		        clc
-.193c	6d 95 0f	        adc reponse
-.193f	90 03		        bcc norep
-.1941	ee 96 0f	        inc reponse+1
-.1944	8d 95 0f	norep   sta reponse
-.1947	ac 96 0f	        ldy reponse+1
-.194a	ae 95 0f	        ldx reponse
-.194d	68		        pla
-.194e	28		        plp
-.194f	60		        rts
-.1950			subtoword
-.1950			subatoyx
-.1950	08		        php
-.1951	48		        pha
-.1952	8d 6e 0b	        sta freevar
-.1955	8c 96 0f	        sty reponse+1
-.1958	8e 95 0f	        stx reponse
-.195b	38		        sec
-.195c	ad 95 0f	        lda reponse
-.195f	ed 6e 0b	        sbc freevar
-.1962	8d 95 0f	        sta reponse
-.1965	ad 96 0f	        lda reponse+1
-.1968	e9 00		        sbc #$00
-.196a	8d 96 0f	        sta reponse+1
-.196d	ac 96 0f	        ldy reponse+1
-.1970	ae 95 0f	        ldx reponse
-.1973	68		        pla
-.1974	28		        plp
-.1975	60		        rts
+.1932			addtoword
+.1932			addatoyx
+.1932	08		        php
+.1933	48		        pha
+.1934	8c 96 0f	        sty reponse+1
+.1937	8e 95 0f	        stx reponse
+.193a	18		        clc
+.193b	6d 95 0f	        adc reponse
+.193e	90 03		        bcc norep
+.1940	ee 96 0f	        inc reponse+1
+.1943	8d 95 0f	norep   sta reponse
+.1946	ac 96 0f	        ldy reponse+1
+.1949	ae 95 0f	        ldx reponse
+.194c	68		        pla
+.194d	28		        plp
+.194e	60		        rts
+.194f			subtoword
+.194f			subatoyx
+.194f	08		        php
+.1950	48		        pha
+.1951	8d 6e 0b	        sta freevar
+.1954	8c 96 0f	        sty reponse+1
+.1957	8e 95 0f	        stx reponse
+.195a	38		        sec
+.195b	ad 95 0f	        lda reponse
+.195e	ed 6e 0b	        sbc freevar
+.1961	8d 95 0f	        sta reponse
+.1964	ad 96 0f	        lda reponse+1
+.1967	e9 00		        sbc #$00
+.1969	8d 96 0f	        sta reponse+1
+.196c	ac 96 0f	        ldy reponse+1
+.196f	ae 95 0f	        ldx reponse
+.1972	68		        pla
+.1973	28		        plp
+.1974	60		        rts
 
 ;******  Return to file: dlbug20.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib/l-v20-conv.asm
 
-.1976			putyxhex
-.1976	20 61 16	        jsr pushall
-.1979	98		        tya
-.197a	48		        pha
-.197b	20 f9 19	        jsr lsr4bits
-.197e	20 0c 1a	        jsr nibtohex
-.1981	8d ea 0f	        sta hexstr+0
-.1984	68		        pla
-.1985	20 0c 1a	        jsr nibtohex
-.1988	8d eb 0f	        sta hexstr+1
-.198b	8a		        txa
-.198c	20 ab 19	        jsr atohex
-.198f	a2 ea		        ldx #<hexstr+0
-.1991	a0 0f		        ldy #>hexstr+0
-.1993	20 43 17	        jsr putsyx
-.1996	20 9a 16	        jsr popall
-.1999	60		        rts
-.199a			putahex
-.199a	20 d3 16	        jsr pushregs
-.199d	20 ab 19	        jsr atohex
-.19a0	a2 ec		        ldx #<hexstr+2
-.19a2	a0 0f		        ldy #>hexstr+2
-.19a4	20 43 17	        jsr putsyx
-.19a7	20 00 17	        jsr popregs
-.19aa	60		        rts
-.19ab			atohex
-.19ab	08		        php
+.1975			putyxhex
+.1975	20 60 16	        jsr pushall
+.1978	98		        tya
+.1979	48		        pha
+.197a	20 f8 19	        jsr lsr4bits
+.197d	20 0b 1a	        jsr nibtohex
+.1980	8d ea 0f	        sta hexstr+0
+.1983	68		        pla
+.1984	20 0b 1a	        jsr nibtohex
+.1987	8d eb 0f	        sta hexstr+1
+.198a	8a		        txa
+.198b	20 aa 19	        jsr atohex
+.198e	a2 ea		        ldx #<hexstr+0
+.1990	a0 0f		        ldy #>hexstr+0
+.1992	20 42 17	        jsr putsyx
+.1995	20 99 16	        jsr popall
+.1998	60		        rts
+.1999			putahex
+.1999	20 d2 16	        jsr pushregs
+.199c	20 aa 19	        jsr atohex
+.199f	a2 ec		        ldx #<hexstr+2
+.19a1	a0 0f		        ldy #>hexstr+2
+.19a3	20 42 17	        jsr putsyx
+.19a6	20 ff 16	        jsr popregs
+.19a9	60		        rts
+.19aa			atohex
+.19aa	08		        php
+.19ab	48		        pha
 .19ac	48		        pha
-.19ad	48		        pha
-.19ae	20 f9 19	        jsr lsr4bits
-.19b1	20 0c 1a	        jsr nibtohex
-.19b4	8d ec 0f	        sta hexstr+2
-.19b7	68		        pla
-.19b8	20 0c 1a	        jsr nibtohex
-.19bb	8d ed 0f	        sta hexstr+3
-.19be	a9 00		        lda #$00
-.19c0	8d ee 0f	        sta hexstr+4
-.19c3	68		        pla
-.19c4	28		        plp
-.19c5	60		        rts
-.19c6			putabin
-.19c6	20 d3 16	          jsr     pushregs
-.19c9	20 d7 19	          jsr     atobin
-.19cc	a2 dd		          ldx     #<binstr
-.19ce	a0 0f		          ldy     #>binstr
-.19d0	20 43 17	          jsr     putsyx
-.19d3	20 00 17	          jsr     popregs
-.19d6	60		          rts
-.19d7			atobin
-.19d7	20 d3 16	          jsr  pushregs
-.19da	a2 08		          ldx  #8
-.19dc	a0 00		          ldy  #0
-.19de	18		          clc
-.19df	2a		nextbit   rol
-.19e0	48		          pha
-.19e1	69 00		          adc  #$00
-.19e3	29 01		          and  #$01
-.19e5	20 0c 1a	          jsr  nibtohex
-.19e8	99 dd 0f	          sta  binstr,y
-.19eb	68		          pla
-.19ec	c8		          iny
-.19ed	ca		          dex
-.19ee	d0 ef		          bne  nextbit
-.19f0	a9 00		          lda  #0
-.19f2	99 dd 0f	          sta  binstr,y
-.19f5	20 00 17	          jsr  popregs
-.19f8	60		          rts
-.19f9			lsr4bits
-.19f9	08		          php
+.19ad	20 f8 19	        jsr lsr4bits
+.19b0	20 0b 1a	        jsr nibtohex
+.19b3	8d ec 0f	        sta hexstr+2
+.19b6	68		        pla
+.19b7	20 0b 1a	        jsr nibtohex
+.19ba	8d ed 0f	        sta hexstr+3
+.19bd	a9 00		        lda #$00
+.19bf	8d ee 0f	        sta hexstr+4
+.19c2	68		        pla
+.19c3	28		        plp
+.19c4	60		        rts
+.19c5			putabin
+.19c5	20 d2 16	          jsr     pushregs
+.19c8	20 d6 19	          jsr     atobin
+.19cb	a2 dd		          ldx     #<binstr
+.19cd	a0 0f		          ldy     #>binstr
+.19cf	20 42 17	          jsr     putsyx
+.19d2	20 ff 16	          jsr     popregs
+.19d5	60		          rts
+.19d6			atobin
+.19d6	20 d2 16	          jsr  pushregs
+.19d9	a2 08		          ldx  #8
+.19db	a0 00		          ldy  #0
+.19dd	18		          clc
+.19de	2a		nextbit   rol
+.19df	48		          pha
+.19e0	69 00		          adc  #$00
+.19e2	29 01		          and  #$01
+.19e4	20 0b 1a	          jsr  nibtohex
+.19e7	99 dd 0f	          sta  binstr,y
+.19ea	68		          pla
+.19eb	c8		          iny
+.19ec	ca		          dex
+.19ed	d0 ef		          bne  nextbit
+.19ef	a9 00		          lda  #0
+.19f1	99 dd 0f	          sta  binstr,y
+.19f4	20 ff 16	          jsr  popregs
+.19f7	60		          rts
+.19f8			lsr4bits
+.19f8	08		          php
+.19f9	4a		          lsr a
 .19fa	4a		          lsr a
 .19fb	4a		          lsr a
 .19fc	4a		          lsr a
-.19fd	4a		          lsr a
-.19fe	28		          plp
-.19ff	60		          rts
-.1a00			nibtohexb
-.1a00	08		        php
-.1a01	29 0f		        and #$0f
-.1a03	f8		        sed
-.1a04	18		        clc
-.1a05	69 90		        adc #$90
-.1a07	69 40		        adc #$40
-.1a09	d8		        cld
-.1a0a	28		        plp
-.1a0b	60		        rts
-.1a0c			nibtohex
-.1a0c	08		        php
-.1a0d	8c 2b 1a	        sty myy
-.1a10	29 0f		        and #$0f
-.1a12	a8		        tay
-.1a13	b9 1b 1a	        lda hextbl,y
-.1a16	ac 2b 1a	        ldy myy
-.1a19	28		        plp
-.1a1a	60		        rts
->1a1b	30 31 32 33	hextbl  .byte $30,$31,$32,$33,$34
->1a1f	34
->1a20	35 36 37 38	        .byte $35,$36,$37,$38,$39
->1a24	39
->1a25	41 42 43 44	        .byte $41,$42,$43,$44,$45
->1a29	45
->1a2a	46		        .byte $46
->1a2b	00		myy     .byte $00
-.1a2c			bytestohex
-.1a2c	20 61 16	        jsr pushall
-.1a2f	84 fc		        sty zp1+1
-.1a31	86 fb		        stx zp1
-.1a33	08		            php
-.1a34	48		            pha
-.1a35	a9 20		            lda #32
-.1a37	20 7a f2	            jsr chrout
-.1a3a	68		            pla
-.1a3b	28		            plp
-.1a3c	08		            php
-.1a3d	48		            pha
-.1a3e	a9 05		            lda #5
-.1a40	20 7a f2	            jsr chrout
-.1a43	68		            pla
-.1a44	28		            plp
-.1a45	08		            php
-.1a46	48		            pha
-.1a47	a9 24		            lda #36
-.1a49	20 7a f2	            jsr chrout
-.1a4c	68		            pla
-.1a4d	28		            plp
-.1a4e	20 76 19	        jsr putyxhex   ; prn adreponsese
-.1a51	08		            php
-.1a52	48		            pha
-.1a53	a9 20		            lda #$20
-.1a55	20 7a f2	            jsr chrout
-.1a58	68		            pla
-.1a59	28		            plp
-.1a5a	08		            php
-.1a5b	48		            pha
-.1a5c	a9 9f		            lda #159
-.1a5e	20 7a f2	            jsr chrout
-.1a61	68		            pla
-.1a62	28		            plp
-.1a63	a0 00		        ldy #$00
-.1a65	aa		        tax
-.1a66	8c ce 0f	another sty offset
-.1a69	b1 fb		        lda (zp1),y
-.1a6b	20 9a 19	        jsr putahex
-.1a6e	48		        pha
-.1a6f	20 8e 1a	        jsr petsciiaddr
-.1a72	68		        pla
-.1a73	8d 00 04	petscii sta $0400
-.1a76	48		        pha
-.1a77	a9 0d		        lda #$0d
-.1a79	8d 00 d8	petcol  sta $d800
-.1a7c	68		        pla
-.1a7d	08		            php
-.1a7e	48		            pha
-.1a7f	a9 20		            lda #$20
-.1a81	20 7a f2	            jsr chrout
-.1a84	68		            pla
-.1a85	28		            plp
-.1a86	c8		        iny
-.1a87	ca		        dex
-.1a88	d0 dc		        bne another
-.1a8a	20 9a 16	        jsr popall
-.1a8d	60		        rts
-.1a8e			petsciiaddr
-.1a8e	20 d3 16	        jsr pushregs
-.1a91	a9 1f		        lda #31
-.1a93	18		        clc
-.1a94	6d ce 0f	        adc offset
-.1a97	20 33 19	        jsr addatoyx
-.1a9a	8c 75 1a	        sty petscii+2
-.1a9d	8e 74 1a	        stx petscii+1
-.1aa0	8e 7a 1a	        stx petcol+1
-.1aa3	98		        tya
-.1aa4	29 fb		        and #%11111011 ;#%00000100
-.1aa6	09 d8		        ora #$d8
-.1aa8	8d 7b 1a	        sta petcol+2
-.1aab	a8		        tay
-.1aac	20 00 17	        jsr popregs
-.1aaf	60		        rts
-.1ab0			strhexval
-.1ab0	20 61 16	        jsr pushall ; sauve registre
-.1ab3	84 fc		        sty zp1+1   ; ptr dans zp1
-.1ab5	86 fb		        stx zp1
-.1ab7	20 f1 17	        jsr strlen  ;len de $(yyxx)->a
-.1aba	f0 3d		        beq oute    ; si 0 erreur C=1
-.1abc	a0 00		        ldy #$00    ; offset a 0
-.1abe	8c 96 0f	        sty reponse+1; reponse a zero
-.1ac1	8c 95 0f	        sty reponse ;    ...
-.1ac4	b1 fb		nextc   lda (zp1),y ;charge un caractere
-.1ac6	f0 26		        beq out     ;On  a fini
-.1ac8	c0 00		        cpy #$00    ;si c'est le premier
-.1aca	f0 07		        beq norol   ; pas de rol
-.1acc	48		        pha         ;
-.1acd	a9 04		        lda #$04    ;rol de 4 pos
-.1acf	20 b9 1b	        jsr rolword ;
-.1ad2	68		        pla         ;
-.1ad3	09 20		norol   ora #%00100000
-.1ad5	38		        sec
-.1ad6	e9 30		        sbc #$30
-.1ad8	c9 0a		        cmp #$0a
-.1ada	90 07		        bcc lt10
-.1adc	38		        sec
-.1add	e9 27		        sbc #$27
-.1adf	c9 10		        cmp #$10
-.1ae1	b0 16		        bcs oute
-.1ae3	0d 95 0f	lt10    ora reponse
-.1ae6	8d 95 0f	        sta reponse
-.1ae9	c8		        iny
-.1aea	c0 04		        cpy #$04
-.1aec	d0 d6		        bne nextc
-.1aee	20 9a 16	out     jsr popall
-.1af1	18		        clc          ;Carry 0 = good
-.1af2	ac 96 0f	        ldy reponse+1
-.1af5	ae 95 0f	        ldx reponse
-.1af8	60		        rts
-.1af9	20 9a 16	oute    jsr popall
-.1afc	38		        sec
-.1afd	60		        rts
-.1afe			showra
-.1afe	20 d3 16	          jsr  pushregs
-.1b01	ac 86 02	          ldy  kcol
-.1b04	08		            php
-.1b05	48		            pha
-.1b06	a9 90		            lda #snoir
-.1b08	20 7a f2	            jsr chrout
-.1b0b	68		            pla
-.1b0c	28		            plp
-.1b0d	20 47 18	          jsr  isprnable
-.1b10	b0 13		          bcs  okprn
-.1b12	48		          pha
-.1b13	08		            php
-.1b14	48		            pha
-.1b15	a9 1c		            lda #srouge
-.1b17	20 7a f2	            jsr chrout
-.1b1a	68		            pla
-.1b1b	28		            plp
-.1b1c	a9 2e		          lda  #'.'
-.1b1e	20 7a f2	          jsr  chrout
-.1b21	68		          pla
-.1b22	4c 28 1b	          jmp  noprn
-.1b25	20 7a f2	okprn     jsr  chrout
-.1b28			noprn
-.1b28	08		            php
-.1b29	48		            pha
-.1b2a	a9 20		            lda #32
-.1b2c	20 7a f2	            jsr chrout
-.1b2f	68		            pla
-.1b30	28		            plp
-.1b31	08		            php
-.1b32	48		            pha
-.1b33	a9 1f		            lda #sbleu
-.1b35	20 7a f2	            jsr chrout
-.1b38	68		            pla
-.1b39	28		            plp
-.1b3a	08		            php
-.1b3b	48		            pha
-.1b3c	a9 24		            lda #36
-.1b3e	20 7a f2	            jsr chrout
-.1b41	68		            pla
-.1b42	28		            plp
-.1b43	20 9a 19	          jsr putahex
-.1b46	08		            php
-.1b47	48		            pha
-.1b48	a9 20		            lda #32
-.1b4a	20 7a f2	            jsr chrout
-.1b4d	68		            pla
-.1b4e	28		            plp
-.1b4f	08		            php
-.1b50	48		            pha
-.1b51	a9 1c		            lda #srouge
-.1b53	20 7a f2	            jsr chrout
-.1b56	68		            pla
-.1b57	28		            plp
-.1b58	08		            php
-.1b59	48		            pha
-.1b5a	a9 25		            lda #37
-.1b5c	20 7a f2	            jsr chrout
-.1b5f	68		            pla
-.1b60	28		            plp
-.1b61	20 c6 19	          jsr putabin
-.1b64	08		            php
-.1b65	48		            pha
-.1b66	a9 20		            lda #32
-.1b68	20 7a f2	            jsr chrout
-.1b6b	68		            pla
-.1b6c	28		            plp
-.1b6d	08		            php
-.1b6e	48		            pha
-.1b6f	a9 9c		            lda #smauve
-.1b71	20 7a f2	            jsr chrout
-.1b74	68		            pla
-.1b75	28		            plp
-.1b76	48		          pha
-.1b77	aa		          tax
-.1b78	a9 00		          lda #$00
-.1b7a	20 cd dd	          jsr fiaxtf1
-.1b7d	68		          pla
-.1b7e	8c 86 02	          sty kcol
-.1b81	20 00 17	          jsr popregs
-.1b84	60		          rts
-.1b85			putahexdec
-.1b85	20 d3 16	          jsr pushregs
-.1b88	20 39 18	          jsr  curget    ; Sauvegarde la position du curseur.
-.1b8b	20 d3 16	        jsr pushregs
-.1b8e	a0 00		        ldy #0
-.1b90	a2 16		        ldx #22
-.1b92	18		        clc
-.1b93	20 0a e5	        jsr plot
-.1b96	20 00 17	        jsr popregs
-.1b99	08		            php
-.1b9a	48		            pha
-.1b9b	a9 20		            lda #32
-.1b9d	20 7a f2	            jsr chrout
-.1ba0	68		            pla
-.1ba1	28		            plp
-.1ba2	20 fe 1a	          jsr  showra    ; Affiche .a en ascii, hexa, bin et dec.
-.1ba5	c9 63		          cmp  #99       ; Estce que le code ascii est > 99 dec.
-.1ba7	10 09		          bpl  nospc     ; Non, on saute.
-.1ba9	08		            php
-.1baa	48		            pha
-.1bab	a9 20		            lda #32
-.1bad	20 7a f2	            jsr chrout
-.1bb0	68		            pla
-.1bb1	28		            plp
-.1bb2	20 40 18	nospc     jsr  curput    ; Replkace le curseur à sa position initiale.
-.1bb5	20 00 17	          jsr popregs
-.1bb8	60		          rts
-.1bb9			rolword
-.1bb9	20 d3 16	        jsr pushregs
-.1bbc	a8		        tay
-.1bbd	18		again   clc
-.1bbe	2e 95 0f	        rol reponse
-.1bc1	2e 96 0f	        rol reponse+1
-.1bc4	88		        dey
-.1bc5	d0 f6		        bne again
-.1bc7	20 00 17	        jsr popregs
-.1bca	60		        rts
+.19fd	28		          plp
+.19fe	60		          rts
+.19ff			nibtohexb
+.19ff	08		        php
+.1a00	29 0f		        and #$0f
+.1a02	f8		        sed
+.1a03	18		        clc
+.1a04	69 90		        adc #$90
+.1a06	69 40		        adc #$40
+.1a08	d8		        cld
+.1a09	28		        plp
+.1a0a	60		        rts
+.1a0b			nibtohex
+.1a0b	08		        php
+.1a0c	8c 2a 1a	        sty myy
+.1a0f	29 0f		        and #$0f
+.1a11	a8		        tay
+.1a12	b9 1a 1a	        lda hextbl,y
+.1a15	ac 2a 1a	        ldy myy
+.1a18	28		        plp
+.1a19	60		        rts
+>1a1a	30 31 32 33	hextbl  .byte $30,$31,$32,$33,$34
+>1a1e	34
+>1a1f	35 36 37 38	        .byte $35,$36,$37,$38,$39
+>1a23	39
+>1a24	41 42 43 44	        .byte $41,$42,$43,$44,$45
+>1a28	45
+>1a29	46		        .byte $46
+>1a2a	00		myy     .byte $00
+.1a2b			bytestohex
+.1a2b	20 60 16	        jsr pushall
+.1a2e	84 fc		        sty zp1+1
+.1a30	86 fb		        stx zp1
+.1a32	08		            php
+.1a33	48		            pha
+.1a34	a9 20		            lda #32
+.1a36	20 7a f2	            jsr chrout
+.1a39	68		            pla
+.1a3a	28		            plp
+.1a3b	08		            php
+.1a3c	48		            pha
+.1a3d	a9 05		            lda #5
+.1a3f	20 7a f2	            jsr chrout
+.1a42	68		            pla
+.1a43	28		            plp
+.1a44	08		            php
+.1a45	48		            pha
+.1a46	a9 24		            lda #36
+.1a48	20 7a f2	            jsr chrout
+.1a4b	68		            pla
+.1a4c	28		            plp
+.1a4d	20 75 19	        jsr putyxhex   ; prn adreponsese
+.1a50	08		            php
+.1a51	48		            pha
+.1a52	a9 20		            lda #$20
+.1a54	20 7a f2	            jsr chrout
+.1a57	68		            pla
+.1a58	28		            plp
+.1a59	08		            php
+.1a5a	48		            pha
+.1a5b	a9 9f		            lda #159
+.1a5d	20 7a f2	            jsr chrout
+.1a60	68		            pla
+.1a61	28		            plp
+.1a62	a0 00		        ldy #$00
+.1a64	aa		        tax
+.1a65	8c ce 0f	another sty offset
+.1a68	b1 fb		        lda (zp1),y
+.1a6a	20 99 19	        jsr putahex
+.1a6d	48		        pha
+.1a6e	20 8d 1a	        jsr petsciiaddr
+.1a71	68		        pla
+.1a72	8d 00 04	petscii sta $0400
+.1a75	48		        pha
+.1a76	a9 0d		        lda #$0d
+.1a78	8d 00 d8	petcol  sta $d800
+.1a7b	68		        pla
+.1a7c	08		            php
+.1a7d	48		            pha
+.1a7e	a9 20		            lda #$20
+.1a80	20 7a f2	            jsr chrout
+.1a83	68		            pla
+.1a84	28		            plp
+.1a85	c8		        iny
+.1a86	ca		        dex
+.1a87	d0 dc		        bne another
+.1a89	20 99 16	        jsr popall
+.1a8c	60		        rts
+.1a8d			petsciiaddr
+.1a8d	20 d2 16	        jsr pushregs
+.1a90	a9 1f		        lda #31
+.1a92	18		        clc
+.1a93	6d ce 0f	        adc offset
+.1a96	20 32 19	        jsr addatoyx
+.1a99	8c 74 1a	        sty petscii+2
+.1a9c	8e 73 1a	        stx petscii+1
+.1a9f	8e 79 1a	        stx petcol+1
+.1aa2	98		        tya
+.1aa3	29 fb		        and #%11111011 ;#%00000100
+.1aa5	09 d8		        ora #$d8
+.1aa7	8d 7a 1a	        sta petcol+2
+.1aaa	a8		        tay
+.1aab	20 ff 16	        jsr popregs
+.1aae	60		        rts
+.1aaf			strhexval
+.1aaf	20 60 16	        jsr pushall ; sauve registre
+.1ab2	84 fc		        sty zp1+1   ; ptr dans zp1
+.1ab4	86 fb		        stx zp1
+.1ab6	20 f0 17	        jsr strlen  ;len de $(yyxx)->a
+.1ab9	f0 3d		        beq oute    ; si 0 erreur C=1
+.1abb	a0 00		        ldy #$00    ; offset a 0
+.1abd	8c 96 0f	        sty reponse+1; reponse a zero
+.1ac0	8c 95 0f	        sty reponse ;    ...
+.1ac3	b1 fb		nextc   lda (zp1),y ;charge un caractere
+.1ac5	f0 26		        beq out     ;On  a fini
+.1ac7	c0 00		        cpy #$00    ;si c'est le premier
+.1ac9	f0 07		        beq norol   ; pas de rol
+.1acb	48		        pha         ;
+.1acc	a9 04		        lda #$04    ;rol de 4 pos
+.1ace	20 b8 1b	        jsr rolword ;
+.1ad1	68		        pla         ;
+.1ad2	09 20		norol   ora #%00100000
+.1ad4	38		        sec
+.1ad5	e9 30		        sbc #$30
+.1ad7	c9 0a		        cmp #$0a
+.1ad9	90 07		        bcc lt10
+.1adb	38		        sec
+.1adc	e9 27		        sbc #$27
+.1ade	c9 10		        cmp #$10
+.1ae0	b0 16		        bcs oute
+.1ae2	0d 95 0f	lt10    ora reponse
+.1ae5	8d 95 0f	        sta reponse
+.1ae8	c8		        iny
+.1ae9	c0 04		        cpy #$04
+.1aeb	d0 d6		        bne nextc
+.1aed	20 99 16	out     jsr popall
+.1af0	18		        clc          ;Carry 0 = good
+.1af1	ac 96 0f	        ldy reponse+1
+.1af4	ae 95 0f	        ldx reponse
+.1af7	60		        rts
+.1af8	20 99 16	oute    jsr popall
+.1afb	38		        sec
+.1afc	60		        rts
+.1afd			showra
+.1afd	20 d2 16	          jsr  pushregs
+.1b00	ac 86 02	          ldy  kcol
+.1b03	08		            php
+.1b04	48		            pha
+.1b05	a9 90		            lda #snoir
+.1b07	20 7a f2	            jsr chrout
+.1b0a	68		            pla
+.1b0b	28		            plp
+.1b0c	20 46 18	          jsr  isprnable
+.1b0f	b0 13		          bcs  okprn
+.1b11	48		          pha
+.1b12	08		            php
+.1b13	48		            pha
+.1b14	a9 1c		            lda #srouge
+.1b16	20 7a f2	            jsr chrout
+.1b19	68		            pla
+.1b1a	28		            plp
+.1b1b	a9 2e		          lda  #'.'
+.1b1d	20 7a f2	          jsr  chrout
+.1b20	68		          pla
+.1b21	4c 27 1b	          jmp  noprn
+.1b24	20 7a f2	okprn     jsr  chrout
+.1b27			noprn
+.1b27	08		            php
+.1b28	48		            pha
+.1b29	a9 20		            lda #32
+.1b2b	20 7a f2	            jsr chrout
+.1b2e	68		            pla
+.1b2f	28		            plp
+.1b30	08		            php
+.1b31	48		            pha
+.1b32	a9 1f		            lda #sbleu
+.1b34	20 7a f2	            jsr chrout
+.1b37	68		            pla
+.1b38	28		            plp
+.1b39	08		            php
+.1b3a	48		            pha
+.1b3b	a9 24		            lda #36
+.1b3d	20 7a f2	            jsr chrout
+.1b40	68		            pla
+.1b41	28		            plp
+.1b42	20 99 19	          jsr putahex
+.1b45	08		            php
+.1b46	48		            pha
+.1b47	a9 20		            lda #32
+.1b49	20 7a f2	            jsr chrout
+.1b4c	68		            pla
+.1b4d	28		            plp
+.1b4e	08		            php
+.1b4f	48		            pha
+.1b50	a9 1c		            lda #srouge
+.1b52	20 7a f2	            jsr chrout
+.1b55	68		            pla
+.1b56	28		            plp
+.1b57	08		            php
+.1b58	48		            pha
+.1b59	a9 25		            lda #37
+.1b5b	20 7a f2	            jsr chrout
+.1b5e	68		            pla
+.1b5f	28		            plp
+.1b60	20 c5 19	          jsr putabin
+.1b63	08		            php
+.1b64	48		            pha
+.1b65	a9 20		            lda #32
+.1b67	20 7a f2	            jsr chrout
+.1b6a	68		            pla
+.1b6b	28		            plp
+.1b6c	08		            php
+.1b6d	48		            pha
+.1b6e	a9 9c		            lda #smauve
+.1b70	20 7a f2	            jsr chrout
+.1b73	68		            pla
+.1b74	28		            plp
+.1b75	48		          pha
+.1b76	aa		          tax
+.1b77	a9 00		          lda #$00
+.1b79	20 cd dd	          jsr fiaxtf1
+.1b7c	68		          pla
+.1b7d	8c 86 02	          sty kcol
+.1b80	20 ff 16	          jsr popregs
+.1b83	60		          rts
+.1b84			putahexdec
+.1b84	20 d2 16	          jsr pushregs
+.1b87	20 38 18	          jsr  curget    ; Sauvegarde la position du curseur.
+.1b8a	20 d2 16	        jsr pushregs
+.1b8d	a0 00		        ldy #0
+.1b8f	a2 16		        ldx #22
+.1b91	18		        clc
+.1b92	20 0a e5	        jsr plot
+.1b95	20 ff 16	        jsr popregs
+.1b98	08		            php
+.1b99	48		            pha
+.1b9a	a9 20		            lda #32
+.1b9c	20 7a f2	            jsr chrout
+.1b9f	68		            pla
+.1ba0	28		            plp
+.1ba1	20 fd 1a	          jsr  showra    ; Affiche .a en ascii, hexa, bin et dec.
+.1ba4	c9 63		          cmp  #99       ; Estce que le code ascii est > 99 dec.
+.1ba6	10 09		          bpl  nospc     ; Non, on saute.
+.1ba8	08		            php
+.1ba9	48		            pha
+.1baa	a9 20		            lda #32
+.1bac	20 7a f2	            jsr chrout
+.1baf	68		            pla
+.1bb0	28		            plp
+.1bb1	20 3f 18	nospc     jsr  curput    ; Replkace le curseur à sa position initiale.
+.1bb4	20 ff 16	          jsr popregs
+.1bb7	60		          rts
+.1bb8			rolword
+.1bb8	20 d2 16	        jsr pushregs
+.1bbb	a8		        tay
+.1bbc	18		again   clc
+.1bbd	2e 95 0f	        rol reponse
+.1bc0	2e 96 0f	        rol reponse+1
+.1bc3	88		        dey
+.1bc4	d0 f6		        bne again
+.1bc6	20 ff 16	        jsr popregs
+.1bc9	60		        rts
 
 ;******  Return to file: dlbug20.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib/l-v20-keyb.asm
 
-.1bcb			clrkbbuf
-.1bcb	08		          php
-.1bcc	48		          pha
-.1bcd	a9 00		          lda #0
-.1bcf	85 c6		          sta 198
-.1bd1	20 e1 ff	          jsr $ffe1
-.1bd4	68		          pla
-.1bd5	28		          plp
-.1bd6	60		          rts
-.1bd7			waitstop
-.1bd7	08		          php    ;\ sauve les flags
-.1bd8	48		          pha    ;/  et l'acc.
-.1bd9	20 cb 1b	          jsr clrkbbuf
-.1bdc	20 70 f7	wait      jsr stop ; Veri [run/stop]
-.1bdf	d0 fb		          bne wait ;loop pas pesee.
-.1be1	68		          pla    ;\ recup. acc et
-.1be2	28		          plp    ;/  les flags.
-.1be3	60		          rts
-.1be4			anykey
-.1be4	08		          php
-.1be5	48		          pha
-.1be6	20 cb 1b	          jsr clrkbbuf
-.1be9	a5 cb		wait      lda 203    ;lit la matrice de
-.1beb	c9 40		          cmp #64    ; 64 = aucune clef
-.1bed	f0 fa		          beq wait   ; on en attend une.
-.1bef	20 f8 1b	          jsr kbfree ; Clavier relache.
-.1bf2	20 cb 1b	          jsr clrkbbuf
-.1bf5	68		          pla
-.1bf6	28		          plp
-.1bf7	60		          rts
-.1bf8			kbfree
-.1bf8	08		        php
-.1bf9	48		        pha
-.1bfa	a5 cb		wait    lda 203    ; lit la matrice
-.1bfc	c9 40		        cmp #64    ; 64 = aucune clef
-.1bfe	d0 fa		        bne wait   ; attend la relache
-.1c00	68		        pla
-.1c01	28		        plp
-.1c02	60		        rts
-.1c03			getkey
-.1c03	08		        php
-.1c04	20 e1 ff	        jsr $ffe1
-.1c07	20 f5 f1	try     jsr getin  ;tente de lire
-.1c0a	c9 00		        cmp #0     ; 0 si aucune.
-.1c0c	f0 f9		        beq try    ; on reessaye
-.1c0e	28		        plp
-.1c0f	60		        rts
-.1c10			waitkey
-.1c10	08		        php
-.1c11	48		        pha
-.1c12	8d 89 0f	        sta clef   ;Sauve clef voulue
-.1c15	20 cb 1b	        jsr clrkbbuf
-.1c18	20 f5 f1	wait    jsr getin  ;Sonde le clavier
-.1c1b	cd 89 0f	        cmp clef   ;Compare avec clef
-.1c1e	d0 f8		        bne wait   ;Pas la bonne.
-.1c20	68		        pla
-.1c21	28		        plp
-.1c22	60		        rts
-.1c23			waitspace
-.1c23	a9 20		          lda #$20
-.1c25	20 10 1c	          jsr waitkey
-.1c28	20 cb 1b	          jsr clrkbbuf
-.1c2b	60		          rts
-.1c2c			showkey
-.1c2c	20 d3 16	        jsr pushregs
-.1c2f	38		        sec
-.1c30	20 0a e5	        jsr plot
-.1c33	8e 8b 0f	        stx curx
-.1c36	8c 8a 0f	        sty cury
-.1c39	20 d3 16	        jsr pushregs
-.1c3c	a0 00		        ldy #0
-.1c3e	a2 16		        ldx #22
-.1c40	18		        clc
-.1c41	20 0a e5	        jsr plot
-.1c44	20 00 17	        jsr popregs
-.1c47	20 7a f2	        jsr chrout
-.1c4a	20 fe 1a	        jsr showra
-.1c4d	18		        clc
-.1c4e	ac 8a 0f	        ldy cury
-.1c51	ae 8b 0f	        ldx curx
-.1c54	20 0a e5	        jsr plot
-.1c57	20 00 17	        jsr popregs
-.1c5a	60		        rts
+.1bca			clrkbbuf
+.1bca	08		          php
+.1bcb	48		          pha
+.1bcc	a9 00		          lda #0
+.1bce	85 c6		          sta 198
+.1bd0	20 e1 ff	          jsr $ffe1
+.1bd3	68		          pla
+.1bd4	28		          plp
+.1bd5	60		          rts
+.1bd6			waitstop
+.1bd6	08		          php    ;\ sauve les flags
+.1bd7	48		          pha    ;/  et l'acc.
+.1bd8	20 ca 1b	          jsr clrkbbuf
+.1bdb	20 70 f7	wait      jsr stop ; Veri [run/stop]
+.1bde	d0 fb		          bne wait ;loop pas pesee.
+.1be0	68		          pla    ;\ recup. acc et
+.1be1	28		          plp    ;/  les flags.
+.1be2	60		          rts
+.1be3			anykey
+.1be3	08		          php
+.1be4	48		          pha
+.1be5	20 ca 1b	          jsr clrkbbuf
+.1be8	a5 cb		wait      lda 203    ;lit la matrice de
+.1bea	c9 40		          cmp #64    ; 64 = aucune clef
+.1bec	f0 fa		          beq wait   ; on en attend une.
+.1bee	20 f7 1b	          jsr kbfree ; Clavier relache.
+.1bf1	20 ca 1b	          jsr clrkbbuf
+.1bf4	68		          pla
+.1bf5	28		          plp
+.1bf6	60		          rts
+.1bf7			kbfree
+.1bf7	08		        php
+.1bf8	48		        pha
+.1bf9	a5 cb		wait    lda 203    ; lit la matrice
+.1bfb	c9 40		        cmp #64    ; 64 = aucune clef
+.1bfd	d0 fa		        bne wait   ; attend la relache
+.1bff	68		        pla
+.1c00	28		        plp
+.1c01	60		        rts
+.1c02			getkey
+.1c02	08		        php
+.1c03	20 e1 ff	        jsr $ffe1
+.1c06	20 f5 f1	try     jsr getin  ;tente de lire
+.1c09	c9 00		        cmp #0     ; 0 si aucune.
+.1c0b	f0 f9		        beq try    ; on reessaye
+.1c0d	28		        plp
+.1c0e	60		        rts
+.1c0f			waitkey
+.1c0f	08		        php
+.1c10	48		        pha
+.1c11	8d 89 0f	        sta clef   ;Sauve clef voulue
+.1c14	20 ca 1b	        jsr clrkbbuf
+.1c17	20 f5 f1	wait    jsr getin  ;Sonde le clavier
+.1c1a	cd 89 0f	        cmp clef   ;Compare avec clef
+.1c1d	d0 f8		        bne wait   ;Pas la bonne.
+.1c1f	68		        pla
+.1c20	28		        plp
+.1c21	60		        rts
+.1c22			waitspace
+.1c22	a9 20		          lda #$20
+.1c24	20 0f 1c	          jsr waitkey
+.1c27	20 ca 1b	          jsr clrkbbuf
+.1c2a	60		          rts
+.1c2b			showkey
+.1c2b	20 d2 16	        jsr pushregs
+.1c2e	38		        sec
+.1c2f	20 0a e5	        jsr plot
+.1c32	8e 8b 0f	        stx curx
+.1c35	8c 8a 0f	        sty cury
+.1c38	20 d2 16	        jsr pushregs
+.1c3b	a0 00		        ldy #0
+.1c3d	a2 16		        ldx #22
+.1c3f	18		        clc
+.1c40	20 0a e5	        jsr plot
+.1c43	20 ff 16	        jsr popregs
+.1c46	20 7a f2	        jsr chrout
+.1c49	20 fd 1a	        jsr showra
+.1c4c	18		        clc
+.1c4d	ac 8a 0f	        ldy cury
+.1c50	ae 8b 0f	        ldx curx
+.1c53	20 0a e5	        jsr plot
+.1c56	20 ff 16	        jsr popregs
+.1c59	60		        rts
 
 ;******  Return to file: dlbug20.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib/l-v20-screen.asm
 
-.1c5b			scrnsave
-.1c5b	20 61 16	        jsr pushall
-.1c5e	20 b3 1c	        jsr setcarptr
-.1c61	20 81 1c	        jsr zp1tozp2
-.1c64	20 ca 1c	        jsr setcolptr
-.1c67	20 81 1c	        jsr zp1tozp2
-.1c6a	20 9a 16	        jsr popall
-.1c6d	60		        rts
-.1c6e			scrnrest
-.1c6e	20 61 16	        jsr pushall
-.1c71	20 b3 1c	        jsr setcarptr
-.1c74	20 9a 1c	        jsr zp2tozp1
-.1c77	20 ca 1c	        jsr setcolptr
-.1c7a	20 9a 1c	        jsr zp2tozp1
-.1c7d	20 9a 16	        jsr popall
-.1c80	60		        rts
-.1c81			zp1tozp2
-.1c81	20 61 16	        jsr pushall
-.1c84	a2 02		        ldx #>scrlen
-.1c86	a0 00		        ldy #<scrlen
-.1c88	b1 fb		nextcar lda (zp1),y
-.1c8a	91 fd		        sta (zp2),y
-.1c8c	c8		        iny
-.1c8d	d0 f9		        bne nextcar
-.1c8f	e6 fc		        inc zp1+1
-.1c91	e6 fe		        inc zp2+1
-.1c93	ca		        dex
-.1c94	d0 f2		        bne nextcar
-.1c96	20 9a 16	        jsr popall
-.1c99	60		        rts
-.1c9a			zp2tozp1
-.1c9a	20 61 16	        jsr pushall
-.1c9d	a2 02		        ldx #>scrlen
-.1c9f	a0 00		        ldy #<scrlen
-.1ca1	b1 fd		nextcar lda (zp2),y
-.1ca3	91 fb		        sta (zp1),y
-.1ca5	c8		        iny
-.1ca6	d0 f9		        bne nextcar
-.1ca8	e6 fc		        inc zp1+1
-.1caa	e6 fe		        inc zp2+1
-.1cac	ca		        dex
-.1cad	d0 f2		        bne nextcar
-.1caf	20 9a 16	        jsr popall
-.1cb2	60		        rts
-.1cb3			setcarptr
-.1cb3	20 d3 16	        jsr pushregs
-.1cb6	a9 00		        lda #<scrtxt
-.1cb8	85 fb		        sta zp1
-.1cba	a9 10		        lda #>scrtxt
-.1cbc	85 fc		        sta zp1+1
-.1cbe	a9 82		        lda #<scrncar
-.1cc0	85 fd		        sta zp2
-.1cc2	a9 0d		        lda #>scrncar
-.1cc4	85 fe		        sta zp2+1
-.1cc6	20 00 17	        jsr popregs
-.1cc9	60		        rts
-.1cca			setcolptr
-.1cca	20 d3 16	        jsr pushregs
-.1ccd	a9 00		        lda #<scrcol
-.1ccf	85 fb		        sta zp1
-.1cd1	a9 94		        lda #>scrcol
-.1cd3	85 fc		        sta zp1+1
-.1cd5	a9 82		        lda #<scrncol
-.1cd7	85 fd		        sta zp2
-.1cd9	a9 0b		        lda #>scrncol
-.1cdb	85 fe		        sta zp2+1
-.1cdd	20 00 17	        jsr popregs
-.1ce0	60		        rts
-.1ce1			fillscreen
-.1ce1	20 61 16	          jsr pushall
-.1ce4	a2 02		          ldx #$02
-.1ce6	a0 00		          ldy #$00
-.1ce8	99 00 10	again     sta scrtxt,y
-.1ceb	99 00 11	          sta scrtxt+256,y
-.1cee	48		          pha
-.1cef	8a		          txa
-.1cf0	99 00 94	          sta scrcol,y
-.1cf3	99 00 95	          sta scrcol+256,y
-.1cf6	68		          pla
-.1cf7	c8		          iny
-.1cf8	d0 ee		          bne again
-.1cfa	20 9a 16	          jsr popall
-.1cfd	60		          rts
+.1c5a			scrnsave
+.1c5a	20 60 16	        jsr pushall
+.1c5d	20 b2 1c	        jsr setcarptr
+.1c60	20 80 1c	        jsr zp1tozp2
+.1c63	20 c9 1c	        jsr setcolptr
+.1c66	20 80 1c	        jsr zp1tozp2
+.1c69	20 99 16	        jsr popall
+.1c6c	60		        rts
+.1c6d			scrnrest
+.1c6d	20 60 16	        jsr pushall
+.1c70	20 b2 1c	        jsr setcarptr
+.1c73	20 99 1c	        jsr zp2tozp1
+.1c76	20 c9 1c	        jsr setcolptr
+.1c79	20 99 1c	        jsr zp2tozp1
+.1c7c	20 99 16	        jsr popall
+.1c7f	60		        rts
+.1c80			zp1tozp2
+.1c80	20 60 16	        jsr pushall
+.1c83	a2 02		        ldx #>scrlen
+.1c85	a0 00		        ldy #<scrlen
+.1c87	b1 fb		nextcar lda (zp1),y
+.1c89	91 fd		        sta (zp2),y
+.1c8b	c8		        iny
+.1c8c	d0 f9		        bne nextcar
+.1c8e	e6 fc		        inc zp1+1
+.1c90	e6 fe		        inc zp2+1
+.1c92	ca		        dex
+.1c93	d0 f2		        bne nextcar
+.1c95	20 99 16	        jsr popall
+.1c98	60		        rts
+.1c99			zp2tozp1
+.1c99	20 60 16	        jsr pushall
+.1c9c	a2 02		        ldx #>scrlen
+.1c9e	a0 00		        ldy #<scrlen
+.1ca0	b1 fd		nextcar lda (zp2),y
+.1ca2	91 fb		        sta (zp1),y
+.1ca4	c8		        iny
+.1ca5	d0 f9		        bne nextcar
+.1ca7	e6 fc		        inc zp1+1
+.1ca9	e6 fe		        inc zp2+1
+.1cab	ca		        dex
+.1cac	d0 f2		        bne nextcar
+.1cae	20 99 16	        jsr popall
+.1cb1	60		        rts
+.1cb2			setcarptr
+.1cb2	20 d2 16	        jsr pushregs
+.1cb5	a9 00		        lda #<scrtxt
+.1cb7	85 fb		        sta zp1
+.1cb9	a9 10		        lda #>scrtxt
+.1cbb	85 fc		        sta zp1+1
+.1cbd	a9 82		        lda #<scrncar
+.1cbf	85 fd		        sta zp2
+.1cc1	a9 0d		        lda #>scrncar
+.1cc3	85 fe		        sta zp2+1
+.1cc5	20 ff 16	        jsr popregs
+.1cc8	60		        rts
+.1cc9			setcolptr
+.1cc9	20 d2 16	        jsr pushregs
+.1ccc	a9 00		        lda #<scrcol
+.1cce	85 fb		        sta zp1
+.1cd0	a9 94		        lda #>scrcol
+.1cd2	85 fc		        sta zp1+1
+.1cd4	a9 82		        lda #<scrncol
+.1cd6	85 fd		        sta zp2
+.1cd8	a9 0b		        lda #>scrncol
+.1cda	85 fe		        sta zp2+1
+.1cdc	20 ff 16	        jsr popregs
+.1cdf	60		        rts
+.1ce0			fillscreen
+.1ce0	20 60 16	          jsr pushall
+.1ce3	a2 02		          ldx #$02
+.1ce5	a0 00		          ldy #$00
+.1ce7	99 00 10	again     sta scrtxt,y
+.1cea	99 00 11	          sta scrtxt+256,y
+.1ced	48		          pha
+.1cee	8a		          txa
+.1cef	99 00 94	          sta scrcol,y
+.1cf2	99 00 95	          sta scrcol+256,y
+.1cf5	68		          pla
+.1cf6	c8		          iny
+.1cf7	d0 ee		          bne again
+.1cf9	20 99 16	          jsr popall
+.1cfc	60		          rts
 
 ;******  Return to file: dlbug20.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib/l-v20-showregs.asm
 
-.1cfe			showregs
-.1cfe	20 5b 1c	          jsr scrnsave
-.1d01	08		          php
-.1d02	8d 78 0b	          sta  acc
-.1d05	68		          pla       ;acc<-sr
-.1d06	8d 75 0b	          sta  sr
-.1d09	8e 77 0b	          stx  xr
-.1d0c	8c 76 0b	          sty  yr
-.1d0f	ba		          tsx       ; x<-sp
-.1d10	8e 74 0b	          stx  sp
-.1d13	68		          pla
-.1d14	8d 73 0b	          sta  pcl
-.1d17	68		          pla
-.1d18	8d 72 0b	          sta  pch
-.1d1b	48		          pha
-.1d1c	ad 73 0b	          lda  pcl
-.1d1f	48		          pha
-.1d20	a9 00		          lda #$00
-.1d22	a2 11		          ldx #regline   ; No. de ligne
-.1d24	a8		          tay
-.1d25	18		          clc
-.1d26	20 0a e5	          jsr plot       ; pos. curseur.
-.1d29	08		            php
-.1d2a	48		            pha
-.1d2b	a9 90		            lda #snoir
-.1d2d	20 7a f2	            jsr chrout
-.1d30	68		            pla
-.1d31	28		            plp
-.1d32	20 61 16	            jsr  pushall
-.1d35	a2 38		            ldx  #<rtitle
-.1d37	86 fb		            stx  $fb
-.1d39	a0 13		            ldy  #>rtitle
-.1d3b	84 fc		            sty  $fc
-.1d3d	20 2d 17	            jsr  puts
-.1d40	20 9a 16	            jsr  popall
-.1d43	20 61 16	            jsr  pushall
-.1d46	a2 54		            ldx  #<rlable
-.1d48	86 fb		            stx  $fb
-.1d4a	a0 13		            ldy  #>rlable
-.1d4c	84 fc		            sty  $fc
-.1d4e	20 2d 17	            jsr  puts
-.1d51	20 9a 16	            jsr  popall
-.1d54	20 61 16	            jsr  pushall
-.1d57	a2 6f		            ldx  #<rvalues
-.1d59	86 fb		            stx  $fb
-.1d5b	a0 13		            ldy  #>rvalues
-.1d5d	84 fc		            sty  $fc
-.1d5f	20 2d 17	            jsr  puts
-.1d62	20 9a 16	            jsr  popall
-.1d65	20 61 16	            jsr  pushall
-.1d68	a2 8a		            ldx  #<rbline
-.1d6a	86 fb		            stx  $fb
-.1d6c	a0 13		            ldy  #>rbline
-.1d6e	84 fc		            sty  $fc
-.1d70	20 2d 17	            jsr  puts
-.1d73	20 9a 16	            jsr  popall
-.1d76	ac 72 0b	          ldy  pch
-.1d79	ae 73 0b	          ldx  pcl
-.1d7c	e8		          inx       ; Aj. LSB adresse
-.1d7d	90 01		          bcc  go   ; Report? Non Go!
-.1d7f	c8		          iny       ; Oui, Aj. MSB
-.1d80			go
-.1d80	20 d3 16	        jsr pushregs
-.1d83	a0 01		        ldy #1
-.1d85	a2 13		        ldx #regline+2
-.1d87	18		        clc
-.1d88	20 0a e5	        jsr plot
-.1d8b	20 00 17	        jsr popregs
-.1d8e	20 76 19	          jsr putyxhex   ; pc
-.1d91	ad 78 0b	          lda  acc
-.1d94	20 d3 16	        jsr pushregs
-.1d97	a0 06		        ldy #6
-.1d99	a2 13		        ldx #regline+2
-.1d9b	18		        clc
-.1d9c	20 0a e5	        jsr plot
-.1d9f	20 00 17	        jsr popregs
-.1da2	20 9a 19	          jsr putahex    ; reg x
-.1da5	ad 77 0b	          lda  xr
-.1da8	20 d3 16	        jsr pushregs
-.1dab	a0 09		        ldy #9
-.1dad	a2 13		        ldx #regline+2
-.1daf	18		        clc
-.1db0	20 0a e5	        jsr plot
-.1db3	20 00 17	        jsr popregs
-.1db6	20 9a 19	          jsr  putahex    ; reg x
-.1db9	ad 76 0b	          lda  yr
-.1dbc	20 d3 16	        jsr pushregs
-.1dbf	a0 0c		        ldy #12
-.1dc1	a2 13		        ldx #regline+2
-.1dc3	18		        clc
-.1dc4	20 0a e5	        jsr plot
-.1dc7	20 00 17	        jsr popregs
-.1dca	20 9a 19	          jsr  putahex    ; reg y
-.1dcd	ad 75 0b	          lda  sr
-.1dd0	20 d3 16	        jsr pushregs
-.1dd3	a0 0f		        ldy #15
-.1dd5	a2 13		        ldx #regline+2
-.1dd7	18		        clc
-.1dd8	20 0a e5	        jsr plot
-.1ddb	20 00 17	        jsr popregs
-.1dde	20 9a 19	          jsr putahex    ; status reg
-.1de1	ad 74 0b	          lda  sp
-.1de4	8a		          txa
-.1de5	20 d3 16	        jsr pushregs
-.1de8	a0 12		        ldy #18
-.1dea	a2 13		        ldx #regline+2
-.1dec	18		        clc
-.1ded	20 0a e5	        jsr plot
-.1df0	20 00 17	        jsr popregs
-.1df3	20 9a 19	          jsr putahex    ; sp
-.1df6	20 cb 1b	          jsr  clrkbbuf
-.1df9	20 e4 1b	          jsr  anykey
-.1dfc	20 6e 1c	          jsr scrnrest
-.1dff	ad 78 0b	          lda  acc
-.1e02	ae 77 0b	          ldx  xr
-.1e05	ac 76 0b	          ldy  yr
-.1e08	ad 75 0b	          lda  sr
-.1e0b	48		          pha
-.1e0c	28		          plp
-.1e0d	60		          rts
+.1cfd			showregs
+.1cfd	20 5a 1c	          jsr scrnsave
+.1d00	08		          php
+.1d01	8d 78 0b	          sta  acc
+.1d04	68		          pla       ;acc<-sr
+.1d05	8d 75 0b	          sta  sr
+.1d08	8e 77 0b	          stx  xr
+.1d0b	8c 76 0b	          sty  yr
+.1d0e	ba		          tsx       ; x<-sp
+.1d0f	8e 74 0b	          stx  sp
+.1d12	68		          pla
+.1d13	8d 73 0b	          sta  pcl
+.1d16	68		          pla
+.1d17	8d 72 0b	          sta  pch
+.1d1a	48		          pha
+.1d1b	ad 73 0b	          lda  pcl
+.1d1e	48		          pha
+.1d1f	a9 00		          lda #$00
+.1d21	a2 11		          ldx #regline   ; No. de ligne
+.1d23	a8		          tay
+.1d24	18		          clc
+.1d25	20 0a e5	          jsr plot       ; pos. curseur.
+.1d28	08		            php
+.1d29	48		            pha
+.1d2a	a9 90		            lda #snoir
+.1d2c	20 7a f2	            jsr chrout
+.1d2f	68		            pla
+.1d30	28		            plp
+.1d31	20 60 16	            jsr  pushall
+.1d34	a2 37		            ldx  #<rtitle
+.1d36	86 fb		            stx  $fb
+.1d38	a0 13		            ldy  #>rtitle
+.1d3a	84 fc		            sty  $fc
+.1d3c	20 2c 17	            jsr  puts
+.1d3f	20 99 16	            jsr  popall
+.1d42	20 60 16	            jsr  pushall
+.1d45	a2 53		            ldx  #<rlable
+.1d47	86 fb		            stx  $fb
+.1d49	a0 13		            ldy  #>rlable
+.1d4b	84 fc		            sty  $fc
+.1d4d	20 2c 17	            jsr  puts
+.1d50	20 99 16	            jsr  popall
+.1d53	20 60 16	            jsr  pushall
+.1d56	a2 6e		            ldx  #<rvalues
+.1d58	86 fb		            stx  $fb
+.1d5a	a0 13		            ldy  #>rvalues
+.1d5c	84 fc		            sty  $fc
+.1d5e	20 2c 17	            jsr  puts
+.1d61	20 99 16	            jsr  popall
+.1d64	20 60 16	            jsr  pushall
+.1d67	a2 89		            ldx  #<rbline
+.1d69	86 fb		            stx  $fb
+.1d6b	a0 13		            ldy  #>rbline
+.1d6d	84 fc		            sty  $fc
+.1d6f	20 2c 17	            jsr  puts
+.1d72	20 99 16	            jsr  popall
+.1d75	ac 72 0b	          ldy  pch
+.1d78	ae 73 0b	          ldx  pcl
+.1d7b	e8		          inx       ; Aj. LSB adresse
+.1d7c	90 01		          bcc  go   ; Report? Non Go!
+.1d7e	c8		          iny       ; Oui, Aj. MSB
+.1d7f			go
+.1d7f	20 d2 16	        jsr pushregs
+.1d82	a0 01		        ldy #1
+.1d84	a2 13		        ldx #regline+2
+.1d86	18		        clc
+.1d87	20 0a e5	        jsr plot
+.1d8a	20 ff 16	        jsr popregs
+.1d8d	20 75 19	          jsr putyxhex   ; pc
+.1d90	ad 78 0b	          lda  acc
+.1d93	20 d2 16	        jsr pushregs
+.1d96	a0 06		        ldy #6
+.1d98	a2 13		        ldx #regline+2
+.1d9a	18		        clc
+.1d9b	20 0a e5	        jsr plot
+.1d9e	20 ff 16	        jsr popregs
+.1da1	20 99 19	          jsr putahex    ; reg x
+.1da4	ad 77 0b	          lda  xr
+.1da7	20 d2 16	        jsr pushregs
+.1daa	a0 09		        ldy #9
+.1dac	a2 13		        ldx #regline+2
+.1dae	18		        clc
+.1daf	20 0a e5	        jsr plot
+.1db2	20 ff 16	        jsr popregs
+.1db5	20 99 19	          jsr  putahex    ; reg x
+.1db8	ad 76 0b	          lda  yr
+.1dbb	20 d2 16	        jsr pushregs
+.1dbe	a0 0c		        ldy #12
+.1dc0	a2 13		        ldx #regline+2
+.1dc2	18		        clc
+.1dc3	20 0a e5	        jsr plot
+.1dc6	20 ff 16	        jsr popregs
+.1dc9	20 99 19	          jsr  putahex    ; reg y
+.1dcc	ad 75 0b	          lda  sr
+.1dcf	20 d2 16	        jsr pushregs
+.1dd2	a0 0f		        ldy #15
+.1dd4	a2 13		        ldx #regline+2
+.1dd6	18		        clc
+.1dd7	20 0a e5	        jsr plot
+.1dda	20 ff 16	        jsr popregs
+.1ddd	20 99 19	          jsr putahex    ; status reg
+.1de0	ad 74 0b	          lda  sp
+.1de3	8a		          txa
+.1de4	20 d2 16	        jsr pushregs
+.1de7	a0 12		        ldy #18
+.1de9	a2 13		        ldx #regline+2
+.1deb	18		        clc
+.1dec	20 0a e5	        jsr plot
+.1def	20 ff 16	        jsr popregs
+.1df2	20 99 19	          jsr putahex    ; sp
+.1df5	20 ca 1b	          jsr  clrkbbuf
+.1df8	20 e3 1b	          jsr  anykey
+.1dfb	20 6d 1c	          jsr scrnrest
+.1dfe	ad 78 0b	          lda  acc
+.1e01	ae 77 0b	          ldx  xr
+.1e04	ac 76 0b	          ldy  yr
+.1e07	ad 75 0b	          lda  sr
+.1e0a	48		          pha
+.1e0b	28		          plp
+.1e0c	60		          rts
 =17			regline   = 17
-.1e0e			showstack
-.1e0e	8d 78 0b	          sta acc
-.1e11	08		          php
-.1e12	68		          pla
-.1e13	8d 75 0b	          sta sr
-.1e16	8e 77 0b	          stx xr
-.1e19	8c 76 0b	          sty yr
-.1e1c	38		          sec
-.1e1d	a0 10		          ldy  #$10
-.1e1f	ba		          tsx
-.1e20	e8		          inx
-.1e21	8a		          txa
-.1e22	20 fe 1a	          jsr showra
-.1e25	08		            php
-.1e26	48		            pha
-.1e27	a9 0d		            lda #13
-.1e29	20 7a f2	            jsr chrout
-.1e2c	68		            pla
-.1e2d	28		            plp
-.1e2e	08		            php
-.1e2f	48		            pha
-.1e30	a9 0d		            lda #13
-.1e32	20 7a f2	            jsr chrout
-.1e35	68		            pla
-.1e36	28		            plp
-.1e37	bd 00 01	morey     lda $0100,x
-.1e3a	20 fe 1a	          jsr showra
-.1e3d	08		            php
-.1e3e	48		            pha
-.1e3f	a9 0d		            lda #13
-.1e41	20 7a f2	            jsr chrout
-.1e44	68		            pla
-.1e45	28		            plp
-.1e46	e8		          inx
-.1e47	88		          dey
-.1e48	d0 ed		          bne morey
-.1e4a	ad 75 0b	          lda sr
-.1e4d	48		          pha
-.1e4e	ad 78 0b	          lda acc
-.1e51	ae 77 0b	          ldx xr
-.1e54	ac 76 0b	          ldy yr
-.1e57	28		          plp
-.1e58	60		          rts
+.1e0d			showstack
+.1e0d	8d 78 0b	          sta acc
+.1e10	08		          php
+.1e11	68		          pla
+.1e12	8d 75 0b	          sta sr
+.1e15	8e 77 0b	          stx xr
+.1e18	8c 76 0b	          sty yr
+.1e1b	38		          sec
+.1e1c	a0 10		          ldy  #$10
+.1e1e	ba		          tsx
+.1e1f	e8		          inx
+.1e20	8a		          txa
+.1e21	20 fd 1a	          jsr showra
+.1e24	08		            php
+.1e25	48		            pha
+.1e26	a9 0d		            lda #13
+.1e28	20 7a f2	            jsr chrout
+.1e2b	68		            pla
+.1e2c	28		            plp
+.1e2d	08		            php
+.1e2e	48		            pha
+.1e2f	a9 0d		            lda #13
+.1e31	20 7a f2	            jsr chrout
+.1e34	68		            pla
+.1e35	28		            plp
+.1e36	bd 00 01	morey     lda $0100,x
+.1e39	20 fd 1a	          jsr showra
+.1e3c	08		            php
+.1e3d	48		            pha
+.1e3e	a9 0d		            lda #13
+.1e40	20 7a f2	            jsr chrout
+.1e43	68		            pla
+.1e44	28		            plp
+.1e45	e8		          inx
+.1e46	88		          dey
+.1e47	d0 ed		          bne morey
+.1e49	ad 75 0b	          lda sr
+.1e4c	48		          pha
+.1e4d	ad 78 0b	          lda acc
+.1e50	ae 77 0b	          ldx xr
+.1e53	ac 76 0b	          ldy yr
+.1e56	28		          plp
+.1e57	60		          rts
 
 ;******  Return to file: dlbug20.asm
 
->1e59	34 12		prgend    .word $1234
+>1e58	34 12		prgend    .word $1234
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src/V20/lib/e-v20-page0.asm
 
@@ -2386,7 +2386,7 @@
 =8			kerr08 = 8      ; file name is missing.
 =9			kerr09 = 9      ; illegal device number.
 =240			kerrf0 = 240    ; top-of-memory change rs-232 buffer allocation.
-.1e5b	4c 57 12	pgmstart        jmp      main  ; le programme principale doit s'appeler "main"
+.1e5a	4c 56 12	pgmstart        jmp      main  ; le programme principale doit s'appeler "main"
 
 ;******  Return to file: dlbug20.asm
 

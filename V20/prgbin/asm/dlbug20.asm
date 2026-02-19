@@ -4,7 +4,7 @@
 ;--------------------------------------
 .enc "none"
      .include  "l-v20-bashead-ex.asm"
-     Version .null "220260131-192144"
+     Version .null "20260219-003227"
      .include  "m-v20-utils.asm"
 ;--------------------------------------
 main      .block
