@@ -43,36 +43,36 @@ outstrxy    .macro string
             jsr popregs
             .endm
 ;--------------------------------------
+; sauve le contenu de $YYXX dans ptr
+;--------------------------------------
+styxmem     .macro ptr
+            php
+            sty \ptr+1
+            stx \ptr
+            plp
+            .endm
+;--------------------------------------
 ; charge le contenu du ptr dans $YYXX
 ;--------------------------------------
-styxmem     .macro pointeur
+ldyxmem     .macro ptr
             php
-            sty \pointeur+1
-            stx \pointeur
+            ldy \ptr+1
+            ldx \ptr
             plp
             .endm
 ;--------------------------------------
 ; charge l'adresse 16 bits dans $yyxx
 ;--------------------------------------
-ldyxptr     .macro pointeur
+ldyxptr     .macro ptr
             php
-            ldy #>\pointeur
-            ldx #<\pointeur
-            plp
-            .endm
-;--------------------------------------
-; charge la valeur 16 bits dans $yyxx
-;--------------------------------------
-ldyxval     .macro pointeur
-            php
-            ldy \pointeur+1
-            ldx \pointeur
+            ldy #>\ptr
+            ldx #<\ptr
             plp
             .endm
 ;--------------------------------------
 ; Macros pour peupler AAXX.
 ;--------------------------------------
-loadaxmem   .macro axadd
+ldaxval     .macro axadd
             php
             ldx  \axadd   ;lsb adr dans X.
             lda  \axadd+1 ;msb adr dans A.
@@ -81,30 +81,70 @@ loadaxmem   .macro axadd
 ;--------------------------------------
 ; 
 ;--------------------------------------
-loadaximm   .macro aximm
+ldaxptr     .macro aximm
             php
             ldx  #<\aximm ;LSB val dans x.
             lda  #>\aximm ;MSB val dans a.
             plp
             .endm
 ;--------------------------------------
-; charge un pointeur dans zpage1
+; charge un ptr dans zpage1
 ;--------------------------------------
-ptrtozp1 .macro immval
+stptrzp1 .macro ptr
         jsr pushregs
-        ldy #>\immval
-        ldx #<\immval
+        ldy #>\ptr
+        ldx #<\ptr
         sty zp1+1
         stx zp1
         jsr popregs
         .endm
 ;--------------------------------------
-; charge un pointeur dans zpage2
+; charge un ptr dans zpage2
 ;--------------------------------------
-ptrtozp2 .macro immval
+stptrzp2 .macro ptr
         jsr pushregs
-        ldy #>\immval
-        ldx #<\immval
+        ldy #>\ptr
+        ldx #<\ptr
+        sty zp2+1
+        stx zp2
+        jsr popregs
+        .endm
+;--------------------------------------
+; charge le contenu du ptr dans zpage1
+;--------------------------------------
+stvalzp1 .macro ptr
+        jsr pushregs
+        ldy \ptr+1
+        ldx \ptr
+        sty zp1+1
+        stx zp1
+        jsr popregs
+        .endm
+;--------------------------------------
+; charge le contenu du ptr dans zpage2
+;--------------------------------------
+stvalzp2 .macro ptr
+        jsr pushregs
+        ldy \ptr+1
+        ldx \ptr
+        sty zp2+1
+        stx zp2
+        jsr popregs
+        .endm
+;--------------------------------------
+; charge un ptr dans zpage2
+;--------------------------------------
+styxzp1 .macro
+        jsr pushregs
+        sty zp1+1
+        stx zp1
+        jsr popregs
+        .endm
+;--------------------------------------
+; charge un ptr dans zpage2
+;--------------------------------------
+styxzp2 .macro
+        jsr pushregs
         sty zp2+1
         stx zp2
         jsr popregs

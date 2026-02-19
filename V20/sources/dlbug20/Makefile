@@ -40,8 +40,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 	$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 	-write $(SOURCENAME).prg $(SOURCENAME) \
 	-write ${V20UTILDIR}/fb fb \
-	-write ${V20UTILDIR}/vicmonb-sys45056.prg vicmonb-sys45056 \
-	-write ${V20UTILDIR}/Vicmon-2-b000.prg vicmon-2-b000 \
+	-write ${V20UTILDIR}/vicmonb-sys45056.prg vmon-sys45056 \
 	-write ${V20UTILDIR}/fb20 fb20 \
 	-write ${V20UTILDIR}/fb20-3k fb20-3k \
 	-write ${V20UTILDIR}/fb20-8k fb20-8k \
@@ -49,8 +48,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 	$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
 	-write $(SOURCENAME).prg $(SOURCENAME) \
 	-write ${V20UTILDIR}/fb fb \
-	-write ${V20UTILDIR}/vicmonb-sys45056.prg vicmonb-sys45056 \
-	-write ${V20UTILDIR}/Vicmon-2-b000.prg vicmon-2-b000 \
+	-write ${V20UTILDIR}/vicmonb-sys45056.prg vmon-sys45056 \
 	-write ${V20UTILDIR}/fb20 fb20 \
 	-write ${V20UTILDIR}/fb20-3k fb20-3k \
 	-write ${V20UTILDIR}/fb20-8k fb20-8k \

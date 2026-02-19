@@ -35,13 +35,16 @@ subatoyx
         .block
         php
         pha
+        sta freevar
         sty reponse+1
         stx reponse
         sec
-        sbc reponse
-        bcs noemp
-        dec reponse+1
-noemp   sta reponse
+        lda reponse
+        sbc freevar
+        sta reponse
+        lda reponse+1
+        sbc #$00
+        sta reponse+1
         ldy reponse+1
         ldx reponse
         pla

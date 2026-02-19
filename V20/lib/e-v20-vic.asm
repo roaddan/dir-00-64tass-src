@@ -86,34 +86,34 @@ vic15     = $900f;XXXXYZZZ
 ;  ||||
 ;   \/
 ;-------Couleurs bordure et fond-------
-;  0000=noir   0100=mauve
-;  0001=Blanc  0101=vert
-;  0010=rouge  0110=vleu
-;  0011=Cyan   0111=jaune
+;  0000=noir    0100=mauve
+;  0001=Blanc   0101=vert
+;  0010=rouge   0110=vleu
+;  0011=Cyan    0111=jaune
 ;--------Couleur fond seulement--------
-;  1000=orange 1100=gris1
-;  1001=brun   1101=vert1
-;  1010=rose   1110=bleu1
-;  1011=gris   1111=jaune
+;  1000=orange  1100=lmauve
+;  1001=lorange 1101=lvert
+;  1010=rose    1110=lbleu1
+;  1011=locean  1111=ljaune
 ;--------------------------------------
-vnoir   =   %00000000
-vblanc  =   %00000001
-vrouge  =   %00000010
-vocean  =   %00000011
-vmauve  =   %00000100
-vvert   =   %00000101
-vbleu   =   %00000110
-vjaune  =   %00000111
-vorange =   %00001000
-vbrun   =   %00001001
-vrose   =   %00001010
-vgris   =   %00001011
-vgris1  =   %00001100
-vvert1  =   %00001101
-vvertp  =   %00001101
-vbleu1  =   %00001110
-vbleup  =   %00001110
-vgris2  =   %00001111
+vnoir    =   %00000000
+vblanc   =   %00000001
+vrouge   =   %00000010
+vocean   =   %00000011
+vmauve   =   %00000100
+vvert    =   %00000101
+vbleu    =   %00000110
+vjaune   =   %00000111
+vorange  =   %00001000
+vorangep =   %00001001
+vrose    =   %00001010
+voceanp  =   %00001011
+vmauvep  =   %00001100
+vvert2   =   %00001101
+vvertp   =   %00001101
+vbleu1   =   %00001110
+vbleup   =   %00001110
+vjaunep   =   %00001111
 vinv      = vorange
 colecran  .macro bd,bg,fg,inv
           php

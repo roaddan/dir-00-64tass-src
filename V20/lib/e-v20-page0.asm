@@ -47,7 +47,7 @@ memuss    = $c3     ; Pointeur vers la zone de RAM en cours de chargement.(mot)
 ndx       = $c6     ; Nombre de caractères (0-10) dans le tampon du clavier.
                     ; Tamppon à 631 ($277)
 rvs       = $c7     ; Indicateur pour caractères d'écran inversés.
-scrnlin   = $d1     ; pnt cur-scrn-line
+scrnlin   = $d1     ; ptr cur-scrn-line
 tblx      = $d6     ; Curseur : numéro de la ligne physique actuelle sur 
                     ; laquelle se trouve le curseur à l’écran.
 zp1       = $fb     ; 1er Zpage prog. usager address (word)
