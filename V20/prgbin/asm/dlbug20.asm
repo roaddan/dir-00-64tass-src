@@ -4,7 +4,7 @@
 ;--------------------------------------
 .enc "none"
      .include  "l-v20-bashead-ex.asm"
-     Version .null "20260219-003227"
+     Version .null "20260221-003227"
      .include  "m-v20-utils.asm"
 ;--------------------------------------
 main      .block
@@ -15,17 +15,10 @@ main      .block
           #ldyxptr $e000
           #styxmem adrptr               ; M: Adresse de depart
           jsr kmenu
-          #outcar sbleu
+outmain   #outcar sbleu
           #outcar 147
-          #outcar 19
-          #outcar '$'
-          #ldyxptr prgend
-          jsr putyxhex
-          #outcar 13
-          #outcar '$'
-          #ldyxmem prgend
-          jsr putyxhex
-          #outcar 13
+;          #outcar 19
+          jsr  putstats
           rts
           .bend
 ;--------------------------------------
@@ -38,14 +31,14 @@ uneclef                                 ;-------------------------------------
           jsr  prompt
           jsr  getkey                   ; Attend une clef.
           jsr  chrout
-keyesc    cmp  #$5f ;[ESC]              ; Est-ce la touche 'ESC'?
+keyesc    cmp  #$5f ;[ESC] Quitter      ; Est-ce la touche 'ESC'?
           bne  keyr                     ; Non on verifie une autre.
           jmp  out                      ; Oui, on quitte la fonction
-keyr      cmp  #$12 ;[CTRL][R]          ; Est-ce la lettre 'Ctrl+R'?
+keyr      cmp  #$52 ;[R] View registers ; Est-ce la lettre 'R'?
           bne  keym                     ; Non on verifie une autre.
           jsr  showregs                 ; Oui, affiche les registres.
           jmp  uneclef
-keym      cmp  #$4d
+keym      cmp  #$4d ;[M] Memory dump
           bne  nextkey
           jsr  mvmenu
 ;          #outcar 13
@@ -76,7 +69,19 @@ prompt    .block
           jsr  popregs
           rts
           .bend
-
+putstats  .block
+          jsr  pushregs
+          #println stattitle 
+          #println startaddr 
+          #println endaddr 
+          #println sizeprg
+          #println mainaddr  
+          #println varsstart 
+          #println varsend
+          #println sizevars
+          jsr popregs   
+          rts
+          .bend
 ;--------------------------------------
      .include  "string-fr.asm"
      ;.include  "string-en.asm"

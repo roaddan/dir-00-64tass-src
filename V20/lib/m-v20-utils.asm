@@ -410,10 +410,12 @@ print       .macro    strptr
 println     .macro    strptr
             jsr  pushregs
             ldx  #<\strptr
+            stx  $fb
             ldy  #>\strptr
-            jsr  putsyx
+            sty  $fc
+            jsr  puts
             lda  #$0d
-            jsr  putch
+            jsr  chrout
             jsr  popregs
             .endm
 ;--------------------------------------

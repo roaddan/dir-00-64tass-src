@@ -8,11 +8,19 @@
 mvmenu    .block
           jsr  pushregs
           jsr  mvaide
-another   jsr  memdump
+another   jsr  memdump   
           jsr  getkey
           cmp  #$5f
-          bne  upar
+          bne  keyr
           jmp  out
+;--------------------------------------
+keyr      cmp  #$52      ; [R] refresh
+          bne  upar      ; -64
+          lda  #64
+          #ldyxmem adrptr               
+          jsr  subatoyx
+          #styxmem adrptr
+          jmp  another
 ;--------------------------------------
 upar      cmp  #$91      ; crsr-up
           bne  dnar      ; -128
@@ -53,7 +61,7 @@ kf1       cmp  #$85       ; f1
           sta  adrptr+1
           jmp  another
 kf3       cmp  #$86      ; crsr-right
-          bne  chkkey        ; +64
+          bne  chkkey    ; +64
           lda  #64
           #ldyxmem adrptr               
           jsr  subatoyx
