@@ -30,70 +30,72 @@ kernalrom = $e000
 ;------------------------------------------------------------------------------
 ; C A R A C T E R E S   D E   C O N T R O L E   P E T S C I I
 ;------------------------------------------------------------------------------
-eot       =    0
-discase   =    8
-enacase   =    9
-locase    =    14
-crsdown   =    17
-revson    =    18
-gohome    =    19
-delete    =    20
-crsright  =    29
-upcase    =    142
-crsup     =    145
-crsleft   =    157
-revsoff   =    146
-clrhome   =    147
-bstop     =   $03      ;stop
-bwhite    =   $05      ;set colour white
-block     =   $08      ;lock the charset
-bunlock   =   $09      ;unlock the charset
-bcarret   =   $0d
-btext     =   $0e
-bcrsdn    =   $11      ;cursor down 1 line
-brevcol   =   $12
-bhome     =   $13
-bdelete   =   $14
-bred      =   $1c
-bcuright  =   $1d
-bgreen    =   $1e
-bblue     =   $1f
-borange   =   $81
-blrun     =   $83
-bfkey1    =   $85
-bfkey2    =   $86
-bfkey3    =   $87
-bfkey4    =   $88
-bfkey5    =   $89
-bfkey6    =   $8a
-bfkey7    =   $8b
-bfkey8    =   $8c
-bcarret1  =   $8d
-bgraph    =   $8e
-bblack    =   $90
-bcuup     =   $91
-brevoff   =   $92
-bclear    =   $93
-binsert   =   $94
-bbrown    =   $95
-bltred    =   $96
-bdkgrey   =   $97
-bmdgrey   =   $98
-bltgreen  =   $99
-bltblue   =   $9a
-bltgrey   =   $9b
-bmagenta  =   $9c
-bculeft   =   $9d
-byellow   =   $9e
-bcyan     =   $9f
+eot       =    $00
+bstop     =    $03      ;stop
+bwhite    =    $05      ;set colour white
+discase   =    $08
+block     =    $08      ;lock the charset
+bunlock   =    $09      ;unlock the charset
+enacase   =    $09
+bcarret   =    $0d  ; 13
+btext     =    $0e
+locase    =    $0e  ; 14
+bcrsdn    =    $11      ;cursor down 1 line
+crsdown   =    $11  ; 17
+brevcol   =    $12
+revson    =    $12  ; 18
+bhome     =    $13
+gohome    =    $13  ; 19
+delete    =    $14  ; 20
+bdelete   =    $14  ; 20
+bred      =    $1c  ; 28
+crsright  =    $1d  ; 29
+bcuright  =    $1d  ; 29
+bgreen    =    $1e  ; 30
+bblue     =    $1f  ; 31
+borange   =    $81  ;129
+blrun     =    $83  ;131
+bfkey1    =    $85  ;133
+bfkey2    =    $86  ;134
+bfkey3    =    $87  ;135
+bfkey4    =    $88  ;136
+bfkey5    =    $89  ;137
+bfkey6    =    $8a  ;138
+bfkey7    =    $8b  ;139
+bfkey8    =    $8c  ;140
+bcarret1  =    $8d  ;141
+bgraph    =    $8e  ;142
+upcase    =    $8e  ;142
+bblack    =    $90  ;144
+status    =    $90  ;144
+crsup     =    $91  ;145
+bcuup     =    $91  ;145
+brevoff   =    $92  ;146
+revsoff   =    $92  ;146
+clrhome   =    $93  ;147
+bclear    =    $93  ;147
+binsert   =    $94  ;148
+bbrown    =    $95  ;149
+bltred    =    $96  ;150
+bdkgrey   =    $97  ;151
+bmdgrey   =    $98  ;152
+bltgreen  =    $99  ;153
+bltblue   =    $9a  ;154
+bltgrey   =    $9b  ;155
+bmagenta  =    $9c  ;156
+crsleft   =    $9d  ;157
+bculeft   =    $9d  ;157
+byellow   =    $9e  ;158
+bcyan     =    $9f  ;159
 ;------------------------------------------------------------------------------
-; registre basic contienant la couleur du prochain caractÃ¨re. 
+; registre basic contienant la couleur du prochain caractere. 
 ;------------------------------------------------------------------------------
 carcol  = $0286
 ieval   = $030a
+; A corriger pour le VIC 20
 ;+----+----------------------+-------------------------------------------------------------------------------------------------------+
-;|    |                      |                                Peek from $dc01 (code in paranthesis):                                 |
-;|row:| $dc00:               +------------+------------+------------+------------+------------+------------+------------+------------+
+;|    |                      |                          Peek from $9121/37153 (code in paranthesis):                                 |
+;|row:| $9120/37152          +------------+------------+------------+------------+------------+------------+------------+------------+
 ;|    |                      |   BIT 7    |   BIT 6    |   BIT 5    |   BIT 4    |   BIT 3    |   BIT 2    |   BIT 1    |   BIT 0    |
 ;+----+----------------------+------------+------------+------------+------------+------------+------------+------------+------------+
 ;|1.  | #%11111110 (254/$fe) | DOWN  ($  )|   F5  ($  )|   F3  ($  )|   F1  ($  )|   F7  ($  )| RIGHT ($  )| RETURN($  )|DELETE ($  )|
@@ -110,45 +112,45 @@ ieval   = $030a
 ; +==========================================================================+
 ; | dec | hex |  binaire  | couleur    || dec | hex |  binaire  | couleur    |
 ; +-----+-----+-----------+------------++-----+-----+-----------+------------+
-; |  0  | $0  | b00000000 | noir       ||  1  | $1  | b00000001 | blanc      |
-; |  2  | $0  | b00000010 | rouge      ||  3  | $3  | b00000011 | ocean      |
-; |  4  | $0  | b00000100 | mauve      ||  5  | $5  | b00000101 | vert       |
-; |  6  | $0  | b00000110 | bleu       ||  7  | $7  | b00000111 | jaune      |
-; |  8  | $0  | b00001000 | orange     ||  9  | $9  | b00001001 | brun       |
-; | 10  | $0  | b00001010 | rose       || 11  | $b  | b00001011 | gris foncé |
-; | 12  | $0  | b00001100 | gris moyen || 13  | $d  | b00001101 | vert pâle  |
-; | 14  | $0  | b00001110 | blue pale  || 15  | $f  | b00001111 | gris pâle  |
+; |  0  | $00 | b00000000 | noir       ||  1  | $01 | b00000001 | blanc      |
+; |  2  | $02 | b00000010 | rouge      ||  3  | $03 | b00000011 | ocean      |
+; |  4  | $04 | b00000100 | mauve      ||  5  | $05 | b00000101 | vert       |
+; |  6  | $06 | b00000110 | bleu       ||  7  | $07 | b00000111 | jaune      |
+; |  8  | $08 | b00001000 | orange     ||  9  | $09 | b00001001 | orangep    |
+; | 10  | $0a | b00001010 | rose       || 11  | $0b | b00001011 | oceanp     |
+; | 12  | $0c | b00001100 | mauve pâle || 13  | $0d | b00001101 | vert pâle  |
+; | 14  | $0e | b00001110 | blue pâle  || 15  | $0f | b00001111 | jaune pâle |
 ; +-----+-----+-----------+------------++-----+-----+-----------+------------+
 ;-----------------------------------------------------------------------------
 ; Constantes de couleurs pour la memoire couleur.
 ;-----------------------------------------------------------------------------
-enoir       = $0
-eblanc      = $1
-erouge      = $2
-eocean      = $3
-emauve      = $4
-evert       = $5
-ebleu       = $6
-ejaune      = $7
-eorange     = $8
-ebrun       = $9
-erose       = $a
-egrisfonce  = $b
-egrismoyen  = $c
-evertpale   = $d
-ebleupale   = $e
-egrispale   = $f
+enoir     =    $00 
+eblanc    =    $01
+erouge    =    $02
+eocean    =    $03
+emauve    =    $04
+evert     =    $05
+ebleu     =    $06
+ejaune    =    $07
+eorange   =    $08
+eorangep  =    $09
+erose     =    $0a
+eoceanp   =    $0b
+emauvep   =    $0c
+evertp    =    $0d
+ebleup    =    $0e
+ejaunep   =    $0f
 ;-----------------------------------------------------------------------------
 ; Constantes couleur pour les chaines de caractères, $ffd2
 ;-----------------------------------------------------------------------------
-snoir       = 144
-sblanc      = 5
-srouge      = 28
-socean      = 159
-smauve      = 156
-svert       = 30
-sbleu       = 31
-sjaune      = 158
+snoir     =    $90  ;144
+sblanc    =    $05  ;  5
+srouge    =    $1c  ; 28
+socean    =    $9f  ;159
+smauve    =    $9c  ;156
+svert     =    $1e  ; 30
+sbleu     =    $1f  ; 31
+sjaune    =    $9e  ;158
 ;-------------------------------------------------------------------------------
 ; R o u t i n e s   D u  K E R N A L  d u   C o m m o d o r e   V I C - 2 0
 ; $e4a0 - $ffff
@@ -1014,7 +1016,7 @@ tstmem  = $fe91 ; Test a memory location.
 ;-------------------------------------------------------------------------------
 nmi     = $fea9 ; NMI handler routine.
 ;-------------------------------------------------------------------------------
-break   = $fed2 ; BREAK interupt entry.
+kbreak  = $fed2 ; BREAK interupt entry.
 ;-------------------------------------------------------------------------------
 rsnmi   = $fede ; RS-232: nmi sequence.
 ;-------------------------------------------------------------------------------
@@ -1105,98 +1107,6 @@ vctrrst = $fffc ; 6502 vector to 64802 ($fd22) START.
 vctrirq = $fffe ; 6502 vector to 65394 ($ff72) BREAK.
 ;------------------------------------------------------------------------------
 
-;-------------------------------------------------------------------------------
-;* kernal function vectors *
-;ayx=input ayx=outputs (c)=1 (c)=0
-;------------------------------------------------------------------------------
-kd_poly1     =   $e043
-kd_poly2     =   $e059
-kd_rmulc     =   $e08d       ;
-kd_raddc     =   $e092       ;
-kd_rnd       =   $e097
-kd_sys       =   $e12a
-kd_save      =   $e156
-kd_verify    =   $e165
-kd_load      =   $e168
-kcint       =   cint        ;   , init vic + ecran.
-kioinit     =   ioinit      ;   , init i/o dev.
-kramtas     =   ramtas      ;   , test de memoire.
-kciout      =   ciout       ;a  ,tx byte  acia
-krestor     =   restor      ;   , set ram plafond
-kvector     =   vector      ;
-ksetmsg     =   setmsg      ;a  , set sys. msg. out
-ksecond     =   second      ;a  , tx adresse sec.
-ktksa       =   tksa        ;a  , talk adresse sec.
-kmemtop     =   memtop      ; yx, (c) get mem high
-kmembot     =   membot      ; yx, (c) get mem low
-kscankey    =   scankey     ;   , scan clavier
-ksettmo     =   settmo      ;a  , set ieee timeout
-kacptr      =   acptr       ;a  ,rx serie.
-kuntlk      =   untlk       ;   , iec-cmc stop talk
-kunlsn      =   unlsn       ;   , iec-cmd stop lsn
-klisten     =   listen      ;a  , iec-cmd dev ecout
-ktalk       =   talk        ;a  , iec-cmd dev parle
-kreadst     =   readst      ;a  , lecture i/o stats
-ksetlfs     =   setlfs      ;ayx, init fich logi.
-ksetnam     =   setnam      ;ayx, init num.nom.fich
-kopen       =   open        ;axy, ouvre fich-nom
-kclose      =   close       ;a  , ferme fichier #a.
-kchkin      =   chkin       ;  x,open canal in.
-kchkout     =   chkout      ;  x,open canal out
-kclrchn     =   clrchn      ;   , ferme canaux i/o.
-kchrin      =   chrin       ;a  ,recup. un car.
-kchrout     =   chrout      ;a  ,sort un car.
-kd_chrout    =   $f1ca
-kload       =   load        ;ayx, dev->ram
-ksave       =   save        ;   , sauve mem->dev
-ksettim     =   settim      ;axy, init sysclock
-krdtim      =   rdtim       ;axy, lecture sysclock
-kstop       =   stop        ;a  , ret. stopkey stat
-kgetin      =   getin       ;a  , recup. car. #dev.
-kclall      =   clall       ;   , ferme fichiers.
-kudtim      =   udtim       ;   , maj sysclock
-kscreen     =   screen      ; yx, get format ecran
-kplot       =   plot        ; yx, (c) get csr pos.
-kiobase     =   iobase      ; yx, def. i/o mem page
-;------------------------------------------------------------------------------
-; Kernal entry point
-;------------------------------------------------------------------------------
-k_echostartup = $e39a
-k_putch       = $e716 ; 52) Print a character.          ;a--;---; a = char
-k_cls         = $e7a0
-k_cursordown  = $e87c
-k_scrollup    = $e8ea
-k_home        = $e94e
-k_insertline  = $e965
-k_screlldown  = $e9c8
-k_devsndlstn  = $ed0c ; 55) Send 'LISTEN'>IEEE/Serial.  ;a--;---; a = dev # 
-k_ieeein      = $ee13 ; 60) Input from IEEE/Serial.     ;---;a--; a = Data byte  
-k_devsndutalk = $eef6 ; 58) Send 'UNTALK'>IEEE/Serial.  ;---;---;
-k_devsndulstn = $ef04 ; 59) Send 'UNLISTEN'>IEEE/Serial.;---;---; 
-k_putsysmsg   = $f12f ; 53) Print system message.       ;--y;---; y = msg offset
-k_cloself     = $f291 ; 61) Close logical file .        ;a--;---; a = file # 
-k_loadsub     = $f49e ; 63) LOAD subroutine.            ;axy;---; a = # start=yyxx
-k_prnsrch     = $f5af ; 64) Print SEARCHING if imm mode.;---;---;
-k_echosearch  = $f5b3 ; 64b) Skipping test part of 64.  ;---;---; 
-k_prnfnam     = $f5c1 ; 65) Print filename.             ;---;---;
-k_stop        = $f6ed ; 62) Check for STOP key.         ;---;---; z = 1 pressed
-k_gettaphdblk = $f7ea ; 66) Find a tape hdr blk.        ;a--;---; a = len 
-                      ;     Prerequisit: Pointer to string in zpage1  
-k_fndtaphdblk = $f7ea ; 67) Find any tape hdr blk.      ;---;---; 
-k_waittapplay = $f817 ; 68) Press PLAY... (wait)        ;---;---;
-k_rdtape2buff = $f841 ; 69) Read tape to buffer.        ;---;---;
-k_readtape    = $f847 ; 70) Read tape.                  ;---;---;
-k_wrbuff2tape = $f864 ; 71) write buffer to tape.       ;---;---;
-k_wrtape      = $f869 ; 72) write tape.                 ;a--;---; a = ldr len
-k_resettapeio = $fb8e ; 73) Reset tape I/O.             ;---;---;
-k_setintvect  = $fcbd ; 74) set interupt vector.        ;---;---;
-k_coldreset   = $fce2 ; 75) Power on reset.             ;---;---;
-k_coldstart   = $fce2 ; 75) Power on reset.             ;---;---;
-k_coldboot    = $fce2 ; 75) Power on reset.             ;---;---;
-k_warmreset   = $fe66 ;     Warm resetstart
-k_warmboot    = $fe66 ;     Warm resetstart
-k_devsndaddr2 = $ff93 ; 56) Send second address.        ;a--;---; a = SA or #$60 
-
 ;------------------------------------------------------------------------------
 ; error codes
 ;------------------------------------------------------------------------------
@@ -1217,13 +1127,3 @@ kerr08 = 8      ; file name is missing.
 kerr09 = 9      ; illegal device number.
 kerrf0 = 240    ; top-of-memory change rs-232 buffer allocation.
 ;---------------+---------------------------------------------------------------
-;------------------------------ d e c i m a l-----------------------------------
-;0000000001111111111222222222233333333334444444444555555555566666666667777777777
-;1234567890123456789012345678901234567890123456789012345678901234567890123456789
-;========================= h e x a - d e c i m a l==============================
-;0000000000000001111111111111111222222222222222233333333333333334444444444444444
-;123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-;------------------------------------------------------------------------------
-; a p p e l   d e   l a   s o u s   r o u t i n e   p r i n c i p a l e
-;------------------------------------------------------------------------------
-pgmstart        jmp      main  ; le programme principale doit s'appeler "main"

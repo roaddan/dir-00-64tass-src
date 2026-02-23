@@ -1,296 +1,341 @@
-;--------------------------------------
-; Fichier : keyfinder.asm
-; Auteur..: Daniel Lafrance
-;--------------------------------------
-.enc "none"
-     .include  "l-v20-bashead-ex.asm"
-     Version .null "20260221-003227"
-     .include  "m-v20-utils.asm"
-;--------------------------------------
+; ********************************
+; * supermon+ 64 jim butterfield *
+; * v1.2   august 20 1985        *
+; ********************************
+
+; reformatted and annotated in late 2016/early 2017 by j.b. langston.
+; 
+; i've made the minimum necessary changes to this code to get it to assemble
+; with 64tass.  specifically, i changed the following directives from pal
+; that 64tass doesn't support:
+;   - .asc => .text
+;   - *=*+x => .fill x
 ;
-main      .block
-          jsr  super
-          rts
-          .bend
-;-----------------------------------------------------------------------------
-;Point d 'entrée initiale
-;-----------------------------------------------------------------------------
-          .weak
-          org = $a000
-          .endweak
-          *=org
-;-----------------------------------------------------------------------------
-; point d'entrée initial
-;-----------------------------------------------------------------------------
-super     lda  #147
-          jsr $ffd2
-          ldy #msg4-msgbas    ; Affiche "..sys ".
-          jsr sndmsg
-          lda supad           ; Stocker l'adresse du point d'entrée dans tmp0.
-          sta tmp0
-          lda supad+1
-          sta tmp0+1
-          jsr cvtdec          ; Convertir l'adresse en décimal.
-          lda #0
-          ldx #6
-          ldy #3
-          jsr nmprnt          ; Afficher l'adresse du point d'entrée.
-          jsr crlf
-          lda linkad          ; Définir le vecteur brk.
-          sta bkvec
-          lda linkad+1
-          sta bkvec+1
-          lda #$80            ; Désactiver les messages de contrôle du noyau
-          jsr setmsg          ; . et activer les messages d'erreur.
-          brk
+; aside from this, i have adopted a strict whitespace and comments only
+; policy so that i preserve code exactly as jim butterfield wrote it.
+; 
+; i think my comments are correct but i don't guarantee i haven't made
+; any errors. sadly jim isn't around to ask anymore. if you spot any
+; misunderstanings or errors in my comments, please report them.
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
+; temporary pointers
+tmp0    = $c1               ; used to return input, often holds end address
+tmp2    = $c3               ; usually holds start address
+
+; -----------------------------------------------------------------------------
+; kernal variables
+satus   = $90               ; kernal i/o status word
+fnlen   = $b7               ; length of current filename
+sadd    = $b9               ; current secondary address (official name sa)
+fa      = $ba               ; current device number
+fnadr   = $bb               ; pointer to current filename
+ndx     = $c6               ; number of characters in keyboard buffer
+keyd    = $0277             ; keyboard buffer
+bkvec   = $0316             ; brk instruction vector (official name cbinv)
+
+        *= $0100            ; store variables in tape error buffer
+
+; -----------------------------------------------------------------------------
+; variables
+acmd    .fill 1             ; addressing command
+length  .fill 1             ; length of operand
+mnemw   .fill 3             ; 3 letter mnemonic buffer
+savx    .fill 1             ; 1 byte temp storage, often to save x register
+opcode  .fill 1             ; current opcode for assembler/disassembler
+upflg   .fill 1             ; flag: count up (bit 7 clear) or down (bit 7 set)
+digcnt  .fill 1             ; digit count
+indig   .fill 1             ; numeric value of single digit
+numbit  .fill 1             ; numeric base of input
+stash   .fill 2             ; 2-byte temp storage
+u0aa0   .fill 10            ; work buffer
+u0aae   =*                  ; end of work buffer
+stage   .fill 30            ; staging buffer for filename, search, etc.
+estage  =*                  ; end of staging buffer
+
+        *= $0200            ; store more variables in basic line editor buffer
+
+inbuff  .fill 40            ; 40-character input buffer
+endin   =*                  ; end of input buffer
+
+; the next 7 locations are used to store the registers when
+; entering the monitor and restore them when exiting.
+
+pch     .fill 1             ; program counter high byte
+pcl     .fill 1             ; program counter low byte
+sr      .fill 1             ; status register
+acc     .fill 1             ; accumulator
+xr      .fill 1             ; x register
+yr      .fill 1             ; y register
+sp      .fill 1             ; stack pointer
+
+store   .fill 2             ; 2-byte temp storage
+chrpnt  .fill 1             ; current position in input buffer
+savy    .fill 1             ; temp storage, often to save y register
+u9f     .fill 1             ; index into assembler work buffer
+
+; -----------------------------------------------------------------------------
+; kernal entry points
+setmsg  = $ff90             ; set kernel message control flag
+second  = $ff93             ; set secondary address after listen
+tksa    = $ff96             ; send secondary address after talk
+listen  = $ffb1             ; command serial bus device to listen
+talk    = $ffb4             ; command serial bus device to talk
+setlfs  = $ffba             ; set logical file parameters
+setnam  = $ffbd             ; set filename
+acptr   = $ffa5             ; input byte from serial bus
+ciout   = $ffa8             ; output byte to serial bus
+untlk   = $ffab             ; command serial bus device to untalk
+unlsn   = $ffae             ; command serial bus device to unlisten
+chkin   = $ffc6             ; define input channel
+clrchn  = $ffcc             ; restore default devices
+input   = $ffcf             ; input a character (official name chrin)
+chrout  = $ffd2             ; output a character
+load    = $ffd5             ; load from device
+save    = $ffd8             ; save to device
+stop    = $ffe1             ; check the stop key
+getin   = $ffe4             ; get a character
+
+; -----------------------------------------------------------------------------
+; set up origin
+
+        .weak
+org     = $c000
+        .endweak
+
+*       = org
+
+; -----------------------------------------------------------------------------
+; initial entry point
+super   lda #147
+        jsr $ffd2
+        ldy #msg4-msgbas    ; display "..sys "
+        jsr sndmsg
+        lda supad           ; store entry point address in tmp0
+        sta tmp0
+        lda supad+1
+        sta tmp0+1
+        jsr cvtdec          ; convert address to decimal
+        lda #0
+        ldx #6
+        ldy #3
+        jsr nmprnt          ; print entry point address
+        jsr crlf
+        lda linkad          ; set brk vector
+        sta bkvec
+        lda linkad+1
+        sta bkvec+1
+        lda #$80            ; disable kernel control messages
+        jsr setmsg          ; and enable error messages
+        brk
+
+; -----------------------------------------------------------------------------
 ; brk handler
-;-----------------------------------------------------------------------------
-break     ldx  #$05           ; Retirer les registres de la pile dans l'ordre:
-bstack    pla                 ; . y, x, a, sr, pcl, pch, stocker en mémoire.
-          sta pch,x
-          dex 
-          bpl bstack
-          cld                 ; Désactiver le mode bcd.
-          tsx                 ; Stocker le pointeur de pile en mémoire.
-          stx sp
-          cli                 ; Activer les interruptions.
+break   ldx #$05            ; pull registers off the stack
+bstack  pla                 ; order: y,x,a,sr,pcl,pch
+        sta pch,x           ; store in memory
+        dex 
+        bpl bstack
+        cld                 ; disable bcd mode
+        tsx                 ; store stack pointer in memory 
+        stx sp
+        cli                 ; enable interupts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; display registers [r]
-;-----------------------------------------------------------------------------
-dsplyr    ldy  #msg2-msgbas   ; Affiche les en-têtes.
-          jsr  sndclr
-          lda  #$3b           ; S'enregistre avec le préfixe <;> pour 
-                              ; . permettre la modification.
-          jsr  chrout
-          lda  #$20
-          jsr  chrout
-          lda  pch            ; Affiche les 2 octets du compteur de programme. 
-          jsr  wrtwo
-          ldy  #1             ; Commence 1 octet après l'octet de poids fort 
-                              ; . du PC.
-disj      lda  pch,y          ; Boucle parmis le reste des registres.
-          jsr  wrbyte         ; Affiche la valeur du registre sur 1 octet.
-          iny 
-          cpy  #7             ; Il y a un total de 5 registres à afficher.
-          bcc  disj
+dsplyr  ldy #msg2-msgbas    ; display headers
+        jsr sndclr
+        lda #$3b            ; prefix registers with "; " to allow editing
+        jsr chrout
+        lda #$20
+        jsr chrout
+        lda pch             ; print 2-byte program counter
+        jsr wrtwo
+        ldy #1              ; start 1 byte after pc high byte
+disj    lda pch,y           ; loop through rest of the registers
+        jsr wrbyte          ; print 1-byte register value
+        iny 
+        cpy #7              ; there are a total of 5 registers to print
+        bcc disj
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; main loop
-;-----------------------------------------------------------------------------
-strt      jsr  crlf           ; Nouvelle ligne à l'écran.
-          ldx  #0             ; Point au début du tampon d'entrée.
-          stx  chrpnt 
-smove     jsr  input          ; Appel chrin du noyau pour saisir un caractère
-          sta  inbuff,x       ; . stocker dans le tampon d'entrée.
-          inx 
-          cpx  #endin-inbuff  ; Erreur si la mémoire tampon est pleine.
-          bcs  error
-          cmp  #$0d           ; Continue à lire jusqu'au CR.
-          bne  smove
-          lda  #0             ; Tampon d'entrée terminé par un caractère null.
-          sta  inbuff-1,x     ; . (remplace le cr)
-st1       jsr  getchr         ; Récupére un caractère du tampon.
-          beq  strt           ; Recommence si le tampon est vide.
-          cmp  #$20           ; Sauter les espaces de début.
-          beq  st1
-s0        ldx  #keytop-keyw   ; Boucle parmis les caractères valides de cmd.
-s1        cmp  keyw,x         ; Vérifie si le caractère saisi correspond.
-          beq  s2             ; Commande correspondante, exécuter.
-          dex                 ; Aucune correspondance, vérifie la commande 
-                              ; . suivante
-          bpl  s1             ; Continuez d'essayer jusqu'à ce que nous les 
-                              ; . ayons tous vérifiés puis passer au 
-                              ; . gestionnaire d'erreurs.
+strt    jsr crlf            ; new line
+        ldx #0              ; point at start of input buffer
+        stx chrpnt 
+smove   jsr input           ; chrin kernal call to input a character
+        sta inbuff,x        ; store in input buffer
+        inx 
+        cpx #endin-inbuff   ; error if buffer is full
+        bcs error
+        cmp #$0d            ; keep reading until cr
+        bne smove
+        lda #0              ; null-terminate input buffer
+        sta inbuff-1,x      ; (replacing the cr)
+st1     jsr getchr          ; get a character from the buffer
+        beq strt            ; start over if buffer is empty
+        cmp #$20            ; skip leading spaces
+        beq st1
+s0      ldx #keytop-keyw    ; loop through valid command characters
+s1      cmp keyw,x          ; see if input character matches
+        beq s2              ; command matched, dispatch it
+        dex                 ; no match, check next command
+        bpl s1              ; keep trying until we've checked them all
+                            ; then fall through to error handler
 
-;-----------------------------------------------------------------------------
-; gérer les erreurs
-;-----------------------------------------------------------------------------
-error     ldy  #msg3-msgbas   ; Afficher «?» pour indiquer une erreur et 
-                              ; . passer à la ligne suivante.
-          jsr  sndmsg
-          jmp  strt           ; Retour à la boucle principale.
+; -----------------------------------------------------------------------------
+; handle error
+error   ldy #msg3-msgbas    ; display "?" to indicate error and go to new line
+        jsr sndmsg
+        jmp strt            ; back to main loop
 
-;-----------------------------------------------------------------------------
-; traite les commandes
-;-----------------------------------------------------------------------------
-s2        cpx  #$13           ; Les 3 dernières commandes du tableau sont 
-                              ; . charger/enregistrer/valider qui sont gérées
-          bcs  lsv            ; . par la même sous-routine.
-          cpx  #$0f           ; Les 4 commandes suivantes sont des conversions
-          bcs  cnvlnk         ; . de base qui sont gérées par la même 
-                              ; . sous-routine.
-          txa                 ; Les commandes restantes sont transmises via la
-          asl  a              ; . table des vecteurs multiplier l'indice de la 
-          tax                 ; . commande par 2 puisque la table contient des 
-                              ; . adresses de 2 octets.
-          lda  kaddr+1,x      ; Place l'adresse de la table des vecteurs sur
-          pha                 ; . la pile de sorte que le rts de getpar saute à 
-                              ; . cet endroit.
-          lda  kaddr,x
-          pha
-          jmp  getpar         ; Obtenir le premier paramètre de la commande
-lsv       sta  savy           ; Gère le 
-                              ; . chargement/l'enregistrement/la validation
-          jmp  ld
-cnvlnk    jmp  convrt         ; Gère la conversion de base.
+; -----------------------------------------------------------------------------
+; dispatch command
+s2      cpx #$13            ; last 3 commands in table are load/save/validate
+        bcs lsv             ;   which are handled by the same subroutine
+        cpx #$0f            ; next 4 commands are base conversions
+        bcs cnvlnk          ;   which are handled by the same subroutine
+        txa                 ; remaining commands dispatch through vector table
+        asl a               ; multiply index of command by 2
+        tax                 ;   since table contains 2-byte addresses
+        lda kaddr+1,x       ; push address from vector table onto stack
+        pha                 ;   so that the rts from getpar will jump there
+        lda kaddr,x
+        pha
+        jmp getpar          ; get the first parameter for the command
+lsv     sta savy            ; handle load/save/validate
+        jmp ld
+cnvlnk  jmp convrt          ; handle base conversion
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; exit monitor [x]
-;-----------------------------------------------------------------------------
-exit      jmp  bboot          ; Saute au démarrage à froid pour réinitialiser 
-                              ; . le système de base sans effacer la memoire.
+exit    jmp ($a002)         ; jump to warm-start vector to reinitialize basic
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; display memory [m]
-;-----------------------------------------------------------------------------
-dsplym    bcs  dspm11         ; Commencer à partir de l'adresse de fin 
-                              ; . précédente si aucune adresse n'est fournie.
-          jsr  copy12         ; Enregistrer l'adresse de départ dans tmp2.
-          jsr  getpar         ; Capture l'adresse de fin dans tmp0.
-          bcc  dsmnew         ; L'utilisateur en a-t-il spécifié un?
-dspm11    lda  #$0b           ; Sinon, on affiche 12 lignes par défaut.
-          sta  tmp0
-          bne  dspbyt         ; Toujours vrai, mais bne utilise 2. jmp 3.
-dsmnew    jsr  sub12          ; Adresse de fin donnée, calculer les octets 
-                              ; . entre le début et la fin.
-          bcc  merror         ; Erreur si le début est après la fin.
-          ldx  #3             ; Diviser par 8 (décaler vers la droite 3 fois).
-dspm01    lsr  tmp0+1
-          ror  tmp0
-          dex   
-          bne  dspm01
-dspbyt    jsr  stop           ; Vérifie la touche [RUN/STOP].
-          beq  dspmx          ; Quitte prématurément si pressé.
-          ;-------------------------------------------------------------------
-          ; CORRECTIFS-V20 ::: Changer le nombre d'octets a afficher de 8 à 4.
-          ;-------------------------------------------------------------------
-          jsr  dispmem        ; Affiche 1 ligne contenant 4 octets.
-          lda  #4             ; Augmenter l'adresse de départ de 4 octets.
-          ;-------------------------------------------------------------------
-          jsr  bumpad2
-          jsr  suba1          ; Décrémente le compteur de lignes.
-          bcs  dspbyt         ; Affiche une autre ligne jusqu'à < 0.
-dspmx     jmp  strt           ; Retour à la boucle principale.
-merror    jmp  error          ; Gère les erreur.
+dsplym  bcs dspm11          ; start from previous end addr if no address given
+        jsr copy12          ; save start address in tmp2
+        jsr getpar          ; get end address in tmp0
+        bcc dsmnew          ; did user specify one?
+dspm11  lda #$0b            ; if not, show 12 lines by default
+        sta tmp0
+        bne dspbyt          ; always true, but bne uses 1 byte less than jmp
+dsmnew  jsr sub12           ; end addr given, calc bytes between start and end
+        bcc merror          ; error if start is after end
+        ldx #3              ; divide by 8 (shift right 3 times)
+dspm01  lsr tmp0+1
+        ror tmp0
+        dex 
+        bne dspm01
+dspbyt  jsr stop            ; check for stop key
+        beq dspmx           ; exit early if pressed
+        jsr dispmem         ; display 1 line containing 8 bytes
+        lda #8              ; increase start address by 8 bytes
+        jsr bumpad2
+        jsr suba1           ; decrement line counter
+        bcs dspbyt          ; show another line until it's < 0
+dspmx   jmp strt            ; back to main loop
+merror  jmp error           ; handle error
 
-;-----------------------------------------------------------------------------
-; modifier les registres [;]
-;-----------------------------------------------------------------------------
-altr      jsr  copy1p         ; Stocke le premier paramètre dans PC.
-          ldy  #0             ; Initialise le coumteur.
-altr1     jsr  getpar         ; Recupère la valeur du registre suivant.
-          bcs  altrx          ; Quitte prématurément si aucune autre valeur 
-                              ; . n'est fournie
-          lda  tmp0           ; Stocke en mémoire, décalage par rapport à sr.
-          sta  sr,y           ; Ces emplacements seront transférés aux caisses
-          iny                 ; . réelles avant la sortie de l'écran.
-          cpy  #$05           ; Avons-nous déjà mis à jour les 5 ?
-          bcc  altr1          ; Sinon, passez au suivant.
-altrx     jmp  strt           ; Retour à la boucle principale.
+; -----------------------------------------------------------------------------
+; alter registers [;]
+altr    jsr copy1p          ; store first parameter in pc
+        ldy #0              ; init counter
+altr1   jsr getpar          ; get value for next register
+        bcs altrx           ; exit early if no more values given
+        lda tmp0            ; store in memory, offset from sr
+        sta sr,y            ; these locations will be transferred to the
+        iny                 ;   actual registers before exiting the monitor
+        cpy #$05            ; have we updated all 5 yet?
+        bcc altr1           ; if not, get next
+altrx   jmp strt            ; back to main loop
 
-;-----------------------------------------------------------------------------
-; Modifier la mémoire [>]
-;-----------------------------------------------------------------------------
-altm      bcs  altmx          ; Quitte si aucun paramètre n'est fourni.
-          jsr  copy12         ; Copie le paramètre à l'adresse de départ.
-          ldy  #0
-altm1     jsr  getpar         ; Recupère le prochain octet en mémoire.
-          bcs  altmx          ; Ii aucune information fournie, on quitte.
-          lda  tmp0           ; Sauve la valeur à l'adresse de départ + y
-          sta  (tmp2),y
-          iny                 ; Octet suivant.
-          ;-------------------------------------------------------------------
-          ; CORRECTIFS-V20 ::: Changer le nombre d'octets a afficher de 8 à 4.
-          ;-------------------------------------------------------------------
-          cpy  #4             ; Avons-nous déjà lu 4 octets ?
-          ;-------------------------------------------------------------------
-          bcc  altm1          ; Sinon, lecture du suivant.
-altmx     lda  #$91           ; Déplace le curseur vers le haut.
-          jsr  chrout
-          jsr  dispmem        ; Réaffiche la ligne pour que l'ASCII 
-                              ; . corresponde à l'Hexadécimal.
-          jmp  strt           ; Retour à la boucle principale.
+; -----------------------------------------------------------------------------
+; alter memory [>]
+altm    bcs altmx           ; exit if no parameter provided
+        jsr copy12          ; copy parameter to start address
+        ldy #0
+altm1   jsr getpar          ; get value for next byte of memory
+        bcs altmx           ; if none given, exit early
+        lda tmp0            ; poke value into memory at start address + y
+        sta (tmp2),y
+        iny                 ; next byte
+        cpy #8              ; have we read 8 bytes yet?
+        bcc altm1           ; if not, read the next one
+altmx   lda #$91            ; move cursor up
+        jsr chrout
+        jsr dispmem         ; re-display line to make ascii match hex
+        jmp strt            ; back to main loop
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; goto (run) [g]
-;-----------------------------------------------------------------------------
-goto      ldx  sp             ; Charge le pointeur de pile depuis la mémoire.
-          txs                 ; Enregistrer dans le registre sp.
-goto2     jsr  copy1p         ; Copie l'adresse fournie dans PC.
-          sei                 ; Désactiver les interruptions
-          lda  pch            ; Place le MSB de PC sur la pile.
-          pha
-          lda  pcl            ; Place le LSB de PC sur la pile.
-          pha
-          lda  sr             ; Place l'octet de status sur la pile.
-          pha
-          lda  acc            ; Charge l'accumulateur depuis la mémoire.
-          ldx  xr             ; Charge X depuis la mémoire.
-          ldy  yr             ; Charge Y depuis la mémoire.
-          rti                 ; Retour de l'interruption (dépile PC et sr).
+goto    ldx sp              ; load stack pointer from memory
+        txs                 ; save in sp register
+goto2   jsr copy1p          ; copy provided address to pc
+        sei                 ; disable interrupts
+        lda pch             ; push pc high byte on stack
+        pha
+        lda pcl             ; push pc low byte on stack
+        pha
+        lda sr              ; push status byte on stack
+        pha
+        lda acc             ; load accumulator from memory
+        ldx xr              ; load x from memory
+        ldy yr              ; load y from memory
+        rti                 ; return from interrupt (pops pc and sr)
 
-;-----------------------------------------------------------------------------
-; Saut vers la sous-routine [j]
-;-----------------------------------------------------------------------------
-jsub      ldx  sp             ; Charge le pointeur de pile depuis la mémoire.
-          txs                 ; Sauve la valeur dans le registre sp.
-          jsr  goto2          ; Identique à la commande goto.
-          sty  yr             ; Enregistre y en mémoire.
-          stx  xr             ; Enregistre x en mémoire.
-          sta  acc            ; Enregistre acc en mémoire.
-          php                 ; Place l'état du processeur sur la pile.
-          pla                 ; Récupére l'état du processeur dans Acc.
-          sta  sr             ; Enregistre l'état du processeur en mémoire.
-          jmp  dsplyr         ; Afficher les registres.
+; jump to subroutine [j]
+jsub    ldx sp              ; load stack pointer from memory
+        txs                 ; save value in sp register
+        jsr goto2           ; same as goto command
+        sty yr              ; save y to memory
+        stx xr              ; save x to memory
+        sta acc             ; save accumulator to memory
+        php                 ; push processor status on stack
+        pla                 ; pull processor status into a
+        sta sr              ; save processor status to memory
+        jmp dsplyr          ; display registers
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; display 8 bytes of memory
-;-----------------------------------------------------------------------------
-dispmem   jsr  crlf           ; Nouvelle ligne.
-          lda  #">"           ; Préfixe > pour indiquer que la mémoire peut
-                              ;  . être modifiée sur place.
-          jsr  chrout
-          jsr  showad         ; Afficher l'adresse du premier octet.
-          ldy  #0
-          beq  dmemgo         ; showad a déjà imprimé un espace après adresse.
-dmemlp    jsr  space          ; Affiche un espace entre les octets.
-dmemgo    lda  (tmp2),y       ; load byte from start address + y
-          jsr  wrtwo          ; output hex digits for byte
-          iny                 ; next byte
-          cpy  #8             ; have we output 8 bytes yet?
-          bcc  dmemlp         ; if not, output next byte
-          ldy  #msg5-msgbas   ; if so, output : and turn on reverse video
-          jsr  sndmsg         ;   before displaying ascii representation
-          ldy  #0             ; back to first byte in line
-dchar     lda  (tmp2),y       ; load byte at start address + y
-          tax                 ; stash in x
-          and  #$bf           ; clear 6th bit
-          cmp  #$22           ; is it a quote (")?"
-          beq  ddot           ; if so, print . instead
-          txa                 ; if not, restore character
-          and  #$7f           ; clear top bit
-          cmp  #$20           ; is it a printable character (>= $20)?
-          txa                 ; restore character
-          bcs  dchrok         ; if printable, output character
-ddot      lda  #$2e           ; if not, output '.' instaed
-dchrok    jsr  chrout         ; send it
-          iny                 ; next byte
-          cpy  #8             ; have we output 8 bytes yet?
-          bcc  dchar          ; if not, output next byte
-          rts 
+dispmem jsr crlf            ; new line
+        lda #">"            ; prefix > so memory can be edited in place
+        jsr chrout
+        jsr showad          ; show address of first byte on line
+        ldy #0
+        beq dmemgo          ; showad already printed a space after the address
+dmemlp  jsr space           ; print space between bytes
+dmemgo  lda (tmp2),y        ; load byte from start address + y
+        jsr wrtwo           ; output hex digits for byte
+        iny                 ; next byte
+        cpy #8              ; have we output 8 bytes yet?
+        bcc dmemlp          ; if not, output next byte
+        ldy #msg5-msgbas    ; if so, output : and turn on reverse video
+        jsr sndmsg          ;   before displaying ascii representation
+        ldy #0              ; back to first byte in line
+dchar   lda (tmp2),y        ; load byte at start address + y
+        tax                 ; stash in x
+        and #$bf            ; clear 6th bit
+        cmp #$22            ; is it a quote (")?"
+        beq ddot            ; if so, print . instead
+        txa                 ; if not, restore character
+        and #$7f            ; clear top bit
+        cmp #$20            ; is it a printable character (>= $20)?
+        txa                 ; restore character
+        bcs dchrok          ; if printable, output character
+ddot    lda #$2e            ; if not, output '.' instaed
+dchrok  jsr chrout          ; send it
+        iny                 ; next byte
+        cpy #8              ; have we output 8 bytes yet?
+        bcc dchar           ; if not, output next byte
+        rts 
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; compare memory [c]
-;-----------------------------------------------------------------------------
 compar  lda #0              ; bit 7 clear signals compare
         .byte $2c           ; absolute bit opcode consumes next word (lda #$80)
 
-;-----------------------------------------------------------------------------
 ; transfer memory [t]
-;-----------------------------------------------------------------------------
 trans   lda #$80            ; bit 7 set signals transfer
         sta savy            ; save compare/transfer flag in savy
         lda #0              ; assume we're counting up (bit 7 clear)
@@ -349,9 +394,8 @@ tmor    jsr sub13           ; decrement length
         bcs tcloop          ; loop until length is 0
 texit   jmp strt            ; back to main loop
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; hunt memory [h]
-;-----------------------------------------------------------------------------
 hunt    jsr getdif          ; get start (tmp2) and end (tmp0) of haystack
         bcs herror          ; carry indicates error
         ldy #0
@@ -394,9 +438,8 @@ hnoft   jsr stop            ; no match, check for stop key
 hexit   jmp strt            ; back to main loop
 herror  jmp error           ; handle error
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; load, save, or verify [lsv]
-;-----------------------------------------------------------------------------
 ld      ldy #1              ; default to reading from tape, device #1
         sty fa
         sty sadd            ; default to secondary address #1
@@ -469,9 +512,8 @@ ldaddr  ldx tmp2            ; load address low byte in x
         sta sadd            ; secondary addr 0 means load to addr in x and y
         beq lshort          ; execute load
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; fill memory [f]
-;-----------------------------------------------------------------------------
 fill    jsr getdif          ; start in tmp2, end in stash, length in store
         bcs aerror          ; carry set indicates error
         jsr getpar          ; get value to fill in tmp0
@@ -488,12 +530,10 @@ fillp   lda tmp0            ; load value to fill in accumulator
         bcs fillp           ; keep going until length reaches 0
 fstart  jmp strt            ; back to main loop
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; assemble [a.]
-;-----------------------------------------------------------------------------
-;-----------------------------------------------------------------------------
+
 ; read in mnemonic
-;-----------------------------------------------------------------------------
 assem   bcs aerror          ; error if no address given
         jsr copy12          ; copy address to tmp2
 aget1   ldx #0
@@ -509,9 +549,8 @@ almor   cmp #$20            ; skip leading spaces
         inx
         cpx #3              ; have we read 3 characters yet?
         bne aget2           ; if not, get next character
-;-----------------------------------------------------------------------------
+
 ; compress mnemonic into two bytes
-;-----------------------------------------------------------------------------
 asqeez  dex                 ; move to previous char
         bmi aoprnd          ; if we're done with mnemonic, look for operand
         lda mnemw,x         ; get current character
@@ -525,9 +564,8 @@ ashift  lsr a               ;   into the first two bytes of the inst buffer
         bne ashift          ; keep looping until we reach zero
         beq asqeez          ; unconditional branch to handle next char
 aerror  jmp error           ; handle error
-;-----------------------------------------------------------------------------
+
 ; parse operand
-;-----------------------------------------------------------------------------
 aoprnd  ldx #2              ; mnemonic is in first two bytes so start at third
 ascan   lda digcnt          ; did we find address digits last time?
         bne aform1          ; if so, look for mode chars
@@ -561,9 +599,8 @@ aform1  jsr getchr          ; get next character
         cpx #u0aae-u0aa0    ; is instruction buffer full?
         bcc ascan           ; if not, keep scanning
         bcs aerror          ; error if buffer is full
-;-----------------------------------------------------------------------------
+
 ; find matching opcode
-;-----------------------------------------------------------------------------
 aescan  stx store           ; save number of bytes in assembly buffer
         ldx #0              ; start at opcode $00 and check every one until
         stx opcode          ;   we find one that matches our criteria
@@ -608,9 +645,8 @@ trybran lda store           ; get number of bytes in assembly buffer
         cmp u9f             ; more bytes left to check?
         beq abran           ; if not, we've found a match; build instruction
         jmp bumpop          ; if so, this opcode doesn't match; try the next
-;-----------------------------------------------------------------------------
+
 ; convert branches to relative address
-;-----------------------------------------------------------------------------
 abran   ldy length          ; get number of bytes in operand
         beq a1byte          ; if none, just output the opcode
         lda store+1         ; otherwise check the address format
@@ -636,9 +672,8 @@ abranx  dex                 ; adjust branch target relative to the
         txa
         ldy length          ; load length of operand
         bne objp2           ; don't use the absolute address
-;-----------------------------------------------------------------------------
+
 ; assemble machine code
-;-----------------------------------------------------------------------------
 objput  lda tmp0-1,y        ; get the operand
 objp2   sta (tmp2),y        ; store it after the opcode
         dey
@@ -671,9 +706,8 @@ a1byte  lda opcode          ; put opcode into instruction
         sta ndx
         jmp strt            ; back to main loop
 serror  jmp error           ; handle error
-;-----------------------------------------------------------------------------
+
 ; check characters in operand
-;-----------------------------------------------------------------------------
 chek2b  jsr chekop          ; check two bytes against value in accumulator
 chekop  stx savx            ; stash x
         ldx u9f             ; get current index into work buffer
@@ -688,9 +722,8 @@ opok    inc u9f             ; opcode matches so far; check the next criteria
         ldx savx            ; restore x
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; disassemble [d]
-;-----------------------------------------------------------------------------
 disass  bcs dis0ad          ; if no address was given, start from last address
         jsr copy12          ; copy start address to tmp2
         jsr getpar          ; get end address in tmp0
@@ -781,9 +814,9 @@ relc2   adc tmp2            ; add relative address to low byte
         inx                 ; if there's a carry, increment the high byte
 relc3   rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; get opcode mode and length
-;-----------------------------------------------------------------------------
+
 ; note: the labels are different, but the code of this subroutine is almost
 ; identical to the insds2 subroutine of the apple mini-assembler on page 78 of
 ; the apple ii red book. i'm not sure exactly where this code originated
@@ -837,9 +870,8 @@ gtfm4   dey
         bne gtfm2
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; extract and print packed mnemonics
-;-----------------------------------------------------------------------------
 propxx  tay                 ; use index in accumulator to look up mnemonic
         lda mneml,y         ;   and place a temporary copy in store
         sta store
@@ -858,9 +890,8 @@ prmn2   asl store+1         ; shift right byte
         bne prmn1           ; loop until all 3 letters are output
         jmp space           ; output space
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; read parameters
-;-----------------------------------------------------------------------------
 rdpar   dec chrpnt          ; back up one char
 getpar  jsr rdval           ; read the value
         bcs gterr           ; carry set indicates error
@@ -883,9 +914,8 @@ getgot  clc                 ; clear carry to indicate paremeter returned
         lda digcnt          ; return number of digits in a
         rts                 ; return to address pushed from vector table
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; read a value in the specified base
-;-----------------------------------------------------------------------------
 rdval   lda #0              ; clear temp
         sta tmp0
         sta tmp0+1
@@ -967,9 +997,8 @@ rdnil   clc                 ; clear carry to indicate success
         lda digcnt          ; return number of digits in a
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; print address
-;-----------------------------------------------------------------------------
 showad  lda tmp2
         ldx tmp2+1
 
@@ -997,9 +1026,8 @@ fresh   jsr crlf            ; output cr
         jsr chrout
         jmp snclr
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; output two hex digits for byte
-;-----------------------------------------------------------------------------
 wrtwo   stx savx            ; save x
         jsr asctwo          ; get hex chars for byte in x (lower) and a (upper)
         jsr chrout          ; output upper nybble
@@ -1007,9 +1035,8 @@ wrtwo   stx savx            ; save x
         ldx savx            ; restore x
         jmp chrout          ; output lower nybble
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; convert byte in a to hex digits
-;-----------------------------------------------------------------------------
 asctwo  pha                 ; save byte
         jsr ascii           ; do low nybble
         tax                 ; save in x
@@ -1018,9 +1045,8 @@ asctwo  pha                 ; save byte
         lsr a
         lsr a
         lsr a
-;-----------------------------------------------------------------------------
+
 ; convert low nybble in a to hex digit
-;-----------------------------------------------------------------------------
 ascii   and #$0f            ; clear upper nibble
         cmp #$0a            ; if less than a, skip next step
         bcc asc1
@@ -1028,13 +1054,11 @@ ascii   and #$0f            ; clear upper nibble
 asc1    adc #$30            ; add ascii char 0 to value
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; get prev char from input buffer
-;-----------------------------------------------------------------------------
 gotchr  dec chrpnt
-;-----------------------------------------------------------------------------
+
 ; get next char from input buffer
-;-----------------------------------------------------------------------------
 getchr  stx savx
         ldx chrpnt          ; get pointer to next char
         lda inbuff,x        ; load next char in a
@@ -1048,18 +1072,16 @@ nochar  php
         plp                 ; z flag will signal last character
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; copy tmp0 to tmp2
-;-----------------------------------------------------------------------------
 copy12  lda tmp0            ; low byte
         sta tmp2
         lda tmp0+1          ; high byte
         sta tmp2+1
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; subtract tmp2 from tmp0
-;-----------------------------------------------------------------------------
 sub12   sec
         lda tmp0            ; subtract low byte
         sbc tmp2
@@ -1069,9 +1091,8 @@ sub12   sec
         sta tmp0+1
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; subtract from tmp0
-;-----------------------------------------------------------------------------
 suba1   lda #1              ; shortcut to decrement by 1
 suba2   sta savx            ; subtrahend in accumulator
         sec
@@ -1083,9 +1104,8 @@ suba2   sta savx            ; subtrahend in accumulator
         sta tmp0+1
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; subtract 1 from store
-;-----------------------------------------------------------------------------
 sub13   sec
         lda store
         sbc #1              ; decrement low byte
@@ -1095,9 +1115,8 @@ sub13   sec
         sta store+1
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; add to tmp2
-;-----------------------------------------------------------------------------
 adda2   lda #1              ; shortcut to increment by 1
 bumpad2 clc
         adc tmp2            ; add value in accumulator to low byte
@@ -1106,9 +1125,8 @@ bumpad2 clc
         inc tmp2+1          ; carry to high byte
 bumpex  rts 
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; subtract 1 from tmp2
-;-----------------------------------------------------------------------------
 sub21   sec
         lda tmp2            ; decrement low byte
         sbc #1
@@ -1118,9 +1136,8 @@ sub21   sec
         sta tmp2+1
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; copy tmp0 to pc
-;-----------------------------------------------------------------------------
 copy1p  bcs cpy1px          ; do nothing if parameter is empty
         lda tmp0            ; copy low byte
         ldy tmp0+1          ; copy high byte
@@ -1128,9 +1145,8 @@ copy1p  bcs cpy1px          ; do nothing if parameter is empty
         sty pch
 cpy1px  rts 
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; get start/end addresses and calc difference
-;-----------------------------------------------------------------------------
 getdif  bcs gdifx           ; exit with error if no parameter given
         jsr copy12          ; save start address in tmp2
         jsr getpar          ; get end address in tmp0
@@ -1150,9 +1166,8 @@ getdif  bcs gdifx           ; exit with error if no parameter given
 gdifx   sec                 ; set carry to indicate error
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; convert base [$+&%]
-;-----------------------------------------------------------------------------
 convrt  jsr rdpar           ; read a parameter
         jsr fresh           ; next line and clear
         lda #"$"            ; output $ sigil for hex
@@ -1184,9 +1199,9 @@ convrt  jsr rdpar           ; read a parameter
         jsr prinum          ; output number
         jmp strt            ; back to mainloop
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; convert binary to bcd
-;-----------------------------------------------------------------------------
+
 cvtdec  jsr copy12          ; copy value from tmp0 to tmp2
         lda #0
         ldx #2              ; clear 3 bytes in work buffer
@@ -1210,9 +1225,7 @@ decdbl  lda u0aa0,x         ; load current value of byte
         plp                 ; restore processor status
         rts
 
-;-----------------------------------------------------------------------------
 ; load the input value and fall through to print it
-;-----------------------------------------------------------------------------
 prinum  pha                 ; save accumulator
         lda tmp0            ; copy input low byte to work buffer
         sta u0aa0+2
@@ -1222,9 +1235,7 @@ prinum  pha                 ; save accumulator
         sta u0aa0
         pla                 ; restore accumulator
 
-;-----------------------------------------------------------------------------
 ; print number in specified base without leading zeros
-;-----------------------------------------------------------------------------
 nmprnt  sta digcnt          ; number of digits in accumulator
         sty numbit          ; bits per digit passed in y register
 digout  ldy numbit          ; get bits to process
@@ -1248,9 +1259,8 @@ zersup  dex                 ; decrement number of leading zeros
         bne digout          ; next digit
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; disk status/command [@]
-;-----------------------------------------------------------------------------
 dstat   bne chgdev          ; if device address was given, use it
         ldx #8              ; otherwise, default to 8
         .byte $2c           ; absolute bit opcode consumes next word (ldx tmp0)
@@ -1272,18 +1282,16 @@ chgdev  ldx tmp0            ; load device address from parameter
         jsr listen
         lda #$6f            ; secondary address 15 (only low nybble used)
         jsr second
-;-----------------------------------------------------------------------------
+
 ; send command to device
-;-----------------------------------------------------------------------------
 dcomd   ldx chrpnt          ; get next character from buffer
         inc chrpnt
         lda inbuff,x
         beq instat          ; break out of loop if it's null
         jsr ciout           ; otherwise output it to the serial bus
         bcc dcomd           ; unconditional loop: ciout clears carry before rts
-;-----------------------------------------------------------------------------
+
 ; get device status
-;-----------------------------------------------------------------------------
 instat  jsr unlsn           ; command device to unlisten
 instat1 jsr crlf            ; new line
         lda tmp0            ; load device address
@@ -1300,9 +1308,8 @@ rdstat  jsr acptr           ; read byte from serial bus
 dexit   jsr untlk           ; command device to stop talking
         jmp strt            ; back to mainloop
 ioerr   jmp error           ; handle error
-;-----------------------------------------------------------------------------
+
 ; get directory
-;-----------------------------------------------------------------------------
 direct  lda tmp0            ; load device address
         jsr listen          ; command device to listen
         lda #$f0            ; secondary address 0 (only low nybble used)
@@ -1363,9 +1370,8 @@ drexit  jsr untlk           ; command device to untalk
         jsr unlsn           ; command device to unlisten
         jmp strt            ; back to mainloop
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; print and clear routines
-;-----------------------------------------------------------------------------
 cline   jsr crlf            ; send cr+lf
         jmp snclr           ; clear line
 sndclr  jsr sndmsg
@@ -1378,9 +1384,8 @@ snclp   lda #$20            ; output space character
         bne snclp
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; display message from table
-;-----------------------------------------------------------------------------
 sndmsg  lda msgbas,y        ; y contains offset in msg table
         php
         and #$7f            ; strip high bit before output
@@ -1390,9 +1395,8 @@ sndmsg  lda msgbas,y        ; y contains offset in msg table
         bpl sndmsg          ; loop until high bit is set
         rts
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; message table; last character has high bit set
-;-----------------------------------------------------------------------------
 msgbas  =*
 msg2    .byte $0d               ; header for registers
         .text "   pc  sr ac xr yr sp   v1.2"
@@ -1407,12 +1411,12 @@ msg7    .byte $41,$20+$80       ; assemble next instruction: "a " + addr
 msg8    .text "  "              ; pad non-existent byte: skip 3 spaces
         .byte $20+$80
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; addressing mode table - nybbles provide index into mode2 table
 ; for opcodes xxxxxxy0, use xxxxxx as index into table
 ; for opcodes wwwxxy01  use $40 + xx as index into table
 ; use right nybble if y=0; use left nybble if y=1
-;-----------------------------------------------------------------------------
+
 mode    .byte $40,$02,$45,$03   ; even opcodes
         .byte $d0,$08,$40,$09
         .byte $30,$22,$45,$33
@@ -1431,18 +1435,16 @@ mode    .byte $40,$02,$45,$03   ; even opcodes
         .byte $d0,$08,$40,$09
         .byte $62,$13,$78,$a9   ; opcodes ending in 01
 
-;-----------------------------------------------------------------------------
 ; addressing mode format definitions indexed by nybbles from mode table
-;-----------------------------------------------------------------------------
+
 ; left 6 bits define which characters appear in the assembly operand
 ; left 3 bits are before the address; next 3 bits are after
-;-----------------------------------------------------------------------------
+
 ; right-most 2 bits define length of binary operand
-;-----------------------------------------------------------------------------
+
 ; index               654 321
 ; 1st character       $(# ,),  
 ; 2nd character        $$ x y    length  format      idx mode
-;-----------------------------------------------------------------------------
 mode2   .byte $00   ; 000 000    00                  0   error
         .byte $21   ; 001 000    01      #$00        1   immediate
         .byte $81   ; 100 000    01      $00         2   zero-page
@@ -1457,20 +1459,21 @@ mode2   .byte $00   ; 000 000    00                  0   error
         .byte $4a   ; 010 010    10      ($0000)     b   indirect
         .byte $85   ; 100 001    01      $00,y       c   zero-page,y
         .byte $9d   ; 100 111    01      $0000*      d   relative
-;-----------------------------------------------------------------------------
+
 ; * relative is special-cased so format bits don't match
-;-----------------------------------------------------------------------------
-;-----------------------------------------------------------------------------
+
+
 ; character lookup tables for the format definitions in mode2
-;-----------------------------------------------------------------------------
+
 char1   .byte $2c,$29,$2c       ; ","  ")"  ","
         .byte $23,$28,$24       ; "#"  "("  "$"
 
 char2   .byte $59,$00,$58       ; "y"   0   "x"
         .byte $24,$24,$00       ; "$"  "$"   0
-;-----------------------------------------------------------------------------
+
+; -----------------------------------------------------------------------------
 ; 3-letter mnemonics packed into two bytes (5 bits per letter)
-;-----------------------------------------------------------------------------
+
         ; left 8 bits
         ; xxxxx000 opcodes
 mneml   .byte $1c,$8a,$1c,$23   ; brk php bpl clc
@@ -1518,50 +1521,21 @@ mnemr   .byte $d8,$62,$5a,$48   ; brk php bpl clc
         .byte $44,$44,$a2,$c8   ; sta lda cmp sbc
         .byte $0d,$20,$20,$20
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 ; single-character commands
-;-----------------------------------------------------------------------------
 keyw    .text "acdfghjmrtx@.>;"
 hikey   .text "$+&%lsv"
 keytop  =*
 
-;-----------------------------------------------------------------------------
 ; vectors corresponding to commands above
-;-----------------------------------------------------------------------------
 kaddr   .word assem-1,compar-1,disass-1,fill-1
         .word goto-1,hunt-1,jsub-1,dsplym-1
         .word dsplyr-1,trans-1,exit-1,dstat-1
         .word assem-1,altm-1,altr-1
 
-;-----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
 modtab  .byte $10,$0a,$08,02    ; modulo number systems
 lentab  .byte $04,$03,$03,$01   ; bits per digit
 
 linkad  .word break             ; address of brk handler
 supad   .word super             ; address of entry point
-
-;-----------------------------------------------------------------------------
-     .include  "string-fr.asm"
-     ;.include  "string-en.asm"
-     .include  "memview.asm"
-;-----------------------------------------------------------------------------
-     .include  "l-v20-push.asm" 
-     .include  "l-v20-string.asm" 
-     .include  "l-v20-mem.asm"           
-     .include  "l-v20-math.asm"           
-     .include  "l-v20-conv.asm" 
-     .include  "l-v20-keyb.asm" 
-     .include  "l-v20-screen.asm"
-     .include  "l-v20-showregs.asm"
-prgend    .word $1234     
-;--------------------------------------
-     .include  "e-v20-page0.asm"
-     .include  "e-v20-float.asm"
-     .include  "e-v20-basic-map.asm"
-     .include  "e-v20-kernal-map.asm"
-     .include  "e-v20-vic.asm"
-     .include  "e-v20-vars.asm"
-     .include  "e-local-equates.asm"
-     .include  "e-local-vars.asm"
-;--------------------------------------
-

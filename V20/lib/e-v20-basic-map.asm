@@ -45,6 +45,7 @@ bprdy   =   $c469   ; Afficher ERREUR, ou un autre message indiqué.
 bready  =   $c474   ; Afficher le message READY.
 bmain   =   $c480   ; Boucle principale BASIC, recevoir et exécuter ou stocker 
                     ; la ligne BASIC.
+bboot   =   $c483
 bnewlin =   $c49c   ; Stocker/remplacer une ligne de programme BASIC.
 blnkprg =   $c533   ; Rechaîner les lignes du programme BASIC.
 bgetlin =   $c560   ; Recevoir les données du périphérique et remplir la 
