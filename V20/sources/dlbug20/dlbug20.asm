@@ -16,7 +16,7 @@ main      .block
 ;Point d 'entrée initiale
 ;-----------------------------------------------------------------------------
           .weak
-          org = $a000
+          org = $6000
           .endweak
           *=org
 ;-----------------------------------------------------------------------------
@@ -279,84 +279,90 @@ dchar     lda  (tmp2),y       ; Charger octet à l'adresse de début + y.
           and  #$7f           ; Effacer le bit supérieur
           cmp  #$20           ; Est-ce un caractère affichable (>= $20)?
           txa                 ; Restaurer le caractère.
-          bcs  dchrok         ; si imprimable, caractère de sortie
-ddot      lda  #$2e           ; sinon, afficher '.' à la place
-dchrok    jsr  chrout         ; envoie-le
-          iny                 ; octet suivant
+          bcs  dchrok         ; Si imprimable, affiche le caractère.
+ddot      lda  #$2e           ; Sinon, on met un '.' à la place
+dchrok    jsr  chrout         ; On l'affiche.
+          iny                 ; On passe à l'octet suivant
           ;-------------------------------------------------------------------
           ; CORRECTIFS-V20 ::: Changer le nombre d'octets a afficher de 8 à 4.
           ;-------------------------------------------------------------------
-          cpy  #4             ; have we output 4 bytes yet?
+          cpy  #4             ; Avons-nous déjà affiché 4 octets ?
           ;-------------------------------------------------------------------
-          bcc  dchar          ; if not, output next byte
+          bcc  dchar          ; Sinon, afficher l'octet suivant.
           rts 
 
 ;-----------------------------------------------------------------------------
 ; compare memory [c]
 ;-----------------------------------------------------------------------------
-compar  lda #0              ; bit 7 clear signals compare
-        .byte $2c           ; absolute bit opcode consumes next word (lda #$80)
+compar    lda  #0             ; bit 7 efface les signaux comparer
+          .byte $2c           ; L'opcode de bit absolu consomme le mot suivant
+                              ; . (lda #$80).
 
 ;-----------------------------------------------------------------------------
 ; transfer memory [t]
 ;-----------------------------------------------------------------------------
-trans   lda #$80            ; bit 7 set signals transfer
-        sta savy            ; save compare/transfer flag in savy
-        lda #0              ; assume we're counting up (bit 7 clear)
-        sta upflg           ; save direction flag
-        jsr getdif          ; get two addresses and calculate difference
-                            ;   tmp2 = source start
-                            ;   stash = source end
-                            ;   store = length
-        bcs terror          ; carry set indicates error
-        jsr getpar          ; get destination address in tmp0
-        bcc tokay           ; carry set indicates error
-terror  jmp error           ; handle error
-tokay   bit savy            ; transfer or compare?
-        bpl compar1         ; high bit clear indicates compare
-        lda tmp2            ; if it's a transfer, we must take steps
-        cmp tmp0            ;   to avoid overwriting the source bytes before 
-        lda tmp2+1          ;   they have been transferred
-        sbc tmp0+1          ; compare source (tmp2) to destination (tmp0)
-        bcs compar1         ; and count up if source is before than desitnation
-        lda store           ; otherwise, start at end and count down...
-        adc tmp0            ; add length (store) to desintation (tmp0)
-        sta tmp0            ; to calculate end of destination
-        lda store+1
-        adc tmp0+1
-        sta tmp0+1
-        ldx #1              ; change source pointer from beginning to end
-tdown   lda stash,x         ; tmp2 = source end (stash)
-        sta tmp2,x
-        dex 
-        bpl tdown
-        lda #$80            ; high bit set in upflg means count down
-        sta upflg
-compar1 jsr crlf            ; new line
-        ldy #0              ; no offset from pointer
-tcloop  jsr stop            ; check for stop key
-        beq texit           ; exit if pressed
-        lda (tmp2),y        ; load byte from source
-        bit savy            ; transfer or compare?
-        bpl compar2         ; skip store if comparing
-        sta (tmp0),y        ; otherwise, store in destination
-compar2 cmp (tmp0),y        ; compare to destination
-        beq tmvad           ; don't show address if equal
-        jsr showad          ; show address
-tmvad   bit upflg           ; counting up or down?
-        bmi tdecad          ; high bit set means we're counting down
-        inc tmp0            ; increment destination low byte
-        bne tincok
-        inc tmp0+1          ; carry to high byte if necessary
-        bne tincok
-        jmp error           ; error if high byte overflowed
-tdecad  jsr suba1           ; decrement destination (tmp0)
-        jsr sub21           ; decrement source (tmp2)
-        jmp tmor
-tincok  jsr adda2           ; increment source (tmp2)
-tmor    jsr sub13           ; decrement length
-        bcs tcloop          ; loop until length is 0
-texit   jmp strt            ; back to main loop
+trans     lda  #$80           ; Bit 7 place le transfert de signaux
+          sta  savy           ; Enregistrer l'indicateur de 
+                              ; . comparaison/transfert dans Savy
+          lda  #0             ; Suppose que nous comptons à rebours (b7 clair)
+          sta  upflg          ; Enregistrer le drapeau de direction
+          jsr  getdif         ; Obtien deux adresses et calcule la différence
+                              ; . tmp2  = debut de la source
+                              ; . stash = fin de la source end
+                              ; . store = longueur
+          bcs  terror         ; Bit carry a un indique une erreur
+          jsr  getpar         ; obtien l'adresse de destination dans tmp0
+          bcc  tokay          ; Bit carry a un indique une erreur
+terror    jmp  error          ; Gère les erreurs
+tokay     bit  savy           ; Transférer ou comparer ?
+          bpl  compar1        ; Bit 7 à 0 indique comparer
+          lda  tmp2           ; S'il s'agit d'un transfert, nous devons 
+          cmp  tmp0           ; . prendre des mesures pour éviter d'écraser 
+          lda  tmp2+1         ; . les octets sources avant qu'ils n'aient été 
+                              ; . transférés  
+          sbc  tmp0+1         ; Comparer la source (tmp2) à la destination
+          bcs  compar1        ; . (tmp0) et incrémenter si la source est 
+                              ; . antérieure à la destination.
+          lda  store          ; Sinon, commencez par la fin et décomptez en 
+          adc  tmp0           ; . ajoutant la longueur (stockée) à la 
+          sta  tmp0           ; . destination (tmp0) pour calculer la fin de 
+                              ; . la destination.
+          lda  store+1
+          adc  tmp0+1
+          sta  tmp0+1
+          ldx  #1             ; Modifier le pointeur source du début à la fin
+tdown     lda  stash,x        ; tmp2 = fin de la source (réserve).
+          sta  tmp2,x
+          dex  
+          bpl  tdown
+          lda  #$80           ; Le bit haut activé dans upflg signifie un 
+                              ; . compte à rebours.
+          sta  upflg
+compar1   jsr  crlf           ; Nouvelle ligne.
+          ldy  #0             ; aucun décalage par rapport au pointeur.
+tcloop    jsr  stop           ; vérifier la touche [RUN/STOP].
+          beq  texit          ; Quitte si appuiée.
+          lda  (tmp2),y       ; Charge un octet depuis la source.
+          bit  savy           ; Transférer ou comparer?
+          bpl  compar2        ; Ignorer la sauvegarde si comparaison.
+          sta  (tmp0),y       ; Sinon, stocker dans la destination.
+compar2   cmp  (tmp0),y       ; Comparer à la destination.
+          beq  tmvad          ; Ne pas afficher l'adresse si égale
+          jsr  showad         ; Afficher l'adresse
+tmvad     bit  upflg          ; Compter en avant ou en arrière ?
+          bmi  tdecad         ; Le bit 7 activé signifie que nous décomptons.
+          inc  tmp0           ; Incrémenter l'octet LSB de la destination.
+          bne  tincok
+          inc  tmp0+1         ; Reporte au MSB si nécessaire.
+          bne  tincok
+          jmp  error          ; Erreur si dépassement de capacité du MSB.
+tdecad    jsr  suba1          ; Décrémenter la destination (tmp0).
+          jsr  sub21          ; Décrémenter la source (tmp2).
+          jmp  tmor
+tincok    jsr  adda2          ; Incrémenter la source (tmp2).
+tmor      jsr  sub13          ; Décrémenter la longueur.
+          bcs  tcloop         ; Boucle jusqu'à ce que la longueur soit 0.
+texit     jmp  strt           ; Retour à la boucle principale.
 
 ;-----------------------------------------------------------------------------
 ; hunt memory [h]
@@ -1232,7 +1238,7 @@ prinum  pha                 ; save accumulator
         pla                 ; restore accumulator
 
 ;-----------------------------------------------------------------------------
-; print number in specified base without leading zeros
+; Affiche un nombre dans la base spécifiée sans précéder de zéros.
 ;-----------------------------------------------------------------------------
 nmprnt  sta digcnt          ; number of digits in accumulator
         sty numbit          ; bits per digit passed in y register
@@ -1260,144 +1266,159 @@ zersup  dex                 ; decrement number of leading zeros
 ;-----------------------------------------------------------------------------
 ; disk status/command [@]
 ;-----------------------------------------------------------------------------
-dstat   bne chgdev          ; if device address was given, use it
-        ldx #8              ; otherwise, default to 8
-        .byte $2c           ; absolute bit opcode consumes next word (ldx tmp0)
-chgdev  ldx tmp0            ; load device address from parameter
-        cpx #4              ; make sure device address is in range 4-31
-        bcc ioerr
-        cpx #32
-        bcs ioerr
-        stx tmp0
-        lda #0              ; clear status
-        sta satus
-        sta fnlen           ; empty filename
-        jsr getchr          ; get next character
-        beq instat1         ; null, display status
-        dec chrpnt          ; back up 1 char
-        cmp #"$"            ; $, display directory
-        beq direct
-        lda tmp0            ; command specified device to listen
-        jsr listen
-        lda #$6f            ; secondary address 15 (only low nybble used)
-        jsr second
+dstat     bne  chgdev         ; si une adresse de périphérique a été fournie, 
+                              ; utilisez-la
+          ldx  #8             ; sinon, la valeur par défaut est 8
+          .byte $2c           ; L'opcode de bit absolu consomme le mot suivant
+                              ; . (ldx tmp0)
+chgdev    ldx  tmp0           ; Charge l'adresse du périphérique à partir du 
+                              ; . paramètre.
+          cpx  #4             ; S'assure que l'adresse du périphérique se 
+                              ; . situe dans la plage 4-31.
+          bcc  ioerr
+          cpx  #32
+          bcs  ioerr
+          stx  tmp0
+          lda  #0             ; Efface le status.
+          sta  satus
+          sta  fnlen          ; Vide le nom de fichier.
+          jsr  getchr         ; Obtient le prochain caractere.
+          beq  instat1        ; nul, afficher l'état
+          dec  chrpnt         ; reculez d'un caractère
+          cmp  #"$"           ; $, Affiche le repertoire.
+          beq  direct
+          lda  tmp0           ; Ordonne LISTEN au périphérique spécifié.
+          jsr  listen
+          lda  #$6f           ; adresse secondaire 15 
+                              ; . (seul le nibble de poids faible est utilisé)
+          jsr  second
 ;-----------------------------------------------------------------------------
-; send command to device
+; Envoyer une commande au périphérique.
 ;-----------------------------------------------------------------------------
-dcomd   ldx chrpnt          ; get next character from buffer
-        inc chrpnt
-        lda inbuff,x
-        beq instat          ; break out of loop if it's null
-        jsr ciout           ; otherwise output it to the serial bus
-        bcc dcomd           ; unconditional loop: ciout clears carry before rts
+dcomd     ldx  chrpnt         ; Récupére le caractère suivant du tampon.
+          inc  chrpnt
+          lda  inbuff,x
+          beq  instat         ; Sort de la boucle si la valeur est nulle.
+          jsr  ciout          ; Sinon, envoyez-le sur le bus série.
+          bcc  dcomd          ; Boucle inconditionnelle: ciout efface carry.
+          rts
 ;-----------------------------------------------------------------------------
-; get device status
+; obtenir l'état du périphérique.
 ;-----------------------------------------------------------------------------
-instat  jsr unlsn           ; command device to unlisten
-instat1 jsr crlf            ; new line
-        lda tmp0            ; load device address
-        jsr talk            ; command device to talk
-        lda #$6f            ; secondary address 15 (only low nybble used)
-        jsr tksa
-rdstat  jsr acptr           ; read byte from serial bus
-        jsr chrout          ; print it
-        cmp #$0d            ; if the byte is cr, exit loop
-        beq dexit
-        lda satus           ; check status
-        and #$bf            ; ignore eoi bit
-        beq rdstat          ; if no errors, read next byte
-dexit   jsr untlk           ; command device to stop talking
-        jmp strt            ; back to mainloop
-ioerr   jmp error           ; handle error
+instat    jsr  unlsn          ; Ordonne UNLISTEN au périphérique.
+instat1   jsr  crlf           ; Nouvelle ligne.
+          lda  tmp0           ; charger l'adresse du périphérique.
+          jsr  talk           ; Ordonne TALK au périphérique.
+          lda  #$6f           ; adresse secondaire 15 
+                              ;(seul le nibble de poids faible est utilisé)
+          jsr  tksa
+rdstat    jsr  acptr          ; Li un octet depuis le bus série
+          jsr  chrout         ; Affiche-le.
+          cmp  #$0d           ; Si l'octet est cr-lf, sortir de la boucle.
+          beq  dexit
+          lda  satus          ; Vérifie l'état.
+          and  #$bf           ; Ignore le bit eoi.
+          beq  rdstat         ; En l'absence d'erreurs, lire l'octet suivant.
+dexit     jsr  untlk          ; Ordonne UNTALK au périphérique.
+          jmp  strt           ; Retour à la boucle principale.
+ioerr     jmp  error          ; Gère les erreurs.
 ;-----------------------------------------------------------------------------
-; get directory
+; Obtenir le répertoire
 ;-----------------------------------------------------------------------------
-direct  lda tmp0            ; load device address
-        jsr listen          ; command device to listen
-        lda #$f0            ; secondary address 0 (only low nybble used)
-        jsr second
-        ldx chrpnt          ; get index of next character
-dir2    lda inbuff,x        ; get next character from buffer
-        beq dir3            ; break if it's null
-        jsr ciout           ; send character to device
-        inx                 ; increment characer index
-        bne dir2            ; loop if it hasn't wrapped to zero
-dir3    jsr unlsn           ; command device to unlisten
-        jsr crlf            ; new line
-        lda tmp0            ; load device address
-        pha                 ; save on stack
-        jsr talk            ; command device to talk
-        lda #$60            ; secondary address 0 (only low nybble used)
-        jsr tksa
-        ldy #3              ; read 3 16-bit values from device
-dirlin  sty store           ;   ignore the first 2; 3rd is file size
-dlink   jsr acptr           ; read low byte from device
-        sta tmp0            ; store it
-        lda satus           ; check status
-        bne drexit          ; exit if error or eof occurred
-        jsr acptr           ; read high byte from device
-        sta tmp0+1          ; store it
-        lda satus           ; check status
-        bne drexit          ; exit if error or eof cocurred
-        dec store           ; decrement byte count
-        bne dlink           ; loop if bytes remain
-        jsr cvtdec          ; convert last 16-bit value to decimal
-        lda #0              ; clear digit count
-        ldx #6              ; max 6 digits
-        ldy #3              ; 3 bits per digit
-        jsr nmprnt          ; output number
-        lda #" "            ; output space
-        jsr chrout
-dname   jsr acptr           ; get a filename character from the device
-        beq dmore           ; if it's null, break out of loop
-        ldx satus           ; check for errors or eof
-        bne drexit          ; if found exit early
-        jsr chrout          ; output character
-        clc
-        bcc dname           ; unconditional branch to read next char
-dmore   jsr crlf
-        jsr stop            ; check for stop key
-        beq drexit          ; exit early if pressed
-        jsr getin           ; pause if a key was pressed
-        beq nopaws
-paws    jsr getin           ; wait until another key is pressed
-        beq paws            
-nopaws  ldy #2
-        bne dirlin          ; unconditional branch to read next file
-drexit  jsr untlk           ; command device to untalk
-        pla                 ; restore accumulator
-        jsr listen          ; command device to listen
-        lda #$e0            ; secondary address 0 (only low nybble is used)
-        jsr second
-        jsr unlsn           ; command device to unlisten
-        jmp strt            ; back to mainloop
+direct    lda  tmp0           ; Charger l'adresse du périphérique.
+          jsr  listen         ; Ordonne LISTEN au périphérique.
+          lda  #$f0           ; adresse secondaire 0 
+                              ; .(seul le nibble de poids faible est utilisé).
+          jsr  second
+          ldx  chrpnt         ; Obtien l'index du caractère suivant.
+dir2      lda  inbuff,x       ; Récupère le caractère suivant du tampon.
+          beq  dir3           ; Interrompre si la valeur est nulle.
+          jsr  ciout          ; Envoie un caractère au périphérique.
+          inx                 ; Incrémente l'indexe du caractère.
+          bne  dir2           ; Boucle si la valeur n'est pas revenue à zéro.
+dir3      jsr  unlsn          ; Ordonne UNLISTEN au périphérique.
+          jsr  crlf           ; Nouvelle ligne.
+          lda  tmp0           ; Charger l'adresse du périphérique.
+          pha                 ; Enregistre sur la pile.
+          jsr  talk           ; Ordonne TALK au périphérique.
+          lda  #$60           ; Adresse second. 0 (seul le LSN est utilisé)
+          jsr  tksa
+          ldy  #3             ; Lire 3 valeurs de 16 bits du périphérique.
+dirlin    sty  store          ; . Ignorez les deux premiers; 
+                              ; . le troisième est la taille du fichier.
+dlink     jsr  acptr          ; Lit le LSB depuis le périphérique.
+          sta  tmp0           ; L'enregistre.
+          lda  satus          ; Vérifie l'état.
+          bne  drexit         ; Quitte en cas d'erreur ou de fin de fichier.
+          jsr  acptr          ; Lit le MSB depuis le périphérique.
+          sta  tmp0+1         ; L'enregistre.
+          lda  satus          ; Vérifie l'état.
+          bne  drexit         ; Quitte en cas d'erreur ou de fin de fichier.
+          dec  store          ; Décrémenter le compteur d'octets.
+          bne  dlink          ; Boucle si des octets restent.
+          jsr  cvtdec         ; Convertir dernière valeur 16 bits en décimal.
+          lda  #0             ; Met le compteur de caracteres a 0.
+          ldx  #6             ; Max 6 chiffres.
+          ldy  #3             ; 3 bits par chiffre.
+          jsr  nmprnt         ; Affiche le nombre.
+          lda  #" "           ; Affiche un espace.
+          jsr  chrout
+dname     jsr  acptr          ; Récupère un caractère de nom de fichier depuis
+                              ; . le périphérique
+          beq  dmore          ; Si la valeur est nulle, sortir de la boucle
+          ldx  satus          ; Vérifie les erreurs ou la fin du fichier.
+          bne  drexit         ; Si trouvé, on sort.
+          jsr  chrout         ; Affiche le caractere.
+          clc
+          bcc  dname          ; Branchement incond. pour lire carac. suivant.
+dmore     jsr  crlf
+          jsr  stop           ; Vérifier la touche [RUN/STOP]
+          beq  drexit         ; Quitter si pressée.
+          jsr  getin          ; Pause si une touche a été pressée.
+          beq  nopaws
+paws      jsr  getin          ; Attendre qu'une autre touche soit enfoncée.
+          beq  paws            
+nopaws    ldy  #2
+          bne  dirlin         ; Branchement incond. pour lire fichier suivant.
+drexit    jsr  untlk          ; Ordonne UNTALK au périphérique.
+          pla                 ; restaurer l'accumulateur
+          jsr  listen         ; Ordonne LISTEN au périphérique.
+          lda  #$e0           ; adresse secondaire 0 
+                              ; .(seul le nibble de poids faible est utilisé).
+          jsr  second
+          jsr  unlsn          ; Ordonne UNLISTEN au périphérique.
+          jmp  strt           ; Retour à la boucle principale.
 
 ;-----------------------------------------------------------------------------
-; print and clear routines
+; Routines d'affichage et d'effacement
 ;-----------------------------------------------------------------------------
-cline   jsr crlf            ; send cr+lf
-        jmp snclr           ; clear line
-sndclr  jsr sndmsg
-snclr   ldy #$28            ; loop 40 times
-snclp   lda #$20            ; output space character
-        jsr chrout
-        lda #$14            ; output delete character
-        jsr chrout
-        dey
-        bne snclp
-        rts
+cline     jsr  crlf           ; Envoie cr+lf.
+          jmp  snclr          ; Efface la ligne.
+sndclr    jsr  sndmsg
+          ;-------------------------------------------------------------------
+          ; CORRECTIFS-V20 : Changer le nombre d'octets a afficher de 40 à 21.
+          ;-------------------------------------------------------------------
+snclr     ldy  #$15           ; loop 21 times
+          ;-------------------------------------------------------------------
+snclp     lda  #$20           ; output space character
+          jsr  chrout
+          lda  #$14            ; output delete character
+          jsr  chrout
+          dey
+          bne  snclp
+          rts
 
 ;-----------------------------------------------------------------------------
-; display message from table
+; Affiche un message de la table des messages.
 ;-----------------------------------------------------------------------------
-sndmsg  lda msgbas,y        ; y contains offset in msg table
-        php
-        and #$7f            ; strip high bit before output
-        jsr chout
-        iny
-        plp
-        bpl sndmsg          ; loop until high bit is set
-        rts
+sndmsg    lda  msgbas,y       ; Y contient le décalage dans la table msg.
+          php
+          and  #$7f           ; Annule le bit 7 avant la sortie.
+          jsr  chout
+          iny
+          plp
+          bpl  sndmsg         ; Boucle jusqu'à ce que le bit 7 soit activé.
+          rts
 
 ;-----------------------------------------------------------------------------
 ; message table; last character has high bit set
