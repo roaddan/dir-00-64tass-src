@@ -1,0 +1,90 @@
+;***************************************
+; Affiche en hexadécimal le contenu des 
+; registres A, X, Y, P, S et PC
+; dans une fenetre pop-up.
+;***************************************
+popregs  .block
+    ;----------------------------------- 
+    ; Sauvegarde le contenu ecran.
+    ;----------------------------------- 
+          jsr scrnsave
+          lda #$00
+          ldx #regline   ; No. de ligne
+          tay
+          clc
+          jsr plot       ; pos. curseur.
+          #outcar snoir  ; texte en noir
+          ; Affiche ligne titre
+          #print rtitle
+          ; Affiche ligne etiquettes
+          #print rlable
+          ; Affiche ligne valeurs
+          #print rvalues
+          ; Affiche ligne du bas
+          #print rbline
+     ;----------------------------------- 
+     ; Affiche adresse de retour     
+     ;----------------------------------- 
+          ldy  pch
+          ldx  pcl            
+          inx       ; Aj. LSB adresse 
+          bcc  go   ; Report? Non Go!
+          iny       ; Oui, Aj. MSB
+          ; On positionne et on affiche
+go        #locate 1,regline+2
+          jsr putyxhex   ; pc
+     ;-----------------------------------
+     ; Affiche le registre Acc.
+     ;----------------------------------- 
+          lda  acc
+          ; On positionne et on affiche
+          #locate 6,regline+2
+          jsr putahex    ; reg x
+     ;----------------------------------- 
+     ; Affiche le registre X.
+     ;----------------------------------- 
+          lda  xr
+          ; On positionne et on affiche
+          #locate 9,regline+2
+          jsr  putahex    ; reg x
+     ;----------------------------------- 
+     ; Affiche le registre Y.
+     ;----------------------------------- 
+          lda  yr
+          ; On positionne et on affiche
+          #locate 12,regline+2
+          jsr  putahex    ; reg y
+     ;----------------------------------- 
+     ; Affiche le registre de status.
+     ;----------------------------------- 
+          lda  sr
+          ; On positionne et on affiche
+          #locate 15,regline+2
+          jsr putahex    ; status reg
+     ;----------------------------------- 
+     ; Affiche le LSB du ptr de pile.
+     ;----------------------------------- 
+          lda  sp
+          txa
+          ; On positionne et on affiche
+          #locate 18,regline+2
+          jsr putahex    ; sp
+     ;----------------------------------- 
+     ; Attend la clef [CTRL][X]
+     ;----------------------------------- 
+          jsr  clrkbbuf
+          jsr  anykey
+    ;----------------------------------- 
+    ; Recipere le contenu ecran.
+    ;----------------------------------- 
+          jsr scrnrest
+          lda  acc
+          ldx  xr
+          ldy  yr
+          lda  sr
+          pha
+          plp
+          rts
+;-------------------------------------- 
+regline   = 17
+          .bend

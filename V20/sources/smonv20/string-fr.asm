@@ -1,19 +1,19 @@
-stattitle      .byte sbleu, revson
-               .text "Statistiques programme"
-               .byte eot
-startaddr      .byte 145, snoir
-               .null format("debut prog----->%5d",bcmd1)
-endaddr        .null format("fin prog------->%5d",prgend)
-sizeprg        .null format("taille prog---->%5d",(prgend-bcmd1+1))
+;stattitle      .byte sbleu, revson
+;               .text "Statistiques programme"
+;               .byte eot
+;startaddr      .byte 145, snoir
+;               .null format("debut prog----->%5d",bcmd1)
+;endaddr        .null format("fin prog------->%5d",prgend)
+;sizeprg        .null format("taille prog---->%5d",(prgend-bcmd1+1))
 
-mainaddr       .byte $0d, sbleu
-               .null format("adresse main--->%5d",main)
+;mainaddr       .byte $0d, sbleu
+;               .null format("adresse main--->%5d",main)
 
-varsstart      .byte $0d, srouge
-               .null format("debut vars----->%5d",mybyte)
-varsend        .null format("fin vars------->%5d",libre)
-sizevars       .text format("taille vars---->%5d",libre-mybyte+1)
-               .byte revsoff, snoir,eot
+;varsstart      .byte $0d, srouge
+;               .null format("debut vars----->%5d",mybyte)
+;varsend        .null format("fin vars------->%5d",libre)
+;sizevars       .text format("taille vars---->%5d",libre-mybyte+1)
+;               .byte revsoff, snoir,eot
                
 rtitle         .byte revsoff,176,snoir,revson
                .text " cpu registers hex "
@@ -69,8 +69,11 @@ biton          .text "bit is on."
 bitoff         .text "bit is off."
                .byte 13,eot
 
-helpscr
-hst            .byte 19,17,29 
+mneuprfx       .byte $0d,sbleu
+               .fill 8,$20
+               .byte 0
+
+helpscr        .byte 19,29 
                .byte 18,tleft,hline,146
                .text " Aide Super-Mon "
                .byte 18,hline,tright,146,$0d
@@ -95,6 +98,14 @@ hst            .byte 19,17,29
                .text "m [debut [fin]]   "
                .byte vline,146,$0d
 
+               .byte 29,18,hleft,146
+               .text "Commandes ajoutees"
+               .byte 18,hright,146,$0d
+
+               .byte 29,18,vline
+               .text "c = cls  ? = aide "
+               .byte vline,146,$0d
+
                .byte 29,18,hleft
                .fill 18,hline
                .byte hright,146,$0d
@@ -107,3 +118,4 @@ hst            .byte 19,17,29
                .fill 18,hline
                .byte bright,146,$0d
                .byte 0
+backspace      .byte 157,32,157,0

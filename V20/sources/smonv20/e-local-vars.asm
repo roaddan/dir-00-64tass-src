@@ -39,6 +39,19 @@ estage    =*             ; fin du tampon de transit
                          ; l'éditeur de ligne de base
 inbuff    .fill     40   ; Tampon d'entrée de 40 caractères
 endin     =*             ; fin du tampon d'entrée
+;----------------------------------------------------------------------------
+; les 7 emplacements suivants servent à stocker les registres lorsque
+; le moniteur est démaré et les restaure en sortant.
+;----------------------------------------------------------------------------
+; Déjà definies dans showregs.
+;----------------------------------------------------------------------------
+;pch      .fill     1    ; octet de poids fort du compteur de programme
+;pcl      .fill     1    ; octet de poids faible du compteur de programme
+;sr       .fill     1    ; registre de statut
+;acc      .fill     1    ; accumulateur
+;xr       .fill     1    ; registre x
+;yr       .fill     1    ; registre y
+;sp       .fill     1    ; pointeur de pile
 
 store     .fill     2    ; stockage temporaire de 2 octets
 chrpnt    .fill     1    ; position actuelle dans le tampon d'entrée

@@ -87,6 +87,21 @@ crsleft   =    $9d  ;157
 bculeft   =    $9d  ;157
 byellow   =    $9e  ;158
 bcyan     =    $9f  ;159
+;--------------------------------------
+;Constantes des caractères de dessin de
+;boîte disponnible dans tous les modes
+;de caractères (majuscule et minuscule)
+;--------------------------------------
+tleft     = 176;Coin suppérieur gauche.
+tright    = 174;Coin suppérieur droit.
+bleft     = 173;Coin inférieur gauche.
+bright    = 189;Coin inférieur droit.
+hleft     = 171;Extr. gauche médianne.
+hright    = 179;Extr. droite médianne.
+vline     = 221;Ligne verticale.
+hline     = 192;Ligne horizontale.
+;--------------------------------------
+
 ;------------------------------------------------------------------------------
 ; registre basic contienant la couleur du prochain caractere. 
 ;------------------------------------------------------------------------------
