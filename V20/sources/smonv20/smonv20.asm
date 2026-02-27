@@ -1,11 +1,10 @@
 ;--------------------------------------
 ; Fichier : keyfinder.asm
-; Auteur..: Daniel Lafrance
+; Auteur..: Daniel Lafrance b
 ;--------------------------------------
 .enc "none"
      .include  "e-v20-bashead-ex.asm"
 ;     .include  "l-v20-bashead-ex.asm"
-;     Version .null "20260221-003227 "
      .include  "m-v20-utils.asm"
 ;--------------------------------------
 ;
@@ -78,7 +77,7 @@ strt      #outcar snoir
           ;lda  #'>'           ; *DL* - Affiche un 
           ;jsr  chrout         ; *DL* - . invite.
 smove     jsr  chrin          ; Appel chrin du noyau pour saisir un caractère
-          cmp  #92
+          cmp  #33
           bne  treatit
           jsr  mycmd
           cmp  #$00
@@ -312,16 +311,16 @@ dmemgo    lda  (tmp2),y       ; Charge un octet à partir du début + y.
           ldy  #0             ; Retour au premier octet de la ligne.
 
 dchar     lda  (tmp2),y       ; Charger octet à l'adresse de début + y.
-          tax                 ; Le cacher dans x.
-          and  #$bf           ; Effacer le 6ème bit.
-          cmp  #$22           ; Est-ce un guillemet ""?
-          beq  ddot           ; Si c'est le cas, affiche . à la place.
-          txa                 ; Sinon, restaurez le caractère.
-          and  #$7f           ; Effacer le bit supérieur
-          cmp  #$20           ; Est-ce un caractère affichable (>= $20)?
-          txa                 ; Restaurer le caractère.
-          bcs  dchrok         ; Si imprimable, affiche le caractère.
-ddot      lda  #$2e           ; Sinon, on met un '.' à la place
+;          tax                 ; Le cacher dans x.
+;          and  #$bf           ; Effacer le 6ème bit.
+;          cmp  #$22           ; Est-ce un guillemet ""?
+;          beq  ddot           ; Si c'est le cas, affiche . à la place.
+;          txa                 ; Sinon, restaurez le caractère.
+;          and  #$7f           ; Effacer le bit supérieur
+;          cmp  #$20           ; Est-ce un caractère affichable (>= $20)?
+;          txa                 ; Restaurer le caractère.
+;          bcs  dchrok         ; Si imprimable, affiche le caractère.
+;ddot      lda  #$2e           ; Sinon, on met un '.' à la place
 dchrok    sta  (zp1),y        ; *DL* - On affiche le caractere.
           tya                 ; *DL* - . et une couleur
           asl                 ; *DL* - .  sequencielle
@@ -1491,29 +1490,6 @@ text    lda #$00    ;place la couleur
         plp
         rts
         .bend
-
-;-----------------------------------------------------------------------------
-; message table; last character has high bit set
-;-----------------------------------------------------------------------------
-msgbas  =*
-msg2      .byte $0d,$20,31,18               ; header for registers
-          .text " SuperMon sur VIC20 "
-          .byte 146,$0d,31               ; header for registers
-          .text "   pc  sr ac xr yr sp"
-          .byte 144,$0d,$00
-msg3      .byte $1d,$3f,$00       ; syntax error: move right, display "?"
-msg4      .text "..sys"           ; sys call to enter monitor
-          .byte $20,$00
-msg5      .byte $3a,$12,$00       ; ":" then rvs on for memory ascii dump
-msg6      .text " erro"           ; i/o error: display " error"
-          .byte "r",$00
-msg7      .byte $41,$20,$00       ; assemble next instruction: "a " + addr
-msg8      .text "  "              ; pad non-existent byte: skip 3 spaces
-          .byte $20,$00
-msg9      .byte 28,32,32,32
-          .text "[?] pour aide."
-          .byte 144,0
-
 ;-----------------------------------------------------------------------------
 ; Aide à l'ecran [?]
 ;-----------------------------------------------------------------------------
@@ -1557,21 +1533,25 @@ notmycmd  jsr  popregs
 ;-----------------------------------------------------------------------------
 ; message table; last character has high bit set
 ;-----------------------------------------------------------------------------
-;msgbas  =*
-;msg2      .byte $0d,$20,$20,18               ; header for registers
-;          .text " j.b. supermon v20 "
-;          .byte 146,$0d               ; header for registers
-;          .text "   pc  sr ac xr yr sp"
-;          .byte $0d+$80
-;msg3      .byte $1d,$3f+$80       ; syntax error: move right, display "?"
-;msg4      .text "..sys"           ; sys call to enter monitor
-;          .byte $20+$80
-;msg5      .byte $3a,$12+$80       ; ":" then rvs on for memory ascii dump
-;msg6      .text " erro"           ; i/o error: display " error"
-;          .byte "r"+$80
-;msg7      .byte $41,$20+$80       ; assemble next instruction: "a " + addr
-;msg8      .text "  "              ; pad non-existent byte: skip 3 spaces
-;          .byte $20+$80
+msgbas  =*
+msg2      .byte $0d,$20,31,18     ; header for registers
+          .text " SuperMon sur VIC20 "
+          .byte 146,$0d,31        ; header for registers
+          .text "   pc  sr ac xr yr sp"
+          .byte 144,$0d,$00
+msg3      .byte $1d,$3f,$00       ; syntax error: move right, display "?"
+msg4      .text "..sys"           ; sys call to enter monitor
+          .byte $20,$00
+msg5      .byte $3a,$12,$00       ; ":" then rvs on for memory ascii dump
+msg6      .text " erro"           ; i/o error: display " error"
+          .byte "r",$00
+msg7      .byte $41,$20,$00       ; assemble next instruction: "a " + addr
+msg8      .text "  "              ; pad non-existent byte: skip 3 spaces
+          .byte $20,$00
+msg9      .byte 28,32,32,32
+          .text "[?] pour aide."
+          .byte 144,0
+version   .null "20260226-120554b"
 
 ;-----------------------------------------------------------------------------
 ; addressing mode table - nybbles provide index into mode2 table
@@ -1707,6 +1687,7 @@ lentab  .byte $04,$03,$03,$01   ; bits per digit
 
 linkad  .word break             ; address of brk handler
 supad   .word super             ; address of entry point
+
 
 ;-----------------------------------------------------------------------------
      .include  "string-fr.asm"

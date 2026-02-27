@@ -99,11 +99,11 @@ helpscr        .byte 19,29
                .byte vline,146,$0d
 
                .byte 29,18,hleft,146
-               .text "Commandes ajoutees"
+               .text " Autres Commandes "
                .byte 18,hright,146,$0d
 
                .byte 29,18,vline
-               .text "c = cls  ? = aide "
+               .text " !c=cls   !?=aide "
                .byte vline,146,$0d
 
                .byte 29,18,hleft
@@ -118,4 +118,4 @@ helpscr        .byte 19,29
                .fill 18,hline
                .byte bright,146,$0d
                .byte 0
-backspace      .byte 157,32,157,0
+backspace      .byte 157,157,32,32,157,157,145,0
