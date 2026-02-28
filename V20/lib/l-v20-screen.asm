@@ -89,9 +89,8 @@ setcolptr
 fillscreen
           .block
           jsr pushall
-          ldx #$02
           ldy #$00
-          ;mlda #102
+          ;lda #102
 again     sta scrtxt,y
           sta scrtxt+256,y
           pha

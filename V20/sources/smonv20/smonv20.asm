@@ -1,10 +1,10 @@
 ;--------------------------------------
 ; Fichier : keyfinder.asm
-; Auteur..: Daniel Lafrance b
+; Auteur..: Daniel Lafrance
 ;--------------------------------------
 .enc "none"
      .include  "e-v20-bashead-ex.asm"
-;     .include  "l-v20-bashead-ex.asm"
+;     .include  "l-v20-bashead-ex.asm "
      .include  "m-v20-utils.asm"
 ;--------------------------------------
 ;
@@ -21,7 +21,7 @@
           *=org
 main = *
 ;-----------------------------------------------------------------------------
-; point d'entrée initial
+; Point d'entrée initial
 ;-----------------------------------------------------------------------------
 super     jsr  scrinit
           lda  #147
@@ -50,14 +50,13 @@ super     jsr  scrinit
           lda linkad+1
           sta bkvec+1
           lda #$80            ; Désactiver les messages de contrôle du noyau
-          jsr setmsg          ; . et activer les messages d'erreur.
+          jsr setmsg          ; ... et activer les messages d'erreur.
           brk
-
 ;-----------------------------------------------------------------------------
 ; gestionnaire de brk
 ;-----------------------------------------------------------------------------
 break     ldx  #$05           ; Retirer les registres de la pile dans l'ordre:
-bstack    pla                 ; . y, x, a, sr, pcl, pch, stocker en mémoire.
+bstack    pla                 ; ... y, x, a, sr, pcl, pch, stocker en mémoire.
           sta pch,x
           dex 
           bpl bstack
@@ -71,7 +70,9 @@ bstack    pla                 ; . y, x, a, sr, pcl, pch, stocker en mémoire.
 ; boucle principale
 ;-----------------------------------------------------------------------------
 strt      #outcar snoir
-          jsr  crlf           ; Nouvelle ligne à l'écran.
+          #outcar $0d
+          ;jsr  crlf           ; Nouvelle ligne à l'écran.
+
           ldx  #0             ; Pointe au début du tampon d'entrée.
           stx  chrpnt
           ;lda  #'>'           ; *DL* - Affiche un 
@@ -82,14 +83,14 @@ smove     jsr  chrin          ; Appel chrin du noyau pour saisir un caractère
           jsr  mycmd
           cmp  #$00
           beq  strt
-treatit   sta  inbuff,x       ; . stocker dans le tampon d'entrée.
+treatit   sta  inbuff,x       ; ... stocker dans le tampon d'entrée.
           inx 
           cpx  #endin-inbuff  ; Erreur si la mémoire tampon est pleine.
           bcs  error
           cmp  #$0d           ; Continue à lire jusqu'au CR.
           bne  smove
           lda  #0             ; Tampon d'entrée terminé par un caractère null.
-          sta  inbuff-1,x     ; . (remplace le cr)
+          sta  inbuff-1,x     ; ... (remplace le cr)
 st1       jsr  getchr         ; Récupére un caractère du tampon.
           beq  strt           ; Recommence si le tampon est vide.
           cmp  #$20           ; Sauter les espaces de début.
@@ -98,16 +99,16 @@ s0        ldx  #keytop-keyw   ; Boucle parmis les caractères valides de cmd.
 s1        cmp  keyw,x         ; Vérifie si le caractère saisi correspond.
           beq  s2             ; Commande correspondante, exécuter.
           dex                 ; Aucune correspondance, vérifie la commande 
-                              ; . suivante
+                              ; ... suivante
           bpl  s1             ; Continuez d'essayer jusqu'à ce que nous les 
-                              ; . ayons tous vérifiés puis passer au 
-                              ; . gestionnaire d'erreurs.
+                              ; ... ayons tous vérifiés puis passer au 
+                              ; ... gestionnaire d'erreurs.
 
 ;-----------------------------------------------------------------------------
 ; gérer les erreurs
 ;-----------------------------------------------------------------------------
 error     ldy  #msg3-msgbas   ; Afficher «?» pour indiquer une erreur et 
-                              ; . passer à la ligne suivante.
+                              ; ... passer à la ligne suivante.
           jsr  sndmsg
           jmp  strt           ; Retour à la boucle principale.
 
@@ -115,23 +116,23 @@ error     ldy  #msg3-msgbas   ; Afficher «?» pour indiquer une erreur et
 ; Traite les commandes
 ;-----------------------------------------------------------------------------
 s2        cpx  #$13           ; Les 3 dernières commandes du tableau sont 
-                              ; . charger/enregistrer/valider qui sont gérées
-          bcs  lsv            ; . par la même sous-routine.
+                              ; ... charger/enregistrer/valider qui sont gérées
+          bcs  lsv            ; ... par la même sous-routine.
           cpx  #$0f           ; Les 4 commandes suivantes sont des conversions
-          bcs  cnvlnk         ; . de base qui sont gérées par la même 
-                              ; . sous-routine.
+          bcs  cnvlnk         ; ... de base qui sont gérées par la même 
+                              ; ... sous-routine.
           txa                 ; Les commandes restantes sont transmises via la
-          asl  a              ; . table des vecteurs multiplier l'indice de la 
-          tax                 ; . commande par 2 puisque la table contient des 
-                              ; . adresses de 2 octets.
+          asl  a              ; ... table des vecteurs multiplier l'indice de la 
+          tax                 ; ... commande par 2 puisque la table contient des 
+                              ; ... adresses de 2 octets.
           lda  kaddr+1,x      ; Place l'adresse de la table des vecteurs sur
-          pha                 ; . la pile de sorte que le rts de getpar saute à 
-                              ; . cet endroit.
+          pha                 ; ... la pile de sorte que le rts de getpar saute à 
+                              ; ... cet endroit.
           lda  kaddr,x
           pha
           jmp  getpar         ; Obtenir le premier paramètre de la commande
 lsv       sta  savy           ; Gère le 
-                              ; . chargement/l'enregistrement/la validation
+                              ; ... chargement/l'enregistrement/la validation
           jmp  ld
 cnvlnk    jmp  convrt         ; Gère la conversion de base.
 
@@ -141,22 +142,22 @@ cnvlnk    jmp  convrt         ; Gère la conversion de base.
 exit      #outcar   147
 
           jmp   (bcoldst)     ; Saute au démarrage à froid pour réinitialiser 
-                              ; . le système de base sans effacer la memoire.
+                              ; ... le système de base sans effacer la memoire.
 
 ;-----------------------------------------------------------------------------
-; afficher les registres [r]
+; Afficher les registres - [r].
 ;-----------------------------------------------------------------------------
 dsplyr    ldy  #msg2-msgbas   ; Affiche les en-têtes.
           jsr  sndclr
           lda  #$3b           ; S'enregistre avec le préfixe <;> pour 
-                              ; . permettre la modification.
+                              ; ... permettre la modification.
           jsr  chrout
           lda  #$20
           jsr  chrout
           lda  pch            ; Affiche les 2 octets du compteur de programme. 
           jsr  wrtwo
           ldy  #1             ; Commence 1 octet après l'octet de poids fort 
-                              ; . du PC.
+                              ; ... du PC.
 disj      lda  pch,y          ; Boucle parmis le reste des registres.
           jsr  wrbyte         ; Affiche la valeur du registre sur 1 octet.
           iny 
@@ -168,7 +169,7 @@ disj      lda  pch,y          ; Boucle parmis le reste des registres.
 ; Afficher mémoire [m]
 ;-----------------------------------------------------------------------------
 dsplym    bcs  dspm11         ; Commencer à partir de l'adresse de fin 
-                              ; . précédente si aucune adresse n'est fournie.
+                              ; ... précédente si aucune adresse n'est fournie.
           jsr  copy12         ; Enregistrer l'adresse de départ dans tmp2.
           jsr  getpar         ; Capture l'adresse de fin dans tmp0.
           bcc  dsmnew         ; L'utilisateur en a-t-il spécifié un?
@@ -178,7 +179,7 @@ dspm11    lda  #145           ; Remonte le curseur d'une ligne.
           sta  tmp0
           bne  dspbyt         ; Toujours vrai, mais bne utilise 2. jmp 3.
 dsmnew    jsr  sub12          ; Adresse de fin donnée, calculer les octets 
-                              ; . entre le début et la fin.
+                              ; ... entre le début et la fin.
           bcc  merror         ; Erreur si le début est après la fin.
           ldx  #2             ; Diviser par (décaler vers la droite 3 fois).
 dspm01    lsr  tmp0+1
@@ -206,10 +207,10 @@ altr      jsr  copy1p         ; Stocke le premier paramètre dans PC.
           ldy  #0             ; Initialise le compteur.
 altr1     jsr  getpar         ; Recupère la valeur du registre suivant.
           bcs  altrx          ; Quitte prématurément si aucune autre valeur 
-                              ; . n'est fournie
+                              ; ... n'est fournie
           lda  tmp0           ; Stocke en mémoire, décalage par rapport à sr.
           sta  sr,y           ; Ces emplacements seront transférés aux caisses
-          iny                 ; . réelles avant la sortie de l'écran.
+          iny                 ; ... réelles avant la sortie de l'écran.
           cpy  #$05           ; Avons-nous déjà mis à jour les 5 ?
           bcc  altr1          ; Sinon, passez au suivant.
 altrx     jmp  strt           ; Retour à la boucle principale.
@@ -234,7 +235,7 @@ altm1     jsr  getpar         ; Recupère le prochain octet en mémoire.
 altmx     lda  #$91           ; Déplace le curseur vers le haut.
           jsr  chrout
           jsr  dispmem        ; Réaffiche la ligne pour que l'ASCII 
-                              ; . corresponde à l'Hexadécimal.
+                              ; ... corresponde à l'Hexadécimal.
           jmp  strt           ; Retour à la boucle principale.
 
 ;-----------------------------------------------------------------------------
@@ -300,8 +301,8 @@ dmemgo    lda  (tmp2),y       ; Charge un octet à partir du début + y.
                               ;  . ASCII.
           
           #ldyxmem scrnlin    ; On calcul l'adresse ecran texte et couleur
-          lda  #18            ; . pour placer les representations petscii
-          jsr  addatoyx       ; . sans generer de crlf à la fin de la ligne.
+          lda  #18            ; ... pour placer les representations petscii
+          jsr  addatoyx       ; ... sans generer de crlf à la fin de la ligne.
           #styxzp1            ; Adresse texte dans ZP1.
           tya
           ora  #$94           ; ex $1005 devient $9505.
@@ -340,20 +341,20 @@ dchrok    sta  (zp1),y        ; *DL* - On affiche le caractere.
 ;-----------------------------------------------------------------------------
 compar    lda  #0             ; bit 7 efface les signaux comparer
           .byte $2c           ; L'opcode de bit absolu consomme le mot suivant
-                              ; . (lda #$80).
+                              ; ... (lda #$80).
 
 ;-----------------------------------------------------------------------------
 ; transfer memory [t]
 ;-----------------------------------------------------------------------------
 trans     lda  #$80           ; Bit 7 place le transfert de signaux
           sta  savy           ; Enregistrer l'indicateur de 
-                              ; . comparaison/transfert dans Savy
+                              ; ... comparaison/transfert dans Savy
           lda  #0             ; Suppose que nous comptons à rebours (b7 clair)
           sta  upflg          ; Enregistrer le drapeau de direction
           jsr  getdif         ; Obtien deux adresses et calcule la différence
-                              ; . tmp2  = debut de la source
-                              ; . stash = fin de la source end
-                              ; . store = longueur
+                              ; ... tmp2  = debut de la source
+                              ; ... stash = fin de la source end
+                              ; ... store = longueur
           bcs  terror         ; Bit carry a un indique une erreur
           jsr  getpar         ; obtien l'adresse de destination dans tmp0
           bcc  tokay          ; Bit carry a un indique une erreur
@@ -361,16 +362,16 @@ terror    jmp  error          ; Gère les erreurs
 tokay     bit  savy           ; Transférer ou comparer ?
           bpl  compar1        ; Bit 7 à 0 indique comparer
           lda  tmp2           ; S'il s'agit d'un transfert, nous devons 
-          cmp  tmp0           ; . prendre des mesures pour éviter d'écraser 
-          lda  tmp2+1         ; . les octets sources avant qu'ils n'aient été 
-                              ; . transférés  
+          cmp  tmp0           ; ... prendre des mesures pour éviter d'écraser 
+          lda  tmp2+1         ; ... les octets sources avant qu'ils n'aient été 
+                              ; ... transférés  
           sbc  tmp0+1         ; Comparer la source (tmp2) à la destination
-          bcs  compar1        ; . (tmp0) et incrémenter si la source est 
-                              ; . antérieure à la destination.
+          bcs  compar1        ; ... (tmp0) et incrémenter si la source est 
+                              ; ... antérieure à la destination.
           lda  store          ; Sinon, commencez par la fin et décomptez en 
-          adc  tmp0           ; . ajoutant la longueur (stockée) à la 
-          sta  tmp0           ; . destination (tmp0) pour calculer la fin de 
-                              ; . la destination.
+          adc  tmp0           ; ... ajoutant la longueur (stockée) à la 
+          sta  tmp0           ; ... destination (tmp0) pour calculer la fin de 
+                              ; ... la destination.
           lda  store+1
           adc  tmp0+1
           sta  tmp0+1
@@ -380,7 +381,7 @@ tdown     lda  stash,x        ; tmp2 = fin de la source (réserve).
           dex  
           bpl  tdown
           lda  #$80           ; Le bit haut activé dans upflg signifie un 
-                              ; . compte à rebours.
+                              ; ... compte à rebours.
           sta  upflg
 compar1   jsr  crlf           ; Nouvelle ligne.
           ldy  #0             ; aucun décalage par rapport au pointeur.
@@ -1260,7 +1261,7 @@ decml1  sta u0aa0,x
         sei                 ; make sure no interrupts occur with bcd enabled
         sed
 decml2  asl tmp2            ; rotate bytes out of input low byte
-        rol tmp2+1          ; .. into high byte and carry bit
+        rol tmp2+1          ; .... into high byte and carry bit
         ldx #2              ; process 3 bytes
 decdbl  lda u0aa0,x         ; load current value of byte
         adc u0aa0,x         ; add it to itself plus the carry bit
@@ -1292,9 +1293,9 @@ nmprnt  sta digcnt          ; number of digits in accumulator
 digout  ldy numbit          ; get bits to process
         lda #0              ; clear accumulator
 rolbit  asl u0aa0+2         ; shift bits out of low byte
-        rol u0aa0+1         ; ... into high byte
-        rol u0aa0           ; ... into overflow byte
-        rol a               ; ... into accumulator
+        rol u0aa0+1         ; ..... into high byte
+        rol u0aa0           ; ..... into overflow byte
+        rol a               ; ..... into accumulator
         dey                 ; decrement bit counter
         bpl rolbit          ; loop until all bits processed
         tay                 ; check whether accumulator is 0
@@ -1317,11 +1318,11 @@ dstat     bne  chgdev         ; si une adresse de périphérique a été fournie
                               ; utilisez-la
           ldx  #8             ; sinon, la valeur par défaut est 8
           .byte $2c           ; L'opcode de bit absolu consomme le mot suivant
-                              ; . (ldx tmp0)
+                              ; ... (ldx tmp0)
 chgdev    ldx  tmp0           ; Charge l'adresse du périphérique à partir du 
-                              ; . paramètre.
+                              ; ... paramètre.
           cpx  #4             ; S'assure que l'adresse du périphérique se 
-                              ; . situe dans la plage 4-31.
+                              ; ... situe dans la plage 4-31.
           bcc  ioerr
           cpx  #32
           bcs  ioerr
@@ -1337,7 +1338,7 @@ chgdev    ldx  tmp0           ; Charge l'adresse du périphérique à partir du
           lda  tmp0           ; Ordonne LISTEN au périphérique spécifié.
           jsr  listen
           lda  #$6f           ; adresse secondaire 15 
-                              ; . (seul le nibble de poids faible est utilisé)
+                              ; ... (seul le nibble de poids faible est utilisé)
           jsr  second
 ;-----------------------------------------------------------------------------
 ; Envoyer une commande au périphérique.
@@ -1375,7 +1376,7 @@ ioerr     jmp  error          ; Gère les erreurs.
 direct    lda  tmp0           ; Charger l'adresse du périphérique.
           jsr  listen         ; Ordonne LISTEN au périphérique.
           lda  #$f0           ; adresse secondaire 0 
-                              ; .(seul le nibble de poids faible est utilisé).
+                              ; ...(seul le nibble de poids faible est utilisé).
           jsr  second
           ldx  chrpnt         ; Obtien l'index du caractère suivant.
 dir2      lda  inbuff,x       ; Récupère le caractère suivant du tampon.
@@ -1391,8 +1392,8 @@ dir3      jsr  unlsn          ; Ordonne UNLISTEN au périphérique.
           lda  #$60           ; Adresse second. 0 (seul le LSN est utilisé)
           jsr  tksa
           ldy  #3             ; Lire 3 valeurs de 16 bits du périphérique.
-dirlin    sty  store          ; . Ignorez les deux premiers; 
-                              ; . le troisième est la taille du fichier.
+dirlin    sty  store          ; ... Ignorez les deux premiers; 
+                              ; ... le troisième est la taille du fichier.
 dlink     jsr  acptr          ; Lit le LSB depuis le périphérique.
           sta  tmp0           ; L'enregistre.
           lda  satus          ; Vérifie l'état.
@@ -1411,7 +1412,7 @@ dlink     jsr  acptr          ; Lit le LSB depuis le périphérique.
           lda  #" "           ; Affiche un espace.
           jsr  chrout
 dname     jsr  acptr          ; Récupère un caractère de nom de fichier depuis
-                              ; . le périphérique
+                              ; ... le périphérique
           beq  dmore          ; Si la valeur est nulle, sortir de la boucle
           ldx  satus          ; Vérifie les erreurs ou la fin du fichier.
           bne  drexit         ; Si trouvé, on sort.
@@ -1431,7 +1432,7 @@ drexit    jsr  untlk          ; Ordonne UNTALK au périphérique.
           pla                 ; restaurer l'accumulateur
           jsr  listen         ; Ordonne LISTEN au périphérique.
           lda  #$e0           ; adresse secondaire 0 
-                              ; .(seul le nibble de poids faible est utilisé).
+                              ; ...(seul le nibble de poids faible est utilisé).
           jsr  second
           jsr  unlsn          ; Ordonne UNLISTEN au périphérique.
           jmp  strt           ; Retour à la boucle principale.
@@ -1473,51 +1474,73 @@ msgout    rts
 ; Interlace off et centre l'ecran
 ;-----------------------------------------------------------------------------
 scrinit
-        .block
-        php
-        pha
-        lda #(128+4)
-        sta vic0
-bord    lda $900f    ;place la couleur
-        and #%00001000
-        ora #%00010101    
-        sta $900f   
-text    lda #$00    ;place la couleur
-        sta $0286   ; du texte.
-        lda #$93    ;efface l'ecran par
-        jsr $ffd2   ; chrout du kernal.
-        pla
-        plp
-        rts
-        .bend
+          .block
+          php
+          pha
+          lda  #(128+4)
+          sta  vic0
+bord      lda  $900f          ;place la couleur
+          and  #%00001000
+          ora  #%00010101    
+          sta  $900f   
+text      lda  #$00           ;place la couleur
+          sta  $0286          ; du texte.
+          lda  #$93           ;efface l'ecran par
+          jsr  $ffd2          ; chrout du kernal.
+          pla
+          plp
+          rts
+          .bend
 ;-----------------------------------------------------------------------------
-; Aide à l'ecran [?]
+; Aide à l'ecran !e
 ;-----------------------------------------------------------------------------
-aide      .block
+popup      .block
           jsr  pushall
-          #print backspace
           jsr  clrkbbuf
+          lda  kcol
+          pha
           jsr  cursave
           jsr  scrnsave
-          #ldyxptr helpscr 
+          #outcar 147
+          ldx  #$07
+          lda  #102
+          jsr  fillscreen
+          #ldyxmem genword1 
           jsr  putsyx
           jsr  anykey
           jsr  scrnrest
           jsr  currest
+          pla
+          sta  kcol
           jsr  popall
           ;jmp  strt
           rts
           .bend
 
 ;-----------------------------------------------------------------------------
-; ajout des commandes c, ?
+; ajout des commandes c, h, g
 ;-----------------------------------------------------------------------------
 mycmd     .block
           jsr  pushregs
           jsr  chrin
-          cmp  #'?'
+          cmp  #'h'
+          bne  cmdg
+          #ldyxptr  helpscrp1
+          #styxmem  genword1
+          jsr  popup
+          #ldyxptr  helpscrp2
+          #styxmem  genword1
+          jsr  popup
+          #ldyxptr  greetings
+          #styxmem  genword1
+          jsr  popup
+          #print backspace
+          jmp  mycmdout
+cmdg      cmp  #'g'
           bne  cmdc
-          jsr  aide
+          #ldyxptr  greetings
+          #styxmem  genword1
+          jsr  popup
           jmp  mycmdout
 cmdc      cmp  #'c'
           bne  notmycmd
@@ -1548,10 +1571,10 @@ msg6      .text " erro"           ; i/o error: display " error"
 msg7      .byte $41,$20,$00       ; assemble next instruction: "a " + addr
 msg8      .text "  "              ; pad non-existent byte: skip 3 spaces
           .byte $20,$00
-msg9      .byte 28,32,32,32
-          .text "[?] pour aide."
-          .byte 144,0
-version   .null "20260226-120554b"
+msg9      .byte 28,32,32,32,32,32,18
+          .text "!h pour aide"
+          .byte 146,144,0
+version   = "20260226-120554"
 
 ;-----------------------------------------------------------------------------
 ; addressing mode table - nybbles provide index into mode2 table
@@ -1700,8 +1723,8 @@ supad   .word super             ; address of entry point
      .include  "l-v20-conv.asm" 
      .include  "l-v20-keyb.asm" 
      .include  "l-v20-screen.asm"
-     .include  "l-v20-showregs.asm"
-prgend    .word $1234     
+;     .include  "l-v20-showregs.asm"
+;prgend    .word $1234     
 ;--------------------------------------
      .include  "e-v20-page0.asm"
      .include  "e-v20-float.asm"
