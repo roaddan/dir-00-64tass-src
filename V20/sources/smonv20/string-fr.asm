@@ -3,6 +3,15 @@ mneuprfx       .byte $0d,sbleu
                .fill 8,$20
                .byte 0
 
+;toppref        .byte 19,17,29,18,tleft,146,156,0
+;topsufx        .byte 144,18,tright,146,$0d,0
+;itempref       .byte 29,18,vline,0
+;itemsufx       .byte vline,146,$0d,0
+;botpref        .byte 29,18,bleft,146,28,0
+;putsufx        .byte 144,18,bright,146,$0d,0
+;testtext       .null "0123456789abcdef01"
+
+
 helpscrp1      .byte 19,17,29 
                .byte 18,tleft,146,156
                .text " Aide SuperMon P1 "
@@ -73,15 +82,15 @@ helpscrp1      .byte 19,17,29
                .byte vline,146,$0d
 
                .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
                .text "[G]oto adresse    "
                .byte vline,146,$0d
 
                .byte 29,18,vline
                .text "g [AAAA]          "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
                .byte vline,146,$0d
 
                .byte 29,18,bleft,146,28
@@ -120,6 +129,18 @@ helpscrp2      .byte 19,17,29
                .byte vline,146,$0d
 
                .byte 29,18,vline
+               .text "[h]unt recherche  "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "h BBBB EEEE BB..BB"
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
                .text "[t]ransfert mem.  "
                .byte vline,146,$0d
 
@@ -139,9 +160,23 @@ helpscrp2      .byte 19,17,29
                .text "c BBBB EEEE DDDD  "
                .byte vline,146,$0d
 
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "@ etat du lecteur "
+               .byte vline,146,$0d
+
                .byte 29,18,hleft
                .fill 18,hline
                .byte hright,146,$0d
+
+               .byte 29,18,bleft,146,28
+               .text " Appuyez une clef "
+               .byte 144,18,bright,146,$0d
+
+               .byte 0
 
                .byte 29,18,vline
                .text "[x] aller a Basic "
@@ -149,14 +184,6 @@ helpscrp2      .byte 19,17,29
 
                .byte 29,18,vline
                .text "Demarrer SYS 40960"
-               .byte vline,146,$0d
-
-               .byte 29,18,hleft,146,31
-               .text " Autres Commandes "
-               .byte 144,18,hright,146,$0d
-
-               .byte 29,18,vline
-               .text " !e=cls   !h=aide "
                .byte vline,146,$0d
 
                .byte 29,18,hleft
@@ -167,11 +194,13 @@ helpscrp2      .byte 19,17,29
                .text "v/e = voir/editer "
                .byte vline,146,$0d
 
-               .byte 29,18,bleft,146,28
-               .text " Appuyez une clef "
-               .byte 144,18,bright,146,$0d
+               .byte 29,18,hleft,146,31
+               .text " Autres Commandes "
+               .byte 144,18,hright,146,$0d
 
-               .byte 0
+               .byte 29,18,vline
+               .text " !e=cls   !h=aide "
+               .byte vline,146,$0d
 
 backspace      .byte 157,157,32,32,157,157,145,0
 

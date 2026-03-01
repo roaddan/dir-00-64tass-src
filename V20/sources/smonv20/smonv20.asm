@@ -51,6 +51,11 @@ super     jsr  scrinit
           sta bkvec+1
           lda #$80            ; Désactiver les messages de contrôle du noyau
           jsr setmsg          ; ... et activer les messages d'erreur.
+          lda  #8
+          sta  ddev
+          #ldyxptr  greetings
+          #styxmem  genword1
+          jsr  popup
           brk
 ;-----------------------------------------------------------------------------
 ; gestionnaire de brk
@@ -1502,7 +1507,7 @@ popup      .block
           jsr  cursave
           jsr  scrnsave
           #outcar 147
-          ldx  #$07
+          ldx  #7
           lda  #102
           jsr  fillscreen
           #ldyxmem genword1 
@@ -1523,7 +1528,13 @@ popup      .block
 mycmd     .block
           jsr  pushregs
           jsr  chrin
-          cmp  #'h'
+          cmp  #'d'
+          bne  cmdh
+          jsr  dirdisk
+          #print backspace
+          jmp  mycmdout
+
+cmdh      cmp  #'h'
           bne  cmdg
           #ldyxptr  helpscrp1
           #styxmem  genword1
@@ -1536,12 +1547,15 @@ mycmd     .block
           jsr  popup
           #print backspace
           jmp  mycmdout
+
 cmdg      cmp  #'g'
           bne  cmdc
           #ldyxptr  greetings
           #styxmem  genword1
           jsr  popup
+          #print backspace
           jmp  mycmdout
+
 cmdc      cmp  #'c'
           bne  notmycmd
           #outcar 147
@@ -1550,8 +1564,27 @@ mycmdout  jsr  popregs
           rts
 notmycmd  jsr  popregs
           rts
-
           .bend
+
+dirdisk   .block
+          jsr  pushall
+          jsr  clrkbbuf
+          lda  kcol
+          pha
+          jsr  cursave
+          jsr  scrnsave
+          #outcar 147
+          jsr  directory 
+          jsr  anykey
+          #outcar 147
+          jsr  scrnrest
+          jsr  currest
+          pla
+          sta  kcol
+          jsr  popall
+          rts
+          .bend
+
 
 ;-----------------------------------------------------------------------------
 ; message table; last character has high bit set
@@ -1722,6 +1755,7 @@ supad   .word super             ; address of entry point
      .include  "l-v20-math.asm"           
      .include  "l-v20-conv.asm" 
      .include  "l-v20-keyb.asm" 
+     .include  "l-v20-disk.asm"
      .include  "l-v20-screen.asm"
 ;     .include  "l-v20-showregs.asm"
 ;prgend    .word $1234     

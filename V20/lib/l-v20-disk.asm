@@ -35,19 +35,19 @@
 ;--------------------------------------
 diskerror      
      .block
-     #mpushr
+     jsr pushregs
      lda  ddev ;Device 8
      sta  $ba  ;
-     jsr  $ffb4;talk 
+     jsr  talk 
      lda  #$6f
      sta  $b9   
-     jsr  $ff96;tksa
-next jsr  $ffa5;acptr
-     jsr  $ffd2;chrout
+     jsr  tksa
+next jsr  acptr
+     jsr  chrout
      cmp  #$0d ;Est-ce un CR ?
      bne  next ;Non, au prochain
-     jsr  $ffab;untlk
-     #mpopr
+     jsr  untlk
+     jsr  popregs
      rts
      .bend
 ;--------------------------------------
@@ -55,63 +55,63 @@ next jsr  $ffa5;acptr
 ;--------------------------------------
 diskdir     
      .block
-     #mpushr
-     lda  #$24 ;nfichier = "$"
-     sta  $fb  ;zp1 msb
-     lda  #$fb ;Set nom-fichier actuel
-     sta  $bb  ;mab nfichier actuel.
-     lda  #$00 ;vers zp1
-     sta  $bc  ;lsb nfichier actuel.
-     lda  #$01 ;Indique -
-     sta  $b7  ;- longueur de nfichier
-     lda  ddev ;Indique 8 as comme - 
-     sta  $ba  ;- periph serie actuel
-     lda  #$60 ;Peuple $60 a l'adresse-
-     sta  $b9  ;- secondaire.
-     jsr  $f3d5;sfopen ouvert. fichier
-     lda  $ba  ;Cmd dev $ba %10111010
-     jsr  $ffb4;talk.
-     lda  $b9  ;Cmd sec. adr. ($60) ...
-     jsr  $ff96;tksa ... to talk.
-     lda  #$00 ;Met $00 dans ...
-     sta  $90  ;... kernal status word.
+     jsr  pushall
+     lda  #$24      ;nfichier = "$"
+     sta  $fb       ;zp1 msb
+     lda  #$fb      ;Set nom-fichier actuel
+     sta  $bb       ;lsb nfichier actuel.
+     lda  #$00      ;vers zp1
+     sta  $bc       ;msb nfichier actuel.
+     lda  #$01      ;Indique -
+     sta  $b7       ;- longueur de nfichier
+     lda  ddev      ;Indique 8 as comme - 
+     sta  $ba       ;- periph serie actuel
+     lda  #$60      ;Peuple $60 a l'adresse-
+     sta  $b9       ;- secondaire.
+     jsr  open      ;Ouverture de  fichier
+     lda  $ba       ;Cmd dev $ba %10111010
+     jsr  talk      ;talk.
+     lda  $b9       ;Cmd sec. adr. ($60) ...
+     jsr  tksa      ;tksa ... to talk.
+     lda  #$00      ;Met $00 dans ...
+     sta  $90       ;... kernal status word.
 ; Bit 0 : Time out (Write).
 ; Bit 1 : Time out (Read).
 ; Bit 6 : EOI (End of Identify).
 ; Bit 7 : Device not present.
      ldy  #$03 ;pour lire 3 Byt, -
 loop1
-     sty  $fb  ;-mettre $3 dans zp1 Msb
-     jsr  $ffa5;acptr Recoit un byte.
-     sta  $fc  ;Met octet dans zp1 lsb
-     ldy  $90  ;Lit kernal status word.
-     bne  exit ;Si erreur, EXIT.
-     jsr  $ffa5;acptr
-     ldy  $90  ;Lit compteur d'octet.
+     sty  $fb       ;-mettre $3 dans zp1 MSB
+     jsr  acptr     ;acptr Recoit un byte.
+     sta  $fc       ;Met octet dans zp1 LSB
+     ldy  $90       ;Lit kernal status word.
+     bne  exit      ;Si erreur, EXIT.
+     jsr  acptr     ;Recoit un caractere provenant du port serie
+     ldy  $90       ;Lit compteur d'octet.
      bne  exit
      ldy  $fb
      dey
-     bne  loop1;si pas dernier, loop
-     ldx  $fc  ;Chrg Octet recu dans x.
-     jsr  $bdcd;bputint print file size    
-     lda  #$20 ;Chrg Espace et ...
-     jsr  $ffd2;chrout ... l'affiche.
+     bne  loop1     ;si pas dernier, loop
+     ldx  $fc       ;Chrg Octet recu dans x.
+     jsr  bprtfix   ;bputint print file size    
+     lda  #$20      ;Chrg Espace et ...
+     jsr  chrout    ;chrout ... l'affiche.
 loop3     
-     jsr  $ffa5;acptr Recoit un byte.
-     ldx  $90  ;Chrg kernal status word
-     bne  exit ;Si erreur, EXIT.
-     tax       ;tfr a dans x
-     beq  loop2;Byte est =0 loop1
-     jsr  $ffd2;chrout,  >0 l'affiche. 
-     jmp  loop3;Chrg un autre octets
+     jsr  acptr     ;acptr Recoit un byte.
+     ldx  $90       ;Chrg kernal status word
+     bne  exit      ;Si erreur, EXIT.
+     tax            ;tfr a dans x
+     beq  loop2     ;Byte est =0 loop2
+     jsr  chrout    ;chrout,  >0 l'affiche. 
+     jmp  loop3     ;Chrg un autre octets
 loop2     
-     lda  #$0d ;Chrg CR dans a ...
-     jsr  $ffd2;chrout ... l'affiche.
-     ldy  #$02 ;Met 2 dans y.
-     bne  loop1;-a la prochaine entree.
+     lda  #$0d      ;Chrg CR dans a ...
+     jsr  chrout    ;chrout ... l'affiche.
+     ldy  #$02      ;Met 2 dans y.
+     bne  loop1     ;-a la prochaine entree.
 exit      
-     jsr  $f642;sfclose ... close file.
-     #mpopr
+     jsr  clall     ;sfclose ... close file.
+     jsr  popall
      rts
      .bend
 ;--------------------------------------
@@ -134,12 +134,12 @@ memtofile
      lda  dfnlen
      ldx  dfnptr    ;Chrg fn addr. lsb 
      ldy  dfnptr+1  ;Chrg fn addr. msb
-     jsr  $ffbd     ;setnam
+     jsr  setnam
      lda  dlfsno
      ldx  ddev      ;Periph. specifie
 skip      
      ldy  #$00
-     jsr  $ffba     ;setlfs
+     jsr  setlfs     ;setlfs
      lda  ddatas    ;ddatas lsb->stal
      sta  stal
      lda  ddatas+1  ;ddatas msb->stal+1
@@ -147,7 +147,7 @@ skip
      ldx  ddatae    ;Met ddatae lsb->x
      ldy  ddatae+1  ;Met ddatae msb->y
      lda  #stal     ;Adr debut->$c1/$c2
-     jsr  $ffd8     ;save
+     jsr  save
      bcc  noerror   ;Si C=1, erreur
 noerror     
      #mpopr
@@ -163,15 +163,15 @@ filetomem
      lda dfnlen  ;Chrg nfichier len.
      ldx dfnptr  ;Pointe $yyxx sur ptr-
      ldy dfnptr+1;- nfichier
-     jsr $ffbd   ;setnam
+     jsr setnam
      lda dlfsno  ;Chrg lfn dans a
      ldx ddev    ;Periph #8
      ldy #$01    ;$00:adresse<-yyxx
                  ;$01:adresse<-fichier
-     jsr $ffba   ;setlfs
+     jsr setlfs
      lda #$00    ;$00:Chrg en memoire
                  ;$01:Verifier   
-     jsr $ffd5   ;load
+     jsr load
      bcc noerror ;C=1, Erreur
      jsr dskerror       
 noerror     
@@ -259,7 +259,7 @@ putmsg
      ldy  dfnptr+1   
      jsr  putsyx
      lda  #33
-     jsr  $ffd2
+     jsr  chrout
      lda  dlfsno
      jsr  close    
      #mpopr
