@@ -1607,7 +1607,8 @@ msg8      .text "  "              ; pad non-existent byte: skip 3 spaces
 msg9      .byte 28,32,32,32,32,32,18
           .text "!h pour aide"
           .byte 146,144,0
-version   = "20260226-120554"
+
+version   = "20260228-224603"
 
 ;-----------------------------------------------------------------------------
 ; addressing mode table - nybbles provide index into mode2 table

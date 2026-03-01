@@ -3,15 +3,6 @@ mneuprfx       .byte $0d,sbleu
                .fill 8,$20
                .byte 0
 
-;toppref        .byte 19,17,29,18,tleft,146,156,0
-;topsufx        .byte 144,18,tright,146,$0d,0
-;itempref       .byte 29,18,vline,0
-;itemsufx       .byte vline,146,$0d,0
-;botpref        .byte 29,18,bleft,146,28,0
-;putsufx        .byte 144,18,bright,146,$0d,0
-;testtext       .null "0123456789abcdef01"
-
-
 helpscrp1      .byte 19,17,29 
                .byte 18,tleft,146,156
                .text " Aide SuperMon P1 "
