@@ -389,8 +389,8 @@ tdown     lda  stash,x        ; tmp2 = fin de la source (réserve).
                               ; ... compte à rebours.
           sta  upflg
 compar1   jsr  crlf           ; Nouvelle ligne.
-          ldy  #0             ; aucun décalage par rapport au pointeur.
-tcloop    jsr  stop           ; vérifier la touche [RUN/STOP].
+          ldy  #0             ; Aucun décalage par rapport au pointeur.
+tcloop    jsr  stop           ; Vérifier la touche [RUN/STOP].
           beq  texit          ; Quitte si appuiée.
           lda  (tmp2),y       ; Charge un octet depuis la source.
           bit  savy           ; Transférer ou comparer?
@@ -415,217 +415,253 @@ tmor      jsr  sub13          ; Décrémenter la longueur.
 texit     jmp  strt           ; Retour à la boucle principale.
 
 ;-----------------------------------------------------------------------------
-; hunt memory [h]
+; Chercher en mémoire [h]
 ;-----------------------------------------------------------------------------
-hunt    jsr getdif          ; get start (tmp2) and end (tmp0) of haystack
-        bcs herror          ; carry indicates error
-        ldy #0
-        jsr getchr          ; get a single character
-        cmp #"'"            ; is it a single quote?
-        bne nostrh          ; if not, input needle as hex bytes
-        jsr getchr          ; if so, input needle as string
-        cmp #0
-        beq herror          ; error if needle isn't at least one byte
-hpar    sta stage,y         ; save char in staging area
-        iny 
-        jsr getchr          ; get another char
-        beq htgo            ; if it's null start searching
-        cpy #estage-stage   ; have we filled up the needle staging area?
-        bne hpar            ; if not, get another character
-        beq htgo            ; if so, start searching
-nostrh  jsr rdpar           ; read hex bytes if string not indicated
-hlp     lda tmp0            ; save last read byte in staging area
-        sta stage,y
-        iny                 ; get another hex byte
-        jsr getpar
-        bcs htgo            ; if there is none, start searching
-        cpy #estage-stage   ; have we filled up the needle staging area?
-        bne hlp             ; if not, get another byte
-htgo    sty savy            ; save length of needle
-        jsr crlf            ; new line
-hscan   ldy #0
-hlp3    lda (tmp2),y        ; get first byte in haystack
-        cmp stage,y         ; compare it to first byte of needle
-        bne hnoft           ; if it doesn't match, we haven't found anything
-        iny                 ; if it does, check the next byte
-        cpy savy            ; have we reached the end of the needle?
-        bne hlp3            ; if not, keep comparing bytes
-        jsr showad          ; match found, show address
-hnoft   jsr stop            ; no match, check for stop key
-        beq hexit           ; exit prematurely if pressed
-        jsr adda2           ; increment haystack pointer
-        jsr sub13           ; decrement haystack length
-        bcs hscan           ; still more haystack? keep searching
-hexit   jmp strt            ; back to main loop
-herror  jmp error           ; handle error
+hunt      jsr  getdif         ; Obtenir le début (tmp2) et la fin (tmp0) 
+          bcs  herror         ; Le report indique une erreur
+          ldy  #0
+          jsr  getchr         ; Obtenir un seul caractère
+          cmp  #"'"           ; S'agit-il d'un simple guillemet ?
+          bne  nostrh         ; Sinon, saisir l'entrée sous forme hexadécimal.
+          jsr  getchr         ; Si oui, saisir l'entrée sous forme de chaine.
+          cmp  #0
+          beq  herror         ; Erreur si l'entrée est vide.
+hpar      sta  stage,y        ; Sauvegarder caractere dans la zone de stockage
+          iny 
+          jsr  getchr         ; Obtenir un autre caractère
+          beq  htgo           ; Si la valeur est nulle, commencez la recherche.
+          cpy  #estage-stage  ; Avons-nous rempli la zone de stockage?
+          bne  hpar           ; Sinon, obtenir un autre personnage
+          beq  htgo           ; Si oui, commencez à chercher
+nostrh    jsr  rdpar          ; Lire les octets hexadécimaux si pas une chaîne.
+hlp       lda  tmp0           ; Enregistrer dernier octet dans zone de stockage
+          sta  stage,y
+          iny                 ; Obtenir un autre octet hexadécimal
+          jsr  getpar
+          bcs  htgo           ; S'il n'y en a pas, commencez la recherche
+          cpy  #estage-stage  ; Avons-nous rempli la zone de stockage ?
+          bne  hlp            ; Sinon, récupérez un autre octet
+htgo      sty  savy           ; Sauvegarder la longueur de la zone de stockage
+          jsr  crlf           ; Nouvelle ligne
+hscan     ldy  #0
+hlp3      lda  (tmp2),y       ; Récupérer le premier octet de la zone de stock.
+          cmp  stage,y        ; Comparez-le au premier octet.
+          bne  hnoft          ; S'ilsne correspondent pas, alors rien trouvé.
+          iny                 ; Si oui, vérifiez l'octet suivant
+          cpy  savy           ; Est-ce la fin de la zone de stockage
+          bne  hlp3           ; Sinon, continuez à comparer les octets
+          jsr  showad         ; Correspondance trouvée, afficher l'adresse
+hnoft     jsr  stop           ; Si non, vérifiez la touche [RUN/STOP]
+          beq  hexit          ; Quitter si pressé
+          jsr  adda2          ; Incrémente le pointeur de la zone de stockage
+          jsr  sub13          ; Décrémente la longueur de la zone de stockage
+          bcs  hscan          ; Il reste des octets, continuer la recherche.
+hexit     jmp  strt           ; Retour à la boucle principale
+herror    jmp  error          ; Gérer les erreurs.
 
 ;-----------------------------------------------------------------------------
-; load, save, or verify [lsv]
+; Charger (load), enregistrer (save), ou verifier [lsv]
 ;-----------------------------------------------------------------------------
-ld      ldy #1              ; default to reading from tape, device #1
-        sty fa
-        sty sadd            ; default to secondary address #1
-        dey
-        sty fnlen           ; start with an empty filename
-        sty satus           ; clear status
-        lda #>stage         ; set filename pointer to staging buffer
-        sta fnadr+1
-        lda #<stage
-        sta fnadr
-l1      jsr getchr          ; get a character
-        beq lshort          ; no filename given, try load or verify from tape
-        cmp #$20            ; skip leading spaces
-        beq l1
-        cmp #$22            ; error if filename doesn't start with a quote
-        bne lerror
-        ldx chrpnt          ; load current char pointer into index reg
-l3      lda inbuff,x        ; load current char from buffer to accumulator
-        beq lshort          ; no filename given, try load or verify from tape
-        inx                 ; next char
-        cmp #$22            ; is it a quote?
-        beq l8              ; if so, we've reached the end of the filename
-        sta (fnadr),y       ; if not, save character in filename buffer
-        inc fnlen           ; increment filename length
-        iny 
-        cpy #estage-stage   ; check whether buffer is full
-        bcc l3              ; if not, get another character
-lerror  jmp error           ; if so, handle error
-l8      stx chrpnt          ; set character pointer to the current index
-        jsr getchr          ; eat separator between filename and device #
-        beq lshort          ; no separator, try to load or verify from tape
-        jsr getpar          ; get device number
-        bcs lshort          ; no device # given, try load or verify from tape
-        lda tmp0            ; set device number for kernal routines
-        sta fa
-        jsr getpar          ; get start address for load or save in tmp0
-        bcs lshort          ; no start address, try to load or verify
-        jsr copy12          ; transfer start address to tmp2
-        jsr getpar          ; get end address for save in tmp0
-        bcs ldaddr          ; no end address, try to load to given start addr
-        jsr crlf            ; new line
-        ldx tmp0            ; put low byte of end address in x
-        ldy tmp0+1          ; put high byte of end address in y
-        lda savy            ; confirm that we're doing a save
-        cmp #"s"
-        bne lerror          ; if not, error due to too many params
-        lda #0
-        sta sadd            ; set secondary address to 0
-        lda #tmp2           ; put addr of zero-page pointer to data in a
-        jsr save            ; call kernal save routine
-lsvxit  jmp strt            ; back to mainloop
-lshort  lda savy            ; check which command we received
-        cmp #"v"
-        beq loadit          ; we're doing a verify so don't set a to 0
-        cmp #"l"
-        bne lerror          ; error due to not enough params for save
-        lda #0              ; 0 in a signals load, anything else is verify
-loadit  jsr load            ; call kernal load routine
-        lda satus           ; get i/o status
-        and #$10            ; check bit 5 for checksum error
-        beq lsvxit          ; if no error go back to mainloop
-        lda savy            ; ?? not sure what these two lines are for...
-        beq lerror          ; ?? savy will never be 0, so why check?
-        ldy #msg6-msgbas    ; display "error" if checksum didn't match
-        jsr sndmsg
-        jmp strt            ; back to mainloop
-ldaddr  ldx tmp2            ; load address low byte in x
-        ldy tmp2+1          ; load address high byte in y
-        lda #0              ; 0 in a signals load
-        sta sadd            ; secondary addr 0 means load to addr in x and y
-        beq lshort          ; execute load
+ld        ldy  #1             ; Lecture par défaut sur bande, périphérique n° 1
+          sty  fa
+          sty  sadd           ; Par défaut, l'adresse secondaire n° 1
+          dey
+          sty  fnlen          ; Commencer par un nom de fichier vide
+          sty  satus          ; Effacer le statut
+          lda  #>stage        ; Pointer de nom de fichier sur la mémoire tampon
+          sta  fnadr+1
+          lda  #<stage
+          sta  fnadr
+l1        jsr  getchr         ; Obtenir un caractere.
+          beq  lshort         ; Aucun nom de fichier fourni, essayez de charger 
+                              ; ... ou de vérifier à partir de la bande
+          cmp  #$20           ; Sauter les espaces de début
+          beq  l1
+          cmp  #$22           ; Erreur si nom de fichier ne commence pas par 
+                              ; ... une guillemet
+          bne  lerror
+          ldx  chrpnt         ; Charger le pointeur de caractère courant dans le
+                              ; ... registre d'index
+l3        lda  inbuff,x       ; Charger le caractère courant du tampon dans 
+                              ; ... l'accumulateur
+          beq  lshort         ; Aucun nom de fichier fourni, essayez de charger 
+                              ; ... ou de vérifier à partir de la bande
+          inx                 ; Prochain caractère
+          cmp  #$22           ; Est-ce un guillemet ?
+          beq  l8             ; Si oui, nc'est la fin du nom de fichier
+          sta  (fnadr),y      ; Sinon, enregistrez le caractère dans le tampon 
+                              ; ... du nom de fichier
+          inc  fnlen          ; Incrémenter la longueur du nom de fichier
+          iny 
+          cpy  #estage-stage  ; Vérifier si le tampon est plein
+          bcc  l3             ; Sinon, obtenir un autre personnage
+lerror    jmp  error          ; Si oui, gérer l'erreur
+l8        stx  chrpnt         ; Le pointeur de caractère sur l'index actuel
+          jsr  getchr         ; Supprimer le séparateur entre le nom de fichier 
+                              ; ... et le no. de périphérique
+          beq  lshort         ; Pas de séparateur, essayez de charger ou de 
+                              ; ... vérifier à partir de la bande
+          jsr  getpar         ; Obtenir le numéro de périphérique
+          bcs  lshort         ; Aucun numéro de périphérique indiqué, essayez de 
+                              ; ... charger ou de vérifier à partir d'une bande
+          lda  tmp0           ; Définir le numéro de périphérique pour les 
+          sta  fa             ; ... routines du noyau
+          jsr  getpar         ; Obtenir l'adresse de départ pour le chargement 
+                              ; ... ou l'enregistrement dans tmp0
+          bcs  lshort         ; Aucune adresse de départ, essayez de charger ou 
+                              ; ... de vérifier
+          jsr  copy12         ; L'adresse de début de transfert dans tmp2
+          jsr  getpar         ; Obtenir l'adresse fin d'enregistrement de tmp0
+          bcs  ldaddr         ; Aucune adresse de fin, tenter le chargement à 
+                              ; ... l'adresse de début indiquée
+          jsr  crlf           ; Nouvelle ligne
+          ldx  tmp0           ; Placer le LSB de l'adresse de fin dans x
+          ldy  tmp0+1         ; Placer le MSB de l'adresse de fin dans y
+          lda  savy           ; Confirmez que nous effectuons une sauvegarde
+          cmp  #"s"
+          bne  lerror         ; Sinon, erreur due à trop de paramètres
+          lda  #0
+          sta  sadd           ; Définir l'adresse secondaire à 0
+          lda  #tmp2          ; Placer pointeur de page zéro dans acc
+          jsr  save           ; Appel de la routine de sauvegarde du noyau
+lsvxit    jmp  strt           ; Retour à la boucle principale
+lshort    lda  savy           ; Vérifier quelle commande nous avons reçue
+          cmp  #"v"
+          beq  loadit         ; Vérification, donc ne pas mettre acc à 0.
+          cmp  #"l"
+          bne  lerror         ; Erreur due à un nombre insuffisant de paramètres
+                              ; ... pour l'enregistrement
+          lda  #0             ; 0 dans a chargement, autre chose verifier
+loadit    jsr  load           ; Appel de la routine de chargement du noyau
+          lda  satus          ; Obtenir l'état des E/S
+          and  #$10           ; Vérifier le bit 5 pour une erreur de somme de 
+                              ; ... contrôle
+          beq  lsvxit         ; Si aucune erreur n'est détectée, 
+                              ; ... retour à la boucle principale
+          lda  savy           ; ?? not sure what these two lines are for...
+          beq  lerror         ; ?? savy will never be 0, so why check?
+          ldy  #msg6-msgbas   ; « erreur » si la somme de contrôle differe
+          jsr  sndmsg
+          jmp  strt           ; Retour à la boucle principale
+ldaddr    ldx  tmp2           ; Placer le LSB de l'adresse de fchargement dans x
+          ldy  tmp2+1         ; Placer le MSB de l'adresse de fchargement dans y
+          lda  #0             ; 0 dans a indique chargement
+          sta  sadd           ; L'adresse secondaire 0 signifie l'adresse de 
+                              ; ... chargement est dans x et y
+          beq  lshort         ; Exécuter le chargement
 
 ;-----------------------------------------------------------------------------
-; fill memory [f]
+; peupler (fill) la memoire [f]
 ;-----------------------------------------------------------------------------
-fill    jsr getdif          ; start in tmp2, end in stash, length in store
-        bcs aerror          ; carry set indicates error
-        jsr getpar          ; get value to fill in tmp0
-        bcs aerror          ; carry set indicates error
-        jsr getchr          ; any more characters triggers an error
-        bne aerror
-        ldy #0              ; no offset
-fillp   lda tmp0            ; load value to fill in accumulator
-        sta (tmp2),y        ; store fill value in current address
-        jsr stop            ; check for stop key
-        beq fstart          ; if pressed, back to main loop
-        jsr adda2           ; increment address
-        jsr sub13           ; decrement length
-        bcs fillp           ; keep going until length reaches 0
-fstart  jmp strt            ; back to main loop
+fill      jsr  getdif         ; Début dans tmp2, fin dans stash, 
+                              ; ... longueur dans store
+          bcs  aerror         ; C à 1 indique une erreur
+          jsr  getpar         ; Obtenir la valeur à peupler dans tmp0
+          bcs  aerror         ; C à 1 indique une erreur
+          jsr  getchr         ; Tout caractère de plus déclenche une erreur
+          bne  aerror
+          ldy  #0             ; Pas de décalage
+fillp     lda  tmp0           ; Charge la valeur à peupler dans acc
+          sta  (tmp2),y       ; Stocke la valeur dans l'adresse actuelle
+          jsr  stop           ; Vérifiez la touche [RUN/STOP]
+          beq  fstart         ; Si appuyé, retour à la boucle principale
+          jsr  adda2          ; Incrémenter l'adresse
+          jsr  sub13          ; Décrémenter la longueur
+          bcs  fillp          ; Continuez jusqu'à ce que la longueur atteigne 0
+fstart    jmp  strt           ; Retour à la boucle principale
 
 ;-----------------------------------------------------------------------------
 ; assemble [a.]
 ;-----------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------
-; read in mnemonic
+; lire la mnemonique
 ;-----------------------------------------------------------------------------
-assem   bcs aerror          ; error if no address given
-        jsr copy12          ; copy address to tmp2
-aget1   ldx #0
-        stx u0aa0+1         ; clear byte that mnemonic gets shifted into
-        stx digcnt          ; clear digit count
-aget2   jsr getchr          ; get a char
-        bne almor           ; proceed if the character isn't null
-        cpx #0              ; it's null, have read a mnemonic yet?
-        beq fstart          ; if not, silently go back to main loop
-almor   cmp #$20            ; skip leading spaces
-        beq aget1
-        sta mnemw,x         ; put character in mnemonic buffer
-        inx
-        cpx #3              ; have we read 3 characters yet?
-        bne aget2           ; if not, get next character
+assem     bcs  aerror         ; Erreur si aucune adresse n'est fournie
+          jsr  copy12         ; Copier l'adresse dans tmp2
+aget1     ldx  #0
+          stx  u0aa0+1        ; Octet d'effacement dans lequel le mnémonique 
+                              ; ... est déplacé
+          stx  digcnt         ; Effacer le compte de caractere
+aget2     jsr  getchr         ; Obtenir un caractere
+          bne  almor          ; Poursuivre si le caractère n'est pas nul
+          cpx  #0             ; C'est nul, avez-nous déjà lu une mneumonique ?
+          beq  fstart         ; Sinon, retourneà la boucle principale
+almor     cmp  #$20           ; Sauter les espaces de début
+          beq  aget1
+          sta  mnemw,x        ; Placer le caractère dans le tampon mnémonique
+          inx
+          cpx  #3             ; Avons-nous déjà lu 3 caracteres ?
+          bne  aget2          ; Sinon, passez au caractère suivant
 ;-----------------------------------------------------------------------------
-; compress mnemonic into two bytes
+; compresser le mnémonique en deux octets
 ;-----------------------------------------------------------------------------
-asqeez  dex                 ; move to previous char
-        bmi aoprnd          ; if we're done with mnemonic, look for operand
-        lda mnemw,x         ; get current character
-        sec                 ; pack 3-letter mnemonic into 2 bytes (15 bits)
-        sbc #$3f            ; subtract $3f from ascii code so a-z = 2 to 27
-        ldy #$05            ; letters now fit in 5 bits; shift them out
-ashift  lsr a               ;   into the first two bytes of the inst buffer
-        ror u0aa0+1         ; catch the low bit from accumulator in right byte
-        ror u0aa0           ; catch the low bit from right byte in left byte
-        dey                 ; count down bits
-        bne ashift          ; keep looping until we reach zero
-        beq asqeez          ; unconditional branch to handle next char
-aerror  jmp error           ; handle error
+asqeez    dex                 ; Passer au caractère précédent
+          bmi  aoprnd         ; Si terminé avec mnémonique, cherche opérande
+          lda  mnemw,x        ; Obtenir le caractere actuel
+          sec                 ; Condenser mnémonique de 3 lettres en (15 bits)
+          sbc  #$3f           ; Soustraire $3f du code ASCII, donc a-z=2 à 27
+          ldy  #$05           ; Les lettres tiennent désormais sur 5 bits ; 
+ashift    lsr  a              ; ... décalez-les dans les deux premiers octets 
+                              ; ...du tampon d'instructions.
+          ror  u0aa0+1        ; Récupérer LSB de l'accumulateur dans l'octet 
+                              ; ... de droite
+          ror  u0aa0          ; Récupérer LSB de l'octet de droite dans 
+                              ; ... l'octet de gauche
+          dey                 ; Decompter les bits.
+          bne  ashift         ; Continuer la boucle jusqu'à atteindre zéro
+          beq  asqeez         ; Branche inconditionnelle pour gérer le 
+                              ; ... prochain caractère
+aerror    jmp  error          ; Gérer l'erreur
 ;-----------------------------------------------------------------------------
 ; parse operand
 ;-----------------------------------------------------------------------------
-aoprnd  ldx #2              ; mnemonic is in first two bytes so start at third
-ascan   lda digcnt          ; did we find address digits last time?
-        bne aform1          ; if so, look for mode chars
-        jsr rdval           ; otherwise, look for an address
-        beq aform0          ; we didn't find an address, look for characters
-        bcs aerror          ; carry flag indicates error
-        lda #"$"
-        sta u0aa0,x         ; prefix addresses with $
-        inx                 ; next position in buffer
-        ldy #4              ; non-zero page addresses are 4 hex digits
-        lda numbit          ; check numeric base in which address was given
-        cmp #8              ; for addresses given in octal or binary
-        bcc aaddr           ;   use only the high byte to determine page
-        cpy digcnt          ; for decimal or hex, force non-zero page addressing
-        beq afill0          ;   if address was given with four digits or more 
-aaddr   lda tmp0+1          ; check whether high byte of address is zero
-        bne afill0          ; non-zero high byte means we're not in zero page
-        ldy #2              ; if it's in zero page, addr is 2 hex digits
-afill0  lda #$30            ; use 0 as placeholder for each hex digit in addr
-afil0l  sta u0aa0,x         ; put placeholder in assembly buffer
-        inx                 ; move to next byte in buffer
-        dey                 ; decrement number of remaining digits
-        bne afil0l          ; loop until all digits have been placed
-aform0  dec chrpnt          ; non-numeric input; back 1 char to see what it was
-aform1  jsr getchr          ; get next character
-        beq aescan          ; if there is none, we're finished scanning
-        cmp #$20            ; skip spaces
-        beq ascan
-        sta u0aa0,x         ; store character in assembly buffer
-        inx                 ; move to next byte in buffer
-        cpx #u0aae-u0aa0    ; is instruction buffer full?
-        bcc ascan           ; if not, keep scanning
-        bcs aerror          ; error if buffer is full
+aoprnd    ldx  #2             ; Le mnémonique se trouve dans les deux premiers
+                              ; ... octets, donc commencez au troisième.
+ascan     lda  digcnt         ; Avons-nous trouvé les chiffres de l'adresse la
+                              ; ... dernière fois ?
+          bne  aform1         ; Si oui, recherchez les caractères de mode
+          jsr  rdval          ; Sinon, cherchez une adresse
+          beq  aform0         ; Nous n'avons pas trouvé d'adresse, recherchez 
+                              ; ... des caractères
+          bcs  aerror         ; Le CARRY indique une erreur
+          lda  #"$"
+          sta  u0aa0,x        ; Préfixez les adresses avec $
+          inx                 ; Prochaine position dans le tampon
+          ldy  #4             ; Les adresses non-zero page comportent 4 
+                              ; ... chiffres hexadécimaux
+          lda  numbit         ; Vérifier la base numérique dans laquelle 
+                              ; ... l'adresse a été donnée
+          cmp  #8             ; Pour les adresses données en octal ou en 
+          bcc  aaddr          ; ... binaire, utilisez uniquement l'octet de 
+                              ; ... poids fort pour déterminer la page
+          cpy  digcnt         ; Pour les formats décimal ou hexadécimal, 
+          beq  afill0         ; ... forcer l'adressage de page non nul si 
+                              ; ... l'adresse fournie comporte quatre chiffres
+                              ; ... ou plus
+aaddr     lda  tmp0+1         ; Vérifier si le MSB de l'adresse est nul
+          bne  afill0         ; Un octet MSB non nul signifie que nous ne 
+                              ; ... sommes pas en mode page zéro
+          ldy  #2             ; Si elle se trouve sur la page zéro, l'adresse 
+                              ; ... est composée de 2 chiffres hexadécimaux
+afill0    lda  #$30           ; Utilisez 0 comme espace réservé pour chaque 
+                              ; ... chiffre hexadécimal dans l'adresse
+afil0l    sta  u0aa0,x        ; Insérer un espace réservé dans le tampon 
+                              ; ... d'assemblage
+          inx                 ; Passer à l'octet suivant dans le tampon
+          dey                 ; Décrémenter le nombre de chiffres restants
+          bne  afil0l         ; Boucler jusqu'à ce que tous les chiffres aient 
+                              ; ... été placés
+aform0    dec  chrpnt         ; Entrée non numérique; revenez au caractère 
+                              ; ... précédent pour voir ce qu'il contenait
+aform1    jsr  getchr         ; obtenir le prochain personnage
+          beq  aescan         ; S'il n'y en a pas, numérisation est terminée
+          cmp  #$20           ; Sauter les espaces
+          beq  ascan
+          sta  u0aa0,x        ; Ltocker le caractère dans tampon d'assemblage
+          inx                 ; Passer à l'octet suivant dans le tampon
+          cpx  #u0aae-u0aa0   ; Le tampon d'instructions est-il plein?
+          bcc  ascan          ; Sinon, continuez à scanner
+          bcs  aerror         ; Erreur si la mémoire tampon est pleine
 ;-----------------------------------------------------------------------------
 ; find matching opcode
 ;-----------------------------------------------------------------------------
@@ -766,7 +802,7 @@ dis0ad  lda #10             ; DL: disassemble 11 bytes by default
 dis2ad  jsr sub12           ; calculate number of bytes between start and end
         bcc derror          ; error if end address is before start address
 disgo   jsr cline           ; clear the current line
-        jsr stop            ; check for stop key
+        jsr stop            ; Vérifiez la touche [RUN/STOP]
         beq disexit         ; exit early if pressed
         jsr dsout1          ; output disassembly prefix ". "
         inc length
