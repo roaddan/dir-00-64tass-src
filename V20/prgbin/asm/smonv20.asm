@@ -1259,12 +1259,16 @@ gdifx   sec                 ; set carry to indicate error
 ;-----------------------------------------------------------------------------
 convrt  jsr rdpar           ; read a parameter
         jsr fresh           ; next line and clear
+        lda #sbleu
+        jsr chrout
         lda #"$"            ; output $ sigil for hex
         jsr chrout
         lda tmp0            ; load the 16-bit value entered
         ldx tmp0+1
         jsr wraddr          ; print it in 4 hex digits
         jsr fresh
+        lda #smauve
+        jsr chrout
         lda #"+"            ; output + sigil for decimal
         jsr chrout
         jsr cvtdec          ; convert to bcd using hardware mode
@@ -1273,6 +1277,8 @@ convrt  jsr rdpar           ; read a parameter
         ldy #3              ; bits per digit - 1
         jsr nmprnt          ; print result without leading zeros
         jsr fresh           ; next line and clear
+        lda #srouge
+        jsr chrout
         lda #"&"            ; print & sigil for octal
         jsr chrout
         lda #0              ; clear digit counter
@@ -1280,12 +1286,16 @@ convrt  jsr rdpar           ; read a parameter
         ldy #2              ; bits per digit - 1
         jsr prinum          ; output number
         jsr fresh           ; next line and clear
+        lda #svert
+        jsr chrout
         lda #"%"            ; print % sigil for binary
         jsr chrout
         lda #0              ; clear digit counter
         ldx #$18            ; max digits + 1
         ldy #0              ; bits per digit - 1
         jsr prinum          ; output number
+        lda #snoir
+        jsr chrout
         jmp strt            ; back to mainloop
 
 ;-----------------------------------------------------------------------------
@@ -1578,6 +1588,12 @@ cmdh      cmp  #'h'
           #ldyxptr  helpscrp2
           #styxmem  genword1
           jsr  popup
+          #ldyxptr  helpscrp3
+          #styxmem  genword1
+          jsr  popup
+          #ldyxptr  helpscrp4
+          #styxmem  genword1
+          jsr  popup
           #ldyxptr  greetings
           #styxmem  genword1
           jsr  popup
@@ -1783,8 +1799,8 @@ supad   .word super             ; address of entry point
 
 
 ;-----------------------------------------------------------------------------
-     .include  "string-fr.asm"
-     ;.include  "string-en.asm"
+     ;.include  "string-fr.asm"
+     .include  "string-en.asm"
 ;-----------------------------------------------------------------------------
      .include  "l-v20-push.asm" 
      .include  "l-v20-string.asm" 

@@ -9,6 +9,10 @@ helpscrp1      .byte 19,17,29
                .byte 144,18,tright,146,$0d
 
                .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
                .text "[a]ssembleur      "
                .byte vline,146,$0d
 
@@ -80,10 +84,6 @@ helpscrp1      .byte 19,17,29
                .text "g [AAAA]          "
                .byte vline,146,$0d
 
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
                .byte 29,18,bleft,146,28
                .text " Appuyez une clef "
                .byte 144,18,bright,146,$0d
@@ -94,6 +94,10 @@ helpscrp2      .byte 19,17,29
                .byte 18,tleft,146,156
                .text " Aide SuperMon P2 "
                .byte 144,18,tright,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
 
                .byte 29,18,vline
                .text "[r]un    programme"
@@ -156,12 +160,16 @@ helpscrp2      .byte 19,17,29
                .byte vline,146,$0d
 
                .byte 29,18,vline
-               .text "@ etat du lecteur "
+               .text "Conversion [$+&%] "
                .byte vline,146,$0d
 
-               .byte 29,18,hleft
-               .fill 18,hline
-               .byte hright,146,$0d
+               .byte 29,18,vline
+               .text " [$]hex.  [&]oct. "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text " [+]dec.  [%]bin. "
+               .byte vline,146,$0d
 
                .byte 29,18,bleft,146,28
                .text " Appuyez une clef "
@@ -169,29 +177,163 @@ helpscrp2      .byte 19,17,29
 
                .byte 0
 
+helpscrp3      .byte 19,17,29 
+               .byte 18,tleft,146,156
+               .text " Aide SuperMon P3 "
+               .byte 144,18,tright,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "[s]auvegarde mem. "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "s"
+               .byte 34
+               .text "fnom"
+               .byte 34
+               .text "d,BBBB,EEEE"
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "[l]oad charger mem"
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "l"
+               .byte 34
+               .text "fnom"
+               .byte 34
+               .text "d,BBBB     "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "[v]erifier fichier"
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "v"
+               .byte 34
+               .text "fnom"
+               .byte 34
+               .text "d,BBBB     "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "@ etat du lecteur "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
                .byte 29,18,vline
                .text "[x] aller a Basic "
                .byte vline,146,$0d
 
                .byte 29,18,vline
-               .text "Demarrer SYS 40960"
+               .fill 18,32
                .byte vline,146,$0d
 
-               .byte 29,18,hleft
-               .fill 18,hline
-               .byte hright,146,$0d
+               .byte 29,18,bleft,146,28
+               .text " Appuyez une clef "
+               .byte 144,18,bright,146,$0d
+
+               .byte 0
+
+helpscrp4      .byte 19,17,29 
+               .byte 18,tleft,146,156
+               .text " Aide SuperMon P4 "
+               .byte 144,18,tright,146,$0d
+
+               .byte 29,18,hleft,146,31
+               .text "   Informations   "
+               .byte 144,18,hright,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "Demarrer:SYS 40960"
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
 
                .byte 29,18,vline
                .text "v/e = voir/editer "
                .byte vline,146,$0d
 
-               .byte 29,18,hleft,146,31
-               .text " Autres Commandes "
-               .byte 144,18,hright,146,$0d
+               .byte 29,18,vline
+               .text "d=Lecteur"
+               .byte vline,146,$0d
 
                .byte 29,18,vline
-               .text " !e=cls   !h=aide "
+               .text "BBBB= Adr. debut  "
                .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "EEEE= Adr. fin    "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "DDDD= Adr. destin."
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "BB=Octet          "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "Autres commandes: "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "!c=cls,!d=listfich"
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "!g=Credits,!h=aide"
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .fill 18,32
+               .byte vline,146,$0d
+
+               .byte 29,18,bleft,146,28
+               .text " Appuyez une clef "
+               .byte 144,18,bright,146,$0d
+
+               .byte 0
 
 backspace      .byte 157,157,32,32,157,157,145,0
 
@@ -224,12 +366,20 @@ greetings      .byte 19,17,29
                .fill 18,32
                .byte vline,146,$0d
 
+               .byte 29,18,hleft
+               .fill 18,hline
+               .byte hright,146,$0d
+
                .byte 29,18,vline
-               .text " Version Vic20    "
+               .fill 18,32
                .byte vline,146,$0d
 
                .byte 29,18,vline
-               .text " Adaptatee par:   "
+               .text "Version Vic20:    "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text " Adaptation:      "
                .byte vline,146,$0d
 
                .byte 29,18,vline
@@ -245,11 +395,19 @@ greetings      .byte 19,17,29
                .byte vline,146,$0d
 
                .byte 29,18,vline
-               .text "Utilise bank0 & 5 "
+               .text "Utilise bank 0 & 5"
                .byte vline,146,$0d
 
                .byte 29,18,vline
-               .text "de la Penultimate+"
+               .text "sur emulateur VICE"
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text " ou la cartouche  "
+               .byte vline,146,$0d
+
+               .byte 29,18,vline
+               .text "Penultimate+,+2,+3"
                .byte vline,146,$0d
 
                .byte 29,18,vline
@@ -265,3 +423,4 @@ greetings      .byte 19,17,29
                .byte 144,18,bright,146,$0d
 
                .byte 0
+Auteur         .text "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"
