@@ -1,426 +1,149 @@
-
 mneuprfx       .byte $0d,sbleu
                .fill 8,$20
                .byte 0
 
-helpscrp1      .byte 19,17,29 
-               .byte 18,tleft,146,156
-               .text " Aide SuperMon P1 "
-               .byte 144,18,tright,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[a]ssembleur      "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "a ADDR MNEUMO OPER"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[d]esassembleur   "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "d [debut [fin]]   "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[f]=emplir memoire"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "f debut fin code  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[m]emoire v/e     "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "m [debut [fin]]   "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text ">AAAA XX XX ... XX"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[r]egsistres v/e  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[;]init registres "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[G]oto adresse    "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "g [AAAA]          "
-               .byte vline,146,$0d
-
-               .byte 29,18,bleft,146,28
-               .text " Appuyez une clef "
-               .byte 144,18,bright,146,$0d
-
-               .byte 0
-
-helpscrp2      .byte 19,17,29 
-               .byte 18,tleft,146,156
-               .text " Aide SuperMon P2 "
-               .byte 144,18,tright,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[r]un    programme"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "r AAAA            "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[j]sr sous-routine"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "j AAAA            "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[h]unt recherche  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "h BBBB EEEE BB..BB"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[t]ransfert mem.  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "t BBBB EEEE DDDD  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[c]ompare mem     "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "c BBBB EEEE DDDD  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "Conversion [$+&%] "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text " [$]hex.  [&]oct. "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text " [+]dec.  [%]bin. "
-               .byte vline,146,$0d
-
-               .byte 29,18,bleft,146,28
-               .text " Appuyez une clef "
-               .byte 144,18,bright,146,$0d
-
-               .byte 0
-
-helpscrp3      .byte 19,17,29 
-               .byte 18,tleft,146,156
-               .text " Aide SuperMon P3 "
-               .byte 144,18,tright,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[s]auvegarde mem. "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "s"
-               .byte 34
-               .text "fnom"
-               .byte 34
-               .text "d,BBBB,EEEE"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[l]oad charger mem"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "l"
-               .byte 34
-               .text "fnom"
-               .byte 34
-               .text "d,BBBB     "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[v]erifier fichier"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "v"
-               .byte 34
-               .text "fnom"
-               .byte 34
-               .text "d,BBBB     "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "@ etat du lecteur "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "[x] aller a Basic "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,bleft,146,28
-               .text " Appuyez une clef "
-               .byte 144,18,bright,146,$0d
-
-               .byte 0
-
-helpscrp4      .byte 19,17,29 
-               .byte 18,tleft,146,156
-               .text " Aide SuperMon P4 "
-               .byte 144,18,tright,146,$0d
-
-               .byte 29,18,hleft,146,31
-               .text "   Informations   "
-               .byte 144,18,hright,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "Demarrer:SYS 40960"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "v/e = voir/editer "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "d=Lecteur"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "BBBB= Adr. debut  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "EEEE= Adr. fin    "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "DDDD= Adr. destin."
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "BB=Octet          "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "Autres commandes: "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "!c=cls,!d=listfich"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "!g=Credits,!h=aide"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,bleft,146,28
-               .text " Appuyez une clef "
-               .byte 144,18,bright,146,$0d
-
-               .byte 0
-
 backspace      .byte 157,157,32,32,157,157,145,0
 
-greetings      .byte 19,17,29 
-               .byte 18,tleft,146,156
-               .text " Credits SuperMon "
-               .byte 144,18,tright,146,$0d
+;Auteur         .text "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"
 
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
 
-               .byte 29,18,vline
-               .text "Version originale:"
-               .byte vline,146,$0d
+hstitle        .byte 18,tleft,146,156
+               .text "  Aide Super-Mon  "
+               .byte 144,18,tright,146,0
 
-               .byte 29,18,vline
-               .text " Supermon64 1983  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text " Jim Butterfield  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text " 1936-2007 R.I.P. "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,hleft
-               .fill 18,hline
-               .byte hright,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "Version Vic20:    "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text " Adaptation:      "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text " Daniel Lafrance  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text format(" %s  ",version)
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "Utilise bank 0 & 5"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "sur emulateur VICE"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text " ou la cartouche  "
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "Penultimate+,+2,+3"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .text "www.tfw8b.com/shop"
-               .byte vline,146,$0d
-
-               .byte 29,18,vline
-               .fill 18,32
-               .byte vline,146,$0d
-
-               .byte 29,18,bleft,146,28
+hsfoot         .byte 18,bleft,146,28
                .text " Appuyez une clef "
-               .byte 144,18,bright,146,$0d
+               .byte 144,18,bright,146,0
 
+hsvide         .fill 18,32
                .byte 0
-Auteur         .text "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"
+
+hsempty        .byte 18,vline
+               .fill 18,32
+               .byte vline,146,0
+
+hsih           .byte 18,0
+hsif           .byte 146,0
+
+horline        .byte 18,hleft
+               .fill 18,hline
+               .byte hright,146,0
+
+                    ;"------------------"
+hs1a           .null "[a]ssembleur"
+hs1b           .null "a ADDR MNEUMO OPER"
+hs1c           .null "[d]esassembleur"
+hs1d           .null "d [debut [fin]]"
+hs1e           .null "[f]=emplir memoire"
+hs1f           .null "f debut fin code"
+hs1g           .null "[m]emoire v/e"
+hs1h           .null "m [debut [fin]]"
+hs1i           .null ">AAAA XX XX ... XX"
+hs1j           .null "[r]egsistres v/e"
+hs1k           .null "[;]init registres"
+hs1l           .null "[G]oto adresse"
+hs1m           .null "g [AAAA]"
+
+hs1vect        .word     hsvide,hs1a,hs1b,hsvide
+               .word     hs1c,hs1d,hsvide
+               .word     hs1e,hs1f,hsvide
+               .word     hs1g,hs1h,hs1i,hsvide
+               .word     hs1j,hs1k,hsvide
+               .word     hs1l,hs1m,$ffff
+    
+hs2a           .null "[r]un Executer"
+hs2b           .null "r [AAAA] ou PC"
+hs2c           .null "[j]sr sous-routine"
+hs2d           .null "j [AAAA] ou PC"
+hs2e           .null "[h]unt recherche"
+hs2f           .null "h BBBB EEEE BB..BB"
+hs2g           .null "[t]ransfert mem."
+hs2h           .null "t BBBB EEEE DDDD"
+hs2i           .null "[c]ompare mem"
+hs2j           .null "c BBBB EEEE DDDD"
+hs2k           .null "Conversion [$+&%]"
+hs2l           .null " [$]hex.  [&]oct."
+hs2m           .null " [+]dec.  [%]bin."
+
+hs2vect   .word     hsvide,hs2a,hs2b,hsvide
+          .word     hs2c,hs2d,hsvide
+          .word     hs2e,hs2f,hsvide
+          .word     hs2g,hs2h,hsvide
+          .word     hs2i,hs2j,hsvide
+          .word     hs2k,hs2l,hs2m,$ffff
+
+hs3a           .null "[s]auvegarde mem. "
+hs3b           .text "s"
+               .byte 34
+               .text "fnom"
+               .byte 34
+               .null "d,BBBB,EEEE"
+
+hs3c           .null "[l]oad charger mem"
+hs3d           .text "l"
+               .byte 34
+               .text "fnom"
+               .byte 34
+               .null "d,BBBB"
+
+hs3e           .null "[v]erifier fichier"
+hs3f           .text "v"
+               .byte 34
+               .text "fnom"
+               .byte 34
+               .null "d,BBBB"
+
+hs3g           .null "@ etat du lecteur"
+hs3h           .null "[x] aller a Basic"
+
+hs3vect        .word     hsvide,hs3a,hs3b,hsvide
+               .word     hs3c,hs3d,hsvide
+               .word     hs3e,hs3f,hsvide
+               .word     hs3g,hsvide,hs3h,$ffff
+
+hs4a           .null "   Informations"
+hs4b           .null "Demarrer:SYS 40960"
+hs4c           .null "v/e = voir/editer"
+hs4d           .null "d=Lecteur"
+hs4e           .null "BBBB= Adr. debut"
+hs4f           .null "EEEE= Adr. fin"
+hs4g           .null "DDDD= Adr. destin."
+hs4h           .null "BB=Octet Hex"
+hs4i           .null "Autres commandes:"
+hs4j           .null "!c=cls,!d=listfich"
+hs4k           .null "!g=Credits,!h=aide"
+
+
+hs4vect   .word     hsvide,hs4a,hs4c,hsvide
+          .word     hs4d,hs4e,hs4f,hs4g,hs4h,hsvide
+          .word     hs4i,hs4j,hs4k,hsvide,hs4b,$ffff
+
+gs1t           .null " Credits SuperMon"
+gs1a           .null "Version originale:"
+gs1b           .byte sbleu
+               .text " Super-Mon64 1983 "
+               .byte snoir,0
+gs1c           .byte srouge
+               .text " Jim Butterfield  "
+               .byte snoir,0
+gs1d           .byte srouge
+               .text " 1936-2007 R.I.P. "
+               .byte snoir,0
+gs1e           .null "Adaptation Vic20:"
+gs1g           .null " Daniel Lafrance"
+gs1h           .null "github.com/roaddan"
+;gs1h           .null format(" %s",version)
+gs1i           .null "Utilise bank 0 & 5"
+gs1j           .null "Utilisez VICE emu."
+gs1k           .null "ou cartouche type"
+gs1l           .null "Penultimate+,+2,+3"
+gs1m           .null "voir:"
+gs1n           .null "www.tfw8b.com/shop"
+
+gs1vect   .word     hsvide,gs1a,hsvide
+          .word     gs1b,gs1c,gs1d,hsvide
+          .word     gs1e,gs1g,gs1h,hsvide
+          .word     gs1i,hsvide,gs1j
+          .word     gs1k,gs1l,gs1m,gs1n,$ffff
+
+;Auteur         .null "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"

@@ -18,7 +18,7 @@
 ;Point d 'entrée initiale
 ;-----------------------------------------------------------------------------
           .weak
-          org = $3000
+          org = $a000
           .endweak
           *=org
 main      =*
@@ -55,9 +55,7 @@ super     jsr  scrinit
           jsr setmsg          ; ... et activer les messages d'erreur.
           lda  #8
           sta  ddev
-          #ldyxptr  greetings
-          #styxmem  genword1
-          jsr  popup
+          jsr  credits
           brk
 ;-----------------------------------------------------------------------------
 ; gestionnaire de brk
@@ -1591,9 +1589,7 @@ cmdh      cmp  #'h'      ; cmd help
 
 cmdg      cmp  #'g'      ; cmd greetings
           bne  cmdc
-          #ldyxptr  greetings
-          #styxmem  genword1
-          jsr  popup
+          jsr  credits
           jmp  mycmdout
 
 cmdc      cmp  #'c'      ;cmd cls
@@ -1787,8 +1783,8 @@ supad   .word super             ; address of entry point
 
 
 ;-----------------------------------------------------------------------------
-     ;.include  "string-fr.asm"
-     .include  "string-en.asm"
+     .include  "string-fr.asm"
+     ;.include  "string-en.asm"
 ;-----------------------------------------------------------------------------
 ;     .include  "l-v20-push.asm" 
 ;     .include  "l-v20-string.asm" 
