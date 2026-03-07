@@ -35,35 +35,31 @@ FTPCRTARG=cd /Usb0/d-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
 
 all: $(SOURCENAME).d64
 #	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:$(SOURCENAME) 
-	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:vic20-wedge
+	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:fb
 
 $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 	$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
-	-write ${V20UTILDIR}/vic20-wedge.prg vic20-wedge \
-	-write smonv20-en.prg smonv20-en \
-	-write smonv20-fr.prg smonv20-fr \
 	-write ${V20UTILDIR}/fb fb \
-	-write ${V20UTILDIR}/vicmon-sys24576.prg vmon-24576 \
-	-write ${V20UTILDIR}/vicmonb-sys45056.prg vmon-45056 \
-	-write ${V20UTILDIR}/showkeys.prg showkeys \
-	-write $(SOURCENAME).prg $(SOURCENAME) \
 	-write ${V20UTILDIR}/fb20 fb20 \
 	-write ${V20UTILDIR}/fb20-3k fb20-3k \
 	-write ${V20UTILDIR}/fb20-8k fb20-8k \
-	-write ${V20UTILDIR}/fb20-mc fb20-mc
+	-write ${V20UTILDIR}/fb20-mc fb20-mc \
+	-write ${V20UTILDIR}/vic20-wedge.prg vic20-wedge \
+	-write smonv20.prg smonv20 \
+	-write smonv20-en.prg smonv20-en \
+	-write smonv20-fr.prg smonv20-fr \
+	-write ${V20UTILDIR}/showkeys.prg showkeys
 	$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
-	-write ${V20UTILDIR}/vic20-wedge.prg vic20-wedge \
-	-write smonv20-en.prg smonv20-en \
-	-write smonv20-fr.prg smonv20-fr \
 	-write ${V20UTILDIR}/fb fb \
-	-write ${V20UTILDIR}/vicmon-sys24576.prg vmon-24576 \
-	-write ${V20UTILDIR}/vicmonb-sys45056.prg vmon-45056 \
-	-write $(SOURCENAME).prg $(SOURCENAME) \
-	-write ${V20UTILDIR}/showkeys.prg showkeys \
 	-write ${V20UTILDIR}/fb20 fb20 \
 	-write ${V20UTILDIR}/fb20-3k fb20-3k \
 	-write ${V20UTILDIR}/fb20-8k fb20-8k \
-	-write ${V20UTILDIR}/fb20-mc fb20-mc
+	-write ${V20UTILDIR}/fb20-mc fb20-mc \
+	-write ${V20UTILDIR}/vic20-wedge.prg vic20-wedge \
+	-write smonv20.prg smonv20 \
+	-write smonv20-en.prg smonv20-en \
+	-write smonv20-fr.prg smonv20-fr \
+	-write ${V20UTILDIR}/showkeys.prg showkeys
 
 	cp -f  ${SOURCENAME}.d81 ${PRGBIN}/d81
 	cp -f  ${SOURCENAME}.d64 ${PRGBIN}/d64

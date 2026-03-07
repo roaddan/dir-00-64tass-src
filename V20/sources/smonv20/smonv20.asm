@@ -1,6 +1,8 @@
 ;--------------------------------------
-; Fichier : keyfinder.asm
-; Auteur..: Daniel Lafrance
+; Fichier.......: smonv20.asm
+; Basee sur.....: Supermon64
+; Auteur........: Jim Butterfield
+; Version Vic20 : Daniel Lafrance
 ;--------------------------------------
 .enc "none"
      .include  "e-v20-bashead-ex.asm"
@@ -16,10 +18,10 @@
 ;Point d 'entrée initiale
 ;-----------------------------------------------------------------------------
           .weak
-          org = $A000
+          org = $3000
           .endweak
           *=org
-main = *
+main      =*
 ;-----------------------------------------------------------------------------
 ; Point d'entrée initial
 ;-----------------------------------------------------------------------------
@@ -30,8 +32,8 @@ super     jsr  scrinit
           jsr  chrout
           lda  #$08
           jsr  chrout
-          ldy #msg9-msgbas    ; Affiche "? pour aide.".
-          jsr sndmsg
+          ldy  #msg9-msgbas    ; Affiche "? pour aide.".
+          jsr  sndmsg
 
           ;ldy #msg4-msgbas    ; Affiche "..sys ".
           ;jsr sndmsg
@@ -464,9 +466,9 @@ herror    jmp  error          ; Gérer les erreurs.
 ;-----------------------------------------------------------------------------
 ld        ldy  #1             ; Lecture par défaut sur bande, périphérique n° 1
           sty  fa
-          sty  sadd           ; Par défaut, l'adresse secondaire n° 1
+          sty  sa           ; Par défaut, l'adresse secondaire n° 1
           dey
-          sty  fnlen          ; Commencer par un nom de fichier vide
+          sty  curfnlen          ; Commencer par un nom de fichier vide
           sty  satus          ; Effacer le statut
           lda  #>stage        ; Pointer de nom de fichier sur la mémoire tampon
           sta  fnadr+1
@@ -491,7 +493,7 @@ l3        lda  inbuff,x       ; Charger le caractère courant du tampon dans
           beq  l8             ; Si oui, nc'est la fin du nom de fichier
           sta  (fnadr),y      ; Sinon, enregistrez le caractère dans le tampon 
                               ; ... du nom de fichier
-          inc  fnlen          ; Incrémenter la longueur du nom de fichier
+          inc  curfnlen          ; Incrémenter la longueur du nom de fichier
           iny 
           cpy  #estage-stage  ; Vérifier si le tampon est plein
           bcc  l3             ; Sinon, obtenir un autre personnage
@@ -521,7 +523,7 @@ l8        stx  chrpnt         ; Le pointeur de caractère sur l'index actuel
           cmp  #"s"
           bne  lerror         ; Sinon, erreur due à trop de paramètres
           lda  #0
-          sta  sadd           ; Définir l'adresse secondaire à 0
+          sta  sa           ; Définir l'adresse secondaire à 0
           lda  #tmp2          ; Placer pointeur de page zéro dans acc
           jsr  save           ; Appel de la routine de sauvegarde du noyau
 lsvxit    jmp  strt           ; Retour à la boucle principale
@@ -546,7 +548,7 @@ loadit    jsr  load           ; Appel de la routine de chargement du noyau
 ldaddr    ldx  tmp2           ; Placer le LSB de l'adresse de fchargement dans x
           ldy  tmp2+1         ; Placer le MSB de l'adresse de fchargement dans y
           lda  #0             ; 0 dans a indique chargement
-          sta  sadd           ; L'adresse secondaire 0 signifie l'adresse de 
+          sta  sa           ; L'adresse secondaire 0 signifie l'adresse de 
                               ; ... chargement est dans x et y
           beq  lshort         ; Exécuter le chargement
 
@@ -1380,7 +1382,7 @@ chgdev    ldx  tmp0           ; Charge l'adresse du périphérique à partir du
           stx  tmp0
           lda  #0             ; Efface le status.
           sta  satus
-          sta  fnlen          ; Vide le nom de fichier.
+          sta  curfnlen          ; Vide le nom de fichier.
           jsr  getchr         ; Obtient le prochain caractere.
           beq  instat1        ; nul, afficher l'état
           dec  chrpnt         ; reculez d'un caractère
@@ -1532,7 +1534,7 @@ scrinit
           sta  vic0
 bord      lda  $900f          ;place la couleur
           and  #%00001000
-          ora  #%00010101    
+          ora  #%00010110    
           sta  $900f   
 text      lda  #$00           ;place la couleur
           sta  $0286          ; du texte.
@@ -1553,7 +1555,7 @@ popup      .block
           jsr  cursave
           jsr  scrnsave
           #outcar 147
-          ldx  #7
+          ldx  #6
           lda  #102
           jsr  fillscreen
           #ldyxmem genword1 
@@ -1574,13 +1576,15 @@ popup      .block
 mycmd     .block
           jsr  pushregs
           jsr  chrin
-          cmp  #'d'
+          cmp  #'t'      ; cmd test
+          bne  cmdd
+          jsr  popscr
+          jmp  mycmdout
+cmdd      cmp  #'d'      ; cmd dir
           bne  cmdh
           jsr  dirdisk
-          #print backspace
           jmp  mycmdout
-
-cmdh      cmp  #'h'
+cmdh      cmp  #'h'      ; cmd help
           bne  cmdg
           #ldyxptr  helpscrp1
           #styxmem  genword1
@@ -1597,21 +1601,20 @@ cmdh      cmp  #'h'
           #ldyxptr  greetings
           #styxmem  genword1
           jsr  popup
-          #print backspace
           jmp  mycmdout
 
-cmdg      cmp  #'g'
+cmdg      cmp  #'g'      ; cmd greetings
           bne  cmdc
           #ldyxptr  greetings
           #styxmem  genword1
           jsr  popup
-          #print backspace
           jmp  mycmdout
 
-cmdc      cmp  #'c'
+cmdc      cmp  #'c'      ;cmd cls
           bne  notmycmd
           #outcar 147
-mycmdout  jsr  popregs
+mycmdout  #print backspace
+          jsr  popregs
           lda  #$00
           rts
 notmycmd  jsr  popregs
@@ -1637,7 +1640,6 @@ dirdisk   .block
           rts
           .bend
 
-
 ;-----------------------------------------------------------------------------
 ; message table; last character has high bit set
 ;-----------------------------------------------------------------------------
@@ -1660,7 +1662,7 @@ msg9      .byte 28,32,32,32,32,32,18
           .text "!h pour aide"
           .byte 146,144,0
 
-version   = "20260306-100141"
+version   = "20260307-000000"
 
 ;-----------------------------------------------------------------------------
 ; addressing mode table - nybbles provide index into mode2 table
@@ -1799,17 +1801,18 @@ supad   .word super             ; address of entry point
 
 
 ;-----------------------------------------------------------------------------
-     .include  "string-fr.asm"
-     ;.include  "string-en.asm"
+     ;.include  "string-fr.asm"
+     .include  "string-en.asm"
 ;-----------------------------------------------------------------------------
-     .include  "l-v20-push.asm" 
-     .include  "l-v20-string.asm" 
-     .include  "l-v20-mem.asm"           
-     .include  "l-v20-math.asm"           
-     .include  "l-v20-conv.asm" 
-     .include  "l-v20-keyb.asm" 
-     .include  "l-v20-disk.asm"
+;     .include  "l-v20-push.asm" 
+;     .include  "l-v20-string.asm" 
+;     .include  "l-v20-mem.asm"           
+;     .include  "l-v20-math.asm"           
+;     .include  "l-v20-conv.asm" 
+;     .include  "l-v20-keyb.asm" 
+;     .include  "l-v20-disk.asm"
      .include  "l-v20-screen.asm"
+     .include  "l-routines.asm"
 ;     .include  "l-v20-showregs.asm"
 ;prgend    .word $1234     
 ;--------------------------------------
@@ -1821,5 +1824,6 @@ supad   .word super             ; address of entry point
      .include  "e-v20-vars.asm"
      .include  "e-local-equates.asm"
      .include  "e-local-vars.asm"
+
 ;--------------------------------------
 
