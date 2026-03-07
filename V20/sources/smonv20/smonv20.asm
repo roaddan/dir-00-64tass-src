@@ -1578,7 +1578,7 @@ mycmd     .block
           jsr  chrin
           cmp  #'t'      ; cmd test
           bne  cmdd
-          jsr  popscr
+          jsr  showhelp
           jmp  mycmdout
 cmdd      cmp  #'d'      ; cmd dir
           bne  cmdh
@@ -1586,21 +1586,7 @@ cmdd      cmp  #'d'      ; cmd dir
           jmp  mycmdout
 cmdh      cmp  #'h'      ; cmd help
           bne  cmdg
-          #ldyxptr  helpscrp1
-          #styxmem  genword1
-          jsr  popup
-          #ldyxptr  helpscrp2
-          #styxmem  genword1
-          jsr  popup
-          #ldyxptr  helpscrp3
-          #styxmem  genword1
-          jsr  popup
-          #ldyxptr  helpscrp4
-          #styxmem  genword1
-          jsr  popup
-          #ldyxptr  greetings
-          #styxmem  genword1
-          jsr  popup
+          jsr  showhelp
           jmp  mycmdout
 
 cmdg      cmp  #'g'      ; cmd greetings

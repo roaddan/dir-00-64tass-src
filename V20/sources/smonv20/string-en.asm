@@ -439,16 +439,17 @@ hsfoot         .byte 18,bleft,146,28
                .text "    Press a key   "
                .byte 144,18,bright,146,0
 
+hsvide         .fill 18,32
+               .byte 0
+
 hsempty        .byte 18,vline
                .fill 18,32
                .byte vline,146,0
 
-hsitemhead     .byte 29,18,vline,0
-hsemty         .fill 18,32
-               .byte 0
-hsitemfoot     .byte vline,146,0
+hsih           .byte 18,0
+hsif           .byte 146,0
 
-horline        .byte 29,18,hleft
+horline        .byte 18,hleft
                .fill 18,hline
                .byte hright,146,0
 
@@ -466,8 +467,12 @@ hs1k           .null "[;]init registers "
 hs1l           .null "[G]oto address    "
 hs1m           .null "g [AAAA]          "
 
-hs1vect   .word hs1a,hs1b,hs1c,hs1d,hs1e,hs1f,hs1g,hs1h
-          .word hs1i,hs1j,hs1k,hs1l,hs1m,$ffff
+hs1vect        .word     hs1a,hs1b,hsvide
+               .word     hs1c,hs1d,hsvide
+               .word     hs1e,hs1f,hsvide
+               .word     hs1g,hs1h,hs1i,hsvide
+               .word     hs1j,hs1k,hsvide
+               .word     hs1l,hs1m,$ffff
     
 hs2a           .null "[r]un program     "
 hs2b           .null "r AAAA            "
@@ -483,41 +488,41 @@ hs2k           .null "Conversion [$+&%] "
 hs2l           .null " [$]hex.  [&]oct. "
 hs2m           .null " [+]dec.  [%]bin. "
 
-hs2vect   .word     hs2a,hs2b,hs2c,hs2d,hs2e,hs2f,hs2g,hs2h
-          .word     hs2i,hs2j,hs2k,hs2l,hs2m,$ffff
+hs2vect   .word     hs2a,hs2b,hsvide
+          .word     hs2c,hs2d,hsvide
+          .word     hs2e,hs2f,hsvide
+          .word     hs2g,hs2h,hsvide
+          .word     hs2i,hs2j,hsvide
+          .word     hs2k,hs2l,hs2m,$ffff
 
-hs3a           .byte 3,4
-               .null "[s]ave memory     "
-hs3b           .byte 3,5
-               .text "s"
+hs3a           .null "[s]ave memory     "
+hs3b           .text "s"
                .byte 34
                .text "fnam"
                .byte 34
                .text "d,BBBB,EEEE"
                .byte 0
-hs3c           .byte 3,6
-               .null "[l]oad into memory"
-hs3d           .byte 3,0
-               .text "l"
+hs3c           .null "[l]oad into memory"
+hs3d           .text "l"
                .byte 34
                .text "fnam"
                .byte 34
                .text "d,BBBB     "
                .byte 0
-hs3e           .byte 3,7
-               .null "[v]erify file/mem "
+hs3e           .null "[v]erify file/mem "
 hs3f           .text "v"
                .byte 34
                .text "fnam"
                .byte 34
                .text "d,BBBB     "
                .byte 0
-hs3g           .byte 3,8
-               .null "@ drive status    "
-hs3h           .byte 3,9
-               .null "[x] Back to Basic "
+hs3g           .null "@ drive status    "
+hs3h           .null "[x] Back to Basic "
 
-hs3vect   .word     hs3a,hs3b,hs3c,hs3d,hs3e,hs3f,hs3g,hs3h
+hs3vect        .word     hs3a,hs3b,hsvide
+               .word     hs3c,hs3d,hsvide
+               .word     hs3e,hs3f,hsvide
+               .word     hs3g,hs3h,$ffff
 
 hs4a           .null "   Information    "
 hs4b           .null "Startup: SYS 40960"
@@ -527,11 +532,12 @@ hs4e           .null "BBBB=Begin Address"
 hs4f           .null "EEEE=End Address  "
 hs4g           .null "DDDD=Dest. Address"
 hs4h           .null "BB=Byte           "
-hs4i           .null "More Commande:    "
+hs4i           .null "More Commands:    "
 hs4j           .null "!c=cls,!d=listfile"
 hs4k           .null "!g=Credits,!h=help"
     
-hs4vecy   .word     hs4a,hs4b,hs4c,hs4d,hs4e,hs4f,hs4g,hs4h
+hs4vect   .word     hs4a,hs4b,hs4c,hsvide
+          .word     hs4d,hs4e,hs4f,hs4g,hs4h,hsvide
           .word     hs4i,hs4j,hs4k,$ffff
 
 gs1t           .null " Credits SuperMon "
@@ -549,5 +555,7 @@ gs1k           .null " or on cartridge  "
 gs1l           .null "Penultimate+,+2,+3"
 gs1m           .null "www.tfw8b.com/shop"
 
-gs1vect   .word     gs1a,gs1b,gs1c,gs1d,gs1e,gs1f,gs1g,gs1h
+gs1vect   .word     gs1a,hsvide
+          .word     gs1b,gs1c,gs1d,gs1e,hsvide
+          .word     gs1f,gs1g,gs1h,hsvide
           .word     gs1i,gs1j,gs1k,gs1l,gs1m,$ffff

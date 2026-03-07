@@ -11,10 +11,29 @@ popscr    .block
           lda  #102
           jsr  fillscreen
           jsr  drawbox
-          ldy  #>hs1vect
-          ldx  #<hs1vect
-          
-          jsr  anykey
+          ldy  #$00
+morestr   jsr  pushregs
+          ldx  #$02
+          tya  
+          clc
+          lsr
+          tay
+          iny
+          iny
+          jsr  gotoxy
+          #print hsih
+          jsr  popregs
+          lda  ($fb),y
+          tax
+          iny
+          lda  ($fb),y
+          iny
+          cmp  #$ff
+          beq  over
+          jsr  putsax
+          #print hsif
+          jmp  morestr
+over      jsr  anykey
           jsr  scrnrest
           jsr  currest
           pla
@@ -23,15 +42,38 @@ popscr    .block
           rts
           .bend
 
-
 prnvcttab .block
           jsr  pushall
+          stx  $fb
+          sty  $fc
+          jsr  popscr
           jsr  popall
           rts
           .bend
 
+showhelp  .block
+          jsr  pushregs
+          ldy  #>hs1vect
+          ldx  #<hs1vect
+          jsr  prnvcttab
+          ldy  #>hs2vect
+          ldx  #<hs2vect
+          jsr  prnvcttab
+          ldy  #>hs3vect
+          ldx  #<hs3vect
+          jsr  prnvcttab
+          ldy  #>hs4vect
+          ldx  #<hs4vect
+          jsr  prnvcttab
+          jmp  popcred
+          .bend
 
-
+credits   jsr  pushregs
+popcred   ldy  #>gs1vect
+          ldx  #<gs1vect
+          jsr  prnvcttab
+          jsr  popregs
+          rts
 
 
 drawbox   .block
@@ -254,7 +296,15 @@ putsyx    .block
           jsr puts
           jsr popall ;recup reg + zps
           rts
-        .bend
+          .bend
+
+putsax    .block
+          jsr  pushregs
+          tay
+          jsr  putsyx
+          jsr  popregs
+          rts
+          .bend
 ;--------------------------------------
 ; $(yyxx) pointeur sur la chaine
 ; retourne A longueur de la chaine
