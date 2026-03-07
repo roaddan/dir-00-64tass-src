@@ -452,66 +452,39 @@ horline        .byte 29,18,hleft
                .fill 18,hline
                .byte hright,146,0
 
-hs1a           .byte 3,1
-               .null "[a]ssembler       "
-hs1b           .byte 3,4
-               .null "a ADDR MNEUMO OPER"
-hs1c           .byte 3,5
-               .null "[d]esassembler    "
-hs1d           .byte 3,6
-               .null "d [start [end]]   "
-hs1e           .byte 3,7
-               .null "[f]ill memory     "
-hs1f           .byte 3,8
-               .null "f start end code  "
-hs1g           .byte 3,9
-               .null "[m]emory v/e      "
-hs1h           .byte 3,10
-               .null "m [start [end]]   "
-hs1i           .byte 3,11
-               .null ">AAAA XX XX ... XX"
-hs1j           .byte 3,12
-               .null "[r]egsisters v/e  "
-hs1k           .byte 3,13
-               .null "[;]init registers "
-hs1l           .byte 3,14
-               .null "[G]oto address    "
-hs1m           .byte 3,15
-               .null "g [AAAA]          "
+hs1a           .null "[a]ssembler       "
+hs1b           .null "a ADDR MNEUMO OPER"
+hs1c           .null "[d]esassembler    "
+hs1d           .null "d [start [end]]   "
+hs1e           .null "[f]ill memory     "
+hs1f           .null "f start end code  "
+hs1g           .null "[m]emory v/e      "
+hs1h           .null "m [start [end]]   "
+hs1i           .null ">AAAA XX XX ... XX"
+hs1j           .null "[r]egsisters v/e  "
+hs1k           .null "[;]init registers "
+hs1l           .null "[G]oto address    "
+hs1m           .null "g [AAAA]          "
 
 hs1vect   .word hs1a,hs1b,hs1c,hs1d,hs1e,hs1f,hs1g,hs1h
           .word hs1i,hs1j,hs1k,hs1l,hs1m,$ffff
-          
-
     
-hs2a           .byte 3,4
-               .null "[r]un program     "
-hs2b           .byte 3,5
-               .null "r AAAA            "
-hs2c           .byte 3,6
-               .null "[j]sr sub-routine "
-hs2d           .byte 3,7
-               .null "j AAAA            "
-hs2e           .byte 3,8
-               .null "[h]unt for bytes  "
-hs2f           .byte 3,9
-               .null "h BBBB EEEE BB..BB"
-hs2g           .byte 3,10
-               .null "[t]ransfer memory "
-hs2h           .byte 3,11
-               .null "t BBBB EEEE DDDD  "
-hs2i           .byte 3,12
-               .null "[c]ompare memory  "
-hs2j           .byte 3,13
-               .null "c BBBB EEEE DDDD  "
-hs2k           .byte 3,14
-               .null "Conversion [$+&%] "
-hs2l           .byte 3,15
-               .null " [$]hex.  [&]oct. "
-hs2m           .byte 3,16
-               .null " [+]dec.  [%]bin. "
-hs2n           .byte 3,17
-               .null "    Press a key   "
+hs2a           .null "[r]un program     "
+hs2b           .null "r AAAA            "
+hs2c           .null "[j]sr sub-routine "
+hs2d           .null "j AAAA            "
+hs2e           .null "[h]unt for bytes  "
+hs2f           .null "h BBBB EEEE BB..BB"
+hs2g           .null "[t]ransfer memory "
+hs2h           .null "t BBBB EEEE DDDD  "
+hs2i           .null "[c]ompare memory  "
+hs2j           .null "c BBBB EEEE DDDD  "
+hs2k           .null "Conversion [$+&%] "
+hs2l           .null " [$]hex.  [&]oct. "
+hs2m           .null " [+]dec.  [%]bin. "
+
+hs2vect   .word     hs2a,hs2b,hs2c,hs2d,hs2e,hs2f,hs2g,hs2h
+          .word     hs2i,hs2j,hs2k,hs2l,hs2m,$ffff
 
 hs3a           .byte 3,4
                .null "[s]ave memory     "
@@ -544,55 +517,37 @@ hs3g           .byte 3,8
 hs3h           .byte 3,9
                .null "[x] Back to Basic "
 
-hs4a           .byte 3,4
-               .null "   Information    "
-hs4b           .byte 3,5
-               .null "Startup: SYS 40960"
-hs4c           .byte 3,6
-               .null "v/e = view/edit   "
-hs4d           .byte 3,7
-               .null "d=Drive number    "
-hs4e           .byte 3,8
-               .null "BBBB=Begin Address"
-hs4f           .byte 3,9
-               .null "EEEE=End Address  "
-hs4g           .byte 3,10
-               .null "DDDD=Dest. Address"
-hs4h           .byte 3,11
-               .null "BB=Byte           "
-hs4i           .byte 3,12
-               .null "More Commande:    "
-hs4j           .byte 3,13
-               .null "!c=cls,!d=listfile"
-hs4k           .byte 3,14
-               .null "!g=Credits,!h=help"
+hs3vect   .word     hs3a,hs3b,hs3c,hs3d,hs3e,hs3f,hs3g,hs3h
+
+hs4a           .null "   Information    "
+hs4b           .null "Startup: SYS 40960"
+hs4c           .null "v/e = view/edit   "
+hs4d           .null "d=Drive number    "
+hs4e           .null "BBBB=Begin Address"
+hs4f           .null "EEEE=End Address  "
+hs4g           .null "DDDD=Dest. Address"
+hs4h           .null "BB=Byte           "
+hs4i           .null "More Commande:    "
+hs4j           .null "!c=cls,!d=listfile"
+hs4k           .null "!g=Credits,!h=help"
     
-gs1t           .byte 3,4
-               .null " Credits SuperMon "
-gs1a           .byte 3,4
-               .null "Original Version: "
-gs1b           .byte 3,5
-               .null " Supermon64 1983  "
-gs1c           .byte 3,6
-               .null " Jim Butterfield  "
-gs1d           .byte 3,7
-               .null " 1936-2007 R.I.P. "
-gs1f           .byte 3,8
-               .null "Vic20 Version:    "
-gs1g           .byte 3,9
-               .null " Port:            "
-gs1h           .byte 3,10
-               .null " Daniel Lafrance  "
-gs1i           .byte 3,11
-               .null format(" %s  ",version)
-gs1j           .byte 3,12
-               .null "Uses banks 0 & 5  "
-gs1k           .byte 3,13
-               .null " on VICE emulator "
-gs1l           .byte 3,14
-               .null " or on cartridge  "
-gs1m           .byte 3,15
-               .null "Penultimate+,+2,+3"
-gs1n           .byte 3,16
-               .null "www.tfw8b.com/shop"
-    
+hs4vecy   .word     hs4a,hs4b,hs4c,hs4d,hs4e,hs4f,hs4g,hs4h
+          .word     hs4i,hs4j,hs4k,$ffff
+
+gs1t           .null " Credits SuperMon "
+gs1a           .null "Original Version: "
+gs1b           .null " Supermon64 1983  "
+gs1c           .null " Jim Butterfield  "
+gs1d           .null " 1936-2007 R.I.P. "
+gs1e           .null "Vic20 Version:    "
+gs1f           .null " Port:            "
+gs1g           .null " Daniel Lafrance  "
+gs1h           .null format(" %s  ",version)
+gs1i           .null "Uses banks 0 & 5  "
+gs1j           .null " on VICE emulator "
+gs1k           .null " or on cartridge  "
+gs1l           .null "Penultimate+,+2,+3"
+gs1m           .null "www.tfw8b.com/shop"
+
+gs1vect   .word     gs1a,gs1b,gs1c,gs1d,gs1e,gs1f,gs1g,gs1h
+          .word     gs1i,gs1j,gs1k,gs1l,gs1m,$ffff

@@ -10,9 +10,10 @@ popscr    .block
           ldx  #6
           lda  #102
           jsr  fillscreen
-
-          jsr drawbox
-
+          jsr  drawbox
+          ldy  #>hs1vect
+          ldx  #<hs1vect
+          
           jsr  anykey
           jsr  scrnrest
           jsr  currest
@@ -21,6 +22,18 @@ popscr    .block
           jsr  popall
           rts
           .bend
+
+
+prnvcttab .block
+          jsr  pushall
+          jsr  popall
+          rts
+          .bend
+
+
+
+
+
 drawbox   .block
           jsr  pushall
           #prnloc 1, 1,  hstitle
@@ -35,32 +48,12 @@ another   ldx  #1
           iny
           cpy  #21
           bne  another
-
-
-;          #prnloc 1, 2,  hsempty
-;          #prnloc 1, 3,  hsempty
-;          #prnloc 1, 4,  hsempty
-;          #prnloc 1, 5,  hsempty
-;          #prnloc 1, 6,  hsempty
-;          #prnloc 1, 7,  hsempty
-;          #prnloc 1, 8,  hsempty
-;          #prnloc 1, 9,  hsempty
-;          #prnloc 1, 10, hsempty
-;          #prnloc 1, 11, hsempty
-;          #prnloc 1, 12, hsempty
-;          #prnloc 1, 13, hsempty
-;          #prnloc 1, 14, hsempty
-;          #prnloc 1, 15, hsempty
-;          #prnloc 1, 16, hsempty
-;          #prnloc 1, 17, hsempty
-;          #prnloc 1, 18, hsempty
-;          #prnloc 1, 19, hsempty
-;          #prnloc 1, 20, hsempty
           #prnloc 1, 21, hsfoot
-
           jsr popall
           rts
           .bend
+
+
 prnloc    .macro x, y, sptr
           ldx  #\x
           ldy  #\y
