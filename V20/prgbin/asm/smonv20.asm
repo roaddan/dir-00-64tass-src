@@ -1660,7 +1660,7 @@ msg9      .byte 28,32,32,32,32,32,18
           .text "!h pour aide"
           .byte 146,144,0
 
-version   = "20260228-224603"
+version   = "20260306-100141"
 
 ;-----------------------------------------------------------------------------
 ; addressing mode table - nybbles provide index into mode2 table
@@ -1799,8 +1799,8 @@ supad   .word super             ; address of entry point
 
 
 ;-----------------------------------------------------------------------------
-     ;.include  "string-fr.asm"
-     .include  "string-en.asm"
+     .include  "string-fr.asm"
+     ;.include  "string-en.asm"
 ;-----------------------------------------------------------------------------
      .include  "l-v20-push.asm" 
      .include  "l-v20-string.asm" 
