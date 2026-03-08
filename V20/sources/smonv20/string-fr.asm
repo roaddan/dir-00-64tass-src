@@ -1,3 +1,26 @@
+;-----------------------------------------------------------------------------
+; message table; last character has high bit set
+;-----------------------------------------------------------------------------
+msgbas  =*
+msg2      .byte $0d,$20,31,18     ; header for registers
+          .text " SuperMon sur VIC20 "
+          .byte 146,$0d,31        ; header for registers
+          .text "   pc  sr ac xr yr sp"
+          .byte 144,$0d,$00
+msg3      .byte $1d,$3f,$00       ; syntax error: move right, display "?"
+msg4      .text "..sys"           ; sys call to enter monitor
+          .byte $20,$00
+msg5      .byte $3a,$12,$00       ; ":" then rvs on for memory ascii dump
+msg6      .text " erro"           ; i/o error: display " error"
+          .byte "r",$00
+msg7      .byte $41,$20,$00       ; assemble next instruction: "a " + addr
+msg8      .text "  "              ; pad non-existent byte: skip 3 spaces
+          .byte $20,$00
+msg9      .byte 28,32,32,32,32,32,18
+          .text "!h pour aide"
+          .byte 146,144,0
+
+
 mneuprfx       .byte $0d,sbleu
                .fill 8,$20
                .byte 0
