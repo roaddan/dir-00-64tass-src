@@ -3,7 +3,7 @@
 ;-----------------------------------------------------------------------------
 msgbas  =*
 msg2      .byte $0d,$20,31,18     ; header for registers
-          .text " SuperMon sur VIC20 "
+          .text " supermon sur vic20 "
           .byte 146,$0d,31        ; header for registers
           .text "   pc  sr ac xr yr sp"
           .byte 144,$0d,$00
@@ -20,7 +20,6 @@ msg9      .byte 28,32,32,32,32,32,18
           .text "!h pour aide"
           .byte 146,144,0
 
-
 mneuprfx       .byte $0d,sbleu
                .fill 8,$20
                .byte 0
@@ -29,10 +28,9 @@ backspace      .byte 157,157,32,32,157,157,145,0
 
 ;Auteur         .text "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"
 
-
-hstitle        .byte 18,tleft,146,156
+hstitle        .byte 18,tleft,31
                .text "  Aide Super-Mon  "
-               .byte 144,18,tright,146,0
+               .byte 144,tright,146,0
 
 hsfoot         .byte 18,bleft,146,28
                .text " Appuyez une clef "
@@ -135,11 +133,11 @@ hs4h           .null "BB=Octet Hex"
 hs4i           .null "Autres commandes:"
 hs4j           .null "!c=cls,!d=listfich"
 hs4k           .null "!g=Credits,!h=aide"
-
-
+hs4l           .null "!m=Masque du bit 8"
+    
 hs4vect   .word     hsvide,hs4a,hs4c,hsvide
           .word     hs4d,hs4e,hs4f,hs4g,hs4h,hsvide
-          .word     hs4i,hs4j,hs4k,hsvide,hs4b,$ffff
+          .word     hs4i,hs4j,hs4k,hs4l,hsvide,hs4b,$ffff
 
 gs1t           .null " Credits SuperMon"
 gs1a           .null "Version originale:"

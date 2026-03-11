@@ -1,6 +1,12 @@
 ;---------------------------------------
 popscr    .block
           jsr  pushall
+
+          lda  #$0e
+          jsr  chrout
+          lda  #$08
+          jsr  chrout
+
           jsr  clrkbbuf
           lda  kcol
           pha
@@ -38,7 +44,13 @@ over      jsr  anykey
           jsr  currest
           pla
           sta  kcol
-          jsr  popall
+ 
+          lda  #142
+          jsr  chrout
+          lda  #$09
+          jsr  chrout
+
+         jsr  popall
           rts
           .bend
 

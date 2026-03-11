@@ -3,7 +3,7 @@
 ;-----------------------------------------------------------------------------
 msgbas  =*
 msg2      .byte $0d,$20,31,18     ; header for registers
-          .text " SuperMon for VIC20 "
+          .text " superson for vic20 "
           .byte 146,$0d,31        ; header for registers
           .text "   pc  sr ac xr yr sp"
           .byte 144,$0d,$00
@@ -28,13 +28,12 @@ backspace      .byte 157,157,32,32,157,157,145,0
 
 ;Auteur         .text "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"
 
-
-hstitle        .byte 18,tleft,146,156
-               .text "  Super-Mon Help  "
-               .byte 144,18,tright,146,0
+hstitle        .byte 18,tleft,31
+               .text "SuperMon with Help"
+               .byte 144,tright,146,0
 
 hsfoot         .byte 18,bleft,146,28
-               .text "    Press a key   "
+               .text "  Press any key!  "
                .byte 144,18,bright,146,0
 
 hsvide         .fill 18,32
@@ -99,22 +98,22 @@ hs3b           .text "s"
                .byte 34
                .text "fnam"
                .byte 34
-               .text "d,BBBB,EEEE"
-               .byte 0
+               .null "d,BBBB,EEEE"
+
 hs3c           .null "[l]oad into memory"
 hs3d           .text "l"
                .byte 34
                .text "fnam"
                .byte 34
-               .text "d,BBBB."
-               .byte 0
+               .null "d,BBBB."
+
 hs3e           .null "[v]erify file/mem "
 hs3f           .text "v"
                .byte 34
                .text "fnam"
                .byte 34
-               .text "d,BBBB"
-               .byte 0
+               .null "d,BBBB"
+
 hs3g           .null "[@] drive status"
 hs3h           .null "[x] Back to Basic "
 
@@ -134,10 +133,11 @@ hs4h           .null "BB=Byte."
 hs4i           .null "More Commands:."
 hs4j           .null "!c=cls,!d=listfile"
 hs4k           .null "!g=Credits,!h=help"
+hs4l           .null "!m=bit 8 mask togl"
     
 hs4vect   .word     hsvide,hs4a,hs4c,hsvide
           .word     hs4d,hs4e,hs4f,hs4g,hs4h,hsvide
-          .word     hs4i,hs4j,hs4k,hsvide,hs4b,$ffff
+          .word     hs4i,hs4j,hs4k,hs4l,hsvide,hs4b,$ffff
 
 gs1t           .null " SuperMon Credits "
 gs1a           .null "Original Version:"

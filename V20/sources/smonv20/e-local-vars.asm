@@ -8,6 +8,7 @@ tmp0      =    $c1       ; utilisé pour renvoyer une entrée,
                          ;      contient souvent l'adresse de fin
 tmp2      =    $c3       ; contient généralement l'adresse de départ
 satus     =    status
+bit8mask  .fill     1
 adrptr    .fill     2
 scraddr   .fill     2
 coladdr   .fill     2
@@ -33,7 +34,6 @@ u0aae     =*             ; fin du tampon de travail
 stage     .fill     30   ; tampon de transit pour le nom de fichier, la 
                          ; recherche, etc.
 estage    =*             ; fin du tampon de transit
-
 ;        *= $0200        ; stocker davantage de variables dans le tampon de 
 
                          ; l'éditeur de ligne de base

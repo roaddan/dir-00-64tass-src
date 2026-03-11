@@ -28,10 +28,12 @@ main      =*
 super     jsr  scrinit
           lda  #147
           jsr  chrout
-          lda  #$0e
-          jsr  chrout
-          lda  #$08
-          jsr  chrout
+          lda  #$ff
+          sta  bit8mask
+;          lda  #$0e
+;          jsr  chrout
+;          lda  #$08
+;          jsr  chrout
           ldy  #msg9-msgbas    ; Affiche "? pour aide.".
           jsr  sndmsg
 
@@ -327,6 +329,7 @@ dchar     lda  (tmp2),y       ; Charger octet à l'adresse de début + y.
 ;          txa                 ; Restaurer le caractère.
 ;          bcs  dchrok         ; Si imprimable, affiche le caractère.
 ;ddot      lda  #$2e           ; Sinon, on met un '.' à la place
+          and  bit8mask
 dchrok    sta  (zp1),y        ; *DL* - On affiche le caractere.
           tya                 ; *DL* - . et une couleur
           asl                 ; *DL* - .  sequencielle
@@ -1547,6 +1550,12 @@ text      lda  #$00           ;place la couleur
 ;-----------------------------------------------------------------------------
 popup      .block
           jsr  pushall
+
+          lda  #$0e
+          jsr  chrout
+          lda  #$08
+          jsr  chrout
+
           jsr  clrkbbuf
           lda  kcol
           pha
@@ -1563,6 +1572,12 @@ popup      .block
           jsr  currest
           pla
           sta  kcol
+
+          lda  #142
+          jsr  chrout
+          lda  #$09
+          jsr  chrout
+
           jsr  popall
           ;jmp  strt
           rts
@@ -1574,9 +1589,11 @@ popup      .block
 mycmd     .block
           jsr  pushregs
           jsr  chrin
-          cmp  #'t'      ; cmd test
+          cmp  #'m'      ;bit8mask 
           bne  cmdd
-          jsr  showhelp
+          lda  bit8mask
+          eor  #%10000000
+          sta  bit8mask
           jmp  mycmdout
 cmdd      cmp  #'d'      ; cmd dir
           bne  cmdh
@@ -1761,8 +1778,8 @@ supad   .word super             ; address of entry point
 
 
 ;----------------------------------------------------------------------------
-     ;.include  "string-fr.asm"
-     .include  "string-en.asm"
+     .include  "string-fr.asm"
+     ;.include  "string-en.asm"
 ;-----------------------------------------------------------------------------
 ;     .include  "l-v20-push.asm" 
 ;     .include  "l-v20-string.asm" 
