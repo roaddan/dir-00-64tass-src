@@ -3,7 +3,7 @@
 ;-----------------------------------------------------------------------------
 msgbas  =*
 msg2      .byte $0d,$20,31,18     ; header for registers
-          .text " superson for vic20 "
+          .text " supermon for vic20 "
           .byte 146,$0d,31        ; header for registers
           .text "   pc  sr ac xr yr sp"
           .byte 144,$0d,$00
@@ -24,12 +24,10 @@ mneuprfx       .byte $0d,sbleu
                .fill 8,$20
                .byte 0
 
-backspace      .byte 157,157,32,32,157,157,145,0
-
-;Auteur         .text "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"
+backspace      .byte 146,144,157,157,32,32,157,157,145,0
 
 hstitle        .byte 18,tleft,31
-               .text "SuperMon with Help"
+               .text "  Super-Mon Help  "
                .byte 144,tright,146,0
 
 hsfoot         .byte 18,bleft,146,28
@@ -93,7 +91,7 @@ hs2vect   .word     hsvide,hs2a,hs2b,hsvide
           .word     hs2i,hs2j,hsvide
           .word     hs2k,hs2l,hs2m,$ffff
 
-hs3a           .null "[s]ave memory."
+hs3a           .null "[s]ave memory"
 hs3b           .text "s"
                .byte 34
                .text "fnam"
@@ -105,9 +103,9 @@ hs3d           .text "l"
                .byte 34
                .text "fnam"
                .byte 34
-               .null "d,BBBB."
+               .null "d,BBBB"
 
-hs3e           .null "[v]erify file/mem "
+hs3e           .null "[v]erify file/mem"
 hs3f           .text "v"
                .byte 34
                .text "fnam"
@@ -115,7 +113,7 @@ hs3f           .text "v"
                .null "d,BBBB"
 
 hs3g           .null "[@] drive status"
-hs3h           .null "[x] Back to Basic "
+hs3h           .null "[x] Basic warmboot"
 
 hs3vect        .word     hsvide,hs3a,hs3b,hsvide
                .word     hs3c,hs3d,hsvide
@@ -135,25 +133,25 @@ hs4j           .null "!c=cls,!d=listfile"
 hs4k           .null "!g=Credits,!h=help"
 hs4l           .null "!m=bit 8 mask togl"
     
-hs4vect   .word     hsvide,hs4a,hs4c,hsvide
+hs4vect   .word     hsvide,hs4a,hsvide,hs4c,hsvide
           .word     hs4d,hs4e,hs4f,hs4g,hs4h,hsvide
-          .word     hs4i,hs4j,hs4k,hs4l,hsvide,hs4b,$ffff
+          .word     hs4i,hsvide,hs4j,hs4k,hs4l,hsvide,hs4b,$ffff
 
 gs1t           .null " SuperMon Credits "
 gs1a           .null "Original Version:"
 gs1b           .byte sbleu
-               .text " Super-Mon64 1983 "
+               .text " SuperMon+64 1985"
                .byte snoir,0
 gs1c           .byte srouge
-               .text " Jim Butterfield  "
+               .text " Jim Butterfield"
                .byte snoir,0
 gs1d           .byte srouge
-               .text " 1936-2007 R.I.P. "
+               .text " 1936-2007 R.I.P."
                .byte snoir,0
 gs1e           .null "Vic20 port by:"
-gs1g           .null " Daniel Lafrance  "
-gs1h           .null "github.com/roaddan"
-;gs1h           .null format(" %s",version)
+gs1g           .null " Daniel Lafrance"
+;gs1h           .null "github.com/roaddan"
+gs1h           .null format("  Look at: $%X",auteur)
 gs1i           .null "Uses banks 0 & 5."
 gs1j           .null "Use VICE emulator"
 gs1k           .null "or cartridge like"
@@ -166,3 +164,6 @@ gs1vect   .word     hsvide,gs1a,hsvide
           .word     gs1e,gs1g,gs1h,hsvide
           .word     gs1i,hsvide,gs1j
           .word     gs1k,gs1l,gs1m,gs1n,$ffff
+
+auteur         .null "adaptation vic20: mars 2026, daniel lafrance, 3rv, quebec, canada"
+github         .null "https://github.com/roaddan/dir-00-64tass-src/tree/main/v20/sources/smonv20"

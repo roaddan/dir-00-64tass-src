@@ -30,11 +30,7 @@ super     jsr  scrinit
           jsr  chrout
           lda  #$ff
           sta  bit8mask
-;          lda  #$0e
-;          jsr  chrout
-;          lda  #$08
-;          jsr  chrout
-          ldy  #msg9-msgbas    ; Affiche "? pour aide.".
+          ldy  #msg9-msgbas    ; Affiche un message pour acceder l'aide
           jsr  sndmsg
 
           ;ldy #msg4-msgbas    ; Affiche "..sys ".
@@ -148,7 +144,7 @@ cnvlnk    jmp  convrt         ; Gère la conversion de base.
 ;-----------------------------------------------------------------------------
 exit      #outcar   147
 
-          jmp   (bcoldst)     ; Saute au démarrage à froid pour réinitialiser 
+          jmp   (bwarmst)     ; Saute au démarrage à froid pour réinitialiser 
                               ; ... le système de base sans effacer la memoire.
 
 ;-----------------------------------------------------------------------------
@@ -1584,7 +1580,7 @@ popup      .block
           .bend
 
 ;-----------------------------------------------------------------------------
-; ajout des commandes c, h, g
+; ajout des commandes c, d, h, g , m
 ;-----------------------------------------------------------------------------
 mycmd     .block
           jsr  pushregs

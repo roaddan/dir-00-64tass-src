@@ -24,9 +24,7 @@ mneuprfx       .byte $0d,sbleu
                .fill 8,$20
                .byte 0
 
-backspace      .byte 157,157,32,32,157,157,145,0
-
-;Auteur         .text "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"
+backspace      .byte 146,144,157,157,32,32,157,157,145,0
 
 hstitle        .byte 18,tleft,31
                .text "  Aide Super-Mon  "
@@ -80,7 +78,7 @@ hs2e           .null "[h]unt recherche"
 hs2f           .null "h BBBB EEEE BB..BB"
 hs2g           .null "[t]ransfert mem."
 hs2h           .null "t BBBB EEEE DDDD"
-hs2i           .null "[c]ompare mem"
+hs2i           .null "[c]ompare mem."
 hs2j           .null "c BBBB EEEE DDDD"
 hs2k           .null "Conversion [$+&%]"
 hs2l           .null " [$]hex.  [&]oct."
@@ -93,14 +91,14 @@ hs2vect   .word     hsvide,hs2a,hs2b,hsvide
           .word     hs2i,hs2j,hsvide
           .word     hs2k,hs2l,hs2m,$ffff
 
-hs3a           .null "[s]auvegarde mem. "
+hs3a           .null "[s]auve fichier"
 hs3b           .text "s"
                .byte 34
                .text "fnom"
                .byte 34
                .null "d,BBBB,EEEE"
 
-hs3c           .null "[l]oad charger mem"
+hs3c           .null "[l]lire fichier"
 hs3d           .text "l"
                .byte 34
                .text "fnom"
@@ -115,7 +113,7 @@ hs3f           .text "v"
                .null "d,BBBB"
 
 hs3g           .null "@ etat du lecteur"
-hs3h           .null "[x] aller a Basic"
+hs3h           .null "[x] Basic warmboot"
 
 hs3vect        .word     hsvide,hs3a,hs3b,hsvide
                .word     hs3c,hs3d,hsvide
@@ -135,14 +133,14 @@ hs4j           .null "!c=cls,!d=listfich"
 hs4k           .null "!g=Credits,!h=aide"
 hs4l           .null "!m=Masque du bit 8"
     
-hs4vect   .word     hsvide,hs4a,hs4c,hsvide
+hs4vect   .word     hsvide,hs4a,hsvide,hs4c,hsvide
           .word     hs4d,hs4e,hs4f,hs4g,hs4h,hsvide
-          .word     hs4i,hs4j,hs4k,hs4l,hsvide,hs4b,$ffff
+          .word     hs4i,hsvide,hs4j,hs4k,hs4l,hsvide,hs4b,$ffff
 
 gs1t           .null " Credits SuperMon"
 gs1a           .null "Version originale:"
 gs1b           .byte sbleu
-               .text " Super-Mon64 1983 "
+               .text " SuperMon+64 1985 "
                .byte snoir,0
 gs1c           .byte srouge
                .text " Jim Butterfield  "
@@ -152,8 +150,8 @@ gs1d           .byte srouge
                .byte snoir,0
 gs1e           .null "Adaptation Vic20:"
 gs1g           .null " Daniel Lafrance"
-gs1h           .null "github.com/roaddan"
-;gs1h           .null format(" %s",version)
+;gs1h           .null "github.com/roaddan"
+gs1h           .null format("   Voir: $%X",auteur)
 gs1i           .null "Utilise bank 0 & 5"
 gs1j           .null "Utilisez VICE emu."
 gs1k           .null "ou cartouche type"
@@ -167,4 +165,5 @@ gs1vect   .word     hsvide,gs1a,hsvide
           .word     gs1i,hsvide,gs1j
           .word     gs1k,gs1l,gs1m,gs1n,$ffff
 
-;Auteur         .null "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"
+auteur         .null "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"
+github         .null "https://github.com/roaddan/dir-00-64tass-src/tree/main/V20/sources/smonv20"
