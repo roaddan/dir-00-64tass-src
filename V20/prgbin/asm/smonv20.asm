@@ -1541,6 +1541,7 @@ text      lda  #$00           ;place la couleur
           plp
           rts
           .bend
+
 ;-----------------------------------------------------------------------------
 ; Aide à l'ecran !e
 ;-----------------------------------------------------------------------------
@@ -1585,11 +1586,21 @@ popup      .block
 mycmd     .block
           jsr  pushregs
           jsr  chrin
-          cmp  #'m'      ;bit8mask 
-          bne  cmdd
+cmdm      cmp  #'m'      ;bit8mask 
+          bne  cmd8
           lda  bit8mask
           eor  #%10000000
           sta  bit8mask
+          jmp  mycmdout
+cmd8      cmp  #'8'      ; selection lecteur 8
+          bne  cmd9
+          lda  #$8
+          sta  ddev
+          jmp  mycmdout
+cmd9      cmp  #'9'      ; selection lecteur 8
+          bne  cmdd
+          lda  #$9
+          sta  ddev
           jmp  mycmdout
 cmdd      cmp  #'d'      ; cmd dir
           bne  cmdh
@@ -1599,12 +1610,10 @@ cmdh      cmp  #'h'      ; cmd help
           bne  cmdg
           jsr  showhelp
           jmp  mycmdout
-
 cmdg      cmp  #'g'      ; cmd greetings
           bne  cmdc
           jsr  credits
           jmp  mycmdout
-
 cmdc      cmp  #'c'      ;cmd cls
           bne  notmycmd
           #outcar 147

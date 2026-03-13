@@ -132,10 +132,12 @@ hs4i           .null "More Commands:."
 hs4j           .null "!c=cls,!d=listfile"
 hs4k           .null "!g=Credits,!h=help"
 hs4l           .null "!m=bit 8 mask togl"
+hs4m           .null "!8/!9=sel. drive"
     
 hs4vect   .word     hsvide,hs4a,hsvide,hs4c,hsvide
           .word     hs4d,hs4e,hs4f,hs4g,hs4h,hsvide
-          .word     hs4i,hsvide,hs4j,hs4k,hs4l,hsvide,hs4b,$ffff
+          .word     hs4i,hsvide,hs4j,hs4k,hs4l,hs4m
+          .word     hsvide,hs4b,$ffff
 
 gs1t           .null " SuperMon Credits "
 gs1a           .null "Original Version:"
