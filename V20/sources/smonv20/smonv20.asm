@@ -1783,8 +1783,8 @@ supad   .word super             ; address of entry point
 
 
 ;----------------------------------------------------------------------------
-     .include  "string-fr.asm"
-     ;.include  "string-en.asm"
+     ;.include  "string-fr.asm"
+     .include  "string-en.asm"
 ;-----------------------------------------------------------------------------
 ;     .include  "l-v20-push.asm" 
 ;     .include  "l-v20-string.asm" 
