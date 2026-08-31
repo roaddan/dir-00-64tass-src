@@ -1,4 +1,4 @@
-!/bin/bash
+#!/usr/bin/bash
 cd /Users/Locals/CBM/00-usbkey32go/d-00-64tass-src
 #export unedate="$(/bin/date "+%Y%m%d-%H%M%S")"
 export ladate=$(/bin/date "+%Y%m%d-%H%M%S")
