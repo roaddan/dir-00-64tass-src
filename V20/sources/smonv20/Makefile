@@ -5,7 +5,7 @@ DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
-LIBDEPS=$(shell find $(BASEDIR)/d-00-64tass-src/V20/lib -maxdepth 1 -type f -iname "*.asm")
+LIBDEPS=$(shell find $(BASEDIR)/dir-00-64tass-src/V20/lib -maxdepth 1 -type f -iname "*.asm")
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 VICEDIR=/Users/Locals/temp/Vice
 SD2IEC=/media/daniel/SD2IECV20/d-remote
@@ -15,22 +15,22 @@ X64SC=/usr/bin/x64sc
 C1541=/usr/bin/c1541
 TASS=/usr/bin/64tass
 
-TASSLIB=$(BASEDIR)/d-00-64tass-src/V20/lib
+TASSLIB=$(BASEDIR)/dir-00-64tass-src/V20/lib
 EXPORTDIR=/media/daniel/DATASSET/d-remote
 TMPSEP06=-9 $(BASEDIR)/dir-tmp-dskimg/turbo-macro-pro-sep06.d64
-V20UTILDIR=$(BASEDIR)/d-00-64tass-src/V20/utils
+V20UTILDIR=$(BASEDIR)/dir-00-64tass-src/V20/utils
 V20MKASM=-9 ${V20UTILDIR}/V20MikroAsmbler.d64
 V20MON=-9 ${V20UTILDIR}/vicmon.d64
 V20MON6000=-9 ${V20UTILDIR}/vicmon-6000.d64
-PRGBIN=$(BASEDIR)/d-00-64tass-src/V20/prgbin
+PRGBIN=$(BASEDIR)/dir-00-64tass-src/V20/prgbin
 VICE=$(V20)
 DISK8DIR=
-PRGDIR=$(BASEDIR)/d-00-64tass-bin
+PRGDIR=$(BASEDIR)/dir-00-64tass-bin
 # FTP SERVER CONFIG
 FTPSVR=10.0.1.10
-FTPPRGARG=cd /Usb0/d-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
-FTPD64ARG=cd /Usb0/d-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
-FTPCRTARG=cd /Usb0/d-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
+FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
+FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
+FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
 
 
 all: $(SOURCENAME).d64
