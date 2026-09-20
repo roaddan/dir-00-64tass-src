@@ -34,6 +34,8 @@ hsfoot         .byte 18,bleft,146,28
                .text " Appuyez une clef "
                .byte 144,18,bright,146,0
 
+keyout         .null $0d,28,"--appuyez une clef!--"
+
 hsvide         .fill 18,32
                .byte 0
 

@@ -1515,7 +1515,7 @@ sndmsg  .block
           beq  msgout
           jsr  chout
           iny
-          jmp  sndmsg       ; Boucle jusqu'à ce que le bit 7 soit activé.
+          jmp  sndmsg         ; Boucle jusqu'à ce que le bit 7 soit activé.
 msgout    rts
           .bend
 
@@ -1634,6 +1634,7 @@ dirdisk   .block
           jsr  scrnsave
           #outcar 147
           jsr  directory 
+          #print keyout
           jsr  anykey
           #outcar 147
           jsr  scrnrest
@@ -1641,6 +1642,7 @@ dirdisk   .block
           pla
           sta  kcol
           jsr  popall
+
           rts
           .bend
 

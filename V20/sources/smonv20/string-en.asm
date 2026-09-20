@@ -34,6 +34,8 @@ hsfoot         .byte 18,bleft,146,28
                .text "  Press any key!  "
                .byte 144,18,bright,146,0
 
+keyout         .null $0d,28,"--press any key!--"
+
 hsvide         .fill 18,32
                .byte 0
 

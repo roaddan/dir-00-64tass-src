@@ -8,7 +8,7 @@ DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 LIBDEPS=$(shell find $(BASEDIR)/dir-00-64tass-src/V20/lib -maxdepth 1 -type f -iname "*.asm")
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 VICEDIR=/Users/Locals/temp/Vice
-SD2IEC=/media/daniel/SD2IECV20/d-remote
+SD2IEC=/media/daniel/SD2IECV20
 V20=/usr/bin/xvic
 X64=/usr/bin/x64
 X64SC=/usr/bin/x64sc
@@ -35,7 +35,7 @@ FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
 
 all: $(SOURCENAME).d64
 #	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:$(SOURCENAME) 
-	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:fb
+#	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:fb
 
 $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 	$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
@@ -70,7 +70,12 @@ $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt;fi
 	cp -f  ${SOURCENAME}.d64 ${VICEDIR}
 	cp -f  ${SOURCENAME}.d81 ${VICEDIR}
-	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d64;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.prg ${SD2IEC}/;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.prg ${SD2IEC}/d-remote/prg;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.asm ${SD2IEC}/d-remote/asm;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.txt ${SD2IEC}/d-remote/txt;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d-remote/d64;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.d81 ${SD2IEC}/d-remote/d81;fi
 
 $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 	$(TASS) -C -m -a -I $(TASSLIB) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
@@ -86,8 +91,8 @@ $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm;fi
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg;fi
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt;fi
-	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.prg ${SD2IEC}/prg;fi
-	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.txt ${SD2IEC}/txt;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.prg ${SD2IEC}/d-remote/prg;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.txt ${SD2IEC}/d-remote/txt;fi
 
 clean:
 	rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 
