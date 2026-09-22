@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/V20/lib -i -L smonv20.txt -o smonv20.prg smonv20.asm
-; Sat Sep 19 18:17:02 2026
+; Tue Sep 22 00:29:22 2026
 
 ;Offset	;Hex		;Source
 
@@ -10,6 +10,8 @@
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/V20/lib/e-v20-bashead-ex.asm
 
+=$1000			vidstart  = $1000
+=$0400			bakmem    = $0400
 =$1000			scrtxt    = $1000
 =$9400			scrcol    = $9400
 =$0200			scrlen    = $0200
@@ -496,33 +498,33 @@
 .a409	f0 0e		          beq  aescan         ; S'il n'y en a pas, numérisation est terminée
 .a40b	c9 20		          cmp  #$20           ; Sauter les espaces
 .a40d	f0 c5		          beq  ascan
-.a40f	9d 16 04	          sta  u0aa0,x        ; Ltocker le caractère dans tampon d'assemblage
+.a40f	9d 16 04	          sta  u0aa0,x        ; Stocker le caractère dans tampon d'assemblage
 .a412	e8		          inx                 ; Passer à l'octet suivant dans le tampon
 .a413	e0 0a		          cpx  #u0aae-u0aa0   ; Le tampon d'instructions est-il plein?
 .a415	90 bd		          bcc  ascan          ; Sinon, continuez à scanner
 .a417	b0 b6		          bcs  aerror         ; Erreur si la mémoire tampon est pleine
-.a419	8e 66 04	aescan  stx store           ; save number of bytes in assembly buffer
-.a41c	a2 00		        ldx #0              ; start at opcode $00 and check every one until
-.a41e	8e 0f 04	        stx opcode          ;   we find one that matches our criteria
-.a421	a2 00		atryop  ldx #0
-.a423	8e 6a 04	        stx u9f             ; reset index into work buffer
-.a426	ad 0f 04	        lda opcode
-.a429	20 fa a5	        jsr instxx          ; look up instruction format for current opcode
-.a42c	ae 09 04	        ldx acmd            ; save addressing command for later
-.a42f	8e 67 04	        stx store+1
-.a432	aa		        tax                 ; use current opcode as index
-.a433	bd dd ab	        lda mnemr,x         ; check right byte of compressed mnemonic
-.a436	20 07 a5	        jsr chekop
-.a439	bd 9d ab	        lda mneml,x         ; check left byte of compressed mnemonic
-.a43c	20 07 a5	        jsr chekop
-.a43f	a2 06		        ldx #6              ; 6 possible characters to check against operand
-.a441	e0 03		tryit   cpx #3              ; are we on character 3?
-.a443	d0 14		        bne trymod          ; if not, check operand characters
-.a445	ac 0a 04	        ldy length          ; otherwise, check number of bytes in operand
-.a448	f0 0f		        beq trymod          ; if zero, check operand characters
-.a44a	ad 09 04	tryad   lda acmd            ; otherwise, look for an address
-.a44d	c9 e8		        cmp #$e8            ; special case for relative addressing mode
-.a44f	a9 30		        lda #$30            ; '0' is the digit placeholder we're looking for
+.a419	8e 66 04	aescan    stx store           ; Enregistrer le nombre d'octets dans le tampon
+.a41c	a2 00		          ldx #0              ; Commencez par l'opcode $00 et examinez-les
+.a41e	8e 0f 04	          stx opcode          ;  un par un jusqu'à en trouver un qui réponde
+.a421	a2 00		atryop    ldx #0
+.a423	8e 6a 04	          stx u9f             ; Réinitialise l'index dans le tampon de travail
+.a426	ad 0f 04	          lda opcode
+.a429	20 fa a5	          jsr instxx          ; Rechercher le format d'instruction pour
+.a42c	ae 09 04	          ldx acmd            ; Enregistrer la commande d'adressage pour plus
+.a42f	8e 67 04	          stx store+1
+.a432	aa		          tax                 ; Vtilise l'opcode actuel comme index
+.a433	bd dd ab	          lda mnemr,x         ; Vérifie l'octet de droite du mnémonique
+.a436	20 07 a5	          jsr chekop
+.a439	bd 9d ab	          lda mneml,x         ; Vérifier l'octet de gauche du mnémonique
+.a43c	20 07 a5	          jsr chekop
+.a43f	a2 06		          ldx #6              ; 6 caractères possibles à comparer avec
+.a441	e0 03		tryit     cpx #3              ; Est-ce qu'on en est au troisième caractère ?
+.a443	d0 14		          bne trymod          ; Sinon, vérifie les caractères de l'opérande.
+.a445	ac 0a 04	          ldy length          ; Sinon, vérifie nombre d'octets de l'opérande.
+.a448	f0 0f		          beq trymod          ; Si zéro, vérifie les caractères de l'opérande.
+.a44a	ad 09 04	tryad     lda acmd            ; Sinon, cherchez une adresse.
+.a44d	c9 e8		          cmp #$e8            ; Cas particulier pour le mode d'adressage
+.a44f	a9 30		          lda #$30            ; « 0 » est l'espace réservé au chiffre que nous
 .a451	b0 1e		        bcs try4b           ; acmd >= $e8 indicates relative addressing
 .a453	20 04 a5	        jsr chek2b          ; acmd < $e8 indicates normal addressing
 .a456	88		        dey                 ; consume byte
@@ -998,19 +1000,19 @@
 >a82c	24		        .byte $24           ; bit zp opcode consumes next byte (sec)
 .a82d	38		gdifx   sec                 ; set carry to indicate error
 .a82e	60		        rts
-.a82f	20 68 a6	convrt  jsr rdpar           ; read a parameter
-.a832	20 57 a7	        jsr fresh           ; next line and clear
-.a835	a9 1f		        lda #sbleu
-.a837	20 d2 ff	        jsr chrout
-.a83a	a9 24		        lda #"$"            ; output $ sigil for hex
-.a83c	20 d2 ff	        jsr chrout
-.a83f	a5 c1		        lda tmp0            ; load the 16-bit value entered
-.a841	a6 c2		        ldx tmp0+1
-.a843	20 38 a7	        jsr wraddr          ; print it in 4 hex digits
-.a846	20 57 a7	        jsr fresh
-.a849	a9 9c		        lda #smauve
-.a84b	20 d2 ff	        jsr chrout
-.a84e	a9 2b		        lda #"+"            ; output + sigil for decimal
+.a82f	20 68 a6	convrt    jsr rdpar           ; lire un paramètre
+.a832	20 57 a7	          jsr fresh           ; ligne suivante et effacer
+.a835	a9 1f		          lda #sbleu          ; Hexadécimal en bleu
+.a837	20 d2 ff	          jsr chrout
+.a83a	a9 24		          lda #"$"            ; sortie $ sigil pour hexadécimal
+.a83c	20 d2 ff	          jsr chrout
+.a83f	a5 c1		          lda tmp0            ; charger la valeur 16 bits saisie
+.a841	a6 c2		          ldx tmp0+1
+.a843	20 38 a7	          jsr wraddr          ; Affichez-le sous la forme de 4 chiffres
+.a846	20 57 a7	          jsr fresh
+.a849	a9 9c		          lda #smauve
+.a84b	20 d2 ff	          jsr chrout
+.a84e	a9 2b		          lda #"+"            ; output + sigil for decimal
 .a850	20 d2 ff	        jsr chrout
 .a853	20 93 a8	        jsr cvtdec          ; convert to bcd using hardware mode
 .a856	a9 00		        lda #0              ; clear digit counter
@@ -1038,28 +1040,28 @@
 .a88b	a9 90		        lda #snoir
 .a88d	20 d2 ff	        jsr chrout
 .a890	4c 3e a0	        jmp strt            ; back to mainloop
-.a893	20 a4 a7	cvtdec  jsr copy12          ; copy value from tmp0 to tmp2
-.a896	a9 00		        lda #0
-.a898	a2 02		        ldx #2              ; clear 3 bytes in work buffer
-.a89a	9d 16 04	decml1  sta u0aa0,x
-.a89d	ca		        dex
-.a89e	10 fa		        bpl decml1
-.a8a0	a0 10		        ldy #16             ; 16 bits in input
-.a8a2	08		        php                 ; save status register
-.a8a3	78		        sei                 ; make sure no interrupts occur with bcd enabled
-.a8a4	f8		        sed
-.a8a5	06 c3		decml2  asl tmp2            ; rotate bytes out of input low byte
-.a8a7	26 c4		        rol tmp2+1          ; .... into high byte and carry bit
-.a8a9	a2 02		        ldx #2              ; process 3 bytes
-.a8ab	bd 16 04	decdbl  lda u0aa0,x         ; load current value of byte
-.a8ae	7d 16 04	        adc u0aa0,x         ; add it to itself plus the carry bit
-.a8b1	9d 16 04	        sta u0aa0,x         ; store it back in the same location
-.a8b4	ca		        dex                 ; decrement byte counter
-.a8b5	10 f4		        bpl decdbl          ; loop until all bytes processed
-.a8b7	88		        dey                 ; decrement bit counter
-.a8b8	d0 eb		        bne decml2          ; loop until all bits processed
-.a8ba	28		        plp                 ; restore processor status
-.a8bb	60		        rts
+.a893	20 a4 a7	cvtdec    jsr copy12          ; Copie la valeur de tmp0 vers tmp2.
+.a896	a9 00		          lda #0
+.a898	a2 02		          ldx #2              ; Effacer 3 octets dans le tampon de travail
+.a89a	9d 16 04	decml1    sta u0aa0,x
+.a89d	ca		          dex
+.a89e	10 fa		          bpl decml1
+.a8a0	a0 10		          ldy #16             ; 16 bits en entrée
+.a8a2	08		          php                 ; Sauvegarder le registre d'état.
+.a8a3	78		          sei                 ; S'Assure qu'aucune interruption ne survienne
+.a8a4	f8		          sed                 ;  le mode BCD est activé.
+.a8a5	06 c3		decml2    asl tmp2            ; Rotation des octets de l'entrée, octet de
+.a8a7	26 c4		          rol tmp2+1          ;  poids fort et bit de retenue.
+.a8a9	a2 02		          ldx #2              ; Traite 3 octets.
+.a8ab	bd 16 04	decdbl    lda u0aa0,x         ; Charge la valeur actuelle de l'octet.
+.a8ae	7d 16 04	          adc u0aa0,x         ; L'ajoute à lui-même, plus le bit de retenue.
+.a8b1	9d 16 04	          sta u0aa0,x         ; Le range à nouveau au même endroit.
+.a8b4	ca		          dex                 ; Décrémente le compteur d'octets.
+.a8b5	10 f4		          bpl decdbl          ; Boucle jusqu'à ce que tous les octets soient
+.a8b7	88		          dey                 ; Décrémente le compteur de bits.
+.a8b8	d0 eb		          bne decml2          ; Boucle jusqu'à ce que tous les bits soient
+.a8ba	28		          plp                 ; Restaure l'état du processeur.
+.a8bb	60		          rts
 .a8bc	48		prinum  pha                 ; save accumulator
 .a8bd	a5 c1		        lda tmp0            ; copy input low byte to work buffer
 .a8bf	8d 18 04	        sta u0aa0+2
@@ -1474,10 +1476,10 @@
 >acdc	20 20 d3 55	               .text "  Super-Mon Help  "
 >ace0	50 45 52 2d cd 4f 4e 20 c8 45 4c 50 20 20
 >acee	90 ae 92 00	               .byte 144,tright,146,0
->acf2	12 ad 92 1c	hsfoot         .byte 18,bleft,146,28
+>acf2	12 ad 92 1c	hsfoot         .byte 18,leftb,146,28
 >acf6	20 20 d0 52	               .text "  Press any key!  "
 >acfa	45 53 53 20 41 4e 59 20 4b 45 59 21 20 20
->ad08	90 12 bd 92	               .byte 144,18,bright,146,0
+>ad08	90 12 bd 92	               .byte 144,18,rightb,146,0
 >ad0c	00
 >ad0d	0d 1c 2d 2d	keyout         .null $0d,28,"--press any key!--"
 >ad11	50 52 45 53 53 20 41 4e 59 20 4b 45 59 21 2d 2d
@@ -1575,18 +1577,18 @@
 >af56	56 45 20 4d 45 4d 4f 52 59 00
 >af60	53		hs3b           .text "s"
 >af61	22		               .byte 34
->af62	46 4e 41 4d	               .text "fnam"
->af66	22		               .byte 34
->af67	44 2c c2 c2	               .null "d,BBBB,EEEE"
->af6b	c2 c2 2c c5 c5 c5 c5 00
+>af62	46 4e 4d	               .text "fnm"
+>af65	22		               .byte 34
+>af66	2c 44 2c c2	               .null ",d,BBBB,EEEE"
+>af6a	c2 c2 c2 2c c5 c5 c5 c5 00
 >af73	5b 4c 5d 4f	hs3c           .null "[l]oad into memory"
 >af77	41 44 20 49 4e 54 4f 20 4d 45 4d 4f 52 59 00
 >af86	4c		hs3d           .text "l"
 >af87	22		               .byte 34
->af88	46 4e 41 4d	               .text "fnam"
->af8c	22		               .byte 34
->af8d	44 2c c2 c2	               .null "d,BBBB"
->af91	c2 c2 00
+>af88	46 4e 4d	               .text "fnm"
+>af8b	22		               .byte 34
+>af8c	4d 44 2c c2	               .null "md,BBBB"
+>af90	c2 c2 c2 00
 >af94	5b 56 5d 45	hs3e           .null "[v]erify file/mem"
 >af98	52 49 46 59 20 46 49 4c 45 2f 4d 45 4d 00
 >afa6	56		hs3f           .text "v"
@@ -3021,8 +3023,8 @@
 =$9f			bcyan     =    $9f  ;159
 =176			tleft     = 176;Coin suppérieur gauche.
 =174			tright    = 174;Coin suppérieur droit.
-=173			bleft     = 173;Coin inférieur gauche.
-=189			bright    = 189;Coin inférieur droit.
+=173			leftb     = 173;Coin inférieur gauche.
+=189			rightb    = 189;Coin inférieur droit.
 =171			hleft     = 171;Extr. gauche médianne.
 =179			hright    = 179;Extr. droite médianne.
 =221			vline     = 221;Ligne verticale.

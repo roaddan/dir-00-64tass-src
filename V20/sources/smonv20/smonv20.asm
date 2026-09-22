@@ -2,7 +2,7 @@
 ; Fichier.......: smonv20.asm
 ; Basee sur.....: Supermon64
 ; Auteur........: Jim Butterfield
-; Version Vic20 : Daniel Lafrance
+; Version Vic20 : Daniel Lafrance 
 ;--------------------------------------
 .enc "none"
      .include  "e-v20-bashead-ex.asm"
@@ -656,7 +656,7 @@ aform1    jsr  getchr         ; obtenir le prochain personnage
           beq  aescan         ; S'il n'y en a pas, numérisation est terminée
           cmp  #$20           ; Sauter les espaces
           beq  ascan
-          sta  u0aa0,x        ; Ltocker le caractère dans tampon d'assemblage
+          sta  u0aa0,x        ; Stocker le caractère dans tampon d'assemblage
           inx                 ; Passer à l'octet suivant dans le tampon
           cpx  #u0aae-u0aa0   ; Le tampon d'instructions est-il plein?
           bcc  ascan          ; Sinon, continuez à scanner
@@ -664,30 +664,39 @@ aform1    jsr  getchr         ; obtenir le prochain personnage
 ;-----------------------------------------------------------------------------
 ; find matching opcode
 ;-----------------------------------------------------------------------------
-aescan  stx store           ; save number of bytes in assembly buffer
-        ldx #0              ; start at opcode $00 and check every one until
-        stx opcode          ;   we find one that matches our criteria
-atryop  ldx #0
-        stx u9f             ; reset index into work buffer
-        lda opcode
-        jsr instxx          ; look up instruction format for current opcode
-        ldx acmd            ; save addressing command for later
-        stx store+1
-        tax                 ; use current opcode as index
-        lda mnemr,x         ; check right byte of compressed mnemonic
-        jsr chekop
-        lda mneml,x         ; check left byte of compressed mnemonic
-        jsr chekop
-        ldx #6              ; 6 possible characters to check against operand
-tryit   cpx #3              ; are we on character 3?
-        bne trymod          ; if not, check operand characters
-        ldy length          ; otherwise, check number of bytes in operand
-        beq trymod          ; if zero, check operand characters
-tryad   lda acmd            ; otherwise, look for an address
-        cmp #$e8            ; special case for relative addressing mode
-                            ;   since it's specified with 4 digits in assembly
-                            ;   but encoded with only 1 byte in object code
-        lda #$30            ; '0' is the digit placeholder we're looking for
+aescan    stx store           ; Enregistrer le nombre d'octets dans le tampon 
+                              ;  d'assemblage.
+          ldx #0              ; Commencez par l'opcode $00 et examinez-les
+          stx opcode          ;  un par un jusqu'à en trouver un qui réponde 
+                              ;  à nos critères.
+atryop    ldx #0
+          stx u9f             ; Réinitialise l'index dans le tampon de travail
+          lda opcode
+          jsr instxx          ; Rechercher le format d'instruction pour 
+                              ;  l'opcode actuel.
+          ldx acmd            ; Enregistrer la commande d'adressage pour plus
+                              ;  tard.
+          stx store+1
+          tax                 ; Vtilise l'opcode actuel comme index
+          lda mnemr,x         ; Vérifie l'octet de droite du mnémonique 
+                              ;  compressé.
+          jsr chekop
+          lda mneml,x         ; Vérifier l'octet de gauche du mnémonique
+                              ;  compressé.
+          jsr chekop
+          ldx #6              ; 6 caractères possibles à comparer avec 
+                              ;  l'opérande.
+tryit     cpx #3              ; Est-ce qu'on en est au troisième caractère ?
+          bne trymod          ; Sinon, vérifie les caractères de l'opérande.
+          ldy length          ; Sinon, vérifie nombre d'octets de l'opérande.
+          beq trymod          ; Si zéro, vérifie les caractères de l'opérande.
+tryad     lda acmd            ; Sinon, cherchez une adresse.
+          cmp #$e8            ; Cas particulier pour le mode d'adressage 
+                              ;  relatif, car il est spécifié sur 4 chiffres 
+                              ;  en assembleur mais codé sur un seul octet en 
+                              ;  code objet.
+          lda #$30            ; « 0 » est l'espace réservé au chiffre que nous 
+                              ;  recherchons.
         bcs try4b           ; acmd >= $e8 indicates relative addressing
         jsr chek2b          ; acmd < $e8 indicates normal addressing
         dey                 ; consume byte
@@ -1256,19 +1265,20 @@ gdifx   sec                 ; set carry to indicate error
 ;-----------------------------------------------------------------------------
 ; convert base [$+&%]
 ;-----------------------------------------------------------------------------
-convrt  jsr rdpar           ; read a parameter
-        jsr fresh           ; next line and clear
-        lda #sbleu
-        jsr chrout
-        lda #"$"            ; output $ sigil for hex
-        jsr chrout
-        lda tmp0            ; load the 16-bit value entered
-        ldx tmp0+1
-        jsr wraddr          ; print it in 4 hex digits
-        jsr fresh
-        lda #smauve
-        jsr chrout
-        lda #"+"            ; output + sigil for decimal
+convrt    jsr rdpar           ; lire un paramètre
+          jsr fresh           ; ligne suivante et effacer
+          lda #sbleu          ; Hexadécimal en bleu
+          jsr chrout
+          lda #"$"            ; sortie $ sigil pour hexadécimal
+          jsr chrout
+          lda tmp0            ; charger la valeur 16 bits saisie
+          ldx tmp0+1
+          jsr wraddr          ; Affichez-le sous la forme de 4 chiffres 
+                              ;hexadécimaux.
+          jsr fresh
+          lda #smauve
+          jsr chrout
+          lda #"+"            ; output + sigil for decimal
         jsr chrout
         jsr cvtdec          ; convert to bcd using hardware mode
         lda #0              ; clear digit counter
@@ -1300,28 +1310,32 @@ convrt  jsr rdpar           ; read a parameter
 ;-----------------------------------------------------------------------------
 ; convert binary to bcd
 ;-----------------------------------------------------------------------------
-cvtdec  jsr copy12          ; copy value from tmp0 to tmp2
-        lda #0
-        ldx #2              ; clear 3 bytes in work buffer
-decml1  sta u0aa0,x
-        dex
-        bpl decml1
-        ldy #16             ; 16 bits in input
-        php                 ; save status register
-        sei                 ; make sure no interrupts occur with bcd enabled
-        sed
-decml2  asl tmp2            ; rotate bytes out of input low byte
-        rol tmp2+1          ; .... into high byte and carry bit
-        ldx #2              ; process 3 bytes
-decdbl  lda u0aa0,x         ; load current value of byte
-        adc u0aa0,x         ; add it to itself plus the carry bit
-        sta u0aa0,x         ; store it back in the same location
-        dex                 ; decrement byte counter
-        bpl decdbl          ; loop until all bytes processed
-        dey                 ; decrement bit counter
-        bne decml2          ; loop until all bits processed
-        plp                 ; restore processor status
-        rts
+cvtdec    jsr copy12          ; Copie la valeur de tmp0 vers tmp2.
+          lda #0
+          ldx #2              ; Effacer 3 octets dans le tampon de travail
+decml1    sta u0aa0,x
+          dex
+          bpl decml1
+          ldy #16             ; 16 bits en entrée
+          php                 ; Sauvegarder le registre d'état.
+          sei                 ; S'Assure qu'aucune interruption ne survienne 
+                              ;  lorsque 
+          sed                 ;  le mode BCD est activé.
+decml2    asl tmp2            ; Rotation des octets de l'entrée, octet de 
+                              ;  poids faible vers octet de 
+          rol tmp2+1          ;  poids fort et bit de retenue.
+          ldx #2              ; Traite 3 octets.
+decdbl    lda u0aa0,x         ; Charge la valeur actuelle de l'octet.
+          adc u0aa0,x         ; L'ajoute à lui-même, plus le bit de retenue.
+          sta u0aa0,x         ; Le range à nouveau au même endroit.
+          dex                 ; Décrémente le compteur d'octets.
+          bpl decdbl          ; Boucle jusqu'à ce que tous les octets soient 
+                              ;  traités.
+          dey                 ; Décrémente le compteur de bits.
+          bne decml2          ; Boucle jusqu'à ce que tous les bits soient 
+                              ;  traités.
+          plp                 ; Restaure l'état du processeur.
+          rts
 
 ;-----------------------------------------------------------------------------
 ; load the input value and fall through to print it

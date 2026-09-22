@@ -1,3 +1,5 @@
+vidstart  = $1000
+bakmem    = $0400
 scrtxt    = $1000
 scrcol    = $9400
 scrlen    = $0200

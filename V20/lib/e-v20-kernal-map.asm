@@ -94,8 +94,8 @@ bcyan     =    $9f  ;159
 ;--------------------------------------
 tleft     = 176;Coin suppérieur gauche.
 tright    = 174;Coin suppérieur droit.
-bleft     = 173;Coin inférieur gauche.
-bright    = 189;Coin inférieur droit.
+leftb     = 173;Coin inférieur gauche.
+rightb    = 189;Coin inférieur droit.
 hleft     = 171;Extr. gauche médianne.
 hright    = 179;Extr. droite médianne.
 vline     = 221;Ligne verticale.

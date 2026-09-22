@@ -30,9 +30,9 @@ hstitle        .byte 18,tleft,31
                .text "  Super-Mon Help  "
                .byte 144,tright,146,0
 
-hsfoot         .byte 18,bleft,146,28
+hsfoot         .byte 18,leftb,146,28
                .text "  Press any key!  "
-               .byte 144,18,bright,146,0
+               .byte 144,18,rightb,146,0
 
 keyout         .null $0d,28,"--press any key!--"
 
@@ -96,16 +96,16 @@ hs2vect   .word     hsvide,hs2a,hs2b,hsvide
 hs3a           .null "[s]ave memory"
 hs3b           .text "s"
                .byte 34
-               .text "fnam"
+               .text "fnm"
                .byte 34
-               .null "d,BBBB,EEEE"
+               .null ",d,BBBB,EEEE"
 
 hs3c           .null "[l]oad into memory"
 hs3d           .text "l"
                .byte 34
-               .text "fnam"
+               .text "fnm"
                .byte 34
-               .null "d,BBBB"
+               .null "md,BBBB"
 
 hs3e           .null "[v]erify file/mem"
 hs3f           .text "v"

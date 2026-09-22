@@ -1,0 +1,97 @@
+SOURCENAME=animation
+BASEDIR=/Users/Locals/CBM/00-usbkey32go
+DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
+#DEPSLOCALES=strings_fr.asm  strings_en.asm
+# -----------------------------------------------------------------------------
+# Dépendances des libraries pour valider tous les changements.
+# -----------------------------------------------------------------------------
+LIBDEPS=$(shell find $(BASEDIR)/dir-00-64tass-src/V20/lib -maxdepth 1 -type f -iname "*.asm")
+DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
+VICEDIR=/Users/Locals/temp/Vice
+SD2IEC=/media/daniel/SD2IECV20
+V20=/usr/bin/xvic
+X64=/usr/bin/x64
+X64SC=/usr/bin/x64sc
+C1541=/usr/bin/c1541
+TASS=/usr/bin/64tass
+
+TASSLIB=$(BASEDIR)/dir-00-64tass-src/V20/lib
+EXPORTDIR=/media/daniel/DATASSET/d-remote
+TMPSEP06=-9 $(BASEDIR)/dir-tmp-dskimg/turbo-macro-pro-sep06.d64
+V20UTILDIR=$(BASEDIR)/dir-00-64tass-src/V20/utils
+V20MKASM=-9 ${V20UTILDIR}/V20MikroAsmbler.d64
+V20MON=-9 ${V20UTILDIR}/vicmon.d64
+V20MON6000=-9 ${V20UTILDIR}/vicmon-6000.d64
+PRGBIN=$(BASEDIR)/dir-00-64tass-src/V20/prgbin
+VICE=$(V20)
+DISK8DIR=
+PRGDIR=$(BASEDIR)/dir-00-64tass-bin
+# FTP SERVER CONFIG
+FTPSVR=10.0.1.10
+FTPPRGARG=cd /Usb0/dir-00-64tass-bin/prg; put $(SOURCENAME).prg; bye
+FTPD64ARG=cd /Usb0/dir-00-64tass-bin/d64; put $(SOURCENAME).d64; bye
+FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
+
+
+all: $(SOURCENAME).d64
+	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:$(SOURCENAME) 
+#	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:fb
+
+$(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
+	$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
+	-write ${V20UTILDIR}/fb fb \
+	-write ${V20UTILDIR}/fb20 fb20 \
+	-write ${V20UTILDIR}/fb20-3k fb20-3k \
+	-write ${V20UTILDIR}/fb20-8k fb20-8k \
+	-write ${V20UTILDIR}/fb20-mc fb20-mc \
+	-write ${V20UTILDIR}/vic20-wedge.prg vic20-wedge \
+	-write $(SOURCENAME).prg $(SOURCENAME) \
+	-write ${V20UTILDIR}/showkeys.prg showkeys
+	$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
+	-write ${V20UTILDIR}/fb fb \
+	-write ${V20UTILDIR}/fb20 fb20 \
+	-write ${V20UTILDIR}/fb20-3k fb20-3k \
+	-write ${V20UTILDIR}/fb20-8k fb20-8k \
+	-write ${V20UTILDIR}/fb20-mc fb20-mc \
+	-write ${V20UTILDIR}/vic20-wedge.prg vic20-wedge \
+	-write $(SOURCENAME).prg $(SOURCENAME) \
+	-write ${V20UTILDIR}/showkeys.prg showkeys
+
+	cp -f  ${SOURCENAME}.d81 ${PRGBIN}/d81
+	cp -f  ${SOURCENAME}.d64 ${PRGBIN}/d64
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.d81 ${EXPORTDIR}/d81;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.d64 ${EXPORTDIR}/d64;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt;fi
+	cp -f  ${SOURCENAME}.d64 ${VICEDIR}
+	cp -f  ${SOURCENAME}.d81 ${VICEDIR}
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.prg ${SD2IEC}/;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.prg ${SD2IEC}/d-remote/prg;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.asm ${SD2IEC}/d-remote/asm;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.txt ${SD2IEC}/d-remote/txt;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d-remote/d64;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.d81 ${SD2IEC}/d-remote/d81;fi
+
+$(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
+	$(TASS) -C -m -a -I $(TASSLIB) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
+	cp -f  ${SOURCENAME}.prg ${VICEDIR}
+	cp -f  ${SOURCENAME}.txt ${VICEDIR}
+	cp -f  ${SOURCENAME}.prg ${PRGDIR}/prg
+	cp -f  ${SOURCENAME}.txt ${PRGDIR}/txt
+	cp -f  ${SOURCENAME}.asm ${PRGBIN}/asm
+	cp -f  ${SOURCENAME}.prg ${PRGBIN}/prg
+	cp -f  ${SOURCENAME}.txt ${PRGBIN}/txt
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.d81 ${EXPORTDIR}/d81;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.d64 ${EXPORTDIR}/d64;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg;fi
+	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.prg ${SD2IEC}/d-remote/prg;fi
+	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.txt ${SD2IEC}/d-remote/txt;fi
+
+clean:
+	rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 
+	rm ${PRGDIR}/prg/$(SOURCENAME).prg
+	rm ${PRGDIR}/txt/$(SOURCENAME).txt
+	rm ${PRGDIR}/d64/$(SOURCENAME).d64

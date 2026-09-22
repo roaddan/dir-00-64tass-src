@@ -30,9 +30,9 @@ hstitle        .byte 18,tleft,31
                .text "  Aide Super-Mon  "
                .byte 144,tright,146,0
 
-hsfoot         .byte 18,bleft,146,28
+hsfoot         .byte 18,leftb,146,28
                .text " Appuyez une clef "
-               .byte 144,18,bright,146,0
+               .byte 144,18,rightb,146,0
 
 keyout         .null $0d,28,"--appuyez une clef!--"
 
@@ -96,16 +96,16 @@ hs2vect   .word     hsvide,hs2a,hs2b,hsvide
 hs3a           .null "[s]auve fichier"
 hs3b           .text "s"
                .byte 34
-               .text "fnom"
+               .text "fnm"
                .byte 34
-               .null "d,BBBB,EEEE"
+               .null ",d,BBBB,EEEE"
 
 hs3c           .null "[l]lire fichier"
 hs3d           .text "l"
                .byte 34
-               .text "fnom"
+               .text "fnm"
                .byte 34
-               .null "d,BBBB"
+               .null ",d,BBBB"
 
 hs3e           .null "[v]erifier fichier"
 hs3f           .text "v"
