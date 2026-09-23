@@ -9,6 +9,7 @@ LIBDEPS=$(shell find $(BASEDIR)/dir-00-64tass-src/V20/lib -maxdepth 1 -type f -i
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 VICEDIR=/Users/Locals/temp/Vice
 SD2IEC=/media/daniel/SD2IECV20
+PI1541=/media/daniel/PI1541
 V20=/usr/bin/xvic
 X64=/usr/bin/x64
 X64SC=/usr/bin/x64sc
@@ -76,6 +77,12 @@ $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.txt ${SD2IEC}/d-remote/txt;fi
 	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.d64 ${SD2IEC}/d-remote/d64;fi
 	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.d81 ${SD2IEC}/d-remote/d81;fi
+	if [ -d "${PI1541}" ]; then cp -f  ${SOURCENAME}.prg ${PI1541}/;fi
+	if [ -d "${PI1541}" ]; then cp -f  ${SOURCENAME}.prg ${PI1541}/d-remote/vic20/prg;fi
+	if [ -d "${PI1541}" ]; then cp -f  ${SOURCENAME}.asm ${PI1541}/d-remote/vic20/asm;fi
+	if [ -d "${PI1541}" ]; then cp -f  ${SOURCENAME}.txt ${PI1541}/d-remote/vic20/txt;fi
+	if [ -d "${PI1541}" ]; then cp -f  ${SOURCENAME}.d64 ${PI1541}/d-remote/vic20/d64;fi
+	if [ -d "${PI1541}" ]; then cp -f  ${SOURCENAME}.d81 ${PI1541}/d-remote/vic20/d81;fi
 
 $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 	$(TASS) -C -m -a -I $(TASSLIB) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
