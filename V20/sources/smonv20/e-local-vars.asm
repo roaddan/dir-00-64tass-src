@@ -29,11 +29,11 @@ digcnt    .fill     1    ; nombre de chiffres
 indig     .fill     1    ; valeur numérique d'un seul chiffre
 numbit    .fill     1    ; base numérique de l'entrée
 stash     .fill     2    ; stockage temporaire de 2 octets
-u0aa0     .fill     10   ; debut dutampon de travail
-u0aae     =*             ; fin du tampon de travail
 stage     .fill     30   ; tampon de transit pour le nom de fichier, la 
                          ; recherche, etc.
 estage    =*             ; fin du tampon de transit
+u0aa0     .fill     10   ; debut dutampon de travail
+u0aae     =*             ; fin du tampon de travail
 ;        *= $0200        ; stocker davantage de variables dans le tampon de 
 
                          ; l'éditeur de ligne de base

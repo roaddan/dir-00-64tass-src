@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/V20/lib -i -L smonv20.txt -o smonv20.prg smonv20.asm
-; Tue Sep 22 20:57:22 2026
+; Wed Sep 23 08:15:14 2026
 
 ;Offset	;Hex		;Source
 
@@ -324,7 +324,7 @@
 .a280	20 8a a7	          jsr  getchr         ; Si oui, saisir l'entrée sous forme de chaine.
 .a283	c9 00		          cmp  #0
 .a285	f0 49		          beq  herror         ; Erreur si l'entrée est vide.
-.a287	99 20 04	hpar      sta  stage,y        ; Sauvegarder caractere dans la zone de stockage
+.a287	99 16 04	hpar      sta  stage,y        ; Sauvegarder caractere dans la zone de stockage
 .a28a	c8		          iny
 .a28b	20 8a a7	          jsr  getchr         ; Obtenir un autre caractère
 .a28e	f0 18		          beq  htgo           ; Si la valeur est nulle, commencez la recherche.
@@ -333,7 +333,7 @@
 .a294	f0 12		          beq  htgo           ; Si oui, commencez à chercher
 .a296	20 68 a6	nostrh    jsr  rdpar          ; Lire les octets hexadécimaux si pas une chaîne.
 .a299	a5 c1		hlp       lda  tmp0           ; Enregistrer dernier octet dans zone de stockage
-.a29b	99 20 04	          sta  stage,y
+.a29b	99 16 04	          sta  stage,y
 .a29e	c8		          iny                 ; Obtenir un autre octet hexadécimal
 .a29f	20 6b a6	          jsr  getpar
 .a2a2	b0 04		          bcs  htgo           ; S'il n'y en a pas, commencez la recherche
@@ -343,7 +343,7 @@
 .a2ab	20 49 a7	          jsr  crlf           ; Nouvelle ligne
 .a2ae	a0 00		hscan     ldy  #0
 .a2b0	b1 c3		hlp3      lda  (tmp2),y       ; Récupérer le premier octet de la zone de stock.
-.a2b2	d9 20 04	          cmp  stage,y        ; Comparez-le au premier octet.
+.a2b2	d9 16 04	          cmp  stage,y        ; Comparez-le au premier octet.
 .a2b5	d0 09		          bne  hnoft          ; S'ilsne correspondent pas, alors rien trouvé.
 .a2b7	c8		          iny                 ; Si oui, vérifiez l'octet suivant
 .a2b8	cc 69 04	          cpy  savy           ; Est-ce la fin de la zone de stockage
@@ -364,7 +364,7 @@
 .a2dc	84 90		          sty  satus          ; Effacer le statut
 .a2de	a9 04		          lda  #>stage        ; Pointer de nom de fichier sur la mémoire tampon
 .a2e0	85 bc		          sta  fnadr+1
-.a2e2	a9 20		          lda  #<stage
+.a2e2	a9 16		          lda  #<stage
 .a2e4	85 bb		          sta  fnadr
 .a2e6	20 8a a7	l1        jsr  getchr         ; Obtenir un caractere.
 .a2e9	f0 59		          beq  lshort         ; Aucun nom de fichier fourni, essayez de charger
@@ -445,7 +445,7 @@
 .a396	b0 37		assem     bcs  aerror         ; Erreur si aucune adresse n'est fournie
 .a398	20 a4 a7	          jsr  copy12         ; Copier l'adresse dans tmp2
 .a39b	a2 00		aget1     ldx  #0
-.a39d	8e 17 04	          stx  u0aa0+1        ; Octet d'effacement dans lequel le mnémonique
+.a39d	8e 35 04	          stx  u0aa0+1        ; Octet d'effacement dans lequel le mnémonique
 .a3a0	8e 11 04	          stx  digcnt         ; Effacer le compte de caractere
 .a3a3	20 8a a7	aget2     jsr  getchr         ; Obtenir un caractere
 .a3a6	d0 04		          bne  almor          ; Poursuivre si le caractère n'est pas nul
@@ -464,8 +464,8 @@
 .a3bf	e9 3f		          sbc  #$3f           ; Soustraire $3f du code ASCII, donc a-z=2 à 27
 .a3c1	a0 05		          ldy  #$05           ; Les lettres tiennent désormais sur 5 bits ;
 .a3c3	4a		ashift    lsr  a              ; ... décalez-les dans les deux premiers octets
-.a3c4	6e 17 04	          ror  u0aa0+1        ; Récupérer LSB de l'accumulateur dans l'octet
-.a3c7	6e 16 04	          ror  u0aa0          ; Récupérer LSB de l'octet de droite dans
+.a3c4	6e 35 04	          ror  u0aa0+1        ; Récupérer LSB de l'accumulateur dans l'octet
+.a3c7	6e 34 04	          ror  u0aa0          ; Récupérer LSB de l'octet de droite dans
 .a3ca	88		          dey                 ; Decompter les bits.
 .a3cb	d0 f6		          bne  ashift         ; Continuer la boucle jusqu'à atteindre zéro
 .a3cd	f0 e9		          beq  asqeez         ; Branche inconditionnelle pour gérer le
@@ -477,7 +477,7 @@
 .a3dc	f0 25		          beq  aform0         ; Nous n'avons pas trouvé d'adresse, recherchez
 .a3de	b0 ef		          bcs  aerror         ; Le CARRY indique une erreur
 .a3e0	a9 24		          lda  #"$"
-.a3e2	9d 16 04	          sta  u0aa0,x        ; Préfixez les adresses avec $
+.a3e2	9d 34 04	          sta  u0aa0,x        ; Préfixez les adresses avec $
 .a3e5	e8		          inx                 ; Prochaine position dans le tampon
 .a3e6	a0 04		          ldy  #4             ; Les adresses non-zero page comportent 4
 .a3e8	ad 13 04	          lda  numbit         ; Vérifier la base numérique dans laquelle
@@ -489,7 +489,7 @@
 .a3f6	d0 02		          bne  afill0         ; Un octet MSB non nul signifie que nous ne
 .a3f8	a0 02		          ldy  #2             ; Si elle se trouve sur la page zéro, l'adresse
 .a3fa	a9 30		afill0    lda  #$30           ; Utilisez 0 comme espace réservé pour chaque
-.a3fc	9d 16 04	afil0l    sta  u0aa0,x        ; Insérer un espace réservé dans le tampon
+.a3fc	9d 34 04	afil0l    sta  u0aa0,x        ; Insérer un espace réservé dans le tampon
 .a3ff	e8		          inx                 ; Passer à l'octet suivant dans le tampon
 .a400	88		          dey                 ; Décrémenter le nombre de chiffres restants
 .a401	d0 f9		          bne  afil0l         ; Boucler jusqu'à ce que tous les chiffres aient
@@ -498,7 +498,7 @@
 .a409	f0 0e		          beq  aescan         ; S'il n'y en a pas, numérisation est terminée
 .a40b	c9 20		          cmp  #$20           ; Sauter les espaces
 .a40d	f0 c5		          beq  ascan
-.a40f	9d 16 04	          sta  u0aa0,x        ; Stocker le caractère dans tampon d'assemblage
+.a40f	9d 34 04	          sta  u0aa0,x        ; Stocker le caractère dans tampon d'assemblage
 .a412	e8		          inx                 ; Passer à l'octet suivant dans le tampon
 .a413	e0 0a		          cpx  #u0aae-u0aa0   ; Le tampon d'instructions est-il plein?
 .a415	90 bd		          bcc  ascan          ; Sinon, continuez à scanner
@@ -605,7 +605,7 @@
 .a504	20 07 a5	chek2b  jsr chekop          ; check two bytes against value in accumulator
 .a507	8e 0e 04	chekop  stx savx            ; stash x
 .a50a	ae 6a 04	        ldx u9f             ; get current index into work buffer
-.a50d	dd 16 04	        cmp u0aa0,x         ; check whether this opcode matches the buffer
+.a50d	dd 34 04	        cmp u0aa0,x         ; check whether this opcode matches the buffer
 .a510	f0 0a		        beq opok            ;   matching so far, check the next criteria
 .a512	68		        pla                 ; didn't match, so throw away return address
 .a513	68		        pla                 ;   on the stack because we're starting over
@@ -1045,7 +1045,7 @@
 .a895	20 a4 a7	cvtdec    jsr copy12          ; Copie la valeur de tmp0 vers tmp2.
 .a898	a9 00		          lda #0
 .a89a	a2 02		          ldx #2              ; Effacer 3 octets dans le tampon de travail
-.a89c	9d 16 04	decml1    sta u0aa0,x
+.a89c	9d 34 04	decml1    sta u0aa0,x
 .a89f	ca		          dex
 .a8a0	10 fa		          bpl decml1
 .a8a2	a0 10		          ldy #16             ; 16 bits en entrée
@@ -1055,9 +1055,9 @@
 .a8a7	06 c3		decml2    asl tmp2            ; Rotation des octets de l'entrée, octet de
 .a8a9	26 c4		          rol tmp2+1          ; ..poids fort et bit de retenue.
 .a8ab	a2 02		          ldx #2              ; Traite 3 octets.
-.a8ad	bd 16 04	decdbl    lda u0aa0,x         ; Charge la valeur actuelle de l'octet.
-.a8b0	7d 16 04	          adc u0aa0,x         ; L'ajoute à lui-même, plus le bit de retenue.
-.a8b3	9d 16 04	          sta u0aa0,x         ; Le range sur lui même.
+.a8ad	bd 34 04	decdbl    lda u0aa0,x         ; Charge la valeur actuelle de l'octet.
+.a8b0	7d 34 04	          adc u0aa0,x         ; L'ajoute à lui-même, plus le bit de retenue.
+.a8b3	9d 34 04	          sta u0aa0,x         ; Le range sur lui même.
 .a8b6	ca		          dex                 ; Décrémente le compteur d'octets.
 .a8b7	10 f4		          bpl decdbl          ; Boucle jusqu'à ce que tous les octets soient
 .a8b9	88		          dey                 ; Décrémente le compteur de bits.
@@ -1066,19 +1066,19 @@
 .a8bd	60		          rts
 .a8be	48		prinum  pha                 ; save accumulator
 .a8bf	a5 c1		        lda tmp0            ; copy input low byte to work buffer
-.a8c1	8d 18 04	        sta u0aa0+2
+.a8c1	8d 36 04	        sta u0aa0+2
 .a8c4	a5 c2		        lda tmp0+1          ; copy input high byte to work buffer
-.a8c6	8d 17 04	        sta u0aa0+1
+.a8c6	8d 35 04	        sta u0aa0+1
 .a8c9	a9 00		        lda #0              ; clear overflow byte in work buffer
-.a8cb	8d 16 04	        sta u0aa0
+.a8cb	8d 34 04	        sta u0aa0
 .a8ce	68		        pla                 ; restore accumulator
 .a8cf	8d 11 04	nmprnt  sta digcnt          ; number of digits in accumulator
 .a8d2	8c 13 04	        sty numbit          ; bits per digit passed in y register
 .a8d5	ac 13 04	digout  ldy numbit          ; get bits to process
 .a8d8	a9 00		        lda #0              ; clear accumulator
-.a8da	0e 18 04	rolbit  asl u0aa0+2         ; shift bits out of low byte
-.a8dd	2e 17 04	        rol u0aa0+1         ; ..... into high byte
-.a8e0	2e 16 04	        rol u0aa0           ; ..... into overflow byte
+.a8da	0e 36 04	rolbit  asl u0aa0+2         ; shift bits out of low byte
+.a8dd	2e 35 04	        rol u0aa0+1         ; ..... into high byte
+.a8e0	2e 34 04	        rol u0aa0           ; ..... into overflow byte
 .a8e3	2a		        rol a               ; ..... into accumulator
 .a8e4	88		        dey                 ; decrement bit counter
 .a8e5	10 f3		        bpl rolbit          ; loop until all bits processed
@@ -3614,10 +3614,10 @@
 >0412			indig     .fill     1    ; valeur numérique d'un seul chiffre
 >0413			numbit    .fill     1    ; base numérique de l'entrée
 >0414			stash     .fill     2    ; stockage temporaire de 2 octets
->0416			u0aa0     .fill     10   ; debut dutampon de travail
-=$0420			u0aae     =*             ; fin du tampon de travail
->0420			stage     .fill     30   ; tampon de transit pour le nom de fichier, la
-=$043e			estage    =*             ; fin du tampon de transit
+>0416			stage     .fill     30   ; tampon de transit pour le nom de fichier, la
+=$0434			estage    =*             ; fin du tampon de transit
+>0434			u0aa0     .fill     10   ; debut dutampon de travail
+=$043e			u0aae     =*             ; fin du tampon de travail
 >043e			inbuff    .fill     40   ; Tampon d'entrée de 40 caractères
 =$0466			endin     =*             ; fin du tampon d'entrée
 >0466			store     .fill     2    ; stockage temporaire de 2 octets
