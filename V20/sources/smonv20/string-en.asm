@@ -152,10 +152,10 @@ gs1c           .byte srouge
 gs1d           .byte srouge
                .text " 1936-2007 R.I.P."
                .byte snoir,0
-gs1e           .null "Vic20 port by:"
+gs1e           .null " Vic20 port by:"
 gs1g           .null " Daniel Lafrance"
 ;gs1h           .null "github.com/roaddan"
-gs1h           .null format("  Look at: $%X",auteur)
+gs1h           .null format("  Look at:$%X",auteur)
 gs1i           .null "Uses banks 0 & 5."
 gs1j           .null "Use VICE emulator"
 gs1k           .null "or cartridge like"

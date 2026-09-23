@@ -1163,10 +1163,12 @@ nochar  php
 ;-----------------------------------------------------------------------------
 ; copy tmp0 to tmp2
 ;-----------------------------------------------------------------------------
-copy12  lda tmp0            ; low byte
+copy12  pha
+        lda tmp0            ; low byte
         sta tmp2
         lda tmp0+1          ; high byte
         sta tmp2+1
+        pla
         rts
 
 ;-----------------------------------------------------------------------------
@@ -1312,27 +1314,28 @@ convrt    jsr rdpar           ; lire un paramètre
 ;-----------------------------------------------------------------------------
 cvtdec    jsr copy12          ; Copie la valeur de tmp0 vers tmp2.
           lda #0
-          ldx #2              ; Effacer 3 octets dans le tampon de travail
+          ldx #3              ; Effacer 3 octets dans le tampon de travail
 decml1    sta u0aa0,x
           dex
           bpl decml1
           ldy #16             ; 16 bits en entrée
           php                 ; Sauvegarder le registre d'état.
           sei                 ; S'Assure qu'aucune interruption ne survienne 
-                              ;  lorsque 
-          sed                 ;  le mode BCD est activé.
+                              ; ..lorsque 
+decml3    sed                 ; ..le mode BCD est activé.
 decml2    asl tmp2            ; Rotation des octets de l'entrée, octet de 
-                              ;  poids faible vers octet de 
-          rol tmp2+1          ;  poids fort et bit de retenue.
+                              ; ..poids faible vers octet de 
+          rol tmp2+1          ; ..poids fort et bit de retenue.
           ldx #2              ; Traite 3 octets.
 decdbl    lda u0aa0,x         ; Charge la valeur actuelle de l'octet.
           adc u0aa0,x         ; L'ajoute à lui-même, plus le bit de retenue.
-          sta u0aa0,x         ; Le range à nouveau au même endroit.
+          sta u0aa0,x         ; Le range sur lui même.
+          jsr nmprnt
           dex                 ; Décrémente le compteur d'octets.
           bpl decdbl          ; Boucle jusqu'à ce que tous les octets soient 
                               ;  traités.
           dey                 ; Décrémente le compteur de bits.
-          bne decml2          ; Boucle jusqu'à ce que tous les bits soient 
+          bne decml3          ; Boucle jusqu'à ce que tous les bits soient 
                               ;  traités.
           plp                 ; Restaure l'état du processeur.
           rts
