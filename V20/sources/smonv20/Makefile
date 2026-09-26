@@ -36,7 +36,7 @@ FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
 
 all: $(SOURCENAME).d64
 #	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:$(SOURCENAME) 
-#	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:fb
+	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:fb
 
 $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 	$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \

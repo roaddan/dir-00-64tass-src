@@ -451,6 +451,34 @@ norep   sta reponse
         plp
         rts
         .bend
+;---------------------------------------
+
+;--------------------------------------
+; Convertie un nombre 16 bits en bcd sur
+; 3 octets.
+; nbrbin = l'adresse du nombre 2 octets
+; nbrdec = le monbre en bcd    3 octets
+; 
+;--------------------------------------
+;cvt16bit2dec  
+;     .block
+;     jsr pushall    ; Remet le 
+;     lda #$00       ;  recepteur
+;     ldy #$02       ;  decimal
+;     sta nbrdec,y   ;  a la 
+;     dey            ;  valeur
+;     bne nextdec    ;  0.
+;     clc
+;     lda nbrbin+1
+;     adc nbrbin
+;     beq zero 
+;     lda 
+;     sec
+;     sbc #10
+;     jsr popall
+;     rts
+;     buff .fill 2
+;     .bend
 ;--------------------------------------
 
 ;---------------------------------------

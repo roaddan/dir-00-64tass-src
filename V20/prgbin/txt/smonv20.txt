@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/V20/lib -i -L smonv20.txt -o smonv20.prg smonv20.asm
-; Wed Sep 23 08:15:14 2026
+; Wed Sep 23 16:24:40 2026
 
 ;Offset	;Hex		;Source
 
@@ -31,7 +31,7 @@
 .a003	a9 93		          lda  #147
 .a005	20 d2 ff	          jsr  chrout
 .a008	a9 ff		          lda  #$ff
-.a00a	8d 00 04	          sta  bit8mask
+.a00a	8d 00 0f	          sta  bit8mask
 .a00d	a0 4e		          ldy  #msg9-msgbas    ; Affiche un message pour acceder l'aide
 .a00f	20 0c aa	          jsr  sndmsg
 .a012	ad 5f ac	          lda linkad          ; Définir le vecteur brk.
@@ -68,21 +68,21 @@
 .a04e	68		            pla
 .a04f	28		            plp
 .a050	a2 00		          ldx  #0             ; Pointe au début du tampon d'entrée.
-.a052	8e 68 04	          stx  chrpnt
+.a052	8e 68 0f	          stx  chrpnt
 .a055	20 0e f2	smove     jsr  chrin          ; Appel chrin du noyau pour saisir un caractère
 .a058	c9 21		          cmp  #33
 .a05a	d0 07		          bne  treatit
 .a05c	20 87 aa	          jsr  mycmd
 .a05f	c9 00		          cmp  #$00
 .a061	f0 db		          beq  strt
-.a063	9d 3e 04	treatit   sta  inbuff,x       ; ... stocker dans le tampon d'entrée.
+.a063	9d 3e 0f	treatit   sta  inbuff,x       ; ... stocker dans le tampon d'entrée.
 .a066	e8		          inx
 .a067	e0 28		          cpx  #endin-inbuff  ; Erreur si la mémoire tampon est pleine.
 .a069	b0 1c		          bcs  error
 .a06b	c9 0d		          cmp  #$0d           ; Continue à lire jusqu'au CR.
 .a06d	d0 e6		          bne  smove
 .a06f	a9 00		          lda  #0             ; Tampon d'entrée terminé par un caractère null.
-.a071	9d 3d 04	          sta  inbuff-1,x     ; ... (remplace le cr)
+.a071	9d 3d 0f	          sta  inbuff-1,x     ; ... (remplace le cr)
 .a074	20 8a a7	st1       jsr  getchr         ; Récupére un caractère du tampon.
 .a077	f0 c5		          beq  strt           ; Recommence si le tampon est vide.
 .a079	c9 20		          cmp  #$20           ; Sauter les espaces de début.
@@ -107,7 +107,7 @@
 .a09e	bd 39 ac	          lda  kaddr,x
 .a0a1	48		          pha
 .a0a2	4c 6b a6	          jmp  getpar         ; Obtenir le premier paramètre de la commande
-.a0a5	8d 69 04	lsv       sta  savy           ; Gère le
+.a0a5	8d 69 0f	lsv       sta  savy           ; Gère le
 .a0a8	4c d3 a2	          jmp  ld
 .a0ab	4c 31 a8	cnvlnk    jmp  convrt         ; Gère la conversion de base.
 .a0ae			exit
@@ -250,7 +250,7 @@
 .a1d8	20 ed b4	        jsr popregs
 .a1db	a0 00		          ldy  #0             ; Retour au premier octet de la ligne.
 .a1dd	b1 c3		dchar     lda  (tmp2),y       ; Charger octet à l'adresse de début + y.
-.a1df	2d 00 04	          and  bit8mask
+.a1df	2d 00 0f	          and  bit8mask
 .a1e2	91 fb		dchrok    sta  (zp1),y        ; *DL* - On affiche le caractere.
 .a1e4	98		          tya                 ; *DL* - . et une couleur
 .a1e5	0a		          asl                 ; *DL* - .  sequencielle
@@ -262,46 +262,46 @@
 .a1ee	a9 00		compar    lda  #0             ; bit 7 efface les signaux comparer
 >a1f0	2c		          .byte $2c           ; L'opcode de bit absolu consomme le mot suivant
 .a1f1	a9 80		trans     lda  #$80           ; Bit 7 place le transfert de signaux
-.a1f3	8d 69 04	          sta  savy           ; Enregistrer l'indicateur de
+.a1f3	8d 69 0f	          sta  savy           ; Enregistrer l'indicateur de
 .a1f6	a9 00		          lda  #0             ; Suppose que nous comptons à rebours (b7 clair)
-.a1f8	8d 10 04	          sta  upflg          ; Enregistrer le drapeau de direction
+.a1f8	8d 10 0f	          sta  upflg          ; Enregistrer le drapeau de direction
 .a1fb	20 0a a8	          jsr  getdif         ; Obtien deux adresses et calcule la différence
 .a1fe	b0 05		          bcs  terror         ; Bit carry a un indique une erreur
 .a200	20 6b a6	          jsr  getpar         ; obtien l'adresse de destination dans tmp0
 .a203	90 03		          bcc  tokay          ; Bit carry a un indique une erreur
 .a205	4c 87 a0	terror    jmp  error          ; Gère les erreurs
-.a208	2c 69 04	tokay     bit  savy           ; Transférer ou comparer ?
+.a208	2c 69 0f	tokay     bit  savy           ; Transférer ou comparer ?
 .a20b	10 27		          bpl  compar1        ; Bit 7 à 0 indique comparer
 .a20d	a5 c3		          lda  tmp2           ; S'il s'agit d'un transfert, nous devons
 .a20f	c5 c1		          cmp  tmp0           ; ... prendre des mesures pour éviter d'écraser
 .a211	a5 c4		          lda  tmp2+1         ; ... les octets sources avant qu'ils n'aient été
 .a213	e5 c2		          sbc  tmp0+1         ; Comparer la source (tmp2) à la destination
 .a215	b0 1d		          bcs  compar1        ; ... (tmp0) et incrémenter si la source est
-.a217	ad 66 04	          lda  store          ; Sinon, commencez par la fin et décomptez en
+.a217	ad 66 0f	          lda  store          ; Sinon, commencez par la fin et décomptez en
 .a21a	65 c1		          adc  tmp0           ; ... ajoutant la longueur (stockée) à la
 .a21c	85 c1		          sta  tmp0           ; ... destination (tmp0) pour calculer la fin de
-.a21e	ad 67 04	          lda  store+1
+.a21e	ad 67 0f	          lda  store+1
 .a221	65 c2		          adc  tmp0+1
 .a223	85 c2		          sta  tmp0+1
 .a225	a2 01		          ldx  #1             ; Modifier le pointeur source du début à la fin
-.a227	bd 14 04	tdown     lda  stash,x        ; tmp2 = fin de la source (réserve).
+.a227	bd 14 0f	tdown     lda  stash,x        ; tmp2 = fin de la source (réserve).
 .a22a	95 c3		          sta  tmp2,x
 .a22c	ca		          dex
 .a22d	10 f8		          bpl  tdown
 .a22f	a9 80		          lda  #$80           ; Le bit haut activé dans upflg signifie un
-.a231	8d 10 04	          sta  upflg
+.a231	8d 10 0f	          sta  upflg
 .a234	20 49 a7	compar1   jsr  crlf           ; Nouvelle ligne.
 .a237	a0 00		          ldy  #0             ; Aucun décalage par rapport au pointeur.
 .a239	20 70 f7	tcloop    jsr  stop           ; Vérifier la touche [RUN/STOP].
 .a23c	f0 31		          beq  texit          ; Quitte si appuiée.
 .a23e	b1 c3		          lda  (tmp2),y       ; Charge un octet depuis la source.
-.a240	2c 69 04	          bit  savy           ; Transférer ou comparer?
+.a240	2c 69 0f	          bit  savy           ; Transférer ou comparer?
 .a243	10 02		          bpl  compar2        ; Ignorer la sauvegarde si comparaison.
 .a245	91 c1		          sta  (tmp0),y       ; Sinon, stocker dans la destination.
 .a247	d1 c1		compar2   cmp  (tmp0),y       ; Comparer à la destination.
 .a249	f0 03		          beq  tmvad          ; Ne pas afficher l'adresse si égale
 .a24b	20 34 a7	          jsr  showad         ; Afficher l'adresse
-.a24e	2c 10 04	tmvad     bit  upflg          ; Compter en avant ou en arrière ?
+.a24e	2c 10 0f	tmvad     bit  upflg          ; Compter en avant ou en arrière ?
 .a251	30 0b		          bmi  tdecad         ; Le bit 7 activé signifie que nous décomptons.
 .a253	e6 c1		          inc  tmp0           ; Incrémenter l'octet LSB de la destination.
 .a255	d0 10		          bne  tincok
@@ -324,7 +324,7 @@
 .a280	20 8a a7	          jsr  getchr         ; Si oui, saisir l'entrée sous forme de chaine.
 .a283	c9 00		          cmp  #0
 .a285	f0 49		          beq  herror         ; Erreur si l'entrée est vide.
-.a287	99 16 04	hpar      sta  stage,y        ; Sauvegarder caractere dans la zone de stockage
+.a287	99 16 0f	hpar      sta  stage,y        ; Sauvegarder caractere dans la zone de stockage
 .a28a	c8		          iny
 .a28b	20 8a a7	          jsr  getchr         ; Obtenir un autre caractère
 .a28e	f0 18		          beq  htgo           ; Si la valeur est nulle, commencez la recherche.
@@ -333,20 +333,20 @@
 .a294	f0 12		          beq  htgo           ; Si oui, commencez à chercher
 .a296	20 68 a6	nostrh    jsr  rdpar          ; Lire les octets hexadécimaux si pas une chaîne.
 .a299	a5 c1		hlp       lda  tmp0           ; Enregistrer dernier octet dans zone de stockage
-.a29b	99 16 04	          sta  stage,y
+.a29b	99 16 0f	          sta  stage,y
 .a29e	c8		          iny                 ; Obtenir un autre octet hexadécimal
 .a29f	20 6b a6	          jsr  getpar
 .a2a2	b0 04		          bcs  htgo           ; S'il n'y en a pas, commencez la recherche
 .a2a4	c0 1e		          cpy  #estage-stage  ; Avons-nous rempli la zone de stockage ?
 .a2a6	d0 f1		          bne  hlp            ; Sinon, récupérez un autre octet
-.a2a8	8c 69 04	htgo      sty  savy           ; Sauvegarder la longueur de la zone de stockage
+.a2a8	8c 69 0f	htgo      sty  savy           ; Sauvegarder la longueur de la zone de stockage
 .a2ab	20 49 a7	          jsr  crlf           ; Nouvelle ligne
 .a2ae	a0 00		hscan     ldy  #0
 .a2b0	b1 c3		hlp3      lda  (tmp2),y       ; Récupérer le premier octet de la zone de stock.
-.a2b2	d9 16 04	          cmp  stage,y        ; Comparez-le au premier octet.
+.a2b2	d9 16 0f	          cmp  stage,y        ; Comparez-le au premier octet.
 .a2b5	d0 09		          bne  hnoft          ; S'ilsne correspondent pas, alors rien trouvé.
 .a2b7	c8		          iny                 ; Si oui, vérifiez l'octet suivant
-.a2b8	cc 69 04	          cpy  savy           ; Est-ce la fin de la zone de stockage
+.a2b8	cc 69 0f	          cpy  savy           ; Est-ce la fin de la zone de stockage
 .a2bb	d0 f3		          bne  hlp3           ; Sinon, continuez à comparer les octets
 .a2bd	20 34 a7	          jsr  showad         ; Correspondance trouvée, afficher l'adresse
 .a2c0	20 70 f7	hnoft     jsr  stop           ; Si non, vérifiez la touche [RUN/STOP]
@@ -362,7 +362,7 @@
 .a2d9	88		          dey
 .a2da	84 b7		          sty  curfnlen          ; Commencer par un nom de fichier vide
 .a2dc	84 90		          sty  satus          ; Effacer le statut
-.a2de	a9 04		          lda  #>stage        ; Pointer de nom de fichier sur la mémoire tampon
+.a2de	a9 0f		          lda  #>stage        ; Pointer de nom de fichier sur la mémoire tampon
 .a2e0	85 bc		          sta  fnadr+1
 .a2e2	a9 16		          lda  #<stage
 .a2e4	85 bb		          sta  fnadr
@@ -372,8 +372,8 @@
 .a2ed	f0 f7		          beq  l1
 .a2ef	c9 22		          cmp  #$22           ; Erreur si nom de fichier ne commence pas par
 .a2f1	d0 16		          bne  lerror
-.a2f3	ae 68 04	          ldx  chrpnt         ; Charger le pointeur de caractère courant dans le
-.a2f6	bd 3e 04	l3        lda  inbuff,x       ; Charger le caractère courant du tampon dans
+.a2f3	ae 68 0f	          ldx  chrpnt         ; Charger le pointeur de caractère courant dans le
+.a2f6	bd 3e 0f	l3        lda  inbuff,x       ; Charger le caractère courant du tampon dans
 .a2f9	f0 49		          beq  lshort         ; Aucun nom de fichier fourni, essayez de charger
 .a2fb	e8		          inx                 ; Prochain caractère
 .a2fc	c9 22		          cmp  #$22           ; Est-ce un guillemet ?
@@ -384,7 +384,7 @@
 .a305	c0 1e		          cpy  #estage-stage  ; Vérifier si le tampon est plein
 .a307	90 ed		          bcc  l3             ; Sinon, obtenir un autre personnage
 .a309	4c 87 a0	lerror    jmp  error          ; Si oui, gérer l'erreur
-.a30c	8e 68 04	l8        stx  chrpnt         ; Le pointeur de caractère sur l'index actuel
+.a30c	8e 68 0f	l8        stx  chrpnt         ; Le pointeur de caractère sur l'index actuel
 .a30f	20 8a a7	          jsr  getchr         ; Supprimer le séparateur entre le nom de fichier
 .a312	f0 30		          beq  lshort         ; Pas de séparateur, essayez de charger ou de
 .a314	20 6b a6	          jsr  getpar         ; Obtenir le numéro de périphérique
@@ -399,7 +399,7 @@
 .a32a	20 49 a7	          jsr  crlf           ; Nouvelle ligne
 .a32d	a6 c1		          ldx  tmp0           ; Placer le LSB de l'adresse de fin dans x
 .a32f	a4 c2		          ldy  tmp0+1         ; Placer le MSB de l'adresse de fin dans y
-.a331	ad 69 04	          lda  savy           ; Confirmez que nous effectuons une sauvegarde
+.a331	ad 69 0f	          lda  savy           ; Confirmez que nous effectuons une sauvegarde
 .a334	c9 53		          cmp  #"s"
 .a336	d0 d1		          bne  lerror         ; Sinon, erreur due à trop de paramètres
 .a338	a9 00		          lda  #0
@@ -407,7 +407,7 @@
 .a33c	a9 c3		          lda  #tmp2          ; Placer pointeur de page zéro dans acc
 .a33e	20 75 f6	          jsr  save           ; Appel de la routine de sauvegarde du noyau
 .a341	4c 3e a0	lsvxit    jmp  strt           ; Retour à la boucle principale
-.a344	ad 69 04	lshort    lda  savy           ; Vérifier quelle commande nous avons reçue
+.a344	ad 69 0f	lshort    lda  savy           ; Vérifier quelle commande nous avons reçue
 .a347	c9 56		          cmp  #"v"
 .a349	f0 06		          beq  loadit         ; Vérification, donc ne pas mettre acc à 0.
 .a34b	c9 4c		          cmp  #"l"
@@ -417,7 +417,7 @@
 .a354	a5 90		          lda  satus          ; Obtenir l'état des E/S
 .a356	29 10		          and  #$10           ; Vérifier le bit 5 pour une erreur de somme de
 .a358	f0 e7		          beq  lsvxit         ; Si aucune erreur n'est détectée,
-.a35a	ad 69 04	          lda  savy           ; ?? not sure what these two lines are for...
+.a35a	ad 69 0f	          lda  savy           ; ?? not sure what these two lines are for...
 .a35d	f0 aa		          beq  lerror         ; ?? savy will never be 0, so why check?
 .a35f	a0 40		          ldy  #msg6-msgbas   ; « erreur » si la somme de contrôle differe
 .a361	20 0c aa	          jsr  sndmsg
@@ -445,73 +445,73 @@
 .a396	b0 37		assem     bcs  aerror         ; Erreur si aucune adresse n'est fournie
 .a398	20 a4 a7	          jsr  copy12         ; Copier l'adresse dans tmp2
 .a39b	a2 00		aget1     ldx  #0
-.a39d	8e 35 04	          stx  u0aa0+1        ; Octet d'effacement dans lequel le mnémonique
-.a3a0	8e 11 04	          stx  digcnt         ; Effacer le compte de caractere
+.a39d	8e 35 0f	          stx  u0aa0+1        ; Octet d'effacement dans lequel le mnémonique
+.a3a0	8e 11 0f	          stx  digcnt         ; Effacer le compte de caractere
 .a3a3	20 8a a7	aget2     jsr  getchr         ; Obtenir un caractere
 .a3a6	d0 04		          bne  almor          ; Poursuivre si le caractère n'est pas nul
 .a3a8	e0 00		          cpx  #0             ; C'est nul, avez-nous déjà lu une mneumonique ?
 .a3aa	f0 e7		          beq  fstart         ; Sinon, retourneà la boucle principale
 .a3ac	c9 20		almor     cmp  #$20           ; Sauter les espaces de début
 .a3ae	f0 eb		          beq  aget1
-.a3b0	9d 0b 04	          sta  mnemw,x        ; Placer le caractère dans le tampon mnémonique
+.a3b0	9d 0b 0f	          sta  mnemw,x        ; Placer le caractère dans le tampon mnémonique
 .a3b3	e8		          inx
 .a3b4	e0 03		          cpx  #3             ; Avons-nous déjà lu 3 caracteres ?
 .a3b6	d0 eb		          bne  aget2          ; Sinon, passez au caractère suivant
 .a3b8	ca		asqeez    dex                 ; Passer au caractère précédent
 .a3b9	30 17		          bmi  aoprnd         ; Si terminé avec mnémonique, cherche opérande
-.a3bb	bd 0b 04	          lda  mnemw,x        ; Obtenir le caractere actuel
+.a3bb	bd 0b 0f	          lda  mnemw,x        ; Obtenir le caractere actuel
 .a3be	38		          sec                 ; Condenser mnémonique de 3 lettres en (15 bits)
 .a3bf	e9 3f		          sbc  #$3f           ; Soustraire $3f du code ASCII, donc a-z=2 à 27
 .a3c1	a0 05		          ldy  #$05           ; Les lettres tiennent désormais sur 5 bits ;
 .a3c3	4a		ashift    lsr  a              ; ... décalez-les dans les deux premiers octets
-.a3c4	6e 35 04	          ror  u0aa0+1        ; Récupérer LSB de l'accumulateur dans l'octet
-.a3c7	6e 34 04	          ror  u0aa0          ; Récupérer LSB de l'octet de droite dans
+.a3c4	6e 35 0f	          ror  u0aa0+1        ; Récupérer LSB de l'accumulateur dans l'octet
+.a3c7	6e 34 0f	          ror  u0aa0          ; Récupérer LSB de l'octet de droite dans
 .a3ca	88		          dey                 ; Decompter les bits.
 .a3cb	d0 f6		          bne  ashift         ; Continuer la boucle jusqu'à atteindre zéro
 .a3cd	f0 e9		          beq  asqeez         ; Branche inconditionnelle pour gérer le
 .a3cf	4c 87 a0	aerror    jmp  error          ; Gérer l'erreur
 .a3d2	a2 02		aoprnd    ldx  #2             ; Le mnémonique se trouve dans les deux premiers
-.a3d4	ad 11 04	ascan     lda  digcnt         ; Avons-nous trouvé les chiffres de l'adresse la
+.a3d4	ad 11 0f	ascan     lda  digcnt         ; Avons-nous trouvé les chiffres de l'adresse la
 .a3d7	d0 2d		          bne  aform1         ; Si oui, recherchez les caractères de mode
 .a3d9	20 93 a6	          jsr  rdval          ; Sinon, cherchez une adresse
 .a3dc	f0 25		          beq  aform0         ; Nous n'avons pas trouvé d'adresse, recherchez
 .a3de	b0 ef		          bcs  aerror         ; Le CARRY indique une erreur
 .a3e0	a9 24		          lda  #"$"
-.a3e2	9d 34 04	          sta  u0aa0,x        ; Préfixez les adresses avec $
+.a3e2	9d 34 0f	          sta  u0aa0,x        ; Préfixez les adresses avec $
 .a3e5	e8		          inx                 ; Prochaine position dans le tampon
 .a3e6	a0 04		          ldy  #4             ; Les adresses non-zero page comportent 4
-.a3e8	ad 13 04	          lda  numbit         ; Vérifier la base numérique dans laquelle
+.a3e8	ad 13 0f	          lda  numbit         ; Vérifier la base numérique dans laquelle
 .a3eb	c9 08		          cmp  #8             ; Pour les adresses données en octal ou en
 .a3ed	90 05		          bcc  aaddr          ; ... binaire, utilisez uniquement l'octet de
-.a3ef	cc 11 04	          cpy  digcnt         ; Pour les formats décimal ou hexadécimal,
+.a3ef	cc 11 0f	          cpy  digcnt         ; Pour les formats décimal ou hexadécimal,
 .a3f2	f0 06		          beq  afill0         ; ... forcer l'adressage de page non nul si
 .a3f4	a5 c2		aaddr     lda  tmp0+1         ; Vérifier si le MSB de l'adresse est nul
 .a3f6	d0 02		          bne  afill0         ; Un octet MSB non nul signifie que nous ne
 .a3f8	a0 02		          ldy  #2             ; Si elle se trouve sur la page zéro, l'adresse
 .a3fa	a9 30		afill0    lda  #$30           ; Utilisez 0 comme espace réservé pour chaque
-.a3fc	9d 34 04	afil0l    sta  u0aa0,x        ; Insérer un espace réservé dans le tampon
+.a3fc	9d 34 0f	afil0l    sta  u0aa0,x        ; Insérer un espace réservé dans le tampon
 .a3ff	e8		          inx                 ; Passer à l'octet suivant dans le tampon
 .a400	88		          dey                 ; Décrémenter le nombre de chiffres restants
 .a401	d0 f9		          bne  afil0l         ; Boucler jusqu'à ce que tous les chiffres aient
-.a403	ce 68 04	aform0    dec  chrpnt         ; Entrée non numérique; revenez au caractère
+.a403	ce 68 0f	aform0    dec  chrpnt         ; Entrée non numérique; revenez au caractère
 .a406	20 8a a7	aform1    jsr  getchr         ; obtenir le prochain personnage
 .a409	f0 0e		          beq  aescan         ; S'il n'y en a pas, numérisation est terminée
 .a40b	c9 20		          cmp  #$20           ; Sauter les espaces
 .a40d	f0 c5		          beq  ascan
-.a40f	9d 34 04	          sta  u0aa0,x        ; Stocker le caractère dans tampon d'assemblage
+.a40f	9d 34 0f	          sta  u0aa0,x        ; Stocker le caractère dans tampon d'assemblage
 .a412	e8		          inx                 ; Passer à l'octet suivant dans le tampon
 .a413	e0 0a		          cpx  #u0aae-u0aa0   ; Le tampon d'instructions est-il plein?
 .a415	90 bd		          bcc  ascan          ; Sinon, continuez à scanner
 .a417	b0 b6		          bcs  aerror         ; Erreur si la mémoire tampon est pleine
-.a419	8e 66 04	aescan    stx store           ; Enregistrer le nombre d'octets dans le tampon
+.a419	8e 66 0f	aescan    stx store           ; Enregistrer le nombre d'octets dans le tampon
 .a41c	a2 00		          ldx #0              ; Commencez par l'opcode $00 et examinez-les
-.a41e	8e 0f 04	          stx opcode          ;  un par un jusqu'à en trouver un qui réponde
+.a41e	8e 0f 0f	          stx opcode          ;  un par un jusqu'à en trouver un qui réponde
 .a421	a2 00		atryop    ldx #0
-.a423	8e 6a 04	          stx u9f             ; Réinitialise l'index dans le tampon de travail
-.a426	ad 0f 04	          lda opcode
+.a423	8e 6a 0f	          stx u9f             ; Réinitialise l'index dans le tampon de travail
+.a426	ad 0f 0f	          lda opcode
 .a429	20 fa a5	          jsr instxx          ; Rechercher le format d'instruction pour
-.a42c	ae 09 04	          ldx acmd            ; Enregistrer la commande d'adressage pour plus
-.a42f	8e 67 04	          stx store+1
+.a42c	ae 09 0f	          ldx acmd            ; Enregistrer la commande d'adressage pour plus
+.a42f	8e 67 0f	          stx store+1
 .a432	aa		          tax                 ; Vtilise l'opcode actuel comme index
 .a433	bd df ab	          lda mnemr,x         ; Vérifie l'octet de droite du mnémonique
 .a436	20 07 a5	          jsr chekop
@@ -520,16 +520,16 @@
 .a43f	a2 06		          ldx #6              ; 6 caractères possibles à comparer avec
 .a441	e0 03		tryit     cpx #3              ; Est-ce qu'on en est au troisième caractère ?
 .a443	d0 14		          bne trymod          ; Sinon, vérifie les caractères de l'opérande.
-.a445	ac 0a 04	          ldy length          ; Sinon, vérifie nombre d'octets de l'opérande.
+.a445	ac 0a 0f	          ldy length          ; Sinon, vérifie nombre d'octets de l'opérande.
 .a448	f0 0f		          beq trymod          ; Si zéro, vérifie les caractères de l'opérande.
-.a44a	ad 09 04	tryad     lda acmd            ; Sinon, cherchez une adresse.
+.a44a	ad 09 0f	tryad     lda acmd            ; Sinon, cherchez une adresse.
 .a44d	c9 e8		          cmp #$e8            ; Cas particulier pour le mode d'adressage
 .a44f	a9 30		          lda #$30            ; « 0 » est l'espace réservé au chiffre que nous
 .a451	b0 1e		        bcs try4b           ; acmd >= $e8 indicates relative addressing
 .a453	20 04 a5	        jsr chek2b          ; acmd < $e8 indicates normal addressing
 .a456	88		        dey                 ; consume byte
 .a457	d0 f1		        bne tryad           ; check for 2 more digits if not zero-page
-.a459	0e 09 04	trymod  asl acmd            ; shift a bit out of the addressing command
+.a459	0e 09 0f	trymod  asl acmd            ; shift a bit out of the addressing command
 .a45c	90 0e		        bcc ub4df           ; if it's zero, skip checking current character
 .a45e	bd 92 ab	        lda char1-1,x
 .a461	20 07 a5	        jsr chekop          ; otherwise first character against operand
@@ -541,13 +541,13 @@
 .a46f	f0 06		        beq trybran
 .a471	20 04 a5	try4b   jsr chek2b          ; check for 4 digit address placeholder
 .a474	20 04 a5	        jsr chek2b          ;   by checking for 2 digits twice
-.a477	ad 66 04	trybran lda store           ; get number of bytes in assembly buffer
-.a47a	cd 6a 04	        cmp u9f             ; more bytes left to check?
+.a477	ad 66 0f	trybran lda store           ; get number of bytes in assembly buffer
+.a47a	cd 6a 0f	        cmp u9f             ; more bytes left to check?
 .a47d	f0 03		        beq abran           ; if not, we've found a match; build instruction
 .a47f	4c 14 a5	        jmp bumpop          ; if so, this opcode doesn't match; try the next
-.a482	ac 0a 04	abran   ldy length          ; get number of bytes in operand
+.a482	ac 0a 0f	abran   ldy length          ; get number of bytes in operand
 .a485	f0 32		        beq a1byte          ; if none, just output the opcode
-.a487	ad 67 04	        lda store+1         ; otherwise check the address format
+.a487	ad 67 0f	        lda store+1         ; otherwise check the address format
 .a48a	c9 9d		        cmp #$9d            ; is it a relative branch?
 .a48c	d0 23		        bne objput          ; if not, skip relative branch calculation
 .a48e	a5 c1		        lda tmp0            ; calculate the difference between the current
@@ -568,13 +568,13 @@
 .a4a9	ca		abranx  dex                 ; adjust branch target relative to the
 .a4aa	ca		        dex                 ;   instruction following this one
 .a4ab	8a		        txa
-.a4ac	ac 0a 04	        ldy length          ; load length of operand
+.a4ac	ac 0a 0f	        ldy length          ; load length of operand
 .a4af	d0 03		        bne objp2           ; don't use the absolute address
 .a4b1	b9 c0 00	objput  lda tmp0-1,y        ; get the operand
 .a4b4	91 c3		objp2   sta (tmp2),y        ; store it after the opcode
 .a4b6	88		        dey
 .a4b7	d0 f8		        bne objput          ; copy the other byte of operand if there is one
-.a4b9	ad 0f 04	a1byte  lda opcode          ; put opcode into instruction
+.a4b9	ad 0f 0f	a1byte  lda opcode          ; put opcode into instruction
 .a4bc	91 c3		        sta (tmp2),y
 .a4be	20 49 a7	        jsr crlf            ; carriage return
 .a4c1	a9 91		        lda #$91            ; back up one line
@@ -582,8 +582,8 @@
 .a4c6	a0 47		        ldy #msg7-msgbas    ; "a " prefix
 .a4c8	20 f9 a9	        jsr sndclr          ; clear line
 .a4cb	20 6b a5	        jsr dislin          ; disassemble the instruction we just assembled
-.a4ce	ee 0a 04	        inc length          ; instruction length = operand length + 1 byte
-.a4d1	ad 0a 04	        lda length          ;   for the opcode
+.a4ce	ee 0a 0f	        inc length          ; instruction length = operand length + 1 byte
+.a4d1	ad 0a 0f	        lda length          ;   for the opcode
 .a4d4	20 e5 a7	        jsr bumpad2         ; increment address by length of instruction
 .a4d7	a9 41		        lda #"a"            ; stuff keyboard buffer with next assemble command:
 .a4d9	8d 77 02	        sta keyd            ;   "a xxxx " where xxxx is the next address
@@ -603,17 +603,17 @@
 .a4fe	4c 3e a0	        jmp strt            ; back to main loop
 .a501	4c 87 a0	serror  jmp error           ; handle error
 .a504	20 07 a5	chek2b  jsr chekop          ; check two bytes against value in accumulator
-.a507	8e 0e 04	chekop  stx savx            ; stash x
-.a50a	ae 6a 04	        ldx u9f             ; get current index into work buffer
-.a50d	dd 34 04	        cmp u0aa0,x         ; check whether this opcode matches the buffer
+.a507	8e 0e 0f	chekop  stx savx            ; stash x
+.a50a	ae 6a 0f	        ldx u9f             ; get current index into work buffer
+.a50d	dd 34 0f	        cmp u0aa0,x         ; check whether this opcode matches the buffer
 .a510	f0 0a		        beq opok            ;   matching so far, check the next criteria
 .a512	68		        pla                 ; didn't match, so throw away return address
 .a513	68		        pla                 ;   on the stack because we're starting over
-.a514	ee 0f 04	bumpop  inc opcode          ; check the next opcode
+.a514	ee 0f 0f	bumpop  inc opcode          ; check the next opcode
 .a517	f0 e8		        beq serror          ; error if we tried every opcode and none fit
 .a519	4c 21 a4	        jmp atryop          ; start over with new opcode
-.a51c	ee 6a 04	opok    inc u9f             ; opcode matches so far; check the next criteria
-.a51f	ae 0e 04	        ldx savx            ; restore x
+.a51c	ee 6a 0f	opok    inc u9f             ; opcode matches so far; check the next criteria
+.a51f	ae 0e 0f	        ldx savx            ; restore x
 .a522	60		        rts
 .a523	b0 08		disass  bcs dis0ad          ; if no address was given, start from last address
 .a525	20 a4 a7	        jsr copy12          ; copy start address to tmp2
@@ -628,10 +628,10 @@
 .a53b	20 70 f7	        jsr stop            ; Vérifiez la touche [RUN/STOP]
 .a53e	f0 14		        beq disexit         ; exit early if pressed
 .a540	20 5a a5	        jsr dsout1          ; output disassembly prefix ". "
-.a543	ee 0a 04	        inc length
-.a546	ad 0a 04	        lda length          ; add length of last instruction to start address
+.a543	ee 0a 0f	        inc length
+.a546	ad 0a 0f	        lda length          ; add length of last instruction to start address
 .a549	20 e5 a7	        jsr bumpad2
-.a54c	ad 0a 04	        lda length          ; subtract length of last inst from end address
+.a54c	ad 0a 0f	        lda length          ; subtract length of last inst from end address
 .a54f	20 bf a7	        jsr suba2
 .a552	b0 e4		        bcs disgo
 .a554	4c 3e a0	disexit jmp strt            ; back to mainloop
@@ -652,14 +652,14 @@
 .a573	b1 c3		        lda (tmp2),y        ; load operand of current instruction
 .a575	20 fa a5	        jsr instxx          ; get mnemonic and addressing mode for opcode
 .a578	48		        pha                 ; save index into mnemonic table
-.a579	ae 0a 04	        ldx length          ; get length of operand
+.a579	ae 0a 0f	        ldx length          ; get length of operand
 .a57c	e8		        inx                 ; add 1 byte for opcode
 .a57d	ca		dsbyt   dex                 ; decrement index
 .a57e	10 0e		        bpl dshex           ; show hex for byte being disassembled
-.a580	8c 69 04	        sty savy            ; save index
+.a580	8c 69 0f	        sty savy            ; save index
 .a583	a0 4a		        ldy #msg8-msgbas    ; skip 3 spaces
 .a585	20 0c aa	        jsr sndmsg
-.a588	ac 69 04	        ldy savy            ; restore index
+.a588	ac 69 0f	        ldy savy            ; restore index
 .a58b	4c 93 a5	        jmp nxbyt
 .a58e	b1 c3		dshex   lda (tmp2),y        ; show hex for byte
 .a590	20 3e a7	        jsr wrbyte
@@ -679,9 +679,9 @@
 .a5af	a2 06		        ldx #6              ; 6 possible address mode character combos
 .a5b1	e0 03		pradr1  cpx #3              ; have we checked the third combo yet?
 .a5b3	d0 16		        bne pradr3          ; if so, output the leading characters
-.a5b5	ac 0a 04	        ldy length          ; get the length of the operand
+.a5b5	ac 0a 0f	        ldy length          ; get the length of the operand
 .a5b8	f0 11		        beq pradr3          ; if it's zero, there's no operand to print
-.a5ba	ad 09 04	pradr2  lda acmd            ; otherwise, get the addressing mode
+.a5ba	ad 09 0f	pradr2  lda acmd            ; otherwise, get the addressing mode
 .a5bd	c9 e8		        cmp #$e8            ; check for relative addressing
 .a5bf	08		        php                 ; save result of check
 .a5c0	b1 c3		        lda (tmp2),y        ; get the operand
@@ -690,7 +690,7 @@
 .a5c5	20 62 a7	        jsr wrtwo           ; output digits from address
 .a5c8	88		        dey
 .a5c9	d0 ef		        bne pradr2          ; repeat for next byte of operand, if there is one
-.a5cb	0e 09 04	pradr3  asl acmd            ; check whether addr mode uses the current char
+.a5cb	0e 09 0f	pradr3  asl acmd            ; check whether addr mode uses the current char
 .a5ce	90 0e		        bcc pradr4          ; if not, skip it
 .a5d0	bd 92 ab	        lda char1-1,x       ; look up the first char in the table
 .a5d3	20 d2 ff	        jsr chrout          ; print first char
@@ -737,9 +737,9 @@
 .a61a	a9 00		        lda #0
 .a61c	aa		getfmt  tax
 .a61d	bd 85 ab	        lda mode2,x         ; lookup operand format using selected nybble
-.a620	8d 09 04	        sta acmd            ; save for later use
+.a620	8d 09 0f	        sta acmd            ; save for later use
 .a623	29 03		        and #$03            ; lower 2 bits indicate number of bytes in operand
-.a625	8d 0a 04	        sta length
+.a625	8d 0a 0f	        sta length
 .a628	98		        tya                 ; restore original opcode
 .a629	29 8f		        and #$8f            ; mask bits to x000xxxx
 .a62b	aa		        tax                 ; save it
@@ -760,13 +760,13 @@
 .a641	60		        rts
 .a642	a8		propxx  tay                 ; use index in accumulator to look up mnemonic
 .a643	b9 9f ab	        lda mneml,y         ;   and place a temporary copy in store
-.a646	8d 66 04	        sta store
+.a646	8d 66 0f	        sta store
 .a649	b9 df ab	        lda mnemr,y
-.a64c	8d 67 04	        sta store+1
+.a64c	8d 67 0f	        sta store+1
 .a64f	a9 00		prmn1   lda #0              ; clear accumulator
 .a651	a0 05		        ldy #$05            ; shift 5 times
-.a653	0e 67 04	prmn2   asl store+1         ; shift right byte
-.a656	2e 66 04	        rol store           ; rotate bits from right byte into left byte
+.a653	0e 67 0f	prmn2   asl store+1         ; shift right byte
+.a656	2e 66 0f	        rol store           ; rotate bits from right byte into left byte
 .a659	2a		        rol a               ; rotate bits from left byte into accumulator
 .a65a	88		        dey                 ; next bit
 .a65b	d0 f6		        bne prmn2           ; loop until all bits shifted
@@ -775,13 +775,13 @@
 .a662	ca		        dex                 ; next letter
 .a663	d0 ea		        bne prmn1           ; loop until all 3 letters are output
 .a665	4c 41 a7	        jmp space           ; output space
-.a668	ce 68 04	rdpar   dec chrpnt          ; back up one char
+.a668	ce 68 0f	rdpar   dec chrpnt          ; back up one char
 .a66b	20 93 a6	getpar  jsr rdval           ; read the value
 .a66e	b0 17		        bcs gterr           ; carry set indicates error
 .a670	20 87 a7	        jsr gotchr          ; check previous character
 .a673	d0 0a		        bne ckterm          ; if it's not null, check if it's a valid separator
-.a675	ce 68 04	        dec chrpnt          ; back up one char
-.a678	ad 11 04	        lda digcnt          ; get number of digits read
+.a675	ce 68 0f	        dec chrpnt          ; back up one char
+.a678	ad 11 0f	        lda digcnt          ; get number of digits read
 .a67b	d0 11		        bne getgot          ; found some digits
 .a67d	f0 0d		        beq gtnil           ; didn't find any digits
 .a67f	c9 20		ckterm  cmp #$20            ; space or comma are valid separators
@@ -794,12 +794,12 @@
 .a68c	38		gtnil   sec                 ; set carry to indicate no parameter found
 >a68d	24		        .byte $24           ; bit zp opcode consumes next byte (clc)
 .a68e	18		getgot  clc                 ; clear carry to indicate paremeter returned
-.a68f	ad 11 04	        lda digcnt          ; return number of digits in a
+.a68f	ad 11 0f	        lda digcnt          ; return number of digits in a
 .a692	60		        rts                 ; return to address pushed from vector table
 .a693	a9 00		rdval   lda #0              ; clear temp
 .a695	85 c1		        sta tmp0
 .a697	85 c2		        sta tmp0+1
-.a699	8d 11 04	        sta digcnt          ; clear digit counter
+.a699	8d 11 0f	        sta digcnt          ; clear digit counter
 .a69c	8a		        txa                 ; save x and y
 .a69d	48		        pha
 .a69e	98		        tya
@@ -814,10 +814,10 @@
 .a6b0	ca		        dex
 .a6b1	10 f8		        bpl gnmode          ; check next base
 .a6b3	e8		        inx                 ; default to hex
-.a6b4	ce 68 04	        dec chrpnt          ; back up one character
+.a6b4	ce 68 0f	        dec chrpnt          ; back up one character
 .a6b7	bc 57 ac	gotmod  ldy modtab,x        ; get base value
 .a6ba	bd 5b ac	        lda lentab,x        ; get bits per digit
-.a6bd	8d 13 04	        sta numbit          ; store bits per digit
+.a6bd	8d 13 0f	        sta numbit          ; store bits per digit
 .a6c0	20 8a a7	nudig   jsr getchr          ; get next char in a
 .a6c3	f0 63		rdnilk  beq rdnil           ; end of number if no more characters
 .a6c5	38		        sec
@@ -828,19 +828,19 @@
 .a6ce	e9 07		        sbc #$07            ; 7 chars between ascii 9 and a, so subtract 7
 .a6d0	c9 10		        cmp #$10            ; end of number if char is greater than f
 .a6d2	b0 54		        bcs rdnil
-.a6d4	8d 12 04	digmor  sta indig           ; store the digit
-.a6d7	cc 12 04	        cpy indig           ; compare base with the digit
+.a6d4	8d 12 0f	digmor  sta indig           ; store the digit
+.a6d7	cc 12 0f	        cpy indig           ; compare base with the digit
 .a6da	90 4a		        bcc rderr           ; error if the digit >= the base
 .a6dc	f0 48		        beq rderr
-.a6de	ee 11 04	        inc digcnt          ; increment the number of digits
+.a6de	ee 11 0f	        inc digcnt          ; increment the number of digits
 .a6e1	c0 0a		        cpy #10
 .a6e3	d0 0a		        bne nodecm          ; skip the next part if not using base 10
 .a6e5	a2 01		        ldx #1
 .a6e7	b5 c1		declp1  lda tmp0,x          ; stash the previous 16-bit value for later use
-.a6e9	9d 14 04	        sta stash,x
+.a6e9	9d 14 0f	        sta stash,x
 .a6ec	ca		        dex
 .a6ed	10 f8		        bpl declp1
-.a6ef	ae 13 04	nodecm  ldx numbit          ; number of bits to shift
+.a6ef	ae 13 0f	nodecm  ldx numbit          ; number of bits to shift
 .a6f2	06 c1		times2  asl tmp0            ; shift 16-bit value by specified number of bits
 .a6f4	26 c2		        rol tmp0+1
 .a6f6	b0 2e		        bcs rderr           ; error if we overflowed 16 bits
@@ -848,18 +848,18 @@
 .a6f9	d0 f7		        bne times2          ; shift remaining bits
 .a6fb	c0 0a		        cpy #10
 .a6fd	d0 18		        bne nodec2          ; skip the next part if not using base 10
-.a6ff	0e 14 04	        asl stash           ; shift the previous 16-bit value one bit left
-.a702	2e 15 04	        rol stash+1
+.a6ff	0e 14 0f	        asl stash           ; shift the previous 16-bit value one bit left
+.a702	2e 15 0f	        rol stash+1
 .a705	b0 1f		        bcs rderr           ; error if we overflowed 16 bits
-.a707	ad 14 04	        lda stash           ; add shifted previous value to current value
+.a707	ad 14 0f	        lda stash           ; add shifted previous value to current value
 .a70a	65 c1		        adc tmp0
 .a70c	85 c1		        sta tmp0
-.a70e	ad 15 04	        lda stash+1
+.a70e	ad 15 0f	        lda stash+1
 .a711	65 c2		        adc tmp0+1
 .a713	85 c2		        sta tmp0+1
 .a715	b0 0f		        bcs rderr           ; error if we overflowed 16 bits
 .a717	18		nodec2  clc
-.a718	ad 12 04	        lda indig           ; load current digit
+.a718	ad 12 0f	        lda indig           ; load current digit
 .a71b	65 c1		        adc tmp0            ; add current digit to low byte
 .a71d	85 c1		        sta tmp0            ; and store result back in low byte
 .a71f	8a		        txa                 ; a=0
@@ -869,12 +869,12 @@
 .a726	38		rderr   sec                 ; set carry to indicate error
 >a727	24		        .byte $24           ; bit zp opcode consumes next byte (clc)
 .a728	18		rdnil   clc                 ; clear carry to indicate success
-.a729	8c 13 04	        sty numbit          ; save base of number
+.a729	8c 13 0f	        sty numbit          ; save base of number
 .a72c	68		        pla                 ; restore x and y
 .a72d	a8		        tay
 .a72e	68		        pla
 .a72f	aa		        tax
-.a730	ad 11 04	        lda digcnt          ; return number of digits in a
+.a730	ad 11 0f	        lda digcnt          ; return number of digits in a
 .a733	60		        rts
 .a734	a5 c3		showad  lda tmp2
 .a736	a6 c4		        ldx tmp2+1
@@ -897,11 +897,11 @@
 .a75a	a9 20		        lda #$20            ; load space in a
 .a75c	20 d2 ff	        jsr chrout
 .a75f	4c fc a9	        jmp snclr
-.a762	8e 0e 04	wrtwo   stx savx            ; save x
+.a762	8e 0e 0f	wrtwo   stx savx            ; save x
 .a765	20 72 a7	        jsr asctwo          ; get hex chars for byte in x (lower) and a (upper)
 .a768	20 d2 ff	        jsr chrout          ; output upper nybble
 .a76b	8a		        txa                 ; transfer lower to a
-.a76c	ae 0e 04	        ldx savx            ; restore x
+.a76c	ae 0e 0f	        ldx savx            ; restore x
 .a76f	4c d2 ff	        jmp chrout          ; output lower nybble
 .a772	48		asctwo  pha                 ; save byte
 .a773	20 7c a7	        jsr ascii           ; do low nybble
@@ -917,17 +917,17 @@
 .a782	69 06		        adc #6              ; skip ascii chars between 9 and a
 .a784	69 30		asc1    adc #$30            ; add ascii char 0 to value
 .a786	60		        rts
-.a787	ce 68 04	gotchr  dec chrpnt
-.a78a	8e 0e 04	getchr  stx savx
-.a78d	ae 68 04	        ldx chrpnt          ; get pointer to next char
-.a790	bd 3e 04	        lda inbuff,x        ; load next char in a
+.a787	ce 68 0f	gotchr  dec chrpnt
+.a78a	8e 0e 0f	getchr  stx savx
+.a78d	ae 68 0f	        ldx chrpnt          ; get pointer to next char
+.a790	bd 3e 0f	        lda inbuff,x        ; load next char in a
 .a793	f0 06		        beq nochar          ; null, :, or ? signal end of buffer
 .a795	c9 3a		        cmp #":"
 .a797	f0 02		        beq nochar
 .a799	c9 3f		        cmp #"?"
 .a79b	08		nochar  php
-.a79c	ee 68 04	        inc chrpnt          ; next char
-.a79f	ae 0e 04	        ldx savx
+.a79c	ee 68 0f	        inc chrpnt          ; next char
+.a79f	ae 0e 0f	        ldx savx
 .a7a2	28		        plp                 ; z flag will signal last character
 .a7a3	60		        rts
 .a7a4	48		copy12  pha
@@ -946,22 +946,22 @@
 .a7ba	85 c2		        sta tmp0+1
 .a7bc	60		        rts
 .a7bd	a9 01		suba1   lda #1              ; shortcut to decrement by 1
-.a7bf	8d 0e 04	suba2   sta savx            ; subtrahend in accumulator
+.a7bf	8d 0e 0f	suba2   sta savx            ; subtrahend in accumulator
 .a7c2	38		        sec
 .a7c3	a5 c1		        lda tmp0            ; minuend in low byte
-.a7c5	ed 0e 04	        sbc savx
+.a7c5	ed 0e 0f	        sbc savx
 .a7c8	85 c1		        sta tmp0
 .a7ca	a5 c2		        lda tmp0+1          ; borrow from high byte
 .a7cc	e9 00		        sbc #0
 .a7ce	85 c2		        sta tmp0+1
 .a7d0	60		        rts
 .a7d1	38		sub13   sec
-.a7d2	ad 66 04	        lda store
+.a7d2	ad 66 0f	        lda store
 .a7d5	e9 01		        sbc #1              ; decrement low byte
-.a7d7	8d 66 04	        sta store
-.a7da	ad 67 04	        lda store+1
+.a7d7	8d 66 0f	        sta store
+.a7da	ad 67 0f	        lda store+1
 .a7dd	e9 00		        sbc #0              ; borrow from high byte
-.a7df	8d 67 04	        sta store+1
+.a7df	8d 67 0f	        sta store+1
 .a7e2	60		        rts
 .a7e3	a9 01		adda2   lda #1              ; shortcut to increment by 1
 .a7e5	18		bumpad2 clc
@@ -989,14 +989,14 @@
 .a80f	20 6b a6	        jsr getpar          ; get end address in tmp0
 .a812	b0 1b		        bcs gdifx           ; exit with error if no parameter given
 .a814	a5 c1		        lda tmp0            ; save end address in stash
-.a816	8d 14 04	        sta stash
+.a816	8d 14 0f	        sta stash
 .a819	a5 c2		        lda tmp0+1
-.a81b	8d 15 04	        sta stash+1
+.a81b	8d 15 0f	        sta stash+1
 .a81e	20 af a7	        jsr sub12           ; subtract start address from end address
 .a821	a5 c1		        lda tmp0
-.a823	8d 66 04	        sta store           ; save difference in store
+.a823	8d 66 0f	        sta store           ; save difference in store
 .a826	a5 c2		        lda tmp0+1
-.a828	8d 67 04	        sta store+1
+.a828	8d 67 0f	        sta store+1
 .a82b	90 02		        bcc gdifx           ; error if start address is after end address
 .a82d	18		        clc                 ; clear carry to indicate success
 >a82e	24		        .byte $24           ; bit zp opcode consumes next byte (sec)
@@ -1045,7 +1045,7 @@
 .a895	20 a4 a7	cvtdec    jsr copy12          ; Copie la valeur de tmp0 vers tmp2.
 .a898	a9 00		          lda #0
 .a89a	a2 02		          ldx #2              ; Effacer 3 octets dans le tampon de travail
-.a89c	9d 34 04	decml1    sta u0aa0,x
+.a89c	9d 34 0f	decml1    sta u0aa0,x
 .a89f	ca		          dex
 .a8a0	10 fa		          bpl decml1
 .a8a2	a0 10		          ldy #16             ; 16 bits en entrée
@@ -1055,9 +1055,9 @@
 .a8a7	06 c3		decml2    asl tmp2            ; Rotation des octets de l'entrée, octet de
 .a8a9	26 c4		          rol tmp2+1          ; ..poids fort et bit de retenue.
 .a8ab	a2 02		          ldx #2              ; Traite 3 octets.
-.a8ad	bd 34 04	decdbl    lda u0aa0,x         ; Charge la valeur actuelle de l'octet.
-.a8b0	7d 34 04	          adc u0aa0,x         ; L'ajoute à lui-même, plus le bit de retenue.
-.a8b3	9d 34 04	          sta u0aa0,x         ; Le range sur lui même.
+.a8ad	bd 34 0f	decdbl    lda u0aa0,x         ; Charge la valeur actuelle de l'octet.
+.a8b0	7d 34 0f	          adc u0aa0,x         ; L'ajoute à lui-même, plus le bit de retenue.
+.a8b3	9d 34 0f	          sta u0aa0,x         ; Le range sur lui même.
 .a8b6	ca		          dex                 ; Décrémente le compteur d'octets.
 .a8b7	10 f4		          bpl decdbl          ; Boucle jusqu'à ce que tous les octets soient
 .a8b9	88		          dey                 ; Décrémente le compteur de bits.
@@ -1066,19 +1066,19 @@
 .a8bd	60		          rts
 .a8be	48		prinum  pha                 ; save accumulator
 .a8bf	a5 c1		        lda tmp0            ; copy input low byte to work buffer
-.a8c1	8d 36 04	        sta u0aa0+2
+.a8c1	8d 36 0f	        sta u0aa0+2
 .a8c4	a5 c2		        lda tmp0+1          ; copy input high byte to work buffer
-.a8c6	8d 35 04	        sta u0aa0+1
+.a8c6	8d 35 0f	        sta u0aa0+1
 .a8c9	a9 00		        lda #0              ; clear overflow byte in work buffer
-.a8cb	8d 34 04	        sta u0aa0
+.a8cb	8d 34 0f	        sta u0aa0
 .a8ce	68		        pla                 ; restore accumulator
-.a8cf	8d 11 04	nmprnt  sta digcnt          ; number of digits in accumulator
-.a8d2	8c 13 04	        sty numbit          ; bits per digit passed in y register
-.a8d5	ac 13 04	digout  ldy numbit          ; get bits to process
+.a8cf	8d 11 0f	nmprnt  sta digcnt          ; number of digits in accumulator
+.a8d2	8c 13 0f	        sty numbit          ; bits per digit passed in y register
+.a8d5	ac 13 0f	digout  ldy numbit          ; get bits to process
 .a8d8	a9 00		        lda #0              ; clear accumulator
-.a8da	0e 36 04	rolbit  asl u0aa0+2         ; shift bits out of low byte
-.a8dd	2e 35 04	        rol u0aa0+1         ; ..... into high byte
-.a8e0	2e 34 04	        rol u0aa0           ; ..... into overflow byte
+.a8da	0e 36 0f	rolbit  asl u0aa0+2         ; shift bits out of low byte
+.a8dd	2e 35 0f	        rol u0aa0+1         ; ..... into high byte
+.a8e0	2e 34 0f	        rol u0aa0           ; ..... into overflow byte
 .a8e3	2a		        rol a               ; ..... into accumulator
 .a8e4	88		        dey                 ; decrement bit counter
 .a8e5	10 f3		        bpl rolbit          ; loop until all bits processed
@@ -1086,9 +1086,9 @@
 .a8e8	d0 09		        bne nzero           ; if not, print it
 .a8ea	e0 01		        cpx #1              ; have we output the max number of digits?
 .a8ec	f0 05		        beq nzero           ; if not, print it
-.a8ee	ac 11 04	        ldy digcnt          ; how many digits have we output?
+.a8ee	ac 11 0f	        ldy digcnt          ; how many digits have we output?
 .a8f1	f0 08		        beq zersup          ; skip output if digit is 0
-.a8f3	ee 11 04	nzero   inc digcnt          ; increment digit counter
+.a8f3	ee 11 0f	nzero   inc digcnt          ; increment digit counter
 .a8f6	09 30		        ora #$30            ; add numeric value to ascii '0' to get ascii char
 .a8f8	20 d2 ff	        jsr chrout          ; output character
 .a8fb	ca		zersup  dex                 ; decrement number of leading zeros
@@ -1108,16 +1108,16 @@
 .a914	85 b7		          sta  curfnlen          ; Vide le nom de fichier.
 .a916	20 8a a7	          jsr  getchr         ; Obtient le prochain caractere.
 .a919	f0 25		          beq  instat1        ; nul, afficher l'état
-.a91b	ce 68 04	          dec  chrpnt         ; reculez d'un caractère
+.a91b	ce 68 0f	          dec  chrpnt         ; reculez d'un caractère
 .a91e	c9 24		          cmp  #"$"           ; $, Affiche le repertoire.
 .a920	f0 44		          beq  direct
 .a922	a5 c1		          lda  tmp0           ; Ordonne LISTEN au périphérique spécifié.
 .a924	20 17 ee	          jsr  listen
 .a927	a9 6f		          lda  #$6f           ; adresse secondaire 15
 .a929	20 c0 ee	          jsr  second
-.a92c	ae 68 04	dcomd     ldx  chrpnt         ; Récupére le caractère suivant du tampon.
-.a92f	ee 68 04	          inc  chrpnt
-.a932	bd 3e 04	          lda  inbuff,x
+.a92c	ae 68 0f	dcomd     ldx  chrpnt         ; Récupére le caractère suivant du tampon.
+.a92f	ee 68 0f	          inc  chrpnt
+.a932	bd 3e 0f	          lda  inbuff,x
 .a935	f0 06		          beq  instat         ; Sort de la boucle si la valeur est nulle.
 .a937	20 e4 ee	          jsr  ciout          ; Sinon, envoyez-le sur le bus série.
 .a93a	90 f0		          bcc  dcomd          ; Boucle inconditionnelle: ciout efface carry.
@@ -1142,8 +1142,8 @@
 .a968	20 17 ee	          jsr  listen         ; Ordonne LISTEN au périphérique.
 .a96b	a9 f0		          lda  #$f0           ; adresse secondaire 0
 .a96d	20 c0 ee	          jsr  second
-.a970	ae 68 04	          ldx  chrpnt         ; Obtien l'index du caractère suivant.
-.a973	bd 3e 04	dir2      lda  inbuff,x       ; Récupère le caractère suivant du tampon.
+.a970	ae 68 0f	          ldx  chrpnt         ; Obtien l'index du caractère suivant.
+.a973	bd 3e 0f	dir2      lda  inbuff,x       ; Récupère le caractère suivant du tampon.
 .a976	f0 06		          beq  dir3           ; Interrompre si la valeur est nulle.
 .a978	20 e4 ee	          jsr  ciout          ; Envoie un caractère au périphérique.
 .a97b	e8		          inx                 ; Incrémente l'indexe du caractère.
@@ -1156,7 +1156,7 @@
 .a98a	a9 60		          lda  #$60           ; Adresse second. 0 (seul le LSN est utilisé)
 .a98c	20 ce ee	          jsr  tksa
 .a98f	a0 03		          ldy  #3             ; Lire 3 valeurs de 16 bits du périphérique.
-.a991	8c 66 04	dirlin    sty  store          ; ... Ignorez les deux premiers;
+.a991	8c 66 0f	dirlin    sty  store          ; ... Ignorez les deux premiers;
 .a994	20 19 ef	dlink     jsr  acptr          ; Lit le LSB depuis le périphérique.
 .a997	85 c1		          sta  tmp0           ; L'enregistre.
 .a999	a5 90		          lda  satus          ; Vérifie l'état.
@@ -1165,7 +1165,7 @@
 .a9a0	85 c2		          sta  tmp0+1         ; L'enregistre.
 .a9a2	a5 90		          lda  satus          ; Vérifie l'état.
 .a9a4	d0 3b		          bne  drexit         ; Quitte en cas d'erreur ou de fin de fichier.
-.a9a6	ce 66 04	          dec  store          ; Décrémenter le compteur d'octets.
+.a9a6	ce 66 0f	          dec  store          ; Décrémenter le compteur d'octets.
 .a9a9	d0 e9		          bne  dlink          ; Boucle si des octets restent.
 .a9ab	20 95 a8	          jsr  cvtdec         ; Convertir dernière valeur 16 bits en décimal.
 .a9ae	a9 00		          lda  #0             ; Met le compteur de caracteres a 0.
@@ -1272,9 +1272,9 @@
 .aa8a	20 0e f2	          jsr  chrin
 .aa8d	c9 4d		cmdm      cmp  #'m'      ;bit8mask
 .aa8f	d0 0b		          bne  cmd8
-.aa91	ad 00 04	          lda  bit8mask
+.aa91	ad 00 0f	          lda  bit8mask
 .aa94	49 80		          eor  #%10000000
-.aa96	8d 00 04	          sta  bit8mask
+.aa96	8d 00 0f	          sta  bit8mask
 .aa99	4c df aa	          jmp  mycmdout
 .aa9c	c9 38		cmd8      cmp  #'8'      ; selection lecteur 8
 .aa9e	d0 08		          bne  cmd9
@@ -3598,32 +3598,32 @@
 =$c1			tmp0      =    $c1       ; utilisé pour renvoyer une entrée,
 =$c3			tmp2      =    $c3       ; contient généralement l'adresse de départ
 =$90			satus     =    status
->0400			bit8mask  .fill     1
->0401			adrptr    .fill     2
->0403			scraddr   .fill     2
->0405			coladdr   .fill     2
->0407			myflags   .fill     1
->0408			mybyte    .fill     1
->0409			acmd      .fill     1    ; commande d'adressage
->040a			length    .fill     1    ; longueur de l'opérande
->040b			mnemw     .fill     3    ; tampon mnémonique à 3 lettres
->040e			savx      .fill     1    ; Mémoire temporaire de 1 octet, souvent utilisée
->040f			opcode    .fill     1    ; opcode actuel pour assembleur/désassembleur
->0410			upflg     .fill     1    ; indicateur : comptage ascendant (bit 7 effacé) ou
->0411			digcnt    .fill     1    ; nombre de chiffres
->0412			indig     .fill     1    ; valeur numérique d'un seul chiffre
->0413			numbit    .fill     1    ; base numérique de l'entrée
->0414			stash     .fill     2    ; stockage temporaire de 2 octets
->0416			stage     .fill     30   ; tampon de transit pour le nom de fichier, la
-=$0434			estage    =*             ; fin du tampon de transit
->0434			u0aa0     .fill     10   ; debut dutampon de travail
-=$043e			u0aae     =*             ; fin du tampon de travail
->043e			inbuff    .fill     40   ; Tampon d'entrée de 40 caractères
-=$0466			endin     =*             ; fin du tampon d'entrée
->0466			store     .fill     2    ; stockage temporaire de 2 octets
->0468			chrpnt    .fill     1    ; position actuelle dans le tampon d'entrée
->0469			savy      .fill     1    ; stockage temporaire, souvent pour sauvegarder le
->046a			u9f       .fill     1    ; index dans le tampon de travail de l'assembleur
+>0f00			bit8mask  .fill     1
+>0f01			adrptr    .fill     2
+>0f03			scraddr   .fill     2
+>0f05			coladdr   .fill     2
+>0f07			myflags   .fill     1
+>0f08			mybyte    .fill     1
+>0f09			acmd      .fill     1    ; commande d'adressage
+>0f0a			length    .fill     1    ; longueur de l'opérande
+>0f0b			mnemw     .fill     3    ; tampon mnémonique à 3 lettres
+>0f0e			savx      .fill     1    ; Mémoire temporaire de 1 octet, souvent utilisée
+>0f0f			opcode    .fill     1    ; opcode actuel pour assembleur/désassembleur
+>0f10			upflg     .fill     1    ; indicateur : comptage ascendant (bit 7 effacé) ou
+>0f11			digcnt    .fill     1    ; nombre de chiffres
+>0f12			indig     .fill     1    ; valeur numérique d'un seul chiffre
+>0f13			numbit    .fill     1    ; base numérique de l'entrée
+>0f14			stash     .fill     2    ; stockage temporaire de 2 octets
+>0f16			stage     .fill     30   ; tampon de transit pour le nom de fichier, la
+=3892			estage    =*             ; fin du tampon de transit
+>0f34			u0aa0     .fill     10   ; debut dutampon de travail
+=3902			u0aae     =*             ; fin du tampon de travail
+>0f3e			inbuff    .fill     40   ; Tampon d'entrée de 40 caractères
+=3942			endin     =*             ; fin du tampon d'entrée
+>0f66			store     .fill     2    ; stockage temporaire de 2 octets
+>0f68			chrpnt    .fill     1    ; position actuelle dans le tampon d'entrée
+>0f69			savy      .fill     1    ; stockage temporaire, souvent pour sauvegarder le
+>0f6a			u9f       .fill     1    ; index dans le tampon de travail de l'assembleur
 
 ;******  Return to file: smonv20.asm
 

@@ -113,7 +113,7 @@ vvert2   =   %00001101
 vvertp   =   %00001101
 vbleu1   =   %00001110
 vbleup   =   %00001110
-vjaunep   =   %00001111
+vjaunep  =   %00001111
 vinv      = vorange
 colecran  .macro bd,bg,fg,inv
           php

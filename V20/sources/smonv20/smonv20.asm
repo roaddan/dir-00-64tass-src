@@ -45,6 +45,7 @@ super     jsr  scrinit
           ;ldy #3
           ;jsr nmprnt          ; Afficher l'adresse du point d'entrée.
           ;jsr crlf
+          
           lda linkad          ; Définir le vecteur brk.
           sta bkvec
           lda linkad+1
@@ -1824,6 +1825,5 @@ supad   .word super             ; address of entry point
      .include  "e-v20-vars.asm"
      .include  "e-local-equates.asm"
      .include  "e-local-vars.asm"
-
 ;--------------------------------------
 
