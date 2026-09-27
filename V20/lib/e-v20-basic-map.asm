@@ -90,6 +90,8 @@ bvarrange=  $cf14   ; Vérifier la plage de la variable ?
 bfacti2 =   $cf28   ; Obtenir le nom et le type de la variable à partir de
                     ; EVLVAR ($d08b).
 bfacti7 =   $cfa7   ; Appel une fonction.
+ffpor   =   $cfe6   ; f1=f1 or f2.
+ffpand  =   $cfe9   ; f1=f1 and f2.
 bcompar =   $d016   ; Comparer des nombres ou des chaînes de caractères.
 bcmpst  =   $d02e   ; Comparez les chaînes de caractères.
 bevlvar =   $d08b   ; Localiser ou créer une variable.
@@ -103,15 +105,21 @@ bintidx =   $d1aa   ; Convertir les nombres à virgule flottante en nombres à
                     ; virgule fixe de deux octets dans les formats .A et .Y.
 bgetsub =   $d1b2   ; Convertir une expression en nombre entier.
 bmakint =   $d1bf   ; Convertir un NVF. en entier signé.
+ff1swd64=   $d1bf   ; f1=sw(f1)->64
 bary    =   $d1d1   ; Trouver un élément d'un tableau ou créer un tableau.
+ff1wrd64=   $d1d2   ; f1=uw(f1)->64
+
 bbadsub =   $d245   ; Affiche le message "BAD SUBSCRIPT".
 bilquan =   $d248   ; Afficher le message "ILLEGAL QUANTITY".
 bary2   =   $d24d   ; Tableau trouvé, vérifiez la plage d'indices.
 bary6   =   $d261   ; Créer un tableau.
+ff1wrday=   $d1aa   ; f1=word->$aayy                    
 bary14  =   $d2ea   ; Localiser un élément particulier du tableau.
 bmi6    =   $d34c   ; Calculer la taille du tableau multidimensionnel.
 bmkfp   =   $d391   ; Convertir l'entier .AAYY .Y (LSB) et .A (MSB) en virgule
                     ; flottante.
+fwrdayf1=   $d391   ; $aayy->f1
+fiyytf1 =   $d3a2   ; f1=float(y)
 bnidirm =   $d3a6   ; Vérifiez si l'instruction est saisie en mode direct.
 bundef  =   $d3ae   ; Émet un message « UNDEF'D FUNCTION » pour EVALFN ($d3f4).
 bfn     =   $d3e1   ; Vérifie la syntaxe de DEF FN et FN.
@@ -137,7 +145,7 @@ badd05  =   $d849   ; Additionner 0,5 à f1.
 blamin  =   $d850   ; Soustraction du contenu de la mémoire de f1.
 bplus1  =   $d862   ; Effectuer un prédécalage d'exposant (?) et continue
                     ; ci-dessous.
-blaplus =   $d867   ; Ajoute FV à f1.
+blaplus =   $d867   ; f1 = FV à f1.
 bplus6  =   $d8a7   ; Rendre le résultat négatif si un emprunt a été effectué.
 bzerfac =   $d8f7   ; Met f1 à zéro et rend le signe positif puisque le
                     ; résultat est nul.
@@ -156,11 +164,10 @@ bfpcten =   $daf9   ; +10 constante à virgule flottante : $84,$20,$00,$00,$00.
 bdivten =   $dafe   ; Divise F1 par 10.
 bladiv  =   $db0f   ; Déplace le NVF. en mémoire vers f2.
 blodfac =   $dba2   ; Déplace le NVF. en mémoire dans f1.
-ffvtf1  =   $dba2   ; copie fv $(yyaa) to f1
 bfactf2 =   $dbc7   ; Déplace f1 en mémoire.
 bfactf1 =   $dbca   ; Déplace f1 en mémoire.
 bfactfp =   $dbd0   ; Déplace f1 en mémoire.
-bstorfac=   $dbd4   ; Déplace FAC1 en mémoire.  
+bstorfac=   $dbd4   ; Déplace FAC1 en mémoire. 
 batof   =   $dbfc   ; Transférer FAC2 vers FAC1.
 brftoa  =   $dc0c   ; Déplace FAC1 vers FAC2, avec arrondissement.
 bftoa   =   $dc0f   ; Déplace FAC1 vers FAC2, sans arrondissement.
@@ -210,4 +217,58 @@ bbasvctrs=  $e44f   ; Six vecteurs BASIC à copier à l'emplacement 768 ($300).
 binitvctrs= $e45b   ; Copie des vecteurs BASIC de la ROM vers la RAM.
 bwarmbas=   $e467   ; Effectue un démarrage à chaud de BASIC.
 bpatcher=   $e476   ; Zone de "patch" programme.
+;-----------------------------------------------------------------------------
+; fonctions de points flottant
+;-----------------------------------------------------------------------------
+ff1evalx=   $d79e   ; eval. expr. f1 to x.
+ff1bytxx=   $d7a1   ; f1 to byte in x
+ff1to20 =   $d7f7   ; f1 -> int($14,$15)
+ff1p05  =   $d849   ; f1=f1+0,5.
+ffvsf1  =   $d850   ; f1=fv-f1 ($yyaa)
+ff2sf1  =   $d853   ; f1=f2-f1.
+ffvpf1  =   $d867   ; f1=fv+f1 ($yyaa)
+ff2pf1  =   $d86a   ; f1=f2+f1
+fzerof1 =   $d8f7   ; f1=0.0
+ff1com2 =   $d947   ; f1=two's compl f1
+ff1xfv  =   $da28   ; f1=f1*fv ($yyaa)
+ff1xf2  =   $da2b   ; f1=f1*f2
+ff1maa  =   $da59   ; f1=f1*.A
+ffvtf2  =   $da8c   ; f2=fv
+ff1x10  =   $dae2   ; f1=f1*10
+ff1d10  =   $dafe   ; f1=f1/10
+ffvdf1  =   $db0f   ; f1=fv/f1 ($yyaa)
+ff2df1  =   $db12   ; f1=f2/f1
+ffvtf1  =   $dba2   ; copie fv $(yyaa) to f1
+ff1t5c  =   $dbc7   ; Copie f1 vers $5c-$60.
+ff1t57  =   $dbca   ; Copie f1 vers $57-$5b.
+ff1t49  =   $dbd0   ; Copie f1 vers $49-$4a.
+ff1tyx  =   $dbd4   ; Copie f1 mem $yyxx. 
+ff2tf1  =   $dbfc   ; copie f2 to f1.
+ff1tf2r =   $dc0c   ; Copie f1 to f2 avec arrondissement.
+ff1tf2  =   $dc0f   ; Copie f1 to f2 sans arrondissement.
+ff1rnd  =   $dc1b   ; f1=round(f1). 
+fsngf1  =   $dc2b   ; Tester le signe de FAC1.
+ff1sign =   $dc39   ; f1=sgn(f1).
+fiaatf1 =   $dc3c   ; Conv. .A->F1.
+fi62tf1 =   $dc44   ; Conv. mot 16 bits $62,$63 a f1.
+ff1abs  =   $dc58   ; f1=abs(f1).
+ffvcmp  =   $dc5b   ; f1=f1 comp fv ($yyaa)
+ff1tudw =   $dc9b   ; f1-> 32 octets signé ($62-$65)
+ff1int  =   $dccc   ; f1=int(f1).
+fasctf1 =   $dcf3   ; f1=float(ascii)
+ff1pac  =   $dd7e   ; f1=f1+ra val ra=0-9
+fiaxtf1 =   $ddcd   ; f1=float($aaxx)+print
+ff1tasc =   $dddd   ; f1 to ascii ($yyaa)
+ff1sqr  =   $df71   ; f1=sqrt(f1).
+ff1ef2  =   $df7b   ; f1=f1^f2
+ff1nf1  =   $dfb4   ; f1=-f1.
+ffac1cos=   $e261   ; f1=sin(f1+(pi/2)).. FAC1 copié en ram.
+ff1cos  =   $e264   ; f1=sin(f1+(pi/2)).
+ffac1sin=   $e26b   ; f1=sin(f1). FAC1 copié en ram.
+ff1sin  =   $e26b   ; f1=sin(f1)
+ffac1tan=   $e2b1   ; f1=sin(f1)/cos(f1). FAC1 copié en ram.
+ff1tan  =   $e2b4   ; f1=sin(f1)/cos(f1)
+ffac1atn=   $e30b   ; f1=atn(f1). FAC1 copié en ram.
+ff1atn  =   $e30e   ; f1=atn(f1).
+
 ;------------------------------------------------------------------------------

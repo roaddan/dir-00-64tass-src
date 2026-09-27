@@ -19,6 +19,10 @@
 ;------------------------------------------------------------------------------
 ; A D R E S S E S   D E S   E L E M E N T S   E T   F O N C T I O N S
 ;------------------------------------------------------------------------------
+ffvtf1  =   $bba2   ; fv $(yyaa) -> f2
+ffvtf2  =   $ba8c   ; fv $(yyaa) -> f2
+
+
 ffpor   =   $cfe6   ; f1=f1 or f2.
 ffpand  =   $cfe9   ; f1=f1 and f2.
 ff1wrday=   $d1aa   ; f1=word->$aayy                    
@@ -39,14 +43,13 @@ ff1com2 =   $d947   ; f1=two's compl f1
 ff1xfv  =   $da28   ; f1=f1*fv ($yyaa)
 ff1xf2  =   $da2b   ; f1=f1*f2
 ff1maa  =   $da59   ; f1=f1*.A
-ffvtf2  =   $da8c   ; fv $(yyaa) -> f2
 ff1x10  =   $dae2   ; f1=f1*10
 ff1d10  =   $dafe   ; f1=f1/10
 ffvdf1  =   $db0f   ; f1=fv/f1 ($yyaa)
 ff2df1  =   $db12   ; f1=f2/f1
 ff1t5c  =   $dbc7   ; Copie f1 vers $5c-$60.
-ff1t57  =   $dbca   ; copie f1 vers $57-$5b.
-ff1t49  =   $dbd0   ; copie f1 vers $49-$4a.
+ff1t57  =   $dbca   ; Copie f1 vers $57-$5b.
+ff1t49  =   $dbd0   ; Copie f1 vers $49-$4a.
 ff1tyx  =   $dbd4   ; Copie f1 mem $yyxx.
 ff2tf1  =   $dbfc   ; copie f2 to f1.
 ff1tf2r =   $dc0c   ; Copie f1 to f2 avec arrondissement.

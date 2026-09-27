@@ -3,6 +3,7 @@ Version = "20260123-101151"
 ;-----------------------------------------------------------
      .include  "e-v20-bashead-ex.asm"
      .include  "l-v20-bashead-ex.asm"
+     .include  "string-fr.asm"
 
      .enc "none" 
 ;-----------------------------------------------------------
@@ -16,18 +17,32 @@ main      .block
           #color vblanc               
           #printxy string1
           #outcar revsoff
+          #locate 0,1
+          ldx  #$00
+          ldy  #$10
+;          #color vvert               
+;          #printxy string2
           #color vvert               
-          #printxy string2
-          #color vvert               
-          #printxy string5
-          #color vvert               
-          #printxy string6
-          #color vbleu             
-          #printxy string4
-          #color vrouge              
-          #printxy string7
-          #color vjaune              
-          #printxy string8
+;          #printxy string5
+;          #color vvert               
+;          #printxy string6
+;          #color vbleu             
+;          #printxy string4
+;          #color vrouge              
+;          #printxy string7
+;          #color vjaune              
+;          #printxy string8
+          ldy #8
+          lda #$00
+          ldx #$00
+loop      jsr pushregs
+          jsr fiaxtf1
+          jsr popregs
+          #outcar $0d
+          inx
+          bne loop  
+          adc #$01
+          bcc loop
           jsr getkey
           #outcar upcase
           #c64blanc
@@ -46,17 +61,13 @@ lin       .byte     0
 adresse   .word     $1234     
      
 
-     .include  "string-fr.asm"
-
-     .include  "e-v20-vic.asm"
-     .include  "m-v20-utils.asm"
+     .include  "l-v20-math.asm"
      .include  "l-v20-bitmap.asm"
      .include  "l-v20-conv.asm"
      .include  "l-v20-disk.asm"
 ;     .include  "l-v20-drawbox.asm"
 ;     .include  "l-v20-float.asm"
      .include  "l-v20-keyb.asm"
-     .include  "l-v20-math.asm"
      .include  "l-v20-mem.asm"
      .include  "l-v20-opcodes.asm"
      .include  "l-v20-opcycles.asm"
@@ -71,6 +82,7 @@ adresse   .word     $1234
      .include  "e-v20-basic-map.asm"
      .include  "e-v20-kernal-map.asm"
      .include  "e-v20-bascmd-map.asm"
-     .include  "e-v20-float.asm"
      .include  "e-v20-page0.asm"
      .include  "e-v20-vars.asm"
+     .include  "e-v20-vic.asm"
+     .include  "m-v20-utils.asm"

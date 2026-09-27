@@ -1283,12 +1283,19 @@ convrt    jsr rdpar           ; lire un paramètre
           jsr chrout
           lda #"+"            ; output + sigil for decimal
         jsr chrout
-        jsr cvtdec          ; convert to bcd using hardware mode
-        lda #0              ; clear digit counter
-        ldx #6              ; max digits + 1
-        ldy #3              ; bits per digit - 1
-        jsr nmprnt          ; print result without leading zeros
+
+        lda tmp0+1
+        ldx tmp0
+        jsr fiaxtf1
+        ;jsr cvtdec          ; convert to bcd using hardware mode
+        ;lda #0              ; clear digit counter
+        ;ldx #6              ; max digits + 1
+        ;ldy #3              ; bits per digit - 1
+        ;jsr nmprnt          ; print result without leading zeros
+
         jsr fresh           ; next line and clear
+        
+
         lda #srouge
         jsr chrout
         lda #"&"            ; print & sigil for octal
@@ -1818,7 +1825,6 @@ supad   .word super             ; address of entry point
 ;prgend    .word $1234     
 ;--------------------------------------
      .include  "e-v20-page0.asm"
-     .include  "e-v20-float.asm"
      .include  "e-v20-basic-map.asm"
      .include  "e-v20-kernal-map.asm"
      .include  "e-v20-vic.asm"

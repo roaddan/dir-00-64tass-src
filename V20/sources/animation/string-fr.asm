@@ -9,7 +9,7 @@ XCPX=$40
 DIFF=$03
 
 string1   .byte     1,TITLELINE
-          .null     " Tests drapeaux CPU "
+          .null     "Essais Mathematiques"
 string2   .byte     BINCOLM-5,BINLINE-3 
           .null     "flags:nv-bdizc"
 string3   .byte     1,22
