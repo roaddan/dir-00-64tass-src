@@ -21,21 +21,21 @@
 # -----------------------------------------------------------------------------
 # This can be change to any assembler of your liking.
 # Final location where the assembled files must be copied.
-PRGDIR=d-00-64tass-bin
+PRGDIR=dir-00-64tass-bin
 #
 # -----------------------------------------------------------------------------
 # ----------------------- P R O J E C T   S E C T I O N -----------------------
 # -----------------------------------------------------------------------------
 # The basename of your project main file ((no extension) .asm is presumed).
 # Could be different for every project.""
-SOURCENAME=siddemotxt
+SOURCENAME=siddemo
 # The lowest common project shared directory complete path for things like ...
 # librairies, data files, images, etc.
 BASEDIR=/Users/Locals/CBM/00-usbkey32go
 #
 # 64tass allows to include libraries of code and routines of your making.
 # The Complete path to your library directory.
-LIBDIR=$(BASEDIR)/dir-00-64tass-src/C64/lib
+LIBDIR=$(BASEDIR)/dir-00-64tass-src/C64/lib/libstd
 #
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 # DEPSLOCALES=strings_fr.asm  strings_en.asm
@@ -51,8 +51,8 @@ DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 # Since the make file will be executed from within your project the following
 # detail is used to specify where the resulting files will be placed.
 # >> Complete path where the compiled files will be placed.
-OUTDIRC64=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/C64/prgbin
-#OUTDIRV20=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/VIC20/prgbin
+OUTDIRC64=/Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/prgbin
+#OUTDIRV20=/Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/VIC20/prgbin
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
 # -----------------------------------------------------------------------------
@@ -90,10 +90,10 @@ V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
 # **** tests not yet conclusive.
 DISK8DIR=
 DISK9DIR=
-DBC=/Users/Locals/C64/00-usbkey32go/dbc
-JBMON64=/Users/Locals/C64/00-usbkey32go/d-mes-utils/jbmon.prg
-CHAREDIT=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/C64/dev/charedit/charedit-fr.prg
-J2TESTER=/Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/C64/dev/joystick/j2tester.prg
+DBC=/Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/utils/dbc
+JBMON64=/Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/utils/jbmon
+CHAREDIT=/Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/utils/charedit
+J2TESTER=/Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/utils/j2tester
 #
 #-------------------------------------------------------------------------------
 # Some other variables just to reduce command line length.
@@ -131,7 +131,7 @@ FTPCMDPATH=/usr/bin/lftp
 # Note:  The following path must exist on the Ultimate II+ cartridge usb ...
 #        disks.
 # Where to put the files on the Ultimate II +.
-FTPBASDIR=/Usb0/d-remote
+FTPBASDIR=/Usb0/dir-remote
 FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
 FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
 FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye

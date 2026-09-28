@@ -1,7 +1,7 @@
 ;-------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .: lib-c64-math.asm
-; Création .......: Quelque part en 2022.
+; Nom du fichier .: l-c64-binmath.asm
+; Création .......: Quelque part en 2025.
 ; Cernière m.à j. : 20250521
 ; Inspiration ....: 
 ; Note ...........: En création.

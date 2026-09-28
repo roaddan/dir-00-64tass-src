@@ -46,22 +46,6 @@ b_praxstr          .block
                .bend
 
 ;------------------------------------------------------------------------------
-; M a c r o s   p o u r   p e u p l e r   A A X X .
-;------------------------------------------------------------------------------
-loadaxmem      .macro axadd
-               php
-               ldx  \axadd         ; Charge lsb de l'adresse dans X.
-               lda  \axadd+1       ; Charge msb de l'adresse dans A.
-               plp
-               .endm
-
-loadaximm      .macro aximm
-               php
-               ldx  #<\aximm       ; Charge dans X le LSB de la valeur imm.
-               lda  #>\aximm       ; Charge dans A le MSB de la valeur imm.
-               plp
-               .endm
-;------------------------------------------------------------------------------
 ; Récupère un nombre à partir du périphérique d'entrée et le sauvegarde en 
 ; ASCII dans le tampon d'éditeur de ligne de BASIC et sauvegarde la longueur de
 ; la chaîne dans la variable b_bufflenght.
