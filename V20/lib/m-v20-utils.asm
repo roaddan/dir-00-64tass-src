@@ -135,19 +135,15 @@ stvalzp2 .macro ptr
 ; charge un ptr dans zpage2
 ;--------------------------------------
 styxzp1 .macro
-        jsr pushregs
         sty zp1+1
         stx zp1
-        jsr popregs
         .endm
 ;--------------------------------------
 ; charge un ptr dans zpage2
 ;--------------------------------------
 styxzp2 .macro
-        jsr pushregs
         sty zp2+1
         stx zp2
-        jsr popregs
         .endm
 ;--------------------------------------
 ; Deplace le curseur a la position 
@@ -178,7 +174,7 @@ mpopr   .macro
         tax
         pla
         plp
-        .endm        
+            .endm        
 ;--------------------------------------
 setloop     .macro lcount
             pha

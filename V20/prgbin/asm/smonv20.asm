@@ -1,144 +1,142 @@
-;--------------------------------------
+;-----------------------------------------------------------------------------
 ; Fichier.......: smonv20.asm
 ; Basee sur.....: Supermon64
 ; Auteur........: Jim Butterfield
 ; Version Vic20 : Daniel Lafrance 
-;--------------------------------------
-.enc "none"
-     .include  "e-v20-bashead-ex.asm"
-;     .include  "l-v20-bashead-ex.asm "
-     .include  "m-v20-utils.asm"
-;--------------------------------------
-;
-;main      .block
-;          jsr  super
-;          rts
-;          .bend
+;-----------------------------------------------------------------------------
+            .enc  "none"      ; Jeu de caractères PETSCI
+;-----------------------------------------------------------------------------
+; déclaration des Constantes de gestion d'écren.
+;-----------------------------------------------------------------------------
+            .include    "e-v20-bashead-ex.asm"
+;-----------------------------------------------------------------------------
+; Enlevez le commentaire suivant pour ajouter une commande de démarrage Basic.     
+;            .include     "l-v20-bashead-ex.asm "
+;-----------------------------------------------------------------------------
+            .include    "m-v20-utils.asm"
 ;-----------------------------------------------------------------------------
 ;Point d 'entrée initiale
 ;-----------------------------------------------------------------------------
-          .weak
-          org = $a000
-          .endweak
-          *=org
-main      =*
+            .weak
+            org = $a000
+            .endweak
+            *=org
+main        =*
 ;-----------------------------------------------------------------------------
 ; Point d'entrée initial
 ;-----------------------------------------------------------------------------
-super     jsr  scrinit
-          lda  #147
-          jsr  chrout
-          lda  #$ff
-          sta  bit8mask
-          ldy  #msg9-msgbas    ; Affiche un message pour acceder l'aide
-          jsr  sndmsg
+super       jsr   scrinit
+            lda   #147
+            jsr   chrout
+            lda   #$ff
+            sta   bit8mask
+            ldy   #msg9-msgbas; Affiche un message pour acceder l'aide
+            jsr   sndmsg
+            ;ldy  #msg4-msgbas; Affiche "..sys ".
+            ;jsr  sndmsg
+            ;lda  supad       ; Stocker l'adresse du point d'entrée dans tmp0.
+            ;sta  tmp0
+            ;lda  supad+1
+            ;sta  tmp0+1
+            ;jsr  cvtdec      ; Convertir l'adresse en décimal.
+            ;lda  #0
+            ;ldx  #6
+            ;ldy  #3
+            ;jsr  nmprnt      ; Afficher l'adresse du point d'entrée.
+            ;jsr  crlf
+            lda   linkad      ; Définir le vecteur brk.
+            sta   bkvec
+            lda   linkad+1
+            sta   bkvec+1
+            lda   #$80        ; Désactiver les messages de contrôle du noyau
+            jsr   setmsg      ; ... et activer les messages d'erreur.
+            lda   #8
+            sta   ddev
+            jsr   credits
+            brk
 
-          ;ldy #msg4-msgbas    ; Affiche "..sys ".
-          ;jsr sndmsg
-          ;lda supad           ; Stocker l'adresse du point d'entrée dans tmp0.
-          ;sta tmp0
-          ;lda supad+1
-          ;sta tmp0+1
-          ;jsr cvtdec          ; Convertir l'adresse en décimal.
-          ;lda #0
-          ;ldx #6
-          ;ldy #3
-          ;jsr nmprnt          ; Afficher l'adresse du point d'entrée.
-          ;jsr crlf
-          
-          lda linkad          ; Définir le vecteur brk.
-          sta bkvec
-          lda linkad+1
-          sta bkvec+1
-          lda #$80            ; Désactiver les messages de contrôle du noyau
-          jsr setmsg          ; ... et activer les messages d'erreur.
-          lda  #8
-          sta  ddev
-          jsr  credits
-          brk
 ;-----------------------------------------------------------------------------
 ; gestionnaire de brk
 ;-----------------------------------------------------------------------------
-break     ldx  #$05           ; Retirer les registres de la pile dans l'ordre:
-bstack    pla                 ; ... y, x, a, sr, pcl, pch, stocker en mémoire.
-          sta pch,x
-          dex 
-          bpl bstack
-          cld                 ; Désactiver le mode bcd.
-          tsx                 ; Stocker le pointeur de pile en mémoire.
-          stx sp
-          cli                 ; Activer les interruptions.
-          jmp dsplyr
+break       ldx   #$05        ; Retirer les registres de la pile dans l'ordre:
+bstack      pla               ; ... y, x, a, sr, pcl, pch, stocker en mémoire.
+            sta   pch,x
+            dex 
+            bpl   bstack
+            cld               ; Désactiver le mode bcd.
+            tsx               ; Stocker le pointeur de pile en mémoire.
+            stx   sp
+            cli               ; Activer les interruptions.
+            jmp   dsplyr
 
 ;-----------------------------------------------------------------------------
 ; boucle principale
 ;-----------------------------------------------------------------------------
-strt      #outcar snoir
-          #outcar $0d
-          ;jsr  crlf           ; Nouvelle ligne à l'écran.
-
-          ldx  #0             ; Pointe au début du tampon d'entrée.
-          stx  chrpnt
-          ;lda  #'>'           ; *DL* - Affiche un 
-          ;jsr  chrout         ; *DL* - . invite.
-smove     jsr  chrin          ; Appel chrin du noyau pour saisir un caractère
-          cmp  #33
-          bne  treatit
-          jsr  mycmd
-          cmp  #$00
-          beq  strt
-treatit   sta  inbuff,x       ; ... stocker dans le tampon d'entrée.
-          inx 
-          cpx  #endin-inbuff  ; Erreur si la mémoire tampon est pleine.
-          bcs  error
-          cmp  #$0d           ; Continue à lire jusqu'au CR.
-          bne  smove
-          lda  #0             ; Tampon d'entrée terminé par un caractère null.
-          sta  inbuff-1,x     ; ... (remplace le cr)
-st1       jsr  getchr         ; Récupére un caractère du tampon.
-          beq  strt           ; Recommence si le tampon est vide.
-          cmp  #$20           ; Sauter les espaces de début.
-          beq  st1
-s0        ldx  #keytop-keyw   ; Boucle parmis les caractères valides de cmd.
-s1        cmp  keyw,x         ; Vérifie si le caractère saisi correspond.
-          beq  s2             ; Commande correspondante, exécuter.
-          dex                 ; Aucune correspondance, vérifie la commande 
+strt        #outcar     snoir
+            #outcar     $0d
+            ;jsr   crlf       ; Nouvelle ligne à l'écran.
+            ldx   #0          ; Pointe au début du tampon d'entrée.
+            stx   chrpnt
+            ;lda   #'>'        ; *DL* - Affiche un 
+            ;jsr   chrout      ; *DL* - . invite.
+smove       jsr   chrin       ; Appel chrin du noyau pour saisir un caractère
+            cmp   #33
+            bne   treatit
+            jsr   mycmd
+            cmp   #$00
+            beq   strt
+treatit     sta   inbuff,x    ; ... stocker dans le tampon d'entrée.
+            inx 
+            cpx   #endin-inbuff; Erreur si la mémoire tampon est pleine.
+            bcs   error
+            cmp   #$0d        ; Continue à lire jusqu'au CR.
+            bne   smove
+            lda   #0          ; Tampon d'entrée terminé par un caractère null.
+            sta   inbuff-1,x  ; ... (remplace le cr)
+st1         jsr   getchr      ; Récupére un caractère du tampon.
+            beq   strt        ; Recommence si le tampon est vide.
+            cmp   #$20        ; Sauter les espaces de début.
+            beq   st1
+s0          ldx   #keytop-keyw; Boucle parmis les caractères valides de cmd.
+s1          cmp   keyw,x      ; Vérifie si le caractère saisi correspond.
+            beq   s2          ; Commande correspondante, exécuter.
+            dex               ; Aucune correspondance, vérifie la commande 
                               ; ... suivante
-          bpl  s1             ; Continuez d'essayer jusqu'à ce que nous les 
+            bpl   s1          ; Continuez d'essayer jusqu'à ce que nous les 
                               ; ... ayons tous vérifiés puis passer au 
                               ; ... gestionnaire d'erreurs.
 
 ;-----------------------------------------------------------------------------
 ; gérer les erreurs
 ;-----------------------------------------------------------------------------
-error     ldy  #msg3-msgbas   ; Afficher «?» pour indiquer une erreur et 
+error       ldy   #msg3-msgbas; Afficher «?» pour indiquer une erreur et 
                               ; ... passer à la ligne suivante.
-          jsr  sndmsg
-          jmp  strt           ; Retour à la boucle principale.
+            jsr   sndmsg
+            jmp   strt        ; Retour à la boucle principale.
 
 ;-----------------------------------------------------------------------------
 ; Traite les commandes
 ;-----------------------------------------------------------------------------
-s2        cpx  #$13           ; Les 3 dernières commandes du tableau sont 
+s2          cpx   #$13        ; Les 3 dernières commandes du tableau sont 
                               ; ... charger/enregistrer/valider qui sont gérées
-          bcs  lsv            ; ... par la même sous-routine.
-          cpx  #$0f           ; Les 4 commandes suivantes sont des conversions
-          bcs  cnvlnk         ; ... de base qui sont gérées par la même 
+            bcs   lsv         ; ... par la même sous-routine.
+            cpx   #$0f        ; Les 4 commandes suivantes sont des conversions
+            bcs   cnvlnk      ; ... de base qui sont gérées par la même 
                               ; ... sous-routine.
-          txa                 ; Les commandes restantes sont transmises via la
-          asl  a              ; ... table des vecteurs multiplier l'indice de la 
-          tax                 ; ... commande par 2 puisque la table contient des 
+            txa               ; Les commandes restantes sont transmises via la
+            asl   a           ; ... table des vecteurs multiplier l'indice de la 
+            tax               ; ... commande par 2 puisque la table contient des 
                               ; ... adresses de 2 octets.
-          lda  kaddr+1,x      ; Place l'adresse de la table des vecteurs sur
-          pha                 ; ... la pile de sorte que le rts de getpar saute à 
+            lda   kaddr+1,x   ; Place l'adresse de la table des vecteurs sur
+            pha               ; ... la pile de sorte que le rts de getpar saute à 
                               ; ... cet endroit.
-          lda  kaddr,x
-          pha
-          jmp  getpar         ; Obtenir le premier paramètre de la commande
-lsv       sta  savy           ; Gère le 
+            lda   kaddr,x
+            pha
+            jmp   getpar      ; Obtenir le premier paramètre de la commande
+lsv         sta   savy        ; Gère le 
                               ; ... chargement/l'enregistrement/la validation
-          jmp  ld
-cnvlnk    jmp  convrt         ; Gère la conversion de base.
+            jmp   ld
+cnvlnk      jmp   convrt      ; Gère la conversion de base.
 
 ;-----------------------------------------------------------------------------
 ; Quitter le moniteur [x]
@@ -303,7 +301,6 @@ dmemgo    lda  (tmp2),y       ; Charge un octet à partir du début + y.
           ldy  #msg5-msgbas   ; Si oui, affichez et activez la lecture vidéo
           jsr  sndmsg         ;  . inversée avant d'afficher la représentation 
                               ;  . ASCII.
-          
           #ldyxmem scrnlin    ; On récupère l'adresse de la ligne actuelle
           lda  #18            ; ... pour placer les representations petscii
           jsr  addatoyx       ; ... sans generer de crlf à la fin de la ligne.
