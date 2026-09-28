@@ -196,9 +196,8 @@ dspbyt    jsr  stop           ; Vérifie la touche [RUN/STOP].
           ; CORRECTIFS-V20 ::: Changer le nombre d'octets a afficher de 8 à 4.
           ;-------------------------------------------------------------------
           jsr  dispmem        ; *DL* - Affiche 1 ligne contenant 4 octets.
-          lda  #4             ; *DL* - Augmenter l'adresse de départ de 4 octets.
-          ;-------------------------------------------------------------------
-          jsr  bumpad2
+          lda  #4             ; *DL* - Augmenter l'adresse de départ ...
+          jsr  bumpad2        ; ... de 4 octets.
           jsr  suba1          ; Décrémente le compteur de lignes.
           bcs  dspbyt         ; Affiche une autre ligne jusqu'à < 0.
 dspmx     jmp  strt           ; Retour à la boucle principale.
@@ -287,11 +286,12 @@ dispmem   jsr  crlf           ; Nouvelle ligne.
           beq  dmemgo         ; showad a déjà imprimé un espace après adresse.
 dmemlp    jsr  space          ; Affiche un espace entre les octets.
 dmemgo    lda  (tmp2),y       ; Charge un octet à partir du début + y.
-          pha  
-          tya
-          asl
-          sta  kcol
-          pla
+          pha                 ; Place le catactere sur la pile.
+          tya                 ; On se sert de Y pour choisir la couleur.
+          asl                 ; On multipli par 2 pour les couleurs 0,2,4,6.
+          sta  kcol           ; Sélectionne laprochaine couleur de caracteres.
+          pla                 ; On récupère le caractere de la pile
+          sta  charbuff,y
           jsr  wrtwo          ; Affiche l'octet en hexadécimal.
           iny                 ; Prochain octet.
           ;-------------------------------------------------------------------
@@ -304,18 +304,17 @@ dmemgo    lda  (tmp2),y       ; Charge un octet à partir du début + y.
           jsr  sndmsg         ;  . inversée avant d'afficher la représentation 
                               ;  . ASCII.
           
-          #ldyxmem scrnlin    ; On calcul l'adresse ecran texte et couleur
+          #ldyxmem scrnlin    ; On récupère l'adresse de la ligne actuelle
           lda  #18            ; ... pour placer les representations petscii
           jsr  addatoyx       ; ... sans generer de crlf à la fin de la ligne.
           #styxzp1            ; Adresse texte dans ZP1.
-          tya
+          tya                 ; On calcul l'adresse en RAM couleur avec or $94
           ora  #$94           ; ex $1005 devient $9505.
-          tay
+          tay                 ; On ajuste Y
           #styxzp2            ; Adresse couleur dans ZP2
-
           ldy  #0             ; Retour au premier octet de la ligne.
 
-dchar     lda  (tmp2),y       ; Charger octet à l'adresse de début + y.
+dchar     lda  charbuff,y       ; Charger octet à l'adresse de début + y.
 ;          tax                 ; Le cacher dans x.
 ;          and  #$bf           ; Effacer le 6ème bit.
 ;          cmp  #$22           ; Est-ce un guillemet ""?
@@ -325,8 +324,7 @@ dchar     lda  (tmp2),y       ; Charger octet à l'adresse de début + y.
 ;          cmp  #$20           ; Est-ce un caractère affichable (>= $20)?
 ;          txa                 ; Restaurer le caractère.
 ;          bcs  dchrok         ; Si imprimable, affiche le caractère.
-;ddot      lda  #$2e           ; Sinon, on met un '.' à la place
-          and  bit8mask
+ddot      and  bit8mask
 dchrok    sta  (zp1),y        ; *DL* - On affiche le caractere.
           tya                 ; *DL* - . et une couleur
           asl                 ; *DL* - .  sequencielle

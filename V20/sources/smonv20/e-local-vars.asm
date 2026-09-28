@@ -59,5 +59,5 @@ chrpnt    .fill     1    ; position actuelle dans le tampon d'entrée
 savy      .fill     1    ; stockage temporaire, souvent pour sauvegarder le 
                          ; registre Y.
 u9f       .fill     1    ; index dans le tampon de travail de l'assembleur
-
+charbuff  .fill     4
 

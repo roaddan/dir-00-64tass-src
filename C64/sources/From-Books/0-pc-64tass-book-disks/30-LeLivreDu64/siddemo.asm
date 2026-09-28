@@ -22,7 +22,7 @@ main        .block
             #loadaxmem $fffe
             jsr b_praxstr
             #locate 2,10
-            #loadaximm 65535
+            #loadaximm $fffe
             jsr b_praxstr
             #locate 0,22
             jsr   popall
