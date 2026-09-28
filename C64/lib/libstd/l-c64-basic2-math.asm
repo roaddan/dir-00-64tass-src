@@ -6,12 +6,12 @@
 ; ISBN .............: 0-942386-32-9 
 ; Section du livre .: Direct Use of Floarting Point (Pages 19 à 40)
 ;--------------------------------------------------------------------------------
-b_math_template
-               .block
-               jsr  pushreg        ; Sauvegarde tous les registres.
-               jsr  popreg         ; Récupère tous les registres.
-               rts
-               .bend
+;b_math_template
+;               .block
+;               jsr  pushreg        ; Sauvegarde tous les registres.
+;               jsr  popreg         ; Récupère tous les registres.
+;               rts
+;               .bend
 ;--------------------------------------------------------------------------------
 ; N O T E : Dans les commentaire les acronymes suivant signifient :
 ;
@@ -38,7 +38,7 @@ b_testnum      .null     "128"
 ;------------------------------------------------------------------------------
 ; Code inspiré de l'exemple 1 de la page 25.
 ;------------------------------------------------------------------------------
-b_praxstr          .block
+b_praxstr      .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                jsr  b_axout
                jsr  popreg         ; Récupère tous les registres.
@@ -455,7 +455,7 @@ b_fac1powfac2
                .bend
 
 ;------------------------------------------------------------------------------
-; Printing b_num1, b_num2 ans b_numresult in hex on screen.
+; Printing b_num1, b_num2 and b_numresult in hex on screen.
 ;------------------------------------------------------------------------------
 ; test et debug des fonctions.
 b_prhexbnum1   .block

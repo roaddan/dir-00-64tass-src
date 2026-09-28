@@ -18,6 +18,12 @@ main        .block
             ldx   #<msg1a        
             ldy   #>msg1a       
             jsr   putscxy
+            #locate 2,5
+            #loadaxmem $fffe
+            jsr b_praxstr
+            #locate 2,10
+            #loadaximm 65535
+            jsr b_praxstr
             #locate 0,22
             jsr   popall
 out         rts

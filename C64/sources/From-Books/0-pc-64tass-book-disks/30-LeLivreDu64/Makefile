@@ -155,8 +155,9 @@ all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 #		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
 #		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
 #		$(FTPASMCMD)	# To transfer the source ASM file.
-#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
+#		$(FTPTXTCMD)	# To transfer the resulting TXT file.
 #		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
+#		killall $(VICE)
 		$(VICE) $(AUTOSTART) $(TMPSEP06) & # to load vice with arguments.
 
 # -----------------------------------------------------------------------------

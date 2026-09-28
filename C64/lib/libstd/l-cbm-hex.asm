@@ -108,27 +108,40 @@ lsra4bits      .block
 ; a2hexstr - affiche la chaine
 ; a2hexstr+1 - sans afficher le ($)
 ;-----------------------------------------------------------------------------
-atohex         .block
-               php
+atohex      .block
+            php
+            pha
+            pha
+            jsr  lsra4bits
+            jsr  nibtohex
+            sta  a2hexstr
+            pla
+            jsr  nibtohex
+            sta  a2hexstr+1
+            lda  #$00                ; set end of string
+            sta  a2hexstr+2
+            pla
+            plp
+            rts
+            .bend
+;-----------------------------------------------------------------------------
+; Converti l'adresse contenu dans $YYXX en hexadécimal.
+;-----------------------------------------------------------------------------
+yx2hex         .block
+               jsr  push
+               txa
                pha
-               pha
-               jsr  lsra4bits
-               jsr  nibtohex
-               sta  a2hexstr
+               tya
+               tax
                pla
-               jsr  nibtohex
-               sta  a2hexstr+1
-               lda  #$00                ; set end of string
-               sta  a2hexstr+2
-               pla
-               plp
-               rts
+               tay
+               jsr xy2hex
+               jsr  pop                     
                .bend
 
 ;-----------------------------------------------------------------------------
 ; Converti l'adresse contenu dans $XXYY en hexadécimal.
 ;-----------------------------------------------------------------------------
-
 xy2hex         .block
                jsr  push
                jsr  atohex
