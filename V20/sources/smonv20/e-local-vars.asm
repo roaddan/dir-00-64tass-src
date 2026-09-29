@@ -1,8 +1,9 @@
 ;--------------------------------------
 ; Variables du block 0
 ;--------------------------------------
-;          *=blk0s
-          *=$1000-$100
+               *=blk0s
+;               *=$1000-$100
+;               *=$3000-$100
 ; -----------------------------------------------------------------------------
 ; temporary pointers
 tmp0      =    $c1       ; utilisé pour renvoyer une entrée, 
@@ -59,5 +60,3 @@ chrpnt    .fill     1    ; position actuelle dans le tampon d'entrée
 savy      .fill     1    ; stockage temporaire, souvent pour sauvegarder le 
                          ; registre Y.
 u9f       .fill     1    ; index dans le tampon de travail de l'assembleur
-charbuff  .fill     4
-

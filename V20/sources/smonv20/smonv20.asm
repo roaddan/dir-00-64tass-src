@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------------------------
-; Fichier.......: smonv20.asm
+; Fichier.......: smonv20.asm 
 ; Basee sur.....: Supermon64
 ; Auteur........: Jim Butterfield
 ; Version Vic20 : Daniel Lafrance 
@@ -30,6 +30,7 @@ super       jsr   scrinit
             jsr   chrout
             lda   #$ff
             sta   bit8mask
+
             ldy   #msg9-msgbas; Affiche un message pour acceder l'aide
             jsr   sndmsg
             ;ldy  #msg4-msgbas; Affiche "..sys ".
@@ -274,67 +275,65 @@ jsub      ldx  sp             ; Charge le pointeur de pile depuis la mémoire.
 ;-----------------------------------------------------------------------------
 ; display 4 bytes of memory
 ;-----------------------------------------------------------------------------
-dispmem   jsr  crlf           ; Nouvelle ligne.
-          #outcar snoir
-          lda  #">"           ; Préfixe > pour indiquer que la mémoire peut
+dispmem     jsr  crlf         ; Nouvelle ligne.
+            #outcar snoir
+            lda  #">"         ; Préfixe > pour indiquer que la mémoire peut
                               ;  . être modifiée sur place.
-          jsr  chrout
-          jsr  showad         ; Afficher l'adresse du premier octet.
-          ldy  #0
-          beq  dmemgo         ; showad a déjà imprimé un espace après adresse.
-dmemlp    jsr  space          ; Affiche un espace entre les octets.
-dmemgo    lda  (tmp2),y       ; Charge un octet à partir du début + y.
-          pha                 ; Place le catactere sur la pile.
-          tya                 ; On se sert de Y pour choisir la couleur.
-          asl                 ; On multipli par 2 pour les couleurs 0,2,4,6.
-          sta  kcol           ; Sélectionne laprochaine couleur de caracteres.
-          pla                 ; On récupère le caractere de la pile
-          sta  charbuff,y
-          jsr  wrtwo          ; Affiche l'octet en hexadécimal.
-          iny                 ; Prochain octet.
-          ;-------------------------------------------------------------------
-          ; CORRECTIFS-V20 ::: Changer le nombre d'octets a afficher de 8 à 4.
-          ;-------------------------------------------------------------------
-          cpy  #4             ; *DL* - Avons-nous déjà affiché 4 octets ?
-          ;-------------------------------------------------------------------
-          bcc  dmemlp         ; Sinon, afficher l'octet suivant.
-          ldy  #msg5-msgbas   ; Si oui, affichez et activez la lecture vidéo
-          jsr  sndmsg         ;  . inversée avant d'afficher la représentation 
-                              ;  . ASCII.
-          #ldyxmem scrnlin    ; On récupère l'adresse de la ligne actuelle
-          lda  #18            ; ... pour placer les representations petscii
-          jsr  addatoyx       ; ... sans generer de crlf à la fin de la ligne.
-          #styxzp1            ; Adresse texte dans ZP1.
-          tya                 ; On calcul l'adresse en RAM couleur avec or $94
-          ora  #$94           ; ex $1005 devient $9505.
-          tay                 ; On ajuste Y
-          #styxzp2            ; Adresse couleur dans ZP2
-          ldy  #0             ; Retour au premier octet de la ligne.
-
-dchar     lda  charbuff,y       ; Charger octet à l'adresse de début + y.
-;          tax                 ; Le cacher dans x.
-;          and  #$bf           ; Effacer le 6ème bit.
-;          cmp  #$22           ; Est-ce un guillemet ""?
-;          beq  ddot           ; Si c'est le cas, affiche . à la place.
-;          txa                 ; Sinon, restaurez le caractère.
-;          and  #$7f           ; Effacer le bit supérieur
-;          cmp  #$20           ; Est-ce un caractère affichable (>= $20)?
-;          txa                 ; Restaurer le caractère.
-;          bcs  dchrok         ; Si imprimable, affiche le caractère.
-ddot      and  bit8mask
-dchrok    sta  (zp1),y        ; *DL* - On affiche le caractere.
-          tya                 ; *DL* - . et une couleur
-          asl                 ; *DL* - .  sequencielle
-          sta  (zp2),y        ; *DL* - . noir, rouge, mauve et bleu.
-          ;jsr  chrout        ; On l'affiche.
-          iny                 ; On passe à l'octet suivant
-          ;-------------------------------------------------------------------
-          ; CORRECTIFS-V20 ::: Changer le nombre d'octets a afficher de 8 à 4.
-          ;-------------------------------------------------------------------
-          cpy  #4             ; Avons-nous déjà affiché 4 octets ?
-          ;-------------------------------------------------------------------
-          bcc  dchar          ; Sinon, afficher l'octet suivant.
-          rts 
+            jsr  chrout
+            jsr  showad       ; Afficher l'adresse du premier octet.
+            ldy  #0
+            beq  dmemgo       ; showad a déjà imprimé un espace après adresse.
+dmemlp      jsr  space        ; Affiche un espace entre les octets.
+dmemgo      lda  (tmp2),y     ; Charge un octet à partir du début + y.
+            pha               ; Place le catactere sur la pile.
+            tya               ; On se sert de Y pour choisir la couleur.
+            asl               ; On multipli par 2 pour les couleurs 0,2,4,6.
+            sta  kcol         ; Sélectionne laprochaine couleur de caracteres.
+            pla               ; On récupère le caractere de la pile
+            jsr  wrtwo        ; Affiche l'octet en hexadécimal.
+            iny               ; Prochain octet.
+            ;-----------------------------------------------------------------
+            ; CORRECTIFS-V20 : Changer le nombre d'octets a afficher de 8 à 4.
+            ;-----------------------------------------------------------------
+            cpy  #4           ; *DL* - Avons-nous déjà affiché 4 octets ?
+            ;-----------------------------------------------------------------
+            bcc  dmemlp       ; Sinon, afficher l'octet suivant.
+            ldy  #msg5-msgbas ; Si oui, affichez et activez la lecture vidéo
+            jsr  sndmsg       ;  . inversée avant d'afficher la 
+                              ;  . représentation PETSCII.
+            #ldyxmem scrnlin  ; On récupère l'adresse de la ligne actuelle
+            lda  #18          ; ... pour placer les representations petscii
+            jsr  addatoyx     ; ... sans generer de crlf à la fin de la ligne.
+            #styxzp1          ; Adresse texte dans ZP1.
+            tya               ; On calcul l'adresse en RAM couleur avec or $94
+            ora  #$94         ; ex $1005 devient $9505.
+            tay               ; On ajuste Y
+            #styxzp2          ; Adresse couleur dans ZP2
+            ldy  #0           ; Retour au premier octet de la ligne.
+dchar       lda  (tmp2),y     ; Charger octet à l'adresse de début + y.
+;           tax                ; Le cacher dans x.
+;           and  #$bf          ; Effacer le 6ème bit.
+;           cmp  #$22          ; Est-ce un guillemet ""?
+;           beq  ddot          ; Si c'est le cas, affiche . à la place.
+;           txa                ; Sinon, restaurez le caractère.
+;           and  #$7f          ; Effacer le bit supérieur
+;           cmp  #$20          ; Est-ce un caractère affichable (>= $20)?
+;           txa                ; Restaurer le caractère.
+;           bcs  dchrok        ; Si imprimable, affiche le caractère.
+ddot        and  bit8mask
+dchrok      sta  (zp1),y      ; *DL* - On affiche le caractere.
+            tya               ; *DL* - . et une couleur
+            asl               ; *DL* - .  sequencielle
+            sta  (zp2),y      ; *DL* - . noir, rouge, mauve et bleu.
+            ;jsr  chrout      ; On l'affiche.
+            iny               ; On passe à l'octet suivant
+            ;-----------------------------------------------------------------
+            ; CORRECTIFS-V20 : Changer le nombre d'octets a afficher de 8 à 4.
+            ;-----------------------------------------------------------------
+            cpy  #4           ; Avons-nous déjà affiché 4 octets ?
+            ;-----------------------------------------------------------------
+            bcc  dchar        ; Sinon, afficher l'octet suivant.
+            rts 
 
 ;-----------------------------------------------------------------------------
 ; compare memory [c]
