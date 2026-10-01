@@ -1779,7 +1779,7 @@ mnemr   .byte $d8,$62,$5a,$48   ; brk php bpl clc
         .byte $0d,$20,$20,$20
 
 ;-----------------------------------------------------------------------------
-; single-character commands
+; single-character commands 
 ;-----------------------------------------------------------------------------
 keyw    .text "acdfghjmrtx@.>;"
 hikey   .text "$+&%lsv"

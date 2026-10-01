@@ -156,7 +156,7 @@ gs1e           .null " Vic20 port by:"
 gs1g           .null " Daniel Lafrance"
 ;gs1h           .null "github.com/roaddan"
 gs1h           .null format("  Look at:$%X",auteur)
-gs1i           .null "Uses banks 0 & 5."
+gs1i           .null "  Uses banks 5.  "
 gs1j           .null "Use VICE emulator"
 gs1k           .null "or cartridge like"
 gs1l           .null "Penultimate+,+2,+3"

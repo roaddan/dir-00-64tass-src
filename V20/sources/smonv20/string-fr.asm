@@ -156,7 +156,7 @@ gs1e           .null "Adaptation Vic20:"
 gs1g           .null " Daniel Lafrance"
 ;gs1h           .null "github.com/roaddan"
 gs1h           .null format("   Voir: $%X",auteur)
-gs1i           .null "Utilise bank 0 & 5"
+gs1i           .null "  Utilise bank   5"
 gs1j           .null "Utilisez VICE emu."
 gs1k           .null "ou cartouche type"
 gs1l           .null "Penultimate+,+2,+3"
