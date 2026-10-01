@@ -1,4 +1,5 @@
 SOURCENAME=animation
+CURRENT=/Users/Locals/Vic20/
 BASEDIR=/Users/Locals/CBM/00-usbkey32go
 DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 #DEPSLOCALES=strings_fr.asm  strings_en.asm
@@ -34,7 +35,9 @@ FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
 
 
 all: $(SOURCENAME).d64
-	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:$(SOURCENAME) 
+	$(VICE) $(V20MON) -autostart $(CURRENT)$(SOURCENAME).d81:vic20-wedge 
+#	$(VICE) $(V20MON) -autostart $(CURRENT)$(SOURCENAME).d81:$(SOURCENAME) 
+#	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:$(SOURCENAME) 
 #	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:fb
 
 $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
@@ -57,15 +60,20 @@ $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 	-write $(SOURCENAME).prg $(SOURCENAME) \
 	-write ${V20UTILDIR}/showkeys.prg showkeys
 
-	cp -f  ${SOURCENAME}.d81 ${PRGBIN}/d81
-	cp -f  ${SOURCENAME}.d64 ${PRGBIN}/d64
+	cp -f ${SOURCENAME}.prg $(CURRENT) 
+	cp -f ${SOURCENAME}.d64 $(CURRENT) 
+	cp -f ${SOURCENAME}.d81 $(CURRENT) 
+
+	cp -f ${SOURCENAME}.d81 ${PRGBIN}/d81
+	cp -f ${SOURCENAME}.d64 ${PRGBIN}/d64
+
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.d81 ${EXPORTDIR}/d81;fi
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.d64 ${EXPORTDIR}/d64;fi
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm;fi
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.prg ${EXPORTDIR}/prg;fi
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.txt ${EXPORTDIR}/txt;fi
-	cp -f  ${SOURCENAME}.d64 ${VICEDIR}
-	cp -f  ${SOURCENAME}.d81 ${VICEDIR}
+	cp -f ${SOURCENAME}.d64 ${VICEDIR}
+	cp -f ${SOURCENAME}.d81 ${VICEDIR}
 	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.prg ${SD2IEC}/;fi
 	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.prg ${SD2IEC}/d-remote/prg;fi
 	if [ -d "${SD2IEC}" ]; then cp -f  ${SOURCENAME}.asm ${SD2IEC}/d-remote/asm;fi
