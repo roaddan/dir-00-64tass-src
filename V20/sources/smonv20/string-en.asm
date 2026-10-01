@@ -27,7 +27,7 @@ mneuprfx       .byte $0d,sbleu
 backspace      .byte 146,144,157,157,32,32,157,157,145,0
 
 hstitle        .byte 18,tleft,31
-               .text "  Super-Mon Help  "
+               .text "Super-Mon V20 Help"
                .byte 144,tright,146,0
 
 hsfoot         .byte 18,leftb,146,28
@@ -142,27 +142,30 @@ hs4vect   .word     hsvide,hs4a,hsvide,hs4c,hsvide
           .word     hsvide,hs4b,$ffff
 
 gs1t           .null " SuperMon Credits "
-gs1a           .null "Original Version:"
-gs1b           .byte sbleu
-               .text " SuperMon+64 1985"
+gs1a           .null "Original Version.:"
+gs1b           .byte srouge
+               .text "*SuperMon+64 1985*"
                .byte snoir,0
 gs1c           .byte srouge
-               .text " Jim Butterfield"
+               .text "* J. Butterfield *"
                .byte snoir,0
 gs1d           .byte srouge
-               .text " 1936-2007 R.I.P."
+               .text "*1936-2007 R.I.P.*"
                .byte snoir,0
-gs1e           .null " Vic20 port by:"
+gs1e           .null " Vic20 port by.:"
 gs1g           .null " Daniel Lafrance"
 ;gs1h           .null "github.com/roaddan"
-gs1h           .null format("  Look at:$%X",auteur)
-gs1i           .null "  Uses banks 5.  "
+gs1h           .null format("   run j$%X",greetme)
+gs1i           .null "Uses 8K + banks 5."
 gs1j           .null "Use VICE emulator"
 gs1k           .null "or cartridge like"
 gs1l           .null "Penultimate+,+2,+3"
-gs1m           .null "See:"
-gs1n           .null "www.tfw8b.com/shop"
-
+gs1m           .byte svert
+               .text "See:              "
+               .byte snoir,0
+gs1n           .byte svert
+               .text "www.tfw8b.com/shop"
+               .byte snoir,0
 gs1vect   .word     hsvide,gs1a,hsvide
           .word     gs1b,gs1c,gs1d,hsvide
           .word     gs1e,gs1g,gs1h,hsvide

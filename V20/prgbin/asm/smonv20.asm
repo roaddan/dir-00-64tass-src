@@ -1663,6 +1663,22 @@ dirdisk   .block
 
           rts
           .bend
+greetme     .block
+            jsr   pushregs
+            lda   #$0d
+            jsr   $ffd2
+            jsr   $ffd2
+            #print auteur
+            lda   #$0d
+            jsr   $ffd2
+            lda   #$0d
+            jsr   $ffd2
+            #print github
+            jsr   getkey
+            jsr   popregs
+            rts
+
+            .bend
 
 version   = "20260307-000000"
 
