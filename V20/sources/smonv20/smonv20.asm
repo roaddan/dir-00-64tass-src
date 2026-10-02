@@ -11,7 +11,7 @@
             .include    "e-v20-bashead-ex.asm"
 ;-----------------------------------------------------------------------------
 ; Enlevez le commentaire suivant pour ajouter une commande de démarrage Basic.     
-;            .include     "l-v20-bashead-ex.asm "
+;            .include     "l-v20-ex-starthead-local.asm"
 ;-----------------------------------------------------------------------------
             .include    "m-v20-utils.asm"
 ;-----------------------------------------------------------------------------
@@ -1660,27 +1660,27 @@ dirdisk   .block
           pla
           sta  kcol
           jsr  popall
-
           rts
           .bend
 greetme     .block
             jsr   pushregs
-            lda   #$0d
-            jsr   $ffd2
+            jsr   cursave
+            jsr   scrnsave
+            lda   #147
             jsr   $ffd2
             #print auteur
-            lda   #$0d
-            jsr   $ffd2
-            lda   #$0d
-            jsr   $ffd2
             #print github
             jsr   getkey
+            lda   #142
+            jsr   $ffd2
+            jsr   scrnrest
+            jsr   currest
             jsr   popregs
             rts
 
             .bend
 
-version   = "20260307-000000"
+version   = "20261002-000000"
 
 ;-----------------------------------------------------------------------------
 ; addressing mode table - nybbles provide index into mode2 table
@@ -1816,6 +1816,7 @@ lentab  .byte $04,$03,$03,$01   ; bits per digit
 
 linkad  .word break             ; address of brk handler
 supad   .word super             ; address of entry point
+prgend  .byte $0     
 
 
 ;----------------------------------------------------------------------------
@@ -1832,14 +1833,15 @@ supad   .word super             ; address of entry point
      .include  "l-v20-screen.asm"
      .include  "l-routines.asm"
 ;     .include  "l-v20-showregs.asm"
-;prgend    .word $1234     
+     .include  "e-local-vars.asm"
+
+     .include  "e-v20-vars.asm"
+
 ;--------------------------------------
      .include  "e-v20-page0.asm"
      .include  "e-v20-basic-map.asm"
      .include  "e-v20-kernal-map.asm"
      .include  "e-v20-vic.asm"
-     .include  "e-v20-vars.asm"
      .include  "e-local-equates.asm"
-     .include  "e-local-vars.asm"
 ;--------------------------------------
 

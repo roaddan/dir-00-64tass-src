@@ -2,7 +2,7 @@
 ; Variables du block 0
 ;--------------------------------------
 ;               *=blk5e-$500
-               *=freevar-$100
+;               *=prgend
 ;               *=$1000-$100
 ;               *=$3000-$100
 ; -----------------------------------------------------------------------------
@@ -61,3 +61,4 @@ chrpnt    .fill     1    ; position actuelle dans le tampon d'entrée
 savy      .fill     1    ; stockage temporaire, souvent pour sauvegarder le 
                          ; registre Y.
 u9f       .fill     1    ; index dans le tampon de travail de l'assembleur
+varlocfin .byte 0

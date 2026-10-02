@@ -172,5 +172,25 @@ gs1vect   .word     hsvide,gs1a,hsvide
           .word     gs1i,hsvide,gs1j
           .word     gs1k,gs1l,gs1m,gs1n,$ffff
 
-auteur         .null "adaptation vic20: mars 2026, daniel lafrance, 3rv, quebec, canada"
-github         .null "https://github.com/roaddan/dir-00-64tass-src/tree/main/v20/sources/smonv20"
+auteur         .byte 14,13,13
+               .text " Vic20 Adaptation:" 
+               .byte 13,28 
+               .text "   Daniel Lafrance," 
+               .byte 13,144 
+               .text "   October 2026," 
+               .byte 13 
+               .text "   Trois-Rivieres," 
+               .byte 13 
+               .text "   Quebec, Canada."
+               .byte 13,13,0
+github         .text "github.com/roaddan"
+               .byte 13,173,192,62
+               .text "/dir-00-64tass-src"
+               .byte 13,32,32,173,192,62
+               .text "/V20"
+               .byte 13,32,32,32,32,173,192,62
+               .text "/sources"
+               .byte 13,32,32,32,32,32,32,173,192,62
+               .text "/smonv20"
+               .byte 0
+               

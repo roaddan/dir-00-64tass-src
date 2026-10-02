@@ -143,31 +143,54 @@ hs4vect   .word     hsvide,hs4a,hsvide,hs4c,hsvide
 
 gs1t           .null " Credits SuperMon"
 gs1a           .null "Version originale:"
-gs1b           .byte sbleu
-               .text " SuperMon+64 1985 "
+gs1b           .byte srouge
+               .text "*SuperMon+64 1985*"
                .byte snoir,0
 gs1c           .byte srouge
-               .text " Jim Butterfield  "
+               .text "* J. Butterfield *"
                .byte snoir,0
 gs1d           .byte srouge
-               .text " 1936-2007 R.I.P. "
+               .text "*1936-2007 R.I.P.*"
                .byte snoir,0
 gs1e           .null "Adaptation Vic20:"
 gs1g           .null " Daniel Lafrance"
 ;gs1h           .null "github.com/roaddan"
-gs1h           .null format(" Lancez j$%X",greetme)
-gs1i           .null "  Utilise bank   5"
+gs1h           .null format("  Lancez j$%X",greetme)
+gs1i           .null "Utilise 8k + bnk 5"
 gs1j           .null "Utilisez VICE emu."
 gs1k           .null "ou cartouche type"
 gs1l           .null "Penultimate+,+2,+3"
-gs1m           .null "voir:"
-gs1n           .null "www.tfw8b.com/shop"
-
+gs1m           .byte svert
+               .text "voir:             "
+               .byte snoir,0
+gs1n           .byte svert
+               .text "www.tfw8b.com/shop"
+               .byte snoir,0
 gs1vect   .word     hsvide,gs1a,hsvide
           .word     gs1b,gs1c,gs1d,hsvide
           .word     gs1e,gs1g,gs1h,hsvide
           .word     gs1i,hsvide,gs1j
           .word     gs1k,gs1l,gs1m,gs1n,$ffff
 
-auteur         .null "Adaptation Vic20: Mars 2026, Daniel Lafrance, 3RV, Quebec, Canada"
-github         .null "https://github.com/roaddan/dir-00-64tass-src/tree/main/V20/sources/smonv20"
+auteur         .byte 14,13,13
+               .text " Adaptation Vic20:" 
+               .byte 13,28 
+               .text "   Daniel Lafrance," 
+               .byte 13,144 
+               .text "   Octobre 2026," 
+               .byte 13 
+               .text "   Trois-Rivieres," 
+               .byte 13 
+               .text "   Quebec, Canada."
+               .byte 13,13,0
+github         .text "github.com/roaddan"
+               .byte 13,173,192,62
+               .text "/dir-00-64tass-src"
+               .byte 13,32,32,173,192,62
+               .text "/V20"
+               .byte 13,32,32,32,32,173,192,62
+               .text "/sources"
+               .byte 13,32,32,32,32,32,32,173,192,62
+               .text "/smonv20"
+               .byte 0
+               
