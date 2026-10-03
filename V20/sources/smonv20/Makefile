@@ -68,6 +68,7 @@ $(SOURCENAME).d64: $(SOURCENAME).prg $(DEPENDANCES)
 
 	cp -f  ${SOURCENAME}.d81 ${PRGBIN}/d81
 	cp -f  ${SOURCENAME}.d64 ${PRGBIN}/d64
+	
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.d81 ${EXPORTDIR}/d81;fi
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.d64 ${EXPORTDIR}/d64;fi
 	if [ -d "${EXPORTDIR}" ]; then cp -f  ${SOURCENAME}.asm ${EXPORTDIR}/asm;fi

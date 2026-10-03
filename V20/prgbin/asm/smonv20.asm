@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------------------------
-; Fichier.......: smonv20.asm 
+; Fichier.......: smonv20.asm
 ; Basee sur.....: Supermon64
 ; Auteur........: Jim Butterfield
 ; Version Vic20 : Daniel Lafrance 
@@ -1818,10 +1818,9 @@ linkad  .word break             ; address of brk handler
 supad   .word super             ; address of entry point
 prgend  .byte $0     
 
-
 ;----------------------------------------------------------------------------
-     ;.include  "string-fr.asm"
-     .include  "string-en.asm"
+     .include  "string-fr.asm" 
+     ;.include  "string-en.asm"
 ;-----------------------------------------------------------------------------
 ;     .include  "l-v20-push.asm" 
 ;     .include  "l-v20-string.asm" 
