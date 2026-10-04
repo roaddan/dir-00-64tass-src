@@ -1561,7 +1561,7 @@ text      lda  #$00           ;place la couleur
           .bend
 
 ;-----------------------------------------------------------------------------
-; Aide à l'ecran !e
+; Aide à l'ecran !h
 ;-----------------------------------------------------------------------------
 popup      .block
           jsr  pushall
@@ -1578,7 +1578,7 @@ popup      .block
           jsr  scrnsave
           #outcar 147
           ldx  #6
-          lda  #102
+          lda  #102           ; caract`re de fond
           jsr  fillscreen
           #ldyxmem genword1 
           jsr  putsyx
@@ -1599,16 +1599,21 @@ popup      .block
           .bend
 
 ;-----------------------------------------------------------------------------
-; ajout des commandes c, d, h, g , m
+; ajout des commandes m, 5, 8, 9, d, h, g ,c
 ;-----------------------------------------------------------------------------
 mycmd     .block
           jsr  pushregs
           jsr  chrin
 cmdm      cmp  #'m'      ;bit8mask 
-          bne  cmd8
+          bne  cmd1
           lda  bit8mask
           eor  #%10000000
           sta  bit8mask
+          jmp  mycmdout
+cmd1      cmp  #'1'      ; selection lecteur cassette
+          bne  cmd8
+          lda  #$1
+          sta  ddev
           jmp  mycmdout
 cmd8      cmp  #'8'      ; selection lecteur 8
           bne  cmd9
@@ -1643,6 +1648,9 @@ notmycmd  jsr  popregs
           rts
           .bend
 
+;-----------------------------------------------------------------------------
+; Affiche le contenue du disque courant
+;-----------------------------------------------------------------------------
 dirdisk   .block
           jsr  pushall
           jsr  clrkbbuf
@@ -1662,6 +1670,10 @@ dirdisk   .block
           jsr  popall
           rts
           .bend
+
+;-----------------------------------------------------------------------------
+; Affiche mes infos
+;-----------------------------------------------------------------------------
 greetme     .block
             jsr   pushregs
             jsr   cursave
@@ -1799,7 +1811,7 @@ mnemr   .byte $d8,$62,$5a,$48   ; brk php bpl clc
 ;-----------------------------------------------------------------------------
 keyw    .text "acdfghjmrtx@.>;"
 hikey   .text "$+&%lsv"
-keytop  =*
+keytop  =* 
 
 ;-----------------------------------------------------------------------------
 ; vectors corresponding to commands above

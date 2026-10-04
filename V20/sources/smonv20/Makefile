@@ -37,7 +37,7 @@ FTPCRTARG=cd /Usb0/dir-00-64tass-bin/crt; put $(SOURCENAME).crt; bye
 
 all: $(SOURCENAME).d64
 #	$(VICE) -8 $(CURRENT)$(SOURCENAME).d81 -keybuf "sys 40960\n" -autostartprgmode 0 $(SOURCENAME).prg 
-	$(VICE) $(V20MON) -autostartprgmode 1 $(CURRENT)$(SOURCENAME).d81:vic20-wedge
+#	$(VICE) $(V20MON) -autostartprgmode 1 $(CURRENT)$(SOURCENAME).d81:vic20-wedge
 #	$(VICE) $(V20MON) -autostart $(CURRENT)$(SOURCENAME).d81:$(SOURCENAME) 
 #	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:$(SOURCENAME) 
 #	$(VICE) $(V20MON) -autostart $(SOURCENAME).d64:fb
