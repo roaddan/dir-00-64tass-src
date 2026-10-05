@@ -86,7 +86,7 @@ hs2k           .null "Conversion [$+&%]"
 hs2l           .null " [$]hex.  [&]oct."
 hs2m           .null " [+]dec.  [%]bin."
 
-hs2vect   .word     hsvide,hs2a,hs2b,hsvide
+hs2vect   .word     hsvide
           .word     hs2c,hs2d,hsvide
           .word     hs2e,hs2f,hsvide
           .word     hs2g,hs2h,hsvide

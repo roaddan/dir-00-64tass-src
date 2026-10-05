@@ -2,7 +2,7 @@
 ; Fichier.......: smonv20.asm
 ; Basee sur.....: Supermon64
 ; Auteur........: Jim Butterfield
-; Version Vic20 : Daniel Lafrance 
+; Version Vic20 : Daniel Lafrance octobre 2026
 ;-----------------------------------------------------------------------------
             .enc  "none"      ; Jeu de caractères PETSCI
 ;-----------------------------------------------------------------------------
@@ -144,7 +144,7 @@ cnvlnk      jmp   convrt      ; Gère la conversion de base.
 ;-----------------------------------------------------------------------------
 exit      #outcar   147
 
-          jmp   (bwarmst)     ; Saute au démarrage à froid pour réinitialiser 
+          jmp   (bwarmst)     ; Saute au démarrage à chaud pour réinitialiser 
                               ; ... le système de base sans effacer la memoire.
 
 ;-----------------------------------------------------------------------------
@@ -799,7 +799,9 @@ disass  bcs dis0ad          ; if no address was given, start from last address
         jsr copy12          ; copy start address to tmp2
         jsr getpar          ; get end address in tmp0
         bcc dis2ad          ; if one was given, skip default
-dis0ad  lda #10             ; DL: disassemble 11 bytes by default
+dis0ad  lda #145
+        jsr chrout
+        lda #10             ; DL: disassemble 11 bytes by default
         sta tmp0            ; store length in tmp0
         bne disgo           ; skip length calculation
 dis2ad  jsr sub12           ; calculate number of bytes between start and end
@@ -898,7 +900,7 @@ relc3   rts
 ; mini-asssembler share a common heritage.  the comments showing the way the 
 ; opcodes are transformed into indexes for the mnemonic lookup table come
 ; from the mini-assembler source.
-
+;-----------------------------------------------------------------------------
 instxx  tay                 ; stash opcode in accumulator in y for later
         lsr a               ; is opcode even or odd?
         bcc ieven
@@ -1831,8 +1833,8 @@ supad   .word super             ; address of entry point
 prgend  .byte $0     
 
 ;----------------------------------------------------------------------------
-     .include  "string-fr.asm" 
-     ;.include  "string-en.asm"
+     ;.include  "string-fr.asm" 
+     .include  "string-en.asm"
 ;-----------------------------------------------------------------------------
 ;     .include  "l-v20-push.asm" 
 ;     .include  "l-v20-string.asm" 
