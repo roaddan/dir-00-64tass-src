@@ -150,23 +150,25 @@ exit      #outcar   147
 ;-----------------------------------------------------------------------------
 ; Afficher les registres - [r].
 ;-----------------------------------------------------------------------------
-dsplyr    ldy  #msg2-msgbas   ; Affiche les en-têtes.
-          jsr  sndclr
-          lda  #$3b           ; S'enregistre avec le préfixe <;> pour 
-                              ; ... permettre la modification.
-          jsr  chrout
-          lda  #$20
-          jsr  chrout
-          lda  pch            ; Affiche les 2 octets du compteur de programme. 
-          jsr  wrtwo
-          ldy  #1             ; Commence 1 octet après l'octet de poids fort 
-                              ; ... du PC.
-disj      lda  pch,y          ; Boucle parmis le reste des registres.
-          jsr  wrbyte         ; Affiche la valeur du registre sur 1 octet.
-          iny 
-          cpy  #7             ; Il y a un total de 7 octets à afficher.
-          bcc  disj
-          jmp  strt
+dsplyr      ldy   #msg2-msgbas      ; Affiche les en-têtes.
+            jsr   sndclr
+            lda   #$3b              ; S'enregistre avec le préfixe <;> pour 
+                                    ; ... permettre la modification.
+            jsr   chrout
+            lda   #$20
+            jsr   chrout
+            lda   pch               ; Affiche les 2 octets du compteur de 
+                                    ; ... programme. 
+            jsr   wrtwo
+            ldy   #1                ; Commence 1 octet après l'octet de poids 
+                                    ; ... fort du PC.
+disj        lda   pch,y             ; Boucle parmis le reste des registres.
+            jsr   wrbyte            ; Affiche la valeur du registre sur 1 
+                                    ; ...octet.
+            iny 
+            cpy   #7                ; Il y a un total de 7 octets à afficher.
+            bcc   disj
+            jmp   strt
 
 ;-----------------------------------------------------------------------------
 ; Afficher mémoire [m]
@@ -411,7 +413,9 @@ texit     jmp  strt           ; Retour à la boucle principale.
 ;-----------------------------------------------------------------------------
 ; Chercher en mémoire [h]
 ;-----------------------------------------------------------------------------
-hunt      jsr  getdif         ; Obtenir le début (tmp2) et la fin (tmp0) 
+hunt        lda   #$00
+            sta   bcount
+            jsr  getdif         ; Obtenir le début (tmp2) et la fin (tmp0) 
           bcs  herror         ; Le report indique une erreur
           ldy  #0
           jsr  getchr         ; Obtenir un seul caractère
@@ -445,6 +449,14 @@ hlp3      lda  (tmp2),y       ; Récupérer le premier octet de la zone de stock
           cpy  savy           ; Est-ce la fin de la zone de stockage
           bne  hlp3           ; Sinon, continuez à comparer les octets
           jsr  showad         ; Correspondance trouvée, afficher l'adresse
+            inc   bcount
+            lda   bcount
+            cmp   #$04
+            bne   hnoft
+            and   #$00
+            sta   bcount
+            lda   #$0d
+            jsr   $ffd2
 hnoft     jsr  stop           ; Si non, vérifiez la touche [RUN/STOP]
           beq  hexit          ; Quitter si pressé
           jsr  adda2          ; Incrémente le pointeur de la zone de stockage
@@ -1833,7 +1845,7 @@ supad   .word super             ; address of entry point
 prgend  .byte $0     
 
 ;----------------------------------------------------------------------------
-     ;.include  "string-fr.asm" 
+     ;.include  "string-fr.asm"  
      .include  "string-en.asm"
 ;-----------------------------------------------------------------------------
 ;     .include  "l-v20-push.asm" 
