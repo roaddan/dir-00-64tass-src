@@ -143,12 +143,10 @@ loadxyimm   .macro    ptr
 ;-----------------------------------------------------------------------------
 ; Sélectionne et mémorise le jeu de caractères Minuscule/Majuscule.
 ;-----------------------------------------------------------------------------
-lowercase
-tolower     .macro   
+lowercase .macro   
             php
             pha
             lda   #14
-            sta   characterset
             jsr   $ffd2
             pla
             plp
@@ -156,12 +154,10 @@ tolower     .macro
 ;-----------------------------------------------------------------------------
 ; Sélectionne le jeu de caractères Majuscule/Graphique.
 ;-----------------------------------------------------------------------------
-uppercase
-toupper     .macro   
+uppercase .macro   
             php
             pha
             lda   #upcase
-            sta   characterset
             jsr   $ffd2
             pla
             plp
