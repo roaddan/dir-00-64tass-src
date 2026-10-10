@@ -8,8 +8,6 @@
 ;$(yyxx) = pointeur sur le mot
 ;acc     = valeur a ajouter.
 ;rep     = $yyxx
-addatoword
-addatow
 addatoyx 
         .block
         php
@@ -31,9 +29,6 @@ norep   sta reponse
 ;$(yyxx) = pointeur sur le mot
 ;acc     = valeur a soustraire.
 ;rep     = $yyxx
-subtoword
-subfromw
-subatoyx
 subfromyx 
         .block
         php
