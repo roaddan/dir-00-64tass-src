@@ -1,0 +1,559 @@
+
+; 64tass Turbo Assembler Macro V1.54.1900 listing file
+; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -l disklibtest.lbl -L disklibtest.txt -o disklibtest.prg disklibtest.asm
+; Wed Jan  7 18:17:38 2026
+
+;Offset	;Hex		;Source
+
+;******  Processing input file: disklibtest.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/l-bashead.asm
+
+.0801			start
+>0801	0b 08		bcmd1    .word $080b ;adresse de la pro-
+>0803	0a 00		         .word $0a   ;no. ligne basic.
+>0805	9e		         .byte $9e   ;jeton pour la
+>0806	32 30 36 31	         .text "2061";adresse du debut
+>080a	00		         .byte $00   ;fin de cmd basic.
+>080b	00 00		bcmd2    .word $00   ;adresse de la pro-
+.080d	a9 90		        lda #$90
+.080f	85 38		        sta $38
+.0811	20 5e a6	        jsr $a65e
+.0814	20 28 08	        jsr bhscrini
+.0817	20 41 08	        jsr bhislib
+.081a	a9 ad		        lda #<bhinfo
+.081c	85 fb		        sta $fb
+.081e	a9 08		        lda #>bhinfo
+.0820	85 fc		        sta $fc
+.0822	20 7d 08	        jsr bhprint
+.0825	4c f5 08	basnold jmp main
+.0828			bhscrini
+.0828	08		        php
+.0829	48		        pha
+.082a	a9 05		bord    lda #$05    ;place la couleur
+.082c	8d 20 d0	        sta $d020   ; de la bordure.
+.082f	a9 06		back    lda #$06    ;place la couleur
+.0831	8d 21 d0	        sta $d021   ; du fond d'ecran.
+.0834	a9 01		text    lda #$01    ;place la couleur
+.0836	8d 86 02	        sta $0286   ; du texte.
+.0839	a9 93		        lda #$93    ;efface l'ecran par
+.083b	20 d2 ff	        jsr $ffd2   ; chrout du kernal.
+.083e	68		        pla
+.083f	28		        plp
+.0840	60		        rts
+.0841			bhislib
+.0841	a0 ff		        ldy #$ff
+.0843	c8		nextc   iny
+.0844	b9 53 08	        lda libmark,y
+.0847	f0 09		        beq finish
+.0849	d9 00 c0	        cmp $c000,y
+.084c	f0 f5		        beq nextc
+.084e	20 5a 08	norom   jsr bhldlib
+.0851	60		        rts
+.0852	60		finish  rts
+>0853	4c 49 42 43	libmark .null "libc64"
+>0857	36 34 00
+.085a			bhldlib
+.085a	a9 8b		        lda #<bhmsg
+.085c	85 fb		        sta $fb
+.085e	a9 08		        lda #>bhmsg
+.0860	85 fc		        sta $fc
+.0862	20 7d 08	        jsr bhprint
+.0865	a9 07		doit    lda #7      ;Chrg nfichier len.
+.0867	a2 a5		        ldx #<bhname ;Pointe $yyxx->ptr
+.0869	a0 08		        ldy #>bhname ;  nfichier
+.086b	20 bd ff	        jsr $ffbd   ;setnam
+.086e	a9 01		        lda #$01    ;Chrg lfn dans a
+.0870	a2 08		        ldx #8      ;Periph #8
+.0872	a0 01		        ldy #$01    ;$00:adresse<-yyxx
+.0874	20 ba ff	        jsr $ffba   ;setlfs
+.0877	a9 00		        lda #$00    ;$00:Chrg en memoire
+.0879	20 d5 ff	        jsr $ffd5   ;load
+.087c	60		end     rts
+.087d			bhprint
+.087d	a0 00		        ldy #$00
+.087f	b1 fb		nextc   lda ($fb),y
+.0881	f0 07		        beq end
+.0883	c8		        iny
+.0884	20 d2 ff	        jsr $ffd2
+.0887	4c 7f 08	        jmp nextc
+.088a	60		end     rts
+.088b			bhmsg
+>088b	1d 1d 1d 1d	        .byte 29,29,29,29,29
+>088f	1d
+>0890	1d 1d		        .byte 29,29
+>0892	43 48 41 52	        .text "chargement/loading:"
+>0896	47 45 4d 45 4e 54 2f 4c 4f 41 44 49 4e 47 3a
+>08a5	52 4f 4d 43	bhname  .null "romc000"
+>08a9	30 30 30 00
+>08ad	0d 0d		bhinfo  .byte $0d,$0d
+>08af	1d 1d 1d 1d	        .byte 29,29,29,29,29
+>08b3	1d
+>08b4	1d 1d 1d 1d	        .byte 29,29,29,29,29
+>08b8	1d
+>08b9	50 4f 55 52	        .text "pour/for information"
+>08bd	2f 46 4f 52 20 49 4e 46 4f 52 4d 41 54 49 4f 4e
+>08cd	0d		        .byte $0d
+>08ce	1d 1d 1d 1d	        .byte 29,29,29,29,29
+>08d2	1d
+>08d3	1d 1d 1d 1d	        .byte 29,29,29,29
+>08d7	56 4f 49 52	        .text "voir/see:"
+>08db	2f 53 45 45 3a
+>08e0	12 20		        .byte 18,32
+>08e2	52 4f 4d 58	        .text "romx000.txt"
+>08e6	30 30 30 2e 54 58 54
+>08ed	20 92		        .byte 32,146
+>08ef	0d 0d 0d 0d	        .byte $0d,$0d,$0d,$0d,$0d,0
+>08f3	0d 00
+
+;******  Return to file: disklibtest.asm
+
+.08f5			main
+.08f5	20 f9 08	        jsr testprg
+.08f8	60		        rts
+.08f9			testprg
+.08f9	20 4c c5	        jsr pushregs
+.08fc	a0 00		        ldy #$00
+.08fe	a9 05		        lda #$05
+.0900	8d 02 90	        sta $9002
+.0903	b9 00 c0	nextc   lda $c000,y
+.0906	f0 07		        beq out
+.0908	20 d2 ff	        jsr chrout
+.090b	c8		        iny
+.090c	4c 03 09	        jmp nextc
+.090f	20 79 c5	out     jsr popregs
+.0912	60		        rts
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/m-utils.asm
+
+
+;******  Return to file: disklibtest.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/e-romc000.asm
+
+=40923			a2bincol  = 40923
+=40926			a2binpfx  = 40926
+=40924			a2binpos  = 40924
+=40924			a2binpx        = 40924
+=40925			a2binpy        = 40925
+=40913			a2deccol  = 40913
+=40916			a2decpfx  = 40916
+=40914			a2decpos  = 40914
+=40914			a2decpx        = 40914
+=40915			a2decpy        = 40915
+=40936			a2hexcol  = 40936
+=40939			a2hexpfx  = 40939
+=40937			a2hexpos  = 40937
+=40937			a2hexpx        = 40937
+=40938			a2hexpy        = 40938
+=$ffa5			acptr          = $ffa5
+=$c3b5			addatoyx  = $c3b5
+=$c3b5			addtoword = $c3b5
+=$c330			anykey         = $c330
+=$c093			atohex         = $c093
+=$0400			bakmem         = $0400
+=40839			bcol      = 40839
+=40927			binstr         = 40927
+=40936			binv      = 40936
+=173			bleft          = 173
+=$c401			blkfill        = $c401
+=$c01c			bmapclr        = $c01c
+=$c007			bmapinit  = $c007
+=$c040			bmpfillbk = $c040
+=189			bright         = 189
+=$c0c0			bytestohex     = $c0c0
+=$ffc6			chkin          = $ffc6
+=$ffc9			chkout         = $ffc9
+=$73			chrget         = $73
+=$79			chrgot         = $79
+=$ffcf			chrin          = $ffcf
+=$ffd2			chrout         = $ffd2
+=$ff81			cint      = $ff81
+=$ffa8			ciout          = $ffa8
+=$ffe7			clall          = $ffe7
+=40843			clef      = 40843
+=40854			cleft          = 40854
+=$ffc3			close          = $ffc3
+=$c2dc			clrbasbuf = $c2dc
+=$ffcc			clrchn         = $ffcc
+=147			clrhome        = 147
+=$c31a			clrkbbuf  = $c31a
+=40852			cmid      = 40852
+=40853			cright         = 40853
+=17			crsdown        = 17
+=157			crsleft        = 157
+=29			crsright  = 29
+=145			crsup          = 145
+=40952			curcol         = 40952
+=$c727			curput         = $c727
+=$c720			cursave        = $c720
+=$c6f6			cursor         = $c6f6
+=40845			curx      = 40845
+=40844			cury      = 40844
+=40841			cx        = 40841
+=40840			cy        = 40840
+=$c232			dbbline        = $c232
+=40846			dbclin         = 40846
+=40847			dbcoul         = 40847
+=$c2c2			dbdraw         = $c2c2
+=$c277			dbdrawline     = $c277
+=$c249			dbeline        = $c249
+=40848			dbhght         = 40848
+=$c260			dbhline        = $c260
+=40850			dbleft         = 40850
+=$c21b			dbtline        = $c21b
+=40851			dbtop          = 40851
+=40849			dbwdth         = 40849
+=38784			ddatae         = 38784
+=38786			ddatas         = 38786
+=38783			ddev      = 38783
+=$c4a4			decptr         = $c4a4
+=40917			decstr         = 40917
+=40923			decv      = 40923
+=$c433			deczp1         = $c433
+=$c440			deczp2         = $c440
+=20			delete         = 20
+=38779			dfnlen         = 38779
+=38780			dfnptr         = 38780
+=$c7cd			directory = $c7cd
+=8			discase        = 8
+=$c757			diskdir        = $c757
+=$c72e			diskerror = $c72e
+=38788			diskvar        = 38788
+=146			disrevs        = 146
+=38782			dlfsno         = 38782
+=$c8cd			dmsg0          = $c8cd
+=$c8ef			dmsg1          = $c8ef
+=$c8de			dmsgc          = $c8de
+=$c95f			dmsge0         = $c95f
+=$c8f8			dmsge1         = $c8f8
+=$c948			dmsge1d        = $c948
+=$c90d			dmsge2         = $c90d
+=$c932			dmsge4         = $c932
+=$c921			dmsge5         = $c921
+=$c895			dputsavemesg   = $c895
+=$c8a2			dputsloadmesg  = $c8a2
+=$c1c3			drawbox        = $c1c3
+=$c843			dskerror  = $c843
+=40947			dst       = 40947
+=40855			edbox          = 40855
+=40846			ekeyb          = 40846
+=9			enacase        = 9
+=18			enarevs        = 18
+=$00			eot       = $00
+=40839			escr      = 40839
+=$0100			fascii         = $0100
+=$bcf3			fasctf1        = $bcf3
+=$bc58			ff1abs         = $bc58
+=$e30e			ff1atn         = $e30e
+=$b7a1			ff1bytxx  = $b7a1
+=$b947			ff1com2        = $b947
+=$e264			ff1cos         = $e264
+=$bafe			ff1d10         = $bafe
+=$bf7b			ff1ef2         = $bf7b
+=$b79e			ff1evalx  = $b79e
+=$bccc			ff1int         = $bccc
+=$b849			ff1p05         = $b849
+=$bd7e			ff1pac         = $bd7e
+=$bc1b			ff1rnd         = $bc1b
+=$bc39			ff1sign        = $bc39
+=$e26b			ff1sin         = $e26b
+=$bf71			ff1sqr         = $bf71
+=$b1bf			ff1swd64  = $b1bf
+=$bbd0			ff1t49         = $bbd0
+=$bbca			ff1t57         = $bbca
+=$bbc7			ff1t5c         = $bbc7
+=$e2b4			ff1tan         = $e2b4
+=$bddd			ff1tasc        = $bddd
+=$bc0c			ff1tf2         = $bc0c
+=$bc9b			ff1tudw        = $bc9b
+=$bbd4			ff1tyx         = $bbd4
+=$b1d2			ff1wrd64  = $b1d2
+=$b1aa			ff1wrday  = $b1aa
+=$bae2			ff1x10         = $bae2
+=$ba2b			ff1xf2         = $ba2b
+=$ba28			ff1xfv         = $ba28
+=$bb12			ff2df1         = $bb12
+=$b86a			ff2pf1         = $b86a
+=$b853			ff2sf1         = $b853
+=$bbfc			ff2tf1         = $bbfc
+=$afe9			ffpand         = $afe9
+=$afe6			ffpor          = $afe6
+=$bc5b			ffvcmp         = $bc5b
+=$bb0f			ffvdf1         = $bb0f
+=$b867			ffvpf1         = $b867
+=$b850			ffvsf1         = $b850
+=$bba2			ffvtf1         = $bba2
+=$ba8c			ffvtf2         = $ba8c
+=$bc44			fi62tf1        = $bc44
+=$bc3c			fiaatf1        = $bc3c
+=$bdcd			fiaxtf1        = $bdcd
+=$c812			filetomem = $c812
+=$b3a2			fiyytf1        = $b3a2
+=40880			float1         = 40880
+=40860			float2         = 40860
+=40912			fltv      = 40912
+=$bc2b			fsngf1         = $bc2b
+=40906			fvar1          = 40906
+=40900			fvar2          = 40900
+=38778			genbyte1  = 38778
+=38776			genword1  = 38776
+=$c2ef			getfac1        = $c2ef
+=$ffe4			getin          = $ffe4
+=$c34f			getkey         = $c34f
+=19			gohome         = 19
+=$c6a2			gotoxy         = $c6a2
+=40940			hexstr         = 40940
+=40945			hexv      = 40945
+=171			hleft          = 171
+=192			hline          = 192
+=179			hright         = 179
+=$c499			incptr         = $c499
+=$c4b4			incptr8        = $c4b4
+=$c421			inczp1         = $c421
+=$c42a			inczp2         = $c42a
+=$e3bf			intcgt         = $e3bf
+=$fff3			iobase         = $fff3
+=$ff84			ioinit         = $ff84
+=$c344			kbfree         = $c344
+=5			kblanc         = 5
+=31			kbleu          = 31
+=154			kbleup         = 154
+=149			kbrun          = 149
+=$0286			kcol      = $0286
+=159			kcyan          = 159
+=151			kgris1         = 151
+=152			kgris2         = 152
+=155			kgris3         = 155
+=158			kjaune         = 158
+=156			kmauve         = 156
+=144			knoir          = 144
+=129			korange        = 129
+=150			krose          = 150
+=28			krouge         = 28
+=30			kvert          = 30
+=153			kvertp         = 153
+=40842			len       = 40842
+=$a000			libre          = $a000
+=$ffb1			listen         = $ffb1
+=$ffd5			load      = $ffd5
+=14			locase         = 14
+=$c4c5			loop      = $c4c5
+=40836			loop16         = 40836
+=40945			loopcount = 40945
+=40838			loops          = 40838
+=$c0ae			lsr4bits  = $c0ae
+=$ff9c			membot         = $ff9c
+=$c413			memfill        = $c413
+=40951			memptr         = 40951
+=$c7d4			memtofile = $c7d4
+=$ff99			memtop         = $ff99
+=$c0b5			nibtohex  = $c0b5
+=40912			offset         = 40912
+=$ffc0			open      = $ffc0
+=40953			pc        = 40953
+=$fff0			plot      = $fff0
+=$c513			popall         = $c513
+=$c579			popregs        = $c579
+=$c306			prnfac1        = $c306
+=$c313			prnfac2        = $c313
+=$abf9			prompt         = $abf9
+=$c490			ptrtoyx        = $c490
+=$c4da			pushall        = $c4da
+=$c54c			pushregs  = $c54c
+=$c082			putahex        = $c082
+=$c198			putahexdec     = $c198
+=$c8af			putmsg         = $c8af
+=$c6cb			putnch         = $c6cb
+=$c614			puts      = $c614
+=$c657			putsc          = $c657
+=$c689			putscxy        = $c689
+=$c670			putscyx        = $c670
+=$c638			putsxy         = $c638
+=$c62a			putsyx         = $c62a
+=$c05e			putyxhex  = $c05e
+=40958			ra        = 40958
+=$ff87			ramtas         = $ff87
+=$ffde			rdtim          = $ffde
+=$ffb7			readst         = $ffb7
+=$fce2			reboot         = $fce2
+=40855			reponse        = 40855
+=$fe66			reset          = $fe66
+=$ff8a			restor         = $ff8a
+=$c3ef			rolword        = $c3ef
+=$c44d			rolzp1         = $c44d
+=$c46b			rolzp2         = $c46b
+=$c45c			rorzp1         = $c45c
+=$c47a			rorzp2         = $c47a
+=40959			rp        = 40959
+=40955			rs        = 40955
+=40957			rx        = 40957
+=40956			ry        = 40956
+=$ffd8			save      = $ffd8
+=1			sblanc         = 1
+=6			sbleu          = 6
+=14			sbleup         = 14
+=9			sbrun          = 9
+=$ff9f			scnkey         = $ff9f
+=$ffed			screen         = $ffed
+=39812			scrncar        = 39812
+=38788			scrncol        = 38788
+=$d1			scrnlin        = $d1
+=$c5b9			scrnrest  = $c5b9
+=$c5a6			scrnsave  = $c5a6
+=3			scyan          = 3
+=$ff93			second         = $ff93
+=$c5f2			setcarptr = $c5f2
+=$c603			setcolptr = $c603
+=$ffba			setlfs         = $ffba
+=$ff90			setmsg         = $ff90
+=$ffbd			setnam         = $ffbd
+=$ffdb			settim         = $ffdb
+=$ffa2			settmo         = $ffa2
+=11			sgris1         = 11
+=12			sgris2         = 12
+=15			sgris3         = 15
+=$c375			showkey        = $c375
+=7			sjaune         = 7
+=4			smauve         = 4
+=0			snoir          = 0
+=8			sorange        = 8
+=32			space          = 32
+=$07f8			sprtloc        = $07f8
+=$0340			sprtmem        = $0340
+=40949			src       = 40949
+=10			srose          = 10
+=2			srouge         = 2
+=$c1			stal      = $c1
+=$ffe1			stop      = $ffe1
+=$c14a			strhexval = $c14a
+=$c6d8			strlen         = $c6d8
+=$ab24			strout         = $ab24
+=$c3d2			subatoyx  = $c3d2
+=$c3d2			subtoword = $c3d2
+=5			svert          = 5
+=13			svertp         = 13
+=$ffb4			talk      = $ffb4
+=176			tleft          = 176
+=174			tright         = 174
+=$ff96			tsks      = $ff96
+=40859			tval1          = 40859
+=40857			tval2          = 40857
+=$ffea			udtim          = $ffea
+=$ffae			unlsn          = $ffae
+=$ffab			untlk          = $ffab
+=142			upcase         = 142
+=$c96d			vaddatoyx = $c96d
+=$c970			vanykey        = $c970
+=$c973			vatohex        = $c973
+=$c976			vbmapclr  = $c976
+=$c979			vbmapinit = $c979
+=$c97c			vbmpfillbk     = $c97c
+=$c97f			vbytestohex    = $c97f
+=$c982			vclrbasbuf     = $c982
+=$c985			vclrkbbuf = $c985
+=$c988			vdbbline  = $c988
+=$c98b			vdbdraw        = $c98b
+=$c98e			vdbdrawline    = $c98e
+=$c991			vdbeline  = $c991
+=$c994			vdbhline  = $c994
+=$c997			vdbtline  = $c997
+=$c99a			vdecptr        = $c99a
+=$c99d			vdeczp1        = $c99d
+=$c9a0			vdeczp2        = $c9a0
+=$c9a3			vdirectory     = $c9a3
+=$c9a6			vdiskdir  = $c9a6
+=$c9a9			vdiskerror     = $c9a9
+=$c9ac			vdputsavemesg  = $c9ac
+=$c9af			vdputsloadmesg = $c9af
+=$c9b2			vdrawbox  = $c9b2
+=$c9b5			vdskerror = $c9b5
+=$ffd8			vector         = $ffd8
+=$c9b8			vfiletomem     = $c9b8
+=$c9bb			vgetfac1  = $c9bb
+=$c9be			vgetkey        = $c9be
+=$c9c1			vgotoxy        = $c9c1
+=$d000			vic       = $d000
+=$3f3f			vidend         = $3f3f
+=$2000			vidstart  = $2000
+=$c9c4			vincptr        = $c9c4
+=$c9c7			vincptr8  = $c9c7
+=$c9ca			vinczp1        = $c9ca
+=$c9cd			vinczp2        = $c9cd
+=$c9d0			vkbfree        = $c9d0
+=221			vline          = 221
+=$c9d3			vlsr4bits = $c9d3
+=$c9d6			vmemtofile     = $c9d6
+=$c9d9			vnibtohex = $c9d9
+=$c9dc			vpopall        = $c9dc
+=$c9df			vpopregs  = $c9df
+=$c9e2			vprnfac1  = $c9e2
+=$c9e5			vprnfac2  = $c9e5
+=$c9e8			vptrtoyx  = $c9e8
+=$c9eb			vpushall  = $c9eb
+=$c9ee			vpushregs = $c9ee
+=$c9f1			vputahex  = $c9f1
+=$c9f4			vputahexdec    = $c9f4
+=$c9f7			vputnch        = $c9f7
+=$c9fa			vputs          = $c9fa
+=$c9fd			vputsc         = $c9fd
+=$ca00			vputscxy  = $ca00
+=$ca03			vputscyx  = $ca03
+=$ca06			vputsxy        = $ca06
+=$ca09			vputsyx        = $ca09
+=$ca0c			vputyxhex = $ca0c
+=$ca0f			vrolword  = $ca0f
+=$ca12			vrolzp1        = $ca12
+=$ca15			vrolzp2        = $ca15
+=$ca18			vrorzp1        = $ca18
+=$ca1b			vrorzp2        = $ca1b
+=$ca1e			vscrnrest = $ca1e
+=$ca21			vscrnsave = $ca21
+=$ca24			vsetcarptr     = $ca24
+=$ca27			vsetcolptr     = $ca27
+=$ca2a			vshowkey  = $ca2a
+=$ca2d			vstrhexval     = $ca2d
+=$ca30			vstrlen        = $ca30
+=$ca33			vsubatoyx = $ca33
+=$ca36			vwaitkey  = $ca36
+=$ca39			vwaitspace     = $ca39
+=$ca3c			vwaitstop = $ca3c
+=$ca3f			vyxtoptr  = $ca3f
+=$ca42			vzp1tozp2 = $ca42
+=$ca45			vzp2tozp1 = $ca45
+=$c359			waitkey        = $c359
+=$c36c			waitspace = $c36c
+=$c323			waitstop  = $c323
+=$c489			yxtoptr        = $c489
+=$fb			zp1       = $fb
+=$c5cc			zp1tozp2  = $c5cc
+=$fd			zp2       = $fd
+=$c5df			zp2tozp1  = $c5df
+
+;******  Return to file: disklibtest.asm
+
+
+;******  Processing file: string-fr.asm
+
+>0913	00		row      .byte $00
+>0914	00		col      .byte $00
+>0915	00		lin      .byte $00
+>0916	55		sbit     .byte $55
+>0917	00 00		adrs     .word $00
+>0919	00		counter  .byte $00
+>091a	00 20		baseaddr .word $2000 ;8192
+>091c	40 01		scrwidth .word $0140 ;320
+>091e	0d 0d 1d 1d	msg   .byte $0d,$0d,29,29,29
+>0922	1d
+>0923	55 4e 20 49	      .text "un instant! chargement de "
+>0927	4e 53 54 41 4e 54 21 20 43 48 41 52 47 45 4d 45
+>0937	4e 54 20 44 45 20
+>093d	52 4f 4d 43	fname .null "romc000"
+>0941	30 30 30 00
+
+;******  Return to file: disklibtest.asm
+
+
+;******  End of listing
