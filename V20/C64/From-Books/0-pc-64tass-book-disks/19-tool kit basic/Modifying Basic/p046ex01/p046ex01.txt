@@ -1,0 +1,619 @@
+
+; 64tass Turbo Assembler Macro V1.52.1237? listing file
+; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -i -L p046ex01.txt -o p046ex01.prg p046ex01.asm
+; Tue Nov 12 10:39:36 2024
+
+;Offset	;Hex		;Source
+
+;******  Processing input file: p046ex01.asm
+
+="20241105-205257"	           Version = "20241105-205257"
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib/macros-64tass.asm
+
+
+;******  Return to file: p046ex01.asm
+
+=$a57c			ntok      =    $a57c
+=$a724			nlst      =    $a724
+=$ab47			ochr      =    $ab47
+=$a6ef			lret1     =    $a6ef
+=$a6f3			lret2     =    $a6f3
+=$a7ae			nstt      =    $a7ae
+=$a7e7			ncmd      =    $a7e7
+=$aef1			evalp     =    $aef1
+=$ad8d			nchk      =    $ad8d
+=$ae8d			nfnc      =    $ae8d
+=$ad9e			eval      =    $ad9e
+=$b7a1			f1tx      =    $b7a1
+=$af08			syntax    =    $af08
+=$d020			breg      =    $d020
+=$d021			sreg      =    $d021
+=$028a			kreg      =    $028a
+=$e394			cstrt     =    $e394
+=$e453			rvect     =    $e453
+=$bbca			f1t57     =    $bbca
+=$bccc			intf1     =    $bccc
+=$b850			subf1     =    $b850
+=$aefa			chklp     =    $aefa
+=$aefd			chkcm     =    $aefd
+=$aef7			chkrp     =    $aef7
+=$bb0f			f1div     =    $bb0f
+=$a43a			nerr      =    $a43a
+=$a447			errcnt    =    $a447
+=$a474			ready     =    $a474
+>8000	45 83		errv      .word     errx
+>8002	0c 82		tokv      .word     tokx
+>8004	c1 82		lstv      .word     listx
+>8006	0a 83		comv      .word     comx
+>8008	65 83		fncv      .word     funcx
+.800a	78		          sei
+.800b	ad 00 80	          lda  errv
+.800e	8d 00 03	          sta  $0300         ; ($0300) =
+.8011	ad 01 80	          lda  errv+1        ; Error message vector
+.8014	8d 01 03	          sta  $0301         ;
+.8017	ad 02 80	          lda  tokv
+.801a	8d 04 03	          sta  $0304         ; ($0304) =
+.801d	ad 03 80	          lda  tokv+1        ; Tokenization vector
+.8020	8d 05 03	          sta  $0305     ;
+.8023	ad 04 80	          lda  lstv
+.8026	8d 06 03	          sta  $0306         ; ($0306) =
+.8029	ad 05 80	          lda  lstv+1        ; List tokens vector
+.802c	8d 07 03	          sta  $0307     ;
+.802f	ad 06 80	          lda  comv
+.8032	8d 08 03	          sta  $0308         ; ($0308) =
+.8035	ad 07 80	          lda  comv+1        ; Command vector
+.8038	8d 09 03	          sta  $0309     ;
+.803b	ad 08 80	          lda  fncv
+.803e	8d 0a 03	          sta  $030a         ; ($030a) =
+.8041	ad 09 80	          lda  fncv+1        ; Function vector
+.8044	8d 0b 03	          sta  $030b     ;
+.8047	58		          cli
+.8048	60		          rts
+>8049	4b 80		adrtok    .word     toktab
+>804b	c1 c4 d5 cd	toktab    .text     "ADUM"
+>804f	d0		          .byte     $d0           ; ADUMP   $01
+>8050	c1 d0 d0 ce	          .text     "APPN"
+>8054	c4		          .byte     $c4           ; APPND   $02
+>8055	c1 d5 d4 cf	          .text     "AUTO"
+>8059	ce		          .byte     $ce           ; AUTON   $03
+>805a	c2 cf		          .text     "BO"
+>805c	d8		          .byte     $d8           ; BOX     $04
+>805d	c3 c1 d3	          .text     "CAS"
+>8060	c5		          .byte     $c5           ; CASE    $05
+>8061	c3 c8 c1 ce	          .text     "CHANG"
+>8065	c7
+>8066	c5		          .byte     $c5           ; CHANGE  $06
+>8067	c3 c9 d2 c3	          .text     "CIRCL"
+>806b	cc
+>806c	c5		          .byte     $c5           ; CIRCLE  $07
+>806d	c3 cf cc cc	          .text     "COLLID"
+>8071	c9 c4
+>8073	c5		          .byte     $c5           ; COLLIDE $08
+>8074	c3 cf cd c7	          .text     "COMG"
+>8078	d4		          .byte     $d4           ; COMGT   $09
+>8079	c3 cf d0	          .text     "COP"
+>807c	d9		          .byte     $d9           ; COPY    $0a
+>807d	c4 c5		          .text     "DE"
+>807f	cc		          .byte     $cc           ; DEL     $0b
+>8080	c4 cc c1	          .text     "DLA"
+>8083	d9		          .byte     $d9           ; DLAY    $0c
+>8084	c4 d2 c1	          .text     "DRA"
+>8087	d7		          .byte     $d7           ; DRAW    $0d
+>8088	c4 d5 cd	          .text     "DUM"
+>808b	d0		          .byte     $d0           ; DUMP    $0e
+>808c	c5 d2 c1 d3	          .text     "ERAS"
+>8090	c5		          .byte     $c5           ; erase   $0f
+>8091	c7 c6 c9 ce	          .text     "GFIN"
+>8095	c4		          .byte     $c4           ; GFIND   $12
+>8096	c8 c5 cc	          .text     "HEL"
+>8099	d0		          .byte     $d0           ; HELP    $13
+>809a	c8 c9 cd c5	          .text     "HIME"
+>809e	cd		          .byte     $cd           ; HIMEM   $14
+>809f	c8 c9 d2 c5	          .text     "HIRE"
+>80a3	d3		          .byte     $d3           ; HIRES   $15
+>80a4	c8 d0 c5	          .text     "HPE"
+>80a7	ce		          .byte     $ce           ; HPEN    $16
+>80a8	c8 d4 c1	          .text     "HTA"
+>80ab	c2		          .byte     $c2           ; HTAB    $17
+>80ac	c9 ce d3 c5	          .text     "INSER"
+>80b0	d2
+>80b1	d4		          .byte     $d4           ; INSERT  $18
+>80b2	cc c1 c2 c5	          .text     "LABE"
+>80b6	cc		          .byte     $cc           ; LABEL   $19
+>80b7	cc c9 ce	          .text     "LIN"
+>80ba	c5		          .byte     $c5           ; LINE    $1a
+>80bb	cc cf cd c5	          .text     "LOME"
+>80bf	cd		          .byte     $cd           ; LOMEM   $1b
+>80c0	cd c5 d2 c7	          .text     "MERG"
+>80c4	c5		          .byte     $c5           ; MERGE   $1c
+>80c5	cd cf		          .text     "MO"
+>80c7	c4		          .byte     $c4           ; MOD     $1d
+>80c8	cd cf d6	          .text     "MOV"
+>80cb	c5		          .byte     $c5           ; MOVE    $1e
+>80cc	d4 c1 d0 c5	          .text     "TAPE"
+>80d0	cd		          .byte     $cd           ; TAPEM   $1f
+>80d1	cd d5 cc d4	          .text     "MULTI"
+>80d5	c9
+>80d6	c3		          .byte     $c3           ; MULTIC  $20
+>80d7	cf cc		          .text     "OL"
+>80d9	c4		          .byte     $c4           ; OLD     $21
+>80da	d0 c1 c9 ce	          .text     "PAINT"
+>80de	d4
+>80df	d2		          .byte     $d2           ; PAINTR  $22
+>80e0	d0 c6 cb c5	          .text     "PFKE"
+>80e4	d9		          .byte     $d9           ; PFKEY   $23
+>80e5	d0 cf c9 ce	          .text     "POINT"
+>80e9	d4
+>80ea	d2		          .byte     $d2           ; POINTR  $24
+>80eb	d0 cf		          .text     "PO"
+>80ed	d0		          .byte     $d0           ; POP     $25
+>80ee	d0 d2 cf	          .text     "PRO"
+>80f1	c3		          .byte     $c3           ; PROC    $26
+>80f2	d0 d2 d4 d5	          .text     "PRTUSN"
+>80f6	d3 ce
+>80f8	c7		          .byte     $c7           ; PRTUSNG $27
+>80f9	d2 c5 ce d5	          .text     "RENU"
+>80fd	cd		          .byte     $cd           ; RENUM   $28
+>80fe	d2 c5 d0 c5	          .text     "REPEA"
+>8102	c1
+>8103	d4		          .byte     $d4           ; REPEAT  $29
+>8104	d2 cc d3	          .text     "RLS"
+>8107	d4		          .byte     $d4           ; RLST    $2A
+>8108	d3 c5		          .text     "SE"
+>810a	d4		          .byte     $d4           ; SET     $2B
+>810b	d3 c9 ce c7	          .text     "SINGL"
+>810f	cc
+>8110	c5		          .byte     $c5           ; SINGLE  $2C
+>8111	d3 d0 d2 c9	          .text     "SPRITE"
+>8115	d4 c5
+>8117	c3		          .byte     $c3           ; SPRITEC $2D
+>8118	d3 d0 d2 c9	          .text     "SPRITE"
+>811c	d4 c5
+>811e	c4		          .byte     $c4           ; SPRITED $2E
+>811f	d3 d0 d2 c9	          .text     "SPRITE"
+>8123	d4 c5
+>8125	cd		          .byte     $cd           ; SPRITEM $2F
+>8126	d3 d2		          .text     "SR"
+>8128	d4		          .byte     $d4           ; SRT     $30
+>8129	d4 d2 c1 c3	          .text     "TRAC"
+>812d	c5		          .byte     $c5           ; TRACE   $31
+>812e	d5 ce cc d3	          .text     "UNLS"
+>8132	d4		          .byte     $d4           ; UNLST   $32
+>8133	d5 ce ce	          .text     "UNN"
+>8136	d7		          .byte     $d7           ; UNNW    $33
+>8137	d6 c4 d5 cd	          .text     "VDUM"
+>813b	d0		          .byte     $d0           ; VDUMP   $34
+>813c	d6 d0 c5	          .text     "VPE"
+>813f	ce		          .byte     $ce           ; VPEN    $35
+>8140	d6 d4 c1	          .text     "VTA"
+>8143	c2		          .byte     $c2           ; VTAB    $36
+>8144	d7 c8 c9 cc	          .text     "WHIL"
+>8148	c5		          .byte     $c5           ; WHILE   $37
+>8149	c3 cf cc	          .text     "COL"
+>814c	c4		          .byte     $c4           ; COLD    $38
+>814d	c2 d2 c4	          .text     "BRD"
+>8150	d2		          .byte     $d2           ; BRDR    $39
+>8151	d3 c3 d2 c5	          .text     "SCREE"
+>8155	c5
+>8156	ce		          .byte     $ce           ; SCREEN  $3A
+>8157	d6 c2 c1 c3	          .text     "VBAC"
+>815b	cb		          .byte     $cb           ; VBACK   $3B
+>815c	cb c5 d9	          .text     "KEY"
+>815f	d3		          .byte     $d3           ; KEYS    $3C
+>8160	c6 d2 c1	          .text     "FRA"
+>8163	c3		          .byte     $c3           ; FRAC    $3D
+>8164	ca cf		          .text     "JO"
+>8166	d9		          .byte     $d9           ; JOY     $3E
+>8167	d0 c5 ce	          .text     "PEN"
+>816a	d8		          .byte     $d8           ; PENX    $3F
+>816b	d0 c5 ce	          .text     "PEN"
+>816e	d9		          .byte     $d9           ; PENY    $40
+>816f	c4 c9		          .text     "DI"
+>8171	d6		          .byte     $d6           ; DIV     $41
+>8172	00		          .byte     $00           ; END of keyword list
+>8173	3d		fncone    .byte     $3d      ; Last command Token+1 (or first function token)
+>8174	3e		twoarg    .byte     $3e      ; First token for functions that needs tow or more
+>8175	42		endfnc    .byte     $42      ; Last token plus one.
+>8176	23 84		comadr    .word     adump-1
+>8178	24 84		          .word     appnd-1
+>817a	25 84		          .word     auton-1
+>817c	26 84		          .word     box-1
+>817e	27 84		          .word     case-1
+>8180	28 84		          .word     change-1
+>8182	29 84		          .word     circle-1
+>8184	2a 84		          .word     collid-1
+>8186	2b 84		          .word     comgt-1
+>8188	2c 84		          .word     copy-1
+>818a	2d 84		          .word     del-1
+>818c	2e 84		          .word     dlay-1
+>818e	2f 84		          .word     draw-1
+>8190	30 84		          .word     dump-1
+>8192	31 84		          .word     erase-1
+>8194	32 84		          .word     find-1
+>8196	33 84		          .word     gchang-1
+>8198	34 84		          .word     gfind-1
+>819a	35 84		          .word     help-1
+>819c	36 84		          .word     himem-1
+>819e	37 84		          .word     hires-1
+>81a0	38 84		          .word     hpen-1
+>81a2	39 84		          .word     htab-1
+>81a4	3a 84		          .word     insert-1
+>81a6	3b 84		          .word     label-1
+>81a8	3c 84		          .word     line-1
+>81aa	3d 84		          .word     lomem-1
+>81ac	3e 84		          .word     merge-1
+>81ae	3f 84		          .word     mod-1
+>81b0	40 84		          .word     move-1
+>81b2	41 84		          .word     tapem-1
+>81b4	42 84		          .word     multic-1
+>81b6	43 84		          .word     old-1
+>81b8	44 84		          .word     paintr-1
+>81ba	45 84		          .word     pfkey-1
+>81bc	46 84		          .word     pointr-1
+>81be	47 84		          .word     pop-1
+>81c0	48 84		          .word     proc-1
+>81c2	49 84		          .word     prtusn-1
+>81c4	4a 84		          .word     renum-1
+>81c6	4b 84		          .word     repeat-1
+>81c8	4c 84		          .word     rlst-1
+>81ca	4d 84		          .word     set-1
+>81cc	4e 84		          .word     single-1
+>81ce	4f 84		          .word     spritc-1
+>81d0	50 84		          .word     spritd-1
+>81d2	51 84		          .word     spritm-1
+>81d4	52 84		          .word     srt-1
+>81d6	53 84		          .word     trace-1
+>81d8	54 84		          .word     unlst-1
+>81da	55 84		          .word     unnw-1
+>81dc	56 84		          .word     vdump-1
+>81de	57 84		          .word     vpen-1
+>81e0	58 84		          .word     vtab-1
+>81e2	59 84		          .word     while-1
+>81e4	b9 83		          .word     cold-1
+>81e6	bc 83		          .word     brdr-1
+>81e8	a8 83		          .word     screen-1
+>81ea	cd 83		          .word     vback-1
+>81ec	d3 83		          .word     keys-1
+>81ee	f6 83		fncadr    .word     frac
+>81f0	5b 84		          .word     joy
+>81f2	5c 84		          .word     penx
+>81f4	5d 84		          .word     peny
+>81f6	04 84		          .word     div
+>81f8	fa 81		errtab    .word     err1
+>81fa	c9 ce d6 c1	err1      .text     "INVALID KEY IPTIO"
+>81fe	cc c9 c4 20 cb c5 d9 20 c9 d0 d4 c9 cf
+>820b	ce		          .byte     $ce           ; Invalid key option
+.820c	20 7c a5	tokx      jsr  ntok           ; Handle normal tokens.
+.820f	a2 00		          ldx  #$00           ; Set input index.
+.8211	a0 04		          ldy  #$04           ; Set output index.
+.8213	84 0f		          sty  $0f            ; Flag for data token.
+.8215	bd 00 02	charlp    lda  $0200,x        ; Next char from buffer.
+.8218	c9 80		          cmp  #$80           ; If already a token.
+.821a	b0 53		          bcs  store          ; then skip.
+.821c	c9 20		          cmp  #$20           ; Test for space.
+.821e	f0 4f		          beq  store          ;
+.8220	85 08		          sta  $08            ; Save for possible quote.
+.8222	c9 22		          cmp  #$22           ; Is it quote?
+.8224	f0 70		          beq  quote
+.8226	24 0f		          bit  $0f            ; See if inside data.
+.8228	70 45		          bvs  store          ; Yes - branch
+.822a	c9 30		          cmp  #$30           ; See if numeric.
+.822c	90 04		          bcc  notnum
+.822e	c9 3c		          cmp  #$3c           ; Branch if number.
+.8230	90 3d		          bcc  store
+.8232	ad 4a 80	notnum    lda  adrtok+1
+.8235	85 fd		          sta  $fd
+.8237	85 ff		          sta  $ff
+.8239	84 71		          sty  $71            ; Save output pointer
+.823b	ad 49 80	          lda  adrtok         ; Set Pointers
+.823e	a8		          tay                 ;   to tokeen table
+.823f	88		          dey                 ;   in ($fc) and
+.8240	84 fe		          sty  $fe            ;   ($fe).
+.8242	88		          dey
+.8243	84 fc		          sty  $fc
+.8245	a0 01		          ldy  #$01
+.8247	84 0b		          sty  $0b            ; Init token index.
+.8249	88		          dey
+.824a	86 7a		          stx  $7a            ; Save input index.
+.824c	ca		          dex
+.824d	c8		nextup    iny                 ; Next character in table.
+.824e	d0 04		          bne  notinc
+.8250	e6 ff		          inc  $ff            ; Move to next table.
+.8252	e6 fd		          inc  $fd            ; Page after 256 bytes
+.8254	e8		notinc    inx                 ; Next character in buffer
+.8255	bd 00 02	notend    lda  $0200,x
+.8258	38		          sec
+.8259	f1 fe		          sbc  ($fe),y
+.825b	f0 f0		          beq  nextup         ; If buffer and table match.
+.825d	c9 80		          cmp  #$80           ; If only high bit off
+.825f	d0 3c		          bne  nomtch         ; No match
+.8261	a9 60		          lda  #$60           ; Two-byte token-lst byte fixed.
+.8263	a4 71		          ldy  $71            ; Output index.
+.8265	c8		          iny
+.8266	99 fb 01	          sta  $01fb,y        ; Store the $60 token.
+.8269	e6 71		          inc  $71
+.826b	a5 0b		          lda  $0b            ; 2nd byte token.
+.826d	a4 71		repeet    ldy  $71            ; Reset output index.
+.826f	e8		store     inx                 ; Input index.
+.8270	c8		          iny                 ; Output index.
+.8271	99 fb 01	          sta  $01fb,y        ; Store char.
+.8274	b9 fb 01	          lda  $01fb,y
+.8277	f0 3c		          beq  done           ; If end of buffer.
+.8279	38		          sec
+.827a	e9 3a		          sbc  #$3a           ; See if colon.
+.827c	f0 04		          beq  colon
+.827e	c9 49		          cmp  #$49           ; See if "DATA" token.
+.8280	d0 04		          bne  notdat
+.8282	85 0f		colon     sta  $0f            ; Sat data flag to $49 for bvs.
+.8284	d0 8f		          bne  charlp
+.8286	38		notdat    sec
+.8287	e9 55		          sbc  #$55           ; See if REM
+.8289	d0 8a		          bne  charlp
+.828b	85 08		          sta  $08            ; If REM set $00 termiator.
+.828d	bd 00 02	tstend    lda  $0200,x        ; Next char from input buffer.
+.8290	f0 dd		          beq  store
+.8292	c5 08		          cmp  $08            ; = terminator?
+.8294	f0 d9		          beq  store
+.8296	c8		quote     iny                 ; Output index.
+.8297	99 fb 01	          sta  $01fb,y
+.829a	e8		          inx
+.829b	d0 f0		          bne  tstend         ; Unconditional.
+.829d	a6 7a		nomtch    ldx  $7a
+.829f	e6 0b		          inc  $0b            ; Token coount.
+.82a1	c8		tokadv    iny
+.82a2	d0 04		          bne  notovr
+.82a4	e6 ff		          inc  $ff            ; Increment Token
+.82a6	e6 fd		          inc  $fd            ; Inchement Table page
+.82a8	b1 fc		notovr    lda  ($fc),y
+.82aa	10 f5		          bpl  tokadv         ; Loop intil end-of-token byte.
+.82ac	b1 fe		          lda  ($fe),y
+.82ae	d0 a5		          bne  notend         ; Fall through if $00 end.
+.82b0	bd 00 02	          lda  $0200,x        ; END-OF-TABLE.
+.82b3	10 b8		          bpl  repeet         ; Try next char in buffer
+.82b5	99 fd 01	done      sta  $01fd,y
+.82b8	a9 01		          lda  #$01
+.82ba	85 7b		          sta  $7b
+.82bc	a9 ff		          lda  #$ff
+.82be	85 7a		          sta  $7a
+.82c0	60		          rts
+.82c1	30 06		listx     bmi  onetok         ; One byte token.
+.82c3	c9 60		          cmp  #$60           ; Double token?
+.82c5	f0 0d		          beq  lsttok         ; Yes - Branch.
+.82c7	d0 3e		          bne  prtone         ; Not a token.
+.82c9	24 0f		onetok    bit  $0f            ; In quote?
+.82cb	30 3a		          bmi  prtone
+.82cd	c9 ff		tstnls    cmp  #$ff           ; PI?
+.82cf	f0 36		          beq  prtone         ; No - do new token.
+.82d1	4c 24 a7	          jmp  nlst           ; No - do token.
+.82d4	ad 4a 80	lsttok    lda  adrtok+1       ; Set pointer
+.82d7	85 ff		          sta  $ff            ;   to token table
+.82d9	c6 ff		          dec  $ff
+.82db	ad 49 80	          lda  adrtok         ;   in ($fe)
+.82de	85 fe		          sta  $fe
+.82e0	c8		          iny                 ; get second byte of token
+.82e1	b1 5f		          lda  ($5f),y
+.82e3	84 49		          sty  $49            ; Save index into line.
+.82e5	aa		          tax
+.82e6	a0 ff		          ldy  #$ff           ; Set index into keyword table.
+.82e8	ca		lloop1    dex                 ; If x=0 then
+.82e9	f0 0b		          beq  match          ; Keyword match token.
+.82eb	c8		lloop2    iny
+.82ec	d0 02		          bne cont1
+.82ee	e6 ff		          inc  $ff
+.82f0	b1 fe		cont1     lda  ($fe),y        ; Next keyword char.
+.82f2	10 f7		          bpl  lloop2         ; Same keyword.
+.82f4	30 f2		          bmi  lloop1          ; End of keyword.
+.82f6	c8		match     iny
+.82f7	d0 02		          bne  cont2
+.82f9	e6 ff		          inc  $ff
+.82fb	b1 fe		cont2     lda  ($fe),y        ; Get a keyword char.
+.82fd	30 05		          bmi  endtok         ; Last char of token.
+.82ff	20 47 ab	          jsr  ochr           ; output all chars except last.
+.8302	d0 f2		          bne  match          ; Unconditional.
+.8304	4c ef a6	endtok    jmp  lret1          ; Back to list.
+.8307	4c f3 a6	prtone    jmp  lret2          ; Back to list.
+.830a	20 73 00	comx      jsr  $0073          ; Chrget
+.830d	08		          php
+.830e	c9 60		          cmp  #$60           ; Two-byte token?
+.8310	d0 2f		          bne  nrmxeq
+.8312	a9 ea		          lda  #$ea           ; Remove check for
+.8314	85 82		          sta  $82            ;   space in chrget
+.8316	85 83		          sta  $83            ;   due to $6020 token.
+.8318	20 73 00	          jsr  $0073          ; Get second token
+.831b	48		          pha
+.831c	a9 f0		          lda  #$f0           ; Restore check for
+.831e	85 82		          sta  $82            ;   space in chrget
+.8320	a9 ef		          lda  #$ef
+.8322	85 83		          sta  $83
+.8324	68		          pla
+.8325	cd 73 81	          cmp  fncone         ; Token > command ?
+.8328	b0 17		          bcs  nrmxeq         ; If yes exit
+.832a	28		          plp                 ; If not
+.832b	20 31 83	          jsr  cmdnew         ;   do the command.
+.832e	4c ae a7	          jmp  nstt           ; Prepare for next basic statement.
+.8331	38		cmdnew    sec
+.8332	e9 01		          sbc  #$01
+.8334	0a		          asl
+.8335	a8		          tay
+.8336	b9 77 81	          lda  comadr+1,y
+.8339	48		          pha
+.833a	b9 76 81	          lda  comadr,y
+.833d	48		          pha
+.833e	4c 73 00	          jmp  $0073
+.8341	28		nrmxeq    plp
+.8342	4c e7 a7	          jmp  ncmd           ; Normal Commands
+.8345	8a		errx      txa
+.8346	30 07		          bmi  rdymsg         ; Not needed by VIC-20.
+.8348	e0 1f		          cpx  #$1f           ; New error message?
+.834a	b0 06		          bcs  newerr         ; Yes.
+.834c	4c 3a a4	          jmp  nerr           ; No.
+.834f	4c 74 a4	rdymsg    jmp  ready          ; Not needed by VIC-20.
+.8352	8a		newerr    txa
+.8353	38		          sec
+.8354	e9 1f		          sbc  #$1f           ; Get index into
+.8356	0a		          asl                 ;   new error address
+.8357	aa		          tax                 ;   table.
+.8358	bd f8 81	          lda  errtab,x
+.835b	85 22		          sta  $22
+.835d	bd f9 81	          lda  errtab+1,x
+.8360	85 23		          sta  $23
+.8362	4c 47 a4	          jmp  errcnt         ; Continue with normal error message handler.
+.8365	a9 00		funcx     lda  #$00
+.8367	85 0d		          sta  $0d            ; Indicate numeric result.
+.8369	20 73 00	          jsr  $0073
+.836c	08		          php
+.836d	c9 60		          cmp  #$60           ; See if to-byte token.
+.836f	d0 31		          bne  nrmfnc         ; If not - Normal Function.
+.8371	20 73 00	          jsr  $0073          ; get second byte.
+.8374	cd 73 81	          cmp  fncone         ; Check for
+.8377	90 2d		          bcc  errfnc         ;   valid range
+.8379	cd 75 81	          cmp  endfnc         ;   for 2nd byte.
+.837c	b0 28		          bcs  errfnc
+.837e	28		          plp
+.837f	48		          pha
+.8380	cd 74 81	          cmp  twoarg         ; See if one-arg function.
+.8383	b0 06		          bcs  mltarg         ; No - branch
+.8385	20 73 00	          jsr  $0073          ; Chrget the "(".
+.8388	20 f1 ae	          jsr  evalp          ; Eval expression in parens
+.838b	68		mltarg    pla                 ; Get index into
+.838c	38		          sec                 ;   function
+.838d	ed 73 81	          sbc  fncone         ;   address table.
+.8390	0a		          asl
+.8391	a8		          tay
+.8392	b9 ee 81	          lda  fncadr,y       ; Set up to
+.8395	85 55		          sta  $55            ;   execute like
+.8397	b9 ef 81	          lda  fncadr+1,y     ;   normal function.
+.839a	85 56		          sta  $56
+.839c	20 54 00	          jsr  $0054
+.839f	4c 8d ad	          jmp  nchk           ; Check for numeric result
+.83a2	28		nrmfnc    plp
+.83a3	4c 8d ae	          jmp  nfnc           ; Normal Function
+.83a6	4c 08 af	errfnc    jmp  syntax         ; If 2nd byte not valid
+.83a9	20 9e ad	screen    jsr  eval           ; Eval expression.
+.83ac	20 a1 b7	          jsr  f1tx           ; Convert FAC1 to X-reg 0-255.
+.83af	e0 10		          cpx  #$10           ; Valid Colour?
+.83b1	b0 04		          bcs  syner1
+.83b3	8e 21 d0	          stx  sreg
+.83b6	60		          rts
+.83b7	4c 08 af	syner1    jmp  syntax         ; Syntax error.
+.83ba	4c 94 e3	cold      jmp  cstrt
+.83bd	20 9e ad	brdr      jsr  eval           ; Eval expression.
+.83c0	20 a1 b7	          jsr  f1tx           ; Convert FAC1 to X-reg 0-255.
+.83c3	e0 10		          cpx  #$10           ; Valid Colour?
+.83c5	b0 04		          bcs  syner2
+.83c7	8e 20 d0	          stx  breg
+.83ca	60		          rts
+.83cb	4c 08 af	syner2    jmp  syntax         ; Syntax error.
+.83ce	78		vback     sei
+.83cf	20 53 e4	          jsr  rvect          ; init vectors.
+.83d2	58		          cli
+.83d3	60		          rts
+.83d4	c9 41		keys      cmp  #$41           ; Is-it "A"?
+.83d6	d0 04		          bne  nota
+.83d8	a9 80		          lda  #$80
+.83da	d0 0e		          bne  comkey
+.83dc	c9 4e		nota      cmp  #$4e           ; Is it "N"?
+.83de	d0 04		          bne notn
+.83e0	a9 40		          lda  #$40
+.83e2	d0 06		          bne  comkey
+.83e4	c9 53		notn      cmp  #$53           ; Is it "S"?
+.83e6	d0 09		          bne  syner3
+.83e8	a9 00		          lda  #$00
+.83ea	8d 8a 02	comkey    sta  kreg
+.83ed	20 73 00	          jsr  $0073          ; Chrget end-of-statement
+.83f0	60		          rts
+.83f1	a2 1f		syner3    ldx  #$1f           ; Set error number.
+.83f3	6c 00 03	          jmp  ($0300)        ; Error vector.
+.83f6	20 ca bb	frac      jsr  f1t57          ; Copy fac1 to $0057...
+.83f9	20 cc bc	          jsr  intf1          ; FAC1 = INT(FAC1)
+.83fc	a9 57		          lda  #$57
+.83fe	a0 00		          ldy  #$00
+.8400	20 50 b8	          jsr  subf1          ; FAC1 = ($0057)-FAC1
+.8403	60		          rts
+.8404	20 73 00	div       jsr  $0073          ; Chrget the "(".
+.8407	20 fa ae	          jsr  chklp          ; Check for "(".
+.840a	20 9e ad	          jsr  eval           ; Eval 1st expression.
+.840d	20 ca bb	          jsr  f1t57          ; Copy fac1 to $0057...
+.8410	20 fd ae	          jsr  chkcm          ; Check for comme
+.8413	20 9e ad	          jsr  eval           ; Eval 2nd expression.
+.8416	20 f7 ae	          jsr  chkrp          ; Check for ")".
+.8419	a9 57		          lda  #$57
+.841b	a0 00		          ldy  #$00
+.841d	20 0f bb	          jsr  f1div          ; FAC1 = ($0057)/FAC1
+.8420	20 cc bc	          jsr  intf1          ; FAC1 = INT(FAC1)
+.8423	60		          rts
+.8424	60		adump     rts
+.8425	60		appnd     rts
+.8426	60		auton     rts
+.8427	60		box       rts
+.8428	60		case      rts
+.8429	60		change    rts
+.842a	60		circle    rts
+.842b	60		collid    rts
+.842c	60		comgt     rts
+.842d	60		copy      rts
+.842e	60		del       rts
+.842f	60		dlay      rts
+.8430	60		draw      rts
+.8431	60		dump      rts
+.8432	60		erase     rts
+.8433	60		find      rts
+.8434	60		gchang    rts
+.8435	60		gfind     rts
+.8436	60		help      rts
+.8437	60		himem     rts
+.8438	60		hires     rts
+.8439	60		hpen      rts
+.843a	60		htab      rts
+.843b	60		insert    rts
+.843c	60		label     rts
+.843d	60		line      rts
+.843e	60		lomem     rts
+.843f	60		merge     rts
+.8440	60		mod       rts
+.8441	60		move      rts
+.8442	60		tapem     rts
+.8443	60		multic    rts
+.8444	60		old       rts
+.8445	60		paintr    rts
+.8446	60		pfkey     rts
+.8447	60		pointr    rts
+.8448	60		pop       rts
+.8449	60		proc      rts
+.844a	60		prtusn    rts
+.844b	60		renum     rts
+.844c	60		repeat    rts
+.844d	60		rlst      rts
+.844e	60		set       rts
+.844f	60		single    rts
+.8450	60		spritc    rts
+.8451	60		spritd    rts
+.8452	60		spritm    rts
+.8453	60		srt       rts
+.8454	60		trace     rts
+.8455	60		unlst     rts
+.8456	60		unnw      rts
+.8457	60		vdump     rts
+.8458	60		vpen      rts
+.8459	60		vtab      rts
+.845a	60		while     rts
+.845b	60		joy       rts
+.845c	60		penx      rts
+.845d	60		peny      rts
+.845e	c9 80		modtok    cmp  #$80
+.8460	d0 11		          bne  posin
+.8462	48		          pha                 ; If possible token.
+.8463	bd 01 02	          lda  $0201,x        ; Get next char.
+.8466	c9 20		          cmp  #$20           ; Is it a space?
+.8468	f0 0c		          beq  endw
+.846a	c9 00		          cmp  #$00           ; END-OF-LINE?
+.846c	f0 08		          beq  endw
+.846e	c9 3a		          cmp  #$3a           ; ":"?
+.8470	f0 04		          beq  endw
+.8472	68		          pla
+.8473	4c f5 a5	posin     jmp  $a5f5          ; don't tokenize.
+.8476	68		endw      pla
+.8477	4c c5 a5	          jmp  $a5c5          ; Do tokenize.
+
+;******  End of listing

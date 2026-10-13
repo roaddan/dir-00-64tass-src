@@ -1,0 +1,1055 @@
+*********
+
+The Mikro Assembler Manual, converted to etext by
+Niklas Ramsberg and Marko Mäkelä in June 2002.
+
+We have tried to follow the layout of the original
+as closely as possible.  There were no pictures or
+graphics in the  original document, and everything
+else is  typeset in a fixed-width  font except the
+page numbers.  So, nothing had to be sacrificed in
+the  conversion.    Everything,  including  letter
+spacing and grammatical  errors, should be present
+in this copy.
+
+*********
+
+           MIKRO ASSEMBLER for the VIC 20
+           ------------------------------
+                  by  Andrew Trott
+
+
+                      CONTENTS
+
+
+INTRODUCTION                                Page  2
+GETTING STARTED                             Page  3
+ADDRESSING                                  Page  5
+OPERANDS                                    Page  7
+PSEUDO-OPS                                  Page  8
+MIKRO PROGRAMMING COMMANDS                  Page  9
+PASSING PARAMETERS TO MACHINE CODE ROUTINES Page 15
+MIKRO GRAPHICS COMMANDS                     Page 16
+OTHER MIKRO COMMANDS                        Page 21
+
+
+
+
+
+
+
+
+                 COPYRIGHT NOTICE
+
+     MIKRO was written by Andrew Trott (c) 1981
+       Instructions by Peter Calver (c) 1982
+ VIC 20 version (c) 1982  Supersoft and Audiogenic
+                        Ltd.
+
+                All Rights Reserved
+
+
+This manual and the Mikro Assembler program are the
+exclusive  copyright  of  Supersoft and  Audiogenic
+Ltd..   Purchase   of  this  software   allows  the
+purchaser  to   use  this  software   only  in  the
+application   for  which   it   was  written.   Any
+unauthorised copying  of these programs  is illegal
+and  strictly forbidden.  Supersoft  and Audiogenic
+and   their    distributors   cannot   assume   any
+responsibility for any  loss or damage arising from
+the use of these programs,  and  the  programs  are
+sold only on this understanding.
+
+    MANUFACTURED AND DISTRIBUTED IN THE U.K. BY
+   AUDIOGENIC LTD., P.O. 20X 88, READING, BERKS,
+                      ENGLAND.
+
+                       .1.
+
+INTRODUCTION - SOURCE CODE
+
+Source Code is the only language that an  assembler
+understands. it is made up  of  mnemonics,  labels,
+operands,   remarks   -    even    things    called
+pseudo-operations!
+
+Complicated as that may sound, writing in  assembly
+language is  a lot easier than writing  in  machine
+language. Instead of expressing the function  'load
+accumulator' as AD in hexadecimal, you can write it
+as LDA. 'Store accumulator' is not $8D (a  $   sign
+is  usually  used   to   indicate   a   number   in
+hexadecimal) but STA. And so on.
+
+All the other bits that make up MIKRO assembler are
+there to  make  things  easier,  not  harder,  like
+labels which make it far simpler to alter  programs
+- and make them more understandable as well.
+
+OBJECT CODE is the  only  language  that  the  6502
+processor understands.  Fortunately  the  assembler
+handles the conversion from one to the other -  you
+need only  worry  about  getting  the  Source  Code
+right.
+
+The most important version  of  a  program  is  the
+Source Code, because you can always regenerate  the
+Object Code from the Source, but you can  never  go
+the other way. It is good practice to save the  the
+Source Code on Tape or Disk before assembling it  -
+just in case something goes amiss.
+
+You can only assemble Source Code, you cannot  turn
+a  Basic  program  into  a  machine  code  program.
+Equally  you  cannot  RUN  a  program  in  assembly
+language - the Source Code must be  assembled  into
+Object Code which  can  be  addressed  with  a  SYS
+command or through the USR function.
+
+                       .2.
+
+GETTING STARTED
+
+Switch off the power to  the  VIC  and  insert  the
+cartridge as  described  on  the  cartridge  label.
+Switch the  power  back  on.  The  MIKRO  assembler
+program  will  automatically  initialise,  and  the
+following display will appear on your screen....
+
+* * MIKRO ASSEMBLER * *
+
+(C) A.J.TROTT
+
+3071 BYTES FREE
+
+READY.
+
+
+Now that MIKRO is switched on you can write  either
+in Basic, or in assembly  language!  You  won't  be
+able to Assemble a Basic  program  or  RUN  one  in
+assembly language however. The assembler  processes
+the Source Code that you write and  turns  it  into
+Object Code - which can be run with a SYS command.
+
+Here is a short program that you can type in as  an
+introduction to MIKRO. Type it in just as  you  see
+it here....
+
+100 *=$033C
+110 SCREEN=$1E00
+120 COLTABLE=$9600
+130 LDA #$02 !SCREEN VALUE
+140 LDX #0
+150 LOOP STA SCREEN,X
+160 STA COLTABLE,X
+170 INX
+180 BNE LOOP !CHECK FOR ZERO
+190 RTS
+
+If you like you can  use  the  AUTO  facility  (see
+section on Programming Aid  commands)  to  generate
+the the line numbers.
+
+                       .3.
+
+When you have typed the program in list it with the
+normal LIST command. it will appear  very  much  as
+you put it in. Now  type  FORMAT  to  see  how  the
+assembler formats the listing....
+
+100 *=$033C
+110 SCREEN=$1E00
+120 COLTABLE=$9600
+130  LDA #$02
+ !SCREEN VALUE
+140  LDX #0
+150 LOOP
+     STA SCREEN,X
+160  STA COLTABLE,X
+170  INX
+180  BNE LOOP
+ !CHECK FOR ZERO
+190  RTS
+
+Note  that  labels  and   label   definitions   are
+highlighted in red, whilst  the  remainder  of  the
+formatted listing appears  in  blue.  Comments  and
+labels are shown on a separate line. Ideally  (with
+an 80-column screen!) all the information would  be
+neatly formatted in five columns, and  in  fact  if
+you print it out that is how it will appear.
+
+If MIKRO is to interpret your source code correctly
+then you must follow one or two  simple rules.  The
+first is that all labels and  mnemonics,  mnemonics
+and operands must be  separated  by  at  least  one
+space. This  is  because  MIKRO  treats  spaces  as
+delimiters. If you go back to the  example  listing
+and take out the space between LDA and #$02 in line
+130 you will find that when you format the  listing
+LDA#$02 appears in red as if it was a  label.  This
+would generate a  series  of  errors  were  you  to
+attempt to assemble.
+
+The second rule is that since spaces  are  regarded
+as rather special characters, you cannot spray them
+around  as  you  might  in  a  Basic  program.  For
+example, if  you  were  to  insert  a  space  after
+SCREEN= and before $1E00 on assembly you would  get
+an illegal operand error.
+
+If you ever get an assembly time error that is  not
+immediately  obvious,  it  is  worth  checking  for
+spaces that should or should not be there.
+
+                       .4.
+
+ADDRESSING
+
+Most lines of 6502 assembly  code  consist  of  two
+parts - a mnemonic, and an operand.  Mnemonics  are
+three letter abbreviations for 6502 instructions or
+groups of instructions. For example, LDA stands for
+'load accumulator', STX means 'store X' and so  on.
+Most of  them  are  fairly  obvious  once  you  are
+familiar with the terminology.
+
+Where a mnemonic represents a group of instructions
+then it is only possible to tell exactly  which  is
+meant by looking at the  operand.  Does  'LDA  102'
+mean 'load the accumulator with 102' or else  'load
+the accumulator with the contents of location 102'?
+The   former   possibility   is  called   IMMEDIATE
+ADDRESSING,  and  it  is   usually   indicated   by
+prefixing the operand with a hash (#)  symbol.  The
+latter is ABSOLUTE ADDRESSING, for which  there  is
+no special indication.
+
+Another  common  mode  of  addressing  is   INDEXED
+ADDRESSING, which involves one of  the registers  X
+and Y. For  example,  the  line  LDA 32768,X  means
+'load the accumulator  with  the  contents  of  the
+address  (32768+X)'.  Indexed  addressing  is  very
+useful for locating a particular entry in a  table,
+or for copying a small block  of  memory  from  one
+area to another. However,  as  X  and  Y  can  vary
+between 0 and 255 only, a  different  technique  is
+necessary  where  larger  tables  and  blocks   are
+concerned.
+
+The 6502 instruction  set  provides  two  types  of
+addressing  which  get  over  this   problem,   and
+although they are quite difficult to grasp at first
+it's worth spending a little  time  learning  about
+them.  The  two  modes  are  INDEXED  INDIRECT  and
+INDIRECT INDEXED -  cunningly  designed  to  be  as
+confusing as possible to beginners!
+
+Indirect Indexed is generally the  more  useful  of
+the two. Only the Y register can be used with  this
+mode of  addressing,  and  it  must  relate  to  an
+address in the zero page (the first  256  bytes  of
+memory).  A  typical  instruction  might  be   'LDA
+(102),Y'  which  means  to  the  processor  'go  to
+address 102, then to the address pointed to by  the
+two bytes 102 and 103, then keep going for  another
+Y bytes and finally load the accumulator with  what
+you find there'. It may sound confusing, but really
+it's only a step along from indexed addressing.
+
+                       .5.
+
+Suppose that you wanted  to  step  through  a  long
+table, perhaps looking for a particular word, or  a
+special character. You could store the  address  of
+the table at addresses 102 and 103 (low byte first,
+then high byte) and set Y to zero. Now if  you  LDA
+(102),Y you will be loading the first byte  of  the
+table into the accumulator. If it's  not  what  you
+are looking for increment Y, and execute  the  line
+again - this will pick up the second  byte  in  the
+table, and so on. When Y goes from 255  back  to  0
+you must add 1 to the high byte of your pointer  so
+that you can read the next 256 bytes, not the  same
+lot over again.
+
+You could do the same job by leaving Y constant and
+changing the low byte of the pointer every time you
+read a byte - but it is generally more  long-winded
+than the other way.
+
+You  are  unlikely   to   find   indexed   indirect
+addressing nearly as useful. Rather than allow  you
+to step through a table, it enables you to select a
+pointer from a table of pointers. For example,  the
+line LDA (102,X) means 'start at address 102, go on
+for X bytes, then look at the address pointed to by
+the  current   byte   and   the   one   immediately
+following'.
+
+Because each pointer requires two  bytes  you  will
+usually change X by 2 each time, not 1 as otherwise
+you would get the tail end of one pointer  and  the
+start of the next. Of course, in the case where you
+do not alter the value  of  the  index  (X  or  Y),
+indexed indirect and indirect  indexed  amounts  to
+the same thing - which only adds to the  confusion!
+Provided that you understand how  indirect  indexed
+addressing works you can probably forget about  the
+other one for a bit.
+
+                       .6.
+
+OPERANDS
+
+An operand can be a number, a label, even a  simple
+expression. Certain characters are used  to  modify
+an  operand,  such  as  hash  (#)   which   denotes
+immediate  mode,  or  a  single  quote  (')   which
+generates  the  ASCII  value  of   the   succeeding
+character.
+
+Less than (<) and greater  than  (>)  instruct  the
+assembler to take the low or high part  only  of  a
+two-byte value - which  could  be  a  label  or  an
+expression.
+
+An expression  may  contain  only  plus  and  minus
+operators. Numbers may usually be in decimal,  hex,
+octal, or binary. Sometimes it is useful to be able
+to access the current assembly location,  and  this
+is represented in an expression by an asterisk (*).
+However when  using  MIKRO  this  facility  is  not
+available.
+
+Here are some examples of valid operands....
+
+  POS=TABLE+INDEX                   LDA #>SCREEN
+
+  STA (POINTER+1),Y                 CHARACTER='A
+
+Branch  instructions  (BNE,  BMI  and  so  on)  are
+followed by a more limited range  of  operands.  In
+fact MIKRO will recognise only a branch to a label,
+for example  BNE LOOP  or   BPL  CALC.  Most  other
+assemblers permit branching by a  specified  number
+of bytes, but of course this  can  create  problems
+when a program is edited.
+
+                       .7.
+
+PSEUDO-OPs
+
+Pseudo operations are so called  because  they  are
+instructions to the assembler, and though they  may
+greatly alter the object code  that  is  generated,
+the processor doesn't know anything about them.
+
+The equals (=) sign is a pseudo-op, and it is  used
+to  define   labels,   such   as   START=1024    or
+TABLEND=TABLE+15. A special use of the equals  sign
+is at the beginning of the program where the  start
+location is defined with  *=,  for  example  *=828.
+MIKRO assumes a default  start  location  of  $033C
+which is the cassette buffer.
+
+MIKRO recognises four other pseudo operations, TXT,
+BYT, WOR and  END.  Other  assemblers  usually  use
+.TEXT, .BYTE, .WORD and .END. TXT allows a  message
+to  be  incorporated  into  the  object  code,  for
+example....
+
+           TXT "ASCII MESSAGE IN QUOTES"
+
+Whilst TXT is followed by an  entire  message,  BYT
+does roughly the same thing with single  characters
+and single byte  values  -  there  may  be  several
+separated by commas, e.g.
+
+             BYT $01,$0D,$0A,$00,'A,$0D
+
+WOR is related to BYT, but  allows  two  bytes  for
+each item of data which follows....
+
+              WOR $FFCF,32768,LOOP,102
+
+The data is stored low byte first. Some  assemblers
+have a  pseudo-op .HILO or .DBYTE which stores  two
+byte values round the other way.
+
+END may be used to signify the end of  source,  but
+it is  not  necessary  when  you  are  using  MIKRO
+assembler. END in the middle of  the  program  will
+probably confuse the assembler.
+
+                       .8.
+
+PROGRAMMING AID COMMANDS
+
+MIKRO  has  a  number  of  commands  to  make life
+generally easier for the  programmer  - whether in
+BASIC or assembly language.  Here they are:
+
+         (1) ASSEMBLE [line number]
+         (2) DISASSEMBLE start-end
+         (3) NUMBER 'parameter'
+         (4) FORMAT [line]-[line]
+         (5) TIM
+         (6) AUTO [start],[end]
+         (7) DELETE [start],end]
+         (8) FIND 'parameter'[,start][-end]
+
+The  first five commands are mainly of interest to
+those of you who are going  to  be  programming in
+assembly language - all  of  you, I hope - but the
+last  three  will  also  be of interest  to  BASIC
+programmers.
+
+(1) ASSEMBLE [line number]
+
+This command tells the assembler  part of MIKRO to
+start  turning   your  source  code  into  machine
+language  (i.e. assemble it).  For  more  details,
+see the section on the ASSEMBLER.
+
+(2) DISASSEMBLE start-end
+
+A disassembler turns machine  code  (which is very
+difficult to understand) into  assembler mnemonics
+(which are a  little easier).  Use the disassemble
+command to examine the  code  in  the VIC-20 Roms,
+or  to  take apart  a  machine  code program  that
+somebody  else  has  written  (if  it's  one  that
+you've  written  you  will  presumably  have   the
+assembler source code, which is even better).
+
+                       .9.
+
+The DISASSEMBLE command  must  be  followed by the
+start and end addresses  of  the  machine  code in
+decimal,  hexadecimal,  octal  or  binary.     The
+listing is displayed a page at  a time;  press any
+key to continue to the next  page.   If  you  have
+printer  connected  you   can   obtain  a  printed
+listing  by  executing the command 'OPEN 4,4:  CMD
+4'  before the DISASSEMBLE command.  When you have
+finished  type  PRINT#4: CLOSE 4 to close down the
+printer.
+
+All values  are shown in hexadecimal notation, but
+because  the  VIC screen isn't quite  wide  enough
+they are shown without the normal $ sign.
+
+(3) NUMBER value
+
+When you're using the ASSEMBLER  part of MIKRO you
+can  type  numbers in decimal, hexadecimal,  octal
+or  binary.   However,  at  other   times   you'll
+frequently  need to convert numbers  from  one  of
+these number bases to another.
+
+All  you need to do is type NUMBER followed by the
+value to be converted,  preceded by  a $  (hex), @
+(octal), %  (binary)  or nothing at all (decimal).
+You can even  enter  a  little  sum (provided that
+you use  only  the  plus and minus signs, and that
+at no stage is the running total negative),e.g.
+
+        NUMBER $1000 + 512 - %10010011
+
+Decimal  numbers  should  not  exceed  63999,  but
+numbers expressed  in other bases can  be as large
+as 65535  ($FFFF).  If  by chance  you  use a  hex
+number including  the  letters  'DEF'  Basic  will
+confuse it with the 'DEF FN' statement  and  raise
+an  error  message, but you can easily get  around
+the problem.
+
+                       .10.
+
+(4) FORMAT [start]-[end]
+
+FORMAT is a command that acts  in a similar way to
+the standard  Basic  'LIST'  command.  In fact the
+start and end line parameters  work in exactly the
+same  way.  The difference is that the  lines  are
+neatly  formatted  with   line   numbers,  labels,
+mnemonics,  operands  and  comments  in  different
+colours   and  positions  -  a  more  intelligible
+listing.   If  you execute the command  OPEN  4,4:
+CMD 4  before  FORMAT  the  output will be sent to
+the  printer;  type PRINT#4: CLOSE 4 afterwards to
+closed down the printer channel.
+
+(5) TIM
+
+TIM enters the machine  code monitor that is built
+into MIKRO.  This  monitor  has  been  modelled on
+the monitor provided  in  the  PET/CBM  range, and
+offers  a  number  of commands to aid the  machine
+code programmer.
+
+      M    Display memory
+      R    Display registers
+      G    Begin execution
+      X    Exit back to BASIC
+      A    Display address
+      L    Load a program file from any device
+      S    Save a program file to any device
+
+   Display memory (M)
+
+   To  display  any  area  of VIC-20 memory on the
+   screen  type  M followed by the start  and  end
+   addresses in hex (no $ prefix):
+
+       .M A000 A005
+       .: A000 00 C3 02 A9
+       .: A004 01 C9 04 90
+
+
+   To  modify  a memory location, simply move  the
+   cursor  to the appropriate position,  type  the
+   amendment, and press Return.
+
+	               .11.
+
+   Display 6502 Registers (R)
+
+   Type R to display the internal register values:
+
+       .R
+         IRQ SR AC XR YR SP
+       .;EABF 4D 00 47 48 FA
+       .
+
+   To  modify  a register, simply  type  over  the
+   existing value and press Return.
+
+   Begin Execution (G)
+
+   This  instruction  starts executing  a  machine
+   code  program  at the address given  by  the  A
+   command, or at the addressed specified if any:
+
+       .G O33C
+
+   This will start executing a program at 033C.
+
+   Exit to Basic (X)
+
+   Type X to get back to Basic READY mode.
+
+   Display Address (A)
+
+   This  command  allows the assumed entry address
+   to be displayed, and altered by typing over.
+
+       .A
+       ., A35B
+       .
+
+                       .12.
+
+   Load Program File (L)
+
+   L enables you  to  load  a  program  file  from
+   disk,   tape,  or  any  other  suitable  device
+   without   leaving   the  monitor,  and  without
+   altering  Basic  pointers or  destroying  Basic
+   variables.   The  file  could contain data, but
+   it must be a program file, not a data file.
+
+       .L 'FILENAME',08
+
+   This  will  load  a  program  called 'FILENAME'
+   from device 08, ie the disk.  The  cassette  is
+   device  01 (the 0 is essential).  If the deivce
+   number is omitted then 01 is assumed.
+
+   Save Program File (S)
+
+   This allows the user  to save a block of memory
+   to any device as a program file.
+
+       .S 'FILENAME',01,033C,0400
+       .
+
+   This will save  the  area  of memory from $033C
+   to $03FF as a program  file  called  'FILENAME'
+   on device 01 (the cassette  unit).   Note  that
+   addresses  must be specifed in hexadecimal, but
+   without  the  normal $ prefix, and that the end
+   address should  be  one  higher  than  the last
+   address to be saved.
+
+(6) AUTO [start],step]
+
+Whether  you  are entering Basic program  line  or
+assembler  source  code  you  can  save  time (and
+errors)   by  allowing  MIKRO  to  generate   line
+numbers automatically.   All  you  need do is type
+AUTO followed by (optionally)  the  starting  line
+and  the  gap between lines.  The defaults are 100
+and 10 respectively.
+
+To  exit  from this mode, just type Return against
+a line number - but beware,  because any line with
+that  number  will be erased.  A safer way to exit
+is to clear the screen and then type  Return.   In
+this way, no line is erased.
+
+EXAMPLE:  AUTO 70,5
+
+Generate line numbers 70, 75, 80 etc.
+
+                       .13.
+
+(7) DELETE [start]-[end]
+
+DELETE enables you to get rid  of  an entire block
+of lines from your program.   The  start  and  end
+line  parameters  are  just  the same as with  the
+LIST  command,  except that you cannot  type  just
+DELETE without  any  line  numbers at all (but you
+could use 'NEW').  The last line in  the  block is
+NOT deleted, however.
+
+EXAMPLE:  DELETE 100-200
+
+(8) FIND 'parameter',[start][-end]
+
+The  FIND  instruction  is used to find occurences
+of particular  variables,  labels,  Basic keywords
+etc.   All  lines  in  the specified  range  (both
+start  and  end   are   optional)   which  include
+'parameter' will be listed on the screen.
+
+The  way that Basic lines (or lines  of  assembler
+source) are stored  varies depending whether items
+are inside or outside  quotes.   Basic  words  and
+certain  symbols  are  'tokenised'  to save space.
+The  FIND  command  tokenises the item to be found
+in the same way as Basic - so if you  are  looking
+for  something in quotes, put  quotes  around  it.
+Otherwise leave them off.
+
+EXAMPLES:  FIND "Hello",100-1200
+           FIND A$(5)
+
+                       .14.
+
+PASSING PARAMETERS TO MACHINE CODE ROUTINES
+
+Often when you are  debugging  your  machine  code
+routines  you will want to place  specific  values
+in the 6502 registers before  you  make a SYS call
+to  the  routine.   There is  a MIKRO command, and
+four MIKRO functions that will help you:
+
+     (1)  PARMS a,x,y,s
+     (2)  ACCU
+     (3)  XREG
+     (4)  YREG
+     (5)  STREG
+
+You  can also  examine  and  modify  the  internal
+registers of the 6502 processor  using the machine
+code monitor, but often  you  will  find  it  more
+convenient to do this from Basic.
+
+THE COMMANDS IN DETAIL
+
+(1)  PARMS a,x,y,s
+
+This command allows you  to  specify the 'starting
+values' to be  loaded  into  the  6502's registers
+immediately prior to executing  your routine.  The
+values   should   be   entered    in   the   order
+Accumulator,  X-Register,  Y-Register,  and Status
+Register - and must of course be in  the  range  0
+to 255.
+
+EXAMPLE:  PARMS 0,255,B,96
+
+(2)  ACCU
+
+ACCU is a special  function that returns the value
+of the ACCUMULATOR as set by the PARMS command, or
+by a machine code routine called with SYS.
+
+EXAMPLE:  SYS 828: PRINT ACCU
+
+(3)  XREG
+
+XREG returns the value of the X-register.
+
+(4)  YREG
+
+YREG returns the value of the Y-register.
+
+(5)  STREG
+
+STREG returns the value of the Status Register.
+
+                       .15.
+
+MIKRO GRAPHICS COMMANDS
+
+This  section deals  with  the  graphics  commands
+available  within MIKRO which enable you  to  plot
+in  high resolution.  All the commands are treated
+exactly the same as  BASIC  keywords,  and  may be
+used in a program or in READY mode.
+
+First of all let's list out all the commands:
+
+      (1) SETPLOT
+      (2) CLEAR
+      (3) VDU border,screen
+      (4) PLOT x,y,c
+      (5) ERASE x,y,c
+      (6) FLIP x,y,c
+      (7) LINE x1,y1,x2,y2,c
+      (8) LINETO x,y,c
+      (9) TEXT@x,y,'this is text'
+     (10) OVER@x,y,'this is text'
+     (11) POINT(x,y)
+     (12) COLOUR (x,y)
+
+The  values  x,  y  and  so  on are the PARAMETERS
+which decide where a point is to be plotted,  what
+colour  a  line  should  be  and so on.  Sometimes
+they can be omitted - see below for details.
+
+THE LAYOUT OF THE HIGH RESOLUTION SCREEN
+
+The high resolution screen  is  really  the  VIC's
+normal  screen  re-organised into a mass of points
+- 160 of them across the screen,  and 176 from top
+to  bottom.     All   in   all  there  are  28,160
+addressable   points!    The  horizontal  axis  is
+usually  referred  to  as  the  X  axis,  and  the
+vertical axis  as  the  Y  axis.  In  all graphics
+commands  and   functions   the  first  coordinate
+specified is  the  X coordinate, and the second is
+the Y coordinate. The origin of the screen  (where
+X=0 and  Y=0) is in the bottom left-hand corner of
+the screen.
+
+                       .16.
+
+THE COMMANDS IN DETAIL
+
+(1) SETPLOT (no parameters)
+
+This  command  is  used  to  turn   on  the   high
+resolution  screen.  It automatically  clears  the
+screen,  and resets the plotting pointers (default
+parameters) to 0.
+
+(2) CLEAR (no parameters)
+
+This  command  is  used  to  turn  off   the  high
+resolution screen,  and  hence  turn  back  on the
+standard  screen.  It  automatically  clears   the
+standard  screen, leaving the cursor in  the  HOME
+position.
+
+(3) VDU border, screen
+
+This command is used to set the border  and screen
+background colours. The border  colour  must be in
+the range 1 to 8, and the screen  has  a  value in
+the range 1-16. The colour numbers  are  those  on
+the  colour keys (the colours from  9  to  16  are
+mostly lighter shades  of the colours from 1 to 8,
+but see your VIC-20 manual for further details).
+
+EXAMPLE:  VDU 4,1
+
+Here the background colour  is  set  to black, and
+the border to cyan.
+
+(4) PLOT x,y,c
+
+The  PLOT  keyword has quite a few uses,  as  will
+become  apparent  very soon.  However, if used  as
+above it causes a point  to be plotted at position
+x,y  in  the  colour  c.  The colour  parameter is
+not  vital and could be omitted,  in  which  case,
+the point would be plotted in the same  colour  as
+the last item plotted.
+
+EXAMPLE:  PLOT 100,23,2
+
+A red point will be plotted at position 100,23.
+
+                       .17.
+
+(5) ERASE x,y,c
+
+ERASE is similar  to PLOT - except that a point is
+erased rather  than  plotted.  Effectively a point
+is plotted in the background colour - OK?
+
+EXAMPLE:  ERASE 100,23
+
+(6) FLIP x,y,c
+
+A coloured point (of colour c) will  be plotted at
+x,y  UNLESS  there is already a point there  -  in
+which  case  it  is erased.  Confused?  Try it out
+and see what happens!
+
+(7) LINE x1,y1,x2,y2,c
+
+The  word  LINE will draw a line from point  x1,y1
+to point x2,y2 in colour  c.  However  to  make it
+work, it must be preceeded by one  of the keywords
+PLOT, ERASE or FLIP.
+
+EXAMPLE:  PLOTLINE 0,0,100,100,2
+
+This  will  plot  a  straight  line  from  0,0  to
+100,100 in red.
+
+EXAMPLE:    ERASELINE  0,50,100,45    (no   colour
+parameter is necessary)
+
+EXAMPLE:  FLIPLINE 50,67,32,43,6
+
+The  word  TO can be used  to  draw  a  series  of
+lines,  each  starting  where  the  previous  line
+finished.
+
+EXAMPLE:  PLOTLINE 0,0,100,100 TO 150,70 TO 0,0
+
+This  would  plot a triangle.  A colour  parameter
+could be placed after any pair of X,Y coordinates.
+
+                       .18.
+
+(8) LINETO x,y,c
+
+This is exactly  the same as LINE, except that the
+first  pair of coordinates is taken from the  last
+point plotted to the screen.
+
+EXAMPLE:  PLOTLINETO 20,170,7
+
+This would plot  a  line  starting  from  the last
+point  plotted  and  ending at 20,170.   The  line
+would be yellow.
+
+(9)a TEXT 'parameter'
+
+The TEXT instruction allows text to be written  on
+the high resolution  screen.  It has a 'parameter'
+exactly  the same  as  that  of  the  BASIC  PRINT
+statement.     This   allows   for  all  sorts  of
+information     such    as   strings,   variables,
+expressions etc to be plotted to the  screen.  The
+text  will be plotted from the last point  plotted
+on the screen, unless an extra  parameter is added
+(see  next  section).   Anything  already  on  the
+screen  beneath  the   text   characters  will  be
+completely overwritten.
+
+(9)b TEXT@x,y,'parameter'
+
+This allows text  to  be  written  at  a specified
+position on the high resolution screen.
+
+EXAMPLE: TEXT@20,145,"hello ";N$;" you are";X;
+"years old"
+
+(10)a OVER 'parameter'
+
+The OVER instruction  acts  exactly  the  same  as
+TEXT,  except  that  information  already  on  the
+screen  is  overwritten  only  by  the  characters
+themselves,  not  by the space around  and  within
+the characters.   This  is  something  you need to
+try out yourself to get a grasp of how it works.
+(10)b OVER@x,y,'parameter'
+
+As you would expect,  this  is  the  OVER  command
+with the exact position specified.
+
+EXAMPLE: OVER@10,34,'this is overprinting',a$,
+chr$(13)
+
+                       .19.
+
+NOTE: SPECIAL CHARACTERS IN TEXT COMMANDS
+Most  of  the  special characters that can be used
+in the print statement  can  be  used  in the text
+statement.   However INSERT and DELETE can't.  Two
+extra commands are available to  control  printing
+in UPPER andlower case  characters.  Hold down the
+CONTROL  key  and  press  the  back-arrow  key  to
+select  upper  case;   CONTROL   RUN/STOP  selects
+lower case.
+
+(11) POINT(x,y)
+
+This function  tells  you  whether  the  specified
+point  is 'set' or 'reset'.  It acts just  like  a
+variable, and  is set to 0 if the point X,Y is the
+same colour as the background, or 1 if it isn't.
+
+EXAMPLE:  FOR I=1TO10: IF POINT(I,J)=1 THEN X=X+1
+
+(12) COLOUR(x,y)
+
+Like POINT, this instruction  is  a  function, but
+it  gives  the  colour of the position  containing
+the point  x,y.   It  returns a value from 0 to 15
+(add 1 to get the colour).
+
+EXAMPLE:   IF  COLOUR(A,B)=C  THEN  C=C+1: IF C=15
+THEN C=0
+
+                       .20.
+
+OTHER MIKRO COMMANDS
+
+There  are  yet  more  commands  available  within
+MIKRO  - designed for use in  your  own  programs.
+They  enable you to generate sound,  use  a  light
+pen, and operate paddles or a joystick.
+
+     (1) SOUND voice,pitch
+     (2) VOLUME level
+     (3) PADDLE(x)
+     (4) JOY(x)
+     (5) PENH
+     (6) PENV
+
+All of these commands can  be used in a program or
+in Basic READY mode.   For  a  full description of
+the VIC-20's sound capabilities see the manual.
+
+THE COMMANDS IN DETAIL
+
+(1) SOUND voice,pitch
+
+The  VIC-20  has  four  'voices' which can be used
+independently to generate sound.  The first  three
+generate tones,  but  the  fourth  creates  'white
+noise' for special  effects.   For the purposes of
+this command they are numbered 0 to 3.
+
+The 'pitch' parameter determines  the pitch of the
+note  generated.    You  can  use  values  from  0
+(lowest)  to  127 (highest).  Before experimenting
+with the  SOUND  command  you  must  turn  up  the
+VOLUME  (see  below)   otherwsie  you  won't  hear
+anything!
+
+EXAMPLE:  SOUND 2,63
+
+(2) VOLUME level
+
+You  can  control  the  VOLUME   of   the   sounds
+generated by your VIC by setting the level to  any
+value from 0 (silence) to 15 (loudest).
+
+EXAMPLE:  VOLUME 5
+
+                       .21.
+
+(3) PADDLE (x)
+
+You can use a  pair  of  paddles  connected to the
+games port to control games.   The  PADDLE command
+is a special  function that returns a value from 0
+to  255  depending  upon   the   position  of  the
+selected  paddle (as you turn the  paddle  control
+clockwise  the value decreases).   To  distinguish
+between the two paddles  you must specify either 0
+or 1 in brackets after the  command.
+
+EXAMPLE:  IF PADDLE(1) > PADDLE(0) THEN GOTO 150
+
+(4) JOY (x)
+
+Instead of connecting  a  pair  of paddles to your
+games port you  may  prefer  to  use  a  joystick.
+Unlike  a  paddle  which has  a  large  number  of
+possible     positions   only   nine     different
+orientations of the joystick are  distinguishable,
+each of which returns a different value:
+
+                       1
+               5               9
+        4              0              8
+               6               10
+                       2
+
+Type in the following program  to  demonstrate how
+the joystick function works:
+
+      10 FOR I = 1 TO 10000
+      20 PRINT JOY (255)
+      30 NEXT 1
+
+Now RUN the program  and  move  the  joystick from
+side to side.   Note  that  the  number printed on
+the  screen  should   correspond   to  the  little
+diagram above.  What  happens  when  you press the
+FIRE button? Try it and see.
+
+                       .22.
+
+The values in the diagonal positions  are  (as you
+may  have  noticed)  the  sum  of the values  next
+door.   In  fact  the  way  that  the  values  are
+organised  allows  you  to  be  a  little bit more
+sophisticated   when   you   test   the   joystick
+position.   The  value returned by JOY (X) is  not
+always  as  shown in the diagram;  it all  depends
+on the value  of  X.   What  happens  is  that the
+value from  the  diagram  is  ANDed with X so that
+you  can  test  more   easily   for   a   specific
+orientation   of   the   joystick   (for   a  full
+description  of  AND  see your VIC-20  Programmers
+Reference Guide).
+
+EXAMPLE:  IF JOY(2) > 0 THEN PRINT "DOWN"
+
+If  in doubt use JOY(255)  which  allows  for  all
+possibilities.  By the way,  did you discover what
+effect  the fire button has?  When the fire button
+is pressed the value returned  is  128 higher than
+the number in the diagram  -  so  your program can
+allow the player to move  and  fire  at  the  same
+time if you wish.
+
+EXAMPLE:  IF JOY(255) = 129 THEN PRINT "UP & FIRE"
+
+(5) PENH
+
+A third gadget you could attach to the games  port
+is a light pen.   If  you  point  the  pen  at the
+screen then  you  can  use  PENH  to  tell you the
+horizontal position of the pen.
+
+EXAMPLE:  X=FNA(PENH): PLOTLINE X,0,X,100
+
+(6) PENV
+
+PENV returns the vertical  position  of  the light
+pen.   Note  that the lowest values for  PENH  and
+PENV  are  given  when  the pen is in the top left
+hand corner of the screen,  and the highest values
+in  the  bottom right hand corner.  You will  need
+to  experiment to discover the lowest and  highest
+values that  can be generated;  you may be able to
+adjust the light pen (see the pen instructions).
+
+                       .23.
+

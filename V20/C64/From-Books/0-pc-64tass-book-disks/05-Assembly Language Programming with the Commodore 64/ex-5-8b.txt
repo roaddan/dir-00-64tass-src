@@ -1,0 +1,53 @@
+
+; 64tass Turbo Assembler Macro V1.54.1900 listing file
+; 64tass --line-numbers --tab-size=4 --cbm-prg -C -m -a -I "/home/daniel/Documents/Mes Sources/C64/Assembleur/64tass/Sources/lib" -i -L ex-5-8b.txt -o ex-5-8b.prg ex-5-8b.asm
+; Sat May 21 09:41:46 2022
+
+;Line	;Offset	;Hex			;Source
+
+:1		;******  Processing input file: ex-5-8b.asm
+
+10		=$dc08					clkths      =   $dc08
+11		=$dc09					clksec      =   $dc09
+12		=$dc0a					clkmin      =   $dc0a
+13		=$dc0b					clkhrs      =   $dc0b
+14		=$ffd2					chrout      =   $ffd2
+15		.c000	ad 0b dc		clock       lda clkhrs  ;49152
+16		.c003	20 38 c0		            jsr prnradec
+17		.c006	a9 3a			            lda #":"
+18		.c008	20 d2 ff		            jsr chrout
+19		.c00b	ad 0a dc		            lda clkmin
+20		.c00e	20 38 c0		            jsr prnradec
+21		.c011	a9 3a			            lda #":"
+22		.c013	20 d2 ff		            jsr chrout
+23		.c016	ad 09 dc		            lda clksec
+24		.c019	20 38 c0		            jsr prnradec
+25		.c01c	ad 08 dc		            lda clkths
+26		.c01f	60				            rts
+28		.c020	a9 08			initclk     lda #$08    ; 49184
+29		.c022	8d 0b dc		            sta clkhrs
+30		.c025	a9 59			            lda #$59
+31		.c027	8d 0a dc		            sta clkmin
+32		.c02a	a9 50			            lda #$50
+33		.c02c	8d 09 dc		            sta clksec
+34		.c02f	a9 00			            lda #$00
+35		.c031	8d 08 dc		            sta clkths
+36		.c034	ad 08 dc		            lda clkths
+37		.c037	60				            rts
+38		.c038	48				prnradec    pha
+39		.c039	4a				            lsr
+40		.c03a	4a				            lsr
+41		.c03b	4a				            lsr
+42		.c03c	4a				            lsr
+43		.c03d	29 07			            and #$07
+44		.c03f	18				            clc
+45		.c040	69 30			            adc #$30
+46		.c042	20 d2 ff		            jsr chrout
+47		.c045	68				            pla
+48		.c046	29 0f			            and #$0f
+49		.c048	18				            clc
+50		.c049	69 30			            adc #$30
+51		.c04b	20 d2 ff		            jsr chrout
+52		.c04e	60				            rts
+
+;******  End of listing

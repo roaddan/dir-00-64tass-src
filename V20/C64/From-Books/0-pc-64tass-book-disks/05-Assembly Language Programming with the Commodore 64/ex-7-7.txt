@@ -1,0 +1,97 @@
+
+; 64tass Turbo Assembler Macro V1.54.1900 listing file
+; 64tass --line-numbers --tab-size=4 --cbm-prg -C -m -a -I "/home/daniel/Documents/Mes Sources/C64/Assembleur/64tass/Sources/lib" -i -L ex-7-7.txt -o ex-7-7.prg ex-7-7.asm
+; Sat Jun 11 10:39:41 2022
+
+;Line	;Offset	;Hex			;Source
+
+:1		;******  Processing input file: ex-7-7.asm
+
+1		=$ffd2					chrout  =   $ffd2
+2		=$02					temp    =   $02
+3		=$ffe4					getin   =   $ffe4
+4		=$dc0b					hours   =   $dc0b
+5		=$dc0a					minuts  =   $dc0a
+6		=$dc09					secnds  =   $dc09
+7		=$dc08					tenths  =   $dc08
+9		.c000	20 3e c0		tod     jsr settime
+10		.c003	8d 08 dc		        sta tenths
+11		.c006	ad 0b dc		more    lda hours
+12		.c009	29 1f			        and #$1f
+13		.c00b	20 13 c8		        jsr prbyte
+14		.c00e	20 36 c0		        jsr colon
+15		.c011	ad 0a dc		        lda minuts
+16		.c014	20 13 c8		        jsr prbyte
+17		.c017	20 36 c0		        jsr colon
+18		.c01a	ad 09 dc		        lda secnds
+19		.c01d	20 13 c8		        jsr prbyte
+20		.c020	20 36 c0		        jsr colon
+21		.c023	ad 08 dc		        lda tenths
+22		.c026	20 13 c8		        jsr prbyte
+23		.c029	a0 0b			        ldy #$0b
+24		.c02b	a9 9d			loop    lda #$9d
+25		.c02d	20 d2 ff		        jsr chrout
+26		.c030	88				        dey
+27		.c031	d0 f8			        bne loop
+28		.c033	f0 d1			        beq more
+29		.c035	00				        brk
+30		.c036	48				colon   pha
+33		.c037	a9 3a			        lda #":"
+34		.c039	20 d2 ff		        jsr chrout
+35		.c03c	68				        pla
+36		.c03d	60				        rts
+38		.c03e	48				settime pha
+39		.c03f	a9 10			        lda #$10
+40		.c041	8d 0b dc		        sta hours
+41		.c044	a9 37			        lda #$37
+42		.c046	8d 0a dc		        sta minuts
+43		.c049	a9 00			        lda #$00
+44		.c04b	8d 09 dc		        sta secnds
+45		.c04e	8d 08 dc		        sta tenths
+46		.c051	68				        pla
+47		.c052	60				        rts
+51		.c800	c9 0a			hexcii  cmp #$0a
+52		.c802	90 02			        bcc around
+53		.c804	69 06			        adc #$06
+54		.c806	69 30			around  adc #$30
+55		.c808	60				        rts
+57		.c809	c9 40			aschex  cmp #$40
+58		.c80b	90 02			        bcc skip
+59		.c80d	e9 07			        sbc #$07
+60		.c80f	38				skip    sec
+61		.c810	e9 30			        sbc #$30
+62		.c812	60				        rts
+64		.c813	85 02			prbyte  sta temp
+65		.c815	4a				        lsr
+66		.c816	4a				        lsr
+67		.c817	4a				        lsr
+68		.c818	4a				        lsr
+69		.c819	20 00 c8		        jsr hexcii
+70		.c81c	20 d2 ff		        jsr chrout
+71		.c81f	a5 02			        lda temp
+72		.c821	29 0f			        and #$0f
+73		.c823	20 00 c8		        jsr hexcii
+74		.c826	20 d2 ff		        jsr chrout
+77		.c829	a5 02			        lda temp
+78		.c82b	60				        rts
+79		.c82c	20 e4 ff		getbyt  jsr getin
+80		.c82f	f0 fb			        beq getbyt
+81		.c831	aa				        tax
+82		.c832	20 d2 ff		        jsr chrout
+83		.c835	8a				        txa
+84		.c836	20 09 c8		        jsr aschex
+85		.c839	0a				        asl
+86		.c83a	0a				        asl
+87		.c83b	0a				        asl
+88		.c83c	0a				        asl
+89		.c83d	85 02			        sta temp
+90		.c83f	20 e4 ff		loaf    jsr getin
+91		.c842	f0 fb			        beq loaf
+92		.c844	aa				        tax
+93		.c845	20 d2 ff		        jsr chrout
+94		.c848	8a				        txa
+95		.c849	20 09 c8		        jsr aschex
+96		.c84c	05 02			        ora temp
+97		.c84e	60				        rts
+
+;******  End of listing

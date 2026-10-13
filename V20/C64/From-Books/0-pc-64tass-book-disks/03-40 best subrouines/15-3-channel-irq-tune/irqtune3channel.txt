@@ -1,0 +1,1643 @@
+
+; 64tass Turbo Assembler Macro V1.54.1900 listing file
+; 64tass -C -m -a -I /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib -i -L irqtune3channel.txt -o irqtune3channel.prg irqtune3channel.asm
+; Sat May 27 22:14:50 2023
+
+;Offset	;Hex		;Source
+
+;******  Processing input file: irqtune3channel.asm
+
+="20230527-220500"	                Version = "20230527-220500"
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/header-c64.asm
+
+>0801	0b 08 0a 00	.word (+), 10
+>0805	9e 32 30 36	.null $9e, "2061"
+>0809	31 00
+>080b	00 00		+ .word 0
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/macros-64tass.asm
+
+
+;******  Return to file: irqtune3channel.asm
+
+.080d			main
+.080d	20 d5 0b	                jsr scrmaninit
+.0810	20 19 08	                jsr help
+.0813	20 f7 09	                jsr irqtune3channel
+.0816	4c 74 a4	                jmp b_warmstart
+.0819			help
+.0819	20 f6 0b	                jsr cls
+.081c	a2 a3		                ldx  #<line
+.081e	a0 09		                ldy  #>line
+.0820	20 0b 0c	                jsr  puts
+.0823	a2 47		                ldx  #<headera
+.0825	a0 08		                ldy  #>headera
+.0827	20 0b 0c	                jsr  puts
+.082a	a2 c9		                ldx  #<headerb
+.082c	a0 08		                ldy  #>headerb
+.082e	20 0b 0c	                jsr  puts
+.0831	a2 4f		                ldx  #<shortcuts
+.0833	a0 09		                ldy  #>shortcuts
+.0835	20 0b 0c	                jsr  puts
+.0838	a2 cc		                ldx  #<helptext
+.083a	a0 09		                ldy  #>helptext
+.083c	20 0b 0c	                jsr  puts
+.083f	a2 a3		                ldx  #<line
+.0841	a0 09		                ldy  #>line
+.0843	20 0b 0c	                jsr  puts
+.0846	60		                rts
+.0847			headera
+>0847	20 20 20 20	                .text          "     40 BEST MACHINE CODE ROUTINES"
+>084b	20 34 30 20 c2 c5 d3 d4 20 cd c1 c3 c8 c9 ce c5
+>085b	20 c3 cf c4 c5 20 d2 cf d5 d4 c9 ce c5 d3
+>0869	0d		          .byte   $0d
+>086a	20 20 20 20	                .text          "          FOR THE COMMODORE 64"
+>086e	20 20 20 20 20 20 c6 cf d2 20 d4 c8 c5 20 c3 cf
+>087e	cd cd cf c4 cf d2 c5 20 36 34
+>0888	0d		          .byte   $0d
+>0889	20 20 20 20	                .text          "       Book by Mark Greenshields."
+>088d	20 20 20 c2 4f 4f 4b 20 42 59 20 cd 41 52 4b 20
+>089d	c7 52 45 45 4e 53 48 49 45 4c 44 53 2e
+>08aa	0d		          .byte   $0d
+>08ab	20 20 20 20	                .text          "          ISBN 0-7156-1899-7"
+>08af	20 20 20 20 20 20 c9 d3 c2 ce 20 30 2d 37 31 35
+>08bf	36 2d 31 38 39 39 2d 37
+>08c7	0d 00		          .byte   $0d,0
+>08c9	20 20 20 20	headerb         .text          "         irqtune3channel (p79)"
+>08cd	20 20 20 20 20 49 52 51 54 55 4e 45 33 43 48 41
+>08dd	4e 4e 45 4c 20 28 50 37 39 29
+>08e7	0d		          .byte   $0d
+>08e8	20 20 20 20	                .text          "        (c) 1979 Brad Templeton"
+>08ec	20 20 20 20 28 43 29 20 31 39 37 39 20 c2 52 41
+>08fc	44 20 d4 45 4d 50 4c 45 54 4f 4e
+>0907	0d		          .byte   $0d
+>0908	20 20 20 20	                .text          "     programmed by Daniel Lafrance."
+>090c	20 50 52 4f 47 52 41 4d 4d 45 44 20 42 59 20 c4
+>091c	41 4e 49 45 4c 20 cc 41 46 52 41 4e 43 45 2e
+>092b	0d		          .byte   $0d
+>092c	20 20 20 20	                .text   format("        Version: %s.",Version)
+>0930	20 20 20 20 d6 45 52 53 49 4f 4e 3a 20 32 30 32
+>0940	33 30 35 32 37 2d 32 32 30 35 30 30 2e
+>094d	0d 00		          .byte   $0d,0
+>094f	20 2d 2d 2d	shortcuts .text          " -------- S H O R T - C U T S ---------"
+>0953	2d 2d 2d 2d 2d 20 d3 20 c8 20 cf 20 d2 20 d4 20
+>0963	2d 20 c3 20 d5 20 d4 20 d3 20 2d 2d 2d 2d 2d 2d
+>0973	2d 2d 2d
+>0976	0d		          .byte   $0d
+>0977	20 52 55 4e	          .text   format(" run=SYS%5d, help=SYS%5d",main, help)
+>097b	3d d3 d9 d3 20 32 30 36 31 2c 20 48 45 4c 50 3d
+>098b	d3 d9 d3 20 32 30 37 33
+>0993	0d		          .byte   $0d
+>0994	20 43 4c 53	          .text   format(" cls=SYS%5d",cls)
+>0998	3d d3 d9 d3 20 33 30 36 32
+>09a1	0d 00		          .byte   $0d,0
+>09a3	20 2d 2d 2d	line      .text          " --------------------------------------"
+>09a7	2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d
+>09b7	2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d 2d
+>09c7	2d 2d 2d
+>09ca	0d 00		          .byte   $0d,0
+>09cc	20 49 52 51	helptext  .text   format(" irqtune3channel: SYS%5d",irqtune3channel)
+>09d0	54 55 4e 45 33 43 48 41 4e 4e 45 4c 3a 20 d3 d9
+>09e0	d3 20 32 35 35 31
+>09e6	0d		          .byte   $0d
+>09e7	20 45 58 2e	          .text   format(" ex.: SYS%5d",irqtune3channel)
+>09eb	3a 20 d3 d9 d3 20 32 35 35 31
+>09f5	0d 00		          .byte   $0d,0
+.09f7			irqtune3channel
+.09f7	78		                sei
+.09f8	a9 34		                lda #<main
+.09fa	8d 14 03	                sta 788
+.09fd	a9 0a		                lda #>main
+.09ff	8d 15 03	                sta 789
+.0a02	a9 0a		                lda #%00001010  ; #0-15 $00-$0f
+.0a04	8d 18 d4	                sta sidsigvol   ; $d418 ; 54296 - Volume and Filter selectv register.
+.0a07	a9 21		                lda #%00100001
+.0a09	8d 04 d4	                sta sidv1control; $d404 ; 54276 - Voice 1 Voice control register.
+.0a0c	a9 11		                lda #%00010001
+.0a0e	8d 0b d4	                sta sidv2control; $d40b ; 54283 - Voice 2 Voice control register.
+.0a11	a9 41		                lda #%01000001
+.0a13	8d 12 d4	                sta sidv3control; $d412 ; 54290 - Voice 3 Voice control register.
+.0a16	a9 40		                lda #64
+.0a18	8d 05 d4	                sta sidv1atkdec ; $d405 ; 54277 - Voice 1 0-3: Decay duration, 4-7: Attack duration.
+.0a1b	8d 06 d4	                sta sidv1stnrel ; $d406 ; 54278 - Voice 1 0-3: Rel. duration, 4-7: Sustain duration.
+.0a1e	8d 0c d4	                sta sidv2atkdec ; $d40c ; 54284 - Voice 2 0-3: Decay duration, 4-7: Attack duration.
+.0a21	8d 0d d4	                sta sidv2stnrel ; $d40d ; 54285 - Voice 2 0-3: Rel. duration, 4-7: Sustain duration.
+.0a24	8d 13 d4	                sta sidv3atkdec ; $d413 ; 54291 - Voice 3 0-3: Decay duration, 4-7: Attack duration.
+.0a27	8d 14 d4	                sta sidv3stnrel ; $d414 ; 54292 - Voice 3 0-3: Rel. duration, 4-7: Sustain duration.
+.0a2a	a9 00		                lda #0
+.0a2c	85 fb		                sta 251
+.0a2e	85 fc		                sta 252
+.0a30	85 fd		                sta 253
+.0a32	58		                cli
+.0a33	60		                rts
+.0a34	a6 fb		main            ldx 251
+.0a36	a4 fc		                ldy 252
+.0a38	bd 82 0a	                lda tune1,x
+.0a3b	8d 00 d4	                sta sidv1flow   ; $d400 ; 54272 - Voice 1 Low freq register low byte.
+.0a3e	bd 83 0a	                lda tune1+1,x
+.0a41	8d 01 d4	                sta sidv1fhigh  ; $d401 ; 54273 - Voice 1 High freq register high byte.
+.0a44	bd be 0a	                lda tune2,x
+.0a47	8d 07 d4	                sta sidv2flow   ; $d407 ; 54279 - Voice 2 Low freq register low byte.
+.0a4a	bd bf 0a	                lda tune2+1,x
+.0a4d	8d 08 d4	                sta sidv2fhigh  ; $d408 ; 54280 - Voice 2 High freq register high byte.
+.0a50	bd 9e 0a	                lda tune3,x
+.0a53	8d 0e d4	                sta sidv3flow   ; $d40e ; 54286 - Voice 3 Low freq register low byte.
+.0a56	bd 9f 0a	                lda tune3+1,x
+.0a59	8d 0f d4	                sta sidv3fhigh  ; $d40f ; 54287 - Voice 3 High freq register high byte.
+.0a5c	a5 fd		                lda 253
+.0a5e	c9 04		delval          cmp #4
+.0a60	b0 05		                bcs nextdelay
+.0a62	e6 fd		                inc 253
+.0a64	4c 31 ea	                jmp irq     ; $ea31
+.0a67	a9 00		nextdelay       lda #0
+.0a69	85 fd		                sta 253
+.0a6b	e8		                inx
+.0a6c	e8		                inx
+.0a6d	c8		                iny
+.0a6e	86 fb		                stx 251
+.0a70	84 fc		                sty 252
+.0a72	e0 3c		                cpx #60
+.0a74	b0 03		                bcs re
+.0a76	4c 31 ea	                jmp irq     ; $ea31
+.0a79	a2 00		re              ldx #0
+.0a7b	85 fb		                sta 251
+.0a7d	85 fc		                sta 252
+.0a7f	4c 31 ea	                jmp irq     ; $ea31
+.0a82			tune1
+>0a82	88 21		          .word     do5
+>0a84	00 00		          .word     silence
+>0a86	a2 25		          .word     re5
+>0a88	00 00		          .word     silence
+>0a8a	3f 2a		          .word     mi5
+>0a8c	00 00		          .word     silence
+>0a8e	c2 2c		          .word     fa5
+>0a90	00 00		          .word     silence
+>0a92	3d 32		          .word     sol5
+>0a94	00 00		          .word     silence
+>0a96	64 38		          .word     la5
+>0a98	00 00		          .word     silence
+>0a9a	4c 3f		          .word     si5
+>0a9c	00 00		          .word     silence
+>0a9e	11 43		tune3     .word     do6
+>0aa0	00 00		          .word     silence
+>0aa2	4c 3f		          .word     si5
+>0aa4	00 00		          .word     silence
+>0aa6	64 38		          .word     la5
+>0aa8	00 00		          .word     silence
+>0aaa	3d 32		          .word     sol5
+>0aac	00 00		          .word     silence
+>0aae	c2 2c		          .word     fa5
+>0ab0	00 00		          .word     silence
+>0ab2	3f 2a		          .word     mi5
+>0ab4	00 00		          .word     silence
+>0ab6	a2 25		          .word     re5
+>0ab8	00 00		          .word     silence
+>0aba	88 21		          .word     do5
+>0abc	00 00		          .word     silence
+>0abe	11 43		tune2     .word     do6
+>0ac0	00 00		          .word     silence
+>0ac2	45 4b		          .word     re6
+>0ac4	00 00		          .word     silence
+>0ac6	7f 54		          .word     mi6
+>0ac8	00 00		          .word     silence
+>0aca	85 59		          .word     fa6
+>0acc	00 00		          .word     silence
+>0ace	7a 64		          .word     sol6
+>0ad0	00 00		          .word     silence
+>0ad2	c8 70		          .word     la6
+>0ad4	00 00		          .word     silence
+>0ad6	99 7e		          .word     si6
+>0ad8	00 00		          .word     silence
+>0ada	22 86		          .word     do7
+>0adc	00 00		          .word     silence
+>0ade	99 7e		          .word     si6
+>0ae0	00 00		          .word     silence
+>0ae2	c8 70		          .word     la6
+>0ae4	00 00		          .word     silence
+>0ae6	7a 64		          .word     sol6
+>0ae8	00 00		          .word     silence
+>0aea	85 59		          .word     fa6
+>0aec	00 00		          .word     silence
+>0aee	7f 54		          .word     mi6
+>0af0	00 00		          .word     silence
+>0af2	45 4b		          .word     re6
+>0af4	00 00		          .word     silence
+>0af6	11 43		          .word     do6
+>0af8	00 00		          .word     silence
+>0afa	39 35		          .word     sold5
+>0afc	00 00		          .word     silence
+>0afe	c8 70		          .word     la6
+>0b00	00 00		          .word     silence
+>0b02	7f 77		          .word     lad6
+>0b04	00 00		          .word     silence
+>0b06	99 7e		          .word     si6
+>0b08	00 00		          .word     silence
+>0b0a	11 43		          .word     do6
+>0b0c	00 00		          .word     silence
+>0b0e	0d 47		          .word     dod6
+>0b10	00 00		          .word     silence
+>0b12	45 4b		          .word     re6
+>0b14	00 00		          .word     silence
+>0b16	c1 4f		          .word     red6
+>0b18	00 00		          .word     silence
+>0b1a	7f 54		          .word     mi6
+>0b1c	00 00		          .word     silence
+>0b1e	85 59		          .word     fa6
+>0b20	00 00		          .word     silence
+>0b22	d7 5e		          .word     fad6
+>0b24	00 00		          .word     silence
+>0b26	7a 64		          .word     sol6
+>0b28	00 00		          .word     silence
+>0b2a	73 6a		          .word     sold6
+>0b2c	8f e1		          .word     la7
+>0b2e	fe ee		          .word     lad7
+>0b30	00 00		          .word     0
+>0b32	00 00		          .word     0
+>0b34	00 00		          .word     0
+>0b36	00 00		          .word     0
+>0b38	85 59		tune7      .word fa6
+>0b3a	00 00		          .word silence
+>0b3c	85 59		          .word fa6
+>0b3e	7f 54		          .word mi6
+>0b40	45 4b		          .word re6
+>0b42	00 00		          .word silence
+>0b44	45 4b		          .word re6
+>0b46	11 43		          .word do6
+>0b48	45 4b		          .word re6
+>0b4a	11 43		          .word do6
+>0b4c	8d 1e		          .byte 141, 30
+>0b4e	d6 1c		          .byte 214, 28
+>0b50	00 00		          .byte   0,  0
+>0b52	d6 1c		          .byte 214, 28
+>0b54	8d 1e		          .byte 141, 30
+>0b56	11 43		          .word do6
+>0b58	e3 16		          .byte 227, 22
+>0b5a	b1 19		          .byte 177, 25
+>0b5c	8d 1e		          .byte 141, 30
+>0b5e	d6 1c		          .byte 214, 28
+>0b60	b1 19		          .byte 177, 25
+>0b62	e3 16		          .byte 227, 22
+>0b64	00 00		          .byte   0,  0
+>0b66	00 00		          .byte   0,  0
+>0b68	00 00		          .byte   0,  0
+>0b6a	00 00		          .byte   0,  0
+.0b6c			tune4
+>0b6c	72 0b		          .byte 114, 11
+>0b6e	00 00		          .byte   0,  0
+>0b70	72 0b		          .byte 114, 11
+>0b72	cd 0a		          .byte 205, 10
+>0b74	9f 09		          .byte 159,  9
+>0b76	00 00		          .byte   0,  0
+>0b78	9f 09		          .byte 159,  9
+>0b7a	93 08		          .byte 147,  8
+>0b7c	9f 09		          .byte 159,  9
+>0b7e	93 08		          .byte 147,  8
+>0b80	a3 07		          .byte 163,  7
+>0b82	35 07		          .byte  53,  7
+>0b84	00 00		          .byte   0,  0
+>0b86	35 07		          .byte  53,  7
+>0b88	a3 07		          .byte 163,  7
+>0b8a	93 08		          .byte 147,  8
+>0b8c	b9 05		          .byte 185,  5
+>0b8e	6c 06		          .byte 108,  6
+>0b90	a3 07		          .byte 163,  7
+>0b92	35 07		          .byte  53,  7
+>0b94	6c 06		          .byte 108,  6
+>0b96	b9 05		          .byte 185,  5
+>0b98	00 00		          .byte   0,  0
+>0b9a	00 00		          .byte   0,  0
+>0b9c	00 00		          .byte   0,  0
+>0b9e	00 00		          .byte   0,  0
+>0ba0	00 00		tune5           .byte   0,  0
+>0ba2	00 00		          .byte   0,  0
+>0ba4	00 00		          .byte   0,  0
+>0ba6	00 00		          .byte   0,  0
+>0ba8	00 00		          .byte   0,  0
+>0baa	00 00		          .byte   0,  0
+>0bac	00 00		          .byte   0,  0
+>0bae	00 00		          .byte   0,  0
+>0bb0	00 00		          .byte   0,  0
+>0bb2	00 00		          .byte   0,  0
+>0bb4	00 00		          .byte   0,  0
+>0bb6	00 00		          .byte   0,  0
+>0bb8	00 00		          .byte   0,  0
+>0bba	00 00		          .byte   0,  0
+>0bbc	00 00		          .byte   0,  0
+>0bbe	00 00		          .byte   0,  0
+>0bc0	00 00		          .byte   0,  0
+>0bc2	00 00		          .byte   0,  0
+>0bc4	00 00		          .byte   0,  0
+>0bc6	00 00		          .byte   0,  0
+>0bc8	00 00		          .byte   0,  0
+>0bca	00 00		          .byte   0,  0
+>0bcc	00 00		          .byte   0,  0
+>0bce	00 00		          .byte   0,  0
+>0bd0	00 00		          .byte   0,  0
+>0bd2	00 00		          .byte   0,  0
+>0bd4	00		byte            .byte 0
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-kernal.asm
+
+=$00			u6510ddr        =       $00     ;   0 6510 port data dir. reg. (def: %xx101111)
+=$01			u6510map        =       $01     ;   1 6510 port used as memory map reg.
+=$02			unused2         =       $02     ;   2 unused.
+=$03			adray1          =       $03     ; 3-4 Vector to routine to convert a number ...
+=$05			adray2          =       $05     ; 5-6 Vector to routine to convert a number ...
+=$07			b_charac        =       $07     ;   7 Search character for scanning ...
+=$08			b_endchr        =       $08     ;   8 Search character for scanning ...
+=$09			b_trmpos        =       $09     ;   9 Cursor column position before the ...
+=$0a			verck           =       $0a     ;  10 Flag: 0=Load or 1=Check
+=$0b			b_count         =       $0b     ;  11 Index into the Text Input Buffer ...
+=$0c			dimflg          =       $0c     ;  12 Flags for routine that locate or build array.
+=$0d			valtyp          =       $0d     ;  13 Flag: Type of data ($ff=string or $00=numeric)
+=$0e			intflg          =       $0e     ;  14 Numeric data Type ($80=Integer or $00=Float)
+=$0f			garbfl          =       $0f     ;  15 Flag for list, Garbage collection, ...
+=$10			subflg          =       $10     ;  16 Flag: Subscript reference to an array or ...
+=$11			inpflg          =       $11     ;  17 Flag: Is data input to GET, READ or INPUT.
+=$12			tansgn          =       $12     ;  18 Flag: Sign of result of TAN or SIN.
+=$13			channl          =       $13     ;  19 Current i/o channel # (CMD logical file).
+=$14			linnum          =       $14     ;  20-21 Integer line number value.
+=$16			temppt          =       $16     ;  22 Ptr to next space in temp. string stack.
+=$17			lastpt          =       $17     ;  23-24 Ptr to last string in temp. string stack.
+=$2b			txttab          =       $2b     ;  43-44 Ptr to start of BASIC Program text.
+=$2d			vartab          =       $2d     ;  45-46 Ptr to start of BASIC Variable area.
+=$2f			arytab          =       $2f     ;  47-48 Ptr to start of BASIC Array area.
+=$31			strebd          =       $31     ;  49-50 Ptr to END of BASIC Array area(+1) ...
+=$33			fretop          =       $33     ;  51-52 Ptr to bottom of string text area.
+=$35			frespc          =       $35     ;  53-54 Temp. ptr for string.
+=$37			memsiz          =       $37     ;  55-56 Ptr to highest address used by BASIC.
+=$39			curlib          =       $39     ;  57-58 Current BASIC line number.
+=$3b			oldlin          =       $3b     ;  59-60 Previous BASIC line number.
+=$3d			oldtxt          =       $3d     ;  61-62 Ptr to current BASIC statement address.
+=$3f			datlin          =       $3f     ;  63-64 Current DATA line number.
+=$41			datptr          =       $41     ;  65-66 Current DATA item address ptr.
+=$43			impptr          =       $43     ;  67-68 GET, READ or INPUT info. source ptr.
+=$45			varnam          =       $45     ;  69-70 Current BASIC variable name.
+=$47			varpnt          =       $47     ;  71-72 Ptr to current BASIC variable value.
+=$49			forpnt          =       $49     ;  73-74 Temp Ptr to index variable used by FOR.
+=$4b			opptr           =       $4b     ;  75-76 Math operator table displacement.
+=$4d			opmask          =       $4d     ;  77 Mask for comparison operation.
+=$4e			defpnt          =       $4e     ;  78-79 Pointer to current FN descriptor.
+=$50			dscpnt          =       $50     ;  80-82 Tmp ptr to current string descriptor.
+=$53			four6           =       $53     ;  83 Constant of garbage collector.
+=$54			jmper           =       $54     ;  84-86 Jump to function Instruction.
+=$61			fac1            =       $61     ; 97-102 Floating point Accumulator #1
+=$73			chrget          =       $73     ; 115
+=$79			chrgot          =       $79     ; 121
+=$90			kiostatus       =       $90     ; 144 Kernal I/O status word (st) (byte)
+=$b7			curfnlen        =       $b7     ; 183 Current filename length (byte)
+=$b9			cursecadd       =       $b9     ; 185 Current secondary address (byte)
+=$ba			curdevno        =       $ba     ; 186 Current device number (byte)
+=$bb			curfptr         =       $bb     ; 187 Current file pointer (word)
+=$c5			lstx            =       $c5     ; 197 matrix coordinate of last key pressed
+=$c6			ndx             =       $c6     ; 198 Number of character in keyboard buffer
+=$fb			zpage1          =       $fb     ; 251 zero page 1 address (word)
+=$fd			zpage2          =       $fd     ; 253 zero page 2 address (word)
+=$fb			zeropage        =       zpage1
+=$fd			zonepage        =       zpage2
+=$277			kbbuff          =       $277    ; 631
+=$286			carcol          =       $286    ; 646 basic next chr colscreenram (byte)
+=$286			kcarcol         =       carcol
+=$286			bascol          =       carcol
+=$28d			shflag          =       $28d    ; 653
+=$30a			ieval           =       $30a
+=$314			cinv            =       $314    ; $314-$315 brk instruction interupt
+=$33c			tbuffer         =       $33c    ; 828-1019 Cassette i/o buffer
+=$326			ibsout          =       $326    ; 806
+=$33c			tpbuff          =       $33c    ; $033c-$03fb (828-1019)
+=$400			scrnram         =       $400    ; 1024 video character ram
+=$400			scrram0         =       scrnram ; 1024
+=$500			scrram1         =       $500    ; 1280
+=$600			scrram2         =       $600    ; 1536
+=$700			scrram3         =       $700    ; 1792
+=$801			basicsta        =       $801    ; 2049  basic start address
+=$a000			basicrom        =       $a000   ; 40960 Basic rom base address
+=$d400			sid             =       $d400   ; 54272 sid base address
+=$d800			colorram        =       $d800   ; 55296 video color ram
+=$d800			colram0         =       colorram; 55296
+=$d900			colram1         =       $d900   ; 55552
+=$da00			colram2         =       $da00   ; 55808
+=$db00			colram3         =       $db00   ; 56064
+=$dc00			cia1            =       $dc00   ; 56320 cia1 base address
+=$dc00			cia1pra         =       $dc00   ; 56320 cia1 dataport A (keyboard column Write)
+=$dc01			cia1prb         =       $dc01   ; 56321 cia1 dataport B (keyboard row read)
+=$dc02			cia1ddra        =       $dc02   ; 56322 cia1 data direction A
+=$dc03			cia1ddrb        =       $dc03   ; 56323 cia1 data direction B
+=$dc04			cia1tmalo       =       $dc04   ; 56324 cia1 timer A low byte
+=$dc05			cia1tmahi       =       $dc05   ; 56325 cia1 timer A high byte
+=$dc06			cia1tmblo       =       $dc06   ; 56326 cia1 timer B low byte
+=$dc07			cia1tmbhi       =       $dc07   ; 56327 cia1 timer B high byte
+=$dc08			cia1todten      =       $dc08   ; 56328 cia1 time of day clock seconds/10
+=$dc09			cia1todsec      =       $dc09   ; 56329 cia1 time of day clock seconds
+=$dc0a			cia1todmin      =       $dc0a   ; 56330 cia1 time of day clock minutes
+=$dc0b			cia1todhrs      =       $dc0b   ; 56331 cia1 time of day clock hours
+=$dc0c			cia1sdr         =       $dc0c   ; 56332 cia1 serial data port
+=$dc0d			cia1icr         =       $dc0d   ; 56333 cia1 Interupt control register
+=$dc0e			cia1cra         =       $dc0e   ; 56334 cia1 control register A
+=$dc0f			cia1crb         =       $dc0f   ; 56335 cia1 control register B
+=$dd00			cia2            =       $dd00   ; 56576 cia2 base address
+=$dd00			cia2pra         =       $dd00   ; 56576 cia2 dataport A
+=$dd01			cia2prb         =       $dd01   ; 56577 cia2 dataport B
+=$dd02			cia2ddra        =       $dd02   ; 56578 cia2 data direction A
+=$dd03			cia2ddrb        =       $dd03   ; 56579 cia2 data direction B
+=$dd04			cia2tmalo       =       $dd04   ; 56580 cia2 timer A low byte
+=$dd05			cia2tmahi       =       $dd05   ; 56581 cia2 timer A high byte
+=$dd06			cia2tmblo       =       $dd06   ; 56582 cia2 timer B low byte
+=$dd07			cia2tmbhi       =       $dd07   ; 56583 cia2 timer B high byte
+=$dd08			cia2todten      =       $dd08   ; 56584 cia2 time of day clock seconds/10
+=$dd09			cia2todsec      =       $dd09   ; 56585 cia2 time of day clock seconds
+=$dd0a			cia2todmin      =       $dd0a   ; 56586 cia2 time of day clock minutes
+=$dd0b			cia2todhrs      =       $dd0b   ; 56587 cia2 time of day clock hours
+=$dd0c			cia2sdr         =       $dd0c   ; 56588 cia2 serial data port
+=$dd0d			cia2icr         =       $dd0d   ; 56589 cia2 Interupt control register
+=$dd0e			cia2cra         =       $dd0e   ; 56590 cia2 control register A
+=$dd0f			cia2crb         =       $dd0f   ; 56501 cia2 control register B
+=$e000			kernalrom       =       $e000   ; 57344 start of kernal rom
+=$ea31			irq             =       $ea31   ; 59953 irq entry point
+=$03			bstop           =       $03     ;  03 [STOP]
+=$05			bwhite          =       $05     ;  05 [CTRL]+[2]        Set colour to WHITE
+=$08			block           =       $08     ;  08 [SHIFT]+[C=]      disabled char map switch
+=$09			bunlock         =       $09     ;  09 [SHIFT]+[C=]      enabled. char map switch
+=$0d			bcarret         =       $0d     ;  11 [RETURN]
+=$0e			btext           =       $0e     ;  14 select Uppercase+lowercase charset
+=$11			bcrsdn          =       $11     ;  17 [CRS-D]           Cursor DOWN 1 line
+=$12			brevcol         =       $12     ;  18 [CTRL]+[9]        REVERSE VIDEO ON
+=$13			bhome           =       $13     ;  19 [HOME]            Cursor HOME
+=$14			bdelete         =       $14     ;  20 [DELETE]          Delete 1 char
+=$1c			bred            =       $1c     ;  28 [CTRL]+[3]        Set colour to RED
+=$1d			bcuright        =       $1d     ;  29 [CRS-R]           Cursor RIGHT
+=$1e			bgreen          =       $1e     ;  30 [CTRL]+[6]        Set colour to GREEN
+=$1f			bblue           =       $1f     ;  31 [CTRL]+[7]        Set colour to BLUE
+=$81			borange         =       $81     ; 129 [C=]+[1]          Set colour to ORANGE
+=$85			bfkey1          =       $85     ; 133 [F1]
+=$86			bfkey2          =       $86     ; 134 [F2]
+=$87			bfkey3          =       $87     ; 135 [F3]
+=$88			bfkey4          =       $88     ; 136 [F4]
+=$89			bfkey5          =       $89     ; 137 [F5]
+=$8a			bfkey6          =       $8a     ; 138 [F6]
+=$8b			bfkey7          =       $8b     ; 139 [F7]
+=$8c			bfkey8          =       $8c     ; 140 [F8]
+=$8d			bcarret1        =       $8d     ; 141 [SHIFT]+[RETURN]
+=$8e			bgraph          =       $8e     ; 142 select Uppercase+graphics charset
+=$90			bblack          =       $90     ; 144 [CTRL]+[1]        Set colour to BLACK
+=$91			bcuup           =       $91     ; 145 [SHIFT]+[CRS-D]   cursor UP 1 line
+=$92			brevoff         =       $92     ; 146 [CTRL]+[0]        REVERSE VIDEO OFF
+=$93			bclear          =       $93     ; 147 [SHIFT]+[HOME]    CLEAR SCREEN
+=$94			binsert         =       $94     ; 148 [SHIFT]+[DELETE]  INSERT a char
+=$95			bbrown          =       $95     ; 149 [C=]+[2]          Set colour to BROWN
+=$96			bltred          =       $96     ; 150 [C=]+[3]          Set colour to PINK
+=$97			bdkgrey         =       $97     ; 151 [C=]+[4]          Set colour to DARK GREY
+=$98			bmdgrey         =       $98     ; 152 [C=]+[5]          Set colour to MEDIUM GREY
+=$99			bltgreen        =       $99     ; 153 [C=]+[6]          Set colour to LIGHT GREEN
+=$9a			bltblue         =       $9a     ; 154 [C=]+[7]          Set colour to LIGHT BLUE
+=$9b			bltgrey         =       $9b     ; 155 [C=]+[8]          Set colour to LIGHT GREY
+=$9c			bmagenta        =       $9c     ; 156 [CTRL]+[5]        Set colour to MAGENTA
+=$9d			bculeft         =       $9d     ; 157 [SHIFT]+[CRS-R]   cursor RIGHT 1 pos
+=$9e			byellow         =       $9e     ; 158 [CTRL]+[8]        Set colour to YELLOW
+=$9f			bcyan           =       $9f     ; 159 [CTRL]+[4]        Set colour to CYAN
+=$a0			bspace1         =       $a0     ; 169                   space
+=$e0			bspace2         =       $e0     ; 224                   space
+=$0			cnoir       = $0
+=$1			cblanc      = $1
+=$2			crouge      = $2
+=$3			cocean      = $3
+=$4			cmauve      = $4
+=$5			cvert       = $5
+=$6			cbleu       = $6
+=$7			cjaune      = $7
+=$8			corange     = $8
+=$9			cbrun       = $9
+=$a			crose       = $a
+=$b			cgrisfonce  = $b
+=$c			cgrismoyen  = $c
+=$d			cvertpale   = $d
+=$e			cbleupale   = $e
+=$f			cgrispale   = $f
+=$0			cblack      = $0
+=$1			cwhite      = $1
+=$2			cred        = $2
+=$3			ccyan       = $3
+=$4			cpurple     = $4
+=$5			cgreen      = $5
+=$6			cblue       = $6
+=$7			cyellow     = $7
+=$9			cbrown      = $9
+=$a			clightred   = $a
+=$b			cdarkgray   = $b
+=$c			cmidgray    = $c
+=$d			clightgreen = $d
+=$e			clightblue  = $e
+=$f			clightgray  = $f
+=$00			vnoir     =    %00000000
+=$00			vblack    =    %00000000
+=$01			vblanc    =    %00000001
+=$01			vwhite    =    %00000001
+=$02			vrouge    =    %00000010
+=$02			vred      =    %00000010
+=$03			vocean    =    %00000011
+=$03			vcyan     =    %00000011
+=$04			vmauve    =    %00000100
+=$04			vpurple   =    %00000100
+=$05			vvert     =    %00000101
+=$05			vgreen    =    %00000101
+=$06			vbleu     =    %00000110
+=$06			vblue     =    %00000110
+=$07			vjaune    =    %00000111
+=$07			vyellow   =    %00000111
+=$08			vorange   =    %00001000
+=$09			vbrun     =    %00001001
+=$09			vbrown    =    %00001001
+=$0a			vrose     =    %00001010
+=$0a			vpink     =    %00001010
+=$0b			vgris     =    %00001011
+=$0b			vgray     =    %00001011
+=$0b			vgrey     =    %00001011
+=$0c			vgris1    =    %00001100
+=$0c			vgray1    =    %00001100
+=$0c			vgrey1    =    %00001100
+=$0d			vvert1    =    %00001101
+=$0d			vgreen1   =    %00001101
+=$0e			vbleu1    =    %00001110
+=$0e			vblue1    =    %00001110
+=$0f			vgris2    =    %00001111
+=$0f			vgray2    =    %00001111
+=$0f			vgrey2    =    %00001111
+=$e1d4			setprms = $e1d4 ; Set parameters for LOAD, SAVE, and verify
+=$ed09			stalk   = $ed09 ; Send Talk command to serial bus.
+=$ed0c			slisten = $ed0c ; Send LISTEN command to serial bus.
+=$ed40			sflush  = $ed40 ; Flush serial bus output cache at memory address $0095, to
+=$edb9			slisten2= $edb9 ; Send LISTEN secondary addressto serial bus.
+=$edb9			stalk2  = $edb9 ; Send TALK secondary addressto serial bus.
+=$eddd			sbout   = $eddd ; Write byte to serial bus.
+=$edef			sutalk  = $edef ; Send UNTalk command to serial bus.
+=$edfe			sulisten= $edfe ; Send UNLISTEN command to serial bus.
+=$ee85			sclkhigh= $ee85 ; Set CLOCK OUT to High
+=$ee8e			sclklow = $ee8e ; Set CLOCK OUT to low
+=$ee97			sdathigh= $ee97 ; Set DATA OUT to High
+=$eea0			sdatlow = $eea0 ; Set DATA OUT to low
+=$eea9			sclkdta = $eea9 ; Read CLOCK IN and DATA IN.
+=$f1ad			sbread  = $f1ad ; Read one byte from serial port.
+=$f237			sstdin  = $F237 ; Define serial bus as standard input; do not send TALK
+=$f279			sstdout = $F279 ; Define serial bus as standard output; do not send LISTEN
+=$f3d5			sfopen  = $F3D5 ; Open file on serial bus; do not send file name if secondary
+=$f528			sutclose= $F528 ; Send UNTALK and CLOSE command to serial bus.
+=$f63f			sulclose= $F63F ; Send UNLISTEN and CLOSE command to serial bus.
+=$f642			sfclose = $F642 ; Close file on serial bus; do not send CLOSE secondary address
+=$fe21			stimeout= $FE21 ; Unknown. (Set serial bus timeout.)
+=$ffa5			acptr   = $ffa5 ; jmp $ee13 Recoit un caractere provenant du port serie
+=$ffc6			chkin   = $ffc6 ; jmp ($031e) Define an input channel.
+=$ffc9			chkout  = $ffc9 ; jmp ($0320) Define an output channel.
+=$ffcf			chrin   = $ffcf ; jmp ($0324) Get a character from the input channel
+=$ffd2			chrout  = $ffd2 ; jmp ($0326) Output a character
+=$ff81			cint    = $ff81 ; jsr $e518 Initialize the screen editor and vic-ii chip
+=$ffa8			ciout   = $ffa8 ; jmp $eddd Transmit a byte over the serial bus
+=$ffe7			clall   = $ffe7 ; jmp ($032c) Close all open files
+=$ffc3			close   = $ffc3 ; jmp ($031c) Close a logical file
+=$ffcc			clrchn  = $ffcc ; jmp ($0322) - Clear all i/o channels.
+=$ffe4			getin   = $ffe4 ; jmp ($032a) Get a character.
+=$fff3			iobase  = $fff3 ; jmp $e500 Define i/o memory page
+=$ff84			ioinit  = $ff84 ; ($fda3) Initialize i/o devices.
+=$ffb1			listen  = $ffb1 ; jmp ($ed0c) Command a device on the serial bus to listen.
+=$ffd5			load    = $ffd5 ; jmp $f4e9 Load device to RAM.
+=$ff9c			membot  = $ff9c ; jmp $fe34 Get/set bottom of memory.
+=$ff99			memtop  = $ff99 ; jmp $fe25 Get/Set top of ram
+=$ffc0			open    = $ffc0 ; jmp ($031a) Open a logical file
+=$fff0			plot    = $fff0 ; jmp $e50a Set or retrieve cursor location x=column, y=line
+=$ff87			ramtas  = $ff87 ; ($fd50) Initialise ram, tape buffer and screen.
+=$ffde			rdtim   = $ffde ; jmp $f6dd Read system clock
+=$ffb7			readst  = $ffb7 ; jmp $fe07 Read i/o status word
+=$ff8a			restor  = $ff8a ; jmp $fd15 Restore default I/O vectors.
+=$ffd8			save    = $ffd8 ; jmp $f5dd Save memory to a device.
+=$ff9f			scnkey  = $ff9f ; jmp $ea87 Scan the keyboard
+=$ffed			screen  = $ffed ; jmp $e505 Return screen format
+=$ff93			second  = $ff93 ; jmp $edb9 Send secondary address after listen
+=$ffba			setlfs  = $ffba ; jmp $fe00 Set up a logical file
+=$ff90			setmsg  = $ff90 ; jmp $fe18 Set kernal message output flag
+=$ffbd			setnam  = $ffbd ; jmp $fdf9 Set up file name
+=$ffdb			settim  = $ffdb ; jmp $f6e4 Set the system clock.
+=$ffa2			settmo  = $ffa2 ; jmp $fe21 Set ieee bus card timeout flag
+=$ffe1			stop    = $ffe1 ; jmp ($0328) Check if stop key is pressed.
+=$ffb4			talk    = $ffb4 ; jmp $ed09 Command a device on the serial bus to talk
+=$ff96			tksa    = $ff96 ; jmp $edc7 Send a secondary address to a device commanded to talk
+=$ffea			udtim   = $ffea ; jmp $f69b Update the system clock
+=$ffae			unlsn   = $ffae ; jmp $edfe Send an unlisten command
+=$ffab			untlk   = $ffab ; jmp $edef Send an untalk command
+=$ff8d			vector  = $ff8d ; jmp $fd1a Read/set I/O vectors.
+=$e043			kd_poly1     =   $e043
+=$e059			kd_poly2     =   $e059
+=$e08d			kd_rmulc     =   $e08d       ;
+=$e092			kd_raddc     =   $e092       ;
+=$e097			kd_rnd       =   $e097
+=$e12a			kd_sys       =   $e12a
+=$e156			kd_save      =   $e156
+=$e165			kd_verify    =   $e165
+=$e168			kd_load      =   $e168
+=$f1ca			kd_chrout    =   $f1ca
+=$ff81			kcint       =   cint        ;   , init vic + ecran.
+=$ff84			kioinit     =   ioinit      ;   , init i/o dev.
+=$ff87			kramtas     =   ramtas      ;   , test de memoire.
+=$ffa8			kciout      =   ciout       ;a  ,tx byte  acia
+=$ff8a			krestor     =   restor      ;   , set ram plafond
+=$ff8d			kvector     =   vector      ;
+=$ff90			ksetmsg     =   setmsg      ;a  , set sys. msg. out
+=$ff93			ksecond     =   second      ;a  , tx adresse sec.
+=$ff96			ktksa       =   tksa        ;a  , talk adresse sec.
+=$ff99			kmemtop     =   memtop      ; yx, (c) get mem high
+=$ff9c			kmembot     =   membot      ; yx, (c) get mem low
+=$ff9f			kscankey    =   scnkey      ;   , scan clavier
+=$ffa2			ksettmo     =   settmo      ;a  , set ieee timeout
+=$ffa5			kacptr      =   acptr       ;a  ,rx serie.
+=$ffab			kuntlk      =   untlk       ;   , iec-cmc stop talk
+=$ffae			kunlsn      =   unlsn       ;   , iec-cmd stop lsn
+=$ffb1			klisten     =   listen      ;a  , iec-cmd dev ecout
+=$ffb4			ktalk       =   talk        ;a  , iec-cmd dev parle
+=$ffb7			kreadst     =   readst      ;a  , lecture i/o stats
+=$ffba			ksetlfs     =   setlfs      ;ayx, init fich logi.
+=$ffbd			ksetnam     =   setnam      ;ayx, init num.nom.fich
+=$ffc0			kopen       =   open        ;axy, ouvre fich-nom
+=$ffc3			kclose      =   close       ;a  , ferme fichier #a.
+=$ffc6			kchkin      =   chkin       ;  x,open canal in.
+=$ffc9			kchkout     =   chkout      ;  x,open canal out
+=$ffcc			kclrchn     =   clrchn      ;   , ferme canaux i/o.
+=$ffcf			kchrin      =   chrin       ;a  ,recup. un car.
+=$ffd2			kchrout     =   chrout      ;a  ,sort un car.
+=$ffd5			kload       =   load        ;ayx, dev->ram
+=$ffd8			ksave       =   save        ;   , sauve mem->dev
+=$ffdb			ksettim     =   settim      ;axy, init sysclock
+=$ffde			krdtim      =   rdtim       ;axy, lecture sysclock
+=$ffe1			kstop       =   stop        ;a  , ret. stopkey stat
+=$ffe4			kgetin      =   getin       ;a  , recup. car. #dev.
+=$ffe7			kclall      =   clall       ;   , ferme fichiers.
+=$ffea			kudtim      =   udtim       ;   , maj sysclock
+=$ffed			kscreen     =   screen      ; yx, get format ecran
+=$fff0			kplot       =   plot        ; yx, (c) get csr pos.
+=$fff3			kiobase     =   iobase      ; yx, def. i/o mem page
+=$e39a			k_echostartup = $e39a
+=$e716			k_putch       = $e716 ; 52) Print a character.          ;a--;---; a = char
+=$e7a0			k_cls         = $e7a0
+=$e87c			k_cursordown  = $e87c
+=$e8ea			k_scrollup    = $e8ea
+=$e94e			k_home        = $e94e
+=$e965			k_insertline  = $e965
+=$e9c8			k_screlldown  = $e9c8
+=$ed0c			k_devsndlstn  = $ed0c ; 55) Send 'LISTEN'>IEEE/Serial.  ;a--;---; a = dev #
+=$ee13			k_ieeein      = $ee13 ; 60) Input from IEEE/Serial.     ;---;a--; a = Data byte
+=$eef6			k_devsndutalk = $eef6 ; 58) Send 'UNTALK'>IEEE/Serial.  ;---;---;
+=$ef04			k_devsndulstn = $ef04 ; 59) Send 'UNLISTEN'>IEEE/Serial.;---;---;
+=$f12f			k_putsysmsg   = $f12f ; 53) Print system message.       ;--y;---; y = msg offset
+=$f291			k_cloself     = $f291 ; 61) Close logical file .        ;a--;---; a = file #
+=$f49e			k_loadsub     = $f49e ; 63) LOAD subroutine.            ;axy;---; a = # start=yyxx
+=$f5af			k_prnsrch     = $f5af ; 64) Print SEARCHING if imm mode.;---;---;
+=$f5b3			k_echosearch  = $f5b3 ; 64b) Skipping test part of 64.  ;---;---;
+=$f5c1			k_prnfnam     = $f5c1 ; 65) Print filename.             ;---;---;
+=$f6ed			k_stop        = $f6ed ; 62) Check for STOP key.         ;---;---; z = 1 pressed
+=$f7ea			k_gettaphdblk = $f7ea ; 66) Find a tape hdr blk.        ;a--;---; a = len
+=$f7ea			k_fndtaphdblk = $f7ea ; 67) Find any tape hdr blk.      ;---;---;
+=$f817			k_waittapplay = $f817 ; 68) Press PLAY... (wait)        ;---;---;
+=$f841			k_rdtape2buff = $f841 ; 69) Read tape to buffer.        ;---;---;
+=$f847			k_readtape    = $f847 ; 70) Read tape.                  ;---;---;
+=$f864			k_wrbuff2tape = $f864 ; 71) write buffer to tape.       ;---;---;
+=$f869			k_wrtape      = $f869 ; 72) write tape.                 ;a--;---; a = ldr len
+=$fb8e			k_resettapeio = $fb8e ; 73) Reset tape I/O.             ;---;---;
+=$fcbd			k_setintvect  = $fcbd ; 74) set interupt vector.        ;---;---;
+=$fce2			k_coldreset   = $fce2 ; 75) Power on reset.             ;---;---;
+=$fce2			k_coldstart   = $fce2 ; 75) Power on reset.             ;---;---;
+=$fce2			k_coldboot    = $fce2 ; 75) Power on reset.             ;---;---;
+=$fe66			k_warmreset   = $fe66 ;     Warm resetstart
+=$fe66			k_warmboot    = $fe66 ;     Warm resetstart
+=$ff93			k_devsndaddr2 = $ff93 ; 56) Send second address.        ;a--;---; a = SA or #$60
+=0			kerr00 = 0      ; routine ended by the stop key.
+=1			kerr01 = 1      ; too many files open.
+=2			kerr02 = 2      ; file already open.
+=3			kerr03 = 3      ; file not open.
+=4			kerr04 = 4      ; file not found.
+=5			kerr05 = 5      ; device not present.
+=6			kerr06 = 6      ; file is not an input file.
+=7			kerr07 = 7      ; file is not an output file.
+=8			kerr08 = 8      ; file name is missing.
+=9			kerr09 = 9      ; illegal device number.
+=240			kerrf0 = 240    ; top-of-memory change rs-232 buffer allocation.
+.0bd5			libtart
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-vicii.asm
+
+=$0400			viciiscn    =   $0400
+=$0400			viciiscn0   =   $0400
+=$04f0			viciiscn1   =   $04f0
+=$05e0			viciiscn2   =   $05e0
+=$06d0			viciiscn3   =   $06d0
+=$d000			vic = $d000			; VicII C64 memorymap base address
+=53248			vicsprt0x = vic+$00	; $d000, 53248 Sprt 0 Horizontal position (X)
+=53249			vicsprt0y = vic+$01	; $d001, 53249 Sprt 0 Vertical position (Y)
+=53250			vicsprt1x = vic+$02	; $d002, 53250 Sprt 1 Horizontal position (X)
+=53251			vicsprt1y = vic+$03	; $d003, 53251 Sprt 1 Vertical position (Y)
+=53252			vicsprt2x = vic+$04	; $d004, 53252 Sprt 2 Horizontal position (X)
+=53253			vicsprt2y = vic+$05	; $d005, 53253 Sprt 2 Vertical position (Y)
+=53254			vicsprt3x = vic+$06	; $d006, 53254 Sprt 3 Horizontal position (X)
+=53255			vicsprt3y = vic+$07	; $d007, 53255 Sprt 3 Vertical position (Y)
+=53256			vicsprt4x = vic+$08	; $d008, 53256 Sprt 4 Horizontal position (X)
+=53257			vicsprt4y = vic+$09	; $d009, 53257 Sprt 4 Vertical position (Y)
+=53258			vicsprt5x = vic+$0a	; $d00a, 53258 Sprt 5 Horizontal position (X)
+=53259			vicsprt5y = vic+$0b	; $d00b, 53259 Sprt 5 Vertical position (Y)
+=53260			vicsprt6x = vic+$0c	; $d00c, 53260 Sprt 6 Horizontal position (X)
+=53261			vicsprt6y = vic+$0d	; $d00d, 53261 Sprt 6 Vertical position (Y)
+=53262			vicsprt7x = vic+$0e	; $d00e, 53262 Sprt 7 Horizontal position (X)
+=53263			vicsprt7y = vic+$0f	; $d00f, 53263 Sprt 7 Vertical position (Y)
+=53264			vicspxmsb = vic+$10	; $D010, 53264
+=53265			vicctrl0v  = vic+$11	; $d011, 53265
+=53266			vicraster = vic+$12	; $d012, 53266	     	|b7|b6|b5|b4|b3|b2|b1|b0|
+=53267			viclpenhp = vic+$13	; $d013, 53267	     	|b7|b6|b5|b4|b3|b2|b1|b0|
+=53268			viclpenvp = vic+$14	; $d014, 53268	     	|b7|b6|b5|b4|b3|b2|b1|b0|
+=53269			vicsprctl = vic+$15	; $d015, 53269	     	|s7|s6|s5|s4|s3|s2|s1|s0|
+=53270			vicctrl1h = vic+$16	; $d016, 53270
+=53271			vicsprtexv = vic+$17	; $d017, 53271	     |s7|s6|s5|s4|s3|s2|s1|s0|
+=53272			vicmemptr  = vic+$18	; $d018, 53272
+=53273			vicirqreg  = vic+$19	; $d019, 53273
+=53274			vicirqena  = vic+$1a	; $d01a, 53274
+=53275			vicsprtprio = vic+$1b 	; $d01b, 53275		|s7|s6|s5|s4|s3|s2|s1|s0|
+=53276			vicsprtmcol = vic+$1c 	; $d01c, 53276		|s7|s6|s5|s4|s3|s2|s1|s0|
+=53277			vicsprtexh = vic+$1d 	; $d01d, 53277		|s7|s6|s5|s4|s3|s2|s1|s0|
+=53278			vicsprscol = vic+$1e 	; $d01e, 53278		|s7|s6|s5|s4|s3|s2|s1|s0|
+=53279			vicsprbakcol = vic+$1f ; $d01f, 53279		|s7|s6|s5|s4|s3|s2|s1|s0|
+=53280			vicbordcol = vic+$20 	; $d020, 53280		|--|--|--|--|c3|c2|c1|c0|
+=53281			vicbackcol  = vic+$21 	; $d021, 53281
+=53281			vicback0col = vic+$21 	; $d021, 53281		|--|--|--|--|c3|c2|c1|c0|
+=53282			vicback1col = vic+$22 	; $d022, 53282		|--|--|--|--|c3|c2|c1|c0|
+=53283			vicback2col = vic+$23 	; $d023, 53283		|--|--|--|--|c3|c2|c1|c0|
+=53284			vicback3col = vic+$24 	; $d024, 53284		|--|--|--|--|c3|c2|c1|c0|
+=53285			vicsprtmcol0 = vic+$25 	; $d025, 53285		|--|--|--|--|c3|c2|c1|c0|
+=53286			vicsprtmcol1 = vic+$26 	; $d026, 53286		|--|--|--|--|c3|c2|c1|c0|
+=53287			vicsprt0col = vic+$27 	; $d027, 53287		|--|--|--|--|c3|c2|c1|c0|
+=53288			vicsprt1col = vic+$28 	; $d028, 53288		|--|--|--|--|c3|c2|c1|c0|
+=53289			vicsprt2col = vic+$29 	; $d029, 53289		|--|--|--|--|c3|c2|c1|c0|
+=53290			vicsprt3col = vic+$2a 	; $d02a, 53290		|--|--|--|--|c3|c2|c1|c0|
+=53291			vicsprt4col = vic+$2b 	; $d02b, 53291		|--|--|--|--|c3|c2|c1|c0|
+=53292			vicsprt5col = vic+$2c 	; $d02c, 53292		|--|--|--|--|c3|c2|c1|c0|
+=53293			vicsprt6col = vic+$2d 	; $d02d, 53293		|--|--|--|--|c3|c2|c1|c0|
+=53294			vicsprt7col = vic+$2e 	; $d02e, 53294		|--|--|--|--|c3|c2|c1|c0|
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-sid.asm
+
+=$d400			sidv1flow   =   $d400 ; 54272 - Voice 1 Low freq register low byte.
+=$d401			sidv1fhigh  =   $d401 ; 54273 - Voice 1 High freq register high byte.
+=$d402			sidv1pwlow 	=   $d402 ; 54274 - Voice 1 Pulse waveform width register low byte.
+=$d403			sidv1pwhigh =   $d403 ; 54275 - Voice 1 Pulse waveform width register high byte.
+=$d404			sidv1control=   $d404 ; 54276 - Voice 1 Voice control register.
+=$d405			sidv1atkdec =	$d405 ; 54277 - 0-3: Voice 1 Decay duration, 4-7: Attack duration.
+=$d406			sidv1stnrel =   $d406 ; 54278 - 0-3: Voice 1 Rel. duration, 4-7: Sustain duration.
+=$d407			sidv2flow   =   $d407 ; 54279 - Voice 2 Low freq register low byte.
+=$d408			sidv2fhigh  =   $d408 ; 54280 - Voice 2 High freq register high byte.
+=$d409			sidv2pwlow 	=   $d409 ; 54281 - Voice 2 Pulse waveform width register low byte.
+=$d40a			sidv2pwhigh	=   $d40a ; 54282 - Voice 2 Pulse waveform width register high byte.
+=$d40b			sidv2control=   $d40b ; 54283 - Voice 2 Voice control register.
+=$d40c			sidv2atkdec =   $d40c ; 54284 - Voice 2 0-3: Decay duration, 4-7: Attack duration.
+=$d40d			sidv2stnrel =   $d40d ; 54285 - Voice 2 0-3: Rel. duration, 4-7: Sustain duration.
+=$d40e			sidv3flow   =   $d40e ; 54286 - Voice 3 Low freq register low byte.
+=$d40f			sidv3fhigh  =   $d40f ; 54287 - Voice 3 High freq register high byte.
+=$d410			sidv3pwlow 	=   $d410 ; 54288 - Voice 3 Pulse waveform width register low byte.
+=$d411			sidv3pwhigh =   $d411 ; 54289 - Voice 3 Pulse waveform width register high byte.
+=$d412			sidv3control=   $d412 ; 54290 - Voice 3 Poice control register.
+=$d413			sidv3atkdec =   $d413 ; 54291 - Voice 3 0-3: Decay duration, 4-7: Attack duration.
+=$d414			sidv3stnrel =   $d414 ; 54292 - Voice 3 0-3: Rel. duration, 4-7: Sustain duration.
+=$d415			sidcutlo    =   $d415 ; 54293 - Bits 0-2 = low portion of filter cutoff frequency.
+=$d416			sidcuthi    =   $d416 ; 54294 - Filter cutoff frequency (high byte).
+=$d417			sidreson    =   $d417 ; 54295 - Filter resonnance control register.
+=$d418			sidsigvol  =    $d418 ; 54296 - Volume and Filter selectv register.
+=$d419			sidpotx    =    $d419 ; 54297 - Read game paddle 1 (or 3) X position.
+=$d41a			sidpoty    =    $d41a ; 54298 - Read game paddle 1 (or 3) Y position.
+=$d41b			sidrandom  =    $d41b ; 54299 - Read oscillator/Random number generator.
+=$d41c			sidenv3    =    $d41c ; 54300 - Envelope Generator 3 output.
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-basic2.asm
+
+=$a3bb			b_opentxtspc  = $a3bb ; Open space in BASIC text.   ;a-y;---; Array top $yyaa
+=$a408			b_chkavailmem = $a408 ; Check available Memory. *1  ;a-y;---; Array top $yyaa
+=$a435			b_outofmem    = $a435 ; ?Out of memory.             ;---;---;
+=$a437			b_errormesg   = $a437 ; Send BASIC error message.   ;a--;---; a = errno
+=$a474			b_warmstart   = $a474 ; Basic warm start.           ;---;---;
+=$a48a			b_chrget      = $a48a ; Main CHRGET entry.          ;---;---;
+=$a49c			b_newline     = $a49c ; Crunch tokens, insert line. ;-x-;---; x = buff len
+=$a52a			b_clrready    = $a52a ; Fix chaining CLR and READY. ;---;---;
+=$a533			b_fixchaining = $a533 ; Fix chaining.               ;---;---;
+=$a560			b_kbgetline   = $a560 ; Recieve line from keyboard.
+=$a579			b_crunchtkns  = $a579 ; Crunch token. *7            ;-x-;---: x = buff len
+=$a613			b_findline    = $a613 ; Find line in BASIC.         ;ax-;---; strBAS = $xxaa
+=$a642			b_new         = $a642 ; Do NEW                      ;---;---;
+=$a659			b_resetclr    = $a659 ; Reset BASIC and do CLR      ;---;---;
+=$a65e			b_clr         = $a65e ; Do CLR                      ;---;---;
+=$a68e			b_rstchrget   = $a68e ; Rst CHRGET to BASIC start   ;---;a--; strBAS hi
+=$a857			b_continue    = $a857 ; Do CONTINUE.                ;a-y;---; curline $yyaa
+=$a96b			b_getint      = $a96b ; Get int from BASIX text.    ;---;---;
+=$aad3			b_sndcr       = $aad3 ; Send RETURN, LF in scr mode.;---;a--; a = LF
+=$aad7			b_sndcrlf     = $aad7 ; Send RETURN, LINEFEED.      ;---;a--; a = LF
+=$ab1e			b_outstr_ay   = $ab1e ; Print string from $yyaa.    ;a-y;---; sptr = $yyaa
+=$ab1e			b_puts        = b_outstr_ay
+=$ab24			b_outstrprep  = $ab24 ; Print precomputated string. ;a--;---; a = strlen
+=$ab45			b_printqm     = $ab45 ; Print '?'.                  ;---;---;
+=$ab47			b_sendchar    = $ab47 ; Send char in a to device.   ;a--;a--; a = char
+=$ad8a			b_frmnum      = $ad8a ; Evaluate numeric expression and/or check for data type mismatch
+=$ad9e			b_evalexpr    = $ad9e ; Evaluate expression.
+=$aefd			b_chk4comma   = $aefd ; Check for coma.             ;---;a--; a = char
+=$aefa			b_chk4lpar    = $aefa ; check for '('.              ;---;a--; a = char
+=$aef7			b_chk4rpar    = $aef7 ; check for ')'.              ;---;a--; a = char
+=$af08			b_syntaxerr   = $af08 ; send 'SYNTAX ERROR'.        ;---;---;
+=$b0e7			b_fndfloatvar = $b0e7 ; find float var by name.     ;---;a-y; addr = $yyaa
+=$b185			b_bumpvaraddr = $b185 ; Bumb var addr by 2. *31     ;---;a-y; addr = $yyaa
+=$b1bf			b_float2int   = $b1bf ; Float to int in Acc#1.      ;---;---;
+=$b248			b_fcerr       = $b248 ; Print ILLEGAL QUANTITY error message.
+=$b391			b_int2float   = $b391 ; Int to float in Acc#1.      ;---;---;
+=$b79e			b_getacc1lsb  = $b79e ; Get Acc#1 LSB in x.         ;---;-x-; x = Acc#1 LSB
+=$b7b5			b_str2float   = $b7b5 ; Evaluate str to float (VAL) ;---;---;
+=$b7b9			b_strxy2float = $b7b9 ; Eval. float from str in xy. ;---;-xy; strptr = $yyxx
+=$b7eb			b_getpokeprms = $b7eb ; Get 2 params for POKE, WAIT.;---;-x-; x = Param2
+=$b7f7			b_getadr      = $b7f7 ; Convert Floating point number to an Unsighed TwoByte Integer.
+=$b867			b_memfloatadd = $b867 ; Add from memory.            ;a-y;---; ptr = $yyaa
+=$ba28			b_memfloatmul = $ba28 ; Multiply from memory.       ;a-y;---; ptr = $yyaa
+=$bae2			b_acc1mul10   = $bae2 ; Multiply Acc#1 by 10.       ;---;---; ptr = $yyaa
+=$bba2			b_memvar2acc1 = $bba2 ; Unpack mem var to Acc#1.    ;a-y;---; ptr = $yyaa
+=$bbd7			b_copyacc12xy = $bbd7 ; Copy Acc#1 to mem location. ;-xy;---; ptr = $yyxx
+=$bbfc			b_acc2toacc1  = $bbfc ; Move Acc#2 to Acc#1.        ;---;---;
+=$bc0c			b_rndac1ac2   = $bc0c ; Move rnd Acc#1 to Acc#2.    ;---;---;
+=$bc0f			b_urndac1ac2  = $bc0f ; Move unrnd Acc#1 to Acc#2.  ;---;---;
+=$bc1b			b_rndac1      = $bc1b ; Round Acc#1.                ;---;---;
+=$bdcd			b_putint      = $bdcd ; Print fix point value.      ;ax-;---; Value = $xxaa
+=$bdd7			b_putfloat    = $bdd7 ; Print Acc#1 float.          ;---;---;
+=$bddd			b_num2str     = $bddd ; Cnv num to str at $0100. *48;a-y;---; a=#$00, y=#$01
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/map-c64-sid-notes-ntsc.asm
+
+=$0000			silence     = $0000 ; Silence (no frequency)
+=$010c			do0   = $010C ;   16,35Hz NTSC (hex): hi: $01, lo: $0C ; (dec): lo: 12, Hi:  1
+=$011c			dod0  = $011C ;   17,33Hz NTSC (hex): hi: $01, lo: $1C ; (dec): lo: 28, Hi:  1
+=$012d			re0   = $012D ;   18,35Hz NTSC (hex): hi: $01, lo: $2D ; (dec): lo: 45, Hi:  1
+=$013f			red0  = $013F ;   19,45Hz NTSC (hex): hi: $01, lo: $3F ; (dec): lo: 63, Hi:  1
+=$0152			mi0   = $0152 ;   20,60Hz NTSC (hex): hi: $01, lo: $52 ; (dec): lo: 82, Hi:  1
+=$0166			fa0   = $0166 ;   21,83Hz NTSC (hex): hi: $01, lo: $66 ; (dec): lo:102, Hi:  1
+=$017b			fad0  = $017B ;   23,13Hz NTSC (hex): hi: $01, lo: $7B ; (dec): lo:123, Hi:  1
+=$0192			sol0  = $0192 ;   24,50Hz NTSC (hex): hi: $01, lo: $92 ; (dec): lo:146, Hi:  1
+=$01aa			sold0 = $01AA ;   25,96Hz NTSC (hex): hi: $01, lo: $AA ; (dec): lo:170, Hi:  1
+=$01c3			la0   = $01C3 ;   27,50Hz NTSC (hex): hi: $01, lo: $C3 ; (dec): lo:195, Hi:  1
+=$01de			lad0  = $01DE ;   29,14Hz NTSC (hex): hi: $01, lo: $DE ; (dec): lo:222, Hi:  1
+=$01fa			si0   = $01FA ;   30,87Hz NTSC (hex): hi: $01, lo: $FA ; (dec): lo:250, Hi:  1
+=$0219			do1   = $0219 ;   32,71Hz NTSC (hex): hi: $02, lo: $19 ; (dec): lo: 25, Hi:  2
+=$0238			dod1  = $0238 ;   34,65Hz NTSC (hex): hi: $02, lo: $38 ; (dec): lo: 56, Hi:  2
+=$025a			re1   = $025A ;   36,71Hz NTSC (hex): hi: $02, lo: $5A ; (dec): lo: 90, Hi:  2
+=$027e			red1  = $027E ;   38,89Hz NTSC (hex): hi: $02, lo: $7E ; (dec): lo:126, Hi:  2
+=$02a4			mi1   = $02A4 ;   41,21Hz NTSC (hex): hi: $02, lo: $A4 ; (dec): lo:164, Hi:  2
+=$02cc			fa1   = $02CC ;   43,66Hz NTSC (hex): hi: $02, lo: $CC ; (dec): lo:204, Hi:  2
+=$02f7			fad1  = $02F7 ;   46,25Hz NTSC (hex): hi: $02, lo: $F7 ; (dec): lo:247, Hi:  2
+=$0324			sol1  = $0324 ;   49,00Hz NTSC (hex): hi: $03, lo: $24 ; (dec): lo: 36, Hi:  3
+=$0354			sold1 = $0354 ;   51,91Hz NTSC (hex): hi: $03, lo: $54 ; (dec): lo: 84, Hi:  3
+=$0386			la1   = $0386 ;   55,00Hz NTSC (hex): hi: $03, lo: $86 ; (dec): lo:134, Hi:  3
+=$03bc			lad1  = $03BC ;   58,28Hz NTSC (hex): hi: $03, lo: $BC ; (dec): lo:188, Hi:  3
+=$03f5			si1   = $03F5 ;   61,74Hz NTSC (hex): hi: $03, lo: $F5 ; (dec): lo:245, Hi:  3
+=$0431			do2   = $0431 ;   65,41Hz NTSC (hex): hi: $04, lo: $31 ; (dec): lo: 49, Hi:  4
+=$0471			dod2  = $0471 ;   69,30Hz NTSC (hex): hi: $04, lo: $71 ; (dec): lo:113, Hi:  4
+=$04b4			re2   = $04B4 ;   73,41Hz NTSC (hex): hi: $04, lo: $B4 ; (dec): lo:180, Hi:  4
+=$04fc			red2  = $04FC ;   77,79Hz NTSC (hex): hi: $04, lo: $FC ; (dec): lo:252, Hi:  4
+=$0548			mi2   = $0548 ;   82,41Hz NTSC (hex): hi: $05, lo: $48 ; (dec): lo: 72, Hi:  5
+=$0598			fa2   = $0598 ;   87,31Hz NTSC (hex): hi: $05, lo: $98 ; (dec): lo:152, Hi:  5
+=$05ed			fad2  = $05ED ;   92,50Hz NTSC (hex): hi: $05, lo: $ED ; (dec): lo:237, Hi:  5
+=$0648			sol2  = $0648 ;   98,00Hz NTSC (hex): hi: $06, lo: $48 ; (dec): lo: 72, Hi:  6
+=$06a7			sold2 = $06A7 ;  103,83Hz NTSC (hex): hi: $06, lo: $A7 ; (dec): lo:167, Hi:  6
+=$070c			la2   = $070C ;  110,00Hz NTSC (hex): hi: $07, lo: $0C ; (dec): lo: 12, Hi:  7
+=$0778			lad2  = $0778 ;  116,55Hz NTSC (hex): hi: $07, lo: $78 ; (dec): lo:120, Hi:  7
+=$07ea			si2   = $07EA ;  123,48Hz NTSC (hex): hi: $07, lo: $EA ; (dec): lo:234, Hi:  7
+=$0862			do3   = $0862 ;  130,83Hz NTSC (hex): hi: $08, lo: $62 ; (dec): lo: 98, Hi:  8
+=$08e2			dod3  = $08E2 ;  138,60Hz NTSC (hex): hi: $08, lo: $E2 ; (dec): lo:226, Hi:  8
+=$0969			re3   = $0969 ;  146,83Hz NTSC (hex): hi: $09, lo: $69 ; (dec): lo:105, Hi:  9
+=$09f8			red3  = $09F8 ;  155,58Hz NTSC (hex): hi: $09, lo: $F8 ; (dec): lo:248, Hi:  9
+=$0a90			mi3   = $0A90 ;  164,83Hz NTSC (hex): hi: $0A, lo: $90 ; (dec): lo:144, Hi: 10
+=$0b31			fa3   = $0B31 ;  174,63Hz NTSC (hex): hi: $0B, lo: $31 ; (dec): lo: 49, Hi: 11
+=$0bdb			fad3  = $0BDB ;  185,00Hz NTSC (hex): hi: $0B, lo: $DB ; (dec): lo:219, Hi: 11
+=$0c8f			sol3  = $0C8F ;  196,00Hz NTSC (hex): hi: $0C, lo: $8F ; (dec): lo:143, Hi: 12
+=$0d4e			sold3 = $0D4E ;  207,65Hz NTSC (hex): hi: $0D, lo: $4E ; (dec): lo: 78, Hi: 13
+=$0e19			la3   = $0E19 ;  220,00Hz NTSC (hex): hi: $0E, lo: $19 ; (dec): lo: 25, Hi: 14
+=$0ef0			lad3  = $0EF0 ;  233,10Hz NTSC (hex): hi: $0E, lo: $F0 ; (dec): lo:240, Hi: 14
+=$0fd3			si3   = $0FD3 ;  246,95Hz NTSC (hex): hi: $0F, lo: $D3 ; (dec): lo:211, Hi: 15
+=$10c4			do4   = $10C4 ;  261,65Hz NTSC (hex): hi: $10, lo: $C4 ; (dec): lo:196, Hi: 16
+=$11c3			dod4  = $11C3 ;  277,20Hz NTSC (hex): hi: $11, lo: $C3 ; (dec): lo:195, Hi: 17
+=$12d1			re4   = $12D1 ;  293,65Hz NTSC (hex): hi: $12, lo: $D1 ; (dec): lo:209, Hi: 18
+=$13f0			red4  = $13F0 ;  311,15Hz NTSC (hex): hi: $13, lo: $F0 ; (dec): lo:240, Hi: 19
+=$1520			mi4   = $1520 ;  329,65Hz NTSC (hex): hi: $15, lo: $20 ; (dec): lo: 32, Hi: 21
+=$1661			fa4   = $1661 ;  349,25Hz NTSC (hex): hi: $16, lo: $61 ; (dec): lo: 97, Hi: 22
+=$17b6			fad4  = $17B6 ;  370,00Hz NTSC (hex): hi: $17, lo: $B6 ; (dec): lo:182, Hi: 23
+=$191f			sol4  = $191F ;  392,00Hz NTSC (hex): hi: $19, lo: $1F ; (dec): lo: 31, Hi: 25
+=$1a9d			sold4 = $1A9D ;  415,30Hz NTSC (hex): hi: $1A, lo: $9D ; (dec): lo:157, Hi: 26
+=$1c32			la4   = $1C32 ;  440,00Hz NTSC (hex): hi: $1C, lo: $32 ; (dec): lo: 50, Hi: 28
+=$1de0			lad4  = $1DE0 ;  466,20Hz NTSC (hex): hi: $1D, lo: $E0 ; (dec): lo:224, Hi: 29
+=$1fa6			si4   = $1FA6 ;  493,90Hz NTSC (hex): hi: $1F, lo: $A6 ; (dec): lo:166, Hi: 31
+=$2188			do5   = $2188 ;  523,30Hz NTSC (hex): hi: $21, lo: $88 ; (dec): lo:136, Hi: 33
+=$2387			dod5  = $2387 ;  554,40Hz NTSC (hex): hi: $23, lo: $87 ; (dec): lo:135, Hi: 35
+=$25a2			re5   = $25A2 ;  587,30Hz NTSC (hex): hi: $25, lo: $A2 ; (dec): lo:162, Hi: 37
+=$27e0			red5  = $27E0 ;  622,30Hz NTSC (hex): hi: $27, lo: $E0 ; (dec): lo:224, Hi: 39
+=$2a3f			mi5   = $2A3F ;  659,30Hz NTSC (hex): hi: $2A, lo: $3F ; (dec): lo: 63, Hi: 42
+=$2cc2			fa5   = $2CC2 ;  698,50Hz NTSC (hex): hi: $2C, lo: $C2 ; (dec): lo:194, Hi: 44
+=$2f6b			fad5  = $2F6B ;  740,00Hz NTSC (hex): hi: $2F, lo: $6B ; (dec): lo:107, Hi: 47
+=$323d			sol5  = $323D ;  784,00Hz NTSC (hex): hi: $32, lo: $3D ; (dec): lo: 61, Hi: 50
+=$3539			sold5 = $3539 ;  830,60Hz NTSC (hex): hi: $35, lo: $39 ; (dec): lo: 57, Hi: 53
+=$3864			la5   = $3864 ;  880,00Hz NTSC (hex): hi: $38, lo: $64 ; (dec): lo:100, Hi: 56
+=$3bbf			lad5  = $3BBF ;  932,40Hz NTSC (hex): hi: $3B, lo: $BF ; (dec): lo:191, Hi: 59
+=$3f4c			si5   = $3F4C ;  987,80Hz NTSC (hex): hi: $3F, lo: $4C ; (dec): lo: 76, Hi: 63
+=$4311			do6   = $4311 ; 1046,60Hz NTSC (hex): hi: $43, lo: $11 ; (dec): lo: 17, Hi: 67
+=$470d			dod6  = $470D ; 1108,80Hz NTSC (hex): hi: $47, lo: $0D ; (dec): lo: 13, Hi: 71
+=$4b45			re6   = $4B45 ; 1174,60Hz NTSC (hex): hi: $4B, lo: $45 ; (dec): lo: 69, Hi: 75
+=$4fc1			red6  = $4FC1 ; 1244,60Hz NTSC (hex): hi: $4F, lo: $C1 ; (dec): lo:193, Hi: 79
+=$547f			mi6   = $547F ; 1318,60Hz NTSC (hex): hi: $54, lo: $7F ; (dec): lo:127, Hi: 84
+=$5985			fa6   = $5985 ; 1397,00Hz NTSC (hex): hi: $59, lo: $85 ; (dec): lo:133, Hi: 89
+=$5ed7			fad6  = $5ED7 ; 1480,00Hz NTSC (hex): hi: $5E, lo: $D7 ; (dec): lo:215, Hi: 94
+=$647a			sol6  = $647A ; 1568,00Hz NTSC (hex): hi: $64, lo: $7A ; (dec): lo:122, Hi:100
+=$6a73			sold6 = $6A73 ; 1661,20Hz NTSC (hex): hi: $6A, lo: $73 ; (dec): lo:115, Hi:106
+=$70c8			la6   = $70C8 ; 1760,00Hz NTSC (hex): hi: $70, lo: $C8 ; (dec): lo:200, Hi:112
+=$777f			lad6  = $777F ; 1864,80Hz NTSC (hex): hi: $77, lo: $7F ; (dec): lo:127, Hi:119
+=$7e99			si6   = $7E99 ; 1975,60Hz NTSC (hex): hi: $7E, lo: $99 ; (dec): lo:153, Hi:126
+=$8622			do7   = $8622 ; 2093,20Hz NTSC (hex): hi: $86, lo: $22 ; (dec): lo: 34, Hi:134
+=$8e1a			dod7  = $8E1A ; 2217,60Hz NTSC (hex): hi: $8E, lo: $1A ; (dec): lo: 26, Hi:142
+=$9689			re7   = $9689 ; 2349,20Hz NTSC (hex): hi: $96, lo: $89 ; (dec): lo:137, Hi:150
+=$9f82			red7  = $9F82 ; 2489,20Hz NTSC (hex): hi: $9F, lo: $82 ; (dec): lo:130, Hi:159
+=$a8fe			mi7   = $A8FE ; 2637,20Hz NTSC (hex): hi: $A8, lo: $FE ; (dec): lo:254, Hi:168
+=$b30a			fa7   = $B30A ; 2794,00Hz NTSC (hex): hi: $B3, lo: $0A ; (dec): lo: 10, Hi:179
+=$bdad			fad7  = $BDAD ; 2960,00Hz NTSC (hex): hi: $BD, lo: $AD ; (dec): lo:173, Hi:189
+=$c8f4			sol7  = $C8F4 ; 3136,00Hz NTSC (hex): hi: $C8, lo: $F4 ; (dec): lo:244, Hi:200
+=$d4e6			sold7 = $D4E6 ; 3322,40Hz NTSC (hex): hi: $D4, lo: $E6 ; (dec): lo:230, Hi:212
+=$e18f			la7   = $E18F ; 3520,00Hz NTSC (hex): hi: $E1, lo: $8F ; (dec): lo:143, Hi:225
+=$eefe			lad7  = $EEFE ; 3729,60Hz NTSC (hex): hi: $EE, lo: $FE ; (dec): lo:254, Hi:238
+=$fd31			si7   = $FD31 ; 3951,20Hz NTSC (hex): hi: $FD, lo: $31 ; (dec): lo: 49, Hi:253
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-c64-basic2.asm
+
+=0			bkcol=0
+=0			bkcol0=0
+=0			bkcol1=0
+=0			bkcol2=0
+=0			bkcol3=0
+.0bd5			scrmaninit
+.0bd5	20 fc 0c	               jsr  push
+.0bd8	a9 06		               lda  #vbleu
+.0bda	8d 21 d0	               sta  vicbackcol
+.0bdd	a9 05		               lda  #vvert
+.0bdf	8d 20 d0	               sta  vicbordcol
+.0be2	a9 01		               lda  #vblanc
+.0be4	8d 86 02	               sta  bascol
+.0be7	ad 00 04	               lda  scrnram
+.0bea	29 fd		               and  #%11111101
+.0bec	8d 00 04	               sta  scrnram
+.0bef	20 f6 0b	               jsr  cls
+.0bf2	20 3b 0d	               jsr  pop
+.0bf5	60		               rts
+.0bf6			cls
+.0bf6	08		               php
+.0bf7	48		               pha
+.0bf8	a9 93		               lda  #$93
+.0bfa	20 05 0c	               jsr  putch
+.0bfd	a9 0e		               lda  #$0e
+.0bff	20 05 0c	               jsr  putch
+.0c02	68		               pla
+.0c03	28		               plp
+.0c04	60		               rts
+.0c05			putch
+.0c05	08		               php
+.0c06	20 d2 ff	               jsr  $ffd2
+.0c09	28		               plp
+.0c0a	60		               rts
+.0c0b			puts
+.0c0b	20 fc 0c	               jsr  push
+.0c0e	86 fb		               stx  zpage1
+.0c10	84 fc		               sty  zpage1+1
+.0c12	a0 00		               ldy  #0
+.0c14	b1 fb		next           lda  (zpage1),y
+.0c16	f0 09		               beq  exit
+.0c18	20 05 0c	               jsr  putch
+.0c1b	20 03 0e	               jsr  inczp1
+.0c1e	4c 14 0c	               jmp  next
+.0c21	20 3b 0d	exit           jsr  pop
+.0c24	60		               rts
+.0c25			gotoxy
+.0c25	08		               php
+.0c26	18		               clc
+.0c27	8a		               txa
+.0c28	48		               pha
+.0c29	98		               tya
+.0c2a	aa		               tax
+.0c2b	68		               pla
+.0c2c	a8		               tay
+.0c2d	20 f0 ff	               jsr  kplot
+.0c30	28		               plp
+.0c31	60		               rts
+.0c32			cursor
+=$0286			bascol    =    $0286
+.0c32	08		               php
+.0c33	48		               pha
+.0c34	90 12		               bcc  restore
+.0c36	20 f0 ff	               jsr  kplot
+.0c39	8c 5a 0c	               sty  cx
+.0c3c	8e 5b 0c	               stx  cy
+.0c3f	ad 86 02	               lda  bascol
+.0c42	8d 5c 0c	               sta  bcol
+.0c45	4c 57 0c	               jmp  out
+.0c48	ae 5b 0c	restore        ldx  cy
+.0c4b	ac 5a 0c	               ldy  cx
+.0c4e	20 f0 ff	               jsr  kplot
+.0c51	ad 5c 0c	               lda  bcol
+.0c54	8d 86 02	               sta  bascol
+.0c57	68		out            pla
+.0c58	28		               plp
+.0c59	60		               rts
+>0c5a	00		cx   .byte     $00
+>0c5b	00		cy   .byte     $00
+>0c5c	00		bcol .byte     $00
+.0c5d			cursave
+.0c5d	08		               php
+.0c5e	38		               sec
+.0c5f	20 32 0c	               jsr  cursor
+.0c62	28		               plp
+.0c63	60		               rts
+.0c64			curput
+.0c64	08		               php
+.0c65	18		               clc
+.0c66	20 32 0c	               jsr  cursor
+.0c69	28		               plp
+.0c6a	60		               rts
+.0c6b			putsxy
+.0c6b	20 fc 0c	               jsr  push
+.0c6e	86 fb		               stx  zpage1
+.0c70	84 fc		               sty  zpage1+1
+.0c72	a0 00		               ldy  #$00
+.0c74	b1 fb		               lda  (zpage1),y
+.0c76	aa		               tax
+.0c77	20 03 0e	               jsr  inczp1
+.0c7a	b1 fb		               lda  (zpage1),y
+.0c7c	a8		               tay
+.0c7d	20 25 0c	               jsr  gotoxy
+.0c80	20 03 0e	               jsr  inczp1
+.0c83	a6 fb		               ldx  zpage1
+.0c85	a4 fc		               ldy  zpage1+1
+.0c87	20 0b 0c	               jsr  puts
+.0c8a	20 3b 0d	               jsr  pop
+.0c8d	60		               rts
+>0c8e	00 00		straddr   .word     $00
+>0c90	00		px        .byte     $00
+>0c91	00		py        .byte     $00
+>0c92	00 00		zp1       .word     $00
+.0c94			putscxy
+.0c94	20 fc 0c	               jsr  push
+.0c97	84 fc		               sty  zpage1+1
+.0c99	86 fb		               stx  zpage1
+.0c9b	ad 86 02	               lda  bascol
+.0c9e	8d be 0c	               sta  bc
+.0ca1	a0 00		               ldy #$00
+.0ca3	b1 fb		               lda  (zpage1),y
+.0ca5	8d 86 02	               sta  bascol
+.0ca8	20 03 0e	               jsr  inczp1
+.0cab	a6 fb		               ldx  zpage1
+.0cad	a4 fc		               ldy  zpage1+1
+.0caf	20 6b 0c	               jsr  putsxy
+.0cb2	ad be 0c	               lda  bc
+.0cb5	8d 86 02	               sta  bascol
+.0cb8	20 3b 0d	               jsr  pop
+.0cbb	60		               rts
+>0cbc	00 00		straddr  .word      $00
+>0cbe	00		bc       .byte      $00
+>0cbf	00 00		zp1      .word      $00
+.0cc1			putrahex
+.0cc1	08		               php
+.0cc2	48		               pha
+.0cc3	20 09 0f	               jsr  a2hex
+.0cc6	a9 b5		               lda  #<a2hexstr
+.0cc8	a0 0e		               ldy  #>a2hexstr
+.0cca	20 0b 0c	               jsr  puts
+.0ccd	68		               pla
+.0cce	28		               plp
+.0ccf	60		               rts
+.0cd0			kputrahexxy
+.0cd0			bputrahexxy
+.0cd0			putrahexxy
+.0cd0	08		               php
+.0cd1	20 09 0f	               jsr  a2hex
+.0cd4	a9 b2		               lda  #<a2hexpos
+.0cd6	a0 0e		               ldy  #>a2hexpos
+.0cd8	20 6b 0c	               jsr  putsxy
+.0cdb	68		               pla
+.0cdc	28		               plp
+.0cdd	60		               rts
+.0cde			putrahexcxy
+.0cde	08		               php
+.0cdf	20 09 0f	               jsr  a2hex
+.0ce2	a9 b2		               lda  #<a2hexpos
+.0ce4	a0 0e		               ldy  #>a2hexpos
+.0ce6	20 94 0c	               jsr  putscxy
+.0ce9	68		               pla
+.0cea	28		               plp
+.0ceb	60		               rts
+.0cec			setinverse
+.0cec	48		               pha
+.0ced	a9 12		               lda  #$12
+.0cef	20 d2 ff	               jsr  $ffd2
+.0cf2	68		               pla
+.0cf3	60		               rts
+.0cf4			clrinverse
+.0cf4	48		               pha
+.0cf5	a9 92		               lda  #$92
+.0cf7	20 d2 ff	               jsr  $ffd2
+.0cfa	68		               pla
+.0cfb	60		               rts
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-pushpop.asm
+
+.0cfc			push
+.0cfc	08		          php            ; stack : flg, pcl, pch
+.0cfd	78		          sei
+.0cfe	8d 38 0d	          sta  ra        ; save a
+.0d01	68		          pla            ; stack : pcl, pch
+.0d02	8d 37 0d	          sta  rp        ; save rp
+.0d05	68		          pla            ; stack : pch
+.0d06	8d 39 0d	          sta  pc        ; save pcl
+.0d09	68		          pla            ; stack : -
+.0d0a	8d 3a 0d	          sta  pc+1      ; save pch
+.0d0d	a5 fb		          lda  zpage1    ; get zpage1 low byte
+.0d0f	48		          pha            ; stack : zp1l
+.0d10	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
+.0d12	48		          pha            ; stack : zp1h, zp1l
+.0d13	a5 fd		          lda  zpage2    ; get zpage2 low byte
+.0d15	48		          pha            ; stack : zp2l, zp1h, zp1l
+.0d16	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
+.0d18	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
+.0d19	ad 37 0d	          lda  rp        ; get rp
+.0d1c	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
+.0d1d	ad 38 0d	          lda  ra        ; get a
+.0d20	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.0d21	8a		          txa            ; get x
+.0d22	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d23	98		          tya            ; get y
+.0d24	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d25	ad 3a 0d	          lda  pc+1      ; get pch
+.0d28	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d29	ad 39 0d	          lda  pc        ; get pcl
+.0d2c	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d2d	ad 37 0d	          lda  rp        ; get rp
+.0d30	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d31	ad 38 0d	          lda  ra        ; get a
+.0d34	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d35	58		          cli
+.0d36	60		          rts
+>0d37	00		rp        .byte     0
+>0d38	00		ra        .byte     0
+>0d39	00 00		pc        .word     0
+.0d3b			pull
+.0d3b			pop
+.0d3b	78		          sei
+.0d3c	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d3d	8d 70 0d	          sta  pc        ; save pcl
+.0d40	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d41	8d 71 0d	          sta  pc+1      ; save pch
+.0d44	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
+.0d45	a8		          tay            ; set y
+.0d46	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
+.0d47	aa		          tax            ; set x
+.0d48	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
+.0d49	8d 6f 0d	          sta  ra        ; save a
+.0d4c	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
+.0d4d	8d 6e 0d	          sta  rp        ; save rp
+.0d50	68		          pla            ; stack : zp2l, zp1h, zp1l
+.0d51	85 fe		          sta  zpage2+1  ; get zpage1 low byte
+.0d53	68		          pla            ; stack : zp1h, zp1l
+.0d54	85 fd		          sta  zpage2    ; get zpage2 High byte
+.0d56	68		          pla            ; stack : zp1l
+.0d57	85 fc		          sta  zpage1+1  ; get zpage2 low byte
+.0d59	68		          pla            ; stack :
+.0d5a	85 fb		          sta  zpage1    ; get zpage1 High byte
+.0d5c	ad 71 0d	          lda  pc+1      ; get pch
+.0d5f	48		          pha            ; stack : pch
+.0d60	ad 70 0d	          lda  pc
+.0d63	48		          pha            ; stack : pcl, pch
+.0d64	ad 6e 0d	          lda  rp        ; get rp
+.0d67	48		          pha            ; stack : rp, pcl, pch
+.0d68	ad 6f 0d	          lda  ra        ; set ra
+.0d6b	58		          cli
+.0d6c	28		          plp            ; stack : pcl, pch
+.0d6d	60		          rts
+>0d6e	00		rp        .byte     0
+>0d6f	00		ra        .byte     0
+>0d70	00 00		pc        .word     0
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-mem.asm
+
+.0d72			blkfill
+.0d72	20 fc 0c	bf0            jsr  push
+.0d75	20 30 0e	               jsr  savezp1
+.0d78	84 fc		               sty  zpage1+1
+.0d7a	a0 00		               ldy  #$00
+.0d7c	84 fb		               sty  zpage1
+.0d7e	91 fb		bf1            sta  (zpage1),y
+.0d80	c8		               iny
+.0d81	d0 fb		               bne  bf1
+.0d83	20 3f 0e	               jsr  restzp1
+.0d86	20 3b 0d	               jsr  pop
+.0d89	60		               rts
+.0d8a			memfill
+.0d8a	20 fc 0c	               jsr  push
+.0d8d	20 72 0d	mf1            jsr  blkfill
+.0d90	c8		               iny
+.0d91	ca		               dex
+.0d92	d0 f9		               bne  mf1
+.0d94	20 3b 0d	               jsr  pop
+.0d97	60		               rts
+.0d98			memmove
+.0d98	20 fc 0c	               jsr  push
+.0d9b	ba		               tsx            ; On se crée un pointeur ...
+.0d9c	8a		               txa
+.0d9d	18		               clc
+.0d9e	69 0b		               adc  #11
+.0da0	a8		               tay
+.0da1	a2 06		               ldx  #$06
+.0da3	b9 00 01	nextbyte       lda  $0100,y
+.0da6	99 f2 0d	               sta  words,y
+.0da9	c8		               iny
+.0daa	ca		               dex
+.0dab	d0 f6		               bne  nextbyte
+.0dad	ad f2 0d	               lda  s
+.0db0	8d c9 0d	               sta  source+1
+.0db3	ad f3 0d	               lda  s+1
+.0db6	8d ca 0d	               sta  source+2
+.0db9	ad f4 0d	               lda  d
+.0dbc	8d c6 0d	               sta  destin+1
+.0dbf	ad f5 0d	               lda  d+1
+.0dc2	8d c7 0d	               sta  destin+2
+.0dc5	ad ff ff	destin         lda  $ffff
+.0dc8	8d ff ff	source         sta  $ffff
+.0dcb	ee c6 0d	               inc  destin+1
+.0dce	d0 03		               bne  src
+.0dd0	ee c7 0d	               inc  destin+2
+.0dd3	ee c9 0d	src            inc  source+1
+.0dd6	d0 03		               bne  cnt
+.0dd8	ee ca 0d	               inc  source+2
+.0ddb	ad f6 0d	cnt            lda  compte
+.0dde	d0 08		               bne  decit
+.0de0	ad f7 0d	               lda  compte+1
+.0de3	f0 09		               beq  fini
+.0de5	ce f7 0d	               dec  compte+1
+.0de8	ce f6 0d	decit          dec  compte
+.0deb	4c c5 0d	               jmp  destin
+.0dee	20 3b 0d	fini           jsr  pop
+.0df1	60		               rts
+.0df2			words
+>0df2	00 00		s         .word     $0000
+>0df4	00 00		d         .word     $0000
+>0df6	00 00		compte    .word     $0000
+.0df8			decword
+.0df8	20 fc 0c	               jsr  push
+.0dfb	86 fd		               stx  zpage2
+.0dfd	84 fe		               sty  zpage2+1
+.0dff	20 3b 0d	               jsr  pop
+.0e02	60		               rts
+.0e03			inczp1
+.0e03	08		               php
+.0e04	e6 fb		               inc  zpage1
+.0e06	d0 02		               bne  nopage
+.0e08	e6 fc		               inc  zpage1+1
+.0e0a	28		nopage         plp
+.0e0b	60		               rts
+.0e0c			deczp1
+.0e0c	08		                php
+.0e0d	48		                pha
+.0e0e	c6 fb		                dec  zpage1
+.0e10	d0 02		                bne  nopage
+.0e12	c6 fc		                dec  zpage1+1
+.0e14	c6 fb		nopage          dec  zpage1
+.0e16	68		                pla
+.0e17	28		                plp
+.0e18	60		                rts
+.0e19			inczp2
+.0e19	08		               php
+.0e1a	48		               pha
+.0e1b	e6 fd		               inc  zpage2
+.0e1d	d0 02		               bne  nopage
+.0e1f	e6 fe		               inc  zpage2+1
+.0e21	68		nopage         pla
+.0e22	28		               plp
+.0e23	60		               rts
+.0e24			deczp2
+.0e24	08		               php
+.0e25	48		               pha
+.0e26	a5 fd		               lda  zpage2
+.0e28	d0 02		               bne  nopage
+.0e2a	c6 fe		               dec  zpage2+1
+.0e2c	c6 fd		nopage         dec  zpage2
+.0e2e	28		               plp
+.0e2f	60		               rts
+.0e30			savezp1
+.0e30	08		               php
+.0e31	48		               pha
+.0e32	a5 fb		               lda  zpage1
+.0e34	8d ac 0e	               sta  zp1
+.0e37	a5 fc		               lda  zpage1+1
+.0e39	8d ad 0e	               sta  zp1+1
+.0e3c	68		               pla
+.0e3d	28		               plp
+.0e3e	60		               rts
+.0e3f			restzp1
+.0e3f	08		               php
+.0e40	48		               pha
+.0e41	ad ac 0e	               lda zp1
+.0e44	85 fb		               sta zpage1
+.0e46	ad ad 0e	               lda zp1+1
+.0e49	85 fc		               sta zpage1+1
+.0e4b	68		               pla
+.0e4c	28		               plp
+.0e4d	60		               rts
+.0e4e			savezp2
+.0e4e	08		         php
+.0e4f	48		         pha
+.0e50	a5 fd		         lda zpage2
+.0e52	8d ae 0e	         sta zp2
+.0e55	a5 fe		         lda zpage2+1
+.0e57	8d af 0e	         sta zp2+1
+.0e5a	68		         pla
+.0e5b	28		         plp
+.0e5c	60		         rts
+.0e5d			restzp2
+.0e5d	08		                php
+.0e5e	48		                pha
+.0e5f	ad ae 0e	                lda  zp2
+.0e62	85 fd		                sta  zpage2
+.0e64	ad af 0e	                lda  zp2+1
+.0e67	85 fe		                sta  zpage2+1
+.0e69	68		                pla
+.0e6a	28		                plp
+.0e6b	60		                rts
+.0e6c			xy2addr
+.0e6c	08		                php
+.0e6d	48		                pha
+.0e6e	8a		                txa
+.0e6f	48		                pha
+.0e70	98		                tya
+.0e71	48		                pha
+.0e72	ad a7 0e	                lda     addr1+1
+.0e75	8d a9 0e	                sta     addr2+1
+.0e78	ad a6 0e	                lda     addr1
+.0e7b	8d a8 0e	                sta     addr2
+.0e7e	c0 00		                cpy     #$00
+.0e80	f0 0f		                beq     addx
+.0e82	18		moreline        clc
+.0e83	6d a5 0e	                adc     ymult
+.0e86	90 03		                bcc     norepy
+.0e88	ee a9 0e	                inc     addr2+1
+.0e8b	8d a8 0e	norepy          sta     addr2
+.0e8e	88		                dey
+.0e8f	d0 f1		                bne     moreline
+.0e91	8a		addx            txa
+.0e92	18		                clc
+.0e93	6d a8 0e	                adc     addr2
+.0e96	90 03		                bcc     thatsit
+.0e98	ee a9 0e	                inc     addr2+1
+.0e9b	8d a8 0e	thatsit         sta     addr2
+.0e9e	68		                pla
+.0e9f	a8		                tay
+.0ea0	68		                pla
+.0ea1	aa		                tax
+.0ea2	68		                pla
+.0ea3	28		                plp
+.0ea4	60		                rts
+>0ea5	28		ymult          .byte     40
+>0ea6	00 00		addr1          .word     $0000
+>0ea8	00 00		addr2          .word     $0000
+>0eaa	00 00		bytecnt        .word     $0000
+>0eac	00 00		zp1        .word   $0000
+>0eae	00 00		zp2        .word   $0000
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-hex.asm
+
+>0eb0	01		a2hexcol       .byte     1              ; pour aputscxy
+>0eb1	00		a2hexbkcol     .byte     %00000000
+.0eb2			a2hexpos
+>0eb2	00		a2hexpx        .byte     0              ; pour aputsxy
+>0eb3	00		a2hexpy        .byte     0
+>0eb4	24		a2hexprefix    .byte     "$"            ; pour aputs
+>0eb5	00 00		a2hexstr       .word     $00
+>0eb7	00 00		               .word     $00
+>0eb9	00		               .byte     0              ; 0 end string
+.0eba			putahexfmtxy
+.0eba	20 fc 0c	               jsr  push
+.0ebd	20 09 0f	               jsr  a2hex
+.0ec0	ae b2 0e	               ldx  a2hexpx
+.0ec3	ac b3 0e	               ldy  a2hexpy
+.0ec6	20 25 0c	               jsr  gotoxy
+.0ec9	a2 b4		               ldx  #<a2hexprefix
+.0ecb	a0 0e		               ldy  #>a2hexprefix
+.0ecd	20 0b 0c	               jsr  puts
+.0ed0	20 3b 0d	               jsr  pop
+.0ed3	60		               rts
+.0ed4			putahexfmt
+.0ed4	20 fc 0c	               jsr  push
+.0ed7	20 09 0f	               jsr  a2hex
+.0eda	a2 b4		               ldx  #<a2hexprefix
+.0edc	a0 0e		               ldy  #>a2hexprefix
+.0ede	20 0b 0c	               jsr  puts
+.0ee1	20 3b 0d	               jsr  pop
+.0ee4	60		               rts
+.0ee5			putahex
+.0ee5	20 fc 0c	               jsr  push
+.0ee8	20 09 0f	               jsr  a2hex
+.0eeb	a2 b5		               ldx  #<a2hexstr
+.0eed	a0 0e		               ldy  #>a2hexstr
+.0eef	20 0b 0c	               jsr  puts
+.0ef2	20 3b 0d	               jsr  pop
+.0ef5	60		               rts
+.0ef6			nib2hex
+.0ef6	08		               php
+.0ef7	29 0f		               and  #$0f
+.0ef9	f8		               sed
+.0efa	18		               clc
+.0efb	69 90		               adc  #$90
+.0efd	69 40		               adc  #$40
+.0eff	d8		               cld
+.0f00	28		               plp
+.0f01	60		               rts
+.0f02			lsra4bits
+.0f02	08		               php
+.0f03	4a		               lsr
+.0f04	4a		               lsr
+.0f05	4a		               lsr
+.0f06	4a		               lsr
+.0f07	28		               plp
+.0f08	60		               rts
+.0f09			a2hex
+.0f09	08		               php
+.0f0a	48		               pha
+.0f0b	48		               pha
+.0f0c	20 02 0f	               jsr  lsra4bits
+.0f0f	20 f6 0e	               jsr  nib2hex
+.0f12	8d b5 0e	               sta  a2hexstr
+.0f15	68		               pla
+.0f16	20 f6 0e	               jsr  nib2hex
+.0f19	8d b6 0e	               sta  a2hexstr+1
+.0f1c	a9 00		               lda  #$00                ; set end of string
+.0f1e	8d b7 0e	               sta  a2hexstr+2
+.0f21	68		               pla
+.0f22	28		               plp
+.0f23	60		               rts
+.0f24			xy2hex
+.0f24	20 fc 0c	               jsr  push
+.0f27	20 09 0f	               jsr  a2hex
+.0f2a	8a		               txa
+.0f2b	48		               pha
+.0f2c	20 02 0f	               jsr  lsra4bits
+.0f2f	20 f6 0e	               jsr  nib2hex
+.0f32	8d b5 0e	               sta  a2hexstr
+.0f35	68		               pla
+.0f36	20 f6 0e	               jsr  nib2hex
+.0f39	8d b6 0e	               sta  a2hexstr+1
+.0f3c	98		               tya
+.0f3d	48		               pha
+.0f3e	20 02 0f	               jsr  lsra4bits
+.0f41	20 f6 0e	               jsr  nib2hex
+.0f44	8d b7 0e	               sta  a2hexstr+2
+.0f47	68		               pla
+.0f48	20 f6 0e	               jsr  nib2hex
+.0f4b	8d b8 0e	               sta  a2hexstr+3
+.0f4e	a9 00		               lda  #$00                ; 0 ended string
+.0f50	8d b9 0e	               sta  a2hexstr+4
+.0f53	20 3b 0d	               jsr  pop
+.0f56			atobin
+.0f56	20 fc 0c	               jsr     push
+.0f59	a2 08		               ldx     #8
+.0f5b	a0 00		               ldy     #0
+.0f5d	2a		nextbit        rol
+.0f5e	48		               pha
+.0f5f	69 00		               adc     #$00
+.0f61	29 01		               and     #$01
+.0f63	20 f6 0e	               jsr     nib2hex
+.0f66	99 77 0f	               sta     abin,y
+.0f69	68		               pla
+.0f6a	c8		               iny
+.0f6b	ca		               dex
+.0f6c	d0 ef		               bne     nextbit
+.0f6e	a9 00		               lda     #0
+.0f70	99 77 0f	               sta     abin,y
+.0f73	20 3b 0d	               jsr     pull
+.0f76	60		               rts
+>0f77	30 30 30 30	abin           .null   "00000000"
+>0f7b	30 30 30 30 00
+.0f80			putabin
+.0f80	20 56 0f	               jsr     atobin
+.0f83	20 fc 0c	               jsr     push
+.0f86	a2 77		               ldx     #<abin
+.0f88	a0 0f		               ldy     #>abin
+.0f8a	20 0b 0c	               jsr     puts
+.0f8d	20 3b 0d	               jsr     pop
+.0f90	60		               rts
+.0f91			putabinfmt
+.0f91	08		               php
+.0f92	48		               pha
+.0f93	a9 25		               lda     #"%"
+.0f95	20 05 0c	               jsr     putch
+.0f98	68		               pla
+.0f99	20 80 0f	               jsr     putabin
+.0f9c	28		               plp
+.0f9d	60		               rts
+.0f9e			putabinxy
+.0f9e	20 25 0c	               jsr     gotoxy
+.0fa1	20 80 0f	               jsr     putabin
+.0fa4	60		               rts
+.0fa5			putabinfmtxy
+.0fa5	20 25 0c	               jsr     gotoxy
+.0fa8	20 91 0f	               jsr     putabinfmt
+.0fab	60		               rts
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  Processing file: /Users/Locals/C64/00-usbkey32go/dir-00-64tass-src/lib/lib-cbm-keyb.asm
+
+.0fac			waitstop
+.0fac	20 fc 0c	                jsr     push
+.0faf	20 ed f6	wait            jsr     k_stop
+.0fb2	d0 fb		                bne     wait
+.0fb4	20 3b 0d	                jsr     pop
+.0fb7	60		                rts
+.0fb8			anykey
+.0fb8	08		                php
+.0fb9	48		                pha
+.0fba	a5 cb		nokey           lda 203
+.0fbc	c9 40		                cmp #64
+.0fbe	f0 fa		                beq nokey
+.0fc0	68		                pla
+.0fc1	28		                plp
+.0fc2	60		                rts
+.0fc3			getkey
+.0fc3	20 fc 0c	                jsr     push
+.0fc6	20 cf ff	again           jsr     chrin
+.0fc9	4c c6 0f	                jmp     again
+.0fcc	20 3b 0d	                jsr     pop
+.0fcf	60		                rts
+.0fd0			waitkey
+.0fd0	20 fc 0c	                jsr     push
+.0fd3	8d e8 0f	                sta     thekey
+.0fd6	20 e4 ff	nope            jsr     getin
+.0fd9	20 d2 ff	                jsr     chrout
+.0fdc	cd e8 0f	                cmp     thekey
+.0fdf	d0 f5		                bne     nope
+.0fe1	20 d2 ff	                jsr     chrout
+.0fe4	20 3b 0d	                jsr     pop
+.0fe7	60		                rts
+>0fe8	00		thekey          .byte   0
+.0fe9			waitspace
+.0fe9	20 fc 0c	                jsr     push
+.0fec	a9 7f		wait            lda     #$7f  ;%01111111
+.0fee	8d 00 dc	                sta     $dc00
+.0ff1	ad 01 dc	                lda     $dc01
+.0ff4	29 10		                and     #$10  ;mask %00010000
+.0ff6	d0 f4		                bne     wait
+.0ff8	20 3b 0d	                jsr     pop
+.0ffb			waitsstop
+.0ffb	20 fc 0c	                jsr     push
+.0ffe	20 ed f6	wait            jsr     k_stop  ;%01111111
+.1001	d0 fb		                bne     wait
+.1003	20 3b 0d	                jsr     pop
+.1006			waitreturn
+.1006	20 fc 0c	                jsr     push
+.1009	ad 25 10	                lda     thecount
+.100c	8d 00 04	                sta     scrnram
+.100f	a9 02		                lda     #$02
+.1011	8d 00 d8	                sta     colorram
+.1014	20 e4 ff	nope            jsr     getin
+.1017	20 d2 ff	                jsr     chrout
+.101a	c9 0d		                cmp     #$0d
+.101c	d0 f6		                bne     nope
+.101e	ee 25 10	                inc     thecount
+.1021	20 3b 0d	                jsr     pop
+.1024	60		                rts
+>1025	01		thecount        .byte   $01
+
+;******  Return to file: irqtune3channel.asm
+
+
+;******  End of listing

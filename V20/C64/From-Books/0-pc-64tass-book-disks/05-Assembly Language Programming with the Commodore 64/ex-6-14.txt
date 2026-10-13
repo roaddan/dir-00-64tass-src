@@ -1,0 +1,40 @@
+
+; 64tass Turbo Assembler Macro V1.54.1900 listing file
+; 64tass --line-numbers --tab-size=4 --cbm-prg -C -m -a -I "/home/daniel/Documents/Mes Sources/C64/Assembleur/64tass/Sources/lib" -i -L ex-6-14.txt -o ex-6-14.prg ex-6-14.asm
+; Sat May 21 19:05:36 2022
+
+;Line	;Offset	;Hex			;Source
+
+:1		;******  Processing input file: ex-6-14.asm
+
+1		=$d000					vic =   $d000
+3		.c000	a9 0d			        lda #$0d        ; sprite 0 memory pointer
+4		.c002	8d f8 07		        sta $07f8
+5		.c005	a9 01			        lda #$01        ; turn on sprite 0 on the vic
+6		.c007	8d 15 d0		        sta vic + $15
+7		.c00a	a9 07			        lda #$07        ; select yellow background
+8		.c00c	8d 21 d0		        sta vic + $21
+9		.c00f	a9 06			        lda #$06        ; select blue for the sprite
+10		.c011	8d 27 d0		        sta vic + $27
+11		.c014	8d 20 d0		        sta vic + $20   ; select blue border colour
+12		.c017	a2 80			        ldx #$80        ; $80 = 128 will be the X coordinate
+13		.c019	8e 00 d0		        stx vic
+14		.c01c	a0 80			        ldy #$80        ; $80 = 128 will be the X coordinate
+15		.c01e	8c 01 d0		        sty vic + $01
+18		.c021	ee 01 d0		down    inc vic + $01   ; move trhe sprite down
+19		.c024	20 3d c0		        jsr delay       ; slow down sprite movement
+20		.c027	ad 01 d0		        lda vic + $01   ; fetch the y coordinate
+21		.c02a	c9 e5			        cmp #$e5        ; is sprite at boundery
+22		.c02c	90 f3			        bcc down        ; no? branch backward to move down
+23		.c02e	ce 01 d0		up      dec vic + $01   ; yes start moving up
+24		.c031	20 3d c0		        jsr delay
+25		.c034	ad 01 d0		        lda vic + $01
+26		.c037	c9 32			        cmp #$32
+27		.c039	b0 f3			        bcs up
+28		.c03b	90 e4			        bcc down
+31		.c03d	a2 00			delay   ldx #$00
+32		.c03f	ca				loop    dex
+33		.c040	d0 fd			        bne loop
+34		.c042	60				        rts
+
+;******  End of listing
