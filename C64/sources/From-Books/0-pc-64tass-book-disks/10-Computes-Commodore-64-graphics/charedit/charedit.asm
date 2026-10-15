@@ -35,8 +35,11 @@ main           .block
                jsr  setscreenptr
                jsr  setdefaultchar
                jsr  staticscreen
-
-;               jsr  drawbitmap
+               jsr  drawbitmap
+      pha
+      lda   #$41
+      jsr   waitkey
+      pla
                lda  #$00
                sta  fkeyset
                jsr  drawfkeys
