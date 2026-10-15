@@ -1,7 +1,7 @@
 ;-------------------------------------------------------------------------------
-version  = "20250925-000001"  
+version  = "20261015-000001"
 ;-------------------------------------------------------------------------------
-               .include "header-c64.asm"
+               .include "e-header-c64.asm"
                .enc     "none"
 fkeyleft       =    18
 f1top          =    9 
@@ -35,7 +35,8 @@ main           .block
                jsr  setscreenptr
                jsr  setdefaultchar
                jsr  staticscreen
-               jsr  drawbitmap
+
+;               jsr  drawbitmap
                lda  #$00
                sta  fkeyset
                jsr  drawfkeys
@@ -139,34 +140,36 @@ device         .byte     8
 ;-------------------------------------------------------------------------------
 ; Including my self written libraries.
 ;-------------------------------------------------------------------------------
-                .include "macros-64tass.asm"
                 .include "localmacro.asm"
                 .include "routines.asm"
-                .include "strings_fr.asm"
-;               .include "strings_en.asm"
+            .include "strings_fr.asm"
+;           .include "strings_en.asm"
+            .include "e-c64-vars.asm"
 
 *=$c000
-                .include "lib-c64-timer.asm"
-                .include "lib-c64-sid.asm"
-                .include "lib-c64-vicii.asm"
-                .include "lib-c64-basic2.asm" 
-                .include "lib-cbm-pushpop.asm"
-                .include "lib-cbm-mem.asm"
-                .include "lib-cbm-hex.asm"
-                .include "lib-cbm-keyb.asm"
-                .include "lib-cbm-disk.asm"
-                .include "lib-c64-std-showregs.asm"
+;                .include "m-64tass.asm"
+                .include "m-c64-utils.asm"
+                .include "l-c64-timer.asm"
+                .include "l-c64-sid.asm"
+                .include "l-c64-vicii.asm"
+                .include "l-c64-basic2.asm" 
+                .include "l-cbm-push.asm"
+                .include "l-cbm-mem.asm"
+                .include "l-cbm-hex.asm"
+                .include "l-cbm-keyb.asm"
+                .include "l-cbm-disk.asm"
+                .include "l-c64-std-showregs.asm"
 
-;               .include "lib-c64-std-text.asm"
-;               .include "lib-c64-mcd-text.asm"
-;               .include "lib-c64-mcd-showregs.asm"                
-;               .include "lib-c64-mcd-joystick.asm"
-;               .include "lib-c64-mcd-spriteman.asm"
+;               .include "l-c64-std-text.asm"
+;               .include "l-c64-mcd-text.asm"
+;               .include "l-c64-mcd-showregs.asm"                
+;               .include "l-c64-mcd-joystick.asm"
+;               .include "l-c64-mcd-spriteman.asm"
 
-                .include "map-c64-kernal.asm"
-                .include "map-c64-vicii.asm"
-                .include "map-c64-basic2.asm"
-                .include "map-c64-sid-2.asm"
-                .include "map-c64-sid-notes-ntsc.asm"
+                .include "e-c64-kernal.asm"
+                .include "e-c64-vicii.asm"
+                .include "e-c64-basic2.asm"
+                .include "e-c64-sid-ii.asm"
+                .include "e-c64-sid-notes-ntsc.asm"
 
 

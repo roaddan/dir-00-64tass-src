@@ -730,40 +730,40 @@ setscreenptr   .block
 
 ;-------------------------------------------------------------------------------
 ;
-;-------------------------------------------------------------------------------
-copycharset    .block
-               jsr  pushreg
-
-               ; On desactive les interruptions du clavier.
-               ; BASIC -> poke 56334, peek(56334) and 254 
-               lda  cia1cra        ;$dc0e, 56334 cia1 control register A
-               and  #%11111110     ;254
-               sta  cia1cra        ;$dc0e, 56334 cia1 control register A
-
-               ; On active la rom des bitmaps charactères.     
-               ; BASIC -> poke 1, peek(1) and 251
-               lda  u6510map       ;$01
-               and  #%11111011     ;251
-               sta  u6510map       ;$01
-
-               ; ici on copy le character-map
-               jsr  memcopy
-
-               ; On réactive les i/o en replaçant la rom des 
-               ; BASIC -> poke 1, peek(1) or 4
-               lda  u6510map       ;$01
-               ora  #%00000100
-               sta  u6510map       ;$01
-
-               ; On réactive les interruptions du clavier.
-               ; BASIC -> poke 56334, peek(56334) or 1
-               lda  cia1cra        ;$dc0e, 56334 cia1 control register A
-               ora  #%00000001     ;254
-               sta  cia1cra        ;$dc0e, 56334 cia1 control register A
-
-               jsr  popreg
-               rts
-               .bend
+;-----------------------------------------------------------------------------
+copycharset       .block
+                  jsr  pushreg
+                  ;-----------------------------------------------------------
+                  ; On desactive les interruptions du clavier.
+                  ; BASIC -> poke 56334, peek(56334) and 254 
+                  lda  cia1cra        ;$dc0e, 56334 cia1 control register A
+                  and  #%11111110     ;254
+                  sta  cia1cra        ;$dc0e, 56334 cia1 control register A
+                  ;-----------------------------------------------------------
+                  ; On active la rom des bitmaps charactères.     
+                  ; BASIC -> poke 1, peek(1) and 251
+                  lda  u6510map       ;$01
+                  and  #%11111011     ;251
+                  sta  u6510map       ;$01
+                  ;-----------------------------------------------------------
+                  ; ici on copy le character-map
+                  jsr  memcopy
+                  ;-----------------------------------------------------------
+                  ; On réactive les i/o en replaçant la rom des 
+                  ; BASIC -> poke 1, peek(1) or 4
+                  lda  u6510map       ;$01
+                  ora  #%00000100
+                  sta  u6510map       ;$01
+                  ;-----------------------------------------------------------
+                  ; On réactive les interruptions du clavier.
+                  ; BASIC -> poke 56334, peek(56334) or 1
+                  lda  cia1cra        ;$dc0e, 56334 cia1 control register A
+                  ora  #%00000001     ;254
+                  sta  cia1cra        ;$dc0e, 56334 cia1 control register A
+                  ;-----------------------------------------------------------
+                  jsr  popreg
+                  rts
+                  .bend
 
 ;-------------------------------------------------------------------------------
 ;

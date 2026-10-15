@@ -31,12 +31,12 @@ vic_son3        .byte   sid_v3offset + 4,    8      ; sid+24=54296,  15   Volume
                 .byte   $ff,  $ff
 
 sid_v1note      .macro xyimm
-                jsr pushreg
+                pha
                 lda #<\xyimm
                 sta sid+0
                 lda #>\xyimm
                 sta sid+1
-                jsr popreg
+                pla
                 .endm
 
 sid_prog        .macro xyimm
