@@ -185,4 +185,5 @@ f8bbutton      .byte     menu2col2,fkeyleft,f1top+10
                .null     "  f8  ", 146
 
 ; Variables locales
-tmpbyte       .byte     $00
+tmpbyte        .byte     $00
+copykey        .byte     0  

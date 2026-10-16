@@ -59,7 +59,7 @@ goodone     sta   tempbyte          ; On le sauvegarde pour ...
             jsr   popreg            ; ... récupèrer les registres.
             lda   tempbyte          ; On le replace dans A.
             rts                     ; On quitte
-tempbyte       .byte     0
+tempbyte    .byte 0
             .bend
 
 ;-------------------------------------------------------------------------------
@@ -67,14 +67,13 @@ tempbyte       .byte     0
 ;-------------------------------------------------------------------------------
 copychar    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
-            jsr   getvalidkey
-            lda   bitmapaddr        ; on pointe sur la table des bitmaps
-            sta   zpage1
-            lda   bitmapaddr+1
-            sta   zpage1+1
-            ; on ajuste l'offset du pointeur de bitmap
-            ldx   copykey
-            lda   asciitorom,x
+            jsr   getvalidkey       ; On cherche une clef valide.
+            lda   bitmapaddr        ; On pointe sur la table des bitmaps
+            sta   zpage1            ; ... pour copier les octets
+            lda   bitmapaddr+1      ; ... de la définition des 
+            sta   zpage1+1          ; ... caractères.
+            ldx   copykey           ; On ajuste l'offset du pointeur de bitmap.
+            lda   asciitorom,x      ; 
             tax
             cpx   #$00
             beq   no_offset         ; sommes nous déja à 0
@@ -117,8 +116,7 @@ getgoodkey  jsr   getkey
 goodone     jsr   putch
             jsr   popreg            ; Récupère les registres.
             rts
-            .bend
-copykey        .byte 0   
+            .bend 
 
 ;-------------------------------------------------------------------------------
 ;
