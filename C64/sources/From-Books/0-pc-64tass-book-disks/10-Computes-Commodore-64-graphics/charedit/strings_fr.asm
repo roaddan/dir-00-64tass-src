@@ -183,4 +183,6 @@ f8bbutton      .byte     menu2col2,fkeyleft,f1top+10
                .text     "aller au menu1."
                .byte     18             ; position 15
                .null     "  f8  ", 146
- 
+
+; Variables locales
+tmpbyte       .byte     $00

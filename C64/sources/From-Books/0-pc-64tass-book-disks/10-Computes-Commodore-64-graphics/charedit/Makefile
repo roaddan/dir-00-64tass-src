@@ -31,6 +31,7 @@ BASEDIR=/Users/Locals/CBM/00-usbkey32go
 # 64tass allows to include libraries of code and routines of your making.
 # Le chemin complet vers le répertoire de votre bibliothèque globales.
 LIBDIR=$(BASEDIR)/dir-00-64tass-src/C64/lib/libstd
+#LIBDIR=$(BASEDIR)/dir-00-64tass-src/C64/lib/librom
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
@@ -156,7 +157,7 @@ all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 		$(FTPASMCMD)	# ... le fichier source ASM.
 		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
 #		$(FTPCRTCMD)	# ... le fichier de cartouche CRT résultant.
-		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
+#		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
 
 # -----------------------------------------------------------------------------
 # Lorsqu'il est appelé avec « make ftp ».
