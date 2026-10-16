@@ -1,25 +1,26 @@
 # -----------------------------------------------------------------------------
-# --------- 6 4 t a s s   m a k e   f i l e   w i t h   V i c e ---------------
-# ----------------- a n d   F T P   u t i l i t i e s . -----------------------
-# ---------------------- L I N U X   V E R S I O N ----------------------------
+# ----- F i c h i e r   M a k e   p o u r  6 4 t a s s   avec   V i c e -------
+# ----------------- e t  u t i l i t a i r e s  F T P . -----------------------
+# ----------------------- V E R S I O N  L I N U X ----------------------------
 # -----------------------------------------------------------------------------
 # Note:
-# 	A) 64tass can be downloaded from :
+# 	A) 64tass peut être téléchargé de :
 #		https://sourceforge.net/projects/tass64/
 #
-#	B) 64tass documentation can be found at :
+#	B) La documentation de 64tass est disponnible ici :
 #		https://tass64.sourceforge.net/
 #
-# 	C) Vice emulator utility is mandatory and available at :
+# 	C) L'émulateur Vice peut être trouvé ici :
 #			"https://vice-emu.sourceforge.io"
 #
-#	D) You must decide of an absolute output directory (\path).
-#	   Drive name should be specified under windows. (ex: C:\path...)
+#	D) Vous devez spécifier un chemin d'accèes absolue (\path).
+#	   Le lecteur doit être spécifié sous MS-Windows. (ex: C:\path...)
 #
 # -----------------------------------------------------------------------------
-# ----------------------- 6 4 T A S S   S E C T I O N -------------------------
+# -----------------------S E C T I O N   6 4 T A S S  -------------------------
 # -----------------------------------------------------------------------------
 # This can be change to any assembler of your liking.
+
 # Final location where the assembled files must be copied.
 PRGDIR=dir-00-64tass-bin
 #
@@ -62,19 +63,19 @@ OUTDIRV20=/Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/V20/prgbin
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-VICEBIN=/usr/bin
+EXECDIR=/usr/local/bin
 # Complete path to the 64tass assembler program.
-TASS=$(VICEBIN)/64tass
+TASS=$(EXECDIR)/64tass
 # Complete path to the Vic20 emulator program.
-V20=$(VICEBIN)/xvic
+V20=$(EXECDIR)/xvic
 # Complete path to the C64 emulator program.
-X64=$(VICEBIN)/x64
+X64=$(EXECDIR)/x64
 # Complete path to the C64sc emulator program.
-X64SC=$(VICEBIN)/x64sc
+X64SC=$(EXECDIR)/x64sc
 # Complete path to the c1541 disk creation program.
-C1541=$(VICEBIN)/c1541
+C1541=$(EXECDIR)/c1541
 # Complete path to the cartconv cartridge converter program.
-CARTCONV=$(VICEBIN)/cartconv
+CARTCONV=$(EXECDIR)/cartconv
 # Complete path to some other emulator programs.
 X64SCSDL=/Applications/vice-x86-64-sdl2-3.6.1/x64sc.app/Contents/MacOS/x64sc
 X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
