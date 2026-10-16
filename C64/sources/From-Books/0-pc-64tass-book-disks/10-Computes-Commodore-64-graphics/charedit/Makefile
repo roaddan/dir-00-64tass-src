@@ -19,41 +19,39 @@
 # -----------------------------------------------------------------------------
 # -----------------------S E C T I O N   6 4 T A S S  -------------------------
 # -----------------------------------------------------------------------------
-# This can be change to any assembler of your liking.
-
-# Final location where the assembled files must be copied.
-PRGDIR=dir-00-64tass-bin
-#
+# Chemin complet vers le programme assembleur 64tass.
+# Cela peut être remplacé par n'importe quel assembleur de votre choix.
+TASS=/usr/bin/64tass
 # -----------------------------------------------------------------------------
 # ----------------------- P R O J E C T   S E C T I O N -----------------------
 # -----------------------------------------------------------------------------
-# The basename of your project main file ((no extension) .asm is presumed).
-# Could be different for every project.""
+# Le nom de base du fichier principal de votre projet 
+# (sans extension ; .asm est supposé).
+# Cela peut varier d'un projet à l'autre.
 SOURCENAME=charedit
-DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
-# DEPSLOCALES=strings_fr.asm  strings_en.asm
+# Emplacement final où les fichiers assemblés doivent être copiés.
+PRGDIR=dir-00-64tass-bin
+
+# Le chemin d'accès complet au répertoire partagé commun du projet pour des 
+# éléments tels que librairies, fichiers data, images, etc.
+BASEDIR=/Users/Locals/CBM/00-usbkey32go
+# 64tass allows to include libraries of code and routines of your making.
+# Le chemin complet vers le répertoire de votre bibliothèque globales.
+LIBDIR=$(BASEDIR)/dir-00-64tass-src/C64/lib/libstd
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
-LIBDEPS=$(shell find /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd -maxdepth 1 -type f -iname "*.asm")
+LIBDEPS=$(shell find $(LIBDIR) -maxdepth 1 -type f -iname "*.asm")
+DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
-# The lowest common project shared directory complete path for things like ...
-# librairies, data files, images, etc.
-BASEDIR=/Users/Locals/CBM/00-usbkey32go
-# 64tass allows to include libraries of code and routines of your making.
-# The Complete path to your library directory.
-LIBDIR=$(BASEDIR)/dir-00-64tass-src/C64/lib/libstd
+
 UTILSDIR=$(BASEDIR)/dir-00-64tass-src/C64/utils
 #
-# Since the make file will be executed from within your project ...
-# ... the following detail is used to specify where the resulting ...
-# ... files will be placed. # Complete path where the compiled files will be
-# ... deposited.
-# Since the make file will be executed from within your project the following
-# detail is used to specify where the resulting files will be placed.
-# >> Complete path where the compiled files will be placed.
-OUTDIRC64=/Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/prgbin
-OUTDIRV20=/Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/V20/prgbin
+# Le fichier make étant exécuté depuis votre projet, les informations ... 
+# ... suivantes servent à spécifier l'emplacement des fichiers générés. 
+# Chemin complet où seront déposés les fichiers compilés.
+OUTDIRC64=$(BASEDIR)/dir-00-64tass-src/C64/prgbin
+# OUTDIRV20=$(BASEDIR)/dir-00-64tass-src/V20/prgbin
 #
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
@@ -63,22 +61,17 @@ OUTDIRV20=/Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/V20/prgbin
 # 	the Vice emulator and utility commands.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
-EXECDIR=/usr/local/bin
-# Complete path to the 64tass assembler program.
-TASS=$(EXECDIR)/64tass
+VICEBIN=/usr/bin
 # Complete path to the Vic20 emulator program.
-V20=$(EXECDIR)/xvic
+V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
-X64=$(EXECDIR)/x64
+X64=$(VICEBIN)/x64
 # Complete path to the C64sc emulator program.
-X64SC=$(EXECDIR)/x64sc
+X64SC=$(VICEBIN)/x64sc
 # Complete path to the c1541 disk creation program.
-C1541=$(EXECDIR)/c1541
+C1541=$(VICEBIN)/c1541
 # Complete path to the cartconv cartridge converter program.
-CARTCONV=$(EXECDIR)/cartconv
-# Complete path to some other emulator programs.
-X64SCSDL=/Applications/vice-x86-64-sdl2-3.6.1/x64sc.app/Contents/MacOS/x64sc
-X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
+CARTCONV=$(VICEBIN)/cartconv
 #
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
@@ -87,7 +80,7 @@ X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
 # Complete path to the c64 Utility disk to be mounted on drive 9.
 TMPSEP06=-9 $(BASEDIR)/dir-disk-img/d64/turbo-macro-pro-sep06.d64
 # Complete path to the Vic20 Utility disk to be mounted on drive 9.
-V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
+V20MKASM=-9 $(BASEDIR)/dir-00-64tass-src/V20/utils/V20MikroAsmbler.d64
 # Complete local path to be mounted as a disk on drive 8 and/or 9.
 # **** tests not yet conclusive.
 DISK8DIR=
