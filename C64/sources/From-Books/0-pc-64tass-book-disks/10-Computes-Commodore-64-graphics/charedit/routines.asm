@@ -1,4 +1,16 @@
 ;-------------------------------------------------------------------------------
+; Projet...: charedit
+; Fichier..: routines.asm
+; Auteur...: Daniel Lafrance
+; Version..: 0.1.1
+; Révision.: 2026-10-16
+;-------------------------------------------------------------------------------
+; Historique des révisions:
+; --------------------------
+; 2026-10-16 - Ajout des commentaires.
+;-------------------------------------------------------------------------------
+
+;-------------------------------------------------------------------------------
 ; Redessine l'écran de travail
 ;-------------------------------------------------------------------------------
 scrredraw   .block
@@ -18,12 +30,13 @@ scrredraw   .block
             .bend
 
 ;-------------------------------------------------------------------------------
+; Fonction :
 ; Capture un nom de fichier de 6 lettres entré par l'usager.
 ;-------------------------------------------------------------------------------
 getfname    .block
             jsr   pushreg           ; Sauvegarde les registres
-            #affichemesg fname_msg  ; Affiche l'invite 
-            ldx  #$00               ; X à 0
+            #affichemesg fname_msg  ; Affiche l'invite.
+            ldx  #$00               ; X à 0.
             stx  count              ; pour compter les caractères
 getanother  jsr  getalnum           ; Lit un car alphanum
             jsr  putch              ; l'affiche
@@ -73,25 +86,22 @@ copychar    .block
             lda   bitmapaddr+1      ; ... de la définition des 
             sta   zpage1+1          ; ... caractères.
             ldx   copykey           ; On ajuste l'offset du pointeur de bitmap.
-            lda   asciitorom,x      ; 
-            tax
-            cpx   #$00
-            beq   no_offset         ; sommes nous déja à 0
-addagain    lda   #$08
-            jsr   zp1addnum         ; on augmente de 8 byte ...
-            dex                     ; pour chaque caracteres
-            bne   addagain
-            ; on place les pointeurs pour faire la copie
-no_offset   lda   mapaddr           ; le caractere actuel
-            sta   zpage2            ;
+            lda   asciitorom,x      ; Convertie le code ascii en offset dans la 
+            tax                     ; ... memoire de bitmap.
+            cpx   #$00              ; S'il n'y a pas d'offset
+            beq   no_offset         ; ... nous sommes nous déja à 0
+addagain    lda   #$08              ; On aditionne 8, X fois.
+            jsr   zp1addnum         ; On augmente de 8 byte ...
+            dex                     ; ... pour chaque caracteres
+            bne   addagain          ; si pas fini.
+no_offset   lda   mapaddr           ; On place les pointeurs pour faire la copie
+            sta   zpage2            ; ... le caractere actuel
             lda   mapaddr+1         ;
             sta   zpage2+1          ;
-            ; on effectue la copie des 8 octets
-            ldy   #$00
-nextbyte    lda   (zpage1),y
-            sta   (zpage2),y
-            iny
-            cpy   #$08
+            ldy   #$08              ; On effectue la copie des 8 octets
+nextbyte    lda   (zpage1),y        ; ... constituant l'image bitmap
+            sta   (zpage2),y        ; ... du caractère visé.
+            dey
             bne   nextbyte            
 out         jsr   popall            ; Récupère registres et pointeur ZP
             rts
