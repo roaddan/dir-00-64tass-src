@@ -11,7 +11,8 @@ wait_msg       .byte     mesgcol,0,5,146
                .null     " un instant s.v.p. ... "
 f1a_msg
 edit_msg       .byte     mesgcol,0,5,146     ;18
-               .null     " mode edit: chr$(   )",146
+               .text     " mode edit: chr$(   )"
+               .byte     146,0
 f2a_msg
 copy_msg       .byte     mesgcol,0,5
                .null     " entez le character a copier:"
@@ -54,136 +55,242 @@ rvrs_msg       .byte     mesgcol,0,5
 
 menua_msg      .byte     mesgcol,0,5
                .null     " vous etes dirige vers le menu 1."
+
 menub_msg      .byte     mesgcol,0,5
                .null     " vous etes dirige vers le menu 2."
 
 copychar_msg   .byte     vjaune,0,5
-               .null     " entrez le caracter a copier (?).",157,157,157
+               .text     " entrez le caracter a copier (?)."
+               .byte     157,157,157
+               .byte 0
 
 fname_msg      .byte     vjaune,0,5
-               .null     " nom du fichier (6 lettres): ",$a4,$a4,$a4,$a4,$a4,$a4,".chr",157,157,157,157,157,157,157,157,157,157
+               .text     " nom du fichier (6 lettres): "
+               .byte     $a4,$a4,$a4,$a4,$a4,$a4
+               .text     ".chr"
+               .byte     157,157,157,157,157,157,157,157,157,157
+               .byte     0
 
 quit_msg       .byte     vmauve,18,24,18
-               .text     "ctrl-x",146
+               .text     "ctrl-x"
+               .byte     146
                .null     " = quitter.   "     
 
 redraw_msg     .byte     vvert,18,23,18
-               .text     "ctrl-r",146
-               .null     " = rafraichir."     
+               .text     "ctrl-r"
+               .byte     146
+               .null     " = rafraichir."   
+
 menu_msg
 exit_msg       .byte     vvert1,18,24,18
-               .text     "ctrl-x",146
+               .text     "ctrl-x"
+               .byte     146
                .null     " = au menu.   "     
 
 whoami0        .byte     whoamicol,4,6,18
-               .null     "                               ",146
+               .text     "                               "
+               .byte     146
+               .byte     0
 
 whoami1        .byte     whoamicol,4,7,18
-               .null     "       ",146," c h a r e d i t ",18,"       ",146
+               .text     "       "
+               .byte     146
+               .text     " c h a r e d i t "
+               .byte     18
+               .text     "       "
+               .byte     146
+               .byte     0
  
 whoami2        .byte     whoamicol,4,8,18
-               .null     "                               ",146
+               .text     "                               "
+               .byte     146
+               .byte     0
 
 whoami3        .byte     whoamicol,4,9,18
-               .null     " tirez de isbn : 0-942386-29-9 ",146
+               .text     " tirez de isbn : 0-942386-29-9 "
+               .byte     146
+               .byte     0
 
 whoami4        .byte     whoamicol,4,10,18
-               .null     "       par john heilborn       ",146
+               .text     "       par john heilborn       "
+               .byte     146
+               .byte     0
 
 whoami5        .byte     whoamicol,4,11,18
-               .null     "                               ",146
+               .text     "                               "
+               .byte     146
+               .byte     0
 
 whoami6        .byte     whoamicol,4,12,18 
-               .null     "      code assembleur par      ",146
+               .text     "      code assembleur par      "
+               .byte     146
+               .byte     0
 
 whoami7        .byte     whoamicol,4,13,18
-               .null     " daniel lafrance quebec/canada ",146
+               .text     " daniel lafrance quebec/canada "
+               .byte     146
+               .byte     0
 
 whoami8        .byte     whoamicol,4,14,18
-               .null     "    version:",version,"    ",146
+               .text     "    version:",version,"    "
+               .byte     146
+               .byte     0
 
 whoami9        .byte     whoamicol,4,15,18
-               .null     "                               ",146
+               .text     "                               "
+               .byte     146
+               .byte     0
 
 bye_msg        .byte     vcyan,6,16,20
-               .null     "      bonjour et merci      ",146
+               .text     "      bonjour et merci      "
+               .byte     146
+               .byte     0
 
 any_msg        .byte     vvert1,5,24,18
-               .null     " appuyez une cle pour basic ",146
+               .text     " appuyez une cle pour basic "
+               .byte     146
+               .byte     0
 
 ;--------- first function key set ------------------               
 
 titremenu1     .byte     menu1col1,fkeyleft,f1top-2       ;133
-               .null     18," jeu de fonctions #1 ",146
+               .byte     18
+               .text     " jeu de fonctions #1 "
+               .byte     146
+               .byte     0
+
 titremenu2     .byte     menu2col1,fkeyleft,f1top-2       ;133
-               .null     18," jeu de fonctions #2 ",146
+               .byte     18
+               .text     " jeu de fonctions #2 "
+               .byte     146
+               .byte     0
 
 f1abutton      .byte     menu1col1,fkeyleft,f1top       ;133
                .text     "editer carac..."
                .byte     18             ; position 15
-               .null     $a9," f1 ",223,146
+               .byte     $a9
+               .text     " f1 "
+               .byte     223,146
+               .byte     0
+
 f2abutton      .byte     menu1col2,fkeyleft,f1top+1     ;138
                .text     "copier un carac"
                .byte     18   ; position 15
-               .null     "  f2  ",146
+               .text     "  f2  "
+               .byte     146
+               .byte     0
+
 f3abutton      .byte     menu1col1,fkeyleft,f1top+3     ;137
                .text     "savegarder sur." 
                .byte     18            ; position 15
-               .null     $a9," f3 ",223,146
+               .byte     $a9
+               .text     " f3 "
+               .byte     223,146
+               .byte     0
+
 f4abutton      .byte     menu1col2,fkeyleft,f1top+4     ;134
                .text     "charger de....."
                .byte     18             ; position 15
-               .null     "  f4  ",146
+               .text     "  f4  "
+               .byte     146
+               .byte     0
+
 f5abutton      .byte     menu1col1,fkeyleft,f1top+6     ;135
                .text     "mettre tout a 0"
                .byte     18             ; position 15
-               .null     $a9," f5 ",223,146
+               .byte     $a9
+               .text     " f5 "
+               .byte     223,146
+               .byte     0
+
 f6abutton      .byte     menu1col2,fkeyleft,f1top+7    ;139
                .text     "mettre tout a 1"
                .byte     18             ; position 15
-               .null     "  f6  ",146
+               .text     "  f6  "
+               .byte     146
+               .byte     0
+
 f7abutton      .byte     menu1col1,fkeyleft,f1top+9    ;136
                .text     "recuperer rom.."
                .byte     18             ; position 15
-               .null     $a9," f7 ",223,146
+               .byte     $a9
+               .text     " f7 "
+               .byte     223,146
+               .byte     0
+
 f8abutton      .byte     menu1col2,fkeyleft,f1top+10
                .text     "aller au menu2."
                .byte     18             ; position 15
-               .null     "  f8  ", 146
+               .text     "  f8  "
+               .byte      146
+               .byte     0
+
 ;-------- second function key set ------------------               
 f1bbutton      .byte     menu2col1,fkeyleft,f1top
                .text     "basculer vert.." 
                .byte     18             ; position 15
-               .null     $a9," f1 ",223,146
+               .byte     $a9
+               .text     " f1 "
+               .byte     223,146
+               .byte     0
+
 f2bbutton      .byte     menu2col2,fkeyleft,f1top+1
                .text     "basculer horz.."
                .byte     18             ; position 15
-               .null     "  f2  ",146
+               .text     "  f2  "
+               .byte     146
+               .byte     0
+
 f3bbutton      .byte     menu2col1,fkeyleft,f1top+3
                .text     "defiler droite."
                .byte     18             ; position 15
-               .null     $a9," f3 ",223,146
+               .byte     $a9
+               .text     " f3 "
+               .byte     223,146
+               .byte     0
+
 f4bbutton      .byte     menu2col2,fkeyleft,f1top+4
                .text     "defiler gauche."
                .byte     18             ; position 15
-               .null     "  f4  ",146
+               .text     "  f4  "
+               .byte     146
+               .byte     0
+
 f5bbutton      .byte     menu2col1,fkeyleft,f1top+6
                .text     "defiler haut..."
                .byte     18             ; position 15
-               .null     $a9," f5 ",223,146
+               .byte     $a9
+               .text     " f5 "
+               .byte     223,146
+               .byte     0
+
 f6bbutton      .byte     menu2col2,fkeyleft,f1top+7
                .text     "defiler bas...."
                .byte     18             ; position 15
-               .null     "  f6  ",146
+               .text     "  f6  "
+               .byte     146
+               .byte     0
+
 f7bbutton      .byte     menu2col1,fkeyleft,f1top+9
                .text     "inverser bits.."
                .byte     18             ; position 15
-               .null     $a9," f7 ",223,146
+               .byte     $a9
+               .text     " f7 "
+               .byte     223,146
+               .byte     0
+
 f8bbutton      .byte     menu2col2,fkeyleft,f1top+10
                .text     "aller au menu1."
                .byte     18             ; position 15
-               .null     "  f8  ", 146
+               .text     "  f8  "
+               .byte     146
+               .byte     0
 
 ; Variables locales
-tmpbyte        .byte     $00
-copykey        .byte 0  
+txt0           .null     "petscii :   "
+txt1           .null     "key code:   "
+txt2           .null     "bitmap..: "
+txt3           .null     "offset..:   "
+txt4           .null     "mapaddr.: "
+txt5           .null     "cursval.: "
+txt6           .null     "stack......:"

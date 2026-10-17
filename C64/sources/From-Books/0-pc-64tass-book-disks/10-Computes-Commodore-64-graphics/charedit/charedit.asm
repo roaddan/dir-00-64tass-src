@@ -1,28 +1,9 @@
 ;-----------------------------------------------------------------------------
 version  = "20261015-000001" 
 ;-----------------------------------------------------------------------------
-               .include "e-header-c64.asm"
-               .enc     "none"
-fkeyleft       =    18
-f1top          =    9 
-scrnnewram     =    $0400 
-charsdef       =    10
-grid_top       =    9
-grid_left      =    1
-grid_bot       =    grid_top + 7
-grid_right     =    grid_left + 7
-bordure        =    vgris
-fond           =    vnoir
-mesgcol        =    vcyan
-menu1col1      =    vcyan
-menu1col2      =    vbleu1
-menu2col1      =    vgris2
-menu2col2      =    vgris1
-flashcol       =    vblanc
-whoamicol      =    vjaune
-charcolor      =    vblanc   
-charscolor     =    vgris2
-*=$5000
+            .include    "e-header-c64.asm"
+            .include    "localcons.asm"
+            .enc        "none"
 main           .block
                jsr  push
                jsr  scrmaninit
@@ -35,7 +16,7 @@ main           .block
                jsr  cls
                jsr  setscreenptr
                jsr  setdfltchar
-               jsr  scrstatic
+               jsr  drawstatic
                jsr  drawbitmap
                lda  #$00
                sta  fkeyset
@@ -83,6 +64,7 @@ savetofile     .block
                jsr  popall
                rts
                .bend
+
 loadfromfile   .block
                jsr  pushall
                lda  #<fname
@@ -112,67 +94,43 @@ loadfromfile   .block
                .bend
 
 ;-----------------------------------------------------------------------------
-;
-;-----------------------------------------------------------------------------
-bitmapmem   =     charsdef * 1024     ;Calcul position ram des caracteres.
-endofaddr   =     (charsdef * 1024) + (4*$800)
-mstopaddr   =     $d000+(4*$800)
-startaddr   .word $d000               ; 53248
-stopaddr    .word mstopaddr           ; 55296 
-bitmapaddr  .word bitmapmem           ; $3000, 12288     
-eorval      .byte $80,$40,$20,$10,$08,$04,$02,$01
-editmode    .byte 0
-fkeyset     .byte 0
-currentchar .byte 0
-currentkey  .byte 0
-previouskey .byte 0
-bmoffset    .byte 0
-mapaddr     .word 0
-byteaddr    .word 0
-gridaddr    .word 0 
-cursln      .byte grid_top
-curscl      .byte grid_left
-pfname      .byte vvert,27,3,18     
-fname       .text "@0:"
-name        .text "origin"
-ext         .null ".chr"
-device      .byte 8
-;-----------------------------------------------------------------------------
 ; Including my self written libraries.
 ;-----------------------------------------------------------------------------
+; chargement des variables locales
+            .include    "localvars.asm"
 ; Chargement des macros globales 
-            .include "m-c64-utils.asm"
+            .include    "m-c64-utils.asm"
 ; et locales.
-            .include "localmacro.asm"
+            .include    "localmacro.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement du code spécifique au programmes et ...
-            .include "routines.asm"
+            .include    "routines.asm"
 ; ... de ses chaines de caractères, ..
-            .include "strings_fr.asm"
-;            .include "strings_en.asm"
+            .include    "strings_fr.asm"
+;            .include    "strings_en.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement en RAM des variables des librairies à la suite du programme.
-            .include "e-c64-vars.asm"
+            .include    "e-c64-vars.asm"
 ;-----------------------------------------------------------------------------
 *=$c000
 ; Chargement des librairies à la page $C000.
-            .include "l-c64-timer.asm"
-            .include "l-c64-sid.asm"
-            .include "l-c64-vicii.asm"
-            .include "l-c64-basic2.asm" 
-            .include "l-cbm-push.asm"
-            .include "l-cbm-mem.asm"
-            .include "l-cbm-hex.asm"
-            .include "l-cbm-keyb.asm"
-            .include "l-cbm-disk.asm"
-            .include "l-c64-std-showregs.asm"
+            .include    "l-c64-timer.asm"
+            .include    "l-c64-sid.asm"
+            .include    "l-c64-vicii.asm"
+            .include    "l-c64-basic2.asm" 
+            .include    "l-cbm-push.asm"
+            .include    "l-cbm-mem.asm"
+            .include    "l-cbm-hex.asm"
+            .include    "l-cbm-keyb.asm"
+            .include    "l-cbm-disk.asm"
+            .include    "l-c64-std-showregs.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement des constantes nécessaires aux librairies et au programmes.
-            .include "e-c64-kernal.asm"
-            .include "e-c64-vicii.asm"
-            .include "e-c64-basic2.asm"
-            .include "e-c64-sid-ii.asm"
-            .include "e-c64-sid-notes-ntsc.asm"
+            .include    "e-c64-kernal.asm"
+            .include    "e-c64-vicii.asm"
+            .include    "e-c64-basic2.asm"
+            .include    "e-c64-sid-ii.asm"
+            .include    "e-c64-sid-notes-ntsc.asm"
 ;-----------------------------------------------------------------------------
 
 

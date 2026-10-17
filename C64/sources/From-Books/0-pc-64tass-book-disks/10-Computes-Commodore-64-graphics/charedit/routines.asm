@@ -14,15 +14,14 @@
 ; Redessine l'écran de travail
 ;-------------------------------------------------------------------------------
 scrredraw   .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             jsr   screendis         ; Inhibe l'affichage
             jsr   cls               ; Efface l'écran
-            jsr   scrstatic         ; Affiche les éléments statiques de l'écran.
+            jsr   drawstatic        ; Affiche les éléments statiques de l'écran.
             jsr   drawbitmap        ; Affiche la représentation bitmap du car.
             jsr   drawfkeys         ; Affiche le menu de clefs fonctions.
-            #locate   13,12         ; Positionne le curseur.
             lda   currentkey        ; Affiche le caractère actuellement
-            jsr   putch             ; ... représenté.
+            jsr   drawkeyval        ; ... représenté.
             #affichemesg prompt_msg ; Affiche un invite.
             jsr   screenena         ; Permet l'affichage d'écran.
             jsr   popreg            ; Récupère les registres.
@@ -34,7 +33,7 @@ scrredraw   .block
 ; Capture un nom de fichier de 6 lettres entré par l'usager.
 ;-------------------------------------------------------------------------------
 getfname    .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             #affichemesg fname_msg  ; Affiche l'invite.
             ldx  #$00               ; X à 0.
             stx  count              ; pour compter les caractères
@@ -57,7 +56,7 @@ count       .byte     0
 ; Récupère un caractère de a-z et 0-9 dans Acc.
 ;-------------------------------------------------------------------------------
 getalnum    .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
 getanother  jsr   getkey            ; Li une clef.
             cmp   #$30              ; Plus petit que 0?
             bmi   getanother        ; On le refuse et en demande une autre.
@@ -81,6 +80,7 @@ tempbyte    .byte 0
 copychar    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             jsr   getvalidkey       ; On cherche une clef valide.
+            ;jsr   getkey
             lda   bitmapaddr        ; On pointe sur la table des bitmaps
             sta   zpage1            ; ... pour copier les octets
             lda   bitmapaddr+1      ; ... de la définition des 
@@ -108,15 +108,17 @@ out         jsr   popall            ; Récupère registres et pointeur ZP
             .bend 
 
 ;-------------------------------------------------------------------------------
-;
+; Récupère une clef entrée par l'utilisateur dont le code ascii correspond à
+; une entrée valide dans la table asciitopetscii présente dans le fichier;
+;    l-cbm-keyb.asm 
 ;-------------------------------------------------------------------------------
 getvalidkey .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             #affichemesg copychar_msg
-getgoodkey  jsr   getkey
-            sta   copykey
-            tax
-            ldy   asciitorom,x
+getgoodkey  jsr   getkey            ; Obtient une clef.
+            sta   copykey           ; Garde une copie de la clef.
+            tax                     ; La transfere dans X.
+            ldy   asciitorom,x      ; Charge dans Y le 
             cpy   $00
             bne   goodone
             ldx   copykey
@@ -129,13 +131,13 @@ goodone     jsr   putch
             .bend 
 
 ;-------------------------------------------------------------------------------
-;
+; Affiche l'écran de présentation du programme.
 ;-------------------------------------------------------------------------------
 drawcredits   .block
-            jsr   pushreg           ; Sauvegarde les registres
-            jsr  cls
-            #printcxy whoami0
-            #printcxy whoami1
+            jsr   pushreg           ; Sauvegarde les registres.
+            jsr   cls               ; Efface l'écran.
+            #printcxy whoami0       ; Affiche les 10 lignes du message 
+            #printcxy whoami1       ; ... de bienvenue.
             #printcxy whoami2
             #printcxy whoami3
             #printcxy whoami4
@@ -144,42 +146,41 @@ drawcredits   .block
             #printcxy whoami7
             #printcxy whoami8
             #printcxy whoami9
-            jsr  delay
-            jsr  delay
-            jsr  delay
-            jsr  delay
-            jsr  delay
+            ldx   #$05              ; Attend environ 5 secondes.
+waitmore    jsr   delay
+            dex
+            bne   waitmore
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
 ;-------------------------------------------------------------------------------
-;
+; Affiche le premier caractères 
 ;-------------------------------------------------------------------------------
 setdfltchar .block
-            jsr   pushreg           ; Sauvegarde les registres
-            lda  #$40
-            sta  currentkey
-            tax
-            ldy  asciitorom,x
-            sty  bmoffset
-            jsr  drawkeyval
-            jsr  drawbitmap
-            #locate   13,12
-            jsr  putch
-            #locate   17,5
-            jsr  atodec
-            #print    adec
+            jsr   pushreg           ; Sauvegarde les registres.
+            lda  #$41
+            sta  currentkey         ; In initialise la clef courrante.
+            tax                     ; On en cherche le  
+            ldy  asciitorom,x       ; ... code petscii.
+            sty  bmoffset           ; En memorise l'offset.
+            jsr  drawkeyval         ; Affiche les infos du caractère.
+            jsr  drawbitmap         ; Affiche le bitmap.
+;            #locate   13,12
+;            jsr  putch
+;            #locate   11,15
+;            jsr  atodec
+;            #print    adec
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
 ;-------------------------------------------------------------------------------
-;
+; Fonction qui rétabli les couleurs normales du menu de clefs fonction.
 ;-------------------------------------------------------------------------------
 rstmenucol  .block
-            jsr   pushreg           ; Sauvegarde les registres
-            lda  #menu1col1
+            jsr   pushreg           ; Sauvegarde les registres.
+            lda  #menu1col1         ; 
             sta  f1abutton
             sta  f3abutton
             sta  f5abutton
@@ -195,29 +196,10 @@ rstmenucol  .block
             .bend
 
 ;-------------------------------------------------------------------------------
-;
-;-------------------------------------------------------------------------------
-resetmenubcolor  .block
-            jsr   pushreg           ; Sauvegarde les registres
-            lda  #menu2col1
-            sta  f1bbutton
-            sta  f3bbutton
-            sta  f5bbutton
-            sta  f7bbutton
-            lda  #menu2col1
-            sta  f2bbutton
-            sta  f4bbutton
-            sta  f6bbutton
-            sta  f8bbutton
-            ;jsr  drawfkeys
-            jsr   popreg            ; Récupère les registres.
-            rts
-            .bend
-;-------------------------------------------------------------------------------
-;
+; Fonction qui établie les couleurs du menu A.
 ;-------------------------------------------------------------------------------
 setmenuacolor  .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             sta  f1abutton
             sta  f2abutton
             sta  f3abutton
@@ -232,10 +214,10 @@ setmenuacolor  .block
             .bend
 
 ;-------------------------------------------------------------------------------
-;
+; Fonction qui établie les couleurs du menu B.
 ;-------------------------------------------------------------------------------
 setmenubcolor  .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             sta  f1bbutton
             sta  f2bbutton
             sta  f3bbutton
@@ -253,167 +235,159 @@ setmenubcolor  .block
 ;
 ;-------------------------------------------------------------------------------
 drawkeyval     .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
+
+            lda  currentkey         ; Charge la dernière clef pesée.
+            #locate   13,12
+            jsr  putch              ; L'affiche dans le carré.
+
+            #locate   13,20
+            jsr  atodec             ; L'affiche en décimal.
+            #print    adec
+
+            #locate 2,20            ; Affiche la valeur de la clef en binaire
+            pha                     ; Sauvegarde la clef.
+            lda  #'%'               ; Le préfixe de Binaire (%).
+            jsr  putch              ;
+            pla                     ; Récupère la clef.
+            pha                     ; Sauvegarde la clef.
+            jsr  putabin            ; L'affiche en binaire.
+            lda  #','               ;
+            jsr  putch              ;
+
             #locate 1,19
-            ;#print txt0
-            lda  currentkey
-            jsr  putch
-            pha
-            lda  #'='
-            jsr  putch
-            lda  #'%'
-            jsr  putch
-            pla
-            jsr  putabin
-
-            #locate 1,20
             #print txt1
+            lda  #'$'               ; Affiche le préfixe de l'hexadécimal.
+            jsr  putch
+            pla                     ; Récupère la clef.
+            jsr  putahex            ; l'affiche en hexadécimal.
+
+            #locate 1,21            ; Affiche l'adresse de la table  
+            #print txt2             ; ... des bitmaps 
             lda  #'$'
             jsr  putch
-            lda  currentkey
-            jsr  putahex
-
-
-            #locate 1,21
-            #print txt2
-            lda  #'$'
-            jsr  putch
-            lda  bitmapaddr+1
+            lda  bitmapaddr+1       ; ... en hexadecimal.
             jsr  putahex
             lda  bitmapaddr
             jsr  putahex
 
-            #locate 1,22
-            #print txt3
+            #locate 1,22            ; Affiche l'offset dans la table
+            #print txt3             ; ... des bitmaps
             lda  #'$'
             jsr  putch            
             lda  bmoffset
-            jsr  putahex
+            jsr  putahex            ; ... en hexadecimal.
 
 
-            #locate 1,23
-            #print txt4
+            #locate 1,23            ; Affiche l'adresse du debut du bitmap 
+            #print txt4             ; ... du caractère 
             lda  #'$'
             jsr  putch
-            lda  mapaddr+1
+            lda  mapaddr+1          ; ... en hexadecimal.
             jsr  putahex
             lda  mapaddr
             jsr  putahex
 
-            #locate 1,24
-            #print txt5
-            lda  curscl
-            jsr  putahex
+            #locate 1,24            ; Affiche la ligne et la colonne
+            #print txt5             ; ... du curseur
+            lda  curscl             ; ... (la colonne)
+            jsr  putahex            ; ... en hexadécimal.
             lda  #$da
             jsr  putch
-            lda  cursln
-            jsr  putahex
+            lda  cursln             ; ... (la ligne)
+            jsr  putahex            ; ... en hexadécimal.
 
-            ;jsr  delay
             jsr   popreg            ; Récupère les registres.
             rts
-txt0           .null     "petscii :   "
-txt1           .null     "key code: "
-txt2           .null     "bitmap..: "
-txt3           .null     "offset..:   "
-txt4           .null     "mapaddr.: "
-txt5           .null     "cursval.: "
-txt6           .null     "stack......:"
+
             .bend
             
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
 keyaction   .block
-            jsr   pushreg           ; Sauvegarde les registres
-myloop      jsr   getkey      ; Boucle de récupération de clef.  
-f1          cmp   #key_f1     ; est-ce F1  
-            bne   f2          ; non, on va voir la prochaine.
-            jmp   dof1        ; Oui, On l'exécute.
-f2          cmp   #key_f2     ; est-ce F2  
-            bne   f3          ; non, on va voir la prochaine.
-            jmp   dof2        ; Oui, On l'exécute.
-f3          cmp   #key_f3     ; est-ce F3  
-            bne   f4          ; non, on va voir la prochaine.
-            jmp   dof3        ; Oui, On l'exécute.
-f4          cmp   #key_f4     ; est-ce F4  
-            bne   f5          ; non, on va voir la prochaine.
-            jmp   dof4        ; Oui, On l'exécute.
-f5          cmp   #key_f5     ; est-ce F5  
-            bne   f6          ; non, on va voir la prochaine.
-            jmp   dof5        ; Oui, On l'exécute.
-f6          cmp   #key_f6     ; est-ce F6  
-            bne   f7          ; non, on va voir la prochaine.
-            jmp   dof6        ; Oui, On l'exécute.
-f7          cmp   #key_f7     ; est-ce F7  
-            bne   f8          ; non, on va voir la prochaine.
-            jmp   dof7        ; Oui, On l'exécute.
-f8          cmp   #key_f8     ; est-ce F8  
-            bne   ctrlx       ; non, on va voir la prochaine.
-            jmp   dof8        ; Oui, On l'exécute.
-ctrlx       cmp   #ctrl_x     ; est-ce CTRL+X  
-            bne   ctrlr       ; non, on va voir la prochaine.
-            jmp   doquit      ; Oui, On l'exécute.
-ctrlr       cmp   #ctrl_r     ; est-ce CTRL+R
-            bne   ishex14     ; non, on va voir la prochaine.
-            jmp   doredraw    ; Oui, On l'exécute.
-ishex14     cmp   #$14        ; est-ce $14 ???  
-            bne   ishex12     ; non, on va voir la prochaine.    
-                        ; XXXX - Ici faire quelque chose
-            jmp   myloop      ; On boucle             
-ishex12     cmp   #$12        ; est-ce F1  
-            bne   reste       ; non, on fait le reste des clefs
-                        ; XXXX - Ici faire quelque chose
-            jmp   myloop            
-reste       #locate   13,12
-            jsr   putch
-            pha            ; remembers 
-            lda   currentkey  ; the 
-            sta   previouskey ; previous key
-            pla            ;
-            sta   currentkey  ; an store current
-            tax
-            ldy   asciitorom,x            
-            sty   bmoffset
-            jsr   drawkeyval
+            jsr   pushreg           ; Sauvegarde les registres.
+actionloop  jsr   getkey            ; Boucle de récupération de clef.  
 
-            pha
-            lda #$41
-            jsr waitkey
-            pla
+f1          cmp   #key_f1           ; est-ce F1  
+            bne   f2                ; non, on va voir la prochaine.
+            jmp   dof1              ; Oui, On l'exécute.
 
-;            jsr  drawbitmap
-            #locate   17,5
-            jsr  atodec
-            #print    adec
-            jmp  myloop
+f2          cmp   #key_f2           ; est-ce F2  
+            bne   f3                ; non, on va voir la prochaine.
+            jmp   dof2              ; Oui, On l'exécute.
+
+f3          cmp   #key_f3           ; est-ce F3  
+            bne   f4                ; non, on va voir la prochaine.
+            jmp   dof3              ; Oui, On l'exécute.
+
+f4          cmp   #key_f4           ; est-ce F4  
+            bne   f5                ; non, on va voir la prochaine.
+            jmp   dof4              ; Oui, On l'exécute.
+
+f5          cmp   #key_f5           ; est-ce F5  
+            bne   f6                ; non, on va voir la prochaine.
+            jmp   dof5              ; Oui, On l'exécute.
+
+f6          cmp   #key_f6           ; est-ce F6  
+            bne   f7                ; non, on va voir la prochaine.
+            jmp   dof6              ; Oui, On l'exécute.
+
+f7          cmp   #key_f7           ; est-ce F7  
+            bne   f8                ; non, on va voir la prochaine.
+            jmp   dof7              ; Oui, On l'exécute.
+
+f8          cmp   #key_f8           ; est-ce F8  
+            bne   ctrlx             ; non, on va voir la prochaine.
+            jmp   dof8              ; Oui, On l'exécute.
+
+ctrlx       cmp   #ctrl_x           ; est-ce CTRL+X  
+            bne   ctrlr             ; non, on va voir la prochaine.
+            jmp   doquit            ; Oui, On l'exécute.
+
+ctrlr       cmp   #ctrl_r           ; est-ce CTRL+R
+            bne   reste           ; non, on va voir la prochaine.
+            jmp   doredraw          ; Oui, On l'exécute.
+
+reste       jsr   drawkeyval
+            pha                     ; Mémorise la nouovelle clef
+            lda   currentkey        ; ... mémorise   
+            sta   previouskey       ; ... l'ancienne
+            pla                     ; ... et place la nouvelle clef dans
+            sta   currentkey        ; ... la variable à cet effet.
+            tax                     ; La clef dans X
+            ldy   asciitorom,x      ; Trouve l'offset bitmap de la clef       
+            sty   bmoffset          ; ... et le mémorise.
+            jsr   drawbitmap
+            jmp   actionloop
+
 ;----------------------------------------------------------
 dof1        jsr  f1action  ;edit/reverse
-            jmp  myloop
+            jmp  actionloop
 ;----------------------------------------------------------
 dof2        jsr  f2action  ;save/flip vert
-            jmp  myloop
+            jmp  actionloop
 ;----------------------------------------------------------
 dof3        jsr  f3action  ;load/flip horz
-            jmp  myloop
+            jmp  actionloop
 ;----------------------------------------------------------
 dof4        jsr  f4action  ;copy/scroll r
-            jmp  myloop
+            jmp  actionloop
 ;----------------------------------------------------------
 dof5        jsr  f5action  ;clear/scroll l
-            jmp  myloop
+            jmp  actionloop
 ;----------------------------------------------------------
 dof6        jsr  f6action  ;fill;/scroll up
-            jmp  myloop
+            jmp  actionloop
 ;----------------------------------------------------------
 dof7        jsr  f7action  ;clear;/scroll down
-            jmp  myloop
+            jmp  actionloop
 ;----------------------------------------------------------
 dof8        jsr  f8action  ; function
-            jmp  myloop
+            jmp  actionloop
 ;----------------------------------------------------------
 doredraw    jsr  scrredraw
-            jmp  myloop
+            jmp  actionloop
 ;----------------------------------------------------------
 doquit      jsr  popreg
             rts
@@ -423,7 +397,7 @@ doquit      jsr  popreg
 ;
 ;-------------------------------------------------------------------------------
 editor      .block 
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             #affichemesg exit_msg
             #affichemesg edit_msg
             jsr  setcurs
@@ -531,7 +505,7 @@ do_ctrlx    jsr  clrcurs
 ;-------------------------------------------------------------------------------
 ; use     byteaddr,cursln,curscl
 do_eor         .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             lda  mapaddr
             sta  zpage2
             lda  mapaddr+1
@@ -556,7 +530,7 @@ do_eor         .block
 ;
 ;-------------------------------------------------------------------------------
 setcurs        .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             ldx  #grid_left
             ldy  cursln
             jsr  gotoxy
@@ -576,7 +550,7 @@ setcurs        .block
 ;
 ;-------------------------------------------------------------------------------
 clrcurs        .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             ldx  #grid_left
             ldy  cursln
             jsr  gotoxy
@@ -595,38 +569,39 @@ clrcurs        .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-drawbitmap     .block
+drawbitmap  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
-            ; prépare le text
-            jsr  calcmapaddr              
-            lda  mapaddr        ; on pointe sur la table des bitmaps
-            sta  zpage1
-            lda  mapaddr+1
-            sta  zpage1+1
-            ; On affiche les 8 lignes du caractere
-drawchar       ldy  #$00      
-            ldx  #grid_top      ;on replace la ...
-            stx  isy+1          ;ligne de départ
-nextline       jsr  push
-            ldx  #grid_left+1        ; la colonne
-isy            ldy  #$00      ; la ligne (autoinc)
-            jsr  gotoxy
-            jsr  pop
-            lda  (zpage1),y     ; on li une ligne
-            jsr  atobin
-            jsr  abintograph
+                                    ; prépare le text
+
+            jsr   calcmapaddr              
+            lda   mapaddr            ; on pointe sur la table des bitmaps
+            sta   zpage1
+            lda   mapaddr+1
+            sta   zpage1+1
+                                    ; On affiche les 8 lignes du caractere
+drawchar    ldy   #$00      
+            ldx   #grid_top         ;on replace la ...
+            stx   isy+1             ;ligne de départ
+nextline    jsr   push
+            ldx   #grid_left+1      ; la colonne
+isy         ldy   #$00              ; la ligne (autoinc)
+            jsr   gotoxy
+            jsr   pop
+            lda   (zpage1),y        ; on li une ligne
+            jsr   atobin
+            ;jsr   abintograph
             #print abin
-            inc  isy+1
+            inc   isy+1
             iny
-            cpy  #$08
-            bmi  nextline
-            jsr  highlight
+            cpy   #$08
+            bmi   nextline
+            jsr   highlight
             jsr   popall            ; Récupère registres et pointeur ZP
             rts
             .bend
 
 highlight      .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             ldx  previouskey
             lda  asciitorom,x
             tax
@@ -645,28 +620,28 @@ highlight      .block
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-calcmapaddr    .block
+calcmapaddr .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
-            lda  bitmapaddr     ; on pointe sur la table des bitmaps
-            sta  zpage1
-            lda  bitmapaddr+1
-            sta  zpage1+1
-            ; on ajuste l'offset du pointeur de bitmap
-            ldx  bmoffset
-            cpx  #$00
-            beq  thesame         ; sommes nous déja à 0
-addagain       lda  #$08
-            jsr  zp1addnum      ; on augmente de 8 byte ...
-            dex              ; pour chaque caracteres
-            bne  addagain
-thesame        pha
-            lda  zpage1
-            sta  mapaddr
-            lda  zpage1+1
-            sta  mapaddr+1
+            lda   bitmapaddr        ; on pointe sur la table des bitmaps
+            sta   zpage1
+            lda   bitmapaddr+1
+            sta   zpage1+1
+                                   
+            ldx   bmoffset          ; on ajuste l'offset du pointeur de bitmap
+            cpx   #$00
+            beq   thesame           ; sommes nous déja à 0
+addagain    lda   #$08
+            jsr   zp1addnum         ; on augmente de 8 byte ...
+            dex                     ; pour chaque caracteres
+            bne   addagain
+thesame     pha
+            lda   zpage1
+            sta   mapaddr
+            lda   zpage1+1
+            sta   mapaddr+1
             pla
-            jsr  drawkeyval
-out         jsr  popall            ; Récupère registres et pointeur ZP
+            jsr   drawkeyval
+out         jsr   popall            ; Récupère registres et pointeur ZP
             rts
             .bend
 
@@ -699,21 +674,21 @@ next           iny
 ;
 ;-------------------------------------------------------------------------------
 setscreenptr   .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
 ;            ; BASIC -> print chr$(8)
             lda  #$08      ; basic commande to disable ...
             jsr  chrout    ; ... character set change.
             
 ;            ; BASIC -> poke 56578,peek(56578) or 3
-;            lda  cia2ddra  ;$dd02, 56578 cia2 data direction A
-;            ora  #$00000011
-;            sta  cia2ddra  ;$dd02, 56578 cia2 data direction A
+;            lda   cia2ddra  ;$dd02, 56578 cia2 data direction A
+;            ora   #$00000011
+;            sta   cia2ddra  ;$dd02, 56578 cia2 data direction A
 ;            
 ;            ; BASIC -> poke 56576, (peek(56576) and 252) or 0
-;            lda  cia2pra   ;$dd00, 56576 cia2 dataport A
-;            and  #%11111100
-;            ora  #%00000000
-;            sta  cia2pra   ;$dd00, 56576 cia2 dataport A
+;            lda   cia2pra   ;$dd00, 56576 cia2 dataport A
+;            and   #%11111100
+;            ora   #%00000000
+;            sta   cia2pra   ;$dd00, 56576 cia2 dataport A
             
             ; BASIC -> poke 53272, (peek(53272) and 240) or 12
             lda  vicmemptr      ;$d018, 53272            
@@ -725,12 +700,12 @@ setscreenptr   .block
             ;  |  scr  |  scr  |  scr  |  scr  |  def  |  def  |  def  |   X   |
             ;  | bit 3 | bit 2 | bit 1 | bit 0 | bit 2 | bit 1 | bit 0 |       |
             ;  +-------+-------+-------+-------+-------+-------+-------+-------+
-            and  #%11110000     ; On conserve les bits 7654 de ce registre ...
-                             ; ... afin de conserver la mémoire vidéo à $0400.
-            ora  #charsdef      ; on place les bits 3210 à %xxxx001x ce qui ...
-                             ; ... sélectionne la mémoire du bitmap des ...
-                             ; ... charactères à $0800. 
-            sta  vicmemptr      ; $d018, 53272
+            and   #%11110000  ; On conserve les bits 7654 de ce registre ...
+                              ; ... afin de conserver la mémoire vidéo à $0400.
+            ora   #charsdef   ; on place les bits 3210 à %xxxx001x ce qui ...
+                              ; ... sélectionne la mémoire du bitmap des ...
+                              ; ... charactères à $0800. 
+            sta   vicmemptr   ; $d018, 53272
 
 ;            ; BASIC -> poke 648, 196            
 ;            lda  #%00000100     ;%11000100 ; 196
@@ -745,7 +720,7 @@ setscreenptr   .block
 ;
 ;-----------------------------------------------------------------------------
 copycharset       .block
-               jsr   pushreg           ; Sauvegarde les registres
+               jsr   pushreg           ; Sauvegarde les registres.
                ;-----------------------------------------------------------
                ; On desactive les interruptions du clavier.
                ; BASIC -> poke 56334, peek(56334) and 254 
@@ -783,30 +758,25 @@ copycharset       .block
 ;-------------------------------------------------------------------------------
 memcopy        .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
-
-            lda  startaddr
-            sta  zpage1
-            lda  startaddr+1
-            sta  zpage1+1
-            lda  bitmapaddr
-            sta  zpage2
-            lda  bitmapaddr+1
-            sta  zpage2+1
-            ldy  #$00
-
-onemore        lda  (zpage1),y
-            sta  (zpage2),y
-            jsr  inczp1
-            jsr  inczp2
-
-            lda  zpage1+1
-            cmp  stopaddr+1
-            bne  onemore
-
-            lda  zpage1
-            cmp  stopaddr
-            bne  onemore
- 
+            lda   startaddr
+            sta   zpage1
+            lda   startaddr+1
+            sta   zpage1+1
+            lda   bitmapaddr
+            sta   zpage2
+            lda   bitmapaddr+1
+            sta   zpage2+1
+            ldy   #$00
+onemore     lda   (zpage1),y
+            sta   (zpage2),y
+            jsr   inczp1
+            jsr   inczp2
+            lda   zpage1+1
+            cmp   stopaddr+1
+            bne   onemore
+            lda   zpage1
+            cmp   stopaddr
+            bne   onemore
             jsr   popall            ; Récupère registres et pointeur ZP
             rts
             .bend
@@ -815,7 +785,7 @@ onemore        lda  (zpage1),y
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-scrstatic   .block
+drawstatic  .block
             #changebord bordure
             #changeback fond
             ;#uppercase
@@ -835,7 +805,7 @@ scrstatic   .block
 ;
 ;-------------------------------------------------------------------------------
 drawfkeys      .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             lda  fkeyset
             cmp  #$0
             bne  secondks
@@ -849,7 +819,7 @@ drawfkeys      .block
             #printcxy f7abutton
             #printcxy f8abutton
             jmp end 
-secondks       #printcxy titremenu2
+secondks    #printcxy titremenu2
             #printcxy f1bbutton
             #printcxy f2bbutton
             #printcxy f3bbutton
@@ -869,7 +839,7 @@ drawallchars   .block
             jsr pushreg
             #locate   0,0
             ldx  #$00
-nextc          txa  
+nextc       txa  
             sta  scrnnewram,x
             lda  #charscolor
             sta  colorram,x
@@ -1016,7 +986,7 @@ nocarry        sta  zpage1
 ;
 ;-------------------------------------------------------------------------------
 delay          .block
-            jsr   pushreg           ; Sauvegarde les registres
+            jsr   pushreg           ; Sauvegarde les registres.
             lda  #$0
             tax
             tay
