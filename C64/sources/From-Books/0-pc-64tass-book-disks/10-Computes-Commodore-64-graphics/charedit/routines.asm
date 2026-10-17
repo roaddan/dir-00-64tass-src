@@ -527,7 +527,8 @@ do_eor         .block
             .bend
 
 ;-------------------------------------------------------------------------------
-;
+; Affiche les pointeurs X et Y du curseur d'éditeur de caractère à l'endroit 
+; donnée par cursln et curscl.
 ;-------------------------------------------------------------------------------
 setcurs        .block
             jsr   pushreg           ; Sauvegarde les registres.
@@ -547,7 +548,7 @@ setcurs        .block
             .bend
 
 ;-------------------------------------------------------------------------------
-;
+; Positionne le curseur au coin sup gauche de la matrice de point.
 ;-------------------------------------------------------------------------------
 clrcurs        .block
             jsr   pushreg           ; Sauvegarde les registres.
@@ -567,38 +568,36 @@ clrcurs        .block
             .bend
 
 ;-------------------------------------------------------------------------------
-;
+; Affiche la représentation bitmap du caractère choisi.
 ;-------------------------------------------------------------------------------
 drawbitmap  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
-                                    ; prépare le text
-
-            jsr   calcmapaddr              
-            lda   mapaddr            ; on pointe sur la table des bitmaps
+            jsr   calcmapaddr       ; On calcule l'adresse de la matrice.       
+            lda   mapaddr           ; On pointe sur la table des bitmaps.
             sta   zpage1
             lda   mapaddr+1
             sta   zpage1+1
-                                    ; On affiche les 8 lignes du caractere
-drawchar    ldy   #$00      
-            ldx   #grid_top         ;on replace la ...
-            stx   isy+1             ;ligne de départ
+drawchar    ldy   #$00              ; On affiche les 8 lignes du caractere  
+            ldx   #grid_top         ; On replace la ligne de départ.
+            stx   isy+1             ; (Code auto-modifié) 
 nextline    jsr   push
             ldx   #grid_left+1      ; la colonne
 isy         ldy   #$00              ; la ligne (autoinc)
             jsr   gotoxy
             jsr   pop
-            lda   (zpage1),y        ; on li une ligne
-            jsr   atobin
-            ;jsr   abintograph
-            #print abin
-            inc   isy+1
-            iny
-            cpy   #$08
-            bmi   nextline
-            jsr   highlight
+            lda   (zpage1),y        ; On li un octet.
+            jsr   atobin            ; Transforme l'octet en binaire ascii ...
+            jsr   abintograph       ; ... puis en une série de points.
+            #print abin             ; On affiche la ligne.
+            inc   isy+1             ; (Code auto-modifié) 
+            iny                     ; On passe à la ligne suivante.
+            cpy   #$08              ; Avons-nous afficher les 8 octets?
+            bmi   nextline          ; Non, on passe à la prochaine.
+            jsr   highlight         ; 
             jsr   popall            ; Récupère registres et pointeur ZP
             rts
             .bend
+
 
 highlight      .block
             jsr   pushreg           ; Sauvegarde les registres.
@@ -618,7 +617,8 @@ highlight      .block
 
 
 ;-------------------------------------------------------------------------------
-;
+; Calcule l'adresse de la matrice de point pour le charactère dont l'offset est 
+; dans bmoffset et place le résultat dans mapaddr. 
 ;-------------------------------------------------------------------------------
 calcmapaddr .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
@@ -629,12 +629,12 @@ calcmapaddr .block
                                    
             ldx   bmoffset          ; on ajuste l'offset du pointeur de bitmap
             cpx   #$00
-            beq   thesame           ; sommes nous déja à 0
-addagain    lda   #$08
+            beq   idem              ; sommes nous déja à 0
+plusencore  lda   #$08
             jsr   zp1addnum         ; on augmente de 8 byte ...
             dex                     ; pour chaque caracteres
-            bne   addagain
-thesame     pha
+            bne   plusencore
+idem        pha
             lda   zpage1
             sta   mapaddr
             lda   zpage1+1
