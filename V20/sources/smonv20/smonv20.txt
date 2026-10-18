@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/V20/lib -i -L smonv20.txt -o smonv20.prg smonv20.asm
-; Wed Oct  7 21:53:58 2026
+; Thu Oct  8 20:18:11 2026
 
 ;Offset	;Hex		;Source
 
@@ -22,8 +22,6 @@
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/V20/lib/m-v20-utils.asm
 
-.0000			lowercase
-.0000			uppercase
 
 ;******  Return to file: smonv20.asm
 
@@ -257,121 +255,121 @@
 .a1dd	c0 04		            cpy  #4           ; Avons-nous déjà affiché 4 octets ?
 .a1df	90 f0		            bcc  dchar        ; Sinon, afficher l'octet suivant.
 .a1e1	60		            rts
-.a1e2	a9 00		compar    lda  #0             ; bit 7 efface les signaux comparer
->a1e4	2c		          .byte $2c           ; L'opcode de bit absolu consomme le mot suivant
-.a1e5	a9 80		trans     lda  #$80           ; Bit 7 place le transfert de signaux
-.a1e7	8d 16 bb	          sta  savy           ; Enregistrer l'indicateur de
-.a1ea	a9 00		          lda  #0             ; Suppose que nous comptons à rebours (b7 clair)
-.a1ec	8d bd ba	          sta  upflg          ; Enregistrer le drapeau de direction
-.a1ef	20 1c a8	          jsr  getdif         ; Obtien deux adresses et calcule la différence
-.a1f2	b0 05		          bcs  terror         ; Bit carry a un indique une erreur
-.a1f4	20 7d a6	          jsr  getpar         ; obtien l'adresse de destination dans tmp0
-.a1f7	90 03		          bcc  tokay          ; Bit carry a un indique une erreur
-.a1f9	4c 87 a0	terror    jmp  error          ; Gère les erreurs
-.a1fc	2c 16 bb	tokay     bit  savy           ; Transférer ou comparer ?
-.a1ff	10 27		          bpl  compar1        ; Bit 7 à 0 indique comparer
-.a201	a5 c3		          lda  tmp2           ; S'il s'agit d'un transfert, nous devons
-.a203	c5 c1		          cmp  tmp0           ; ... prendre des mesures pour éviter d'écraser
-.a205	a5 c4		          lda  tmp2+1         ; ... les octets sources avant qu'ils n'aient été
-.a207	e5 c2		          sbc  tmp0+1         ; Comparer la source (tmp2) à la destination
-.a209	b0 1d		          bcs  compar1        ; ... (tmp0) et incrémenter si la source est
-.a20b	ad 13 bb	          lda  store          ; Sinon, commencez par la fin et décomptez en
-.a20e	65 c1		          adc  tmp0           ; ... ajoutant la longueur (stockée) à la
-.a210	85 c1		          sta  tmp0           ; ... destination (tmp0) pour calculer la fin de
-.a212	ad 14 bb	          lda  store+1
-.a215	65 c2		          adc  tmp0+1
-.a217	85 c2		          sta  tmp0+1
-.a219	a2 01		          ldx  #1             ; Modifier le pointeur source du début à la fin
-.a21b	bd c1 ba	tdown     lda  stash,x        ; tmp2 = fin de la source (réserve).
-.a21e	95 c3		          sta  tmp2,x
-.a220	ca		          dex
-.a221	10 f8		          bpl  tdown
-.a223	a9 80		          lda  #$80           ; Le bit haut activé dans upflg signifie un
-.a225	8d bd ba	          sta  upflg
-.a228	20 5b a7	compar1   jsr  crlf           ; Nouvelle ligne.
-.a22b	a0 00		          ldy  #0             ; Aucun décalage par rapport au pointeur.
-.a22d	20 70 f7	tcloop    jsr  stop           ; Vérifier la touche [RUN/STOP].
-.a230	f0 31		          beq  texit          ; Quitte si appuiée.
-.a232	b1 c3		          lda  (tmp2),y       ; Charge un octet depuis la source.
-.a234	2c 16 bb	          bit  savy           ; Transférer ou comparer?
-.a237	10 02		          bpl  compar2        ; Ignorer la sauvegarde si comparaison.
-.a239	91 c1		          sta  (tmp0),y       ; Sinon, stocker dans la destination.
-.a23b	d1 c1		compar2   cmp  (tmp0),y       ; Comparer à la destination.
-.a23d	f0 03		          beq  tmvad          ; Ne pas afficher l'adresse si égale
-.a23f	20 46 a7	          jsr  showad         ; Afficher l'adresse
-.a242	2c bd ba	tmvad     bit  upflg          ; Compter en avant ou en arrière ?
-.a245	30 0b		          bmi  tdecad         ; Le bit 7 activé signifie que nous décomptons.
-.a247	e6 c1		          inc  tmp0           ; Incrémenter l'octet LSB de la destination.
-.a249	d0 10		          bne  tincok
-.a24b	e6 c2		          inc  tmp0+1         ; Reporte au MSB si nécessaire.
-.a24d	d0 0c		          bne  tincok
-.a24f	4c 87 a0	          jmp  error          ; Erreur si dépassement de capacité du MSB.
-.a252	20 cf a7	tdecad    jsr  suba1          ; Décrémenter la destination (tmp0).
-.a255	20 01 a8	          jsr  sub21          ; Décrémenter la source (tmp2).
-.a258	4c 5e a2	          jmp  tmor
-.a25b	20 f5 a7	tincok    jsr  adda2          ; Incrémenter la source (tmp2).
-.a25e	20 e3 a7	tmor      jsr  sub13          ; Décrémenter la longueur.
-.a261	b0 ca		          bcs  tcloop         ; Boucle jusqu'à ce que la longueur soit 0.
-.a263	4c 3e a0	texit     jmp  strt           ; Retour à la boucle principale.
+.a1e2	a9 00		compar      lda   #0          ; bit 7 efface les signaux comparer
+>a1e4	2c		            .byte $2c         ; L'opcode de bit absolu consomme le mot suivant
+.a1e5	a9 80		trans       lda   #$80        ; Bit 7 place le transfert de signaux
+.a1e7	8d 16 bb	            sta   savy        ; Enregistrer l'indicateur de
+.a1ea	a9 00		            lda   #0          ; Suppose que nous comptons à rebours (b7 clair)
+.a1ec	8d bd ba	            sta   upflg       ; Enregistrer le drapeau de direction
+.a1ef	20 1c a8	            jsr   getdif      ; Obtien deux adresses et calcule la différence
+.a1f2	b0 05		            bcs   terror      ; Bit carry a un indique une erreur
+.a1f4	20 7d a6	            jsr   getpar      ; obtien l'adresse de destination dans tmp0
+.a1f7	90 03		            bcc   tokay       ; Bit carry a un indique une erreur
+.a1f9	4c 87 a0	terror      jmp   error       ; Gère les erreurs
+.a1fc	2c 16 bb	tokay       bit   savy        ; Transférer ou comparer ?
+.a1ff	10 27		            bpl   compar1     ; Bit 7 à 0 indique comparer
+.a201	a5 c3		            lda   tmp2        ; S'il s'agit d'un transfert, nous devons
+.a203	c5 c1		            cmp   tmp0        ; ... prendre des mesures pour éviter d'écraser
+.a205	a5 c4		            lda   tmp2+1      ; ... les octets sources avant qu'ils n'aient été
+.a207	e5 c2		            sbc   tmp0+1      ; Comparer la source (tmp2) à la destination
+.a209	b0 1d		            bcs   compar1     ; ... (tmp0) et incrémenter si la source est
+.a20b	ad 13 bb	            lda   store       ; Sinon, commencez par la fin et décomptez en
+.a20e	65 c1		            adc   tmp0        ; ... ajoutant la longueur (stockée) à la
+.a210	85 c1		            sta   tmp0        ; ... destination (tmp0) pour calculer la fin de
+.a212	ad 14 bb	            lda   store+1
+.a215	65 c2		            adc   tmp0+1
+.a217	85 c2		            sta   tmp0+1
+.a219	a2 01		            ldx   #1          ; Modifier le pointeur source du début à la fin
+.a21b	bd c1 ba	tdown       lda   stash,x     ; tmp2 = fin de la source (réserve).
+.a21e	95 c3		            sta   tmp2,x
+.a220	ca		            dex
+.a221	10 f8		            bpl   tdown
+.a223	a9 80		            lda   #$80        ; Le bit haut activé dans upflg signifie un
+.a225	8d bd ba	            sta   upflg
+.a228	20 5b a7	compar1     jsr   crlf        ; Nouvelle ligne.
+.a22b	a0 00		            ldy   #0          ; Aucun décalage par rapport au pointeur.
+.a22d	20 70 f7	tcloop      jsr   stop        ; Vérifier la touche [RUN/STOP].
+.a230	f0 31		            beq   texit       ; Quitte si appuiée.
+.a232	b1 c3		            lda   (tmp2),y    ; Charge un octet depuis la source.
+.a234	2c 16 bb	            bit   savy        ; Transférer ou comparer?
+.a237	10 02		            bpl   compar2     ; Ignorer la sauvegarde si comparaison.
+.a239	91 c1		            sta   (tmp0),y    ; Sinon, stocker dans la destination.
+.a23b	d1 c1		compar2     cmp   (tmp0),y    ; Comparer à la destination.
+.a23d	f0 03		            beq   tmvad       ; Ne pas afficher l'adresse si égale
+.a23f	20 46 a7	            jsr   showad      ; Afficher l'adresse
+.a242	2c bd ba	tmvad       bit   upflg       ; Compter en avant ou en arrière ?
+.a245	30 0b		            bmi   tdecad      ; Le bit 7 activé signifie que nous décomptons.
+.a247	e6 c1		            inc   tmp0        ; Incrémenter l'octet LSB de la destination.
+.a249	d0 10		            bne   tincok
+.a24b	e6 c2		            inc   tmp0+1      ; Reporte au MSB si nécessaire.
+.a24d	d0 0c		            bne   tincok
+.a24f	4c 87 a0	            jmp   error       ; Erreur si dépassement de capacité du MSB.
+.a252	20 cf a7	tdecad      jsr   suba1       ; Décrémenter la destination (tmp0).
+.a255	20 01 a8	            jsr   sub21       ; Décrémenter la source (tmp2).
+.a258	4c 5e a2	            jmp   tmor
+.a25b	20 f5 a7	tincok      jsr   adda2       ; Incrémenter la source (tmp2).
+.a25e	20 e3 a7	tmor        jsr   sub13       ; Décrémenter la longueur.
+.a261	b0 ca		            bcs   tcloop      ; Boucle jusqu'à ce que la longueur soit 0.
+.a263	4c 3e a0	texit       jmp   strt        ; Retour à la boucle principale.
 .a266	a9 00		hunt        lda   #$00
 .a268	8d 18 bb	            sta   bcount
-.a26b	20 1c a8	            jsr  getdif         ; Obtenir le début (tmp2) et la fin (tmp0)
-.a26e	b0 6d		          bcs  herror         ; Le report indique une erreur
-.a270	a0 00		          ldy  #0
-.a272	20 9c a7	          jsr  getchr         ; Obtenir un seul caractère
-.a275	c9 27		          cmp  #"'"           ; S'agit-il d'un simple guillemet ?
-.a277	d0 16		          bne  nostrh         ; Sinon, saisir l'entrée sous forme hexadécimal.
-.a279	20 9c a7	          jsr  getchr         ; Si oui, saisir l'entrée sous forme de chaine.
-.a27c	c9 00		          cmp  #0
-.a27e	f0 5d		          beq  herror         ; Erreur si l'entrée est vide.
-.a280	99 c3 ba	hpar      sta  stage,y        ; Sauvegarder caractere dans la zone de stockage
-.a283	c8		          iny
-.a284	20 9c a7	          jsr  getchr         ; Obtenir un autre caractère
-.a287	f0 18		          beq  htgo           ; Si la valeur est nulle, commencez la recherche.
-.a289	c0 1e		          cpy  #estage-stage  ; Avons-nous rempli la zone de stockage?
-.a28b	d0 f3		          bne  hpar           ; Sinon, obtenir un autre personnage
-.a28d	f0 12		          beq  htgo           ; Si oui, commencez à chercher
-.a28f	20 7a a6	nostrh    jsr  rdpar          ; Lire les octets hexadécimaux si pas une chaîne.
-.a292	a5 c1		hlp       lda  tmp0           ; Enregistrer dernier octet dans zone de stockage
-.a294	99 c3 ba	          sta  stage,y
-.a297	c8		          iny                 ; Obtenir un autre octet hexadécimal
-.a298	20 7d a6	          jsr  getpar
-.a29b	b0 04		          bcs  htgo           ; S'il n'y en a pas, commencez la recherche
-.a29d	c0 1e		          cpy  #estage-stage  ; Avons-nous rempli la zone de stockage ?
-.a29f	d0 f1		          bne  hlp            ; Sinon, récupérez un autre octet
-.a2a1	8c 16 bb	htgo      sty  savy           ; Sauvegarder la longueur de la zone de stockage
-.a2a4	20 5b a7	          jsr  crlf           ; Nouvelle ligne
-.a2a7	a0 00		hscan     ldy  #0
-.a2a9	b1 c3		hlp3      lda  (tmp2),y       ; Récupérer le premier octet de la zone de stock.
-.a2ab	d9 c3 ba	          cmp  stage,y        ; Comparez-le au premier octet.
-.a2ae	d0 1d		          bne  hnoft          ; S'ilsne correspondent pas, alors rien trouvé.
-.a2b0	c8		          iny                 ; Si oui, vérifiez l'octet suivant
-.a2b1	cc 16 bb	          cpy  savy           ; Est-ce la fin de la zone de stockage
-.a2b4	d0 f3		          bne  hlp3           ; Sinon, continuez à comparer les octets
-.a2b6	20 46 a7	          jsr  showad         ; Correspondance trouvée, afficher l'adresse
-.a2b9	ee 18 bb	            inc   bcount
-.a2bc	ad 18 bb	            lda   bcount
-.a2bf	c9 04		            cmp   #$04
-.a2c1	d0 0a		            bne   hnoft
-.a2c3	29 00		            and   #$00
-.a2c5	8d 18 bb	            sta   bcount
-.a2c8	a9 0d		            lda   #$0d
-.a2ca	20 d2 ff	            jsr   $ffd2
-.a2cd	20 70 f7	hnoft     jsr  stop           ; Si non, vérifiez la touche [RUN/STOP]
-.a2d0	f0 08		          beq  hexit          ; Quitter si pressé
-.a2d2	20 f5 a7	          jsr  adda2          ; Incrémente le pointeur de la zone de stockage
-.a2d5	20 e3 a7	          jsr  sub13          ; Décrémente la longueur de la zone de stockage
-.a2d8	b0 cd		          bcs  hscan          ; Il reste des octets, continuer la recherche.
-.a2da	4c 3e a0	hexit     jmp  strt           ; Retour à la boucle principale
-.a2dd	4c 87 a0	herror    jmp  error          ; Gérer les erreurs.
-.a2e0	a0 01		ld        ldy  #1             ; Lecture par défaut sur bande, périphérique n° 1
-.a2e2	84 ba		          sty  fa
-.a2e4	84 b9		          sty  sa           ; Par défaut, l'adresse secondaire n° 1
-.a2e6	88		          dey
-.a2e7	84 b7		          sty  curfnlen          ; Commencer par un nom de fichier vide
-.a2e9	84 90		          sty  satus          ; Effacer le statut
-.a2eb	a9 ba		          lda  #>stage        ; Pointer de nom de fichier sur la mémoire tampon
-.a2ed	85 bc		          sta  fnadr+1
+.a26b	20 1c a8	            jsr   getdif      ; Obtenir le début (tmp2) et la fin (tmp0)
+.a26e	b0 6d		            bcs   herror      ; Le report indique une erreur
+.a270	a0 00		            ldy   #0
+.a272	20 9c a7	            jsr   getchr      ; Obtenir un seul caractère
+.a275	c9 27		            cmp   #"'"        ; S'agit-il d'un simple guillemet ?
+.a277	d0 16		            bne   nostrh      ; Sinon, saisir l'entrée sous forme hexadécimal.
+.a279	20 9c a7	            jsr   getchr      ; Si oui, saisir l'entrée sous forme de chaine.
+.a27c	c9 00		            cmp   #0
+.a27e	f0 5d		            beq   herror      ; Erreur si l'entrée est vide.
+.a280	99 c3 ba	hpar        sta   stage,y     ; Sauvegarder caractere dans la zone de stockage
+.a283	c8		            iny
+.a284	20 9c a7	            jsr   getchr      ; Obtenir un autre caractère
+.a287	f0 18		            beq   htgo        ; Si la valeur est nulle, commencez la recherche.
+.a289	c0 1e		            cpy   #estage-stage ; Avons-nous rempli la zone de stockage?
+.a28b	d0 f3		            bne   hpar        ; Sinon, obtenir un autre personnage
+.a28d	f0 12		            beq   htgo        ; Si oui, commencez à chercher
+.a28f	20 7a a6	nostrh      jsr   rdpar       ; Lire les octets hexadécimaux si pas une chaîne.
+.a292	a5 c1		hlp         lda   tmp0        ; Enregistrer dernier octet dans zone de stockage
+.a294	99 c3 ba	            sta   stage,y
+.a297	c8		            iny               ; Obtenir un autre octet hexadécimal
+.a298	20 7d a6	            jsr   getpar
+.a29b	b0 04		            bcs   htgo        ; S'il n'y en a pas, commencez la recherche
+.a29d	c0 1e		            cpy   #estage-stage ; Avons-nous rempli la zone de stockage ?
+.a29f	d0 f1		            bne   hlp         ; Sinon, récupérez un autre octet
+.a2a1	8c 16 bb	htgo        sty   savy        ; Sauvegarder la longueur de la zone de stockage
+.a2a4	20 5b a7	            jsr   crlf        ; Nouvelle ligne
+.a2a7	a0 00		hscan       ldy   #0
+.a2a9	b1 c3		hlp3        lda   (tmp2),y    ; Récupérer le premier octet de la zone de stock.
+.a2ab	d9 c3 ba	            cmp   stage,y     ; Comparez-le au premier octet.
+.a2ae	d0 1d		            bne   hnoft       ; S'ilsne correspondent pas, alors rien trouvé.
+.a2b0	c8		            iny               ; Si oui, vérifiez l'octet suivant
+.a2b1	cc 16 bb	            cpy   savy        ; Est-ce la fin de la zone de stockage
+.a2b4	d0 f3		            bne   hlp3        ; Sinon, continuez à comparer les octets
+.a2b6	20 46 a7	            jsr   showad      ; Correspondance trouvée, afficher l'adresse
+.a2b9	ee 18 bb	            inc   bcount      ;\
+.a2bc	ad 18 bb	            lda   bcount      ; \
+.a2bf	c9 04		            cmp   #$04        ;  \
+.a2c1	d0 0a		            bne   hnoft       ;   \ DL 2026 - Place les adresse trouvées en
+.a2c3	29 00		            and   #$00        ;   / 4 colonnes
+.a2c5	8d 18 bb	            sta   bcount      ;  /
+.a2c8	a9 0d		            lda   #$0d        ; /
+.a2ca	20 d2 ff	            jsr   $ffd2       ;/
+.a2cd	20 70 f7	hnoft       jsr   stop        ; Si non, vérifiez la touche [RUN/STOP]
+.a2d0	f0 08		            beq   hexit       ; Quitter si pressé
+.a2d2	20 f5 a7	            jsr   adda2       ; Incrémente le pointeur de la zone de stockage
+.a2d5	20 e3 a7	            jsr   sub13       ; Décrémente la longueur de la zone de stockage
+.a2d8	b0 cd		            bcs   hscan       ; Il reste des octets, continuer la recherche.
+.a2da	4c 3e a0	hexit       jmp   strt        ; Retour à la boucle principale
+.a2dd	4c 87 a0	herror      jmp   error       ; Gérer les erreurs.
+.a2e0	a0 01		ld          ldy  #1             ; Lecture par défaut sur bande, périphérique n° 1
+.a2e2	84 ba		            sty  fa
+.a2e4	84 b9		            sty  sa           ; Par défaut, l'adresse secondaire n° 1
+.a2e6	88		            dey
+.a2e7	84 b7		            sty  curfnlen          ; Commencer par un nom de fichier vide
+.a2e9	84 90		            sty  satus          ; Effacer le statut
+.a2eb	a9 ba		            lda  #>stage        ; Pointer de nom de fichier sur la mémoire tampon
+.a2ed	85 bc		            sta  fnadr+1
 .a2ef	a9 c3		          lda  #<stage
 .a2f1	85 bb		          sta  fnadr
 .a2f3	20 9c a7	l1        jsr  getchr         ; Obtenir un caractere.

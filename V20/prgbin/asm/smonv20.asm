@@ -340,142 +340,142 @@ dchrok      sta  (zp1),y      ; *DL* - On affiche le caractere.
 ;-----------------------------------------------------------------------------
 ; compare memory [c]
 ;-----------------------------------------------------------------------------
-compar    lda  #0             ; bit 7 efface les signaux comparer
-          .byte $2c           ; L'opcode de bit absolu consomme le mot suivant
+compar      lda   #0          ; bit 7 efface les signaux comparer
+            .byte $2c         ; L'opcode de bit absolu consomme le mot suivant
                               ; ... (lda #$80).
 
 ;-----------------------------------------------------------------------------
 ; transfer memory [t]
 ;-----------------------------------------------------------------------------
-trans     lda  #$80           ; Bit 7 place le transfert de signaux
-          sta  savy           ; Enregistrer l'indicateur de 
+trans       lda   #$80        ; Bit 7 place le transfert de signaux
+            sta   savy        ; Enregistrer l'indicateur de 
                               ; ... comparaison/transfert dans Savy
-          lda  #0             ; Suppose que nous comptons à rebours (b7 clair)
-          sta  upflg          ; Enregistrer le drapeau de direction
-          jsr  getdif         ; Obtien deux adresses et calcule la différence
+            lda   #0          ; Suppose que nous comptons à rebours (b7 clair)
+            sta   upflg       ; Enregistrer le drapeau de direction
+            jsr   getdif      ; Obtien deux adresses et calcule la différence
                               ; ... tmp2  = debut de la source
                               ; ... stash = fin de la source end
                               ; ... store = longueur
-          bcs  terror         ; Bit carry a un indique une erreur
-          jsr  getpar         ; obtien l'adresse de destination dans tmp0
-          bcc  tokay          ; Bit carry a un indique une erreur
-terror    jmp  error          ; Gère les erreurs
-tokay     bit  savy           ; Transférer ou comparer ?
-          bpl  compar1        ; Bit 7 à 0 indique comparer
-          lda  tmp2           ; S'il s'agit d'un transfert, nous devons 
-          cmp  tmp0           ; ... prendre des mesures pour éviter d'écraser 
-          lda  tmp2+1         ; ... les octets sources avant qu'ils n'aient été 
+            bcs   terror      ; Bit carry a un indique une erreur
+            jsr   getpar      ; obtien l'adresse de destination dans tmp0
+            bcc   tokay       ; Bit carry a un indique une erreur
+terror      jmp   error       ; Gère les erreurs
+tokay       bit   savy        ; Transférer ou comparer ?
+            bpl   compar1     ; Bit 7 à 0 indique comparer
+            lda   tmp2        ; S'il s'agit d'un transfert, nous devons 
+            cmp   tmp0        ; ... prendre des mesures pour éviter d'écraser 
+            lda   tmp2+1      ; ... les octets sources avant qu'ils n'aient été 
                               ; ... transférés  
-          sbc  tmp0+1         ; Comparer la source (tmp2) à la destination
-          bcs  compar1        ; ... (tmp0) et incrémenter si la source est 
+            sbc   tmp0+1      ; Comparer la source (tmp2) à la destination
+            bcs   compar1     ; ... (tmp0) et incrémenter si la source est 
                               ; ... antérieure à la destination.
-          lda  store          ; Sinon, commencez par la fin et décomptez en 
-          adc  tmp0           ; ... ajoutant la longueur (stockée) à la 
-          sta  tmp0           ; ... destination (tmp0) pour calculer la fin de 
+            lda   store       ; Sinon, commencez par la fin et décomptez en 
+            adc   tmp0        ; ... ajoutant la longueur (stockée) à la 
+            sta   tmp0        ; ... destination (tmp0) pour calculer la fin de 
                               ; ... la destination.
-          lda  store+1
-          adc  tmp0+1
-          sta  tmp0+1
-          ldx  #1             ; Modifier le pointeur source du début à la fin
-tdown     lda  stash,x        ; tmp2 = fin de la source (réserve).
-          sta  tmp2,x
-          dex  
-          bpl  tdown
-          lda  #$80           ; Le bit haut activé dans upflg signifie un 
+            lda   store+1
+            adc   tmp0+1
+            sta   tmp0+1
+            ldx   #1          ; Modifier le pointeur source du début à la fin
+tdown       lda   stash,x     ; tmp2 = fin de la source (réserve).
+            sta   tmp2,x
+            dex    
+            bpl   tdown
+            lda   #$80        ; Le bit haut activé dans upflg signifie un 
                               ; ... compte à rebours.
-          sta  upflg
-compar1   jsr  crlf           ; Nouvelle ligne.
-          ldy  #0             ; Aucun décalage par rapport au pointeur.
-tcloop    jsr  stop           ; Vérifier la touche [RUN/STOP].
-          beq  texit          ; Quitte si appuiée.
-          lda  (tmp2),y       ; Charge un octet depuis la source.
-          bit  savy           ; Transférer ou comparer?
-          bpl  compar2        ; Ignorer la sauvegarde si comparaison.
-          sta  (tmp0),y       ; Sinon, stocker dans la destination.
-compar2   cmp  (tmp0),y       ; Comparer à la destination.
-          beq  tmvad          ; Ne pas afficher l'adresse si égale
-          jsr  showad         ; Afficher l'adresse
-tmvad     bit  upflg          ; Compter en avant ou en arrière ?
-          bmi  tdecad         ; Le bit 7 activé signifie que nous décomptons.
-          inc  tmp0           ; Incrémenter l'octet LSB de la destination.
-          bne  tincok
-          inc  tmp0+1         ; Reporte au MSB si nécessaire.
-          bne  tincok
-          jmp  error          ; Erreur si dépassement de capacité du MSB.
-tdecad    jsr  suba1          ; Décrémenter la destination (tmp0).
-          jsr  sub21          ; Décrémenter la source (tmp2).
-          jmp  tmor
-tincok    jsr  adda2          ; Incrémenter la source (tmp2).
-tmor      jsr  sub13          ; Décrémenter la longueur.
-          bcs  tcloop         ; Boucle jusqu'à ce que la longueur soit 0.
-texit     jmp  strt           ; Retour à la boucle principale.
+            sta   upflg
+compar1     jsr   crlf        ; Nouvelle ligne.
+            ldy   #0          ; Aucun décalage par rapport au pointeur.
+tcloop      jsr   stop        ; Vérifier la touche [RUN/STOP].
+            beq   texit       ; Quitte si appuiée.
+            lda   (tmp2),y    ; Charge un octet depuis la source.
+            bit   savy        ; Transférer ou comparer?
+            bpl   compar2     ; Ignorer la sauvegarde si comparaison.
+            sta   (tmp0),y    ; Sinon, stocker dans la destination.
+compar2     cmp   (tmp0),y    ; Comparer à la destination.
+            beq   tmvad       ; Ne pas afficher l'adresse si égale
+            jsr   showad      ; Afficher l'adresse
+tmvad       bit   upflg       ; Compter en avant ou en arrière ?
+            bmi   tdecad      ; Le bit 7 activé signifie que nous décomptons.
+            inc   tmp0        ; Incrémenter l'octet LSB de la destination.
+            bne   tincok
+            inc   tmp0+1      ; Reporte au MSB si nécessaire.
+            bne   tincok
+            jmp   error       ; Erreur si dépassement de capacité du MSB.
+tdecad      jsr   suba1       ; Décrémenter la destination (tmp0).
+            jsr   sub21       ; Décrémenter la source (tmp2).
+            jmp   tmor
+tincok      jsr   adda2       ; Incrémenter la source (tmp2).
+tmor        jsr   sub13       ; Décrémenter la longueur.
+            bcs   tcloop      ; Boucle jusqu'à ce que la longueur soit 0.
+texit       jmp   strt        ; Retour à la boucle principale.
 
 ;-----------------------------------------------------------------------------
 ; Chercher en mémoire [h]
 ;-----------------------------------------------------------------------------
 hunt        lda   #$00
             sta   bcount
-            jsr  getdif         ; Obtenir le début (tmp2) et la fin (tmp0) 
-          bcs  herror         ; Le report indique une erreur
-          ldy  #0
-          jsr  getchr         ; Obtenir un seul caractère
-          cmp  #"'"           ; S'agit-il d'un simple guillemet ?
-          bne  nostrh         ; Sinon, saisir l'entrée sous forme hexadécimal.
-          jsr  getchr         ; Si oui, saisir l'entrée sous forme de chaine.
-          cmp  #0
-          beq  herror         ; Erreur si l'entrée est vide.
-hpar      sta  stage,y        ; Sauvegarder caractere dans la zone de stockage
-          iny 
-          jsr  getchr         ; Obtenir un autre caractère
-          beq  htgo           ; Si la valeur est nulle, commencez la recherche.
-          cpy  #estage-stage  ; Avons-nous rempli la zone de stockage?
-          bne  hpar           ; Sinon, obtenir un autre personnage
-          beq  htgo           ; Si oui, commencez à chercher
-nostrh    jsr  rdpar          ; Lire les octets hexadécimaux si pas une chaîne.
-hlp       lda  tmp0           ; Enregistrer dernier octet dans zone de stockage
-          sta  stage,y
-          iny                 ; Obtenir un autre octet hexadécimal
-          jsr  getpar
-          bcs  htgo           ; S'il n'y en a pas, commencez la recherche
-          cpy  #estage-stage  ; Avons-nous rempli la zone de stockage ?
-          bne  hlp            ; Sinon, récupérez un autre octet
-htgo      sty  savy           ; Sauvegarder la longueur de la zone de stockage
-          jsr  crlf           ; Nouvelle ligne
-hscan     ldy  #0
-hlp3      lda  (tmp2),y       ; Récupérer le premier octet de la zone de stock.
-          cmp  stage,y        ; Comparez-le au premier octet.
-          bne  hnoft          ; S'ilsne correspondent pas, alors rien trouvé.
-          iny                 ; Si oui, vérifiez l'octet suivant
-          cpy  savy           ; Est-ce la fin de la zone de stockage
-          bne  hlp3           ; Sinon, continuez à comparer les octets
-          jsr  showad         ; Correspondance trouvée, afficher l'adresse
-            inc   bcount
-            lda   bcount
-            cmp   #$04
-            bne   hnoft
-            and   #$00
-            sta   bcount
-            lda   #$0d
-            jsr   $ffd2
-hnoft     jsr  stop           ; Si non, vérifiez la touche [RUN/STOP]
-          beq  hexit          ; Quitter si pressé
-          jsr  adda2          ; Incrémente le pointeur de la zone de stockage
-          jsr  sub13          ; Décrémente la longueur de la zone de stockage
-          bcs  hscan          ; Il reste des octets, continuer la recherche.
-hexit     jmp  strt           ; Retour à la boucle principale
-herror    jmp  error          ; Gérer les erreurs.
+            jsr   getdif      ; Obtenir le début (tmp2) et la fin (tmp0) 
+            bcs   herror      ; Le report indique une erreur
+            ldy   #0
+            jsr   getchr      ; Obtenir un seul caractère
+            cmp   #"'"        ; S'agit-il d'un simple guillemet ?
+            bne   nostrh      ; Sinon, saisir l'entrée sous forme hexadécimal.
+            jsr   getchr      ; Si oui, saisir l'entrée sous forme de chaine.
+            cmp   #0
+            beq   herror      ; Erreur si l'entrée est vide.
+hpar        sta   stage,y     ; Sauvegarder caractere dans la zone de stockage
+            iny 
+            jsr   getchr      ; Obtenir un autre caractère
+            beq   htgo        ; Si la valeur est nulle, commencez la recherche.
+            cpy   #estage-stage ; Avons-nous rempli la zone de stockage?
+            bne   hpar        ; Sinon, obtenir un autre personnage
+            beq   htgo        ; Si oui, commencez à chercher
+nostrh      jsr   rdpar       ; Lire les octets hexadécimaux si pas une chaîne.
+hlp         lda   tmp0        ; Enregistrer dernier octet dans zone de stockage
+            sta   stage,y
+            iny               ; Obtenir un autre octet hexadécimal
+            jsr   getpar
+            bcs   htgo        ; S'il n'y en a pas, commencez la recherche
+            cpy   #estage-stage ; Avons-nous rempli la zone de stockage ?
+            bne   hlp         ; Sinon, récupérez un autre octet
+htgo        sty   savy        ; Sauvegarder la longueur de la zone de stockage
+            jsr   crlf        ; Nouvelle ligne
+hscan       ldy   #0
+hlp3        lda   (tmp2),y    ; Récupérer le premier octet de la zone de stock.
+            cmp   stage,y     ; Comparez-le au premier octet.
+            bne   hnoft       ; S'ilsne correspondent pas, alors rien trouvé.
+            iny               ; Si oui, vérifiez l'octet suivant
+            cpy   savy        ; Est-ce la fin de la zone de stockage
+            bne   hlp3        ; Sinon, continuez à comparer les octets
+            jsr   showad      ; Correspondance trouvée, afficher l'adresse
+            inc   bcount      ;\ 
+            lda   bcount      ; \
+            cmp   #$04        ;  \
+            bne   hnoft       ;   \ DL 2026 - Place les adresse trouvées en
+            and   #$00        ;   / 4 colonnes
+            sta   bcount      ;  /
+            lda   #$0d        ; /
+            jsr   $ffd2       ;/
+hnoft       jsr   stop        ; Si non, vérifiez la touche [RUN/STOP]
+            beq   hexit       ; Quitter si pressé
+            jsr   adda2       ; Incrémente le pointeur de la zone de stockage
+            jsr   sub13       ; Décrémente la longueur de la zone de stockage
+            bcs   hscan       ; Il reste des octets, continuer la recherche.
+hexit       jmp   strt        ; Retour à la boucle principale
+herror      jmp   error       ; Gérer les erreurs.
 
 ;-----------------------------------------------------------------------------
 ; Charger (load), enregistrer (save), ou verifier [lsv]
 ;-----------------------------------------------------------------------------
-ld        ldy  #1             ; Lecture par défaut sur bande, périphérique n° 1
-          sty  fa
-          sty  sa           ; Par défaut, l'adresse secondaire n° 1
-          dey
-          sty  curfnlen          ; Commencer par un nom de fichier vide
-          sty  satus          ; Effacer le statut
-          lda  #>stage        ; Pointer de nom de fichier sur la mémoire tampon
-          sta  fnadr+1
+ld          ldy  #1             ; Lecture par défaut sur bande, périphérique n° 1
+            sty  fa
+            sty  sa           ; Par défaut, l'adresse secondaire n° 1
+            dey
+            sty  curfnlen          ; Commencer par un nom de fichier vide
+            sty  satus          ; Effacer le statut
+            lda  #>stage        ; Pointer de nom de fichier sur la mémoire tampon
+            sta  fnadr+1
           lda  #<stage
           sta  fnadr
 l1        jsr  getchr         ; Obtenir un caractere.
