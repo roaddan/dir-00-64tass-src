@@ -26,3 +26,4 @@ ext            .null     ".chr"
 device         .byte     8
 tmpbyte        .byte     $00
 copykey        .byte     0  
+tempbyte       .byte     0

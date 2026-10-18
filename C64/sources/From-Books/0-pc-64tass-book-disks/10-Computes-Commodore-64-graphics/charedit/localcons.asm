@@ -17,3 +17,10 @@ flashcol       =    vblanc
 whoamicol      =    vjaune
 charcolor      =    vblanc   
 charscolor     =    vbleu
+
+; drawlines
+hline1=4
+hline2=6
+hline3=18
+vlinepos=16
+vzplit=scrnnewram+(6*40)+8

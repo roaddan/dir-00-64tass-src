@@ -4,94 +4,94 @@ version  = "20261015-000001"
             .include    "e-header-c64.asm"
             .include    "localcons.asm"
             .enc        "none"
-main           .block
-               jsr  push
-               jsr  scrmaninit
-               #disable
-               jsr  drawcredits
-               jsr  sid_tada
-               #printcxy menu_msg
-               jsr  screendis
-               jsr  copycharset
-               jsr  cls
-               jsr  setscreenptr
-               jsr  setdfltchar
-               jsr  drawstatic
-               jsr  drawbitmap
-               lda  #$00
-               sta  fkeyset
-               jsr  drawfkeys
-               lda  #$00
-               #affichemesg prompt_msg
-               jsr  kbflushbuff
-               jsr  screenena 
-               jsr  keyaction
-               jsr  cls
-               jsr  drawcredits
-               #printcxy bye_msg
-               #printcxy any_msg
-               jsr  getkey
-               jsr  cls       
-endmain        jsr  pop
-               ;jsr  k_coldboot
-               brk
-               .bend
+main        .block
+            jsr   push
+            jsr   scrmaninit
+            #disable
+            jsr   drawcredits
+            jsr   sid_tada
+            #printcxy menu_msg
+            jsr   screendis
+            jsr   copycharset
+            jsr   cls
+            jsr   setscrptr
+            jsr   setdfltchar
+            jsr   drawstatic
+            jsr   drawbitmap
+            lda   #$00
+            sta   fkeyset
+            jsr   drawfkeys
+            lda   #$00
+            #affichemesg prompt_msg
+            jsr   kbflushbuff
+            jsr   screenena 
+            jsr   keyaction
+            jsr   cls
+            jsr   drawcredits
+            #printcxy bye_msg
+            #printcxy any_msg
+            jsr   getkey
+            jsr   cls       
+endmain     jsr   pop
+            ;jsr  k_coldboot
+            brk
+            .bend
 
-savetofile     .block
-               jsr  pushall
-               lda  #<fname
-               sta  dsk_fnptr
-               lda  #>fname
-               sta  dsk_fnptr+1
-               lda  #(device-fname-1)               
-               sta  dsk_fnlen
-               lda  device
-               and  #$0f
-               sta  dsk_lfsno
-               sta  dsk_dev
-               lda  #<bitmapmem
-               sta  dsk_data_s
-               lda  #>bitmapmem
-               sta  dsk_data_s+1
-               lda  #<endofaddr
-               sta  dsk_data_e
-               lda  #>endofaddr
-               sta  dsk_data_e+1
-               #printcxy blankmsg
-               #printcxy wait_msg
-               #locate 1,4
-               jsr  memtofile
-               jsr  popall
-               rts
-               .bend
+savetofile  .block
+            jsr   pushall
+            lda   #<fname
+            sta   dsk_fnptr
+            lda   #>fname
+            sta   dsk_fnptr+1
+            lda   #(device-fname-1)            
+            sta   dsk_fnlen
+            lda   device
+            and   #$0f
+            sta   dsk_lfsno
+            sta   dsk_dev
+            lda   #<bitmapmem
+            sta   dsk_data_s
+            lda   #>bitmapmem
+            sta   dsk_data_s+1
+            lda   #<endofaddr
+            sta   dsk_data_e
+            lda   #>endofaddr
+            sta   dsk_data_e+1
+            #printcxy blankmsg
+            #printcxy wait_msg
+            #locate 1,4
+            jsr   memtofile
+            jsr   popall
+            rts
+            .bend
 
 loadfromfile   .block
-               jsr  pushall
-               lda  #<fname
-               sta  dsk_fnptr
-               lda  #>fname
-               sta  dsk_fnptr+1
-               lda  #(device-fname-1)
-               sta  dsk_fnlen
-               lda  device
-               and  #$0f
-               sta  dsk_dev
-               sta  dsk_lfsno
-               lda  #<bitmapmem
-               sta  dsk_data_s
-               lda  #>bitmapmem
-               sta  dsk_data_s+1
-               lda  #<endofaddr
-               sta  dsk_data_e
-               lda  #>endofaddr
-               sta  dsk_data_e+1
-               #printcxy blankmsg
-               #printcxy wait_msg
-               #locate 1,4
-               jsr  filetomem
-               jsr  popall
-               rts
-               .bend
+            jsr   pushall
+            lda   #<fname
+            sta   dsk_fnptr
+            lda   #>fname
+            sta   dsk_fnptr+1
+            lda   #(device-fname-1)
+            sta   dsk_fnlen
+            lda   device
+            and   #$0f
+            sta   dsk_dev
+            sta   dsk_lfsno
+            lda   #<bitmapmem
+            sta   dsk_data_s
+            lda   #>bitmapmem
+            sta   dsk_data_s+1
+            lda   #<endofaddr
+            sta   dsk_data_e
+            lda   #>endofaddr
+            sta   dsk_data_e+1
+            #printcxy blankmsg
+            #printcxy wait_msg
+            #locate 1,4
+            jsr   filetomem
+            jsr   popall
+            rts
+            .bend
 
 ;-----------------------------------------------------------------------------
 ; Including my self written libraries.
