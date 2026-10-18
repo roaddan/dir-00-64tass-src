@@ -1,69 +1,67 @@
 # -----------------------------------------------------------------------------
-# --------- 6 4 t a s s   m a k e   f i l e   w i t h   V i c e ---------------
-# ----------------- a n d   F T P   u t i l i t i e s . -----------------------
-# ---------------------- L I N U X   V E R S I O N ----------------------------
+# ----- F i c h i e r   M a k e   p o u r  6 4 t a s s   avec   V i c e -------
+# ----------------- e t  u t i l i t a i r e s  F T P . -----------------------
+# ----------------------- V E R S I O N  L I N U X ----------------------------
 # -----------------------------------------------------------------------------
 # Note:
-# 	A) 64tass can be downloaded from :
+# 	A) 64tass peut être téléchargé de :
 #		https://sourceforge.net/projects/tass64/
 #
-#	B) 64tass documentation can be found at :
+#	B) La documentation de 64tass est disponnible ici :
 #		https://tass64.sourceforge.net/
 #
-# 	C) Vice emulator utility is mandatory and available at :
+# 	C) L'émulateur Vice peut être trouvé ici :
 #			"https://vice-emu.sourceforge.io"
 #
-#	D) You must decide of an absolute output directory (\path).
-#	   Drive name should be specified under windows. (ex: C:\path...)
-#
-# -----------------------------------------------------------------------------
-# ----------------------- 6 4 T A S S   S E C T I O N -------------------------
-# -----------------------------------------------------------------------------
-# This can be change to any assembler of your liking.
-# Final location where the assembled files must be copied.
-PRGDIR=d-00-64tass-bin
+#	D) Vous devez spécifier un chemin d'accèes absolue (\path).
+#	   Le lecteur doit être spécifié sous MS-Windows. (ex: C:\path...)
 #
 # -----------------------------------------------------------------------------
 # ----------------------- P R O J E C T   S E C T I O N -----------------------
 # -----------------------------------------------------------------------------
-# The basename of your project main file ((no extension) .asm is presumed).
-# Could be different for every project.""
-SOURCENAME=prog
-DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
-# DEPSLOCALES=strings_fr.asm  strings_en.asm
+# Le nom de base du fichier principal de votre projet 
+# (sans extension ; .asm est supposé).
+# Cela peut varier d'un projet à l'autre.
+SOURCENAME=template
+# Emplacement final où les fichiers assemblés doivent être copiés.
+PRGDIR=dir-00-64tass-bin
+# Le chemin d'accès complet au répertoire partagé commun du projet pour des 
+# éléments tels que librairies, fichiers data, images, etc.
+BASEDIR=/Users/Locals/CBM/00-usbkey32go
+# 64tass allows to include libraries of code and routines of your making.
+# Le chemin complet vers le répertoire de votre bibliothèque globales.
+LIBDIR=$(BASEDIR)/dir-00-64tass-src/C64/lib/libstd
+#LIBDIR=$(BASEDIR)/dir-00-64tass-src/C64/lib/librom
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
-LIBDEPS=$(shell find /Users/Locals/C64/00-usbkey32go/d-00-64tass-src/lib -maxdepth 1 -type f -iname "*.asm")
+LIBDEPS=$(shell find $(LIBDIR) -maxdepth 1 -type f -iname "*.asm")
+DEPSLOCALES=$(shell find . -maxdepth 1 -type f -iname "*.asm")
 DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
-# The lowest common project shared directory complete path for things like ...
-# librairies, data files, images, etc.
-BASEDIR=/Users/Locals/C64/00-usbkey32go
-# Since the make file will be executed from within your project ...
-# ... the following detail is used to specify where the resulting ...
-# ... files will be placed. # Complete path where the compiled files will be
-# ... deposited.
-# Since the make file will be executed from within your project the following
-# detail is used to specify where the resulting files will be placed.
-# >> Complete path where the compiled files will be placed.
-OUTDIRC64=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
-OUTDIRV20=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/prgbin
 #
-# 64tass allows to include libraries of code and routines of your making.
-# The Complete path to your library directory.
-LIBDIR=$(BASEDIR)/d-00-64tass-src/lib
+# Le fichier make étant exécuté depuis votre projet, les informations ... 
+# ... suivantes servent à spécifier l'emplacement des fichiers générés. 
+# Chemin complet où seront déposés les fichiers compilés.
+OUTDIRC64=$(BASEDIR)/dir-00-64tass-src/C64/prgbin
+OUTDIRV20=$(BASEDIR)/dir-00-64tass-src/V20/prgbin
+#
+# -----------------------------------------------------------------------------
+# -----------------------S E C T I O N   6 4 T A S S  -------------------------
+# -----------------------------------------------------------------------------
+# Chemin complet vers le programme assembleur 64tass.
+# Cela peut être remplacé par n'importe quel assembleur de votre choix.
+TASS=/usr/bin/64tass
 #
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
 # -----------------------------------------------------------------------------
 # Note:
-# 	On my system (MacOS) home dir I have a bin folder containing lins to ...
-# 	the Vice emulator and utility commands.
+# 	Dans le répertoire personnel de mon système (Linux), je dispose d'un dossier
+#   ...  « bin » contenant des liens vers l'émulateur Vice et des commandes 
+#    ... utilitaires.
 # -----------------------------------------------------------------------------
 # Complete path to the Vic20 emulator's programs.
 VICEBIN=/usr/bin
-# Complete path to the 64tass assembler program.
-TASS=$(VICEBIN)/64tass
 # Complete path to the Vic20 emulator program.
 V20=$(VICEBIN)/xvic
 # Complete path to the C64 emulator program.
@@ -74,71 +72,71 @@ X64SC=$(VICEBIN)/x64sc
 C1541=$(VICEBIN)/c1541
 # Complete path to the cartconv cartridge converter program.
 CARTCONV=$(VICEBIN)/cartconv
-# Complete path to some other emulator programs.
-X64SCSDL=/Applications/vice-x86-64-sdl2-3.6.1/x64sc.app/Contents/MacOS/x64sc
-X64SCGTK=/Applications/vice-x86-64-gtk3-3.6.1/x64sc.app/Contents/MacOS/x64sc
 #
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
 #-------------------------------------------------------------------------------
-# These options enable you to mount utility disk image in drive 9.
-# Complete path to the c64 Utility disk to be mounted on drive 9.
-TMPSEP06=-9 $(BASEDIR)/d-disk-img/d64/turbo-macro-pro-sep06.d64
-# Complete path to the Vic20 Utility disk to be mounted on drive 9.
-V20MKASM=-9 /Users/Locals/Vic20/roms/tools/4k/D64/V20MikroAsmbler.d64
-# Complete local path to be mounted as a disk on drive 8 and/or 9.
-# **** tests not yet conclusive.
-DISK8DIR=
-DISK9DIR=
-DBC=/Users/Locals/C64/00-usbkey32go/dbc
-JBMON64=/Users/Locals/C64/00-usbkey32go/d-mes-utils/jbmon.prg
-CHAREDIT=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/charedit/charedit-fr.prg
-J2TESTER=/Users/Locals/C64/00-usbkey32go/d-00-64tass-src/C64/dev/joystick/j2tester.prg
+# Ces options vous permettent de monter un image disque utilitaire dans le 
+# lecteur 9.
+# Chemin complet vers le disque utilitaire c64 à monter sur le lecteur 9.
+TMPSEP06=-9 $(BASEDIR)/dir-disk-img/d64/turbo-macro-pro-sep06.d64
+# Chemin complet vers le disque utilitaire Vic20 à monter sur le lecteur 9.
+V20MKASM=-9 $(BASEDIR)/dir-00-64tass-src/V20/utils/V20MikroAsmbler.d64
+# Chemin vers les programmes utilitaires que vous voulez copier sur les disques
+# ... destination.
+UTILSDIR=$(BASEDIR)/dir-00-64tass-src/C64/utils
+DBC=$(UTILSDIR)/dbc
+JBMON64=$(UTILSDIR)/jbmon
+#CHAREDIT=charedit-fr.prg
+J2TESTER=$(UTILSDIR)/j2tester
 #
 #-------------------------------------------------------------------------------
-# Some other variables just to reduce command line length.
+# Quelques autres variables, simplement pour réduire la longueur des lignes de 
+# ... commande.
 #-------------------------------------------------------------------------------
-# Here you choose the vice emulator of your choosing.
+# C'est ici que vous choisissez l'émulateur VICE.
 VICE=$(X64)
+# 
 OUTDIR=$(OUTDIRC64)
 #OUTDIR=$(OUTDIRV20)
 
-# The Vice autostart parameters.
+# Les paramètres de démarrage automatique de Vice.
 #AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64:$(SOURCENAME)
 AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81:$(SOURCENAME)
 # -----------------------------------------------------------------------------
-# --------------------- O P T I O N N A L   S E C T I O N ---------------------
+# ------------------ S E C T I O N   O P T I O N N E L L E --------------------
 # -----------------------------------------------------------------------------
-# Note:
-#	E) FTP usage is intended for the 1541 Ultimate II+ and compatible users.
-#	   The 1541 Ultimate II+ provide an FTP interface leading to the root ...
-#       directory configured in the cartridge. When connected to your LAN, ...
-#	   the IP address of your cartridge can be found at the root level of ...
-# 	   cartridge C64 menu. Other systems might use an FTP interface.
-#
 # -----------------------------------------------------------------------------
 # -------------------------- F T P   S E C T I O N ----------------------------
 # -----------------------------------------------------------------------------
-# This section is intended to transfer the resulting files to the Ultimite ...
-# cartridge II with the ftpserver enabeled.
-# In this example it uses the lftp utility available in both Mac-OS and Linux.
+# Cette section a pour but de transférer les fichiers résultants vers la 
+# ... cartouche Ultimate II avec le serveur FTP activé.
+# Cet exemple utilise l'utilitaire lftp, disponible aussi bien sous macOS que 
+# ... sous Linux.
 # -----------------------------------------------------------------------------
-# FTP SERVER CONFIG
+# Configuration du serveur FTP
 FTPSVRIP=192.168.2.200 # Check cartridge root menu for your address.
-# FTP CLI client full path.
+# Chemin d'accès complet au client FTP en ligne de commande.
 FTPCMDPATH=/usr/bin/lftp
-# List of commands by filetype intended to the FTP server.
-# Note:  The following path must exist on the Ultimate II+ cartridge usb ...
-#        disks.
-# Where to put the files on the Ultimate II +.
-FTPBASDIR=/Usb0/d-remote
+# Note:
+#	E) L'utilisation du FTP est destinée aux utilisateurs du 1541 Ultimate II+ 
+#      ... et des appareils compatibles.
+#      La 1541 Ultimate II+ propose une interface FTP donnant accès au 
+#      ... répertoire racine configuré dans la cartouche. Une fois celle-ci 
+#      ... connectée à votre réseau local, l'adresse IP de la cartouche est 
+#      ... visible à la racine du menu C64 de la cartouche.
+# Liste des commandes destinées au serveur FTP, classées par type de fichier.
+# Remarque : Le chemin suivant doit exister sur les disques USB de la cartouche
+#            ... Ultimate II+.
+# Où placer les fichiers sur l'Ultimate II+.
+FTPBASDIR=/Usb0/dir-remote
 FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
 FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
 FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye
 FTPD64ARG=cd $(FTPBASDIR)/d64; put $(SOURCENAME).d64; bye
 FTPD81ARG=cd $(FTPBASDIR)/d81; put $(SOURCENAME).d81; bye
 FTPCRTARG=cd $(FTPBASDIR)/crt; put $(SOURCENAME).crt; bye
-# Concatenating lftp full commands.
+# Concaténation de commandes lftp complètes.
 FTPASMCMD=$(FTPCMDPATH) -e "$(FTPASMARG)" $(FTPSVRIP)
 FTPTXTCMD=$(FTPCMDPATH) -e "$(FTPTXTARG)" $(FTPSVRIP)
 FTPPRGCMD=$(FTPCMDPATH) -e "$(FTPPRGARG)" $(FTPSVRIP)
@@ -147,32 +145,34 @@ FTPD81CMD=$(FTPCMDPATH) -e "$(FTPD81ARG)" $(FTPSVRIP)
 FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 #
 # -----------------------------------------------------------------------------
-# Make command rules to build, execute and clean program.
-# ** Using comment, you can mask or enable anny action.
+# Règles de la commande MAKE pour compiler, exécuter et nettoyer le programme.
+# ** À l'aide de commentaires, vous pouvez masquer ou activer n'importe quelle 
+#    ... action.
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
-#		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
-#		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-#		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
-#		$(FTPASMCMD)	# To transfer the source ASM file.
-#		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
-#		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
-		$(VICE) $(AUTOSTART) $(TMPSEP06) & # to load vice with arguments.
+#                       # Pour transférer ... 
+#		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
+#		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
+#		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
+#		$(FTPASMCMD)	# ... le fichier source ASM.
+#		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
+#		$(FTPCRTCMD)	# ... le fichier de cartouche CRT résultant.
+		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
 
 # -----------------------------------------------------------------------------
-# When called with "make ftp".
-# ** Using comment, you can mask or enable anny action.
+# Lorsqu'il est appelé avec « make ftp ».
+# ** À l'aide de commentaires, vous pouvez masquer ou activer n'importe quelle action.
 ftp:
-		$(SOURCENAME).d64	# To compile the source file and crate disk.
-		$(FTPPRGCMD)	# To transfer the resulting PRG program file.
-		$(FTPD64CMD)	# To transfer the resulting D64 disk file.
-		$(FTPD81CMD)	# To transfer the resulting D81 disk file.
-		$(FTPASMCMD)	# To transfer the source ASM file.
-		$(FTPTXTCMD) 	# To transfer the resulting TXT file.
-#		$(FTPCRTCMD)	# To transfer the resulting CRT cartridge file.
+#                       # Pour transférer ... 
+		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
+		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
+		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
+		$(FTPASMCMD)	# ... le fichier source ASM.
+		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
+#		$(FTPCRTCMD)	# ... le fichier de cartouche CRT résultant.
 
 # -----------------------------------------------------------------------------
-# To clean and start project fresh. (seldome used).
+# Pour nettoyer et repartir à zéro sur le projet (rarement utilisé).
 clean:
 		rm $(SOURCENAME).txt $(SOURCENAME).prg $(SOURCENAME).d64 $(SOURCENAME).d81
 		rm $(BASEDIR)/$(PRGDIR)/prg/$(SOURCENAME).prg
@@ -180,17 +180,16 @@ clean:
 		rm $(BASEDIR)/$(PRGDIR)/d64/$(SOURCENAME).d64
 		rm $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81
 # -----------------------------------------------------------------------------
-# Rule to compile the source file.
+# Règle pour compiler le fichier source.
 # -----------------------------------------------------------------------------
-# Create disk image containing the resulting program.
-# The disk will be named as per the source file.
+# Créez une image disque contenant le programme résultant.
+# Le disque sera nommé d'après le fichier source.
 
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
-		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
@@ -198,14 +197,14 @@ $(SOURCENAME).d64: $(SOURCENAME).prg
 		-write $(SOURCENAME).prg $(SOURCENAME) \
 		-write $(DBC) dbc \
 		-write $(JBMON64) jbmon64 \
-		-write $(CHAREDIT) charedit \
 		-write $(J2TESTER) j2tester
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
 
-# Assembling and distributing resulting files.
+# Assemblage et distribution des fichiers résultants.
 $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)
 		$(TASS) -C -m -a -I $(LIBDIR) -i $(SOURCENAME).asm -L $(SOURCENAME).txt -o $(SOURCENAME).prg
+		cp -f  $(SOURCENAME).prg $(UTILSDIR)
 		cp -f  $(SOURCENAME).prg $(BASEDIR)/$(PRGDIR)/prg
 		cp -f  $(SOURCENAME).prg $(OUTDIR)
 		cp -f  $(SOURCENAME).txt $(BASEDIR)/$(PRGDIR)/txt

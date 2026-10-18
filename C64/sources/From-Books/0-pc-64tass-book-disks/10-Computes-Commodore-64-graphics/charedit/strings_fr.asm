@@ -76,7 +76,7 @@ quit_msg       .byte     vmauve,18,24,18
                .byte     146
                .null     " = quitter.   "     
 
-redraw_msg     .byte     vvert,18,23,18
+redraw_msg     .byte     vrose,18,23,18
                .text     "ctrl-r"
                .byte     146
                .null     " = rafraichir."   

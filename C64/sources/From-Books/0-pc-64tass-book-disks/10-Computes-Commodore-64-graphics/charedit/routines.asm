@@ -757,82 +757,80 @@ copycharset       .block
 ;-------------------------------------------------------------------------------
 memcopy        .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
-            lda   startaddr
-            sta   zpage1
-            lda   startaddr+1
-            sta   zpage1+1
-            lda   bitmapaddr
-            sta   zpage2
-            lda   bitmapaddr+1
-            sta   zpage2+1
-            ldy   #$00
-onemore     lda   (zpage1),y
-            sta   (zpage2),y
-            jsr   inczp1
-            jsr   inczp2
-            lda   zpage1+1
-            cmp   stopaddr+1
-            bne   onemore
-            lda   zpage1
-            cmp   stopaddr
-            bne   onemore
+            lda   startaddr         ; Charge le LSB de l'adresse de départ 
+            sta   zpage1            ; ... dans zpage1 ($fb).
+            lda   startaddr+1       ; Charge le MSB de l'adresse de départ 
+            sta   zpage1+1          ; ... dans zpage1+1 ($fc).
+            lda   bitmapaddr        ; Charge le LSB de l'adresse des bitmaps 
+            sta   zpage2            ; ... en ram dans zpage2 ($fd).
+            lda   bitmapaddr+1      ; Charge le LSB de l'adresse des bitmaps 
+            sta   zpage2+1          ; ... en ram dans zpage2+1 ($fe).
+            ldy   #$00              ; Index Y à 0.
+onemore     lda   (zpage1),y        ; Prend un octet de la rom et 
+            sta   (zpage2),y        ; ... la copie en mémoire.
+            jsr   inczp1            ; Incrémente les 
+            jsr   inczp2            ; ... pointeurs
+            lda   zpage1+1          ; Compare le MSB du pointeur avec
+            cmp   stopaddr+1        ; ... l'adresse de fin.
+            bne   onemore           ; Pas encore à cette page, on continue.
+            lda   zpage1            ; Compare le LSB du pointeur avec
+            cmp   stopaddr          ; ... l'adresse de fin.
+            bne   onemore           ; Pas encore à la fin, on continue.
             jsr   popall            ; Récupère registres et pointeur ZP
             rts
             .bend
 
 
 ;-------------------------------------------------------------------------------
-;
+; Affiche les éléments statiques de l'écran.
 ;-------------------------------------------------------------------------------
 drawstatic  .block
             #changebord bordure
             #changeback fond
-            ;#uppercase
-            jsr  drawlines
-            jsr  drawallchars
-            jsr  drawgrid
-            jsr  drawfkeys
-            lda  #vrose
-            sta  redraw_msg  
-            #affichemesg redraw_msg
-            #affichemesg quit_msg
-            #locate   0,7
+            ;#uppercase              ; Bloque le système en majuscule/graph. 
+            jsr  drawlines          ; Affiche tout ce qui est ligne à l'écran.
+            jsr  drawallchars       ; Affiche les 128 caractères à l'écran
+            jsr  drawgrid           ; Affiche la grille de bitmap. 
+            jsr  drawfkeys          ; Affiche le menu de clefs fonction.
+            #affichemesg redraw_msg ; Affiche le message pour CTRL-R.
+            #affichemesg quit_msg   ; Affiche le message pour CTRL-X.
             rts
             .bend
 
 ;-------------------------------------------------------------------------------
-;
+; Affiche le menu de clefs fonction du menu 1 ou 2 selon la variable fkeyset.
 ;-------------------------------------------------------------------------------
 drawfkeys      .block
             jsr   pushreg           ; Sauvegarde les registres.
-            lda  fkeyset
-            cmp  #$0
-            bne  secondks
-            #printcxy titremenu1
-            #printcxy f1abutton
-            #printcxy f2abutton
-            #printcxy f3abutton
-            #printcxy f4abutton
-            #printcxy f5abutton
-            #printcxy f6abutton
-            #printcxy f7abutton
-            #printcxy f8abutton
+            lda  fkeyset            ; On vérifie dans quel menu nous 
+            cmp  #$0                ; somme présentement
+            bne  secondks           ; Pas 0, alors on affiche le second menu.
+            #printcxy titremenu1    ; Affiche ... le titre
+            #printcxy f1abutton     ; ... le F1,
+            #printcxy f2abutton     ; ... le F2,
+            #printcxy f3abutton     ; ... le F3,
+            #printcxy f4abutton     ; ... le F4,
+            #printcxy f5abutton     ; ... le F5,
+            #printcxy f6abutton     ; ... le F6,
+            #printcxy f7abutton     ; ... le F7
+            #printcxy f8abutton     ; ... ainsi que le F8.
             jmp end 
-secondks    #printcxy titremenu2
-            #printcxy f1bbutton
-            #printcxy f2bbutton
-            #printcxy f3bbutton
-            #printcxy f4bbutton
-            #printcxy f5bbutton
-            #printcxy f6bbutton
-            #printcxy f7bbutton
-            #printcxy f8bbutton
+secondks    #printcxy titremenu2    ; Affiche ... le titre
+            #printcxy f1bbutton     ; ... le F1,
+            #printcxy f2bbutton     ; ... le F2,
+            #printcxy f3bbutton     ; ... le F3,
+            #printcxy f4bbutton     ; ... le F4,
+            #printcxy f5bbutton     ; ... le F5,
+            #printcxy f6bbutton     ; ... le F6,
+            #printcxy f7bbutton     ; ... le F7
+            #printcxy f8bbutton     ; ... ainsi que le F8.
 end         jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
 ;-------------------------------------------------------------------------------
-;
+; Affiche tous les 128 caractères principaux directement dans la mémoire vidéo
+; en  
 ;-------------------------------------------------------------------------------
 drawallchars   .block
             jsr pushreg
