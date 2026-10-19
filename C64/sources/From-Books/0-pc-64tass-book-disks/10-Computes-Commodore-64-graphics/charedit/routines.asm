@@ -20,7 +20,7 @@ scrredraw   .block
             jsr   drawstatic        ; Affiche les éléments statiques d'écran.
             jsr   drawfkeys         ; Affiche le menu de clefs fonctions.
             lda   currentkey        ; Affiche le caractère actuellement
-            jsr   drawkeyval        ; ... représenté.
+            ; jsr   drawkeyval        ; ... représenté.
             jsr   drawbitmap        ; Affiche la représentation bitmap du car.
             #affichemesg prompt_msg ; Affiche un invite.
             jsr   screenena         ; Permet l'affichage d'écran.
@@ -162,7 +162,7 @@ setdfltchar .block
             tax                     ; On en cherche le  
             ldy  asciitorom,x       ; ... code petscii.
             sty  bmoffset           ; En memorise l'offset.
-            jsr  drawkeyval         ; Affiche les infos du caractère.
+;            jsr  drawkeyval         ; Affiche les infos du caractère.
             jsr  drawbitmap         ; Affiche le bitmap.
 ;            #locate   13,12
 ;            jsr  putch
@@ -330,7 +330,7 @@ ctrlr       cmp   #ctrl_r           ; est-ce CTRL+R
             ;-----------------------------------------------------------------
             ; Il s'agit maintenant d'une autre touche
             ;-----------------------------------------------------------------
-reste       jsr   drawkeyval
+reste       ;jsr   drawkeyval
             pha                     ; Mémorise la nouovelle clef
             lda   currentkey        ; ... mémorise   
             sta   previouskey       ; ... l'ancienne
@@ -342,34 +342,34 @@ reste       jsr   drawkeyval
             jsr   drawbitmap
             jmp   actionloop
             ;-----------------------------------------------------------------
-dof1        jsr  f1action           ;edit/reverse
-            jmp  actionloop
+dof1        jsr   f1action          ;edit/reverse
+            jmp   actionloop
             ;-----------------------------------------------------------------
-dof2        jsr  f2action           ;save/flip vert
-            jmp  actionloop
+dof2        jsr   f2action          ;save/flip vert
+            jmp   actionloop
             ;-----------------------------------------------------------------
-dof3        jsr  f3action           ;load/flip horz
-            jmp  actionloop
+dof3        jsr   f3action          ;load/flip horz
+            jmp   actionloop
             ;-----------------------------------------------------------------
-dof4        jsr  f4action           ;copy/scroll r
-            jmp  actionloop
+dof4        jsr   f4action          ;copy/scroll r
+            jmp   actionloop
             ;-----------------------------------------------------------------
-dof5        jsr  f5action           ;clear/scroll l
-            jmp  actionloop
+dof5        jsr   f5action          ;clear/scroll l
+            jmp   actionloop
             ;-----------------------------------------------------------------
-dof6        jsr  f6action           ;fill/scroll up
-            jmp  actionloop
+dof6        jsr   f6action          ;fill/scroll up
+            jmp   actionloop
             ;-----------------------------------------------------------------
-dof7        jsr  f7action           ;clear/scroll down
-            jmp  actionloop
+dof7        jsr   f7action          ;clear/scroll down
+            jmp   actionloop
             ;-----------------------------------------------------------------
-dof8        jsr  f8action           ;menub/menua
-            jmp  actionloop
+dof8        jsr   f8action          ;menub/menua
+            jmp   actionloop
             ;-----------------------------------------------------------------
-doredraw    jsr  scrredraw          ;Redessine l'écran
-            jmp  actionloop
+doredraw    jsr   scrredraw         ;Redessine l'écran
+            jmp   actionloop
             ;-----------------------------------------------------------------
-doquit      jsr  popreg             ;Retourne à main
+doquit      jsr   popreg            ;Retourne à main
             rts
             .bend
 
@@ -425,7 +425,7 @@ rest        #locate   13,12         ; Positionne le curseur et
             tay                     ; La clef devient l'offset dans la table
             ldx   asciitorom,y      ; ... de convertion ascii à 
             stx   bmoffset          ; petscii et l'offset de la matrice.
-            jsr   drawkeyval        ; Affiche le tableau de conversion.
+;            jsr   drawkeyval        ; Affiche le tableau de conversion.
             jsr   drawbitmap        ; Affiche la matrice de point
 ;            #locate   13,12         ; 
 ;            jsr   putch
@@ -501,7 +501,7 @@ do_eor         .block
             lda   eorval,x
             eor   (zpage2),y
             sta   (zpage2),y
-            jsr   drawkeyval
+            ;jsr   drawkeyval
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
@@ -575,52 +575,53 @@ isy         ldy   #$00              ; la ligne (autoinc)
             bmi   nextline          ; Non, on passe à la prochaine.
             jsr   highlight         ; 
             jsr   popall            ; Récupère registres et pointeur ZP
+            jsr   drawkeyval
             rts
             .bend
 
-
+;-----------------------------------------------------------------------------
+; Routine qui met le caractere actuel en surbrillance dans la liste..
+;-----------------------------------------------------------------------------
 highlight      .block
             jsr   pushreg           ; Sauvegarde les registres.
-            ldx  previouskey
-            lda  asciitorom,x
-            tax
-            lda  #charscolor
-            sta  colorram,x
-            ldx  currentkey
-            lda  asciitorom,x
-            tax
-            lda  #charcolor
-            sta  colorram,x 
+            ldx  previouskey        ; Replace le caractère précédente
+            lda  asciitorom,x       ; ... dans sa 
+            tax                     ; ... couleur
+            lda  #charscolor        ; ... normale 
+            sta  colorram,x         ; ... sur l'écran.
+            ldx  currentkey         ; Place le caractère actuel
+            lda  asciitorom,x       ; ... dans sa 
+            tax                     ; ... couleur
+            lda  #charcolor         ; ... surbrillante 
+            sta  colorram,x         ; ... sur l'écran.
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
-
 ;-----------------------------------------------------------------------------
-; Routine qui calcule l'adresse de la matrice de points pour le charactère dont 
-; l'offset est dans bmoffset et place le résultat dans mapaddr. 
+; Routine qui calcule l'adresse de la matrice de points pour le charactère 
+; dont l'offset est dans bmoffset et place le résultat dans mapaddr. 
 ;-----------------------------------------------------------------------------
 calcmapaddr .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
-            lda   bitmapaddr        ; on pointe sur la table des bitmaps
-            sta   zpage1
-            lda   bitmapaddr+1
-            sta   zpage1+1
-                             
-            ldx   bmoffset          ; on ajuste l'offset du pointeur de bitmap
-            cpx   #$00
-            beq   idem              ; sommes nous déja à 0
-plusencore  lda   #$08
-            jsr   zp1addnum         ; on augmente de 8 byte ...
-            dex                  ; pour chaque caracteres
-            bne   plusencore
-idem        pha
-            lda   zpage1
-            sta   mapaddr
-            lda   zpage1+1
-            sta   mapaddr+1
-            pla
-            jsr   drawkeyval
+            lda   bitmapaddr        ; On pointe zpage1 ($fc$fb) 
+            sta   zpage1            ; ... sur l'adresse 16 bits
+            lda   bitmapaddr+1      ; ... de la 
+            sta   zpage1+1          ; ... table des bitmaps.
+            ldx   bmoffset          ; On charge l'offset du caractère
+            cpx   #$00              ; Sommes nous déja à 0
+            beq   idem              ; Oui, pas d'offset a ajuster.      
+plusencore  lda   #$08              ; On ajoute un offset de 8
+            jsr   zp1addnum         ; ... au pointeur pour 
+            dex                     ; ... chaquun des caracteres
+            bne   plusencore        ; ... de la table.
+idem        pha                     ; On mémorise Acc.
+            lda   zpage1            ; On place l'adresse 16 bits
+            sta   mapaddr           ; ... du bitmap du
+            lda   zpage1+1          ; ... caractère dana      
+            sta   mapaddr+1         ; ...la variable mapaddr.
+            pla                     ; On recupère l'Acc.
+;            jsr   drawkeyval        ; On affiche le tableau de conversion.
 out         jsr   popall            ; Récupère registres et pointeur ZP
             rts
             .bend

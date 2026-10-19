@@ -170,7 +170,7 @@ xy2hex         .block
 ; Converti le contenu de A en chaine  binaire dans abin. 
 ;-----------------------------------------------------------------------------
 atobin         .block
-               jsr  push
+               jsr  pushreg
                ldx  #8
                ldy  #0
                clc
@@ -186,7 +186,7 @@ nextbit        rol
                bne  nextbit
                lda  #0
                sta  abin,y
-               jsr  pull
+               jsr  popreg
                rts
                .bend          
 
