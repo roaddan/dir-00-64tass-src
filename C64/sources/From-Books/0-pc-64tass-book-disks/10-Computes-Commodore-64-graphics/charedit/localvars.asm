@@ -26,8 +26,8 @@ gridaddr       .word     0
 cursln         .byte     grid_top
 curscl         .byte     grid_left
 pfname         .byte     vvert,27,3,18     
-fname          .text     "@0:"
-name           .text     "origin"
+fname          .null     "@0:"
+name           .null     "origin"
 ext            .null     ".chr"
 device         .byte     8
 tmpbyte        .byte     $00
