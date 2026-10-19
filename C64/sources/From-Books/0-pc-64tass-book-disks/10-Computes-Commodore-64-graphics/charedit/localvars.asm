@@ -1,9 +1,15 @@
 ;-----------------------------------------------------------------------------
-;
+; Projet...: charedit
+; Fichier..: localvars.asm
+; Auteur...: Daniel Lafrance
+; Version..: 0.1.1
+; Révision.: 2026-10-16
 ;-----------------------------------------------------------------------------
-bitmapmem      =    charsdef * 1024     ;Calcul position ram des caracteres.
-endofaddr      =    (charsdef * 1024) + (4*$800)
-mstopaddr      =    $d000+(4*$800)
+; Historique des révisions:
+; --------------------------
+; 2026-10-16 - Ajout et francisation des commentaires.
+;-----------------------------------------------------------------------------
+
 startaddr      .word     $d000               ; 53248
 stopaddr       .word     mstopaddr           ; 55296 
 bitmapaddr     .word     bitmapmem           ; $3000, 12288     

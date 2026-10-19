@@ -1,23 +1,23 @@
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Projet...: charedit
 ; Fichier..: routines.asm
 ; Auteur...: Daniel Lafrance
 ; Version..: 0.1.1
 ; Révision.: 2026-10-16
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Historique des révisions:
 ; --------------------------
-; 2026-10-16 - Ajout des commentaires.
-;-------------------------------------------------------------------------------
+; 2026-10-16 - Ajout et francisation des commentaires.
+;-----------------------------------------------------------------------------
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui redessine l'écran de travail.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 scrredraw   .block
             jsr   pushreg           ; Sauvegarde les registres.
             jsr   screendis         ; Inhibe l'affichage
             jsr   cls               ; Efface l'écran
-            jsr   drawstatic        ; Affiche les éléments statiques de l'écran.
+            jsr   drawstatic        ; Affiche les éléments statiques d'écran.
             jsr   drawfkeys         ; Affiche le menu de clefs fonctions.
             lda   currentkey        ; Affiche le caractère actuellement
             jsr   drawkeyval        ; ... représenté.
@@ -25,12 +25,12 @@ scrredraw   .block
             #affichemesg prompt_msg ; Affiche un invite.
             jsr   screenena         ; Permet l'affichage d'écran.
             jsr   popreg            ; Récupère les registres.
-            rts                     ; Bye.
+            rts                     
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui capture un nom de fichier de 6 lettres entré par l'usager.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 getfname    .block
             jsr   pushreg           ; Sauvegarde les registres.
             #affichemesg fname_msg  ; Affiche l'invite.
@@ -51,9 +51,9 @@ finish      #affichemesg pfname     ; Affiche le nom du fichier
 count       .byte     0
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui récupère un caractère de a-z et 0-9 dans Acc.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 getalnum    .block
             jsr   pushreg           ; Sauvegarde les registres.
 getanother  jsr   getkey            ; Li une clef.
@@ -72,9 +72,9 @@ goodone     sta   tempbyte          ; On le sauvegarde pour ...
             rts                     ; On quitte
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui copie le bitmap d'un caractère sur le caractère actuel.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 copychar    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             jsr   getvalidkey       ; On cherche une clef valide.
@@ -83,17 +83,17 @@ copychar    .block
             sta   zpage1            ; ... pour copier les octets
             lda   bitmapaddr+1      ; ... de la définition des 
             sta   zpage1+1          ; ... caractères.
-            ldx   copykey           ; On ajuste l'offset du pointeur de bitmap.
-            lda   asciitorom,x      ; Convertie le code ascii en offset dans la 
-            tax                     ; ... memoire de bitmap.
+            ldx   copykey           ; On ajuste l'offset du pointeur bitmap.
+            lda   asciitorom,x      ; Convertie le code ascii en offset dans
+            tax                     ; ... la memoire de bitmap.
             cpx   #$00              ; S'il n'y a pas d'offset
             beq   no_offset         ; ... nous sommes nous déja à 0
 addagain    lda   #$08              ; On aditionne 8, X fois.
             jsr   zp1addnum         ; On augmente de 8 byte ...
             dex                     ; ... pour chaque caracteres
             bne   addagain          ; si pas fini.
-no_offset   lda   mapaddr           ; On place les pointeurs pour faire la copie
-            sta   zpage2            ; ... le caractere actuel
+no_offset   lda   mapaddr           ; On place les pointeurs pour faire la
+            sta   zpage2            ; ... copie le caractere actuel
             lda   mapaddr+1         ;
             sta   zpage2+1          ;
             ldy   #$08              ; On effectue la copie des 8 octets
@@ -105,14 +105,14 @@ out         jsr   popall            ; Récupère registres et pointeur ZP
             rts
             .bend 
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui récupère une clef entrée par l'utilisateur dont le code ascii 
 ; correspond à une entrée valide dans la table asciitopetscii présente dans 
 ; le fichier: l-cbm-keyb.asm 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 getvalidkey .block
             jsr   pushreg           ; Sauvegarde les registres.
-            #affichemesg copychar_msg
+            #affichemesg cp_char_msg
 getgoodkey  jsr   getkey            ; Obtient une clef.
             sta   copykey           ; Garde une copie de la clef.
             tax                     ; La transfere dans X.
@@ -128,9 +128,9 @@ goodone     jsr   putch
             rts
             .bend 
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui affiche l'écran de présentation du programme.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 drawcredits   .block
             jsr   pushreg           ; Sauvegarde les registres.
             jsr   cls               ; Efface l'écran.
@@ -152,9 +152,9 @@ waitmore    jsr   delay
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui affiche le premier caractères au début du programme
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 setdfltchar .block
             jsr   pushreg           ; Sauvegarde les registres.
             lda  #$41
@@ -173,50 +173,52 @@ setdfltchar .block
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui rétabli les couleurs normales du menu de clefs fonction.
-;-------------------------------------------------------------------------------
+; Le premier octet de chacune des chaines de menu contien sa couleur.
+;-----------------------------------------------------------------------------
 rstmenucol  .block
             jsr   pushreg           ; Sauvegarde les registres.
-            lda  #menu1col1         ; 
-            sta  f1abutton
-            sta  f3abutton
-            sta  f5abutton
-            sta  f7abutton
-            lda  #menu1col2
-            sta  f2abutton
-            sta  f4abutton
-            sta  f6abutton
-            sta  f8abutton
-            ;jsr  drawfkeys
+            lda   #menu1col1        ; Charge la couleur normale des clefs
+            sta   f1abutton         ; ... impaires et l'atrribut a tous les
+            sta   f3abutton         ; ... menus impairs.
+            sta   f5abutton
+            sta   f7abutton
+            lda   #menu1col2        ; Charge la couleur normale des clefs
+            sta   f2abutton         ; ... paires et l'atrribut a tous les
+            sta   f4abutton         ; ... menus pairs.
+            sta   f6abutton
+            sta   f8abutton
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
-;-------------------------------------------------------------------------------
-; Routine qui établie les couleurs du menu A.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
+; Routine qui établie les couleurs du menu A avec la couleurs reçue de l'ACC.
+; Le premier octet de chacune des chaines de menu contien sa couleur.
+;-----------------------------------------------------------------------------
 setmenuacolor  .block
             jsr   pushreg           ; Sauvegarde les registres.
-            sta  f1abutton
-            sta  f2abutton
-            sta  f3abutton
-            sta  f4abutton
-            sta  f5abutton
-            sta  f6abutton
-            sta  f7abutton
-            sta  f8abutton
-            ;jsr  drawfkeys
+            sta   f1abutton         ; Attribut la couleur à chacun des menus.
+            sta   f2abutton
+            sta   f3abutton
+            sta   f4abutton
+            sta   f5abutton
+            sta   f6abutton
+            sta   f7abutton
+            sta   f8abutton
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
-;-------------------------------------------------------------------------------
-; Routine qui établie les couleurs du menu B.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
+; Routine qui établie les couleurs du menu Bavec la couleurs reçue de l'ACC.
+; Le premier octet de chacune des chaines de menu contien sa couleur.
+;-----------------------------------------------------------------------------
 setmenubcolor  .block
             jsr   pushreg           ; Sauvegarde les registres.
-            sta   f1bbutton
+            sta   f1bbutton         ; Attribut la couleur à chacun des menus.
+            sta   f1abutton
             sta   f2bbutton
             sta   f3bbutton
             sta   f4bbutton
@@ -229,124 +231,105 @@ setmenubcolor  .block
             rts
             .bend
             
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui affiche le tableau de conversion des valeurs du caractère.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 drawkeyval     .block
             jsr   pushreg           ; Sauvegarde les registres.
-
-            lda  currentkey         ; Charge la dernière clef pesée.
+            lda  currentkey         ; Récupère la dernière clef pesée.
             #locate   13,12
             jsr  putch              ; L'affiche dans le carré.
-
             #locate   13,20
             jsr  atodec             ; L'affiche en décimal.
             #print    adec
-
             #locate 2,20            ; Affiche la valeur de la clef en binaire
             pha                     ; Sauvegarde la clef.
             lda  #'%'               ; Le préfixe de Binaire (%).
             jsr  putch              ;
             pla                     ; Récupère la clef.
             pha                     ; Sauvegarde la clef.
-            jsr  putabin            ; L'affiche en binaire.
-            lda  #','               ;
+            jsr  putabin            ; L'affiche en binaire
+            lda  #','               ; ... suivi d'une virgule.
             jsr  putch              ;
-
-            #locate 1,19
-            #print txt1
+            #locate 1,19            ; Positionne le curseur. 
+            #print txt1             ; Affiche le texte.
             lda  #'$'               ; Affiche le préfixe de l'hexadécimal.
             jsr  putch
             pla                     ; Récupère la clef.
             jsr  putahex            ; l'affiche en hexadécimal.
-
             #locate 1,21            ; Affiche l'adresse de la table  
             #print txt2             ; ... des bitmaps 
-            lda  #'$'
-            jsr  putch
-            lda  bitmapaddr+1       ; ... en hexadecimal.
-            jsr  putahex
-            lda  bitmapaddr
-            jsr  putahex
-
+            lda  #'$'               ; ... préfixée d'un 
+            jsr  putch              ; ... $
+            lda  bitmapaddr+1       ; ... en hexadecimal
+            jsr  putahex            ; ... sur
+            lda  bitmapaddr         ; ... 16
+            jsr  putahex            ; ... bits.
             #locate 1,22            ; Affiche l'offset dans la table
             #print txt3             ; ... des bitmaps
-            lda  #'$'
-            jsr  putch            
-            lda  bmoffset
+            lda  #'$'               ; ... préfixée d'un 
+            jsr  putch              ; ... $
+            lda  bmoffset           ; ... sur 8 bits.
             jsr  putahex            ; ... en hexadecimal.
-
-
             #locate 1,23            ; Affiche l'adresse du debut du bitmap 
             #print txt4             ; ... du caractère 
-            lda  #'$'
-            jsr  putch
+            lda  #'$'               ; ... préfixée d'un 
+            jsr  putch              ; ... $
             lda  mapaddr+1          ; ... en hexadecimal.
-            jsr  putahex
-            lda  mapaddr
-            jsr  putahex
-
+            jsr  putahex            ; ... sur
+            lda  mapaddr            ; ... 16
+            jsr  putahex            ; ... bits.
             #locate 1,24            ; Affiche la ligne et la colonne
             #print txt5             ; ... du curseur
             lda  curscl             ; ... (la colonne)
-            jsr  putahex            ; ... en hexadécimal.
-            lda  #$da
-            jsr  putch
+            jsr  putahex            ; ... en hexadécimal
+            lda  #$da               ; ... suivi d'un
+            jsr  putch              ; ... diamand et de
             lda  cursln             ; ... (la ligne)
             jsr  putahex            ; ... en hexadécimal.
-
             jsr   popreg            ; Récupère les registres.
             rts
-
             .bend
             
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue les action des clef des menus.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 keyaction   .block
             jsr   pushreg           ; Sauvegarde les registres.
 actionloop  jsr   getkey            ; Boucle de récupération de clef.  
-
 isitf1      cmp   #key_f1           ; est-ce F1  
             bne   isitf2            ; non, on va voir la prochaine.
             jmp   dof1              ; Oui, On l'exécute.
-
 isitf2      cmp   #key_f2           ; est-ce F2  
             bne   isitf3            ; non, on va voir la prochaine.
             jmp   dof2              ; Oui, On l'exécute.
-
 isitf3      cmp   #key_f3           ; est-ce F3  
             bne   isitf4            ; non, on va voir la prochaine.
             jmp   dof3              ; Oui, On l'exécute.
-
 isitf4      cmp   #key_f4           ; est-ce F4  
             bne   isitf5            ; non, on va voir la prochaine.
             jmp   dof4              ; Oui, On l'exécute.
-
 isitf5      cmp   #key_f5           ; est-ce F5  
             bne   isitf6            ; non, on va voir la prochaine.
             jmp   dof5              ; Oui, On l'exécute.
-
 isitf6      cmp   #key_f6           ; est-ce F6  
             bne   isitf7            ; non, on va voir la prochaine.
             jmp   dof6              ; Oui, On l'exécute.
-
 isitf7      cmp   #key_f7           ; est-ce F7  
             bne   isitf8            ; non, on va voir la prochaine.
             jmp   dof7              ; Oui, On l'exécute.
-
 isitf8      cmp   #key_f8           ; est-ce F8  
             bne   ctrlx             ; non, on va voir la prochaine.
             jmp   dof8              ; Oui, On l'exécute.
-
 ctrlx       cmp   #ctrl_x           ; est-ce CTRL+X  
             bne   ctrlr             ; non, on va voir la prochaine.
             jmp   doquit            ; Oui, On l'exécute.
-
 ctrlr       cmp   #ctrl_r           ; est-ce CTRL+R
-            bne   reste           ; non, on va voir la prochaine.
+            bne   reste             ; non, on va voir la prochaine.
             jmp   doredraw          ; Oui, On l'exécute.
-
+            ;-----------------------------------------------------------------
+            ; Il s'agit maintenant d'une autre touche
+            ;-----------------------------------------------------------------
 reste       jsr   drawkeyval
             pha                     ; Mémorise la nouovelle clef
             lda   currentkey        ; ... mémorise   
@@ -358,42 +341,41 @@ reste       jsr   drawkeyval
             sty   bmoffset          ; ... et le mémorise.
             jsr   drawbitmap
             jmp   actionloop
-
-;----------------------------------------------------------
-dof1        jsr  f1action  ;edit/reverse
+            ;-----------------------------------------------------------------
+dof1        jsr  f1action           ;edit/reverse
             jmp  actionloop
-;----------------------------------------------------------
-dof2        jsr  f2action  ;save/flip vert
+            ;-----------------------------------------------------------------
+dof2        jsr  f2action           ;save/flip vert
             jmp  actionloop
-;----------------------------------------------------------
-dof3        jsr  f3action  ;load/flip horz
+            ;-----------------------------------------------------------------
+dof3        jsr  f3action           ;load/flip horz
             jmp  actionloop
-;----------------------------------------------------------
-dof4        jsr  f4action  ;copy/scroll r
+            ;-----------------------------------------------------------------
+dof4        jsr  f4action           ;copy/scroll r
             jmp  actionloop
-;----------------------------------------------------------
-dof5        jsr  f5action  ;clear/scroll l
+            ;-----------------------------------------------------------------
+dof5        jsr  f5action           ;clear/scroll l
             jmp  actionloop
-;----------------------------------------------------------
-dof6        jsr  f6action  ;fill;/scroll up
+            ;-----------------------------------------------------------------
+dof6        jsr  f6action           ;fill/scroll up
             jmp  actionloop
-;----------------------------------------------------------
-dof7        jsr  f7action  ;clear;/scroll down
+            ;-----------------------------------------------------------------
+dof7        jsr  f7action           ;clear/scroll down
             jmp  actionloop
-;----------------------------------------------------------
-dof8        jsr  f8action  ; function
+            ;-----------------------------------------------------------------
+dof8        jsr  f8action           ;menub/menua
             jmp  actionloop
-;----------------------------------------------------------
-doredraw    jsr  scrredraw
+            ;-----------------------------------------------------------------
+doredraw    jsr  scrredraw          ;Redessine l'écran
             jmp  actionloop
-;----------------------------------------------------------
-doquit      jsr  popreg
+            ;-----------------------------------------------------------------
+doquit      jsr  popreg             ;Retourne à main
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui permet de modifier le bitmap d'un caractère.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 editor      .block 
             jsr   pushreg           ; Sauvegarde les registres.
             #affichemesg exit_msg   ;
@@ -451,9 +433,9 @@ rest        #locate   13,12         ; Positionne le curseur et
 ;            jsr   atodec
 ;            #print    adec
             jmp   ed_loop
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Code des actions spécifiques pour certaines touches.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 do_up       lda   cursln            ; Vérifie si le curseur est déjà 
             cmp   #grid_top         ; ... en haut de la matrice.
             beq   no_up             ; Oui, on le monte pas.
@@ -499,97 +481,96 @@ do_ctrlx    jsr   clrcurs           ; On efface les curseurs.
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue l'inversion bit par bit de la matrice.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; use     byteaddr,cursln,curscl
 do_eor         .block
             jsr   pushreg           ; Sauvegarde les registres.
-            lda   mapaddr
-            sta   zpage2
-            lda   mapaddr+1
-            sta   zpage2+1
-
-            ldx   cursln            ; calcul de 
+            lda   mapaddr           ; Place l'adresse 
+            sta   zpage2            ; 16 bits de la
+            lda   mapaddr+1         ; matrice dans 
+            sta   zpage2+1          ; zpage2 ($fe-$fd).
+            ldx   cursln            ; Calcul de 
             dex                     ; l'offset de 
             txa                     ; la 
             and   #$f7              ; ligne
-            tay
+            tay                     
             ldx   curscl
             dex
             lda   eorval,x
             eor   (zpage2),y
-            jsr   drawkeyval
             sta   (zpage2),y
+            jsr   drawkeyval
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui affiche les pointeurs X et Y du curseur d'éditeur de caractère à 
 ; l'endroit donnée par cursln et curscl.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 setcurs        .block
             jsr   pushreg           ; Sauvegarde les registres.
-            ldx  #grid_left
-            ldy  cursln
-            jsr  gotoxy
-            lda  #$da
-            jsr  putch
-            ldx  curscl
-            inx
-            ldy  #grid_top-1
-            jsr  gotoxy
-            lda  #$da
-            jsr  putch
+            ldx  #grid_left         ; Récupère la position de la colonne
+            ldy  cursln             ; ... de la grille.
+            jsr  gotoxy             ; ... positionne le curseur
+            lda  #$da               ; ... y affiche un 
+            jsr  putch              ; ... diamamd.
+            ldx  curscl             ; Récupère la colonne
+            inx                     ; ... et l'incrémente.
+            ldy  #grid_top-1        ; Trouve le haut de la grille
+            jsr  gotoxy             ; ... y positionne le curseur
+            lda  #$da               ; ... et affiche un autre 
+            jsr  putch              ; ... diamand.
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui positionne le curseur au coin sup gauche de la matrice de point.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 clrcurs        .block
             jsr   pushreg           ; Sauvegarde les registres.
-            ldx  #grid_left
-            ldy  cursln
-            jsr  gotoxy
-            lda  #$20
-            jsr  putch
-            ldx  curscl
-            inx
-            ldy  #grid_top-1
-            jsr  gotoxy
-            lda  #$20
-            jsr  putch
+            ldx   #grid_left        ; Récupère la position de la colonne
+            ldy   cursln            ; ... de la grille.
+            jsr   gotoxy            ; ... positionne le curseur
+            lda   #$20              ; ... y affiche un 
+            jsr   putch             ; ... espace.
+            ldx   curscl            ; Récupère la colonne
+            inx                     ; ... et l'incrémente.
+            ldy   #grid_top-1       ; Trouve le haut de la grille
+            jsr   gotoxy            ; ... y positionne le curseur
+            lda   #$20              ; ... et affiche un autre 
+            jsr   putch             ; ... espace.
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui affiche la représentation bitmap du caractère choisi.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 drawbitmap  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             jsr   calcmapaddr       ; On calcule l'adresse de la matrice.       
-            lda   mapaddr           ; On pointe sur la table des bitmaps.
-            sta   zpage1
-            lda   mapaddr+1
-            sta   zpage1+1
+            lda   mapaddr           ; On pointe zpage 1 sur 
+            sta   zpage1            ; ... l'adresse 
+            lda   mapaddr+1         ; ... 16 bits de
+            sta   zpage1+1          ; ... la table des bitmaps.
 drawchar    ldy   #$00              ; On affiche les 8 lignes du caractere  
             ldx   #grid_top         ; On replace la ligne de départ.
             stx   isy+1             ; (Code auto-modifié) 
-nextline    jsr   push
+nextline    jsr   pushreg
             ldx   #grid_left+1      ; la colonne
 isy         ldy   #$00              ; la ligne (autoinc)
             jsr   gotoxy
-            jsr   pop
+            jsr   popreg
             lda   (zpage1),y        ; On li un octet.
             jsr   atobin            ; Transforme l'octet en binaire ascii ...
             jsr   abintograph       ; ... puis en une série de points.
             #print abin             ; On affiche la ligne.
             inc   isy+1             ; (Code auto-modifié) 
-            iny                     ; On passe à la ligne suivante.
+            iny                  ; On passe à la ligne suivante.
             cpy   #$08              ; Avons-nous afficher les 8 octets?
             bmi   nextline          ; Non, on passe à la prochaine.
             jsr   highlight         ; 
@@ -615,23 +596,23 @@ highlight      .block
             .bend
 
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui calcule l'adresse de la matrice de points pour le charactère dont 
 ; l'offset est dans bmoffset et place le résultat dans mapaddr. 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 calcmapaddr .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             lda   bitmapaddr        ; on pointe sur la table des bitmaps
             sta   zpage1
             lda   bitmapaddr+1
             sta   zpage1+1
-                                   
+                             
             ldx   bmoffset          ; on ajuste l'offset du pointeur de bitmap
             cpx   #$00
             beq   idem              ; sommes nous déja à 0
 plusencore  lda   #$08
             jsr   zp1addnum         ; on augmente de 8 byte ...
-            dex                     ; pour chaque caracteres
+            dex                  ; pour chaque caracteres
             bne   plusencore
 idem        pha
             lda   zpage1
@@ -644,9 +625,9 @@ out         jsr   popall            ; Récupère registres et pointeur ZP
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui convertie une chaine binaire en chaine de points petits et gros.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 abintograph    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             lda  #<abin
@@ -669,9 +650,9 @@ next           iny
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui initialise les pointeurs du VIC-II pour le programme.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 setscrptr   .block
             jsr   pushreg           ; Sauvegarde les registres.
 ;            ; BASIC -> print chr$(8)
@@ -692,70 +673,75 @@ setscrptr   .block
             ; BASIC -> poke 53272, (peek(53272) and 240) or 12
             lda  vicmemptr      ;$d018, 53272            
             ; vicmemptr
-            ;  +-------+-------+-------+-------+-------+-------+-------+-------+
-            ;  |   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0   |
-            ;  +-------+-------+-------+-------+-------+-------+-------+-------+
-            ;  |  txt  |  txt  |  txt  |  txt  | chars | chars | chars |       | 
-            ;  |  scr  |  scr  |  scr  |  scr  |  def  |  def  |  def  |   X   |
-            ;  | bit 3 | bit 2 | bit 1 | bit 0 | bit 2 | bit 1 | bit 0 |       |
-            ;  +-------+-------+-------+-------+-------+-------+-------+-------+
+            ;+-------+-------+-------+-------+-------+-------+-------+-------+
+            ;|   7   |   6   |   5   |   4   |   3   |   2   |   1   |   0   |
+            ;+-------+-------+-------+-------+-------+-------+-------+-------+
+            ;|  txt  |  txt  |  txt  |  txt  | chars | chars | chars |       | 
+            ;|  scr  |  scr  |  scr  |  scr  |  def  |  def  |  def  |   X   |
+            ;| bit 3 | bit 2 | bit 1 | bit 0 | bit 2 | bit 1 | bit 0 |       |
+            ;+-------+-------+-------+-------+-------+-------+-------+-------+
             and   #%11110000  ; On conserve les bits 7654 de ce registre ...
-                              ; ... afin de conserver la mémoire vidéo à $0400.
+                              ;    afin de conserver la mémoire vidéo à $0400.
             ora   #charsdef   ; on place les bits 3210 à %xxxx001x ce qui ...
                               ; ... sélectionne la mémoire du bitmap des ...
                               ; ... charactères à $0800. 
             sta   vicmemptr   ; $d018, 53272
 
 ;            ; BASIC -> poke 648, 196            
-;            lda  #%00000100     ;%11000100 ; 196
-;            sta  $0288          ; On indique au kernal que la mémoire video ...
-;                             ; ... commence à 4 * 256 = 1024
-;                             ; 648 - top page of screen memory
+;            lda   #%00000100  ;%11000100 ; 196
+;            sta   $0288       ; On indique au kernal que la mémoire video ...
+;                              ; ... commence à 4 * 256 = 1024
+;                              ; 648 - top page of screen memory
+            jsr   popreg      ; Récupère les registres.
+            rts
+            .bend
+
+;-----------------------------------------------------------------------------
+; Routine qui copie la matrice complète du jeu de caractères de la ROM à la 
+; RAM.
+;-----------------------------------------------------------------------------
+copycharset .block
+            jsr   pushreg           ; Sauvegarde les registres.
+            ;-----------------------------------------------------------------
+            ; On desactive les interruptions du clavier.
+            ; BASIC -> poke 56334, peek(56334) and 254 
+            ;-----------------------------------------------------------------
+            lda   cia1cra           ;$dc0e, 56334 cia1 control register A
+            and   #%11111110        ;254
+            sta   cia1cra           ;$dc0e, 56334 cia1 control register A
+            ;-----------------------------------------------------------------
+            ; On active la rom des bitmaps charactères.     
+            ; BASIC -> poke 1, peek(1) and 251
+            ;-----------------------------------------------------------------
+            lda  u6510map       ;$01
+            and  #%11111011     ;251
+            sta  u6510map       ;$01
+            ;-----------------------------------------------------------------
+            ; ici on copy le character-map
+            ;-----------------------------------------------------------------
+            jsr  memcopy
+            ;-----------------------------------------------------------------
+            ; On réactive les i/o en replaçant la rom des 
+            ; BASIC -> poke 1, peek(1) or 4
+            ;-----------------------------------------------------------------
+            lda  u6510map       ;$01
+            ora  #%00000100
+            sta  u6510map       ;$01
+            ;-----------------------------------------------------------------
+            ; On réactive les interruptions du clavier.
+            ; BASIC -> poke 56334, peek(56334) or 1
+            ;-----------------------------------------------------------------
+            lda  cia1cra        ;$dc0e, 56334 cia1 control register A
+            ora  #%00000001     ;254
+            sta  cia1cra        ;$dc0e, 56334 cia1 control register A
+            ;-----------------------------------------------------------------
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
-;-------------------------------------------------------------------------------
-; Routine qui copie la matrice complète du jeu de caractères de la ROM à la 
-; RAM.
-;-------------------------------------------------------------------------------
-copycharset       .block
-               jsr   pushreg           ; Sauvegarde les registres.
-               ;-----------------------------------------------------------
-               ; On desactive les interruptions du clavier.
-               ; BASIC -> poke 56334, peek(56334) and 254 
-               lda  cia1cra        ;$dc0e, 56334 cia1 control register A
-               and  #%11111110     ;254
-               sta  cia1cra        ;$dc0e, 56334 cia1 control register A
-               ;-----------------------------------------------------------
-               ; On active la rom des bitmaps charactères.     
-               ; BASIC -> poke 1, peek(1) and 251
-               lda  u6510map       ;$01
-               and  #%11111011     ;251
-               sta  u6510map       ;$01
-               ;-----------------------------------------------------------
-               ; ici on copy le character-map
-               jsr  memcopy
-               ;-----------------------------------------------------------
-               ; On réactive les i/o en replaçant la rom des 
-               ; BASIC -> poke 1, peek(1) or 4
-               lda  u6510map       ;$01
-               ora  #%00000100
-               sta  u6510map       ;$01
-               ;-----------------------------------------------------------
-               ; On réactive les interruptions du clavier.
-               ; BASIC -> poke 56334, peek(56334) or 1
-               lda  cia1cra        ;$dc0e, 56334 cia1 control register A
-               ora  #%00000001     ;254
-               sta  cia1cra        ;$dc0e, 56334 cia1 control register A
-               ;-----------------------------------------------------------
-               jsr   popreg            ; Récupère les registres.
-               rts
-               .bend
-
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui copie une région mémoire vers une autre.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 memcopy        .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             lda   startaddr         ; Charge le LSB de l'adresse de départ 
@@ -781,15 +767,15 @@ onemore     lda   (zpage1),y        ; Prend un octet de la rom et
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui affiche les éléments statiques de l'écran.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 drawstatic  .block
             #changebord bordure
             #changeback fond
             ;#uppercase              ; Bloque le système en majuscule/graph. 
             jsr  drawlines          ; Affiche tout ce qui est ligne à l'écran.
-            jsr  drawallchars       ; Affiche les 128 caractères à l'écran
+            jsr  drawchars       ; Affiche les 128 caractères à l'écran
             jsr  drawgrid           ; Affiche la grille de bitmap. 
             jsr  drawfkeys          ; Affiche le menu de clefs fonction.
             #affichemesg redraw_msg ; Affiche le message pour CTRL-R.
@@ -797,14 +783,14 @@ drawstatic  .block
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui affiche le menu de clefs fonction du menu 1 ou 2 selon la variable
 ; fkeyset.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 drawfkeys      .block
             jsr   pushreg           ; Sauvegarde les registres.
             lda  fkeyset            ; On vérifie dans quel menu nous 
-            cmp  #$0                ; somme présentement
+            cmp  #$0             ; somme présentement
             bne  secondks           ; Pas 0, alors on affiche le second menu.
             #printcxy titremenu1    ; Affiche ... le titre
             #printcxy f1abutton     ; ... le F1,
@@ -829,28 +815,28 @@ end         jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui affiche tous les 128 caractères principaux directement dans la 
 ; mémoire vidéo et la mémoire des couleurs.  
-;-------------------------------------------------------------------------------
-drawallchars   .block
-            jsr pushreg
-            #locate   0,0
-            ldx  #$00
+;-----------------------------------------------------------------------------
+drawchars   .block
+            jsr   pushreg
+;            #locate   0,0
+            ldx   #$00
 nextc       txa  
-            sta  scrnnewram,x
-            lda  #charscolor
-            sta  colorram,x
+            sta   scrnnewram,x
+            lda   #charscolor
+            sta   colorram,x
             inx
-            cpx  #$80
-            bne  nextc
+            cpx   #$80
+            bne   nextc
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui affiche toute les lignes de l'écran statique.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 drawlines   .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             ldx   #40
@@ -893,9 +879,9 @@ another93   sta   (zpage1),y
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui affiche la grille de la matrice de point.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 drawgrid    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             jsr   screendis
@@ -922,30 +908,30 @@ nextlin     sta   (zpage1),y
             bne   nextlin
             lda   #$3e
             sta   scrnnewram+(40*(12))+11
-            lda   #$70                  ;+
+            lda   #$70               ;+
             sta   scrnnewram+(40*(11))+12
-            lda   #$43                  ;-
+            lda   #$43               ;-
             sta   scrnnewram+(40*(11))+13  
-            lda   #$6e                  ;+
+            lda   #$6e               ;+
             sta   scrnnewram+(40*(11))+14
-            lda   #$5d                  ;|
+            lda   #$5d               ;|
             sta   scrnnewram+(40*(12))+12
-            lda   #$5d                  ;|
+            lda   #$5d               ;|
             sta   scrnnewram+(40*(12))+14
-            lda   #$6d                  ;+
+            lda   #$6d               ;+
             sta   scrnnewram+(40*(13))+12
-            lda   #$43                  ;-
+            lda   #$43               ;-
             sta   scrnnewram+(40*(13))+13  
-            lda   #$7d                  ;+
+            lda   #$7d               ;+
             sta   scrnnewram+(40*(13))+14
             jsr   screenena
             jsr   popall            ; Récupère registres et pointeur ZP
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui ajoute l'accumulateur au pointeur 16 bits zpage1
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 zp1addnum   .block
             php
             pha
@@ -958,9 +944,9 @@ nocarry     sta  zpage1
             plp
             rts
             .bend
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui ajoute le nombre 40 au pointeur 16 bits zpage1.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 zp1add40    .block
             php
             pha
@@ -975,9 +961,9 @@ nocarry     sta  zpage1
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue un delais d'environ une seconde.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 delay       .block
             jsr   pushreg           ; Sauvegarde les registres.
             lda   #$0
@@ -994,9 +980,9 @@ yagain      dey
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue les actions de la touche F1.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 f1action    .block
             pha
             lda   #$ff
@@ -1032,9 +1018,9 @@ out         #affichemesg prompt_msg
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue les actions de la touche F2.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 f2action    .block
             pha
             lda   #$0
@@ -1055,9 +1041,9 @@ out         #affichemesg prompt_msg
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue les actions de la touche F3.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 f3action    .block
             pha
             lda   #$0
@@ -1088,9 +1074,9 @@ out         #affichemesg prompt_msg
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue les actions de la touche F4.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 f4action    .block
             pha
             lda   #$0
@@ -1122,9 +1108,9 @@ out         #affichemesg prompt_msg
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue les actions de la touche F5.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 f5action    .block
             pha
             lda   #$0
@@ -1145,9 +1131,9 @@ out         #affichemesg prompt_msg
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue les actions de la touche F6.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 f6action    .block
             pha
             lda   #$0
@@ -1168,9 +1154,9 @@ out         #affichemesg prompt_msg
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue les actions de la touche F7.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 f7action    .block
             pha
             lda   #$0
@@ -1193,9 +1179,9 @@ out         #affichemesg prompt_msg
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue les actions de la touche F8.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 f8action    .block
             php
             pha
@@ -1217,9 +1203,9 @@ swapit      eor   #$ff
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui effectue l'actions d'inverser la matrice de points.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 reverse     .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             #setzpage2     mapaddr
@@ -1234,9 +1220,9 @@ again       lda   (zpage2),y
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui décale la matrice de points d'un bit vers le haut.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 scrollup    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             #setzpage1     mapaddr
@@ -1256,9 +1242,9 @@ again       lda   (zpage2),y
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui décale la matrice de points d'un bit vers le bas.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 scrolldown  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             #setzpage1     mapaddr
@@ -1267,21 +1253,21 @@ scrolldown  .block
             ldy   #$07             ;xxxxxxxx zpage1
             lda   (zpage1),y          ;xxxxxxxx zpage2
             sta   tmpbyte             ;xxxxxxxx
-again       dey                   ;xxxxxxxx
+again       dey                ;xxxxxxxx
             lda   (zpage1),y          ;xxxxxxxx
             sta   (zpage2),y          ;xxxxxxxx
             cpy   #$00             ;xxxxxxxx
             bne   again            ;xxxxxxxx
-            ldy   #$00                   
+            ldy   #$00                
             lda   tmpbyte
             sta   (zpage1),y  
             jsr   popall            ; Récupère registres et pointeur ZP
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui décale la matrice de points d'un bit vers la droite.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 scrollright .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             #setzpage1     mapaddr
@@ -1300,9 +1286,9 @@ zero        sta   (zpage1),y
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui décale la matrice de points d'un bit vers la gauche.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 scrollleft  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             #setzpage1     mapaddr
@@ -1319,9 +1305,9 @@ again       lda   (zpage1),y
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui place des 1 partout dans la matrice de points.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 fillchar    .block
             php
             pha
@@ -1332,9 +1318,9 @@ fillchar    .block
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui place des 0 partout dans la matrice de points.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 clearchar   .block
             php
             pha
@@ -1345,9 +1331,9 @@ clearchar   .block
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui place la même valeur (1 ou 0) dans toute la matrice de points.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 allsame     .block
             #setzpage2     mapaddr
             ldy   #$00
@@ -1358,9 +1344,9 @@ again       sta   (zpage2),y
             rts
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui bascule la matrice de points horizontalement.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 fliphorz    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             #setzpage2     mapaddr
@@ -1382,9 +1368,9 @@ rolagain    rol
 ;tmpbyte        .byte     $00
             .bend
 
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Routine qui bascule la matrice de points verticalement.
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 flipvert    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP
             #setzpage2     mapaddr

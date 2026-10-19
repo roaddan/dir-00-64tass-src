@@ -1,11 +1,23 @@
 ;-----------------------------------------------------------------------------
+; Projet...: charedit
+; Fichier..: charedit.asm
+; Auteur...: Daniel Lafrance
+; Version..: 0.1.1
+; Révision.: 2026-10-16
+;-----------------------------------------------------------------------------
+; Historique des révisions:
+; --------------------------
+; 2026-10-16 - Ajout et francisation des commentaires.
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
 version  = "20261015-000001" 
 ;-----------------------------------------------------------------------------
             .include    "e-header-c64.asm"
             .include    "localcons.asm"
             .enc        "none"
 main        .block
-            jsr   push
+            jsr   pushreg
             jsr   scrmaninit
             #disable
             jsr   drawcredits
@@ -25,15 +37,17 @@ main        .block
             #affichemesg prompt_msg
             jsr   kbflushbuff
             jsr   screenena 
-            jsr   keyaction
+            ;-----------------------------------------------------------------
+            ; Le coeur du programme se déroule dans cette routine
+            jsr   keyaction         
+            ;-----------------------------------------------------------------
             jsr   cls
             jsr   drawcredits
             #printcxy bye_msg
             #printcxy any_msg
             jsr   getkey
             jsr   cls       
-endmain     jsr   pop
-            ;jsr  k_coldboot
+endmain     jsr   popreg
             brk
             .bend
 
