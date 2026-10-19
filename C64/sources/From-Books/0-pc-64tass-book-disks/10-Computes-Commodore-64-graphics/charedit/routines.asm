@@ -875,21 +875,21 @@ notyet      cpx   #$00              ; Avons-noous terminé?
             sta   (zpage1),y        ; Affiche dans la mémoire vidéo.
             jsr   zp1add40          ; Ajoute 40 au pointeur.
             ; On imprime ensuite les characteres de la ligne vert
-            ldx   #24-hline2        ; Charge 
-            lda   #93
-another93   sta   (zpage1),y
-            jsr   zp1add40
-            dex
-            bne   another93
+            ldx   #24-hline2        ; Charge l'index de départ.
+            lda   #93               ; Une ligne verticale.
+another93   sta   (zpage1),y        ; Place dans la mémoire vidéo.
+            jsr   zp1add40          ; Ajoute 40 au pointeur.
+            dex                     ; Une ligne de moins à faire.
+            bne   another93         ; Si pas fini on en fait une autre.
             ; On imprime le joint se la ligne vert et la demi 
             ; ... ligne horz.
             lda   #<scrnnewram+(40*(hline3))+vlinepos
-            sta   zpage1
+            sta   zpage1            ; Charge l'adresse 16 bit de l'int- 
             lda   #>scrnnewram+(40*(hline3))+vlinepos
-            sta   zpage1+1
-            ldy   #0
-            lda   #115
-            sta   (zpage1),y
+            sta   zpage1+1          ; ... -ersection des ligne ver et hor.
+            ldy   #0                ; Index à 0.
+            lda   #115              ; Une intersection hor-ver droite. 
+            sta   (zpage1),y        ; On l'écrit dans la mémoire vidéo.
             jsr   popall            ; Récupère registres et pointeur ZP.
             rts
             .bend
@@ -905,41 +905,41 @@ drawgrid    .block
             lda   #>scrnnewram+(40*(grid_top))+grid_left
             sta   zpage1+1          ; ... de la grille bitmap à l'écran.
             ldx   #8                ; Il y a 8 ligne de point.
-nextbox     lda   #101              ; 
-            ldy   #9
-            sta   (zpage1),y
-            dey
-            lda   #$2e
-nextcol     sta   (zpage1),y
-            dey  
-            bne   nextcol
-            jsr   zp1add40
-            dex
-            bne   nextbox
-            ldy   #8
-            lda   #119
-nextlin     sta   (zpage1),y
-            dey  
-            bne   nextlin
-            lda   #$3e
+nextbox     lda   #101              ; Ligne horizontale
+            ldy   #9                ; Index à 9.
+            sta   (zpage1),y        ; On en place une
+            dey                     ; Décrémente l'index.
+            lda   #$2e              ; Un point.
+nextcol     sta   (zpage1),y        ; On en place .
+            dey                     ; Décrémente l'index.
+            bne   nextcol           ; Si pas fini on en met un autre.
+            jsr   zp1add40          ; On ajoute 40 au pointeur.
+            dex                     ; Une ligne en moins à faire.
+            bne   nextbox           ; On branche si pas fini.
+            ldy   #8                ; Index à 8
+            lda   #119              ; Une ligne horizontale haute..
+nextlin     sta   (zpage1),y        ; On la place en mémoire vidéo.
+            dey                     ; Décrémente l'index.
+            bne   nextlin           ; Pas fini? on en fait une autre.
+            lda   #$3e              ; 62 = le signe ">"
             sta   scrnnewram+(40*(12))+11
-            lda   #$70               ;+
+            lda   #$70              ; Un coin sup gauche.
             sta   scrnnewram+(40*(11))+12
-            lda   #$43               ;-
+            lda   #$43              ; Le signe "+".
             sta   scrnnewram+(40*(11))+13  
-            lda   #$6e               ;+
+            lda   #$6e              ; Un coin suppérieur droit.
             sta   scrnnewram+(40*(11))+14
-            lda   #$5d               ;|
+            lda   #$5d              ;| Une ligne verticale.
             sta   scrnnewram+(40*(12))+12
-            lda   #$5d               ;|
+;            lda   #$5d              ;| Une ligne verticale.
             sta   scrnnewram+(40*(12))+14
-            lda   #$6d               ;+
+            lda   #$6d              ; Un coin inférieur gauche.
             sta   scrnnewram+(40*(13))+12
-            lda   #$43               ;-
+            lda   #$43              ; Le sighe "+".
             sta   scrnnewram+(40*(13))+13  
-            lda   #$7d               ;+
+            lda   #$7d              ; Le joint hor-ver droit
             sta   scrnnewram+(40*(13))+14
-            jsr   screenena
+            jsr   screenena         ; Permet l'affichage de l'écran.
             jsr   popall            ; Récupère registres et pointeur ZP.
             rts
             .bend
@@ -948,13 +948,13 @@ nextlin     sta   (zpage1),y
 ; Routine qui ajoute l'accumulateur au pointeur 16 bits zpage1
 ;=============================================================================
 zp1addnum   .block
-            php
-            pha
-            clc
-            adc  zpage1
-            bcc  nocarry
-            inc  zpage1+1
-nocarry     sta  zpage1
+            php                     ; Sauvegarde minimaliste des 
+            pha                     ; ... registres.
+            clc                     ; Carry à 0.
+            adc  zpage1             ; Calcule Zpage1 + Acc. + Carry.
+            bcc  nocarry            ; Si Carry encore à 0, pas de report.
+            inc  zpage1+1           ; Sy report à faire.
+nocarry     sta  zpage1             
             pla
             plp
             rts
