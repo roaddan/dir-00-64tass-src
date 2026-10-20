@@ -21,6 +21,10 @@ main        .block
             jsr   scrmaninit
             #disable
             jsr   drawcredits
+            ldx   #$05              ; Attend environ 5 secondes.
+waitmore    jsr   delay
+            dex
+            bne   waitmore
             jsr   sid_tada
             #printcxy menu_msg
             jsr   screendis
@@ -48,7 +52,8 @@ main        .block
             jsr   getkey
             jsr   cls       
 endmain     jsr   popreg
-            brk
+            jmp   k_warmstart 
+            rts
             .bend
 
 savetofile  .block

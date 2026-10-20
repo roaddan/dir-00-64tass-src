@@ -25,7 +25,7 @@ byteaddr       .word     0
 gridaddr       .word     0 
 cursln         .byte     grid_top
 curscl         .byte     grid_left
-pfname         .byte     vvert,27,3,18     
+pfname         .byte     vvert,25,21,18     
 fname          .null     "@0:"
 name           .null     "origin"
 ext            .null     ".chr"

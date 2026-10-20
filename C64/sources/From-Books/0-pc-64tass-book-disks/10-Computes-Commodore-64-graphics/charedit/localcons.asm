@@ -17,8 +17,8 @@ charsdef       =    %00001100
 bitmapmem      =    charsdef * 1024     ;Calcul position ram des caracteres.
 endofaddr      =    (charsdef * 1024) + (4*$800)
 mstopaddr      =    $d000+(4*$800)
-bordure        =    vgris
-fond           =    vnoir
+bordure        =    vvert
+fond           =    vbleu
 ;-----------------------------------------------------------------------------
 ; Pour le positionnement des lignes à l'écran. (drawlines)
 ;-----------------------------------------------------------------------------
@@ -48,8 +48,8 @@ grid_right     =    grid_left + 7
 ;-----------------------------------------------------------------------------
 ; Pour la couleur des caractères à l'écran et de l'écran de présentation.
 ;-----------------------------------------------------------------------------
-charcolor      =    vrose   
-charscolor     =    vgris2
+charcolor      =    vvert1   
+charscolor     =    vnoir
 whoamicol      =    vcyan
 
 

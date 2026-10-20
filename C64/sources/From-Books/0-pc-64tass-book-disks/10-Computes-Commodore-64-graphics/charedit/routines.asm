@@ -144,10 +144,6 @@ drawcredits   .block
             #printcxy whoami7
             #printcxy whoami8
             #printcxy whoami9
-            ldx   #$05              ; Attend environ 5 secondes.
-waitmore    jsr   delay
-            dex
-            bne   waitmore
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
@@ -555,18 +551,18 @@ drawbitmap  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
             jsr   calcmapaddr       ; On calcule l'adresse de la matrice.
             jsr   drawkeyval       
+drawchar    ldy   #$00              ; On affiche les 8 lignes du caractere  
+            ldx   #grid_top         ; On replace la ligne de départ.
+            stx   isy+1             ; (Code auto-modifié) 
+nextline    jsr   pushreg
+            ldx   #grid_left+1      ; la colonne
+isy         ldy   #$00              ; la ligne (autoinc)
+            jsr   gotoxy
+            jsr   popreg
             lda   mapaddr           ; On pointe zpage 1 sur 
             sta   zpage1            ; ... l'adresse 
             lda   mapaddr+1         ; ... 16 bits de
             sta   zpage1+1          ; ... la table des bitmaps.
-drawchar    ldy   #$00              ; On affiche les 8 lignes du caractere  
-            ldx   #grid_top         ; On replace la ligne de départ.
-            stx   isy+1             ; (Code auto-modifié) 
-nextline    jsr   pushall
-            ldx   #grid_left+1      ; la colonne
-isy         ldy   #$00              ; la ligne (autoinc)
-            jsr   gotoxy
-            jsr   popall
             lda   (zpage1),y        ; On li un octet.
             jsr   atobin            ; Transforme l'octet en binaire ascii ...
             jsr   abintograph       ; ... puis en une série de points.
@@ -964,14 +960,10 @@ nocarry     sta  zpage1
 ; Routine qui ajoute le nombre 40 au pointeur 16 bits zpage1.
 ;=============================================================================
 zp1add40    .block
-            php
-            pha
-            clc
-            lda  zpage1
-            adc  #40
-            bcc  nocarry
-            inc  zpage1+1
-nocarry     sta  zpage1
+            php                     ; Sauvegarde minimaliste des 
+            pha                     ; ... registres.
+            lda   #40
+            jsr   zp1addnum         
             pla
             plp
             rts
