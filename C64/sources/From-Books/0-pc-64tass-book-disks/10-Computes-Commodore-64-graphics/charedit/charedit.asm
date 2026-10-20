@@ -107,6 +107,19 @@ loadfromfile   .block
             rts
             .bend
 
+waitakey    .block
+            php
+            pha
+            lda   #$41
+            pha
+            jsr   $ffd2
+            pla
+            jsr   waitkey
+            pla
+            plp
+            rts
+            .bend  
+
 ;-----------------------------------------------------------------------------
 ; Including my self written libraries.
 ;-----------------------------------------------------------------------------

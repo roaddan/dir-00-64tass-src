@@ -55,9 +55,8 @@ getkey      .block      ; Retourne une clef appuyée dans Acc.
 ;--------------------------------------------------------------------------------
             php         ; Sauvegarde les drapeaux.
 gkagain     jsr getin   ; Tente de lire une clef.
-            cmp #0      ; 0 si aucune.
-            beq gkagain ; Aucune, alors on attend.
-            php         ; Récupère les drapeaux.
+            beq gkagain ; 0=Aucune, alors on attend.
+            plp         ; Récupère les drapeaux.
             rts
             .bend
 

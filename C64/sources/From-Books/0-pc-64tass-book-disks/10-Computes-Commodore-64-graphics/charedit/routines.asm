@@ -290,13 +290,17 @@ drawkeyval     .block
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
-            
+
 ;=============================================================================
 ; Routine qui effectue les action des clef des menus.
 ;=============================================================================
 keyaction   .block
             jsr   pushreg           ; Sauvegarde les registres.
-actionloop  jsr   getkey            ; Boucle de récupération de clef.  
+            ; ----- test
+            jsr   waitakey
+            ; ----- test  
+actionloop  jsr   getkey            ; Boucle de récupération de clef.
+
 isitf1      cmp   #key_f1           ; est-ce F1  
             bne   isitf2            ; non, on va voir la prochaine.
             jmp   dof1              ; Oui, On l'exécute.
@@ -369,7 +373,8 @@ dof8        jsr   f8action          ;menub/menua
 doredraw    jsr   scrredraw         ;Redessine l'écran
             jmp   actionloop
             ;-----------------------------------------------------------------
-doquit      jsr   popreg            ;Retourne à main
+doquit      
+            jsr   popreg            ;Retourne à main
             rts
             .bend
 
