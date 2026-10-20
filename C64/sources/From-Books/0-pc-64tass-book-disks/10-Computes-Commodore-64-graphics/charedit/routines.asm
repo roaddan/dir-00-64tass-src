@@ -100,7 +100,7 @@ no_offset   lda   mapaddr           ; On place les pointeurs pour faire la
 nextbyte    lda   (zpage1),y        ; ... constituant l'image bitmap
             sta   (zpage2),y        ; ... du caractère visé.
             dey
-            bne   nextbyte            
+            bpl   nextbyte            
 out         jsr   popall            ; Récupère registres et pointeur ZP.
             rts
             .bend 
