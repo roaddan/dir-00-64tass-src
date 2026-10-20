@@ -137,8 +137,8 @@ waitakey    .block
 ; Chargement du code spécifique au programmes et ...
             .include    "routines.asm"
 ; ... de ses chaines de caractères, ..
-            .include    "strings_fr.asm"
-;            .include    "strings_en.asm"
+;            .include    "strings_fr.asm"
+            .include    "strings_en.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement en RAM des variables des librairies à la suite du programme.
             .include    "e-c64-vars.asm"

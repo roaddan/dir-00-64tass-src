@@ -59,8 +59,8 @@ menua_msg      .byte     mesgcol,0,5
 menub_msg      .byte     mesgcol,0,5
                .null     " you are being moved to menu 2."
 
-copychar_msg   .byte     vjaune,0,5
-               .text     " enter character to copy from (?).",
+cp_char_msg    .byte     vjaune,0,5
+               .text     " enter character to copy from (?)."
                .byte     157,157,157
                .byte     0
 
@@ -71,12 +71,12 @@ fname_msg      .byte     vjaune,0,5
                .byte     157,157,157,157,157,157,157,157,157,157
                .byte     0
 
-quit_msg       .byte     vmauve,21,24,18
+quit_msg       .byte     vmauve,20,24,18
                .text     "ctrl-x"
                .byte     146
                .null     " to quit."     
 
-redraw_msg     .byte     vrose,20,22,18
+redraw_msg     .byte     vrose,20,23,18
                .text     "ctrl-r"
                .byte     146
                .null     " to redraw."     
@@ -93,8 +93,10 @@ whoami0        .byte     whoamicol,4,6,18
 
 whoami1        .byte     whoamicol,4,7,18
                .text     "          "
-               .byte     146," charedit "
-               .byte     18,"           "
+               .byte     146
+               .text     " charedit "
+               .byte     18
+               .text     "           "
                .byte     146
                .byte     0
  
@@ -151,12 +153,14 @@ any_msg        .byte     vvert1,5,24,18
 ;--------- first function key set ------------------               
 
 titremenu1     .byte     menu1col1,fkeyleft,f1top-2
-               .byte     18,"   function set #1   "
+               .byte     18
+               .text     "   function set #1   "
                .byte     146
                .byte     0
 
 titremenu2     .byte     menu2col1,fkeyleft,f1top-2       ;133
-               .byte     18,"   function set #2   "
+               .byte     18
+               .text     "   function set #2   "
                .byte     146
                .byte     0
 
