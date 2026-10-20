@@ -296,11 +296,7 @@ drawkeyval     .block
 ;=============================================================================
 keyaction   .block
             jsr   pushreg           ; Sauvegarde les registres.
-            ; ----- test
-            jsr   waitakey
-            ; ----- test  
 actionloop  jsr   getkey            ; Boucle de récupération de clef.
-
 isitf1      cmp   #key_f1           ; est-ce F1  
             bne   isitf2            ; non, on va voir la prochaine.
             jmp   dof1              ; Oui, On l'exécute.
@@ -557,7 +553,8 @@ clrcurs        .block
 ;=============================================================================
 drawbitmap  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-            jsr   calcmapaddr       ; On calcule l'adresse de la matrice.       
+            jsr   calcmapaddr       ; On calcule l'adresse de la matrice.
+            jsr   drawkeyval       
             lda   mapaddr           ; On pointe zpage 1 sur 
             sta   zpage1            ; ... l'adresse 
             lda   mapaddr+1         ; ... 16 bits de
@@ -565,11 +562,11 @@ drawbitmap  .block
 drawchar    ldy   #$00              ; On affiche les 8 lignes du caractere  
             ldx   #grid_top         ; On replace la ligne de départ.
             stx   isy+1             ; (Code auto-modifié) 
-nextline    jsr   pushreg
+nextline    jsr   pushall
             ldx   #grid_left+1      ; la colonne
 isy         ldy   #$00              ; la ligne (autoinc)
             jsr   gotoxy
-            jsr   popreg
+            jsr   popall
             lda   (zpage1),y        ; On li un octet.
             jsr   atobin            ; Transforme l'octet en binaire ascii ...
             jsr   abintograph       ; ... puis en une série de points.
@@ -580,7 +577,6 @@ isy         ldy   #$00              ; la ligne (autoinc)
             bmi   nextline          ; Non, on passe à la prochaine.
             jsr   highlight         ; 
             jsr   popall            ; Récupère registres et pointeur ZP.
-            jsr   drawkeyval
             rts
             .bend
 
