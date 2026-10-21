@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd -i -L charedit.txt -o charedit.prg charedit.asm
-; Mon Oct 19 22:49:49 2026
+; Wed Oct 21 11:28:02 2026
 
 ;Offset	;Hex		;Source
 
@@ -45,8 +45,8 @@
 =12288			bitmapmem      =    charsdef * 1024     ;Calcul position ram des caracteres.
 =20480			endofaddr      =    (charsdef * 1024) + (4*$800)
 =61440			mstopaddr      =    $d000+(4*$800)
-=$05			bordure        =    vvert
-=$06			fond           =    vbleu
+=$0b			bordure        =    vgris
+=$00			fond           =    vnoir
 =4			hline1=4
 =6			hline2=6
 =18			hline3=18
@@ -55,17 +55,17 @@
 =18			fkeyleft       =    18
 =9			f1top          =    9
 =$03			mesgcol        =    vcyan
-=$03			menu1col1      =    vcyan
-=$0e			menu1col2      =    vbleu1
-=$0f			menu2col1      =    vgris2
-=$0c			menu2col2      =    vgris1
-=$01			flashcol       =    vblanc
+=$0f			menu1col1      =    vgris2
+=$0c			menu1col2      =    vgris1
+=$0c			menu2col1      =    vgris1 ;vgris2
+=$0b			menu2col2      =    vgris
+=$01			flashcol       =    vblanc    ; Quand l'option de menu est activée.
 =9			grid_top       =    9
 =1			grid_left      =    1
 =16			grid_bot       =    grid_top + 7
 =8			grid_right     =    grid_left + 7
-=$0d			charcolor      =    vvert1
-=$00			charscolor     =    vnoir
+=$07			charcolor      =    vjaune
+=$03			charscolor     =    vcyan
 =$03			whoamicol      =    vcyan
 
 ;******  Return to file: charedit.asm
@@ -86,7 +86,7 @@
 .086d	d0 fa		            bne   waitmore
 .086f	20 aa c0	            jsr   sid_tada
 .0872	20 b3 c4	                   jsr  pushregs
-.0875	a2 fa		               ldx  #<menu_msg
+.0875	a2 fd		               ldx  #<menu_msg
 .0877	a0 1c		               ldy  #>menu_msg
 .0879	20 e0 c3	                   jsr  putscxy
 .087c	20 e2 c4	                   jsr  popregs
@@ -102,10 +102,10 @@
 .0899	20 ac 10	            jsr   drawfkeys
 .089c	a9 00		            lda   #$00
 .089e	20 b3 c4	               jsr  pushreg
-.08a1	a2 58		               ldx  #<blankmsg
+.08a1	a2 5b		               ldx  #<blankmsg
 .08a3	a0 1a		               ldy  #>blankmsg
 .08a5	20 e0 c3	               jsr  putscxy
-.08a8	a2 84		               ldx  #<prompt_msg
+.08a8	a2 87		               ldx  #<prompt_msg
 .08aa	a0 1a		               ldy  #>prompt_msg
 .08ac	20 e0 c3	               jsr  putscxy
 .08af	20 e2 c4	               jsr  popreg
@@ -115,12 +115,12 @@
 .08bb	20 1c c3	            jsr   cls
 .08be	20 f7 0a	            jsr   drawcredits
 .08c1	20 b3 c4	                   jsr  pushregs
-.08c4	a2 83		               ldx  #<bye_msg
+.08c4	a2 86		               ldx  #<bye_msg
 .08c6	a0 1e		               ldy  #>bye_msg
 .08c8	20 e0 c3	                   jsr  putscxy
 .08cb	20 e2 c4	                   jsr  popregs
 .08ce	20 b3 c4	                   jsr  pushregs
-.08d1	a2 a5		               ldx  #<any_msg
+.08d1	a2 a8		               ldx  #<any_msg
 .08d3	a0 1e		               ldy  #>any_msg
 .08d5	20 e0 c3	                   jsr  putscxy
 .08d8	20 e2 c4	                   jsr  popregs
@@ -149,12 +149,12 @@
 .0913	a9 50		            lda   #>endofaddr
 .0915	8d 24 cb	            sta   dsk_data_e+1
 .0918	20 b3 c4	                   jsr  pushregs
-.091b	a2 58		               ldx  #<blankmsg
+.091b	a2 5b		               ldx  #<blankmsg
 .091d	a0 1a		               ldy  #>blankmsg
 .091f	20 e0 c3	                   jsr  putscxy
 .0922	20 e2 c4	                   jsr  popregs
 .0925	20 b3 c4	                   jsr  pushregs
-.0928	a2 9f		               ldx  #<wait_msg
+.0928	a2 a2		               ldx  #<wait_msg
 .092a	a0 1a		               ldy  #>wait_msg
 .092c	20 e0 c3	                   jsr  putscxy
 .092f	20 e2 c4	                   jsr  popregs
@@ -187,12 +187,12 @@
 .0972	a9 50		            lda   #>endofaddr
 .0974	8d 24 cb	            sta   dsk_data_e+1
 .0977	20 b3 c4	                   jsr  pushregs
-.097a	a2 58		               ldx  #<blankmsg
+.097a	a2 5b		               ldx  #<blankmsg
 .097c	a0 1a		               ldy  #>blankmsg
 .097e	20 e0 c3	                   jsr  putscxy
 .0981	20 e2 c4	                   jsr  popregs
 .0984	20 b3 c4	                   jsr  pushregs
-.0987	a2 9f		               ldx  #<wait_msg
+.0987	a2 a2		               ldx  #<wait_msg
 .0989	a0 1a		               ldy  #>wait_msg
 .098b	20 e0 c3	                   jsr  putscxy
 .098e	20 e2 c4	                   jsr  popregs
@@ -271,10 +271,10 @@
 .09f5	ad c5 09	            lda   currentkey        ; Affiche le caractère actuellement
 .09f8	20 37 0f	            jsr   drawbitmap        ; Affiche la représentation bitmap du car.
 .09fb	20 b3 c4	               jsr  pushreg
-.09fe	a2 58		               ldx  #<blankmsg
+.09fe	a2 5b		               ldx  #<blankmsg
 .0a00	a0 1a		               ldy  #>blankmsg
 .0a02	20 e0 c3	               jsr  putscxy
-.0a05	a2 84		               ldx  #<prompt_msg
+.0a05	a2 87		               ldx  #<prompt_msg
 .0a07	a0 1a		               ldy  #>prompt_msg
 .0a09	20 e0 c3	               jsr  putscxy
 .0a0c	20 e2 c4	               jsr  popreg
@@ -284,10 +284,10 @@
 .0a16			getfname
 .0a16	20 b3 c4	            jsr   pushreg           ; Sauvegarde les registres.
 .0a19	20 b3 c4	               jsr  pushreg
-.0a1c	a2 58		               ldx  #<blankmsg
+.0a1c	a2 5b		               ldx  #<blankmsg
 .0a1e	a0 1a		               ldy  #>blankmsg
 .0a20	20 e0 c3	               jsr  putscxy
-.0a23	a2 99		               ldx  #<fname_msg
+.0a23	a2 9c		               ldx  #<fname_msg
 .0a25	a0 1c		               ldy  #>fname_msg
 .0a27	20 e0 c3	               jsr  putscxy
 .0a2a	20 e2 c4	               jsr  popreg
@@ -304,7 +304,7 @@
 .0a48	4c 32 0a	            jmp  getanother         ; Sinon on en demande un autre.
 .0a4b			finish
 .0a4b	20 b3 c4	               jsr  pushreg
-.0a4e	a2 58		               ldx  #<blankmsg
+.0a4e	a2 5b		               ldx  #<blankmsg
 .0a50	a0 1a		               ldy  #>blankmsg
 .0a52	20 e0 c3	               jsr  putscxy
 .0a55	a2 d0		               ldx  #<pfname
@@ -360,10 +360,10 @@
 .0ac1			getvalidkey
 .0ac1	20 b3 c4	            jsr   pushreg           ; Sauvegarde les registres.
 .0ac4	20 b3 c4	               jsr  pushreg
-.0ac7	a2 58		               ldx  #<blankmsg
+.0ac7	a2 5b		               ldx  #<blankmsg
 .0ac9	a0 1a		               ldy  #>blankmsg
 .0acb	20 e0 c3	               jsr  putscxy
-.0ace	a2 70		               ldx  #<cp_char_msg
+.0ace	a2 73		               ldx  #<cp_char_msg
 .0ad0	a0 1c		               ldy  #>cp_char_msg
 .0ad2	20 e0 c3	               jsr  putscxy
 .0ad5	20 e2 c4	               jsr  popreg
@@ -384,52 +384,52 @@
 .0af7	20 b3 c4	            jsr   pushreg           ; Sauvegarde les registres.
 .0afa	20 1c c3	            jsr   cls               ; Efface l'écran.
 .0afd	20 b3 c4	                   jsr  pushregs
-.0b00	a2 0f		               ldx  #<whoami0
+.0b00	a2 12		               ldx  #<whoami0
 .0b02	a0 1d		               ldy  #>whoami0
 .0b04	20 e0 c3	                   jsr  putscxy
 .0b07	20 e2 c4	                   jsr  popregs
 .0b0a	20 b3 c4	                   jsr  pushregs
-.0b0d	a2 34		               ldx  #<whoami1
+.0b0d	a2 37		               ldx  #<whoami1
 .0b0f	a0 1d		               ldy  #>whoami1
 .0b11	20 e0 c3	                   jsr  putscxy
 .0b14	20 e2 c4	                   jsr  popregs
 .0b17	20 b3 c4	                   jsr  pushregs
-.0b1a	a2 5b		               ldx  #<whoami2
+.0b1a	a2 5e		               ldx  #<whoami2
 .0b1c	a0 1d		               ldy  #>whoami2
 .0b1e	20 e0 c3	                   jsr  putscxy
 .0b21	20 e2 c4	                   jsr  popregs
 .0b24	20 b3 c4	                   jsr  pushregs
-.0b27	a2 80		               ldx  #<whoami3
+.0b27	a2 83		               ldx  #<whoami3
 .0b29	a0 1d		               ldy  #>whoami3
 .0b2b	20 e0 c3	                   jsr  putscxy
 .0b2e	20 e2 c4	                   jsr  popregs
 .0b31	20 b3 c4	                   jsr  pushregs
-.0b34	a2 a5		               ldx  #<whoami4
+.0b34	a2 a8		               ldx  #<whoami4
 .0b36	a0 1d		               ldy  #>whoami4
 .0b38	20 e0 c3	                   jsr  putscxy
 .0b3b	20 e2 c4	                   jsr  popregs
 .0b3e	20 b3 c4	                   jsr  pushregs
-.0b41	a2 ca		               ldx  #<whoami5
+.0b41	a2 cd		               ldx  #<whoami5
 .0b43	a0 1d		               ldy  #>whoami5
 .0b45	20 e0 c3	                   jsr  putscxy
 .0b48	20 e2 c4	                   jsr  popregs
 .0b4b	20 b3 c4	                   jsr  pushregs
-.0b4e	a2 ef		               ldx  #<whoami6
+.0b4e	a2 f2		               ldx  #<whoami6
 .0b50	a0 1d		               ldy  #>whoami6
 .0b52	20 e0 c3	                   jsr  putscxy
 .0b55	20 e2 c4	                   jsr  popregs
 .0b58	20 b3 c4	                   jsr  pushregs
-.0b5b	a2 14		               ldx  #<whoami7
+.0b5b	a2 17		               ldx  #<whoami7
 .0b5d	a0 1e		               ldy  #>whoami7
 .0b5f	20 e0 c3	                   jsr  putscxy
 .0b62	20 e2 c4	                   jsr  popregs
 .0b65	20 b3 c4	                   jsr  pushregs
-.0b68	a2 39		               ldx  #<whoami8
+.0b68	a2 3c		               ldx  #<whoami8
 .0b6a	a0 1e		               ldy  #>whoami8
 .0b6c	20 e0 c3	                   jsr  putscxy
 .0b6f	20 e2 c4	                   jsr  popregs
 .0b72	20 b3 c4	                   jsr  pushregs
-.0b75	a2 5e		               ldx  #<whoami9
+.0b75	a2 61		               ldx  #<whoami9
 .0b77	a0 1e		               ldy  #>whoami9
 .0b79	20 e0 c3	                   jsr  putscxy
 .0b7c	20 e2 c4	                   jsr  popregs
@@ -447,41 +447,41 @@
 .0b98	60		            rts
 .0b99			rstmenucol
 .0b99	20 b3 c4	            jsr   pushreg           ; Sauvegarde les registres.
-.0b9c	a9 03		            lda   #menu1col1        ; Charge la couleur normale des clefs
-.0b9e	8d ff 1e	            sta   f1abutton         ; ... impaires et l'atrribut a tous les
-.0ba1	8d 35 1f	            sta   f3abutton         ; ... menus impairs.
-.0ba4	8d 6b 1f	            sta   f5abutton
-.0ba7	8d a1 1f	            sta   f7abutton
-.0baa	a9 0e		            lda   #menu1col2        ; Charge la couleur normale des clefs
-.0bac	8d 1a 1f	            sta   f2abutton         ; ... paires et l'atrribut a tous les
-.0baf	8d 50 1f	            sta   f4abutton         ; ... menus pairs.
-.0bb2	8d 86 1f	            sta   f6abutton
-.0bb5	8d bc 1f	            sta   f8abutton
+.0b9c	a9 0f		            lda   #menu1col1        ; Charge la couleur normale des clefs
+.0b9e	8d 02 1f	            sta   f1abutton         ; ... impaires et l'atrribut a tous les
+.0ba1	8d 38 1f	            sta   f3abutton         ; ... menus impairs.
+.0ba4	8d 6e 1f	            sta   f5abutton
+.0ba7	8d a4 1f	            sta   f7abutton
+.0baa	a9 0c		            lda   #menu1col2        ; Charge la couleur normale des clefs
+.0bac	8d 1d 1f	            sta   f2abutton         ; ... paires et l'atrribut a tous les
+.0baf	8d 53 1f	            sta   f4abutton         ; ... menus pairs.
+.0bb2	8d 89 1f	            sta   f6abutton
+.0bb5	8d bf 1f	            sta   f8abutton
 .0bb8	20 e2 c4	            jsr   popreg            ; Récupère les registres.
 .0bbb	60		            rts
 .0bbc			setmenuacolor
 .0bbc	20 b3 c4	            jsr   pushreg           ; Sauvegarde les registres.
-.0bbf	8d ff 1e	            sta   f1abutton         ; Attribut la couleur à chacun des menus.
-.0bc2	8d 1a 1f	            sta   f2abutton
-.0bc5	8d 35 1f	            sta   f3abutton
-.0bc8	8d 50 1f	            sta   f4abutton
-.0bcb	8d 6b 1f	            sta   f5abutton
-.0bce	8d 86 1f	            sta   f6abutton
-.0bd1	8d a1 1f	            sta   f7abutton
-.0bd4	8d bc 1f	            sta   f8abutton
+.0bbf	8d 02 1f	            sta   f1abutton         ; Attribut la couleur à chacun des menus.
+.0bc2	8d 1d 1f	            sta   f2abutton
+.0bc5	8d 38 1f	            sta   f3abutton
+.0bc8	8d 53 1f	            sta   f4abutton
+.0bcb	8d 6e 1f	            sta   f5abutton
+.0bce	8d 89 1f	            sta   f6abutton
+.0bd1	8d a4 1f	            sta   f7abutton
+.0bd4	8d bf 1f	            sta   f8abutton
 .0bd7	20 e2 c4	            jsr   popreg            ; Récupère les registres.
 .0bda	60		            rts
 .0bdb			setmenubcolor
 .0bdb	20 b3 c4	            jsr   pushreg           ; Sauvegarde les registres.
-.0bde	8d d7 1f	            sta   f1bbutton         ; Attribut la couleur à chacun des menus.
-.0be1	8d ff 1e	            sta   f1abutton
-.0be4	8d f2 1f	            sta   f2bbutton
-.0be7	8d 0d 20	            sta   f3bbutton
-.0bea	8d 28 20	            sta   f4bbutton
-.0bed	8d 43 20	            sta   f5bbutton
-.0bf0	8d 5e 20	            sta   f6bbutton
-.0bf3	8d 79 20	            sta   f7bbutton
-.0bf6	8d 94 20	            sta   f8bbutton
+.0bde	8d da 1f	            sta   f1bbutton         ; Attribut la couleur à chacun des menus.
+.0be1	8d 02 1f	            sta   f1abutton
+.0be4	8d f5 1f	            sta   f2bbutton
+.0be7	8d 10 20	            sta   f3bbutton
+.0bea	8d 2b 20	            sta   f4bbutton
+.0bed	8d 46 20	            sta   f5bbutton
+.0bf0	8d 61 20	            sta   f6bbutton
+.0bf3	8d 7c 20	            sta   f7bbutton
+.0bf6	8d 97 20	            sta   f8bbutton
 .0bf9	20 e2 c4	            jsr   popreg            ; Récupère les registres.
 .0bfc	60		            rts
 .0bfd			drawkeyval
@@ -523,7 +523,7 @@
 .0c54	20 53 c3	                jsr gotoxy
 .0c57	20 e2 c4	                jsr popregs
 .0c5a	20 b3 c4	                   jsr  pushregs
-.0c5d	a2 bc		               ldx  #<txt1
+.0c5d	a2 bf		               ldx  #<txt1
 .0c5f	a0 20		               ldy  #>txt1
 .0c61	20 39 c3	                   jsr  putsyx
 .0c64	20 e2 c4	                   jsr  popregs
@@ -537,7 +537,7 @@
 .0c77	20 53 c3	                jsr gotoxy
 .0c7a	20 e2 c4	                jsr popregs
 .0c7d	20 b3 c4	                   jsr  pushregs
-.0c80	a2 c9		               ldx  #<txt2
+.0c80	a2 cc		               ldx  #<txt2
 .0c82	a0 20		               ldy  #>txt2
 .0c84	20 39 c3	                   jsr  putsyx
 .0c87	20 e2 c4	                   jsr  popregs
@@ -553,7 +553,7 @@
 .0ca2	20 53 c3	                jsr gotoxy
 .0ca5	20 e2 c4	                jsr popregs
 .0ca8	20 b3 c4	                   jsr  pushregs
-.0cab	a2 d4		               ldx  #<txt3
+.0cab	a2 d7		               ldx  #<txt3
 .0cad	a0 20		               ldy  #>txt3
 .0caf	20 39 c3	                   jsr  putsyx
 .0cb2	20 e2 c4	                   jsr  popregs
@@ -567,7 +567,7 @@
 .0cc7	20 53 c3	                jsr gotoxy
 .0cca	20 e2 c4	                jsr popregs
 .0ccd	20 b3 c4	                   jsr  pushregs
-.0cd0	a2 e1		               ldx  #<txt4
+.0cd0	a2 e4		               ldx  #<txt4
 .0cd2	a0 20		               ldy  #>txt4
 .0cd4	20 39 c3	                   jsr  putsyx
 .0cd7	20 e2 c4	                   jsr  popregs
@@ -583,7 +583,7 @@
 .0cf2	20 53 c3	                jsr gotoxy
 .0cf5	20 e2 c4	                jsr popregs
 .0cf8	20 b3 c4	                   jsr  pushregs
-.0cfb	a2 ec		               ldx  #<txt5
+.0cfb	a2 ef		               ldx  #<txt5
 .0cfd	a0 20		               ldy  #>txt5
 .0cff	20 39 c3	                   jsr  putsyx
 .0d02	20 e2 c4	                   jsr  popregs
@@ -639,21 +639,21 @@
 .0d75	8c c7 09	            sty   bmoffset          ; ... et le mémorise.
 .0d78	20 37 0f	            jsr   drawbitmap
 .0d7b	4c 1d 0d	            jmp   actionloop
-.0d7e	20 93 12	dof1        jsr   f1action          ;edit/reverse
+.0d7e	20 96 12	dof1        jsr   f1action          ;edit/reverse
 .0d81	4c 1d 0d	            jmp   actionloop
-.0d84	20 b4 13	dof2        jsr   f2action          ;save/flip vert
+.0d84	20 b7 13	dof2        jsr   f2action          ;save/flip vert
 .0d87	4c 1d 0d	            jmp   actionloop
-.0d8a	20 68 14	dof3        jsr   f3action          ;load/flip horz
+.0d8a	20 6b 14	dof3        jsr   f3action          ;load/flip horz
 .0d8d	4c 1d 0d	            jmp   actionloop
-.0d90	20 45 15	dof4        jsr   f4action          ;copy/scroll r
+.0d90	20 48 15	dof4        jsr   f4action          ;copy/scroll r
 .0d93	4c 1d 0d	            jmp   actionloop
-.0d96	20 25 16	dof5        jsr   f5action          ;clear/scroll l
+.0d96	20 28 16	dof5        jsr   f5action          ;clear/scroll l
 .0d99	4c 1d 0d	            jmp   actionloop
-.0d9c	20 d9 16	dof6        jsr   f6action          ;fill/scroll up
+.0d9c	20 dc 16	dof6        jsr   f6action          ;fill/scroll up
 .0d9f	4c 1d 0d	            jmp   actionloop
-.0da2	20 8d 17	dof7        jsr   f7action          ;clear/scroll down
+.0da2	20 90 17	dof7        jsr   f7action          ;clear/scroll down
 .0da5	4c 1d 0d	            jmp   actionloop
-.0da8	20 46 18	dof8        jsr   f8action          ;menub/menua
+.0da8	20 49 18	dof8        jsr   f8action          ;menub/menua
 .0dab	4c 1d 0d	            jmp   actionloop
 .0dae	20 e6 09	doredraw    jsr   scrredraw         ;Redessine l'écran
 .0db1	4c 1d 0d	            jmp   actionloop
@@ -663,18 +663,18 @@
 .0db8			editor
 .0db8	20 b3 c4	            jsr   pushreg           ; Sauvegarde les registres.
 .0dbb	20 b3 c4	               jsr  pushreg
-.0dbe	a2 58		               ldx  #<blankmsg
+.0dbe	a2 5b		               ldx  #<blankmsg
 .0dc0	a0 1a		               ldy  #>blankmsg
 .0dc2	20 e0 c3	               jsr  putscxy
-.0dc5	a2 fa		               ldx  #<exit_msg
+.0dc5	a2 fd		               ldx  #<exit_msg
 .0dc7	a0 1c		               ldy  #>exit_msg
 .0dc9	20 e0 c3	               jsr  putscxy
 .0dcc	20 e2 c4	               jsr  popreg
 .0dcf	20 b3 c4	               jsr  pushreg
-.0dd2	a2 58		               ldx  #<blankmsg
+.0dd2	a2 5b		               ldx  #<blankmsg
 .0dd4	a0 1a		               ldy  #>blankmsg
 .0dd6	20 e0 c3	               jsr  putscxy
-.0dd9	a2 bb		               ldx  #<edit_msg
+.0dd9	a2 be		               ldx  #<edit_msg
 .0ddb	a0 1a		               ldy  #>edit_msg
 .0ddd	20 e0 c3	               jsr  putscxy
 .0de0	20 e2 c4	               jsr  popreg
@@ -855,12 +855,12 @@
 .0f85	ae c6 09	            ldx  previouskey        ; Replace le caractère précédente
 .0f88	bd 42 c8	            lda  asciitorom,x       ; ... dans sa
 .0f8b	aa		            tax                     ; ... couleur
-.0f8c	a9 00		            lda  #charscolor        ; ... normale
+.0f8c	a9 03		            lda  #charscolor        ; ... normale
 .0f8e	9d 00 d8	            sta  colorram,x         ; ... sur l'écran.
 .0f91	ae c5 09	            ldx  currentkey         ; Place le caractère actuel
 .0f94	bd 42 c8	            lda  asciitorom,x       ; ... dans sa
 .0f97	aa		            tax                     ; ... couleur
-.0f98	a9 0d		            lda  #charcolor         ; ... surbrillante
+.0f98	a9 07		            lda  #charcolor         ; ... surbrillante
 .0f9a	9d 00 d8	            sta  colorram,x         ; ... sur l'écran.
 .0f9d	20 e2 c4	            jsr   popreg            ; Récupère les registres.
 .0fa0	60		            rts
@@ -958,13 +958,13 @@
 .1065			drawstatic
 .1065	08		                   php
 .1066	48		                   pha
-.1067	a9 05		               lda  #bordure
+.1067	a9 0b		               lda  #bordure
 .1069	8d 20 d0	               sta  $d020
 .106c	68		                   pla
 .106d	28		                   plp
 .106e	08		                   php
 .106f	48		                   pha
-.1070	a9 06		               lda  #fond
+.1070	a9 00		               lda  #fond
 .1072	8d 21 d0	               sta  $d021
 .1075	68		                   pla
 .1076	28		                   plp
@@ -973,18 +973,18 @@
 .107d	20 06 12	            jsr  drawgrid           ; Affiche la grille de bitmap.
 .1080	20 ac 10	            jsr  drawfkeys          ; Affiche le menu de clefs fonction.
 .1083	20 b3 c4	               jsr  pushreg
-.1086	a2 58		               ldx  #<blankmsg
+.1086	a2 5b		               ldx  #<blankmsg
 .1088	a0 1a		               ldy  #>blankmsg
 .108a	20 e0 c3	               jsr  putscxy
-.108d	a2 e3		               ldx  #<redraw_msg
+.108d	a2 e6		               ldx  #<redraw_msg
 .108f	a0 1c		               ldy  #>redraw_msg
 .1091	20 e0 c3	               jsr  putscxy
 .1094	20 e2 c4	               jsr  popreg
 .1097	20 b3 c4	               jsr  pushreg
-.109a	a2 58		               ldx  #<blankmsg
+.109a	a2 5b		               ldx  #<blankmsg
 .109c	a0 1a		               ldy  #>blankmsg
 .109e	20 e0 c3	               jsr  putscxy
-.10a1	a2 ce		               ldx  #<quit_msg
+.10a1	a2 d1		               ldx  #<quit_msg
 .10a3	a0 1c		               ldy  #>quit_msg
 .10a5	20 e0 c3	               jsr  putscxy
 .10a8	20 e2 c4	               jsr  popreg
@@ -995,94 +995,94 @@
 .10b2	c9 00		            cmp  #$0                ; somme présentement
 .10b4	d0 78		            bne  secondks           ; Pas 0, alors on affiche le second menu.
 .10b6	20 b3 c4	                   jsr  pushregs
-.10b9	a2 c9		               ldx  #<titremenu1
+.10b9	a2 cc		               ldx  #<titremenu1
 .10bb	a0 1e		               ldy  #>titremenu1
 .10bd	20 e0 c3	                   jsr  putscxy
 .10c0	20 e2 c4	                   jsr  popregs
 .10c3	20 b3 c4	                   jsr  pushregs
-.10c6	a2 ff		               ldx  #<f1abutton
-.10c8	a0 1e		               ldy  #>f1abutton
+.10c6	a2 02		               ldx  #<f1abutton
+.10c8	a0 1f		               ldy  #>f1abutton
 .10ca	20 e0 c3	                   jsr  putscxy
 .10cd	20 e2 c4	                   jsr  popregs
 .10d0	20 b3 c4	                   jsr  pushregs
-.10d3	a2 1a		               ldx  #<f2abutton
+.10d3	a2 1d		               ldx  #<f2abutton
 .10d5	a0 1f		               ldy  #>f2abutton
 .10d7	20 e0 c3	                   jsr  putscxy
 .10da	20 e2 c4	                   jsr  popregs
 .10dd	20 b3 c4	                   jsr  pushregs
-.10e0	a2 35		               ldx  #<f3abutton
+.10e0	a2 38		               ldx  #<f3abutton
 .10e2	a0 1f		               ldy  #>f3abutton
 .10e4	20 e0 c3	                   jsr  putscxy
 .10e7	20 e2 c4	                   jsr  popregs
 .10ea	20 b3 c4	                   jsr  pushregs
-.10ed	a2 50		               ldx  #<f4abutton
+.10ed	a2 53		               ldx  #<f4abutton
 .10ef	a0 1f		               ldy  #>f4abutton
 .10f1	20 e0 c3	                   jsr  putscxy
 .10f4	20 e2 c4	                   jsr  popregs
 .10f7	20 b3 c4	                   jsr  pushregs
-.10fa	a2 6b		               ldx  #<f5abutton
+.10fa	a2 6e		               ldx  #<f5abutton
 .10fc	a0 1f		               ldy  #>f5abutton
 .10fe	20 e0 c3	                   jsr  putscxy
 .1101	20 e2 c4	                   jsr  popregs
 .1104	20 b3 c4	                   jsr  pushregs
-.1107	a2 86		               ldx  #<f6abutton
+.1107	a2 89		               ldx  #<f6abutton
 .1109	a0 1f		               ldy  #>f6abutton
 .110b	20 e0 c3	                   jsr  putscxy
 .110e	20 e2 c4	                   jsr  popregs
 .1111	20 b3 c4	                   jsr  pushregs
-.1114	a2 a1		               ldx  #<f7abutton
+.1114	a2 a4		               ldx  #<f7abutton
 .1116	a0 1f		               ldy  #>f7abutton
 .1118	20 e0 c3	                   jsr  putscxy
 .111b	20 e2 c4	                   jsr  popregs
 .111e	20 b3 c4	                   jsr  pushregs
-.1121	a2 bc		               ldx  #<f8abutton
+.1121	a2 bf		               ldx  #<f8abutton
 .1123	a0 1f		               ldy  #>f8abutton
 .1125	20 e0 c3	                   jsr  putscxy
 .1128	20 e2 c4	                   jsr  popregs
 .112b	4c a3 11	            jmp end
 .112e			secondks
 .112e	20 b3 c4	                   jsr  pushregs
-.1131	a2 e4		               ldx  #<titremenu2
+.1131	a2 e7		               ldx  #<titremenu2
 .1133	a0 1e		               ldy  #>titremenu2
 .1135	20 e0 c3	                   jsr  putscxy
 .1138	20 e2 c4	                   jsr  popregs
 .113b	20 b3 c4	                   jsr  pushregs
-.113e	a2 d7		               ldx  #<f1bbutton
+.113e	a2 da		               ldx  #<f1bbutton
 .1140	a0 1f		               ldy  #>f1bbutton
 .1142	20 e0 c3	                   jsr  putscxy
 .1145	20 e2 c4	                   jsr  popregs
 .1148	20 b3 c4	                   jsr  pushregs
-.114b	a2 f2		               ldx  #<f2bbutton
+.114b	a2 f5		               ldx  #<f2bbutton
 .114d	a0 1f		               ldy  #>f2bbutton
 .114f	20 e0 c3	                   jsr  putscxy
 .1152	20 e2 c4	                   jsr  popregs
 .1155	20 b3 c4	                   jsr  pushregs
-.1158	a2 0d		               ldx  #<f3bbutton
+.1158	a2 10		               ldx  #<f3bbutton
 .115a	a0 20		               ldy  #>f3bbutton
 .115c	20 e0 c3	                   jsr  putscxy
 .115f	20 e2 c4	                   jsr  popregs
 .1162	20 b3 c4	                   jsr  pushregs
-.1165	a2 28		               ldx  #<f4bbutton
+.1165	a2 2b		               ldx  #<f4bbutton
 .1167	a0 20		               ldy  #>f4bbutton
 .1169	20 e0 c3	                   jsr  putscxy
 .116c	20 e2 c4	                   jsr  popregs
 .116f	20 b3 c4	                   jsr  pushregs
-.1172	a2 43		               ldx  #<f5bbutton
+.1172	a2 46		               ldx  #<f5bbutton
 .1174	a0 20		               ldy  #>f5bbutton
 .1176	20 e0 c3	                   jsr  putscxy
 .1179	20 e2 c4	                   jsr  popregs
 .117c	20 b3 c4	                   jsr  pushregs
-.117f	a2 5e		               ldx  #<f6bbutton
+.117f	a2 61		               ldx  #<f6bbutton
 .1181	a0 20		               ldy  #>f6bbutton
 .1183	20 e0 c3	                   jsr  putscxy
 .1186	20 e2 c4	                   jsr  popregs
 .1189	20 b3 c4	                   jsr  pushregs
-.118c	a2 79		               ldx  #<f7bbutton
+.118c	a2 7c		               ldx  #<f7bbutton
 .118e	a0 20		               ldy  #>f7bbutton
 .1190	20 e0 c3	                   jsr  putscxy
 .1193	20 e2 c4	                   jsr  popregs
 .1196	20 b3 c4	                   jsr  pushregs
-.1199	a2 94		               ldx  #<f8bbutton
+.1199	a2 97		               ldx  #<f8bbutton
 .119b	a0 20		               ldy  #>f8bbutton
 .119d	20 e0 c3	                   jsr  putscxy
 .11a0	20 e2 c4	                   jsr  popregs
@@ -1093,7 +1093,7 @@
 .11aa	a2 00		            ldx   #$00              ; Index à 0.
 .11ac	8a		nextc       txa                     ; On fait un caractère de l'index.
 .11ad	9d 00 04	            sta   scrnnewram,x      ; On affiche directement en ram vidéo.
-.11b0	a9 00		            lda   #charscolor       ; On charge la couleur.
+.11b0	a9 03		            lda   #charscolor       ; On charge la couleur.
 .11b2	9d 00 d8	            sta   colorram,x        ; On la place en ram couleur.
 .11b5	e8		            inx                     ; Incrémente l'index.
 .11b6	e0 80		            cpx   #$80              ; Sommes nous à la fin?
@@ -1193,1351 +1193,1353 @@
 .1273			zp1add40
 .1273	08		            php                     ; Sauvegarde minimaliste des
 .1274	48		            pha                     ; ... registres.
-.1275	a9 28		            lda   #40
-.1277	20 65 12	            jsr   zp1addnum
+.1275	a9 28		            lda   #40               ; Ajouter 40 avec l'aide
+.1277	20 65 12	            jsr   zp1addnum         ; ... de zp1addnum.
 .127a	68		            pla
 .127b	28		            plp
 .127c	60		            rts
 .127d			delay
 .127d	20 b3 c4	            jsr   pushreg           ; Sauvegarde les registres.
-.1280	a9 00		            lda   #$0
-.1282	aa		            tax
-.1283	a8		            tay
+.1280	a2 00		            ldx   #$00
+.1282	a0 00		            ldy   #$00
 .1284	ca		xagain      dex
-.1285	ca		            dex
-.1286	88		yagain      dey
-.1287	c0 00		            cpy   #$00
-.1289	d0 fb		            bne   yagain
-.128b	e0 00		            cpx   #$00
-.128d	d0 f5		            bne   xagain
-.128f	20 e2 c4	            jsr   popreg            ; Récupère les registres.
-.1292	60		            rts
-.1293			f1action
-.1293	48		            pha
-.1294	a9 ff		            lda   #$ff
-.1296	8d c2 09	            sta   editmode
-.1299	ad c3 09	            lda   fkeyset
-.129c	f0 03		            beq   menua
-.129e	4c 56 13	            jmp   menub
-.12a1			menua
-.12a1	20 b3 c4	               jsr  pushreg
-.12a4	a2 58		               ldx  #<blankmsg
-.12a6	a0 1a		               ldy  #>blankmsg
-.12a8	20 e0 c3	               jsr  putscxy
-.12ab	a2 bb		               ldx  #<f1a_msg
-.12ad	a0 1a		               ldy  #>f1a_msg
-.12af	20 e0 c3	               jsr  putscxy
-.12b2	20 e2 c4	               jsr  popreg
-.12b5	20 b3 c4	               jsr  pushreg
-.12b8	ad ff 1e	               lda  f1abutton
-.12bb	48		               pha
-.12bc	a9 92		               lda  #146
-.12be	8d 11 1f	               sta  f1abutton+18
-.12c1	a9 01		               lda  #flashcol
-.12c3	8d ff 1e	               sta  f1abutton
-.12c6	a2 ff		               ldx  #<f1abutton
-.12c8	a0 1e		               ldy  #>f1abutton
-.12ca	20 e0 c3	               jsr  putscxy
-.12cd	20 7d 12	               jsr  delay
-.12d0	a9 12		               lda  #18
-.12d2	8d 11 1f	               sta  f1abutton+18
-.12d5	68		               pla
-.12d6	8d ff 1e	               sta  f1abutton
-.12d9	a2 ff		               ldx  #<f1abutton
-.12db	a0 1e		               ldy  #>f1abutton
-.12dd	20 e0 c3	               jsr  putscxy
-.12e0	20 e2 c4	               jsr  popreg
-.12e3	a9 0b		            lda   #vgris
-.12e5	20 bc 0b	            jsr   setmenuacolor
-.12e8	a9 03		            lda   #menu1col1
-.12ea	8d ff 1e	            sta   f1abutton
-.12ed	20 ac 10	            jsr   drawfkeys
-.12f0	a9 0b		            lda   #vgris
-.12f2	8d e3 1c	            sta   redraw_msg
-.12f5	20 b3 c4	               jsr  pushreg
-.12f8	a2 58		               ldx  #<blankmsg
-.12fa	a0 1a		               ldy  #>blankmsg
-.12fc	20 e0 c3	               jsr  putscxy
-.12ff	a2 e3		               ldx  #<redraw_msg
-.1301	a0 1c		               ldy  #>redraw_msg
-.1303	20 e0 c3	               jsr  putscxy
-.1306	20 e2 c4	               jsr  popreg
-.1309	20 b8 0d	            jsr   editor
-.130c	a9 0a		            lda   #vrose
-.130e	8d e3 1c	            sta   redraw_msg
-.1311	20 b3 c4	               jsr  pushreg
-.1314	a2 58		               ldx  #<blankmsg
-.1316	a0 1a		               ldy  #>blankmsg
-.1318	20 e0 c3	               jsr  putscxy
-.131b	a2 e3		               ldx  #<redraw_msg
-.131d	a0 1c		               ldy  #>redraw_msg
-.131f	20 e0 c3	               jsr  putscxy
-.1322	20 e2 c4	               jsr  popreg
-.1325	20 b3 c4	               jsr  pushreg
-.1328	a2 58		               ldx  #<blankmsg
-.132a	a0 1a		               ldy  #>blankmsg
-.132c	20 e0 c3	               jsr  putscxy
-.132f	a2 ce		               ldx  #<quit_msg
-.1331	a0 1c		               ldy  #>quit_msg
-.1333	20 e0 c3	               jsr  putscxy
-.1336	20 e2 c4	               jsr  popreg
-.1339	20 b3 c4	               jsr  pushreg
-.133c	a2 58		               ldx  #<blankmsg
-.133e	a0 1a		               ldy  #>blankmsg
-.1340	20 e0 c3	               jsr  putscxy
-.1343	a2 2a		               ldx  #<menua_msg
-.1345	a0 1c		               ldy  #>menua_msg
-.1347	20 e0 c3	               jsr  putscxy
-.134a	20 e2 c4	               jsr  popreg
-.134d	20 99 0b	            jsr   rstmenucol
-.1350	20 ac 10	            jsr   drawfkeys
-.1353	4c 9e 13	            jmp   out
-.1356			menub
-.1356	20 b3 c4	               jsr  pushreg
-.1359	a2 58		               ldx  #<blankmsg
-.135b	a0 1a		               ldy  #>blankmsg
-.135d	20 e0 c3	               jsr  putscxy
-.1360	a2 90		               ldx  #<f1b_msg
-.1362	a0 1b		               ldy  #>f1b_msg
-.1364	20 e0 c3	               jsr  putscxy
-.1367	20 e2 c4	               jsr  popreg
-.136a	20 b3 c4	               jsr  pushreg
-.136d	ad d7 1f	               lda  f1bbutton
-.1370	48		               pha
-.1371	a9 92		               lda  #146
-.1373	8d e9 1f	               sta  f1bbutton+18
-.1376	a9 01		               lda  #flashcol
-.1378	8d d7 1f	               sta  f1bbutton
-.137b	a2 d7		               ldx  #<f1bbutton
-.137d	a0 1f		               ldy  #>f1bbutton
-.137f	20 e0 c3	               jsr  putscxy
-.1382	20 7d 12	               jsr  delay
-.1385	a9 12		               lda  #18
-.1387	8d e9 1f	               sta  f1bbutton+18
-.138a	68		               pla
-.138b	8d d7 1f	               sta  f1bbutton
-.138e	a2 d7		               ldx  #<f1bbutton
-.1390	a0 1f		               ldy  #>f1bbutton
-.1392	20 e0 c3	               jsr  putscxy
-.1395	20 e2 c4	               jsr  popreg
-.1398	20 25 1a	            jsr   flipvert
-.139b	20 37 0f	            jsr   drawbitmap
-.139e			out
-.139e	20 b3 c4	               jsr  pushreg
-.13a1	a2 58		               ldx  #<blankmsg
-.13a3	a0 1a		               ldy  #>blankmsg
-.13a5	20 e0 c3	               jsr  putscxy
-.13a8	a2 84		               ldx  #<prompt_msg
-.13aa	a0 1a		               ldy  #>prompt_msg
-.13ac	20 e0 c3	               jsr  putscxy
-.13af	20 e2 c4	               jsr  popreg
-.13b2	68		            pla
-.13b3	60		            rts
-.13b4			f2action
-.13b4	48		            pha
-.13b5	a9 00		            lda   #$0
-.13b7	8d c2 09	            sta   editmode
-.13ba	ad c3 09	            lda   fkeyset
-.13bd	d0 4b		            bne   menub
-.13bf	20 b3 c4	               jsr  pushreg
-.13c2	a2 58		               ldx  #<blankmsg
-.13c4	a0 1a		               ldy  #>blankmsg
-.13c6	20 e0 c3	               jsr  putscxy
-.13c9	a2 d5		               ldx  #<f2a_msg
-.13cb	a0 1a		               ldy  #>f2a_msg
-.13cd	20 e0 c3	               jsr  putscxy
-.13d0	20 e2 c4	               jsr  popreg
-.13d3	20 b3 c4	               jsr  pushreg
-.13d6	ad 1a 1f	               lda  f2abutton
-.13d9	48		               pha
-.13da	a9 92		               lda  #146
-.13dc	8d 2c 1f	               sta  f2abutton+18
-.13df	a9 01		               lda  #flashcol
-.13e1	8d 1a 1f	               sta  f2abutton
-.13e4	a2 1a		               ldx  #<f2abutton
-.13e6	a0 1f		               ldy  #>f2abutton
-.13e8	20 e0 c3	               jsr  putscxy
-.13eb	20 7d 12	               jsr  delay
-.13ee	a9 12		               lda  #18
-.13f0	8d 2c 1f	               sta  f2abutton+18
-.13f3	68		               pla
-.13f4	8d 1a 1f	               sta  f2abutton
-.13f7	a2 1a		               ldx  #<f2abutton
-.13f9	a0 1f		               ldy  #>f2abutton
-.13fb	20 e0 c3	               jsr  putscxy
-.13fe	20 e2 c4	               jsr  popreg
-.1401	20 87 0a	            jsr   copychar
-.1404	20 37 0f	            jsr   drawbitmap
-.1407	4c 52 14	            jmp   out
-.140a			menub
-.140a	20 b3 c4	               jsr  pushreg
-.140d	a2 58		               ldx  #<blankmsg
-.140f	a0 1a		               ldy  #>blankmsg
-.1411	20 e0 c3	               jsr  putscxy
-.1414	a2 a9		               ldx  #<f2b_msg
-.1416	a0 1b		               ldy  #>f2b_msg
-.1418	20 e0 c3	               jsr  putscxy
-.141b	20 e2 c4	               jsr  popreg
-.141e	20 b3 c4	               jsr  pushreg
-.1421	ad f2 1f	               lda  f2bbutton
-.1424	48		               pha
-.1425	a9 92		               lda  #146
-.1427	8d 04 20	               sta  f2bbutton+18
-.142a	a9 01		               lda  #flashcol
-.142c	8d f2 1f	               sta  f2bbutton
-.142f	a2 f2		               ldx  #<f2bbutton
-.1431	a0 1f		               ldy  #>f2bbutton
-.1433	20 e0 c3	               jsr  putscxy
-.1436	20 7d 12	               jsr  delay
-.1439	a9 12		               lda  #18
-.143b	8d 04 20	               sta  f2bbutton+18
-.143e	68		               pla
-.143f	8d f2 1f	               sta  f2bbutton
-.1442	a2 f2		               ldx  #<f2bbutton
-.1444	a0 1f		               ldy  #>f2bbutton
-.1446	20 e0 c3	               jsr  putscxy
-.1449	20 e2 c4	               jsr  popreg
-.144c	20 f9 19	            jsr   fliphorz
-.144f	20 37 0f	            jsr   drawbitmap
-.1452			out
-.1452	20 b3 c4	               jsr  pushreg
-.1455	a2 58		               ldx  #<blankmsg
-.1457	a0 1a		               ldy  #>blankmsg
-.1459	20 e0 c3	               jsr  putscxy
-.145c	a2 84		               ldx  #<prompt_msg
-.145e	a0 1a		               ldy  #>prompt_msg
-.1460	20 e0 c3	               jsr  putscxy
-.1463	20 e2 c4	               jsr  popreg
-.1466	68		            pla
-.1467	60		            rts
-.1468			f3action
-.1468	48		            pha
-.1469	a9 00		            lda   #$0
-.146b	8d c2 09	            sta   editmode
-.146e	ad c3 09	            lda   fkeyset
-.1471	d0 74		            bne   menub
-.1473	20 b3 c4	               jsr  pushreg
-.1476	ad 35 1f	               lda  f3abutton
-.1479	48		               pha
-.147a	a9 92		               lda  #146
-.147c	8d 47 1f	               sta  f3abutton+18
-.147f	a9 01		               lda  #flashcol
-.1481	8d 35 1f	               sta  f3abutton
-.1484	a2 35		               ldx  #<f3abutton
-.1486	a0 1f		               ldy  #>f3abutton
-.1488	20 e0 c3	               jsr  putscxy
-.148b	20 7d 12	               jsr  delay
-.148e	a9 12		               lda  #18
-.1490	8d 47 1f	               sta  f3abutton+18
-.1493	68		               pla
-.1494	8d 35 1f	               sta  f3abutton
-.1497	a2 35		               ldx  #<f3abutton
-.1499	a0 1f		               ldy  #>f3abutton
-.149b	20 e0 c3	               jsr  putscxy
-.149e	20 e2 c4	               jsr  popreg
-.14a1	20 b3 c4	               jsr  pushreg
-.14a4	a2 58		               ldx  #<blankmsg
-.14a6	a0 1a		               ldy  #>blankmsg
-.14a8	20 e0 c3	               jsr  putscxy
-.14ab	a2 f2		               ldx  #<f3a_msg
-.14ad	a0 1a		               ldy  #>f3a_msg
-.14af	20 e0 c3	               jsr  putscxy
-.14b2	20 e2 c4	               jsr  popreg
-.14b5	20 f6 c7	getagain    jsr   getkey
-.14b8	c9 31		            cmp   #$31
-.14ba	f0 0b		            beq   devok
-.14bc	c9 38		            cmp   #$38
-.14be	f0 07		            beq   devok
-.14c0	c9 39		            cmp   #$39
-.14c2	f0 03		            beq   devok
-.14c4	4c b5 14	            jmp   getagain
-.14c7	8d e2 09	devok       sta   device
-.14ca	20 16 0a	            jsr   getfname
-.14cd	20 b3 c4	               jsr  pushreg
-.14d0	a2 58		               ldx  #<blankmsg
-.14d2	a0 1a		               ldy  #>blankmsg
-.14d4	20 e0 c3	               jsr  putscxy
-.14d7	a2 9f		               ldx  #<wait_msg
-.14d9	a0 1a		               ldy  #>wait_msg
-.14db	20 e0 c3	               jsr  putscxy
-.14de	20 e2 c4	               jsr  popreg
-.14e1	20 e7 08	            jsr   savetofile
-.14e4	4c 2f 15	            jmp   out
-.14e7			menub
-.14e7	20 b3 c4	               jsr  pushreg
-.14ea	a2 58		               ldx  #<blankmsg
-.14ec	a0 1a		               ldy  #>blankmsg
-.14ee	20 e0 c3	               jsr  putscxy
-.14f1	a2 c4		               ldx  #<f3b_msg
-.14f3	a0 1b		               ldy  #>f3b_msg
-.14f5	20 e0 c3	               jsr  putscxy
-.14f8	20 e2 c4	               jsr  popreg
-.14fb	20 b3 c4	               jsr  pushreg
-.14fe	ad 0d 20	               lda  f3bbutton
-.1501	48		               pha
-.1502	a9 92		               lda  #146
-.1504	8d 1f 20	               sta  f3bbutton+18
-.1507	a9 01		               lda  #flashcol
-.1509	8d 0d 20	               sta  f3bbutton
-.150c	a2 0d		               ldx  #<f3bbutton
-.150e	a0 20		               ldy  #>f3bbutton
-.1510	20 e0 c3	               jsr  putscxy
-.1513	20 7d 12	               jsr  delay
-.1516	a9 12		               lda  #18
-.1518	8d 1f 20	               sta  f3bbutton+18
-.151b	68		               pla
-.151c	8d 0d 20	               sta  f3bbutton
-.151f	a2 0d		               ldx  #<f3bbutton
-.1521	a0 20		               ldy  #>f3bbutton
-.1523	20 e0 c3	               jsr  putscxy
-.1526	20 e2 c4	               jsr  popreg
-.1529	20 88 19	            jsr   scrollright
-.152c	20 37 0f	            jsr   drawbitmap
-.152f			out
-.152f	20 b3 c4	               jsr  pushreg
-.1532	a2 58		               ldx  #<blankmsg
-.1534	a0 1a		               ldy  #>blankmsg
-.1536	20 e0 c3	               jsr  putscxy
-.1539	a2 84		               ldx  #<prompt_msg
-.153b	a0 1a		               ldy  #>prompt_msg
-.153d	20 e0 c3	               jsr  putscxy
-.1540	20 e2 c4	               jsr  popreg
-.1543	68		            pla
-.1544	60		            rts
-.1545			f4action
-.1545	48		            pha
-.1546	a9 00		            lda   #$0
-.1548	8d c2 09	            sta   editmode
-.154b	ad c3 09	            lda   fkeyset
-.154e	d0 77		            bne   menub
-.1550	20 b3 c4	               jsr  pushreg
-.1553	ad 50 1f	               lda  f4abutton
-.1556	48		               pha
-.1557	a9 92		               lda  #146
-.1559	8d 62 1f	               sta  f4abutton+18
-.155c	a9 01		               lda  #flashcol
-.155e	8d 50 1f	               sta  f4abutton
-.1561	a2 50		               ldx  #<f4abutton
-.1563	a0 1f		               ldy  #>f4abutton
-.1565	20 e0 c3	               jsr  putscxy
-.1568	20 7d 12	               jsr  delay
-.156b	a9 12		               lda  #18
-.156d	8d 62 1f	               sta  f4abutton+18
-.1570	68		               pla
-.1571	8d 50 1f	               sta  f4abutton
-.1574	a2 50		               ldx  #<f4abutton
-.1576	a0 1f		               ldy  #>f4abutton
-.1578	20 e0 c3	               jsr  putscxy
-.157b	20 e2 c4	               jsr  popreg
-.157e	20 b3 c4	               jsr  pushreg
-.1581	a2 58		               ldx  #<blankmsg
-.1583	a0 1a		               ldy  #>blankmsg
-.1585	20 e0 c3	               jsr  putscxy
-.1588	a2 17		               ldx  #<f4a_msg
-.158a	a0 1b		               ldy  #>f4a_msg
-.158c	20 e0 c3	               jsr  putscxy
-.158f	20 e2 c4	               jsr  popreg
-.1592	20 f6 c7	getagain    jsr   getkey
-.1595	c9 31		            cmp   #$31
-.1597	f0 0b		            beq   devok
-.1599	c9 38		            cmp   #$38
-.159b	f0 07		            beq   devok
-.159d	c9 39		            cmp   #$39
-.159f	f0 03		            beq   devok
-.15a1	4c 92 15	            jmp   getagain
-.15a4	8d e2 09	devok       sta   device
-.15a7	20 16 0a	            jsr   getfname
-.15aa	20 b3 c4	               jsr  pushreg
-.15ad	a2 58		               ldx  #<blankmsg
-.15af	a0 1a		               ldy  #>blankmsg
-.15b1	20 e0 c3	               jsr  putscxy
-.15b4	a2 9f		               ldx  #<wait_msg
-.15b6	a0 1a		               ldy  #>wait_msg
-.15b8	20 e0 c3	               jsr  putscxy
-.15bb	20 e2 c4	               jsr  popreg
-.15be	20 46 09	            jsr   loadfromfile
-.15c1	20 e6 09	            jsr   scrredraw
-.15c4	4c 0f 16	            jmp   out
-.15c7			menub
-.15c7	20 b3 c4	               jsr  pushreg
-.15ca	a2 58		               ldx  #<blankmsg
-.15cc	a0 1a		               ldy  #>blankmsg
-.15ce	20 e0 c3	               jsr  putscxy
-.15d1	a2 d9		               ldx  #<f4b_msg
-.15d3	a0 1b		               ldy  #>f4b_msg
-.15d5	20 e0 c3	               jsr  putscxy
-.15d8	20 e2 c4	               jsr  popreg
-.15db	20 b3 c4	               jsr  pushreg
-.15de	ad 28 20	               lda  f4bbutton
-.15e1	48		               pha
-.15e2	a9 92		               lda  #146
-.15e4	8d 3a 20	               sta  f4bbutton+18
-.15e7	a9 01		               lda  #flashcol
-.15e9	8d 28 20	               sta  f4bbutton
-.15ec	a2 28		               ldx  #<f4bbutton
-.15ee	a0 20		               ldy  #>f4bbutton
-.15f0	20 e0 c3	               jsr  putscxy
-.15f3	20 7d 12	               jsr  delay
-.15f6	a9 12		               lda  #18
-.15f8	8d 3a 20	               sta  f4bbutton+18
-.15fb	68		               pla
-.15fc	8d 28 20	               sta  f4bbutton
-.15ff	a2 28		               ldx  #<f4bbutton
-.1601	a0 20		               ldy  #>f4bbutton
-.1603	20 e0 c3	               jsr  putscxy
-.1606	20 e2 c4	               jsr  popreg
-.1609	20 ad 19	            jsr   scrollleft
-.160c	20 37 0f	            jsr   drawbitmap
-.160f			out
-.160f	20 b3 c4	               jsr  pushreg
-.1612	a2 58		               ldx  #<blankmsg
-.1614	a0 1a		               ldy  #>blankmsg
-.1616	20 e0 c3	               jsr  putscxy
-.1619	a2 84		               ldx  #<prompt_msg
-.161b	a0 1a		               ldy  #>prompt_msg
-.161d	20 e0 c3	               jsr  putscxy
-.1620	20 e2 c4	               jsr  popreg
-.1623	68		            pla
-.1624	60		            rts
-.1625			f5action
-.1625	48		            pha
-.1626	a9 00		            lda   #$0
-.1628	8d c2 09	            sta   editmode
-.162b	ad c3 09	            lda   fkeyset
-.162e	d0 4b		            bne   menub
-.1630	20 b3 c4	               jsr  pushreg
-.1633	a2 58		               ldx  #<blankmsg
-.1635	a0 1a		               ldy  #>blankmsg
-.1637	20 e0 c3	               jsr  putscxy
-.163a	a2 3e		               ldx  #<f5a_msg
-.163c	a0 1b		               ldy  #>f5a_msg
-.163e	20 e0 c3	               jsr  putscxy
-.1641	20 e2 c4	               jsr  popreg
-.1644	20 b3 c4	               jsr  pushreg
-.1647	ad 6b 1f	               lda  f5abutton
-.164a	48		               pha
-.164b	a9 92		               lda  #146
-.164d	8d 7d 1f	               sta  f5abutton+18
-.1650	a9 01		               lda  #flashcol
-.1652	8d 6b 1f	               sta  f5abutton
-.1655	a2 6b		               ldx  #<f5abutton
-.1657	a0 1f		               ldy  #>f5abutton
-.1659	20 e0 c3	               jsr  putscxy
-.165c	20 7d 12	               jsr  delay
-.165f	a9 12		               lda  #18
-.1661	8d 7d 1f	               sta  f5abutton+18
-.1664	68		               pla
-.1665	8d 6b 1f	               sta  f5abutton
-.1668	a2 6b		               ldx  #<f5abutton
-.166a	a0 1f		               ldy  #>f5abutton
-.166c	20 e0 c3	               jsr  putscxy
-.166f	20 e2 c4	               jsr  popreg
-.1672	20 d9 19	            jsr   clearchar
-.1675	20 37 0f	            jsr   drawbitmap
-.1678	4c c3 16	            jmp   out
-.167b			menub
-.167b	20 b3 c4	               jsr  pushreg
-.167e	a2 58		               ldx  #<blankmsg
-.1680	a0 1a		               ldy  #>blankmsg
-.1682	20 e0 c3	               jsr  putscxy
-.1685	a2 ed		               ldx  #<f5b_msg
-.1687	a0 1b		               ldy  #>f5b_msg
-.1689	20 e0 c3	               jsr  putscxy
-.168c	20 e2 c4	               jsr  popreg
-.168f	20 b3 c4	               jsr  pushreg
-.1692	ad 43 20	               lda  f5bbutton
-.1695	48		               pha
-.1696	a9 92		               lda  #146
-.1698	8d 55 20	               sta  f5bbutton+18
-.169b	a9 01		               lda  #flashcol
-.169d	8d 43 20	               sta  f5bbutton
-.16a0	a2 43		               ldx  #<f5bbutton
-.16a2	a0 20		               ldy  #>f5bbutton
-.16a4	20 e0 c3	               jsr  putscxy
-.16a7	20 7d 12	               jsr  delay
-.16aa	a9 12		               lda  #18
-.16ac	8d 55 20	               sta  f5bbutton+18
-.16af	68		               pla
-.16b0	8d 43 20	               sta  f5bbutton
-.16b3	a2 43		               ldx  #<f5bbutton
-.16b5	a0 20		               ldy  #>f5bbutton
-.16b7	20 e0 c3	               jsr  putscxy
-.16ba	20 e2 c4	               jsr  popreg
-.16bd	20 18 19	            jsr   scrollup
-.16c0	20 37 0f	            jsr   drawbitmap
-.16c3			out
-.16c3	20 b3 c4	               jsr  pushreg
-.16c6	a2 58		               ldx  #<blankmsg
-.16c8	a0 1a		               ldy  #>blankmsg
-.16ca	20 e0 c3	               jsr  putscxy
-.16cd	a2 84		               ldx  #<prompt_msg
-.16cf	a0 1a		               ldy  #>prompt_msg
-.16d1	20 e0 c3	               jsr  putscxy
-.16d4	20 e2 c4	               jsr  popreg
-.16d7	68		            pla
-.16d8	60		            rts
-.16d9			f6action
-.16d9	48		            pha
-.16da	a9 00		            lda   #$0
-.16dc	8d c2 09	            sta   editmode
-.16df	ad c3 09	            lda   fkeyset
-.16e2	d0 4b		            bne   menub
-.16e4	20 b3 c4	               jsr  pushreg
-.16e7	a2 58		               ldx  #<blankmsg
-.16e9	a0 1a		               ldy  #>blankmsg
-.16eb	20 e0 c3	               jsr  putscxy
-.16ee	a2 58		               ldx  #<f6a_msg
-.16f0	a0 1b		               ldy  #>f6a_msg
-.16f2	20 e0 c3	               jsr  putscxy
-.16f5	20 e2 c4	               jsr  popreg
-.16f8	20 b3 c4	               jsr  pushreg
-.16fb	ad 86 1f	               lda  f6abutton
-.16fe	48		               pha
-.16ff	a9 92		               lda  #146
-.1701	8d 98 1f	               sta  f6abutton+18
-.1704	a9 01		               lda  #flashcol
-.1706	8d 86 1f	               sta  f6abutton
-.1709	a2 86		               ldx  #<f6abutton
-.170b	a0 1f		               ldy  #>f6abutton
-.170d	20 e0 c3	               jsr  putscxy
-.1710	20 7d 12	               jsr  delay
-.1713	a9 12		               lda  #18
-.1715	8d 98 1f	               sta  f6abutton+18
-.1718	68		               pla
-.1719	8d 86 1f	               sta  f6abutton
-.171c	a2 86		               ldx  #<f6abutton
-.171e	a0 1f		               ldy  #>f6abutton
-.1720	20 e0 c3	               jsr  putscxy
-.1723	20 e2 c4	               jsr  popreg
-.1726	20 cf 19	            jsr   fillchar
-.1729	20 37 0f	            jsr   drawbitmap
-.172c	4c 77 17	            jmp   out
-.172f			menub
-.172f	20 b3 c4	               jsr  pushreg
-.1732	a2 58		               ldx  #<blankmsg
-.1734	a0 1a		               ldy  #>blankmsg
-.1736	20 e0 c3	               jsr  putscxy
-.1739	a2 ff		               ldx  #<f6b_msg
-.173b	a0 1b		               ldy  #>f6b_msg
-.173d	20 e0 c3	               jsr  putscxy
-.1740	20 e2 c4	               jsr  popreg
-.1743	20 b3 c4	               jsr  pushreg
-.1746	ad 5e 20	               lda  f6bbutton
-.1749	48		               pha
-.174a	a9 92		               lda  #146
-.174c	8d 70 20	               sta  f6bbutton+18
-.174f	a9 01		               lda  #flashcol
-.1751	8d 5e 20	               sta  f6bbutton
-.1754	a2 5e		               ldx  #<f6bbutton
-.1756	a0 20		               ldy  #>f6bbutton
-.1758	20 e0 c3	               jsr  putscxy
-.175b	20 7d 12	               jsr  delay
-.175e	a9 12		               lda  #18
-.1760	8d 70 20	               sta  f6bbutton+18
-.1763	68		               pla
-.1764	8d 5e 20	               sta  f6bbutton
-.1767	a2 5e		               ldx  #<f6bbutton
-.1769	a0 20		               ldy  #>f6bbutton
-.176b	20 e0 c3	               jsr  putscxy
-.176e	20 e2 c4	               jsr  popreg
-.1771	20 4f 19	            jsr   scrolldown
-.1774	20 37 0f	            jsr   drawbitmap
-.1777			out
-.1777	20 b3 c4	               jsr  pushreg
-.177a	a2 58		               ldx  #<blankmsg
-.177c	a0 1a		               ldy  #>blankmsg
-.177e	20 e0 c3	               jsr  putscxy
-.1781	a2 84		               ldx  #<prompt_msg
-.1783	a0 1a		               ldy  #>prompt_msg
-.1785	20 e0 c3	               jsr  putscxy
-.1788	20 e2 c4	               jsr  popreg
-.178b	68		            pla
-.178c	60		            rts
-.178d			f7action
-.178d	48		            pha
-.178e	a9 00		            lda   #$0
-.1790	8d c2 09	            sta   editmode
-.1793	ad c3 09	            lda   fkeyset
-.1796	d0 4b		            bne   menub
-.1798	20 b3 c4	               jsr  pushreg
-.179b	a2 58		               ldx  #<blankmsg
-.179d	a0 1a		               ldy  #>blankmsg
-.179f	20 e0 c3	               jsr  putscxy
-.17a2	a2 72		               ldx  #<f7a_msg
-.17a4	a0 1b		               ldy  #>f7a_msg
-.17a6	20 e0 c3	               jsr  putscxy
-.17a9	20 e2 c4	               jsr  popreg
-.17ac	20 b3 c4	               jsr  pushreg
-.17af	ad a1 1f	               lda  f7abutton
-.17b2	48		               pha
-.17b3	a9 92		               lda  #146
-.17b5	8d b3 1f	               sta  f7abutton+18
-.17b8	a9 01		               lda  #flashcol
-.17ba	8d a1 1f	               sta  f7abutton
-.17bd	a2 a1		               ldx  #<f7abutton
-.17bf	a0 1f		               ldy  #>f7abutton
-.17c1	20 e0 c3	               jsr  putscxy
-.17c4	20 7d 12	               jsr  delay
-.17c7	a9 12		               lda  #18
-.17c9	8d b3 1f	               sta  f7abutton+18
-.17cc	68		               pla
-.17cd	8d a1 1f	               sta  f7abutton
-.17d0	a2 a1		               ldx  #<f7abutton
-.17d2	a0 1f		               ldy  #>f7abutton
-.17d4	20 e0 c3	               jsr  putscxy
-.17d7	20 e2 c4	               jsr  popreg
-.17da	20 0a 10	            jsr   copycharset
-.17dd	20 37 0f	            jsr   drawbitmap
-.17e0	4c 30 18	            jmp   out
-.17e3	a9 00		menub       lda   #$0
-.17e5	8d c2 09	            sta   editmode
-.17e8	20 b3 c4	               jsr  pushreg
-.17eb	a2 58		               ldx  #<blankmsg
-.17ed	a0 1a		               ldy  #>blankmsg
-.17ef	20 e0 c3	               jsr  putscxy
-.17f2	a2 13		               ldx  #<f7b_msg
-.17f4	a0 1c		               ldy  #>f7b_msg
-.17f6	20 e0 c3	               jsr  putscxy
-.17f9	20 e2 c4	               jsr  popreg
-.17fc	20 b3 c4	               jsr  pushreg
-.17ff	ad 79 20	               lda  f7bbutton
-.1802	48		               pha
-.1803	a9 92		               lda  #146
-.1805	8d 8b 20	               sta  f7bbutton+18
-.1808	a9 01		               lda  #flashcol
-.180a	8d 79 20	               sta  f7bbutton
-.180d	a2 79		               ldx  #<f7bbutton
-.180f	a0 20		               ldy  #>f7bbutton
-.1811	20 e0 c3	               jsr  putscxy
-.1814	20 7d 12	               jsr  delay
-.1817	a9 12		               lda  #18
-.1819	8d 8b 20	               sta  f7bbutton+18
-.181c	68		               pla
-.181d	8d 79 20	               sta  f7bbutton
-.1820	a2 79		               ldx  #<f7bbutton
-.1822	a0 20		               ldy  #>f7bbutton
-.1824	20 e0 c3	               jsr  putscxy
-.1827	20 e2 c4	               jsr  popreg
-.182a	20 f8 18	            jsr   reverse
-.182d	20 37 0f	            jsr   drawbitmap
-.1830			out
-.1830	20 b3 c4	               jsr  pushreg
-.1833	a2 58		               ldx  #<blankmsg
-.1835	a0 1a		               ldy  #>blankmsg
-.1837	20 e0 c3	               jsr  putscxy
-.183a	a2 84		               ldx  #<prompt_msg
-.183c	a0 1a		               ldy  #>prompt_msg
-.183e	20 e0 c3	               jsr  putscxy
-.1841	20 e2 c4	               jsr  popreg
-.1844	68		            pla
-.1845	60		            rts
-.1846			f8action
-.1846	08		            php
-.1847	48		            pha
-.1848	a9 00		            lda   #$0
-.184a	8d c2 09	            sta   editmode
-.184d	ad c3 09	            lda   fkeyset
-.1850	d0 45		            bne   menub
-.1852	20 b3 c4	               jsr  pushreg
-.1855	a2 58		               ldx  #<blankmsg
-.1857	a0 1a		               ldy  #>blankmsg
-.1859	20 e0 c3	               jsr  putscxy
-.185c	a2 4d		               ldx  #<menub_msg
-.185e	a0 1c		               ldy  #>menub_msg
-.1860	20 e0 c3	               jsr  putscxy
-.1863	20 e2 c4	               jsr  popreg
-.1866	20 b3 c4	               jsr  pushreg
-.1869	ad bc 1f	               lda  f8abutton
-.186c	48		               pha
-.186d	a9 92		               lda  #146
-.186f	8d ce 1f	               sta  f8abutton+18
-.1872	a9 01		               lda  #flashcol
-.1874	8d bc 1f	               sta  f8abutton
-.1877	a2 bc		               ldx  #<f8abutton
-.1879	a0 1f		               ldy  #>f8abutton
-.187b	20 e0 c3	               jsr  putscxy
-.187e	20 7d 12	               jsr  delay
-.1881	a9 12		               lda  #18
-.1883	8d ce 1f	               sta  f8abutton+18
-.1886	68		               pla
-.1887	8d bc 1f	               sta  f8abutton
-.188a	a2 bc		               ldx  #<f8abutton
-.188c	a0 1f		               ldy  #>f8abutton
-.188e	20 e0 c3	               jsr  putscxy
-.1891	20 e2 c4	               jsr  popreg
-.1894	4c d9 18	            jmp   swapit
-.1897			menub
-.1897	20 b3 c4	               jsr  pushreg
-.189a	a2 58		               ldx  #<blankmsg
-.189c	a0 1a		               ldy  #>blankmsg
-.189e	20 e0 c3	               jsr  putscxy
-.18a1	a2 2a		               ldx  #<menua_msg
-.18a3	a0 1c		               ldy  #>menua_msg
-.18a5	20 e0 c3	               jsr  putscxy
-.18a8	20 e2 c4	               jsr  popreg
-.18ab	20 b3 c4	               jsr  pushreg
-.18ae	ad 94 20	               lda  f8bbutton
-.18b1	48		               pha
-.18b2	a9 92		               lda  #146
-.18b4	8d a6 20	               sta  f8bbutton+18
-.18b7	a9 01		               lda  #flashcol
-.18b9	8d 94 20	               sta  f8bbutton
-.18bc	a2 94		               ldx  #<f8bbutton
-.18be	a0 20		               ldy  #>f8bbutton
-.18c0	20 e0 c3	               jsr  putscxy
-.18c3	20 7d 12	               jsr  delay
-.18c6	a9 12		               lda  #18
-.18c8	8d a6 20	               sta  f8bbutton+18
-.18cb	68		               pla
-.18cc	8d 94 20	               sta  f8bbutton
-.18cf	a2 94		               ldx  #<f8bbutton
-.18d1	a0 20		               ldy  #>f8bbutton
-.18d3	20 e0 c3	               jsr  putscxy
-.18d6	20 e2 c4	               jsr  popreg
-.18d9	49 ff		swapit      eor   #$ff
-.18db	8d c3 09	            sta   fkeyset
-.18de	20 ac 10	            jsr   drawfkeys
-.18e1	20 b3 c4	               jsr  pushreg
-.18e4	a2 58		               ldx  #<blankmsg
-.18e6	a0 1a		               ldy  #>blankmsg
-.18e8	20 e0 c3	               jsr  putscxy
-.18eb	a2 84		               ldx  #<prompt_msg
-.18ed	a0 1a		               ldy  #>prompt_msg
-.18ef	20 e0 c3	               jsr  putscxy
-.18f2	20 e2 c4	               jsr  popreg
-.18f5	68		            pla
-.18f6	28		            plp
-.18f7	60		            rts
-.18f8			reverse
-.18f8	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-.18fb	48		                   pha
-.18fc	ad c8 09	               lda  mapaddr
-.18ff	85 fd		               sta  $fd
-.1901	ad c9 09	               lda  mapaddr+1
-.1904	85 fe		               sta  $fe
-.1906	68		                   pla
-.1907	a0 00		            ldy   #$00
-.1909	b1 fd		again       lda   (zpage2),y
-.190b	49 ff		            eor   #$ff
-.190d	91 fd		            sta   (zpage2),y
-.190f	c8		            iny
-.1910	c0 08		            cpy   #$08
-.1912	d0 f5		            bne   again
-.1914	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
-.1917	60		            rts
-.1918			scrollup
-.1918	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-.191b	48		                   pha
-.191c	ad c8 09	               lda  mapaddr
-.191f	85 fb		               sta  $fb
-.1921	ad c9 09	               lda  mapaddr+1
-.1924	85 fc		               sta  $fc
-.1926	68		                   pla
-.1927	48		                   pha
-.1928	ad c8 09	               lda  mapaddr
-.192b	85 fd		               sta  $fd
-.192d	ad c9 09	               lda  mapaddr+1
-.1930	85 fe		               sta  $fe
-.1932	68		                   pla
-.1933	20 b8 c5	            jsr   inczp2
-.1936	a0 00		            ldy   #$00
-.1938	b1 fb		            lda   (zpage1),y
-.193a	8d e3 09	            sta   tmpbyte
-.193d	b1 fd		again       lda   (zpage2),y
-.193f	91 fb		            sta   (zpage1),y
-.1941	c8		            iny
-.1942	c0 07		            cpy   #$07
-.1944	d0 f7		            bne   again
-.1946	ad e3 09	            lda   tmpbyte
-.1949	91 fb		            sta   (zpage1),y
-.194b	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
-.194e	60		            rts
-.194f			scrolldown
-.194f	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-.1952	48		                   pha
-.1953	ad c8 09	               lda  mapaddr
-.1956	85 fb		               sta  $fb
-.1958	ad c9 09	               lda  mapaddr+1
-.195b	85 fc		               sta  $fc
-.195d	68		                   pla
-.195e	48		                   pha
-.195f	ad c8 09	               lda  mapaddr
-.1962	85 fd		               sta  $fd
-.1964	ad c9 09	               lda  mapaddr+1
-.1967	85 fe		               sta  $fe
-.1969	68		                   pla
-.196a	20 b8 c5	            jsr   inczp2
-.196d	a0 07		            ldy   #$07             ;xxxxxxxx zpage1
-.196f	b1 fb		            lda   (zpage1),y          ;xxxxxxxx zpage2
-.1971	8d e3 09	            sta   tmpbyte             ;xxxxxxxx
-.1974	88		again       dey                ;xxxxxxxx
-.1975	b1 fb		            lda   (zpage1),y          ;xxxxxxxx
-.1977	91 fd		            sta   (zpage2),y          ;xxxxxxxx
-.1979	c0 00		            cpy   #$00             ;xxxxxxxx
-.197b	d0 f7		            bne   again            ;xxxxxxxx
-.197d	a0 00		            ldy   #$00
-.197f	ad e3 09	            lda   tmpbyte
-.1982	91 fb		            sta   (zpage1),y
-.1984	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
-.1987	60		            rts
-.1988			scrollright
-.1988	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-.198b	48		                   pha
-.198c	ad c8 09	               lda  mapaddr
-.198f	85 fb		               sta  $fb
-.1991	ad c9 09	               lda  mapaddr+1
-.1994	85 fc		               sta  $fc
-.1996	68		                   pla
-.1997	a0 00		            ldy   #$00
-.1999	b1 fb		again       lda   (zpage1),y
-.199b	18		            clc
-.199c	6a		            ror
-.199d	90 03		            bcc   zero
-.199f	18		            clc
-.19a0	69 80		one         adc   #$80
-.19a2	91 fb		zero        sta   (zpage1),y
-.19a4	c8		            iny
-.19a5	c0 08		            cpy   #$08
-.19a7	d0 f0		            bne   again
-.19a9	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
-.19ac	60		            rts
-.19ad			scrollleft
-.19ad	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-.19b0	48		                   pha
-.19b1	ad c8 09	               lda  mapaddr
-.19b4	85 fb		               sta  $fb
-.19b6	ad c9 09	               lda  mapaddr+1
-.19b9	85 fc		               sta  $fc
-.19bb	68		                   pla
-.19bc	a0 00		            ldy   #$00
-.19be	b1 fb		again       lda   (zpage1),y
-.19c0	18		            clc
-.19c1	2a		            rol
-.19c2	69 00		            adc   #$00
-.19c4	91 fb		            sta   (zpage1),y
-.19c6	c8		            iny
-.19c7	c0 08		            cpy   #$08
-.19c9	d0 f3		            bne   again
-.19cb	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
-.19ce	60		            rts
-.19cf			fillchar
-.19cf	08		            php
-.19d0	48		            pha
-.19d1	a9 ff		            lda   #$ff
-.19d3	20 e3 19	            jsr   allsame
-.19d6	68		            pla
-.19d7	28		            plp
-.19d8	60		            rts
-.19d9			clearchar
-.19d9	08		            php
-.19da	48		            pha
-.19db	a9 00		            lda   #$00
-.19dd	20 e3 19	            jsr   allsame
-.19e0	68		            pla
-.19e1	28		            plp
-.19e2	60		            rts
-.19e3			allsame
-.19e3	48		                   pha
-.19e4	ad c8 09	               lda  mapaddr
-.19e7	85 fd		               sta  $fd
-.19e9	ad c9 09	               lda  mapaddr+1
-.19ec	85 fe		               sta  $fe
-.19ee	68		                   pla
-.19ef	a0 00		            ldy   #$00
-.19f1	91 fd		again       sta   (zpage2),y
-.19f3	c8		            iny
-.19f4	c0 08		            cpy   #$08
-.19f6	d0 f9		            bne   again
-.19f8	60		            rts
-.19f9			fliphorz
-.19f9	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-.19fc	48		                   pha
-.19fd	ad c8 09	               lda  mapaddr
-.1a00	85 fd		               sta  $fd
-.1a02	ad c9 09	               lda  mapaddr+1
-.1a05	85 fe		               sta  $fe
-.1a07	68		                   pla
-.1a08	a0 00		            ldy   #$00
-.1a0a	b1 fd		nextbyte    lda   (zpage2),y
-.1a0c	a2 00		            ldx   #$00
-.1a0e	2a		rolagain    rol
-.1a0f	6e e3 09	            ror   tmpbyte
-.1a12	e8		            inx
-.1a13	e0 08		            cpx   #$08
-.1a15	30 f7		            bmi   rolagain
-.1a17	ad e3 09	            lda   tmpbyte
-.1a1a	91 fd		            sta   (zpage2),y
-.1a1c	c8		            iny
-.1a1d	c0 08		            cpy   #$08
-.1a1f	30 e9		            bmi   nextbyte
-.1a21	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
-.1a24	60		            rts
-.1a25			flipvert
-.1a25	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-.1a28	48		                   pha
-.1a29	ad c8 09	               lda  mapaddr
-.1a2c	85 fd		               sta  $fd
-.1a2e	ad c9 09	               lda  mapaddr+1
-.1a31	85 fe		               sta  $fe
-.1a33	68		                   pla
-.1a34	a0 00		            ldy   #$00
-.1a36	b1 fd		tostack     lda   (zpage2),y
-.1a38	48		            pha
-.1a39	c8		            iny
-.1a3a	c0 08		            cpy   #$08
-.1a3c	d0 f8		            bne   tostack
-.1a3e	a0 00		            ldy   #$00
-.1a40	68		fromstack   pla
-.1a41	91 fd		            sta   (zpage2),y
-.1a43	c8		            iny
-.1a44	c0 08		            cpy   #$08
-.1a46	d0 f8		            bne   fromstack
-.1a48	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
-.1a4b	60		            rts
+.1285	88		yagain      dey
+.1286	ea		            nop
+.1287	ea		            nop
+.1288	ea		            nop
+.1289	ea		            nop
+.128a	c0 00		            cpy   #$00
+.128c	d0 f7		            bne   yagain
+.128e	e0 00		            cpx   #$00
+.1290	d0 f2		            bne   xagain
+.1292	20 e2 c4	            jsr   popreg            ; Récupère les registres.
+.1295	60		            rts
+.1296			f1action
+.1296	48		            pha
+.1297	a9 ff		            lda   #$ff
+.1299	8d c2 09	            sta   editmode
+.129c	ad c3 09	            lda   fkeyset
+.129f	f0 03		            beq   menua
+.12a1	4c 59 13	            jmp   menub
+.12a4			menua
+.12a4	20 b3 c4	               jsr  pushreg
+.12a7	a2 5b		               ldx  #<blankmsg
+.12a9	a0 1a		               ldy  #>blankmsg
+.12ab	20 e0 c3	               jsr  putscxy
+.12ae	a2 be		               ldx  #<f1a_msg
+.12b0	a0 1a		               ldy  #>f1a_msg
+.12b2	20 e0 c3	               jsr  putscxy
+.12b5	20 e2 c4	               jsr  popreg
+.12b8	20 b3 c4	               jsr  pushreg
+.12bb	ad 02 1f	               lda  f1abutton
+.12be	48		               pha
+.12bf	a9 92		               lda  #146
+.12c1	8d 14 1f	               sta  f1abutton+18
+.12c4	a9 01		               lda  #flashcol
+.12c6	8d 02 1f	               sta  f1abutton
+.12c9	a2 02		               ldx  #<f1abutton
+.12cb	a0 1f		               ldy  #>f1abutton
+.12cd	20 e0 c3	               jsr  putscxy
+.12d0	20 7d 12	               jsr  delay
+.12d3	a9 12		               lda  #18
+.12d5	8d 14 1f	               sta  f1abutton+18
+.12d8	68		               pla
+.12d9	8d 02 1f	               sta  f1abutton
+.12dc	a2 02		               ldx  #<f1abutton
+.12de	a0 1f		               ldy  #>f1abutton
+.12e0	20 e0 c3	               jsr  putscxy
+.12e3	20 e2 c4	               jsr  popreg
+.12e6	a9 0b		            lda   #vgris
+.12e8	20 bc 0b	            jsr   setmenuacolor
+.12eb	a9 0f		            lda   #menu1col1
+.12ed	8d 02 1f	            sta   f1abutton
+.12f0	20 ac 10	            jsr   drawfkeys
+.12f3	a9 0b		            lda   #vgris
+.12f5	8d e6 1c	            sta   redraw_msg
+.12f8	20 b3 c4	               jsr  pushreg
+.12fb	a2 5b		               ldx  #<blankmsg
+.12fd	a0 1a		               ldy  #>blankmsg
+.12ff	20 e0 c3	               jsr  putscxy
+.1302	a2 e6		               ldx  #<redraw_msg
+.1304	a0 1c		               ldy  #>redraw_msg
+.1306	20 e0 c3	               jsr  putscxy
+.1309	20 e2 c4	               jsr  popreg
+.130c	20 b8 0d	            jsr   editor
+.130f	a9 0a		            lda   #vrose
+.1311	8d e6 1c	            sta   redraw_msg
+.1314	20 b3 c4	               jsr  pushreg
+.1317	a2 5b		               ldx  #<blankmsg
+.1319	a0 1a		               ldy  #>blankmsg
+.131b	20 e0 c3	               jsr  putscxy
+.131e	a2 e6		               ldx  #<redraw_msg
+.1320	a0 1c		               ldy  #>redraw_msg
+.1322	20 e0 c3	               jsr  putscxy
+.1325	20 e2 c4	               jsr  popreg
+.1328	20 b3 c4	               jsr  pushreg
+.132b	a2 5b		               ldx  #<blankmsg
+.132d	a0 1a		               ldy  #>blankmsg
+.132f	20 e0 c3	               jsr  putscxy
+.1332	a2 d1		               ldx  #<quit_msg
+.1334	a0 1c		               ldy  #>quit_msg
+.1336	20 e0 c3	               jsr  putscxy
+.1339	20 e2 c4	               jsr  popreg
+.133c	20 b3 c4	               jsr  pushreg
+.133f	a2 5b		               ldx  #<blankmsg
+.1341	a0 1a		               ldy  #>blankmsg
+.1343	20 e0 c3	               jsr  putscxy
+.1346	a2 2d		               ldx  #<menua_msg
+.1348	a0 1c		               ldy  #>menua_msg
+.134a	20 e0 c3	               jsr  putscxy
+.134d	20 e2 c4	               jsr  popreg
+.1350	20 99 0b	            jsr   rstmenucol
+.1353	20 ac 10	            jsr   drawfkeys
+.1356	4c a1 13	            jmp   out
+.1359			menub
+.1359	20 b3 c4	               jsr  pushreg
+.135c	a2 5b		               ldx  #<blankmsg
+.135e	a0 1a		               ldy  #>blankmsg
+.1360	20 e0 c3	               jsr  putscxy
+.1363	a2 93		               ldx  #<f1b_msg
+.1365	a0 1b		               ldy  #>f1b_msg
+.1367	20 e0 c3	               jsr  putscxy
+.136a	20 e2 c4	               jsr  popreg
+.136d	20 b3 c4	               jsr  pushreg
+.1370	ad da 1f	               lda  f1bbutton
+.1373	48		               pha
+.1374	a9 92		               lda  #146
+.1376	8d ec 1f	               sta  f1bbutton+18
+.1379	a9 01		               lda  #flashcol
+.137b	8d da 1f	               sta  f1bbutton
+.137e	a2 da		               ldx  #<f1bbutton
+.1380	a0 1f		               ldy  #>f1bbutton
+.1382	20 e0 c3	               jsr  putscxy
+.1385	20 7d 12	               jsr  delay
+.1388	a9 12		               lda  #18
+.138a	8d ec 1f	               sta  f1bbutton+18
+.138d	68		               pla
+.138e	8d da 1f	               sta  f1bbutton
+.1391	a2 da		               ldx  #<f1bbutton
+.1393	a0 1f		               ldy  #>f1bbutton
+.1395	20 e0 c3	               jsr  putscxy
+.1398	20 e2 c4	               jsr  popreg
+.139b	20 28 1a	            jsr   flipvert
+.139e	20 37 0f	            jsr   drawbitmap
+.13a1			out
+.13a1	20 b3 c4	               jsr  pushreg
+.13a4	a2 5b		               ldx  #<blankmsg
+.13a6	a0 1a		               ldy  #>blankmsg
+.13a8	20 e0 c3	               jsr  putscxy
+.13ab	a2 87		               ldx  #<prompt_msg
+.13ad	a0 1a		               ldy  #>prompt_msg
+.13af	20 e0 c3	               jsr  putscxy
+.13b2	20 e2 c4	               jsr  popreg
+.13b5	68		            pla
+.13b6	60		            rts
+.13b7			f2action
+.13b7	48		            pha
+.13b8	a9 00		            lda   #$0
+.13ba	8d c2 09	            sta   editmode
+.13bd	ad c3 09	            lda   fkeyset
+.13c0	d0 4b		            bne   menub
+.13c2	20 b3 c4	               jsr  pushreg
+.13c5	a2 5b		               ldx  #<blankmsg
+.13c7	a0 1a		               ldy  #>blankmsg
+.13c9	20 e0 c3	               jsr  putscxy
+.13cc	a2 d8		               ldx  #<f2a_msg
+.13ce	a0 1a		               ldy  #>f2a_msg
+.13d0	20 e0 c3	               jsr  putscxy
+.13d3	20 e2 c4	               jsr  popreg
+.13d6	20 b3 c4	               jsr  pushreg
+.13d9	ad 1d 1f	               lda  f2abutton
+.13dc	48		               pha
+.13dd	a9 92		               lda  #146
+.13df	8d 2f 1f	               sta  f2abutton+18
+.13e2	a9 01		               lda  #flashcol
+.13e4	8d 1d 1f	               sta  f2abutton
+.13e7	a2 1d		               ldx  #<f2abutton
+.13e9	a0 1f		               ldy  #>f2abutton
+.13eb	20 e0 c3	               jsr  putscxy
+.13ee	20 7d 12	               jsr  delay
+.13f1	a9 12		               lda  #18
+.13f3	8d 2f 1f	               sta  f2abutton+18
+.13f6	68		               pla
+.13f7	8d 1d 1f	               sta  f2abutton
+.13fa	a2 1d		               ldx  #<f2abutton
+.13fc	a0 1f		               ldy  #>f2abutton
+.13fe	20 e0 c3	               jsr  putscxy
+.1401	20 e2 c4	               jsr  popreg
+.1404	20 87 0a	            jsr   copychar
+.1407	20 37 0f	            jsr   drawbitmap
+.140a	4c 55 14	            jmp   out
+.140d			menub
+.140d	20 b3 c4	               jsr  pushreg
+.1410	a2 5b		               ldx  #<blankmsg
+.1412	a0 1a		               ldy  #>blankmsg
+.1414	20 e0 c3	               jsr  putscxy
+.1417	a2 ac		               ldx  #<f2b_msg
+.1419	a0 1b		               ldy  #>f2b_msg
+.141b	20 e0 c3	               jsr  putscxy
+.141e	20 e2 c4	               jsr  popreg
+.1421	20 b3 c4	               jsr  pushreg
+.1424	ad f5 1f	               lda  f2bbutton
+.1427	48		               pha
+.1428	a9 92		               lda  #146
+.142a	8d 07 20	               sta  f2bbutton+18
+.142d	a9 01		               lda  #flashcol
+.142f	8d f5 1f	               sta  f2bbutton
+.1432	a2 f5		               ldx  #<f2bbutton
+.1434	a0 1f		               ldy  #>f2bbutton
+.1436	20 e0 c3	               jsr  putscxy
+.1439	20 7d 12	               jsr  delay
+.143c	a9 12		               lda  #18
+.143e	8d 07 20	               sta  f2bbutton+18
+.1441	68		               pla
+.1442	8d f5 1f	               sta  f2bbutton
+.1445	a2 f5		               ldx  #<f2bbutton
+.1447	a0 1f		               ldy  #>f2bbutton
+.1449	20 e0 c3	               jsr  putscxy
+.144c	20 e2 c4	               jsr  popreg
+.144f	20 fc 19	            jsr   fliphorz
+.1452	20 37 0f	            jsr   drawbitmap
+.1455			out
+.1455	20 b3 c4	               jsr  pushreg
+.1458	a2 5b		               ldx  #<blankmsg
+.145a	a0 1a		               ldy  #>blankmsg
+.145c	20 e0 c3	               jsr  putscxy
+.145f	a2 87		               ldx  #<prompt_msg
+.1461	a0 1a		               ldy  #>prompt_msg
+.1463	20 e0 c3	               jsr  putscxy
+.1466	20 e2 c4	               jsr  popreg
+.1469	68		            pla
+.146a	60		            rts
+.146b			f3action
+.146b	48		            pha
+.146c	a9 00		            lda   #$0
+.146e	8d c2 09	            sta   editmode
+.1471	ad c3 09	            lda   fkeyset
+.1474	d0 74		            bne   menub
+.1476	20 b3 c4	               jsr  pushreg
+.1479	ad 38 1f	               lda  f3abutton
+.147c	48		               pha
+.147d	a9 92		               lda  #146
+.147f	8d 4a 1f	               sta  f3abutton+18
+.1482	a9 01		               lda  #flashcol
+.1484	8d 38 1f	               sta  f3abutton
+.1487	a2 38		               ldx  #<f3abutton
+.1489	a0 1f		               ldy  #>f3abutton
+.148b	20 e0 c3	               jsr  putscxy
+.148e	20 7d 12	               jsr  delay
+.1491	a9 12		               lda  #18
+.1493	8d 4a 1f	               sta  f3abutton+18
+.1496	68		               pla
+.1497	8d 38 1f	               sta  f3abutton
+.149a	a2 38		               ldx  #<f3abutton
+.149c	a0 1f		               ldy  #>f3abutton
+.149e	20 e0 c3	               jsr  putscxy
+.14a1	20 e2 c4	               jsr  popreg
+.14a4	20 b3 c4	               jsr  pushreg
+.14a7	a2 5b		               ldx  #<blankmsg
+.14a9	a0 1a		               ldy  #>blankmsg
+.14ab	20 e0 c3	               jsr  putscxy
+.14ae	a2 f5		               ldx  #<f3a_msg
+.14b0	a0 1a		               ldy  #>f3a_msg
+.14b2	20 e0 c3	               jsr  putscxy
+.14b5	20 e2 c4	               jsr  popreg
+.14b8	20 f6 c7	getagain    jsr   getkey
+.14bb	c9 31		            cmp   #$31
+.14bd	f0 0b		            beq   devok
+.14bf	c9 38		            cmp   #$38
+.14c1	f0 07		            beq   devok
+.14c3	c9 39		            cmp   #$39
+.14c5	f0 03		            beq   devok
+.14c7	4c b8 14	            jmp   getagain
+.14ca	8d e2 09	devok       sta   device
+.14cd	20 16 0a	            jsr   getfname
+.14d0	20 b3 c4	               jsr  pushreg
+.14d3	a2 5b		               ldx  #<blankmsg
+.14d5	a0 1a		               ldy  #>blankmsg
+.14d7	20 e0 c3	               jsr  putscxy
+.14da	a2 a2		               ldx  #<wait_msg
+.14dc	a0 1a		               ldy  #>wait_msg
+.14de	20 e0 c3	               jsr  putscxy
+.14e1	20 e2 c4	               jsr  popreg
+.14e4	20 e7 08	            jsr   savetofile
+.14e7	4c 32 15	            jmp   out
+.14ea			menub
+.14ea	20 b3 c4	               jsr  pushreg
+.14ed	a2 5b		               ldx  #<blankmsg
+.14ef	a0 1a		               ldy  #>blankmsg
+.14f1	20 e0 c3	               jsr  putscxy
+.14f4	a2 c7		               ldx  #<f3b_msg
+.14f6	a0 1b		               ldy  #>f3b_msg
+.14f8	20 e0 c3	               jsr  putscxy
+.14fb	20 e2 c4	               jsr  popreg
+.14fe	20 b3 c4	               jsr  pushreg
+.1501	ad 10 20	               lda  f3bbutton
+.1504	48		               pha
+.1505	a9 92		               lda  #146
+.1507	8d 22 20	               sta  f3bbutton+18
+.150a	a9 01		               lda  #flashcol
+.150c	8d 10 20	               sta  f3bbutton
+.150f	a2 10		               ldx  #<f3bbutton
+.1511	a0 20		               ldy  #>f3bbutton
+.1513	20 e0 c3	               jsr  putscxy
+.1516	20 7d 12	               jsr  delay
+.1519	a9 12		               lda  #18
+.151b	8d 22 20	               sta  f3bbutton+18
+.151e	68		               pla
+.151f	8d 10 20	               sta  f3bbutton
+.1522	a2 10		               ldx  #<f3bbutton
+.1524	a0 20		               ldy  #>f3bbutton
+.1526	20 e0 c3	               jsr  putscxy
+.1529	20 e2 c4	               jsr  popreg
+.152c	20 8b 19	            jsr   scrollright
+.152f	20 37 0f	            jsr   drawbitmap
+.1532			out
+.1532	20 b3 c4	               jsr  pushreg
+.1535	a2 5b		               ldx  #<blankmsg
+.1537	a0 1a		               ldy  #>blankmsg
+.1539	20 e0 c3	               jsr  putscxy
+.153c	a2 87		               ldx  #<prompt_msg
+.153e	a0 1a		               ldy  #>prompt_msg
+.1540	20 e0 c3	               jsr  putscxy
+.1543	20 e2 c4	               jsr  popreg
+.1546	68		            pla
+.1547	60		            rts
+.1548			f4action
+.1548	48		            pha
+.1549	a9 00		            lda   #$0
+.154b	8d c2 09	            sta   editmode
+.154e	ad c3 09	            lda   fkeyset
+.1551	d0 77		            bne   menub
+.1553	20 b3 c4	               jsr  pushreg
+.1556	ad 53 1f	               lda  f4abutton
+.1559	48		               pha
+.155a	a9 92		               lda  #146
+.155c	8d 65 1f	               sta  f4abutton+18
+.155f	a9 01		               lda  #flashcol
+.1561	8d 53 1f	               sta  f4abutton
+.1564	a2 53		               ldx  #<f4abutton
+.1566	a0 1f		               ldy  #>f4abutton
+.1568	20 e0 c3	               jsr  putscxy
+.156b	20 7d 12	               jsr  delay
+.156e	a9 12		               lda  #18
+.1570	8d 65 1f	               sta  f4abutton+18
+.1573	68		               pla
+.1574	8d 53 1f	               sta  f4abutton
+.1577	a2 53		               ldx  #<f4abutton
+.1579	a0 1f		               ldy  #>f4abutton
+.157b	20 e0 c3	               jsr  putscxy
+.157e	20 e2 c4	               jsr  popreg
+.1581	20 b3 c4	               jsr  pushreg
+.1584	a2 5b		               ldx  #<blankmsg
+.1586	a0 1a		               ldy  #>blankmsg
+.1588	20 e0 c3	               jsr  putscxy
+.158b	a2 1a		               ldx  #<f4a_msg
+.158d	a0 1b		               ldy  #>f4a_msg
+.158f	20 e0 c3	               jsr  putscxy
+.1592	20 e2 c4	               jsr  popreg
+.1595	20 f6 c7	getagain    jsr   getkey
+.1598	c9 31		            cmp   #$31
+.159a	f0 0b		            beq   devok
+.159c	c9 38		            cmp   #$38
+.159e	f0 07		            beq   devok
+.15a0	c9 39		            cmp   #$39
+.15a2	f0 03		            beq   devok
+.15a4	4c 95 15	            jmp   getagain
+.15a7	8d e2 09	devok       sta   device
+.15aa	20 16 0a	            jsr   getfname
+.15ad	20 b3 c4	               jsr  pushreg
+.15b0	a2 5b		               ldx  #<blankmsg
+.15b2	a0 1a		               ldy  #>blankmsg
+.15b4	20 e0 c3	               jsr  putscxy
+.15b7	a2 a2		               ldx  #<wait_msg
+.15b9	a0 1a		               ldy  #>wait_msg
+.15bb	20 e0 c3	               jsr  putscxy
+.15be	20 e2 c4	               jsr  popreg
+.15c1	20 46 09	            jsr   loadfromfile
+.15c4	20 e6 09	            jsr   scrredraw
+.15c7	4c 12 16	            jmp   out
+.15ca			menub
+.15ca	20 b3 c4	               jsr  pushreg
+.15cd	a2 5b		               ldx  #<blankmsg
+.15cf	a0 1a		               ldy  #>blankmsg
+.15d1	20 e0 c3	               jsr  putscxy
+.15d4	a2 dc		               ldx  #<f4b_msg
+.15d6	a0 1b		               ldy  #>f4b_msg
+.15d8	20 e0 c3	               jsr  putscxy
+.15db	20 e2 c4	               jsr  popreg
+.15de	20 b3 c4	               jsr  pushreg
+.15e1	ad 2b 20	               lda  f4bbutton
+.15e4	48		               pha
+.15e5	a9 92		               lda  #146
+.15e7	8d 3d 20	               sta  f4bbutton+18
+.15ea	a9 01		               lda  #flashcol
+.15ec	8d 2b 20	               sta  f4bbutton
+.15ef	a2 2b		               ldx  #<f4bbutton
+.15f1	a0 20		               ldy  #>f4bbutton
+.15f3	20 e0 c3	               jsr  putscxy
+.15f6	20 7d 12	               jsr  delay
+.15f9	a9 12		               lda  #18
+.15fb	8d 3d 20	               sta  f4bbutton+18
+.15fe	68		               pla
+.15ff	8d 2b 20	               sta  f4bbutton
+.1602	a2 2b		               ldx  #<f4bbutton
+.1604	a0 20		               ldy  #>f4bbutton
+.1606	20 e0 c3	               jsr  putscxy
+.1609	20 e2 c4	               jsr  popreg
+.160c	20 b0 19	            jsr   scrollleft
+.160f	20 37 0f	            jsr   drawbitmap
+.1612			out
+.1612	20 b3 c4	               jsr  pushreg
+.1615	a2 5b		               ldx  #<blankmsg
+.1617	a0 1a		               ldy  #>blankmsg
+.1619	20 e0 c3	               jsr  putscxy
+.161c	a2 87		               ldx  #<prompt_msg
+.161e	a0 1a		               ldy  #>prompt_msg
+.1620	20 e0 c3	               jsr  putscxy
+.1623	20 e2 c4	               jsr  popreg
+.1626	68		            pla
+.1627	60		            rts
+.1628			f5action
+.1628	48		            pha
+.1629	a9 00		            lda   #$0
+.162b	8d c2 09	            sta   editmode
+.162e	ad c3 09	            lda   fkeyset
+.1631	d0 4b		            bne   menub
+.1633	20 b3 c4	               jsr  pushreg
+.1636	a2 5b		               ldx  #<blankmsg
+.1638	a0 1a		               ldy  #>blankmsg
+.163a	20 e0 c3	               jsr  putscxy
+.163d	a2 41		               ldx  #<f5a_msg
+.163f	a0 1b		               ldy  #>f5a_msg
+.1641	20 e0 c3	               jsr  putscxy
+.1644	20 e2 c4	               jsr  popreg
+.1647	20 b3 c4	               jsr  pushreg
+.164a	ad 6e 1f	               lda  f5abutton
+.164d	48		               pha
+.164e	a9 92		               lda  #146
+.1650	8d 80 1f	               sta  f5abutton+18
+.1653	a9 01		               lda  #flashcol
+.1655	8d 6e 1f	               sta  f5abutton
+.1658	a2 6e		               ldx  #<f5abutton
+.165a	a0 1f		               ldy  #>f5abutton
+.165c	20 e0 c3	               jsr  putscxy
+.165f	20 7d 12	               jsr  delay
+.1662	a9 12		               lda  #18
+.1664	8d 80 1f	               sta  f5abutton+18
+.1667	68		               pla
+.1668	8d 6e 1f	               sta  f5abutton
+.166b	a2 6e		               ldx  #<f5abutton
+.166d	a0 1f		               ldy  #>f5abutton
+.166f	20 e0 c3	               jsr  putscxy
+.1672	20 e2 c4	               jsr  popreg
+.1675	20 dc 19	            jsr   clearchar
+.1678	20 37 0f	            jsr   drawbitmap
+.167b	4c c6 16	            jmp   out
+.167e			menub
+.167e	20 b3 c4	               jsr  pushreg
+.1681	a2 5b		               ldx  #<blankmsg
+.1683	a0 1a		               ldy  #>blankmsg
+.1685	20 e0 c3	               jsr  putscxy
+.1688	a2 f0		               ldx  #<f5b_msg
+.168a	a0 1b		               ldy  #>f5b_msg
+.168c	20 e0 c3	               jsr  putscxy
+.168f	20 e2 c4	               jsr  popreg
+.1692	20 b3 c4	               jsr  pushreg
+.1695	ad 46 20	               lda  f5bbutton
+.1698	48		               pha
+.1699	a9 92		               lda  #146
+.169b	8d 58 20	               sta  f5bbutton+18
+.169e	a9 01		               lda  #flashcol
+.16a0	8d 46 20	               sta  f5bbutton
+.16a3	a2 46		               ldx  #<f5bbutton
+.16a5	a0 20		               ldy  #>f5bbutton
+.16a7	20 e0 c3	               jsr  putscxy
+.16aa	20 7d 12	               jsr  delay
+.16ad	a9 12		               lda  #18
+.16af	8d 58 20	               sta  f5bbutton+18
+.16b2	68		               pla
+.16b3	8d 46 20	               sta  f5bbutton
+.16b6	a2 46		               ldx  #<f5bbutton
+.16b8	a0 20		               ldy  #>f5bbutton
+.16ba	20 e0 c3	               jsr  putscxy
+.16bd	20 e2 c4	               jsr  popreg
+.16c0	20 1b 19	            jsr   scrollup
+.16c3	20 37 0f	            jsr   drawbitmap
+.16c6			out
+.16c6	20 b3 c4	               jsr  pushreg
+.16c9	a2 5b		               ldx  #<blankmsg
+.16cb	a0 1a		               ldy  #>blankmsg
+.16cd	20 e0 c3	               jsr  putscxy
+.16d0	a2 87		               ldx  #<prompt_msg
+.16d2	a0 1a		               ldy  #>prompt_msg
+.16d4	20 e0 c3	               jsr  putscxy
+.16d7	20 e2 c4	               jsr  popreg
+.16da	68		            pla
+.16db	60		            rts
+.16dc			f6action
+.16dc	48		            pha
+.16dd	a9 00		            lda   #$0
+.16df	8d c2 09	            sta   editmode
+.16e2	ad c3 09	            lda   fkeyset
+.16e5	d0 4b		            bne   menub
+.16e7	20 b3 c4	               jsr  pushreg
+.16ea	a2 5b		               ldx  #<blankmsg
+.16ec	a0 1a		               ldy  #>blankmsg
+.16ee	20 e0 c3	               jsr  putscxy
+.16f1	a2 5b		               ldx  #<f6a_msg
+.16f3	a0 1b		               ldy  #>f6a_msg
+.16f5	20 e0 c3	               jsr  putscxy
+.16f8	20 e2 c4	               jsr  popreg
+.16fb	20 b3 c4	               jsr  pushreg
+.16fe	ad 89 1f	               lda  f6abutton
+.1701	48		               pha
+.1702	a9 92		               lda  #146
+.1704	8d 9b 1f	               sta  f6abutton+18
+.1707	a9 01		               lda  #flashcol
+.1709	8d 89 1f	               sta  f6abutton
+.170c	a2 89		               ldx  #<f6abutton
+.170e	a0 1f		               ldy  #>f6abutton
+.1710	20 e0 c3	               jsr  putscxy
+.1713	20 7d 12	               jsr  delay
+.1716	a9 12		               lda  #18
+.1718	8d 9b 1f	               sta  f6abutton+18
+.171b	68		               pla
+.171c	8d 89 1f	               sta  f6abutton
+.171f	a2 89		               ldx  #<f6abutton
+.1721	a0 1f		               ldy  #>f6abutton
+.1723	20 e0 c3	               jsr  putscxy
+.1726	20 e2 c4	               jsr  popreg
+.1729	20 d2 19	            jsr   fillchar
+.172c	20 37 0f	            jsr   drawbitmap
+.172f	4c 7a 17	            jmp   out
+.1732			menub
+.1732	20 b3 c4	               jsr  pushreg
+.1735	a2 5b		               ldx  #<blankmsg
+.1737	a0 1a		               ldy  #>blankmsg
+.1739	20 e0 c3	               jsr  putscxy
+.173c	a2 02		               ldx  #<f6b_msg
+.173e	a0 1c		               ldy  #>f6b_msg
+.1740	20 e0 c3	               jsr  putscxy
+.1743	20 e2 c4	               jsr  popreg
+.1746	20 b3 c4	               jsr  pushreg
+.1749	ad 61 20	               lda  f6bbutton
+.174c	48		               pha
+.174d	a9 92		               lda  #146
+.174f	8d 73 20	               sta  f6bbutton+18
+.1752	a9 01		               lda  #flashcol
+.1754	8d 61 20	               sta  f6bbutton
+.1757	a2 61		               ldx  #<f6bbutton
+.1759	a0 20		               ldy  #>f6bbutton
+.175b	20 e0 c3	               jsr  putscxy
+.175e	20 7d 12	               jsr  delay
+.1761	a9 12		               lda  #18
+.1763	8d 73 20	               sta  f6bbutton+18
+.1766	68		               pla
+.1767	8d 61 20	               sta  f6bbutton
+.176a	a2 61		               ldx  #<f6bbutton
+.176c	a0 20		               ldy  #>f6bbutton
+.176e	20 e0 c3	               jsr  putscxy
+.1771	20 e2 c4	               jsr  popreg
+.1774	20 52 19	            jsr   scrolldown
+.1777	20 37 0f	            jsr   drawbitmap
+.177a			out
+.177a	20 b3 c4	               jsr  pushreg
+.177d	a2 5b		               ldx  #<blankmsg
+.177f	a0 1a		               ldy  #>blankmsg
+.1781	20 e0 c3	               jsr  putscxy
+.1784	a2 87		               ldx  #<prompt_msg
+.1786	a0 1a		               ldy  #>prompt_msg
+.1788	20 e0 c3	               jsr  putscxy
+.178b	20 e2 c4	               jsr  popreg
+.178e	68		            pla
+.178f	60		            rts
+.1790			f7action
+.1790	48		            pha
+.1791	a9 00		            lda   #$0
+.1793	8d c2 09	            sta   editmode
+.1796	ad c3 09	            lda   fkeyset
+.1799	d0 4b		            bne   menub
+.179b	20 b3 c4	               jsr  pushreg
+.179e	a2 5b		               ldx  #<blankmsg
+.17a0	a0 1a		               ldy  #>blankmsg
+.17a2	20 e0 c3	               jsr  putscxy
+.17a5	a2 75		               ldx  #<f7a_msg
+.17a7	a0 1b		               ldy  #>f7a_msg
+.17a9	20 e0 c3	               jsr  putscxy
+.17ac	20 e2 c4	               jsr  popreg
+.17af	20 b3 c4	               jsr  pushreg
+.17b2	ad a4 1f	               lda  f7abutton
+.17b5	48		               pha
+.17b6	a9 92		               lda  #146
+.17b8	8d b6 1f	               sta  f7abutton+18
+.17bb	a9 01		               lda  #flashcol
+.17bd	8d a4 1f	               sta  f7abutton
+.17c0	a2 a4		               ldx  #<f7abutton
+.17c2	a0 1f		               ldy  #>f7abutton
+.17c4	20 e0 c3	               jsr  putscxy
+.17c7	20 7d 12	               jsr  delay
+.17ca	a9 12		               lda  #18
+.17cc	8d b6 1f	               sta  f7abutton+18
+.17cf	68		               pla
+.17d0	8d a4 1f	               sta  f7abutton
+.17d3	a2 a4		               ldx  #<f7abutton
+.17d5	a0 1f		               ldy  #>f7abutton
+.17d7	20 e0 c3	               jsr  putscxy
+.17da	20 e2 c4	               jsr  popreg
+.17dd	20 0a 10	            jsr   copycharset
+.17e0	20 37 0f	            jsr   drawbitmap
+.17e3	4c 33 18	            jmp   out
+.17e6	a9 00		menub       lda   #$0
+.17e8	8d c2 09	            sta   editmode
+.17eb	20 b3 c4	               jsr  pushreg
+.17ee	a2 5b		               ldx  #<blankmsg
+.17f0	a0 1a		               ldy  #>blankmsg
+.17f2	20 e0 c3	               jsr  putscxy
+.17f5	a2 16		               ldx  #<f7b_msg
+.17f7	a0 1c		               ldy  #>f7b_msg
+.17f9	20 e0 c3	               jsr  putscxy
+.17fc	20 e2 c4	               jsr  popreg
+.17ff	20 b3 c4	               jsr  pushreg
+.1802	ad 7c 20	               lda  f7bbutton
+.1805	48		               pha
+.1806	a9 92		               lda  #146
+.1808	8d 8e 20	               sta  f7bbutton+18
+.180b	a9 01		               lda  #flashcol
+.180d	8d 7c 20	               sta  f7bbutton
+.1810	a2 7c		               ldx  #<f7bbutton
+.1812	a0 20		               ldy  #>f7bbutton
+.1814	20 e0 c3	               jsr  putscxy
+.1817	20 7d 12	               jsr  delay
+.181a	a9 12		               lda  #18
+.181c	8d 8e 20	               sta  f7bbutton+18
+.181f	68		               pla
+.1820	8d 7c 20	               sta  f7bbutton
+.1823	a2 7c		               ldx  #<f7bbutton
+.1825	a0 20		               ldy  #>f7bbutton
+.1827	20 e0 c3	               jsr  putscxy
+.182a	20 e2 c4	               jsr  popreg
+.182d	20 fb 18	            jsr   reverse
+.1830	20 37 0f	            jsr   drawbitmap
+.1833			out
+.1833	20 b3 c4	               jsr  pushreg
+.1836	a2 5b		               ldx  #<blankmsg
+.1838	a0 1a		               ldy  #>blankmsg
+.183a	20 e0 c3	               jsr  putscxy
+.183d	a2 87		               ldx  #<prompt_msg
+.183f	a0 1a		               ldy  #>prompt_msg
+.1841	20 e0 c3	               jsr  putscxy
+.1844	20 e2 c4	               jsr  popreg
+.1847	68		            pla
+.1848	60		            rts
+.1849			f8action
+.1849	08		            php
+.184a	48		            pha
+.184b	a9 00		            lda   #$0
+.184d	8d c2 09	            sta   editmode
+.1850	ad c3 09	            lda   fkeyset
+.1853	d0 45		            bne   menub
+.1855	20 b3 c4	               jsr  pushreg
+.1858	a2 5b		               ldx  #<blankmsg
+.185a	a0 1a		               ldy  #>blankmsg
+.185c	20 e0 c3	               jsr  putscxy
+.185f	a2 50		               ldx  #<menub_msg
+.1861	a0 1c		               ldy  #>menub_msg
+.1863	20 e0 c3	               jsr  putscxy
+.1866	20 e2 c4	               jsr  popreg
+.1869	20 b3 c4	               jsr  pushreg
+.186c	ad bf 1f	               lda  f8abutton
+.186f	48		               pha
+.1870	a9 92		               lda  #146
+.1872	8d d1 1f	               sta  f8abutton+18
+.1875	a9 01		               lda  #flashcol
+.1877	8d bf 1f	               sta  f8abutton
+.187a	a2 bf		               ldx  #<f8abutton
+.187c	a0 1f		               ldy  #>f8abutton
+.187e	20 e0 c3	               jsr  putscxy
+.1881	20 7d 12	               jsr  delay
+.1884	a9 12		               lda  #18
+.1886	8d d1 1f	               sta  f8abutton+18
+.1889	68		               pla
+.188a	8d bf 1f	               sta  f8abutton
+.188d	a2 bf		               ldx  #<f8abutton
+.188f	a0 1f		               ldy  #>f8abutton
+.1891	20 e0 c3	               jsr  putscxy
+.1894	20 e2 c4	               jsr  popreg
+.1897	4c dc 18	            jmp   swapit
+.189a			menub
+.189a	20 b3 c4	               jsr  pushreg
+.189d	a2 5b		               ldx  #<blankmsg
+.189f	a0 1a		               ldy  #>blankmsg
+.18a1	20 e0 c3	               jsr  putscxy
+.18a4	a2 2d		               ldx  #<menua_msg
+.18a6	a0 1c		               ldy  #>menua_msg
+.18a8	20 e0 c3	               jsr  putscxy
+.18ab	20 e2 c4	               jsr  popreg
+.18ae	20 b3 c4	               jsr  pushreg
+.18b1	ad 97 20	               lda  f8bbutton
+.18b4	48		               pha
+.18b5	a9 92		               lda  #146
+.18b7	8d a9 20	               sta  f8bbutton+18
+.18ba	a9 01		               lda  #flashcol
+.18bc	8d 97 20	               sta  f8bbutton
+.18bf	a2 97		               ldx  #<f8bbutton
+.18c1	a0 20		               ldy  #>f8bbutton
+.18c3	20 e0 c3	               jsr  putscxy
+.18c6	20 7d 12	               jsr  delay
+.18c9	a9 12		               lda  #18
+.18cb	8d a9 20	               sta  f8bbutton+18
+.18ce	68		               pla
+.18cf	8d 97 20	               sta  f8bbutton
+.18d2	a2 97		               ldx  #<f8bbutton
+.18d4	a0 20		               ldy  #>f8bbutton
+.18d6	20 e0 c3	               jsr  putscxy
+.18d9	20 e2 c4	               jsr  popreg
+.18dc	49 ff		swapit      eor   #$ff
+.18de	8d c3 09	            sta   fkeyset
+.18e1	20 ac 10	            jsr   drawfkeys
+.18e4	20 b3 c4	               jsr  pushreg
+.18e7	a2 5b		               ldx  #<blankmsg
+.18e9	a0 1a		               ldy  #>blankmsg
+.18eb	20 e0 c3	               jsr  putscxy
+.18ee	a2 87		               ldx  #<prompt_msg
+.18f0	a0 1a		               ldy  #>prompt_msg
+.18f2	20 e0 c3	               jsr  putscxy
+.18f5	20 e2 c4	               jsr  popreg
+.18f8	68		            pla
+.18f9	28		            plp
+.18fa	60		            rts
+.18fb			reverse
+.18fb	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
+.18fe	48		                   pha
+.18ff	ad c8 09	               lda  mapaddr
+.1902	85 fd		               sta  $fd
+.1904	ad c9 09	               lda  mapaddr+1
+.1907	85 fe		               sta  $fe
+.1909	68		                   pla
+.190a	a0 00		            ldy   #$00
+.190c	b1 fd		again       lda   (zpage2),y
+.190e	49 ff		            eor   #$ff
+.1910	91 fd		            sta   (zpage2),y
+.1912	c8		            iny
+.1913	c0 08		            cpy   #$08
+.1915	d0 f5		            bne   again
+.1917	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
+.191a	60		            rts
+.191b			scrollup
+.191b	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
+.191e	48		                   pha
+.191f	ad c8 09	               lda  mapaddr
+.1922	85 fb		               sta  $fb
+.1924	ad c9 09	               lda  mapaddr+1
+.1927	85 fc		               sta  $fc
+.1929	68		                   pla
+.192a	48		                   pha
+.192b	ad c8 09	               lda  mapaddr
+.192e	85 fd		               sta  $fd
+.1930	ad c9 09	               lda  mapaddr+1
+.1933	85 fe		               sta  $fe
+.1935	68		                   pla
+.1936	20 b8 c5	            jsr   inczp2
+.1939	a0 00		            ldy   #$00
+.193b	b1 fb		            lda   (zpage1),y
+.193d	8d e3 09	            sta   tmpbyte
+.1940	b1 fd		again       lda   (zpage2),y
+.1942	91 fb		            sta   (zpage1),y
+.1944	c8		            iny
+.1945	c0 07		            cpy   #$07
+.1947	d0 f7		            bne   again
+.1949	ad e3 09	            lda   tmpbyte
+.194c	91 fb		            sta   (zpage1),y
+.194e	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
+.1951	60		            rts
+.1952			scrolldown
+.1952	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
+.1955	48		                   pha
+.1956	ad c8 09	               lda  mapaddr
+.1959	85 fb		               sta  $fb
+.195b	ad c9 09	               lda  mapaddr+1
+.195e	85 fc		               sta  $fc
+.1960	68		                   pla
+.1961	48		                   pha
+.1962	ad c8 09	               lda  mapaddr
+.1965	85 fd		               sta  $fd
+.1967	ad c9 09	               lda  mapaddr+1
+.196a	85 fe		               sta  $fe
+.196c	68		                   pla
+.196d	20 b8 c5	            jsr   inczp2
+.1970	a0 07		            ldy   #$07             ;xxxxxxxx zpage1
+.1972	b1 fb		            lda   (zpage1),y          ;xxxxxxxx zpage2
+.1974	8d e3 09	            sta   tmpbyte             ;xxxxxxxx
+.1977	88		again       dey                ;xxxxxxxx
+.1978	b1 fb		            lda   (zpage1),y          ;xxxxxxxx
+.197a	91 fd		            sta   (zpage2),y          ;xxxxxxxx
+.197c	c0 00		            cpy   #$00             ;xxxxxxxx
+.197e	d0 f7		            bne   again            ;xxxxxxxx
+.1980	a0 00		            ldy   #$00
+.1982	ad e3 09	            lda   tmpbyte
+.1985	91 fb		            sta   (zpage1),y
+.1987	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
+.198a	60		            rts
+.198b			scrollright
+.198b	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
+.198e	48		                   pha
+.198f	ad c8 09	               lda  mapaddr
+.1992	85 fb		               sta  $fb
+.1994	ad c9 09	               lda  mapaddr+1
+.1997	85 fc		               sta  $fc
+.1999	68		                   pla
+.199a	a0 00		            ldy   #$00
+.199c	b1 fb		again       lda   (zpage1),y
+.199e	18		            clc
+.199f	6a		            ror
+.19a0	90 03		            bcc   zero
+.19a2	18		            clc
+.19a3	69 80		one         adc   #$80
+.19a5	91 fb		zero        sta   (zpage1),y
+.19a7	c8		            iny
+.19a8	c0 08		            cpy   #$08
+.19aa	d0 f0		            bne   again
+.19ac	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
+.19af	60		            rts
+.19b0			scrollleft
+.19b0	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
+.19b3	48		                   pha
+.19b4	ad c8 09	               lda  mapaddr
+.19b7	85 fb		               sta  $fb
+.19b9	ad c9 09	               lda  mapaddr+1
+.19bc	85 fc		               sta  $fc
+.19be	68		                   pla
+.19bf	a0 00		            ldy   #$00
+.19c1	b1 fb		again       lda   (zpage1),y
+.19c3	18		            clc
+.19c4	2a		            rol
+.19c5	69 00		            adc   #$00
+.19c7	91 fb		            sta   (zpage1),y
+.19c9	c8		            iny
+.19ca	c0 08		            cpy   #$08
+.19cc	d0 f3		            bne   again
+.19ce	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
+.19d1	60		            rts
+.19d2			fillchar
+.19d2	08		            php
+.19d3	48		            pha
+.19d4	a9 ff		            lda   #$ff
+.19d6	20 e6 19	            jsr   allsame
+.19d9	68		            pla
+.19da	28		            plp
+.19db	60		            rts
+.19dc			clearchar
+.19dc	08		            php
+.19dd	48		            pha
+.19de	a9 00		            lda   #$00
+.19e0	20 e6 19	            jsr   allsame
+.19e3	68		            pla
+.19e4	28		            plp
+.19e5	60		            rts
+.19e6			allsame
+.19e6	48		                   pha
+.19e7	ad c8 09	               lda  mapaddr
+.19ea	85 fd		               sta  $fd
+.19ec	ad c9 09	               lda  mapaddr+1
+.19ef	85 fe		               sta  $fe
+.19f1	68		                   pla
+.19f2	a0 00		            ldy   #$00
+.19f4	91 fd		again       sta   (zpage2),y
+.19f6	c8		            iny
+.19f7	c0 08		            cpy   #$08
+.19f9	d0 f9		            bne   again
+.19fb	60		            rts
+.19fc			fliphorz
+.19fc	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
+.19ff	48		                   pha
+.1a00	ad c8 09	               lda  mapaddr
+.1a03	85 fd		               sta  $fd
+.1a05	ad c9 09	               lda  mapaddr+1
+.1a08	85 fe		               sta  $fe
+.1a0a	68		                   pla
+.1a0b	a0 00		            ldy   #$00
+.1a0d	b1 fd		nextbyte    lda   (zpage2),y
+.1a0f	a2 00		            ldx   #$00
+.1a11	2a		rolagain    rol
+.1a12	6e e3 09	            ror   tmpbyte
+.1a15	e8		            inx
+.1a16	e0 08		            cpx   #$08
+.1a18	30 f7		            bmi   rolagain
+.1a1a	ad e3 09	            lda   tmpbyte
+.1a1d	91 fd		            sta   (zpage2),y
+.1a1f	c8		            iny
+.1a20	c0 08		            cpy   #$08
+.1a22	30 e9		            bmi   nextbyte
+.1a24	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
+.1a27	60		            rts
+.1a28			flipvert
+.1a28	20 45 c4	            jsr   pushall           ; Sauvegarde registres et pointeur ZP.
+.1a2b	48		                   pha
+.1a2c	ad c8 09	               lda  mapaddr
+.1a2f	85 fd		               sta  $fd
+.1a31	ad c9 09	               lda  mapaddr+1
+.1a34	85 fe		               sta  $fe
+.1a36	68		                   pla
+.1a37	a0 00		            ldy   #$00
+.1a39	b1 fd		tostack     lda   (zpage2),y
+.1a3b	48		            pha
+.1a3c	c8		            iny
+.1a3d	c0 08		            cpy   #$08
+.1a3f	d0 f8		            bne   tostack
+.1a41	a0 00		            ldy   #$00
+.1a43	68		fromstack   pla
+.1a44	91 fd		            sta   (zpage2),y
+.1a46	c8		            iny
+.1a47	c0 08		            cpy   #$08
+.1a49	d0 f8		            bne   fromstack
+.1a4b	20 80 c4	            jsr   popall            ; Récupère registres et pointeur ZP.
+.1a4e	60		            rts
 
 ;******  Return to file: charedit.asm
 
 
 ;******  Processing file: strings_en.asm
 
->1a4c	0a 01 05	editor_msg     .byte vrose,1,5
->1a4f	5b 45 44 49	               .null     "[editor]"
->1a53	54 4f 52 5d 00
->1a58	03 00 05 92	blankmsg       .byte     mesgcol,0,5,146
->1a5c	20 20 20 20	               .null     "                                       "
->1a60	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
->1a70	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
->1a80	20 20 20 00
->1a84	03 00 05 92	prompt_msg     .byte     mesgcol,0,5,146
->1a88	20 45 4e 54	               .null     " enter f-key command :"
->1a8c	45 52 20 46 2d 4b 45 59 20 43 4f 4d 4d 41 4e 44
->1a9c	20 3a 00
->1a9f	03 00 05 92	wait_msg       .byte     mesgcol,0,5,146
->1aa3	20 4f 4e 45	               .null     " one moment please ... "
->1aa7	20 4d 4f 4d 45 4e 54 20 50 4c 45 41 53 45 20 2e
->1ab7	2e 2e 20 00
-.1abb			f1a_msg
->1abb	03 00 05 92	edit_msg       .byte     mesgcol,0,5,146     ;18
->1abf	20 45 44 49	               .text     " edit mode: chr$(   )"
->1ac3	54 20 4d 4f 44 45 3a 20 43 48 52 24 28 20 20 20
->1ad3	29
->1ad4	92		               .byte     146.0
-.1ad5			f2a_msg
->1ad5	03 00 05	copy_msg       .byte     mesgcol,0,5
->1ad8	20 45 4e 54	               .null     " enter character to copy:"
->1adc	45 52 20 43 48 41 52 41 43 54 45 52 20 54 4f 20
->1aec	43 4f 50 59 3a 00
-.1af2			f3a_msg
->1af2	03 00 05 92	save_msg       .byte     mesgcol,0,5,146
->1af6	20 53 41 56	               .null     " save on witch device? (1/8/9): "
->1afa	45 20 4f 4e 20 57 49 54 43 48 20 44 45 56 49 43
->1b0a	45 3f 20 28 31 2f 38 2f 39 29 3a 20 00
-.1b17			f4a_msg
->1b17	03 00 05 92	load_msg       .byte     mesgcol,0,5,146
->1b1b	20 4c 4f 41	               .null     " load from witch device? (1/8/9): "
->1b1f	44 20 46 52 4f 4d 20 57 49 54 43 48 20 44 45 56
->1b2f	49 43 45 3f 20 28 31 2f 38 2f 39 29 3a 20 00
-.1b3e			f5a_msg
->1b3e	03 00 05	clear_msg      .byte     mesgcol,0,5
->1b41	20 43 4c 45	               .null     " clear char: chr$(   )"
->1b45	41 52 20 43 48 41 52 3a 20 43 48 52 24 28 20 20
->1b55	20 29 00
-.1b58			f6a_msg
->1b58	03 00 05	fill_msg       .byte     mesgcol,0,5
->1b5b	20 46 49 4c	               .null     " fill char:  chr$(   )"
->1b5f	4c 20 43 48 41 52 3a 20 20 43 48 52 24 28 20 20
->1b6f	20 29 00
-.1b72			f7a_msg
->1b72	03 00 05	work_msg       .byte     mesgcol,0,5
->1b75	20 52 45 53	               .null     " restoring all characters."
->1b79	54 4f 52 49 4e 47 20 41 4c 4c 20 43 48 41 52 41
->1b89	43 54 45 52 53 2e 00
-.1b90			f1b_msg
->1b90	03 00 05	invr_msg       .byte     mesgcol,0,5
->1b93	20 46 4c 49	               .null     " flipping vertically:"
->1b97	50 50 49 4e 47 20 56 45 52 54 49 43 41 4c 4c 59
->1ba7	3a 00
-.1ba9			f2b_msg
->1ba9	03 00 05	flip_msg       .byte     mesgcol,0,5
->1bac	20 46 4c 49	               .null     " flipping horizontally:"
->1bb0	50 50 49 4e 47 20 48 4f 52 49 5a 4f 4e 54 41 4c
->1bc0	4c 59 3a 00
-.1bc4			f3b_msg
->1bc4	03 00 05	scrollr_msg    .byte     mesgcol,0,5
->1bc7	20 53 43 52	               .null     " scrolling right:"
->1bcb	4f 4c 4c 49 4e 47 20 52 49 47 48 54 3a 00
-.1bd9			f4b_msg
->1bd9	03 00 05	scrolll_msg    .byte     mesgcol,0,5
->1bdc	20 53 43 52	               .null     " scrolling left:"
->1be0	4f 4c 4c 49 4e 47 20 4c 45 46 54 3a 00
-.1bed			f5b_msg
->1bed	03 00 05	scrollu_msg    .byte     mesgcol,0,5
->1bf0	20 53 43 52	               .null     " scrolling up:"
->1bf4	4f 4c 4c 49 4e 47 20 55 50 3a 00
-.1bff			f6b_msg
->1bff	03 00 05	scrolld_msg    .byte     mesgcol,0,5
->1c02	20 53 43 52	               .null     " scrolling down:"
->1c06	4f 4c 4c 49 4e 47 20 44 4f 57 4e 3a 00
-.1c13			f7b_msg
->1c13	03 00 05	rvrs_msg       .byte     mesgcol,0,5
->1c16	20 52 45 56	               .null     " reverse character:"
->1c1a	45 52 53 45 20 43 48 41 52 41 43 54 45 52 3a 00
->1c2a	03 00 05	menua_msg      .byte     mesgcol,0,5
->1c2d	20 59 4f 55	               .null     " you are being moved to menu 1."
->1c31	20 41 52 45 20 42 45 49 4e 47 20 4d 4f 56 45 44
->1c41	20 54 4f 20 4d 45 4e 55 20 31 2e 00
->1c4d	03 00 05	menub_msg      .byte     mesgcol,0,5
->1c50	20 59 4f 55	               .null     " you are being moved to menu 2."
->1c54	20 41 52 45 20 42 45 49 4e 47 20 4d 4f 56 45 44
->1c64	20 54 4f 20 4d 45 4e 55 20 32 2e 00
->1c70	07 00 05	cp_char_msg    .byte     vjaune,0,5
->1c73	20 45 4e 54	               .text     " enter character to copy from (?)."
->1c77	45 52 20 43 48 41 52 41 43 54 45 52 20 54 4f 20
->1c87	43 4f 50 59 20 46 52 4f 4d 20 28 3f 29 2e
->1c95	9d 9d 9d	               .byte     157,157,157
->1c98	00		               .byte     0
->1c99	07 00 05	fname_msg      .byte     vjaune,0,5
->1c9c	20 45 4e 54	               .text     " enter a 6 letter filename : "
->1ca0	45 52 20 41 20 36 20 4c 45 54 54 45 52 20 46 49
->1cb0	4c 45 4e 41 4d 45 20 3a 20
->1cb9	a4 a4 a4 a4	               .byte     $a4,$a4,$a4,$a4,$a4,$a4
->1cbd	a4 a4
->1cbf	2e 43 48 52	               .text     ".chr"
->1cc3	9d 9d 9d 9d	               .byte     157,157,157,157,157,157,157,157,157,157
->1cc7	9d 9d 9d 9d 9d 9d
->1ccd	00		               .byte     0
->1cce	04 14 18 12	quit_msg       .byte     vmauve,20,24,18
->1cd2	43 54 52 4c	               .text     "ctrl-x"
->1cd6	2d 58
->1cd8	92		               .byte     146
->1cd9	20 54 4f 20	               .null     " to quit."
->1cdd	51 55 49 54 2e 00
->1ce3	0a 14 17 12	redraw_msg     .byte     vrose,20,23,18
->1ce7	43 54 52 4c	               .text     "ctrl-r"
->1ceb	2d 52
->1ced	92		               .byte     146
->1cee	20 54 4f 20	               .null     " to redraw."
->1cf2	52 45 44 52 41 57 2e 00
-.1cfa			menu_msg
->1cfa	0d 15 18 12	exit_msg       .byte     vvert1,21,24,18
->1cfe	43 54 52 4c	               .text     "ctrl-x"
->1d02	2d 58
->1d04	92		               .byte     146
->1d05	20 54 4f 20	               .null     " to menu."
->1d09	4d 45 4e 55 2e 00
->1d0f	03 04 06 12	whoami0        .byte     whoamicol,4,6,18
->1d13	20 20 20 20	               .text     "                               "
->1d17	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
->1d27	20 20 20 20 20 20 20 20 20 20 20
->1d32	92		               .byte     146
->1d33	00		               .byte     0
->1d34	03 04 07 12	whoami1        .byte     whoamicol,4,7,18
->1d38	20 20 20 20	               .text     "          "
->1d3c	20 20 20 20 20 20
->1d42	92		               .byte     146
->1d43	20 43 48 41	               .text     " charedit "
->1d47	52 45 44 49 54 20
->1d4d	12		               .byte     18
->1d4e	20 20 20 20	               .text     "           "
->1d52	20 20 20 20 20 20 20
->1d59	92		               .byte     146
->1d5a	00		               .byte     0
->1d5b	03 04 08 12	whoami2        .byte     whoamicol,4,8,18
->1d5f	20 20 20 20	               .text     "                               "
->1d63	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
->1d73	20 20 20 20 20 20 20 20 20 20 20
->1d7e	92		               .byte     146
->1d7f	00		               .byte     0
->1d80	03 04 09 12	whoami3        .byte     whoamicol,4,9,18
->1d84	20 20 20 46	               .text     "   from isbn : 0-942386-29-9   "
->1d88	52 4f 4d 20 49 53 42 4e 20 3a 20 30 2d 39 34 32
->1d98	33 38 36 2d 32 39 2d 39 20 20 20
->1da3	92		               .byte     146
->1da4	00		               .byte     0
->1da5	03 04 0a 12	whoami4        .byte     whoamicol,4,10,18
->1da9	20 20 20 20	               .text     "        by john heilborn       "
->1dad	20 20 20 20 42 59 20 4a 4f 48 4e 20 48 45 49 4c
->1dbd	42 4f 52 4e 20 20 20 20 20 20 20
->1dc8	92		               .byte     146
->1dc9	00		               .byte     0
->1dca	03 04 0b 12	whoami5        .byte     whoamicol,4,11,18
->1dce	20 20 20 20	               .text     "                               "
->1dd2	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
->1de2	20 20 20 20 20 20 20 20 20 20 20
->1ded	92		               .byte     146
->1dee	00		               .byte     0
->1def	03 04 0c 12	whoami6        .byte     whoamicol,4,12,18
->1df3	20 43 4f 44	               .text     " coded in assembly language by "
->1df7	45 44 20 49 4e 20 41 53 53 45 4d 42 4c 59 20 4c
->1e07	41 4e 47 55 41 47 45 20 42 59 20
->1e12	92		               .byte     146
->1e13	00		               .byte     0
->1e14	03 04 0d 12	whoami7        .byte     whoamicol,4,13,18
->1e18	20 44 41 4e	               .text     " daniel lafrance quebec/canada "
->1e1c	49 45 4c 20 4c 41 46 52 41 4e 43 45 20 51 55 45
->1e2c	42 45 43 2f 43 41 4e 41 44 41 20
->1e37	92		               .byte     146
->1e38	00		               .byte     0
->1e39	03 04 0e 12	whoami8        .byte     whoamicol,4,14,18
->1e3d	20 20 20 20	               .text     "    version:",version,"    "
->1e41	56 45 52 53 49 4f 4e 3a 32 30 32 36 31 30 31 39
->1e51	2d 32 32 33 31 33 39 20 20 20 20
->1e5c	92		               .byte     146
->1e5d	00		               .byte     0
->1e5e	03 04 0f 12	whoami9        .byte     whoamicol,4,15,18
->1e62	20 20 20 20	               .text     "                               "
->1e66	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
->1e76	20 20 20 20 20 20 20 20 20 20 20
->1e81	92		               .byte     146
->1e82	00		               .byte     0
->1e83	03 06 10 14	bye_msg        .byte     vcyan,6,16,20
->1e87	20 54 48 41	               .text     " thanks and have a good day "
->1e8b	4e 4b 53 20 41 4e 44 20 48 41 56 45 20 41 20 47
->1e9b	4f 4f 44 20 44 41 59 20
->1ea3	92		               .byte     146
->1ea4	00		               .byte     0
->1ea5	0d 05 18 12	any_msg        .byte     vvert1,5,24,18
->1ea9	20 20 55 53	               .null         "  use the [anykey] to basic  "
->1ead	45 20 54 48 45 20 5b 41 4e 59 4b 45 59 5d 20 54
->1ebd	4f 20 42 41 53 49 43 20 20 00
->1ec7	92		               .byte     146
->1ec8	00		               .byte     0
->1ec9	03 12 07	titremenu1     .byte     menu1col1,fkeyleft,f1top-2
->1ecc	12		               .byte     18
->1ecd	20 20 20 46	               .text     "   function set #1   "
->1ed1	55 4e 43 54 49 4f 4e 20 53 45 54 20 23 31 20 20
->1ee1	20
->1ee2	92		               .byte     146
->1ee3	00		               .byte     0
->1ee4	0f 12 07	titremenu2     .byte     menu2col1,fkeyleft,f1top-2       ;133
->1ee7	12		               .byte     18
->1ee8	20 20 20 46	               .text     "   function set #2   "
->1eec	55 4e 43 54 49 4f 4e 20 53 45 54 20 23 32 20 20
->1efc	20
->1efd	92		               .byte     146
->1efe	00		               .byte     0
->1eff	03 12 09	f1abutton      .byte     menu1col1,fkeyleft,f1top       ;133
->1f02	45 44 49 54	               .text     "edit character."
->1f06	20 43 48 41 52 41 43 54 45 52 2e
->1f11	12		               .byte     18             ; position 15
->1f12	a9		               .byte     $a9
->1f13	20 46 31 20	               .text     " f1 "
->1f17	df 92		               .byte     223,146
->1f19	00		               .byte     0
->1f1a	0e 12 0a	f2abutton      .byte     menu1col2,fkeyleft,f1top+1     ;138
->1f1d	43 4f 50 59	               .text     "copy from......"
->1f21	20 46 52 4f 4d 2e 2e 2e 2e 2e 2e
->1f2c	12		               .byte     18   ; position 15
->1f2d	20 20 46 32	               .text     "  f2  "
->1f31	20 20
->1f33	92		               .byte     146
->1f34	00		               .byte     0
->1f35	03 12 0c	f3abutton      .byte     menu1col1,fkeyleft,f1top+3     ;137
->1f38	53 41 56 45	               .text     "save to........"
->1f3c	20 54 4f 2e 2e 2e 2e 2e 2e 2e 2e
->1f47	12		               .byte     18            ; position 15
->1f48	a9		               .byte     $a9
->1f49	20 46 33 20	               .text     " f3 "
->1f4d	df 92		               .byte     223,146
->1f4f	00		               .byte     0
->1f50	0e 12 0d	f4abutton      .byte     menu1col2,fkeyleft,f1top+4     ;134
->1f53	4c 4f 41 44	               .text     "load from......"
->1f57	20 46 52 4f 4d 2e 2e 2e 2e 2e 2e
->1f62	12		               .byte     18             ; position 15
->1f63	20 20 46 34	               .text     "  f4  "
->1f67	20 20
->1f69	92		               .byte     146
->1f6a	00		               .byte     0
->1f6b	03 12 0f	f5abutton      .byte     menu1col1,fkeyleft,f1top+6     ;135
->1f6e	43 4c 45 41	               .text     "clear.........."
->1f72	52 2e 2e 2e 2e 2e 2e 2e 2e 2e 2e
->1f7d	12		               .byte     18             ; position 15
->1f7e	a9		               .byte     $a9
->1f7f	20 46 35 20	               .text     " f5 "
->1f83	df 92		               .byte     223,146
->1f85	00		               .byte     0
->1f86	0e 12 10	f6abutton      .byte     menu1col2,fkeyleft,f1top+7    ;139
->1f89	46 49 4c 4c	               .text     "fill..........."
->1f8d	2e 2e 2e 2e 2e 2e 2e 2e 2e 2e 2e
->1f98	12		               .byte     18             ; position 15
->1f99	20 20 46 36	               .text     "  f6  "
->1f9d	20 20
->1f9f	92		               .byte     146
->1fa0	00		               .byte     0
->1fa1	03 12 12	f7abutton      .byte     menu1col1,fkeyleft,f1top+9    ;136
->1fa4	52 45 53 54	               .text     "restore all...."
->1fa8	4f 52 45 20 41 4c 4c 2e 2e 2e 2e
->1fb3	12		               .byte     18             ; position 15
->1fb4	a9		               .byte     $a9
->1fb5	20 46 37 20	               .text     " f7 "
->1fb9	df 92		               .byte     223,146
->1fbb	00		               .byte     0
->1fbc	0e 12 13	f8abutton      .byte     menu1col2,fkeyleft,f1top+10
->1fbf	47 4f 20 54	               .text     "go to menu #2.."
->1fc3	4f 20 4d 45 4e 55 20 23 32 2e 2e
->1fce	12		               .byte     18             ; position 15
->1fcf	20 20 46 38	               .text     "  f8  "
->1fd3	20 20
->1fd5	92		               .byte     146
->1fd6	00		               .byte     0
->1fd7	0f 12 09	f1bbutton      .byte     menu2col1,fkeyleft,f1top
->1fda	56 45 52 54	               .text     "vertical flip.."
->1fde	49 43 41 4c 20 46 4c 49 50 2e 2e
->1fe9	12		               .byte     18             ; position 15
->1fea	a9		               .byte     $a9
->1feb	20 46 31 20	               .text     " f1 "
->1fef	df 92		               .byte     223,146
->1ff1	00		               .byte     0
->1ff2	0c 12 0a	f2bbutton      .byte     menu2col2,fkeyleft,f1top+1
->1ff5	48 4f 52 5a	               .text     "horzontal flip."
->1ff9	4f 4e 54 41 4c 20 46 4c 49 50 2e
->2004	12		               .byte     18             ; position 15
->2005	20 20 46 32	               .text     "  f2  "
->2009	20 20
->200b	92		               .byte     146
->200c	00		               .byte     0
->200d	0f 12 0c	f3bbutton      .byte     menu2col1,fkeyleft,f1top+3
->2010	53 43 52 4f	               .text     "scroll to right"
->2014	4c 4c 20 54 4f 20 52 49 47 48 54
->201f	12		               .byte     18             ; position 15
->2020	a9		               .byte     $a9
->2021	20 46 33 20	               .text     " f3 "
->2025	df 92		               .byte     223,146
->2027	00		               .byte     0
->2028	0c 12 0d	f4bbutton      .byte     menu2col2,fkeyleft,f1top+4
->202b	53 43 52 4f	               .text     "scroll to left."
->202f	4c 4c 20 54 4f 20 4c 45 46 54 2e
->203a	12		               .byte     18             ; position 15
->203b	20 20 46 34	               .text     "  f4  "
->203f	20 20
->2041	92		               .byte     146
->2042	00		               .byte     0
->2043	0f 12 0f	f5bbutton      .byte     menu2col1,fkeyleft,f1top+6
->2046	53 43 52 4f	               .text     "scroll up......"
->204a	4c 4c 20 55 50 2e 2e 2e 2e 2e 2e
->2055	12		               .byte     18             ; position 15
->2056	a9		               .byte     $a9
->2057	20 46 35 20	               .text     " f5 "
->205b	df 92		               .byte     223,146
->205d	00		               .byte     0
->205e	0c 12 10	f6bbutton      .byte     menu2col2,fkeyleft,f1top+7
->2061	53 43 52 4f	               .text     "scroll down...."
->2065	4c 4c 20 44 4f 57 4e 2e 2e 2e 2e
->2070	12		               .byte     18             ; position 15
->2071	20 20 46 36	               .text     "  f6  "
->2075	20 20
->2077	92		               .byte     146
->2078	00		               .byte     0
->2079	0f 12 12	f7bbutton      .byte     menu2col1,fkeyleft,f1top+9
->207c	52 45 56 45	               .text     "reverse bits..."
->2080	52 53 45 20 42 49 54 53 2e 2e 2e
->208b	12		               .byte     18             ; position 15
->208c	a9		               .byte     $a9
->208d	20 46 37 20	               .text     " f7 "
->2091	df 92		               .byte     223,146
->2093	00		               .byte     0
->2094	0c 12 13	f8bbutton      .byte     menu2col2,fkeyleft,f1top+10
->2097	47 4f 20 54	               .text     "go to menu #1.."
->209b	4f 20 4d 45 4e 55 20 23 31 2e 2e
->20a6	12		               .byte     18             ; position 15
->20a7	20 20 46 38	               .text     "  f8  "
->20ab	20 20
->20ad	92		               .byte     146
->20ae	00		               .byte     0
->20af	50 45 54 53	txt0           .null     "petscii :   "
->20b3	43 49 49 20 3a 20 20 20 00
->20bc	4b 45 59 20	txt1           .null     "key code:   "
->20c0	43 4f 44 45 3a 20 20 20 00
->20c9	42 49 54 4d	txt2           .null     "bitmap..: "
->20cd	41 50 2e 2e 3a 20 00
->20d4	4f 46 46 53	txt3           .null     "offset..:   "
->20d8	45 54 2e 2e 3a 20 20 20 00
->20e1	4d 41 50 41	txt4           .null     "mapaddr.: "
->20e5	44 44 52 2e 3a 20 00
->20ec	43 55 52 53	txt5           .null     "cursval.: "
->20f0	56 41 4c 2e 3a 20 00
->20f7	53 54 41 43	txt6           .null     "stack......:"
->20fb	4b 2e 2e 2e 2e 2e 2e 3a 00
+>1a4f	0a 01 05	editor_msg     .byte vrose,1,5
+>1a52	5b 45 44 49	               .null     "[editor]"
+>1a56	54 4f 52 5d 00
+>1a5b	03 00 05 92	blankmsg       .byte     mesgcol,0,5,146
+>1a5f	20 20 20 20	               .null     "                                       "
+>1a63	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+>1a73	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+>1a83	20 20 20 00
+>1a87	03 00 05 92	prompt_msg     .byte     mesgcol,0,5,146
+>1a8b	20 45 4e 54	               .null     " enter f-key command :"
+>1a8f	45 52 20 46 2d 4b 45 59 20 43 4f 4d 4d 41 4e 44
+>1a9f	20 3a 00
+>1aa2	03 00 05 92	wait_msg       .byte     mesgcol,0,5,146
+>1aa6	20 4f 4e 45	               .null     " one moment please ... "
+>1aaa	20 4d 4f 4d 45 4e 54 20 50 4c 45 41 53 45 20 2e
+>1aba	2e 2e 20 00
+.1abe			f1a_msg
+>1abe	03 00 05 92	edit_msg       .byte     mesgcol,0,5,146     ;18
+>1ac2	20 45 44 49	               .text     " edit mode: chr$(   )"
+>1ac6	54 20 4d 4f 44 45 3a 20 43 48 52 24 28 20 20 20
+>1ad6	29
+>1ad7	92		               .byte     146.0
+.1ad8			f2a_msg
+>1ad8	03 00 05	copy_msg       .byte     mesgcol,0,5
+>1adb	20 45 4e 54	               .null     " enter character to copy:"
+>1adf	45 52 20 43 48 41 52 41 43 54 45 52 20 54 4f 20
+>1aef	43 4f 50 59 3a 00
+.1af5			f3a_msg
+>1af5	03 00 05 92	save_msg       .byte     mesgcol,0,5,146
+>1af9	20 53 41 56	               .null     " save on witch device? (1/8/9): "
+>1afd	45 20 4f 4e 20 57 49 54 43 48 20 44 45 56 49 43
+>1b0d	45 3f 20 28 31 2f 38 2f 39 29 3a 20 00
+.1b1a			f4a_msg
+>1b1a	03 00 05 92	load_msg       .byte     mesgcol,0,5,146
+>1b1e	20 4c 4f 41	               .null     " load from witch device? (1/8/9): "
+>1b22	44 20 46 52 4f 4d 20 57 49 54 43 48 20 44 45 56
+>1b32	49 43 45 3f 20 28 31 2f 38 2f 39 29 3a 20 00
+.1b41			f5a_msg
+>1b41	03 00 05	clear_msg      .byte     mesgcol,0,5
+>1b44	20 43 4c 45	               .null     " clear char: chr$(   )"
+>1b48	41 52 20 43 48 41 52 3a 20 43 48 52 24 28 20 20
+>1b58	20 29 00
+.1b5b			f6a_msg
+>1b5b	03 00 05	fill_msg       .byte     mesgcol,0,5
+>1b5e	20 46 49 4c	               .null     " fill char:  chr$(   )"
+>1b62	4c 20 43 48 41 52 3a 20 20 43 48 52 24 28 20 20
+>1b72	20 29 00
+.1b75			f7a_msg
+>1b75	03 00 05	work_msg       .byte     mesgcol,0,5
+>1b78	20 52 45 53	               .null     " restoring all characters."
+>1b7c	54 4f 52 49 4e 47 20 41 4c 4c 20 43 48 41 52 41
+>1b8c	43 54 45 52 53 2e 00
+.1b93			f1b_msg
+>1b93	03 00 05	invr_msg       .byte     mesgcol,0,5
+>1b96	20 46 4c 49	               .null     " flipping vertically:"
+>1b9a	50 50 49 4e 47 20 56 45 52 54 49 43 41 4c 4c 59
+>1baa	3a 00
+.1bac			f2b_msg
+>1bac	03 00 05	flip_msg       .byte     mesgcol,0,5
+>1baf	20 46 4c 49	               .null     " flipping horizontally:"
+>1bb3	50 50 49 4e 47 20 48 4f 52 49 5a 4f 4e 54 41 4c
+>1bc3	4c 59 3a 00
+.1bc7			f3b_msg
+>1bc7	03 00 05	scrollr_msg    .byte     mesgcol,0,5
+>1bca	20 53 43 52	               .null     " scrolling right:"
+>1bce	4f 4c 4c 49 4e 47 20 52 49 47 48 54 3a 00
+.1bdc			f4b_msg
+>1bdc	03 00 05	scrolll_msg    .byte     mesgcol,0,5
+>1bdf	20 53 43 52	               .null     " scrolling left:"
+>1be3	4f 4c 4c 49 4e 47 20 4c 45 46 54 3a 00
+.1bf0			f5b_msg
+>1bf0	03 00 05	scrollu_msg    .byte     mesgcol,0,5
+>1bf3	20 53 43 52	               .null     " scrolling up:"
+>1bf7	4f 4c 4c 49 4e 47 20 55 50 3a 00
+.1c02			f6b_msg
+>1c02	03 00 05	scrolld_msg    .byte     mesgcol,0,5
+>1c05	20 53 43 52	               .null     " scrolling down:"
+>1c09	4f 4c 4c 49 4e 47 20 44 4f 57 4e 3a 00
+.1c16			f7b_msg
+>1c16	03 00 05	rvrs_msg       .byte     mesgcol,0,5
+>1c19	20 52 45 56	               .null     " reverse character:"
+>1c1d	45 52 53 45 20 43 48 41 52 41 43 54 45 52 3a 00
+>1c2d	03 00 05	menua_msg      .byte     mesgcol,0,5
+>1c30	20 59 4f 55	               .null     " you are being moved to menu 1."
+>1c34	20 41 52 45 20 42 45 49 4e 47 20 4d 4f 56 45 44
+>1c44	20 54 4f 20 4d 45 4e 55 20 31 2e 00
+>1c50	03 00 05	menub_msg      .byte     mesgcol,0,5
+>1c53	20 59 4f 55	               .null     " you are being moved to menu 2."
+>1c57	20 41 52 45 20 42 45 49 4e 47 20 4d 4f 56 45 44
+>1c67	20 54 4f 20 4d 45 4e 55 20 32 2e 00
+>1c73	07 00 05	cp_char_msg    .byte     vjaune,0,5
+>1c76	20 45 4e 54	               .text     " enter character to copy from (?)."
+>1c7a	45 52 20 43 48 41 52 41 43 54 45 52 20 54 4f 20
+>1c8a	43 4f 50 59 20 46 52 4f 4d 20 28 3f 29 2e
+>1c98	9d 9d 9d	               .byte     157,157,157
+>1c9b	00		               .byte     0
+>1c9c	07 00 05	fname_msg      .byte     vjaune,0,5
+>1c9f	20 45 4e 54	               .text     " enter a 6 letter filename : "
+>1ca3	45 52 20 41 20 36 20 4c 45 54 54 45 52 20 46 49
+>1cb3	4c 45 4e 41 4d 45 20 3a 20
+>1cbc	a4 a4 a4 a4	               .byte     $a4,$a4,$a4,$a4,$a4,$a4
+>1cc0	a4 a4
+>1cc2	2e 43 48 52	               .text     ".chr"
+>1cc6	9d 9d 9d 9d	               .byte     157,157,157,157,157,157,157,157,157,157
+>1cca	9d 9d 9d 9d 9d 9d
+>1cd0	00		               .byte     0
+>1cd1	04 14 18 12	quit_msg       .byte     vmauve,20,24,18
+>1cd5	43 54 52 4c	               .text     "ctrl-x"
+>1cd9	2d 58
+>1cdb	92		               .byte     146
+>1cdc	20 54 4f 20	               .null     " to quit."
+>1ce0	51 55 49 54 2e 00
+>1ce6	0f 14 17 12	redraw_msg     .byte     vgris2,20,23,18
+>1cea	43 54 52 4c	               .text     "ctrl-r"
+>1cee	2d 52
+>1cf0	92		               .byte     146
+>1cf1	20 54 4f 20	               .null     " to redraw."
+>1cf5	52 45 44 52 41 57 2e 00
+.1cfd			menu_msg
+>1cfd	02 14 18 12	exit_msg       .byte     vrouge,20,24,18
+>1d01	43 54 52 4c	               .text     "ctrl-x"
+>1d05	2d 58
+>1d07	92		               .byte     146
+>1d08	20 54 4f 20	               .null     " to menu."
+>1d0c	4d 45 4e 55 2e 00
+>1d12	03 04 06 12	whoami0        .byte     whoamicol,4,6,18
+>1d16	20 20 20 20	               .text     "                               "
+>1d1a	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+>1d2a	20 20 20 20 20 20 20 20 20 20 20
+>1d35	92		               .byte     146
+>1d36	00		               .byte     0
+>1d37	03 04 07 12	whoami1        .byte     whoamicol,4,7,18
+>1d3b	20 20 20 20	               .text     "          "
+>1d3f	20 20 20 20 20 20
+>1d45	92		               .byte     146
+>1d46	20 43 48 41	               .text     " charedit "
+>1d4a	52 45 44 49 54 20
+>1d50	12		               .byte     18
+>1d51	20 20 20 20	               .text     "           "
+>1d55	20 20 20 20 20 20 20
+>1d5c	92		               .byte     146
+>1d5d	00		               .byte     0
+>1d5e	03 04 08 12	whoami2        .byte     whoamicol,4,8,18
+>1d62	20 20 20 20	               .text     "                               "
+>1d66	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+>1d76	20 20 20 20 20 20 20 20 20 20 20
+>1d81	92		               .byte     146
+>1d82	00		               .byte     0
+>1d83	03 04 09 12	whoami3        .byte     whoamicol,4,9,18
+>1d87	20 20 20 46	               .text     "   from isbn : 0-942386-29-9   "
+>1d8b	52 4f 4d 20 49 53 42 4e 20 3a 20 30 2d 39 34 32
+>1d9b	33 38 36 2d 32 39 2d 39 20 20 20
+>1da6	92		               .byte     146
+>1da7	00		               .byte     0
+>1da8	03 04 0a 12	whoami4        .byte     whoamicol,4,10,18
+>1dac	20 20 20 20	               .text     "        by john heilborn       "
+>1db0	20 20 20 20 42 59 20 4a 4f 48 4e 20 48 45 49 4c
+>1dc0	42 4f 52 4e 20 20 20 20 20 20 20
+>1dcb	92		               .byte     146
+>1dcc	00		               .byte     0
+>1dcd	03 04 0b 12	whoami5        .byte     whoamicol,4,11,18
+>1dd1	20 20 20 20	               .text     "                               "
+>1dd5	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+>1de5	20 20 20 20 20 20 20 20 20 20 20
+>1df0	92		               .byte     146
+>1df1	00		               .byte     0
+>1df2	03 04 0c 12	whoami6        .byte     whoamicol,4,12,18
+>1df6	20 43 4f 44	               .text     " coded in assembly language by "
+>1dfa	45 44 20 49 4e 20 41 53 53 45 4d 42 4c 59 20 4c
+>1e0a	41 4e 47 55 41 47 45 20 42 59 20
+>1e15	92		               .byte     146
+>1e16	00		               .byte     0
+>1e17	03 04 0d 12	whoami7        .byte     whoamicol,4,13,18
+>1e1b	20 44 41 4e	               .text     " daniel lafrance quebec/canada "
+>1e1f	49 45 4c 20 4c 41 46 52 41 4e 43 45 20 51 55 45
+>1e2f	42 45 43 2f 43 41 4e 41 44 41 20
+>1e3a	92		               .byte     146
+>1e3b	00		               .byte     0
+>1e3c	03 04 0e 12	whoami8        .byte     whoamicol,4,14,18
+>1e40	20 20 20 20	               .text     "    version:",version,"    "
+>1e44	56 45 52 53 49 4f 4e 3a 32 30 32 36 31 30 31 39
+>1e54	2d 32 32 33 31 33 39 20 20 20 20
+>1e5f	92		               .byte     146
+>1e60	00		               .byte     0
+>1e61	03 04 0f 12	whoami9        .byte     whoamicol,4,15,18
+>1e65	20 20 20 20	               .text     "                               "
+>1e69	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+>1e79	20 20 20 20 20 20 20 20 20 20 20
+>1e84	92		               .byte     146
+>1e85	00		               .byte     0
+>1e86	03 06 10 14	bye_msg        .byte     vcyan,6,16,20
+>1e8a	20 54 48 41	               .text     " thanks and have a good day "
+>1e8e	4e 4b 53 20 41 4e 44 20 48 41 56 45 20 41 20 47
+>1e9e	4f 4f 44 20 44 41 59 20
+>1ea6	92		               .byte     146
+>1ea7	00		               .byte     0
+>1ea8	0d 05 18 12	any_msg        .byte     vvert1,5,24,18
+>1eac	20 20 55 53	               .null         "  use the [anykey] to basic  "
+>1eb0	45 20 54 48 45 20 5b 41 4e 59 4b 45 59 5d 20 54
+>1ec0	4f 20 42 41 53 49 43 20 20 00
+>1eca	92		               .byte     146
+>1ecb	00		               .byte     0
+>1ecc	0f 12 07	titremenu1     .byte     menu1col1,fkeyleft,f1top-2
+>1ecf	12		               .byte     18
+>1ed0	20 20 20 46	               .text     "   function set #1   "
+>1ed4	55 4e 43 54 49 4f 4e 20 53 45 54 20 23 31 20 20
+>1ee4	20
+>1ee5	92		               .byte     146
+>1ee6	00		               .byte     0
+>1ee7	0c 12 07	titremenu2     .byte     menu2col1,fkeyleft,f1top-2       ;133
+>1eea	12		               .byte     18
+>1eeb	20 20 20 46	               .text     "   function set #2   "
+>1eef	55 4e 43 54 49 4f 4e 20 53 45 54 20 23 32 20 20
+>1eff	20
+>1f00	92		               .byte     146
+>1f01	00		               .byte     0
+>1f02	0f 12 09	f1abutton      .byte     menu1col1,fkeyleft,f1top       ;133
+>1f05	45 44 49 54	               .text     "edit character."
+>1f09	20 43 48 41 52 41 43 54 45 52 2e
+>1f14	12		               .byte     18             ; position 15
+>1f15	a9		               .byte     $a9
+>1f16	20 46 31 20	               .text     " f1 "
+>1f1a	df 92		               .byte     223,146
+>1f1c	00		               .byte     0
+>1f1d	0c 12 0a	f2abutton      .byte     menu1col2,fkeyleft,f1top+1     ;138
+>1f20	43 4f 50 59	               .text     "copy from char."
+>1f24	20 46 52 4f 4d 20 43 48 41 52 2e
+>1f2f	12		               .byte     18   ; position 15
+>1f30	20 20 46 32	               .text     "  f2  "
+>1f34	20 20
+>1f36	92		               .byte     146
+>1f37	00		               .byte     0
+>1f38	0f 12 0c	f3abutton      .byte     menu1col1,fkeyleft,f1top+3     ;137
+>1f3b	53 41 56 45	               .text     "save to file..."
+>1f3f	20 54 4f 20 46 49 4c 45 2e 2e 2e
+>1f4a	12		               .byte     18            ; position 15
+>1f4b	a9		               .byte     $a9
+>1f4c	20 46 33 20	               .text     " f3 "
+>1f50	df 92		               .byte     223,146
+>1f52	00		               .byte     0
+>1f53	0c 12 0d	f4abutton      .byte     menu1col2,fkeyleft,f1top+4     ;134
+>1f56	4c 4f 41 44	               .text     "load from file."
+>1f5a	20 46 52 4f 4d 20 46 49 4c 45 2e
+>1f65	12		               .byte     18             ; position 15
+>1f66	20 20 46 34	               .text     "  f4  "
+>1f6a	20 20
+>1f6c	92		               .byte     146
+>1f6d	00		               .byte     0
+>1f6e	0f 12 0f	f5abutton      .byte     menu1col1,fkeyleft,f1top+6     ;135
+>1f71	43 4c 45 41	               .text     "clear with 0's."
+>1f75	52 20 57 49 54 48 20 30 27 53 2e
+>1f80	12		               .byte     18             ; position 15
+>1f81	a9		               .byte     $a9
+>1f82	20 46 35 20	               .text     " f5 "
+>1f86	df 92		               .byte     223,146
+>1f88	00		               .byte     0
+>1f89	0c 12 10	f6abutton      .byte     menu1col2,fkeyleft,f1top+7    ;139
+>1f8c	46 49 4c 4c	               .text     "fill with 1's.."
+>1f90	20 57 49 54 48 20 31 27 53 2e 2e
+>1f9b	12		               .byte     18             ; position 15
+>1f9c	20 20 46 36	               .text     "  f6  "
+>1fa0	20 20
+>1fa2	92		               .byte     146
+>1fa3	00		               .byte     0
+>1fa4	0f 12 12	f7abutton      .byte     menu1col1,fkeyleft,f1top+9    ;136
+>1fa7	4c 4f 41 44	               .text     "load from rom.."
+>1fab	20 46 52 4f 4d 20 52 4f 4d 2e 2e
+>1fb6	12		               .byte     18             ; position 15
+>1fb7	a9		               .byte     $a9
+>1fb8	20 46 37 20	               .text     " f7 "
+>1fbc	df 92		               .byte     223,146
+>1fbe	00		               .byte     0
+>1fbf	0c 12 13	f8abutton      .byte     menu1col2,fkeyleft,f1top+10
+>1fc2	47 4f 20 54	               .text     "go to menu #2.."
+>1fc6	4f 20 4d 45 4e 55 20 23 32 2e 2e
+>1fd1	12		               .byte     18             ; position 15
+>1fd2	20 20 46 38	               .text     "  f8  "
+>1fd6	20 20
+>1fd8	92		               .byte     146
+>1fd9	00		               .byte     0
+>1fda	0c 12 09	f1bbutton      .byte     menu2col1,fkeyleft,f1top
+>1fdd	56 45 52 54	               .text     "vertical flip.."
+>1fe1	49 43 41 4c 20 46 4c 49 50 2e 2e
+>1fec	12		               .byte     18             ; position 15
+>1fed	a9		               .byte     $a9
+>1fee	20 46 31 20	               .text     " f1 "
+>1ff2	df 92		               .byte     223,146
+>1ff4	00		               .byte     0
+>1ff5	0b 12 0a	f2bbutton      .byte     menu2col2,fkeyleft,f1top+1
+>1ff8	48 4f 52 5a	               .text     "horzontal flip."
+>1ffc	4f 4e 54 41 4c 20 46 4c 49 50 2e
+>2007	12		               .byte     18             ; position 15
+>2008	20 20 46 32	               .text     "  f2  "
+>200c	20 20
+>200e	92		               .byte     146
+>200f	00		               .byte     0
+>2010	0c 12 0c	f3bbutton      .byte     menu2col1,fkeyleft,f1top+3
+>2013	53 43 52 4f	               .text     "scroll to right"
+>2017	4c 4c 20 54 4f 20 52 49 47 48 54
+>2022	12		               .byte     18             ; position 15
+>2023	a9		               .byte     $a9
+>2024	20 46 33 20	               .text     " f3 "
+>2028	df 92		               .byte     223,146
+>202a	00		               .byte     0
+>202b	0b 12 0d	f4bbutton      .byte     menu2col2,fkeyleft,f1top+4
+>202e	53 43 52 4f	               .text     "scroll to left."
+>2032	4c 4c 20 54 4f 20 4c 45 46 54 2e
+>203d	12		               .byte     18             ; position 15
+>203e	20 20 46 34	               .text     "  f4  "
+>2042	20 20
+>2044	92		               .byte     146
+>2045	00		               .byte     0
+>2046	0c 12 0f	f5bbutton      .byte     menu2col1,fkeyleft,f1top+6
+>2049	53 43 52 4f	               .text     "scroll up......"
+>204d	4c 4c 20 55 50 2e 2e 2e 2e 2e 2e
+>2058	12		               .byte     18             ; position 15
+>2059	a9		               .byte     $a9
+>205a	20 46 35 20	               .text     " f5 "
+>205e	df 92		               .byte     223,146
+>2060	00		               .byte     0
+>2061	0b 12 10	f6bbutton      .byte     menu2col2,fkeyleft,f1top+7
+>2064	53 43 52 4f	               .text     "scroll down...."
+>2068	4c 4c 20 44 4f 57 4e 2e 2e 2e 2e
+>2073	12		               .byte     18             ; position 15
+>2074	20 20 46 36	               .text     "  f6  "
+>2078	20 20
+>207a	92		               .byte     146
+>207b	00		               .byte     0
+>207c	0c 12 12	f7bbutton      .byte     menu2col1,fkeyleft,f1top+9
+>207f	52 45 56 45	               .text     "reverse bits..."
+>2083	52 53 45 20 42 49 54 53 2e 2e 2e
+>208e	12		               .byte     18             ; position 15
+>208f	a9		               .byte     $a9
+>2090	20 46 37 20	               .text     " f7 "
+>2094	df 92		               .byte     223,146
+>2096	00		               .byte     0
+>2097	0b 12 13	f8bbutton      .byte     menu2col2,fkeyleft,f1top+10
+>209a	47 4f 20 54	               .text     "go to menu #1.."
+>209e	4f 20 4d 45 4e 55 20 23 31 2e 2e
+>20a9	12		               .byte     18             ; position 15
+>20aa	20 20 46 38	               .text     "  f8  "
+>20ae	20 20
+>20b0	92		               .byte     146
+>20b1	00		               .byte     0
+>20b2	50 45 54 53	txt0           .null     "petscii :   "
+>20b6	43 49 49 20 3a 20 20 20 00
+>20bf	4b 45 59 20	txt1           .null     "key code:   "
+>20c3	43 4f 44 45 3a 20 20 20 00
+>20cc	42 49 54 4d	txt2           .null     "bitmap..: "
+>20d0	41 50 2e 2e 3a 20 00
+>20d7	4f 46 46 53	txt3           .null     "offset..:   "
+>20db	45 54 2e 2e 3a 20 20 20 00
+>20e4	4d 41 50 41	txt4           .null     "mapaddr.: "
+>20e8	44 44 52 2e 3a 20 00
+>20ef	43 55 52 53	txt5           .null     "cursval.: "
+>20f3	56 41 4c 2e 3a 20 00
+>20fa	53 54 41 43	txt6           .null     "stack......:"
+>20fe	4b 2e 2e 2e 2e 2e 2e 3a 00
 
 ;******  Return to file: charedit.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd/e-c64-vars.asm
 
-=$2104			libre    = *
-=$2103			rp       = libre-$01;1 byte $cfff
-=$2102			ra       = rp-1     ;1 byte $cffe
-=$2101			rx       = ra-1     ;1 byte $cffd
-=$2100			ry       = rx-1     ;1 byte $cffc
-=$20ff			rs       = ry-1     ;1 byte $cffb
-=$20fd			pc       = rs-2     ;2 byte $cff9-$cffa
-=$20fc			curcol   = pc-1     ;1 byte $cff6
-=$20fb			memptr   = curcol-1;1 word $cff7-$cff8
-=$20f9			src      = memptr-2
-=$20f7			dst      = memptr-4
-=$20f5			loopcount = memptr-6
-=$20f5			hexv     = loopcount
-=$20f0			hexstr   = hexv-$05 ;5 byte
-=$20ef			a2hexpfx = hexv-$06 ;1 byte
-=$20ee			a2hexpy  = hexv-$07 ;1 byte
-=$20ed			a2hexpx  = hexv-$08 ;1 byte
-=$20ed			a2hexpos = hexv-$08 ;0 byte
-=$20ec			a2hexcol = hexv-$09 ;1 byte
-=$20ec			binv     = a2hexcol
-=$20e3			binstr   = binv-$09 ;9 byte
-=$20e2			a2binpfx = binv-$0a ;1 byte
-=$20e1			a2binpy  = binv-$0b ;1 byte
-=$20e0			a2binpx  = binv-$0c ;1 byte
-=$20e0			a2binpos = binv-$0c ;0 byte
-=$20df			a2bincol = binv-$0d ;1 byte
-=$20df			decv     = a2bincol
-=$20d9			decstr   = decv-$06 ;6 byte
-=$20d8			a2decpfx = decv-$07 ;1 byte
-=$20d7			a2decpy  = decv-$08 ;1 byte
-=$20d6			a2decpx  = decv-$09 ;1 byte
-=$20d6			a2decpos = decv-$09 ;0 byte
-=$20d5			a2deccol = decv-$0a ;1 byte
-=$20d4			offset   = decv-$0b ;1 byte
-=$20d4			fltv     = offset
-=$20ce			fvar1    = fltv-6  ; 6 byte
-=$20c8			fvar2    = fltv-12 ; 6 byte
-=$20b4			float1   = fltv-32 ;20 byte
-=$20a0			float2   = fltv-52 ;20 byte
-=$209f			tval1    = fltv-53 ; 1 byte
-=$209d			tval2    = fltv-55 ; 2 byte
-=$209b			reponse  = tval2-2 ; 2 byte
-=$209b			edbox    = reponse
-=$209a			cleft    = edbox-1 ;1 byte
-=$2099			cright   = edbox-2 ;1 byte
-=$2098			cmid     = edbox-3 ;1 byte
-=$2097			dbtop    = edbox-4 ;1 byte
-=$2096			dbleft   = edbox-5 ;1 byte
-=$2095			dbwdth   = edbox-6 ;1 byte
-=$2094			dbhght   = edbox-7 ;1 byte
-=$2093			dbcoul   = edbox-8 ;1 byte
-=$2092			dbclin   = edbox-9 ;1 byte
-=$2092			ekeyb    = dbclin
-=$2091			curx     = ekeyb-1 ;1 byte
-=$2090			cury     = ekeyb-2 ;1 byte
-=$208f			clef     = ekeyb-3 ;1 byte
-=$208e			len      = clef-1  ;1 byte
-=$208d			cx       = clef-2  ;1 byte
-=$208c			cy       = clef-3  ;1 byte
-=$208b			bcol     = clef-4  ;1 byte
-=$208b			escr     = bcol
-=$208a			loops    = escr-1       ; 1 byte
-=$2088			loop16   = loops-2      ; 2 byte
-=$1c88			scrncar  = loop16-1024  ;1k byte
-=$1888			scrncol  = scrncar-1024 ;1k byte
-=$1888			diskvar = scrncol
-=$1886			ddatas  = diskvar-2 ;2 byte Data start
-=$1884			ddatae  = diskvar-4 ;2 byte Data end
-=$1883			ddev    = diskvar-5 ;1 byte Dev number
-=$1882			dlfsno  = diskvar-6 ;1 byte Lfs
-=$1880			dfnptr  = diskvar-8 ;2 byte Ptrnfichier
-=$187f			dfnlen  = diskvar-9 ;1 byte lenfilename
-=$187e			genbyte1 = dfnlen-1 ; 1 byte
-=$187c			genword1 = dfnlen-3 ; 2 byte
+=$2107			libre    = *
+=$2106			rp       = libre-$01;1 byte $cfff
+=$2105			ra       = rp-1     ;1 byte $cffe
+=$2104			rx       = ra-1     ;1 byte $cffd
+=$2103			ry       = rx-1     ;1 byte $cffc
+=$2102			rs       = ry-1     ;1 byte $cffb
+=$2100			pc       = rs-2     ;2 byte $cff9-$cffa
+=$20ff			curcol   = pc-1     ;1 byte $cff6
+=$20fe			memptr   = curcol-1;1 word $cff7-$cff8
+=$20fc			src      = memptr-2
+=$20fa			dst      = memptr-4
+=$20f8			loopcount = memptr-6
+=$20f8			hexv     = loopcount
+=$20f3			hexstr   = hexv-$05 ;5 byte
+=$20f2			a2hexpfx = hexv-$06 ;1 byte
+=$20f1			a2hexpy  = hexv-$07 ;1 byte
+=$20f0			a2hexpx  = hexv-$08 ;1 byte
+=$20f0			a2hexpos = hexv-$08 ;0 byte
+=$20ef			a2hexcol = hexv-$09 ;1 byte
+=$20ef			binv     = a2hexcol
+=$20e6			binstr   = binv-$09 ;9 byte
+=$20e5			a2binpfx = binv-$0a ;1 byte
+=$20e4			a2binpy  = binv-$0b ;1 byte
+=$20e3			a2binpx  = binv-$0c ;1 byte
+=$20e3			a2binpos = binv-$0c ;0 byte
+=$20e2			a2bincol = binv-$0d ;1 byte
+=$20e2			decv     = a2bincol
+=$20dc			decstr   = decv-$06 ;6 byte
+=$20db			a2decpfx = decv-$07 ;1 byte
+=$20da			a2decpy  = decv-$08 ;1 byte
+=$20d9			a2decpx  = decv-$09 ;1 byte
+=$20d9			a2decpos = decv-$09 ;0 byte
+=$20d8			a2deccol = decv-$0a ;1 byte
+=$20d7			offset   = decv-$0b ;1 byte
+=$20d7			fltv     = offset
+=$20d1			fvar1    = fltv-6  ; 6 byte
+=$20cb			fvar2    = fltv-12 ; 6 byte
+=$20b7			float1   = fltv-32 ;20 byte
+=$20a3			float2   = fltv-52 ;20 byte
+=$20a2			tval1    = fltv-53 ; 1 byte
+=$20a0			tval2    = fltv-55 ; 2 byte
+=$209e			reponse  = tval2-2 ; 2 byte
+=$209e			edbox    = reponse
+=$209d			cleft    = edbox-1 ;1 byte
+=$209c			cright   = edbox-2 ;1 byte
+=$209b			cmid     = edbox-3 ;1 byte
+=$209a			dbtop    = edbox-4 ;1 byte
+=$2099			dbleft   = edbox-5 ;1 byte
+=$2098			dbwdth   = edbox-6 ;1 byte
+=$2097			dbhght   = edbox-7 ;1 byte
+=$2096			dbcoul   = edbox-8 ;1 byte
+=$2095			dbclin   = edbox-9 ;1 byte
+=$2095			ekeyb    = dbclin
+=$2094			curx     = ekeyb-1 ;1 byte
+=$2093			cury     = ekeyb-2 ;1 byte
+=$2092			clef     = ekeyb-3 ;1 byte
+=$2091			len      = clef-1  ;1 byte
+=$2090			cx       = clef-2  ;1 byte
+=$208f			cy       = clef-3  ;1 byte
+=$208e			bcol     = clef-4  ;1 byte
+=$208e			escr     = bcol
+=$208d			loops    = escr-1       ; 1 byte
+=$208b			loop16   = loops-2      ; 2 byte
+=$1c8b			scrncar  = loop16-1024  ;1k byte
+=$188b			scrncol  = scrncar-1024 ;1k byte
+=$188b			diskvar = scrncol
+=$1889			ddatas  = diskvar-2 ;2 byte Data start
+=$1887			ddatae  = diskvar-4 ;2 byte Data end
+=$1886			ddev    = diskvar-5 ;1 byte Dev number
+=$1885			dlfsno  = diskvar-6 ;1 byte Lfs
+=$1883			dfnptr  = diskvar-8 ;2 byte Ptrnfichier
+=$1882			dfnlen  = diskvar-9 ;1 byte lenfilename
+=$1881			genbyte1 = dfnlen-1 ; 1 byte
+=$187f			genword1 = dfnlen-3 ; 2 byte
 
 ;******  Return to file: charedit.asm
 
@@ -2890,9 +2892,9 @@
 .c256	85 fc		               sta  zpage1+1            ; ... dans le Msb de zpage1.
 .c258	48		            pha
 .c259	a9 ff		        lda  #<$0000+(8191)
-.c25b	8d f5 20	        sta  loopcount
+.c25b	8d f8 20	        sta  loopcount
 .c25e	a9 1f		        lda  #>$0000+(8191)
-.c260	8d f6 20	        sta  loopcount+1
+.c260	8d f9 20	        sta  loopcount+1
 .c263	68		            pla
 .c264	a0 00		               ldy  #$00
 .c266	a9 0f		next           lda  #$0f
@@ -2912,9 +2914,9 @@
 .c284	84 fc		               sty  zpage1+1            ; ... dans le Msb de zpage1.
 .c286	48		            pha
 .c287	a9 00		        lda  #<$0000+(1024)
-.c289	8d f5 20	        sta  loopcount
+.c289	8d f8 20	        sta  loopcount
 .c28c	a9 04		        lda  #>$0000+(1024)
-.c28e	8d f6 20	        sta  loopcount+1
+.c28e	8d f9 20	        sta  loopcount+1
 .c291	68		            pla
 .c292	a0 00		               ldy  #$00
 .c294	b1 fb		next           lda  (zpage1),y
@@ -2941,9 +2943,9 @@
 .c2bc	84 fc		               sty  zpage1+1            ; ... dans le Msb de zpage1.
 .c2be	48		            pha
 .c2bf	a9 00		        lda  #<$0000+(1024)
-.c2c1	8d f5 20	        sta  loopcount
+.c2c1	8d f8 20	        sta  loopcount
 .c2c4	a9 04		        lda  #>$0000+(1024)
-.c2c6	8d f6 20	        sta  loopcount+1
+.c2c6	8d f9 20	        sta  loopcount+1
 .c2c9	68		            pla
 .c2ca	a0 00		               ldy  #$00
 .c2cc	b1 fb		next           lda  (zpage1),y
@@ -3137,7 +3139,7 @@
 .c415	08		               php                 ; Sauvegarde le registre de
 .c416	48		               pha                 ;   status et le registre a.
 .c417	20 cd c6	               jsr  atohex         ; Convertion de a en hexadécimal.
-.c41a	a2 ed		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
+.c41a	a2 f0		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
 .c41c	a0 20		               ldy  #>a2hexpos     ;   hexa dans $YYXX.
 .c41e	20 b7 c3	               jsr  putsxy         ; Positionne et affiche la chaîne.
 .c421	68		               pla                 ; Récupère le registre a et
@@ -3146,7 +3148,7 @@
 .c424			putrahexcxy
 .c424	20 b3 c4	               jsr  pushreg        ; Sauvegarde tous les registres.
 .c427	20 cd c6	               jsr  atohex         ; Convertion de a en hexadécimal.
-.c42a	a2 ed		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
+.c42a	a2 f0		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
 .c42c	a0 20		               ldy  #>a2hexpos     ;   hexa dans $YYXX.
 .c42e	20 b7 c3	               jsr  putsxy         ; Colore, positionne et affiche la
 .c431	20 e2 c4	               jsr  popreg         ; Récupère tous les registres.
@@ -3173,13 +3175,13 @@
 .c445			push
 .c445	08		          php            ; stack : flg, pcl, pch
 .c446	78		          sei
-.c447	8d 02 21	          sta  ra        ; save a
+.c447	8d 05 21	          sta  ra        ; save a
 .c44a	68		          pla            ; stack : pcl, pch
-.c44b	8d 03 21	          sta  rp        ; save rp
+.c44b	8d 06 21	          sta  rp        ; save rp
 .c44e	68		          pla            ; stack : pch
-.c44f	8d fd 20	          sta  pc        ; save pcl
+.c44f	8d 00 21	          sta  pc        ; save pcl
 .c452	68		          pla            ; stack : -
-.c453	8d fe 20	          sta  pc+1      ; save pch
+.c453	8d 01 21	          sta  pc+1      ; save pch
 .c456	a5 fb		          lda  zpage1    ; get zpage1 low byte
 .c458	48		          pha            ; stack : zp1l
 .c459	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
@@ -3188,21 +3190,21 @@
 .c45e	48		          pha            ; stack : zp2l, zp1h, zp1l
 .c45f	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
 .c461	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
-.c462	ad 03 21	          lda  rp        ; get rp
+.c462	ad 06 21	          lda  rp        ; get rp
 .c465	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
-.c466	ad 02 21	          lda  ra        ; get a
+.c466	ad 05 21	          lda  ra        ; get a
 .c469	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c46a	8a		          txa            ; get x
 .c46b	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c46c	98		          tya            ; get y
 .c46d	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c46e	ad fe 20	          lda  pc+1      ; get pch
+.c46e	ad 01 21	          lda  pc+1      ; get pch
 .c471	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c472	ad fd 20	          lda  pc        ; get pcl
+.c472	ad 00 21	          lda  pc        ; get pcl
 .c475	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c476	ad 03 21	          lda  rp        ; get rp
+.c476	ad 06 21	          lda  rp        ; get rp
 .c479	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c47a	ad 02 21	          lda  ra        ; get a
+.c47a	ad 05 21	          lda  ra        ; get a
 .c47d	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c47e	58		          cli
 .c47f	60		          rts
@@ -3212,17 +3214,17 @@
 .c480			pop
 .c480	78		          sei
 .c481	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c482	8d fd 20	          sta  pc        ; save pcl
+.c482	8d 00 21	          sta  pc        ; save pcl
 .c485	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c486	8d fe 20	          sta  pc+1      ; save pch
+.c486	8d 01 21	          sta  pc+1      ; save pch
 .c489	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c48a	a8		          tay            ; set y
 .c48b	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c48c	aa		          tax            ; set x
 .c48d	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
-.c48e	8d 02 21	          sta  ra        ; save a
+.c48e	8d 05 21	          sta  ra        ; save a
 .c491	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
-.c492	8d 03 21	          sta  rp        ; save rp
+.c492	8d 06 21	          sta  rp        ; save rp
 .c495	68		          pla            ; stack : zp2l, zp1h, zp1l
 .c496	85 fe		          sta  zpage2+1  ; get zpage1 low byte
 .c498	68		          pla            ; stack : zp1h, zp1l
@@ -3231,13 +3233,13 @@
 .c49c	85 fc		          sta  zpage1+1  ; get zpage2 low byte
 .c49e	68		          pla            ; stack :
 .c49f	85 fb		          sta  zpage1    ; get zpage1 High byte
-.c4a1	ad fe 20	          lda  pc+1      ; get pch
+.c4a1	ad 01 21	          lda  pc+1      ; get pch
 .c4a4	48		          pha            ; stack : pch
-.c4a5	ad fd 20	          lda  pc
+.c4a5	ad 00 21	          lda  pc
 .c4a8	48		          pha            ; stack : pcl, pch
-.c4a9	ad 03 21	          lda  rp        ; get rp
+.c4a9	ad 06 21	          lda  rp        ; get rp
 .c4ac	48		          pha            ; stack : rp, pcl, pch
-.c4ad	ad 02 21	          lda  ra        ; set ra
+.c4ad	ad 05 21	          lda  ra        ; set ra
 .c4b0	58		          cli
 .c4b1	28		          plp            ; stack : pcl, pch
 .c4b2	60		          rts
@@ -3245,28 +3247,28 @@
 .c4b3			pushreg
 .c4b3	08		          php            ; stack : flg, pcl, pch
 .c4b4	78		          sei
-.c4b5	8d 02 21	          sta  ra        ; save a
+.c4b5	8d 05 21	          sta  ra        ; save a
 .c4b8	68		          pla            ; stack : pcl, pch
-.c4b9	8d 03 21	          sta  rp        ; save rp
+.c4b9	8d 06 21	          sta  rp        ; save rp
 .c4bc	68		          pla            ; stack : pch
-.c4bd	8d fd 20	          sta  pc        ; save pcl
+.c4bd	8d 00 21	          sta  pc        ; save pcl
 .c4c0	68		          pla            ; stack : -
-.c4c1	8d fe 20	          sta  pc+1      ; save pch
-.c4c4	ad 03 21	          lda  rp        ; get rp
+.c4c1	8d 01 21	          sta  pc+1      ; save pch
+.c4c4	ad 06 21	          lda  rp        ; get rp
 .c4c7	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
-.c4c8	ad 02 21	          lda  ra        ; get a
+.c4c8	ad 05 21	          lda  ra        ; get a
 .c4cb	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c4cc	8a		          txa            ; get x
 .c4cd	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c4ce	98		          tya            ; get y
 .c4cf	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4d0	ad fe 20	          lda  pc+1      ; get pch
+.c4d0	ad 01 21	          lda  pc+1      ; get pch
 .c4d3	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4d4	ad fd 20	          lda  pc        ; get pcl
+.c4d4	ad 00 21	          lda  pc        ; get pcl
 .c4d7	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4d8	ad 03 21	          lda  rp        ; get rp
+.c4d8	ad 06 21	          lda  rp        ; get rp
 .c4db	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4dc	ad 02 21	          lda  ra        ; get a
+.c4dc	ad 05 21	          lda  ra        ; get a
 .c4df	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c4e0	58		          cli
 .c4e1	60		          rts
@@ -3276,24 +3278,24 @@
 .c4e2			popreg
 .c4e2	78		          sei
 .c4e3	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4e4	8d fd 20	          sta  pc        ; save pcl
+.c4e4	8d 00 21	          sta  pc        ; save pcl
 .c4e7	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4e8	8d fe 20	          sta  pc+1      ; save pch
+.c4e8	8d 01 21	          sta  pc+1      ; save pch
 .c4eb	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c4ec	a8		          tay            ; set y
 .c4ed	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c4ee	aa		          tax            ; set x
 .c4ef	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
-.c4f0	8d 02 21	          sta  ra        ; save a
+.c4f0	8d 05 21	          sta  ra        ; save a
 .c4f3	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
-.c4f4	8d 03 21	          sta  rp        ; save rp
-.c4f7	ad fe 20	          lda  pc+1      ; get pch
+.c4f4	8d 06 21	          sta  rp        ; save rp
+.c4f7	ad 01 21	          lda  pc+1      ; get pch
 .c4fa	48		          pha            ; stack : pch
-.c4fb	ad fd 20	          lda  pc
+.c4fb	ad 00 21	          lda  pc
 .c4fe	48		          pha            ; stack : pcl, pch
-.c4ff	ad 03 21	          lda  rp        ; get rp
+.c4ff	ad 06 21	          lda  rp        ; get rp
 .c502	48		          pha            ; stack : rp, pcl, pch
-.c503	ad 02 21	          lda  ra        ; set ra
+.c503	ad 05 21	          lda  ra        ; set ra
 .c506	58		          cli
 .c507	28		          plp            ; stack : pcl, pch
 .c508	60		          rts
@@ -3491,13 +3493,13 @@
 .c647	28		               plp
 .c648	60		               rts
 .c649			loop
-.c649	ce f5 20	               dec  loopcount
+.c649	ce f8 20	               dec  loopcount
 .c64c	d0 03		               bne  norep
-.c64e	ce f6 20	               dec  loopcount+1
-.c651	ad f5 20	norep          lda  loopcount
+.c64e	ce f9 20	               dec  loopcount+1
+.c651	ad f8 20	norep          lda  loopcount
 .c654	c9 00		               cmp  #$00
 .c656	d0 05		               bne  out
-.c658	4d f6 20	               eor  loopcount+1
+.c658	4d f9 20	               eor  loopcount+1
 .c65b	c9 ff		               cmp  #$ff
 .c65d	60		out            rts
 >c65e	28		ymult          .byte     40
@@ -3524,8 +3526,8 @@
 .c67e			putahexfmtxy
 .c67e	20 45 c4	               jsr  push
 .c681	20 cd c6	               jsr  atohex
-.c684	ae ed 20	               ldx  a2hexpx
-.c687	ac ee 20	               ldy  a2hexpy
+.c684	ae f0 20	               ldx  a2hexpx
+.c687	ac f1 20	               ldy  a2hexpy
 .c68a	20 53 c3	               jsr  gotoxy
 .c68d	a2 69		               ldx  #<a2hexprefix
 .c68f	a0 c6		               ldy  #>a2hexprefix

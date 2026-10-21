@@ -76,12 +76,12 @@ quit_msg       .byte     vmauve,20,24,18
                .byte     146
                .null     " to quit."     
 
-redraw_msg     .byte     vrose,20,23,18
+redraw_msg     .byte     vgris2,20,23,18
                .text     "ctrl-r"
                .byte     146
                .null     " to redraw."     
 menu_msg
-exit_msg       .byte     vvert1,21,24,18
+exit_msg       .byte     vrouge,20,24,18
                .text     "ctrl-x"
                .byte     146
                .null     " to menu."     
@@ -173,14 +173,14 @@ f1abutton      .byte     menu1col1,fkeyleft,f1top       ;133
                .byte     0
 
 f2abutton      .byte     menu1col2,fkeyleft,f1top+1     ;138
-               .text     "copy from......"
+               .text     "copy from char."
                .byte     18   ; position 15
                .text     "  f2  "
                .byte     146
                .byte     0
 
 f3abutton      .byte     menu1col1,fkeyleft,f1top+3     ;137
-               .text     "save to........" 
+               .text     "save to file..." 
                .byte     18            ; position 15
                .byte     $a9
                .text     " f3 "
@@ -188,14 +188,14 @@ f3abutton      .byte     menu1col1,fkeyleft,f1top+3     ;137
                .byte     0
 
 f4abutton      .byte     menu1col2,fkeyleft,f1top+4     ;134
-               .text     "load from......"
+               .text     "load from file."
                .byte     18             ; position 15
                .text     "  f4  "
                .byte     146
                .byte     0
 
 f5abutton      .byte     menu1col1,fkeyleft,f1top+6     ;135
-               .text     "clear.........."
+               .text     "clear with 0's."
                .byte     18             ; position 15
                .byte     $a9
                .text     " f5 "
@@ -203,14 +203,14 @@ f5abutton      .byte     menu1col1,fkeyleft,f1top+6     ;135
                .byte     0
 
 f6abutton      .byte     menu1col2,fkeyleft,f1top+7    ;139
-               .text     "fill..........."
+               .text     "fill with 1's.."
                .byte     18             ; position 15
                .text     "  f6  "
                .byte     146
                .byte     0
 
 f7abutton      .byte     menu1col1,fkeyleft,f1top+9    ;136
-               .text     "restore all...."
+               .text     "load from rom.."
                .byte     18             ; position 15
                .byte     $a9
                .text     " f7 "

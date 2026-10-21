@@ -17,8 +17,8 @@ charsdef       =    %00001100
 bitmapmem      =    charsdef * 1024     ;Calcul position ram des caracteres.
 endofaddr      =    (charsdef * 1024) + (4*$800)
 mstopaddr      =    $d000+(4*$800)
-bordure        =    vvert
-fond           =    vbleu
+bordure        =    vgris
+fond           =    vnoir
 ;-----------------------------------------------------------------------------
 ; Pour le positionnement des lignes à l'écran. (drawlines)
 ;-----------------------------------------------------------------------------
@@ -33,11 +33,11 @@ vzplit=scrnnewram+(6*40)+8
 fkeyleft       =    18
 f1top          =    9 
 mesgcol        =    vcyan
-menu1col1      =    vcyan
-menu1col2      =    vbleu1
-menu2col1      =    vgris2
-menu2col2      =    vgris1
-flashcol       =    vblanc
+menu1col1      =    vgris2
+menu1col2      =    vgris1
+menu2col1      =    vgris1 ;vgris2
+menu2col2      =    vgris    
+flashcol       =    vblanc    ; Quand l'option de menu est activée.
 ;-----------------------------------------------------------------------------
 ; Pour le positionnement de la grille de bitmap 
 ;-----------------------------------------------------------------------------
@@ -48,8 +48,8 @@ grid_right     =    grid_left + 7
 ;-----------------------------------------------------------------------------
 ; Pour la couleur des caractères à l'écran et de l'écran de présentation.
 ;-----------------------------------------------------------------------------
-charcolor      =    vvert1   
-charscolor     =    vnoir
+charcolor      =    vjaune   
+charscolor     =    vcyan
 whoamicol      =    vcyan
 
 

@@ -962,8 +962,8 @@ nocarry     sta  zpage1
 zp1add40    .block
             php                     ; Sauvegarde minimaliste des 
             pha                     ; ... registres.
-            lda   #40
-            jsr   zp1addnum         
+            lda   #40               ; Ajouter 40 avec l'aide 
+            jsr   zp1addnum         ; ... de zp1addnum.    
             pla
             plp
             rts
@@ -974,12 +974,14 @@ zp1add40    .block
 ;=============================================================================
 delay       .block
             jsr   pushreg           ; Sauvegarde les registres.
-            lda   #$0
-            tax
-            tay
+            ldx   #$00
+            ldy   #$00
 xagain      dex
-            dex
 yagain      dey
+            nop
+            nop
+            nop
+            nop
             cpy   #$00
             bne   yagain
             cpx   #$00
