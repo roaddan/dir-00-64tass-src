@@ -978,8 +978,8 @@ yagain      dey                     ; 2 cycles. ;-\            \
             nop                     ; 2 cycles. ;  /  * 256       / *1,023 MHz
             cpy   #$00              ; 2 cycles. ; / =3840 cycles / =1006435us
             bne   yagain            ; 3 cycles. ;/              / ou 1,006s
-            cpx   #$00              ; 2 cycles. ;--------------/ 
-            bne   xagain            ; 3 cycles
+            cpx   #$00              ; 2 cycles. ;              / 
+            bne   xagain            ; 3 cycles. ;-------------/ 
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
@@ -992,16 +992,16 @@ f1action    .block
             lda   #$ff
             sta   editmode          ; Drapeau pour indiquer le mode edition.
             lda   fkeyset           ; Identifie le jeu de clef actuel.
-            beq   menua             ; Si 0 menu A
+            beq   menua             ; Si 0 menu A.
             jmp   menub             ; si 1 menu B, JMP pour long saut. 
-menua       #affichemesg f1a_msg
-            #flashfkey f1abutton
-            lda   #vgris
-            jsr   setmenuacolor
-            lda   #menu1col1
-            sta   f1abutton
-            jsr   drawfkeys
-            lda   #vgris
+menua       #affichemesg f1a_msg    ; Affiche l'invite de f1a.
+            #flashfkey f1abutton    ; Clignotte le menu sélectionné.
+            lda   #vgris            ; Du gris
+            jsr   setmenuacolor     ; ... pour les autres options.
+            lda   #menu1col1        ; Surbrillance pour
+            sta   f1abutton         ; ... l'option choisie.
+            jsr   drawfkeys         ; Redessine le menu.
+            lda   #vgris            ; 
             sta   redraw_msg  
             #affichemesg redraw_msg
             jsr   editor
