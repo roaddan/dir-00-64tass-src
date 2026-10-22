@@ -988,8 +988,12 @@ yagain      dey                     ; 2 cycles. ;-\            \
 ; Routine qui effectue les actions de la touche F1.
 ;=============================================================================
 f1action    .block
-            pha
-            lda   #$ff
+            php                     ; Sauvegarde minimaliste 
+            pha                     ; ... des registres.
+            ;-----------------------------------------------------------------
+            ; Action du menu F1A.
+            ;-----------------------------------------------------------------
+            lda   #$ff              ; On se met en mode édition.
             sta   editmode          ; Drapeau pour indiquer le mode edition.
             lda   fkeyset           ; Identifie le jeu de clef actuel.
             beq   menua             ; Si 0 menu A.
@@ -1001,24 +1005,29 @@ menua       #affichemesg f1a_msg    ; Affiche l'invite de f1a.
             lda   #menu1col1        ; Surbrillance pour
             sta   f1abutton         ; ... l'option choisie.
             jsr   drawfkeys         ; Redessine le menu.
-            lda   #vgris            ; 
-            sta   redraw_msg  
-            #affichemesg redraw_msg
-            jsr   editor
-            lda   #vrose
-            sta   redraw_msg  
-            #affichemesg redraw_msg
-            #affichemesg quit_msg
-            #affichemesg menua_msg
-            jsr   rstmenucol
-            jsr   drawfkeys
-            jmp   out
-menub       #affichemesg f1b_msg
-            #flashfkey f1bbutton
-            jsr   flipvert
-            jsr   drawbitmap 
-out         #affichemesg prompt_msg
-            pla
+            lda   #vgris            ; Le gris pour
+            sta   redraw_msg        ; ... le messages redessiner
+            #affichemesg redraw_msg ; ... que nous affichons.
+            jsr   editor            ; On invoque la fonction d'étition.
+            lda   #vrose            ; Le gris pour
+            sta   redraw_msg        ; ... le messages redessiner 
+            #affichemesg redraw_msg ; ... que nous affichons.
+            #affichemesg menua_msg  ; Réaffiche le menu a
+            jsr   rstmenucol        ; Restaure les couleurs du menu.
+            jsr   drawfkeys         ; Redessine les clefs fonction.
+            lda   #$00              ; On sort du mode édition.
+            sta   editmode          ; Drapeau pour indiquer le mode edition.
+            jmp   out               ; On sort du menu f1A
+            ;-----------------------------------------------------------------
+            ; Action du menu F1B.
+            ;-----------------------------------------------------------------
+menub       #affichemesg f1b_msg    ; Affiche le message menu f1b.
+            #flashfkey f1bbutton    ; Clognotte l'option choisi.
+            jsr   flipvert          ; On permute verticalement le bitmap.
+            jsr   drawbitmap        ; On redessine les affichages bitmap.
+out         #affichemesg prompt_msg ; Affiche l'invite.
+            pla                     ; Récupération minimaliste
+            plp                     ; ... des registres.
             rts
             .bend
 
@@ -1026,9 +1035,11 @@ out         #affichemesg prompt_msg
 ; Routine qui effectue les actions de la touche F2.
 ;=============================================================================
 f2action    .block
-            pha
-            lda   #$0
-            sta   editmode
+            php                     ; Sauvegarde minimaliste 
+            pha                     ; ... des registres.
+            ;-----------------------------------------------------------------
+            ; Action du menu F2A.
+            ;-----------------------------------------------------------------
             lda   fkeyset
             bne   menub  
             #affichemesg f2a_msg
@@ -1036,12 +1047,16 @@ f2action    .block
             jsr   copychar
             jsr   drawbitmap
             jmp   out
+            ;-----------------------------------------------------------------
+            ; Action du menu F2b.
+            ;-----------------------------------------------------------------
 menub       #affichemesg f2b_msg
             #flashfkey f2bbutton
             jsr   fliphorz
             jsr   drawbitmap           
 out         #affichemesg prompt_msg
-            pla
+            pla                     ; Récupération minimaliste
+            plp                     ; ... des registres.
             rts
             .bend
 
@@ -1049,9 +1064,11 @@ out         #affichemesg prompt_msg
 ; Routine qui effectue les actions de la touche F3.
 ;=============================================================================
 f3action    .block
-            pha
-            lda   #$0
-            sta   editmode
+            php                     ; Sauvegarde minimaliste 
+            pha                     ; ... des registres.
+            ;-----------------------------------------------------------------
+            ; Action du menu F3A.
+            ;-----------------------------------------------------------------
             lda   fkeyset
             bne   menub  
             #flashfkey f3abutton
@@ -1069,12 +1086,16 @@ devok       sta   device
             #affichemesg wait_msg
             jsr   savetofile
             jmp   out
+            ;-----------------------------------------------------------------
+            ; Action du menu F3B.
+            ;-----------------------------------------------------------------
 menub       #affichemesg f3b_msg
             #flashfkey f3bbutton
             jsr   scrollright
             jsr   drawbitmap             
 out         #affichemesg prompt_msg
-            pla
+            pla                     ; Récupération minimaliste
+            plp                     ; ... des registres.
             rts
             .bend
 
@@ -1082,9 +1103,11 @@ out         #affichemesg prompt_msg
 ; Routine qui effectue les actions de la touche F4.
 ;=============================================================================
 f4action    .block
-            pha
-            lda   #$0
-            sta   editmode
+            php                     ; Sauvegarde minimaliste 
+            pha                     ; ... des registres.
+            ;-----------------------------------------------------------------
+            ; Action du menu F4A.
+            ;-----------------------------------------------------------------
             lda   fkeyset
             bne   menub  
             #flashfkey f4abutton
@@ -1103,12 +1126,16 @@ devok       sta   device
             jsr   loadfromfile
             jsr   scrredraw 
             jmp   out
+            ;-----------------------------------------------------------------
+            ; Action du menu F4B.
+            ;-----------------------------------------------------------------
 menub       #affichemesg f4b_msg
             #flashfkey f4bbutton
             jsr   scrollleft
             jsr   drawbitmap            
 out         #affichemesg prompt_msg
-            pla
+            pla                     ; Récupération minimaliste
+            plp                     ; ... des registres.
             rts
             .bend
 
@@ -1116,9 +1143,11 @@ out         #affichemesg prompt_msg
 ; Routine qui effectue les actions de la touche F5.
 ;=============================================================================
 f5action    .block
-            pha
-            lda   #$0
-            sta   editmode
+            php                     ; Sauvegarde minimaliste 
+            pha                     ; ... des registres.
+            ;-----------------------------------------------------------------
+            ; Action du menu F5A.
+            ;-----------------------------------------------------------------
             lda   fkeyset
             bne   menub  
             #affichemesg f5a_msg
@@ -1126,12 +1155,16 @@ f5action    .block
             jsr   clearchar
             jsr   drawbitmap  
             jmp   out
+            ;-----------------------------------------------------------------
+            ; Action du menu F5B.
+            ;-----------------------------------------------------------------
 menub       #affichemesg f5b_msg
             #flashfkey f5bbutton
             jsr   scrollup            
             jsr   drawbitmap 
 out         #affichemesg prompt_msg
-            pla
+            pla                     ; Récupération minimaliste
+            plp                     ; ... des registres.
             rts
             .bend
 
@@ -1139,9 +1172,11 @@ out         #affichemesg prompt_msg
 ; Routine qui effectue les actions de la touche F6.
 ;=============================================================================
 f6action    .block
-            pha
-            lda   #$0
-            sta   editmode
+            php                     ; Sauvegarde minimaliste 
+            pha                     ; ... des registres.
+            ;-----------------------------------------------------------------
+            ; Action du menu F6A.
+            ;-----------------------------------------------------------------
             lda   fkeyset
             bne   menub  
             #affichemesg f6a_msg
@@ -1149,12 +1184,16 @@ f6action    .block
             jsr   fillchar
             jsr   drawbitmap 
             jmp   out
+            ;-----------------------------------------------------------------
+            ; Action du menu F6B.
+            ;-----------------------------------------------------------------
 menub       #affichemesg f6b_msg
             #flashfkey f6bbutton
             jsr   scrolldown 
             jsr   drawbitmap            
 out         #affichemesg prompt_msg
-            pla
+            pla                     ; Récupération minimaliste
+            plp                     ; ... des registres.
             rts
             .bend
 
@@ -1162,9 +1201,11 @@ out         #affichemesg prompt_msg
 ; Routine qui effectue les actions de la touche F7.
 ;=============================================================================
 f7action    .block
-            pha
-            lda   #$0
-            sta   editmode
+            php                     ; Sauvegarde minimaliste 
+            pha                     ; ... des registres.
+            ;-----------------------------------------------------------------
+            ; Action du menu F7A.
+            ;-----------------------------------------------------------------
             lda   fkeyset
             bne   menub  
             #affichemesg f7a_msg
@@ -1172,14 +1213,16 @@ f7action    .block
             jsr   copycharset
             jsr   drawbitmap
             jmp   out
-menub       lda   #$0
-            sta   editmode
-            #affichemesg f7b_msg
+            ;-----------------------------------------------------------------
+            ; Action du menu F7B.
+            ;-----------------------------------------------------------------
+menub       #affichemesg f7b_msg
             #flashfkey f7bbutton
             jsr   reverse
             jsr   drawbitmap            
 out         #affichemesg prompt_msg
-            pla
+            pla                     ; Récupération minimaliste
+            plp                     ; ... des registres.
             rts
             .bend
 
@@ -1187,23 +1230,27 @@ out         #affichemesg prompt_msg
 ; Routine qui effectue les actions de la touche F8.
 ;=============================================================================
 f8action    .block
-            php
-            pha
-            lda   #$0
-            sta   editmode
+            php                     ; Sauvegarde minimaliste 
+            pha                     ; ... des registres.
+            ;-----------------------------------------------------------------
+            ; Action du menu F8A.
+            ;-----------------------------------------------------------------
             lda   fkeyset
             bne   menub  
             #affichemesg menub_msg
             #flashfkey f8abutton
             jmp   swapit
+            ;-----------------------------------------------------------------
+            ; Action du menu F8B.
+            ;-----------------------------------------------------------------
 menub       #affichemesg menua_msg
             #flashfkey f8bbutton            
 swapit      eor   #$ff
             sta   fkeyset
             jsr   drawfkeys
             #affichemesg prompt_msg
-            pla
-            plp
+            pla                     ; Récupération minimaliste
+            plp                     ; ... des registres.
             rts
             .bend
 
