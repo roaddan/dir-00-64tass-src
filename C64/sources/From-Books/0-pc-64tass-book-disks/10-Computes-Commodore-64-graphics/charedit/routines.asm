@@ -321,7 +321,7 @@ ctrlx       cmp   #ctrl_x           ; est-ce CTRL+X
             bne   ctrlr             ; non, on va voir la prochaine.
             jmp   doquit            ; Oui, On l'exécute.
 ctrlr       cmp   #ctrl_r           ; est-ce CTRL+R
-            bne   reste             ; non, on va voir la prochaine.
+            bne   reste              ; non, on va voir la prochaine.
             jmp   doredraw          ; Oui, On l'exécute.
             ;-----------------------------------------------------------------
             ; Il s'agit maintenant d'une autre touche
@@ -422,13 +422,7 @@ rest        #locate   13,12         ; Positionne le curseur et
             tay                     ; La clef devient l'offset dans la table
             ldx   asciitorom,y      ; ... de convertion ascii à 
             stx   bmoffset          ; petscii et l'offset de la matrice.
-;            jsr   drawkeyval        ; Affiche le tableau de conversion.
             jsr   drawbitmap        ; Affiche la matrice de point
-;            #locate   13,12         ; 
-;            jsr   putch
-;            #locate   17,5
-;            jsr   atodec
-;            #print    adec
             jmp   ed_loop
 ;=============================================================================
 ; Code des actions spécifiques pour certaines touches.
@@ -479,7 +473,8 @@ do_ctrlx    jsr   clrcurs           ; On efface les curseurs.
             .bend
 
 ;=============================================================================
-; Routine qui effectue l'inversion bit par bit de la matrice.
+; Routine qui effectue l'inversion bit par bit de la matrice en fonction de la
+; position des curseurs.
 ;=============================================================================
 ; use     byteaddr,cursln,curscl
 do_eor         .block
@@ -498,7 +493,6 @@ do_eor         .block
             lda   eorval,x
             eor   (zpage2),y
             sta   (zpage2),y
-            ;jsr   drawkeyval
             jsr   popreg            ; Récupère les registres.
             rts
             .bend
@@ -507,7 +501,7 @@ do_eor         .block
 ; Routine qui affiche les pointeurs X et Y du curseur d'éditeur de caractère à 
 ; l'endroit donnée par cursln et curscl.
 ;=============================================================================
-setcurs        .block
+setcurs     .block
             jsr   pushreg           ; Sauvegarde les registres.
             ldx  #grid_left         ; Récupère la position de la colonne
             ldy  cursln             ; ... de la grille.
@@ -527,7 +521,7 @@ setcurs        .block
 ;=============================================================================
 ; Routine qui positionne le curseur au coin sup gauche de la matrice de point.
 ;=============================================================================
-clrcurs        .block
+clrcurs     .block
             jsr   pushreg           ; Sauvegarde les registres.
             ldx   #grid_left        ; Récupère la position de la colonne
             ldy   cursln            ; ... de la grille.
@@ -579,7 +573,7 @@ isy         ldy   #$00              ; la ligne (autoinc)
 ;=============================================================================
 ; Routine qui met le caractere actuel en surbrillance dans la liste..
 ;=============================================================================
-highlight      .block
+highlight   .block
             jsr   pushreg           ; Sauvegarde les registres.
             ldx  previouskey        ; Replace le caractère précédente
             lda  asciitorom,x       ; ... dans sa 
@@ -950,10 +944,10 @@ zp1addnum   .block
             clc                     ; Carry à 0.
             adc  zpage1             ; Calcule Zpage1 + Acc. + Carry.
             bcc  nocarry            ; Si Carry encore à 0, pas de report.
-            inc  zpage1+1           ; Sy report à faire.
-nocarry     sta  zpage1             
-            pla
-            plp
+            inc  zpage1+1           ; Si report à faire.
+nocarry     sta  zpage1             ; Sauvegarde le LSB.
+            pla                     ; Récupération minimaliste des
+            plp                     ; ... registres.
             rts
             .bend
 ;=============================================================================
@@ -964,8 +958,8 @@ zp1add40    .block
             pha                     ; ... registres.
             lda   #40               ; Ajouter 40 avec l'aide 
             jsr   zp1addnum         ; ... de zp1addnum.    
-            pla
-            plp
+            pla                     ; Récupération minimaliste des
+            plp                     ; ... registres.
             rts
             .bend
 
@@ -974,18 +968,18 @@ zp1add40    .block
 ;=============================================================================
 delay       .block
             jsr   pushreg           ; Sauvegarde les registres.
-            ldx   #$00
-            ldy   #$00
-xagain      dex
-yagain      dey
-            nop
-            nop
-            nop
-            nop
-            cpy   #$00
-            bne   yagain
-            cpx   #$00
-            bne   xagain
+            ldx   #$00              ; 2 cycles.
+            ldy   #$00              ; 2 cycles.
+xagain      dex                     ; 2 cycles. ;-------------\
+yagain      dey                     ; 2 cycles. ;-\            \
+            nop                     ; 2 cycles. ;  \            \ 3843 cycles
+            nop                     ; 2 cycles. ;   \            \ *256
+            nop                     ; 2 cycles. ;   / 15 cycles   \ =983808
+            nop                     ; 2 cycles. ;  /  * 256       / *1,023 MHz
+            cpy   #$00              ; 2 cycles. ; / =3840 cycles / =1006435us
+            bne   yagain            ; 3 cycles. ;/              / ou 1,006s
+            cpx   #$00              ; 2 cycles. ;--------------/ 
+            bne   xagain            ; 3 cycles
             jsr   popreg            ; Récupère les registres.
             rts
             .bend

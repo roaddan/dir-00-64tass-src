@@ -104,11 +104,11 @@ whoami0     .byte     whoamicol,4,6,18
             .byte     0
 
 whoami1     .byte     whoamicol,4,7,18
-            .text     "       "
+            .text     "   >>  "
             .byte     146
             .text     " c h a r e d i t "
             .byte     18
-            .text     "       "
+            .text     "  <<   "
             .byte     146
             .byte     0
  
@@ -152,13 +152,13 @@ whoami9     .byte     whoamicol,4,15,18
             .byte     146
             .byte     0
 
-bye_msg     .byte     vcyan,6,16,20
-            .text     "      bonjour et merci      "
+bye_msg     .byte     vcyan,5,23,18
+            .text     "   merci et bonne journee.   "
             .byte     146
             .byte     0
 
 any_msg     .byte     vvert1,5,24,18
-            .text     " appuyez une cle pour basic "
+            .text     " appuyez une cle pour basic. "
             .byte     146
             .byte     0
 

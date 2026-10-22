@@ -3,7 +3,7 @@
 ; Fichier..: charedit.asm
 ; Auteur...: Daniel Lafrance
 ; Version..: 0.1.1
-; Révision.: 2026-10-16
+; Révision.: 20261021-193200
 ;-----------------------------------------------------------------------------
 ; Historique des révisions:
 ; --------------------------
@@ -11,7 +11,7 @@
 ;-----------------------------------------------------------------------------
 
 ;-----------------------------------------------------------------------------
-version  = "20261019-223139" 
+version  = "20261021-193200" 
 ;-----------------------------------------------------------------------------
             .include    "e-header-c64.asm"
             .include    "localcons.asm"
@@ -21,7 +21,7 @@ main        .block
             jsr   scrmaninit
             #disable
             jsr   drawcredits
-            ldx   #$05              ; Attend environ 5 secondes.
+            ldx   #$03             ; Attend environ 5 secondes.
 waitmore    jsr   delay
             dex
             bne   waitmore
@@ -47,9 +47,12 @@ waitmore    jsr   delay
             ;-----------------------------------------------------------------
             jsr   cls
             jsr   drawcredits
-            #printcxy bye_msg
             #printcxy any_msg
-            jsr   getkey
+printbye    inc   bye_msg
+            #printcxy bye_msg
+            jsr   delay
+            jsr   getin
+            beq   printbye
             jsr   cls       
 endmain     jsr   popreg
             jmp   k_warmstart 

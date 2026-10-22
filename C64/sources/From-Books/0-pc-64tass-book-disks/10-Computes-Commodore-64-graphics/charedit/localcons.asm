@@ -48,8 +48,8 @@ grid_right     =    grid_left + 7
 ;-----------------------------------------------------------------------------
 ; Pour la couleur des caractères à l'écran et de l'écran de présentation.
 ;-----------------------------------------------------------------------------
-charcolor      =    vjaune   
-charscolor     =    vcyan
+charcolor      =    vvert1  
+charscolor     =    vbleu
 whoamicol      =    vcyan
 
 

@@ -92,11 +92,11 @@ whoami0        .byte     whoamicol,4,6,18
                .byte     0
 
 whoami1        .byte     whoamicol,4,7,18
-               .text     "          "
+               .text     "   >>  "
                .byte     146
-               .text     " charedit "
+               .text     " c h a r e d i t "
                .byte     18
-               .text     "           "
+               .text     "  <<   "
                .byte     146
                .byte     0
  
@@ -140,13 +140,13 @@ whoami9        .byte     whoamicol,4,15,18
                .byte     146
                .byte     0
 
-bye_msg        .byte     vcyan,6,16,20
-               .text     " thanks and have a good day "
+bye_msg        .byte     vcyan,5,23,18
+               .text     " thanks and have a nice day. "
                .byte     146
                .byte     0
 
 any_msg        .byte     vvert1,5,24,18
-               .null         "  use the [anykey] to basic  "
+               .null     "  back to basic by any key.  "
                .byte     146
                .byte     0
 
