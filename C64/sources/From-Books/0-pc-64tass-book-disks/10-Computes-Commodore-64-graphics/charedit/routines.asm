@@ -990,10 +990,10 @@ yagain      dey                     ; 2 cycles. ;-\            \
 f1action    .block
             pha
             lda   #$ff
-            sta   editmode
-            lda   fkeyset
-            beq   menua
-            jmp   menub  
+            sta   editmode          ; Drapeau pour indiquer le mode edition.
+            lda   fkeyset           ; Identifie le jeu de clef actuel.
+            beq   menua             ; Si 0 menu A
+            jmp   menub             ; si 1 menu B, JMP pour long saut. 
 menua       #affichemesg f1a_msg
             #flashfkey f1abutton
             lda   #vgris
