@@ -964,7 +964,7 @@ zp1add40    .block
             .bend
 
 ;=============================================================================
-; Routine qui effectue un delais d'environ une seconde.
+; Routine qui effectue un delais d'environ une seconde sur un C64 NTSC.
 ;=============================================================================
 delay       .block
             jsr   pushreg           ; Sauvegarde les registres.
