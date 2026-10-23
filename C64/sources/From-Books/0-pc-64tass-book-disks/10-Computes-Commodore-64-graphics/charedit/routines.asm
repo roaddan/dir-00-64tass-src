@@ -986,19 +986,21 @@ yagain      dey                     ; 2 cycles. ;-\            \
 
 ;=============================================================================
 ; Routine qui effectue les actions de la touche F1.
+; A) Edition de matrice.
+; B) Permutation verticale.
 ;=============================================================================
 f1action    .block
             php                     ; Sauvegarde minimaliste 
             pha                     ; ... des registres.
-            ;-----------------------------------------------------------------
-            ; Action du menu F1A.
-            ;-----------------------------------------------------------------
-            lda   #$ff              ; On se met en mode édition.
-            sta   editmode          ; Drapeau pour indiquer le mode edition.
             lda   fkeyset           ; Identifie le jeu de clef actuel.
-            beq   menua             ; Si 0 menu A.
+            beq   menua             ; On saute au menu a.
             jmp   menub             ; si 1 menu B, JMP pour long saut. 
-menua       #affichemesg f1a_msg    ; Affiche l'invite de f1a.
+            ;-----------------------------------------------------------------
+            ; Action du menu F1A. Edition de matrice.
+            ;-----------------------------------------------------------------
+menua       lda   #$ff              ; On se met en mode édition.
+            sta   editmode          ; Drapeau pour indiquer le mode edition.
+            #affichemesg f1a_msg    ; Affiche l'invite de f1a.
             #flashfkey f1abutton    ; Clignotte le menu sélectionné.
             lda   #vgris            ; Du gris
             jsr   setmenuacolor     ; ... pour les autres options.
@@ -1019,7 +1021,7 @@ menua       #affichemesg f1a_msg    ; Affiche l'invite de f1a.
             sta   editmode          ; Drapeau pour indiquer le mode edition.
             jmp   out               ; On sort du menu f1A
             ;-----------------------------------------------------------------
-            ; Action du menu F1B.
+            ; Action du menu F1B. Permutation verticale.
             ;-----------------------------------------------------------------
 menub       #affichemesg f1b_msg    ; Affiche le message menu f1b.
             #flashfkey f1bbutton    ; Clognotte l'option choisi.
@@ -1033,28 +1035,30 @@ out         #affichemesg prompt_msg ; Affiche l'invite.
 
 ;=============================================================================
 ; Routine qui effectue les actions de la touche F2.
+; A) Copier d'un autre caractère.
+; B) Permutation horizontale.
 ;=============================================================================
 f2action    .block
             php                     ; Sauvegarde minimaliste 
             pha                     ; ... des registres.
+            lda   fkeyset           ; Identifie le jeu de clef actuel.
+            bne   menub             ; si 1 menu B, JMP pour long saut. 
             ;-----------------------------------------------------------------
-            ; Action du menu F2A.
+            ; Action du menu F2A. Copier d'un autre caractère.
             ;-----------------------------------------------------------------
-            lda   fkeyset
-            bne   menub  
-            #affichemesg f2a_msg
-            #flashfkey f2abutton
-            jsr   copychar
-            jsr   drawbitmap
-            jmp   out
+menua       #affichemesg f2a_msg    ; Affiche l'invite de f2a.
+            #flashfkey f2abutton    ; Clignotte le menu sélectionné.
+            jsr   copychar          ; Effectue la copie du caractèreé
+            jsr   drawbitmap        ; Redessine les information.
+            jmp   out               ; On sort.
             ;-----------------------------------------------------------------
-            ; Action du menu F2b.
+            ; Action du menu F2b. Permutation horizontale.
             ;-----------------------------------------------------------------
-menub       #affichemesg f2b_msg
-            #flashfkey f2bbutton
-            jsr   fliphorz
-            jsr   drawbitmap           
-out         #affichemesg prompt_msg
+menub       #affichemesg f2b_msg    ; Affiche l'invite de f2b.
+            #flashfkey f2bbutton    ; Clignotte le menu sélectionné.
+            jsr   fliphorz          ; Effectue la permutation horiz. des bits. 
+            jsr   drawbitmap        ; Redessine les information.          
+out         #affichemesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1062,19 +1066,21 @@ out         #affichemesg prompt_msg
 
 ;=============================================================================
 ; Routine qui effectue les actions de la touche F3.
+; A) Sauvegarde de la matrice sur medium.
+; B) Décallage d'un bit vers la droite.
 ;=============================================================================
 f3action    .block
             php                     ; Sauvegarde minimaliste 
             pha                     ; ... des registres.
+            lda   fkeyset           ; Identifie le jeu de clef actuel.
+            bne   menub             ; si 1 menu B, JMP pour long saut. 
             ;-----------------------------------------------------------------
-            ; Action du menu F3A.
+            ; Action du menu F3A. Sauvegarde de la matrice sur medium.
             ;-----------------------------------------------------------------
-            lda   fkeyset
-            bne   menub  
-            #flashfkey f3abutton
-            #affichemesg f3a_msg
-getagain    jsr   getkey
-            cmp   #$31
+menua       #affichemesg f3a_msg    ; Affiche l'invite de f3a.
+            #flashfkey f3abutton    ; Clignotte le menu sélectionné.
+getagain    jsr   getkey            ; Récupère une clef.
+            cmp   #$31              ; Est-ce 1
             beq   devok
             cmp   #$38
             beq   devok
@@ -1083,17 +1089,17 @@ getagain    jsr   getkey
             jmp   getagain
 devok       sta   device
             jsr   getfname
-            #affichemesg wait_msg
+            #affichemesg prompt_msg ; Affiche l'invite.
             jsr   savetofile
-            jmp   out
+            jmp   out               ; On sort.
             ;-----------------------------------------------------------------
-            ; Action du menu F3B.
+            ; Action du menu F3B. Décallage d'un bit vers la droite.
             ;-----------------------------------------------------------------
-menub       #affichemesg f3b_msg
-            #flashfkey f3bbutton
-            jsr   scrollright
-            jsr   drawbitmap             
-out         #affichemesg prompt_msg
+menub       #affichemesg f3b_msg    ; Affiche l'invite de f3b.
+            #flashfkey f3bbutton    ; Clignotte le menu sélectionné.
+            jsr   scrollright       ; Décallage d'un bit vers la droite.
+            jsr   drawbitmap        ; Redessine les information.             
+out         #affichemesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1101,39 +1107,42 @@ out         #affichemesg prompt_msg
 
 ;=============================================================================
 ; Routine qui effectue les actions de la touche F4.
+; A) Récupère de la matrice sur medium.
+; B) Décallage d'un bit vers la gauche.
 ;=============================================================================
 f4action    .block
             php                     ; Sauvegarde minimaliste 
             pha                     ; ... des registres.
+            lda   fkeyset           ; Identifie le jeu de clef actuel.
+            bne   menub             ; si 1 menu B, JMP pour long saut. 
             ;-----------------------------------------------------------------
-            ; Action du menu F4A.
+            ; Action du menu F4A. Récupère de la matrice sur medium.
             ;-----------------------------------------------------------------
-            lda   fkeyset
-            bne   menub  
-            #flashfkey f4abutton
-            #affichemesg f4a_msg
-getagain    jsr   getkey
-            cmp   #$31
-            beq   devok
-            cmp   #$38
-            beq   devok
-            cmp   #$39
-            beq   devok
-            jmp   getagain
-devok       sta   device
-            jsr   getfname
-            #affichemesg wait_msg
-            jsr   loadfromfile
-            jsr   scrredraw 
-            jmp   out
+menua       #affichemesg f4a_msg    ; Affiche l'invite de f4a.    
+            #flashfkey f4abutton    ; Clignotte le menu sélectionné.
+            getagain    
+            jsr   getkey            ; Récupère une claf
+            cmp   #$31              ; Le lecteur cassette ?
+            beq   devok             ; ... Oui.
+            cmp   #$38              ; Le lecteur de disque #8? 
+            beq   devok             ; ... Oui.
+            cmp   #$39              ; Le lecteur de disque #9? 
+            beq   devok             ; ... Oui.
+            jmp   getagain          ; On redemande le # de périphérique.
+devok       sta   device            ; On sauvegarde le # du périphérique.
+            jsr   getfname          ; On récupère le nom du fichier.
+            #affichemesg wait_msg   ; On demande d'attendre.
+            jsr   loadfromfile      ; Récupère de la matrice d'un medium.
+            jsr   scrredraw         ; On redessine l'écran complet.
+            jmp   out               ; On sort.
             ;-----------------------------------------------------------------
-            ; Action du menu F4B.
+            ; Action du menu F4B. Décallage d'un bit vers la gauche.
             ;-----------------------------------------------------------------
-menub       #affichemesg f4b_msg
-            #flashfkey f4bbutton
-            jsr   scrollleft
-            jsr   drawbitmap            
-out         #affichemesg prompt_msg
+menub       #affichemesg f4b_msg    ; Affiche l'invite de f4b.
+            #flashfkey f4bbutton    ; Clignotte le menu sélectionné.
+            jsr   scrollleft        ; Décallage d'un bit vers la gauche.
+            jsr   drawbitmap        ; Redessine les information.            
+out         #affichemesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1145,24 +1154,23 @@ out         #affichemesg prompt_msg
 f5action    .block
             php                     ; Sauvegarde minimaliste 
             pha                     ; ... des registres.
+            lda   fkeyset           ; Identifie le jeu de clef actuel.
+            bne   menub             ; si 1 menu B, JMP pour long saut. 
             ;-----------------------------------------------------------------
             ; Action du menu F5A.
             ;-----------------------------------------------------------------
-            lda   fkeyset
-            bne   menub  
-            #affichemesg f5a_msg
-            #flashfkey f5abutton
-            jsr   clearchar
-            jsr   drawbitmap  
-            jmp   out
+menua       #affichemesg f5a_msg    ; Affiche l'invite de f5a.
+            #flashfkey f5abutton    ; Clignotte le menu sélectionné.
+            jsr   clearchar         ; PLace tous les bits à 0.
+            jmp   out               ; On sort.
             ;-----------------------------------------------------------------
             ; Action du menu F5B.
             ;-----------------------------------------------------------------
-menub       #affichemesg f5b_msg
-            #flashfkey f5bbutton
-            jsr   scrollup            
-            jsr   drawbitmap 
-out         #affichemesg prompt_msg
+menub       #affichemesg f5b_msg    ; Affiche l'invite de f5b.
+            #flashfkey f5bbutton    ; Clignotte le menu sélectionné.
+            jsr   scrollup          ; Décale la matrice vers le haut.
+out         jsr   drawbitmap        ; Redessine les information. 
+            #affichemesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1174,24 +1182,24 @@ out         #affichemesg prompt_msg
 f6action    .block
             php                     ; Sauvegarde minimaliste 
             pha                     ; ... des registres.
+            lda   fkeyset           ; Identifie le jeu de clef actuel.
+            bne   menub             ; si 1 menu B, JMP pour long saut. 
             ;-----------------------------------------------------------------
             ; Action du menu F6A.
             ;-----------------------------------------------------------------
-            lda   fkeyset
-            bne   menub  
-            #affichemesg f6a_msg
-            #flashfkey f6abutton
-            jsr   fillchar
-            jsr   drawbitmap 
-            jmp   out
+menua       #affichemesg f6a_msg    ; Affiche l'invite de f6a.
+            #flashfkey f6abutton    ; Clignotte le menu sélectionné.
+            jsr   fillchar          ; PLace tous les bits à 1.
+            jsr   drawbitmap        ; Redessine les information. 
+            jmp   out               ; On sort.
             ;-----------------------------------------------------------------
             ; Action du menu F6B.
             ;-----------------------------------------------------------------
-menub       #affichemesg f6b_msg
-            #flashfkey f6bbutton
-            jsr   scrolldown 
-            jsr   drawbitmap            
-out         #affichemesg prompt_msg
+menub       #affichemesg f6b_msg    ; Affiche l'invite de f6b.
+            #flashfkey f6bbutton    ; Clignotte le menu sélectionné.
+            jsr   scrolldown        ; Décale la matrice vers le bas.
+            jsr   drawbitmap        ; Redessine les information.            
+out         #affichemesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1203,24 +1211,24 @@ out         #affichemesg prompt_msg
 f7action    .block
             php                     ; Sauvegarde minimaliste 
             pha                     ; ... des registres.
+            lda   fkeyset           ; Identifie le jeu de clef actuel.
+            bne   menub             ; si 1 menu B, JMP pour long saut. 
             ;-----------------------------------------------------------------
             ; Action du menu F7A.
             ;-----------------------------------------------------------------
-            lda   fkeyset
-            bne   menub  
-            #affichemesg f7a_msg
-            #flashfkey f7abutton
-            jsr   copycharset
-            jsr   drawbitmap
-            jmp   out
+menua       #affichemesg f7a_msg    ; Affiche l'invite de f7a.
+            #flashfkey f7abutton    ; Clignotte le menu sélectionné.
+            jsr   copycharset       ; Recopie le jeu de caractères de la ROM.
+            jsr   drawbitmap        ; Redessine les information.
+            jmp   out               ; On sort.
             ;-----------------------------------------------------------------
             ; Action du menu F7B.
             ;-----------------------------------------------------------------
-menub       #affichemesg f7b_msg
-            #flashfkey f7bbutton
-            jsr   reverse
-            jsr   drawbitmap            
-out         #affichemesg prompt_msg
+menub       #affichemesg f7b_msg    ; Affiche l'invite de f7b.
+            #flashfkey f7bbutton    ; Clignotte le menu sélectionné.
+            jsr   reverse           ; Inverse les bits du bitmap.
+            jsr   drawbitmap        ; Redessine les information.            
+out         #affichemesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1232,23 +1240,23 @@ out         #affichemesg prompt_msg
 f8action    .block
             php                     ; Sauvegarde minimaliste 
             pha                     ; ... des registres.
+            lda   fkeyset           ; Identifie le jeu de clef actuel.
+            bne   menub             ; si 1 menu B, JMP pour long saut. 
             ;-----------------------------------------------------------------
             ; Action du menu F8A.
             ;-----------------------------------------------------------------
-            lda   fkeyset
-            bne   menub  
-            #affichemesg menub_msg
-            #flashfkey f8abutton
-            jmp   swapit
+menua       #affichemesg menub_msg  ; Affiche l'invite de f8a.
+            #flashfkey f8abutton    ; Clignotte le menu sélectionné.
+            jmp   swapit            ; Permute les menus d'action.
             ;-----------------------------------------------------------------
             ; Action du menu F8B.
             ;-----------------------------------------------------------------
-menub       #affichemesg menua_msg
-            #flashfkey f8bbutton            
-swapit      eor   #$ff
-            sta   fkeyset
-            jsr   drawfkeys
-            #affichemesg prompt_msg
+menub       #affichemesg menua_msg  ; Affiche l'invite de f8b.
+            #flashfkey f8bbutton    ; Clignotte le menu sélectionné.            
+swapit      eor   #$ff              ; Permute les
+            sta   fkeyset           ; ... menus d'action.
+            jsr   drawfkeys         ; Redessine le menu.
+out         #affichemesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
