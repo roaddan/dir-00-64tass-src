@@ -1452,30 +1452,30 @@ fromstack   pla                     ; Récupère l'octet de la pile
 ; Routine qui sauvegarde les bitmaps dans un fichier.
 ;=============================================================================
 savetofile  .block
-            jsr   pushall
-            lda   #<fname
-            sta   dsk_fnptr
-            lda   #>fname
-            sta   dsk_fnptr+1
-            lda   #(device-fname-1)            
-            sta   dsk_fnlen
-            lda   device
-            and   #$0f
-            sta   dsk_lfsno
-            sta   dsk_dev
-            lda   #<bitmapmem
-            sta   dsk_data_s
-            lda   #>bitmapmem
-            sta   dsk_data_s+1
-            lda   #<endofaddr
-            sta   dsk_data_e
-            lda   #>endofaddr
-            sta   dsk_data_e+1
-            #printcxy blankmsg
-            #printcxy wait_msg
-            #locate 1,4
-            jsr   memtofile
-            jsr   popall
+            jsr   pushall           ; Sauvegarde les registres
+            lda   #<fname           ; Charge l'adresse 16 bits
+            sta   dsk_fnptr         ; ... du pointeur de nom
+            lda   #>fname           ; ... de fichier dans
+            sta   dsk_fnptr+1       ; ... le pointeur standard du Kernal.
+            lda   #(device-fname-1) ; Charge la longueur du nom de fichier       
+            sta   dsk_fnlen         ; ... la place dans la variable du Kernal.
+            lda   device            ; Charge le no de périphérique 
+            and   #$0f              ; ... le masque pour limiter la valeur.
+            sta   dsk_lfsno         ; ... le place dans la variable du Kernal
+            sta   dsk_dev           ; ... pour les no. primaire et secondaire.
+            lda   #<bitmapmem       ; Copie l'adresse 16 bits du debut de la 
+            sta   dsk_data_s        ; ... matrice de point dans l'espace 
+            lda   #>bitmapmem       ; ... réservée à cet 
+            sta   dsk_data_s+1      ; ... effet.
+            lda   #<endofaddr       ; Copie l'adresse 16 bits de la fin de la
+            sta   dsk_data_e        ; ... matrice de point dans l'espace 
+            lda   #>endofaddr       ; ... réservée à cet 
+            sta   dsk_data_e+1      ; ... effet.
+            #printcxy blankmsg      ; Efface la zone de message.
+            #printcxy wait_msg      ; Affiche un message d'attente.
+            #locate 1,4             ; Place le curseur colonne 2, ligne 5.
+            jsr   memtofile         ; Appelle la fonction de sauvegarde ram.
+            jsr   popall            ; Récupère tous les registres.
             rts
             .bend
 
