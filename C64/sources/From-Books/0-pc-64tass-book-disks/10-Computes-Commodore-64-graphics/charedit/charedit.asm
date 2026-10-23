@@ -58,75 +58,6 @@ endmain     jsr   popreg
             jmp   k_warmstart 
             .bend
 
-savetofile  .block
-            jsr   pushall
-            lda   #<fname
-            sta   dsk_fnptr
-            lda   #>fname
-            sta   dsk_fnptr+1
-            lda   #(device-fname-1)            
-            sta   dsk_fnlen
-            lda   device
-            and   #$0f
-            sta   dsk_lfsno
-            sta   dsk_dev
-            lda   #<bitmapmem
-            sta   dsk_data_s
-            lda   #>bitmapmem
-            sta   dsk_data_s+1
-            lda   #<endofaddr
-            sta   dsk_data_e
-            lda   #>endofaddr
-            sta   dsk_data_e+1
-            #printcxy blankmsg
-            #printcxy wait_msg
-            #locate 1,4
-            jsr   memtofile
-            jsr   popall
-            rts
-            .bend
-
-loadfromfile   .block
-            jsr   pushall
-            lda   #<fname
-            sta   dsk_fnptr
-            lda   #>fname
-            sta   dsk_fnptr+1
-            lda   #(device-fname-1)
-            sta   dsk_fnlen
-            lda   device
-            and   #$0f
-            sta   dsk_dev
-            sta   dsk_lfsno
-            lda   #<bitmapmem
-            sta   dsk_data_s
-            lda   #>bitmapmem
-            sta   dsk_data_s+1
-            lda   #<endofaddr
-            sta   dsk_data_e
-            lda   #>endofaddr
-            sta   dsk_data_e+1
-            #printcxy blankmsg
-            #printcxy wait_msg
-            #locate 1,4
-            jsr   filetomem
-            jsr   popall
-            rts
-            .bend
-
-waitakey    .block
-            php
-            pha
-            lda   #$41
-            pha
-            jsr   $ffd2
-            pla
-            jsr   waitkey
-            pla
-            plp
-            rts
-            .bend  
-
 ;-----------------------------------------------------------------------------
 ; Including my self written libraries.
 ;-----------------------------------------------------------------------------
@@ -140,8 +71,8 @@ waitakey    .block
 ; Chargement du code spécifique au programmes et ...
             .include    "routines.asm"
 ; ... de ses chaines de caractères, ..
-;            .include    "strings_fr.asm"
-            .include    "strings_en.asm"
+            .include    "strings_fr.asm"
+;            .include    "strings_en.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement en RAM des variables des librairies à la suite du programme.
             .include    "e-c64-vars.asm"

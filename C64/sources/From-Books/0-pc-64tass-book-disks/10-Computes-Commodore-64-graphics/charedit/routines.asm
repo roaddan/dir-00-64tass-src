@@ -1079,16 +1079,17 @@ f3action    .block
             ;-----------------------------------------------------------------
 menua       #affichemesg f3a_msg    ; Affiche l'invite de f3a.
             #flashfkey f3abutton    ; Clignotte le menu sélectionné.
-getagain    jsr   getkey            ; Récupère une clef.
-            cmp   #$31              ; Est-ce 1
-            beq   devok
-            cmp   #$38
-            beq   devok
-            cmp   #$39
-            beq   devok
-            jmp   getagain
-devok       sta   device
-            jsr   getfname
+getagain    jsr   getkey            ; Récupère une clef
+            cmp   #$31              ; Le lecteur cassette ?
+            beq   devok             ; ... Oui.
+            cmp   #$38              ; Le lecteur de disque #8? 
+            beq   devok             ; ... Oui.
+            cmp   #$39              ; Le lecteur de disque #9? 
+            beq   devok             ; ... Oui.
+            jmp   getagain          ; On redemande le # de périphérique.
+devok       and   #$0f              ; On masque le MSN.
+            sta   device            ; On sauvegarde le # de périphérique.
+            jsr   getfname          ; On requière un nom de fichier.
             #affichemesg prompt_msg ; Affiche l'invite.
             jsr   savetofile
             jmp   out               ; On sort.
@@ -1120,8 +1121,7 @@ f4action    .block
             ;-----------------------------------------------------------------
 menua       #affichemesg f4a_msg    ; Affiche l'invite de f4a.    
             #flashfkey f4abutton    ; Clignotte le menu sélectionné.
-            getagain    
-            jsr   getkey            ; Récupère une claf
+getagain    jsr   getkey            ; Récupère une clef
             cmp   #$31              ; Le lecteur cassette ?
             beq   devok             ; ... Oui.
             cmp   #$38              ; Le lecteur de disque #8? 
@@ -1129,7 +1129,8 @@ menua       #affichemesg f4a_msg    ; Affiche l'invite de f4a.
             cmp   #$39              ; Le lecteur de disque #9? 
             beq   devok             ; ... Oui.
             jmp   getagain          ; On redemande le # de périphérique.
-devok       sta   device            ; On sauvegarde le # du périphérique.
+devok       and   #$0f              ; On masque le MSN.
+            sta   device            ; On sauvegarde le # du périphérique.
             jsr   getfname          ; On récupère le nom du fichier.
             #affichemesg wait_msg   ; On demande d'attendre.
             jsr   loadfromfile      ; Récupère de la matrice d'un medium.
@@ -1267,14 +1268,14 @@ out         #affichemesg prompt_msg ; Affiche l'invite.
 ;=============================================================================
 reverse     .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-            #setzpage2     mapaddr
-            ldy   #$00
-again       lda   (zpage2),y
-            eor   #$ff
-            sta   (zpage2),y
-            iny
-            cpy   #$08
-            bne   again
+            #setzpage2  mapaddr     ; Positionne zpage2 ($fe,$fd) sur mapaddr.
+            ldy   #$00              ; Un index à 0.
+again       lda   (zpage2),y        ; On charge la matrice du caractère 
+            eor   #$ff              ; ... pour l'inverser et 
+            sta   (zpage2),y        ; ... le remettre.
+            iny                     ; On fait toute la matrice 
+            cpy   #$08              ; ... un octet à la fois
+            bne   again             ; ... pour les 8 octets.
             jsr   popall            ; Récupère registres et pointeur ZP.
             rts
             .bend
@@ -1284,19 +1285,19 @@ again       lda   (zpage2),y
 ;=============================================================================
 scrollup    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-            #setzpage1     mapaddr
-            #setzpage2     mapaddr
-            jsr   inczp2
-            ldy   #$00
-            lda   (zpage1),y
-            sta   tmpbyte
-again       lda   (zpage2),y
-            sta   (zpage1),y
-            iny
-            cpy   #$07
-            bne   again
-            lda   tmpbyte
-            sta   (zpage1),y  
+            #setzpage1  mapaddr     ; Positionne zpage1 ($fc,$fb) sur mapaddr.
+            #setzpage2  mapaddr     ; Positionne zpage2 ($fe,$fd) sur mapaddr.
+            jsr   inczp2            ; On incremente zpage2.
+            ldy   #$00              ; Index à 0
+            lda   (zpage1),y        ; On prend le premier ictet de la matrice
+            sta   tmpbyte           ; ... et on le mémorise.
+again       lda   (zpage2),y        ; On decale les octets suivant 
+            sta   (zpage1),y        ; ... vers le haut du caractère.
+            iny                     ; On avance l'index.
+            cpy   #$07              ; En sommes-nous au septième?
+            bne   again             ; Non, on continue.
+            lda   tmpbyte           ; On récupère le premier octet et 
+            sta   (zpage1),y        ; ... on le place en dernier.
             jsr   popall            ; Récupère registres et pointeur ZP.
             rts
             .bend
@@ -1306,20 +1307,20 @@ again       lda   (zpage2),y
 ;=============================================================================
 scrolldown  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-            #setzpage1     mapaddr
-            #setzpage2     mapaddr
-            jsr   inczp2
-            ldy   #$07             ;xxxxxxxx zpage1
-            lda   (zpage1),y          ;xxxxxxxx zpage2
-            sta   tmpbyte             ;xxxxxxxx
-again       dey                ;xxxxxxxx
-            lda   (zpage1),y          ;xxxxxxxx
-            sta   (zpage2),y          ;xxxxxxxx
-            cpy   #$00             ;xxxxxxxx
-            bne   again            ;xxxxxxxx
-            ldy   #$00                
-            lda   tmpbyte
-            sta   (zpage1),y  
+            #setzpage1  mapaddr     ; Positionne zpage1 ($fc,$fb) sur mapaddr.
+            #setzpage2  mapaddr     ; Positionne zpage2 ($fe,$fd) sur mapaddr.
+            jsr   inczp2            ; On incrémente zpage2.
+            ldy   #$07              ; Index à 7
+            lda   (zpage1),y        ; On mémorise le dernier octet 
+            sta   tmpbyte           ; ... de la matrice.
+again       dey                     ; On recule l'index.
+            lda   (zpage2),y        ; On decale les octets suivant 
+            sta   (zpage1),y        ; ... vers le bas du caractère.
+            cpy   #$00              ; En sommes-nous à l'avant dernier?
+            bne   again             ; Non, on continue.
+            ldy   #$00              ; Index à 0.  
+            lda   tmpbyte           ; On récupère le dernier octet et 
+            sta   (zpage1),y        ; ... on le place en premier.
             jsr   popall            ; Récupère registres et pointeur ZP.
             rts
             .bend
@@ -1329,18 +1330,17 @@ again       dey                ;xxxxxxxx
 ;=============================================================================
 scrollright .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-            #setzpage1     mapaddr
-            ldy   #$00
-again       lda   (zpage1),y
-            clc
-            ror
-            bcc   zero
-            clc
-one         adc   #$80
-zero        sta   (zpage1),y
-            iny
-            cpy   #$08
-            bne   again 
+            #setzpage1  mapaddr     ; Positionne zpage1 ($fc,$fb) sur mapaddr.
+            ldy   #$00              ; Index à 0.
+again       lda   (zpage1),y        ; On prend une ligne de la matrice.
+            clc                     ; Carry à 0.
+            ror                     ; Rotation des bit vers la droite.
+            bcc   zero              ; Carry est-il à 0?
+one         ora   #$80              ; Non, on place le bit 7 à 1.
+zero        sta   (zpage1),y        ; Oui, on sauvegarde.
+            iny                     ; Incremente l'index.
+            cpy   #$08              ; Avons-nous fait les 8 octets?
+            bne   again             ; Non, on continue.
             jsr   popall            ; Récupère registres et pointeur ZP.
             rts
             .bend
@@ -1350,16 +1350,16 @@ zero        sta   (zpage1),y
 ;=============================================================================
 scrollleft  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-            #setzpage1     mapaddr
-            ldy   #$00
-again       lda   (zpage1),y
-            clc
-            rol
-            adc   #$00
-            sta   (zpage1),y
-            iny
-            cpy   #$08
-            bne   again 
+            #setzpage1  mapaddr     ; Positionne zpage1 ($fc,$fb) sur mapaddr.
+            ldy   #$00              ; Index à 0.
+again       lda   (zpage1),y        ; On prend une ligne de la matrice.
+            clc                     ; Carry à 0.
+            rol                     ; Rotation des bit vers la gauche.
+            adc   #$00              ; On ajoute le carry au bit 0.
+            sta   (zpage1),y        ; On sauvegarde.
+            iny                     ; Incremente l'index.
+            cpy   #$08              ; Avons-nous fait les 8 octets?
+            bne   again             ; Non, on continue.
             jsr   popall            ; Récupère registres et pointeur ZP.
             rts
             .bend
@@ -1368,12 +1368,12 @@ again       lda   (zpage1),y
 ; Routine qui place des 1 partout dans la matrice de points.
 ;=============================================================================
 fillchar    .block
-            php
-            pha
-            lda   #$ff
-            jsr   allsame
-            pla
-            plp
+            php                     ; Sauvegarde minimaliste 
+            pha                     ; ... des registres.
+            lda   #$ff              ; Pour avoir tous les bits à 1.
+            jsr   allsame           ; On en remplie la matrice.
+            pla                     ; Récupération minimaliste
+            plp                     ; ... des registres.
             rts
             .bend
 
@@ -1381,25 +1381,27 @@ fillchar    .block
 ; Routine qui place des 0 partout dans la matrice de points.
 ;=============================================================================
 clearchar   .block
-            php
-            pha
-            lda   #$00
-            jsr   allsame
-            pla
-            plp
+            php                     ; Sauvegarde minimaliste 
+            pha                     ; ... des registres.
+            lda   #$00              ; Pour avoir tous les bits à 0.
+            jsr   allsame           ; On en remplie la matrice.
+            pla                     ; Récupération minimaliste
+            plp                     ; ... des registres.
             rts
             .bend
 
 ;=============================================================================
-; Routine qui place la même valeur (1 ou 0) dans toute la matrice de points.
+; Routine qui place la valeur de l'Acc dans toutes les ligne de la matrice.
 ;=============================================================================
 allsame     .block
-            #setzpage2     mapaddr
-            ldy   #$00
-again       sta   (zpage2),y
-            iny
-            cpy   #$08
-            bne   again
+            jsr   pushreg           ; Sauvegarde tous les registres.
+            #setzpage1  mapaddr     ; Positionne zpage1 ($fc,$fb) sur mapaddr.
+            ldy   #$00              ; Index à 0.
+again       sta   (zpage2),y        ; On remplace un octet de la matrice.
+            iny                     ; Incremente l'index.
+            cpy   #$08              ; Sommes-nous au huitième.
+            bne   again             ; Non. on en fait un autre.
+            jsr   popreg            ; Récupère toous les registres.      
             rts
             .bend
 
@@ -1408,23 +1410,22 @@ again       sta   (zpage2),y
 ;=============================================================================
 fliphorz    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-            #setzpage2     mapaddr
-            ldy   #$00
-nextbyte    lda   (zpage2),y
-            ldx   #$00
-rolagain    rol
-            ror   tmpbyte
-            inx
-            cpx   #$08
-            bmi   rolagain
-            lda   tmpbyte
-            sta   (zpage2),y     
-            iny
-            cpy   #$08
-            bmi   nextbyte
+            #setzpage1  mapaddr     ; Positionne zpage1 ($fe,$fd) sur mapaddr.
+            ldy   #$00              ; Place 0 
+            sty   tmpbyte           ; ... dans l'octet temporaire.
+            ldy   #$07              ; Index à 7.
+nextbyte    lda   (zpage1),y        ; Charge un octet de la matrice.
+            ldx   #$07              ; On le fait sur 8 bits.
+rolagain    rol                     ; On place le bit 7 dans carry
+            ror   tmpbyte           ; ... et carry dans le bit 0.
+            dex                     ; Décremente l'index X.
+            bpl   rolagain          ; 0 et plus on continue.
+            lda   tmpbyte           ; Charge l'octet temporaire dans Acc
+            sta   (zpage1),y        ; ... et remplace l'octet de la matrice.
+            dey                     ; Décremente l'index X.
+            bpl   nextbyte          ; 0 et plus on continue.
             jsr   popall            ; Récupère registres et pointeur ZP.
             rts
-;tmpbyte        .byte     $00
             .bend
 
 ;=============================================================================
@@ -1432,20 +1433,96 @@ rolagain    rol
 ;=============================================================================
 flipvert    .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
-            #setzpage2     mapaddr
-            ldy   #$00
-tostack     lda   (zpage2),y
-            pha
-            iny
-            cpy   #$08
-            bne   tostack
-            ldy   #$00
-fromstack   pla
-            sta   (zpage2),y
-            iny
-            cpy   #$08
-            bne   fromstack
+            #setzpage1  mapaddr     ; Positionne zpage1 ($fe,$fd) sur mapaddr.
+            ldy   #$07              ; Index à 7.
+tostack     lda   (zpage1),y        ; Charge un octet de la matrice
+            pha                     ; ... et le place sur la pile.
+            dey                     ; Décrémente l'index.
+            bpl   tostack           ; 0 et plus on continue. 
+            ldy   #$07              ; Index à 7.
+fromstack   pla                     ; Récupère l'octet de la pile
+            sta   (zpage1),y        ; ... et le sauvegarde dans la matrice.
+            dey                     ; Décrémente l'index.
+            bpl   fromstack         ; 0 et plus on continue. 
             jsr   popall            ; Récupère registres et pointeur ZP.
             rts
             .bend
+
+;=============================================================================
+; Routine qui sauvegarde les bitmaps dans un fichier.
+;=============================================================================
+savetofile  .block
+            jsr   pushall
+            lda   #<fname
+            sta   dsk_fnptr
+            lda   #>fname
+            sta   dsk_fnptr+1
+            lda   #(device-fname-1)            
+            sta   dsk_fnlen
+            lda   device
+            and   #$0f
+            sta   dsk_lfsno
+            sta   dsk_dev
+            lda   #<bitmapmem
+            sta   dsk_data_s
+            lda   #>bitmapmem
+            sta   dsk_data_s+1
+            lda   #<endofaddr
+            sta   dsk_data_e
+            lda   #>endofaddr
+            sta   dsk_data_e+1
+            #printcxy blankmsg
+            #printcxy wait_msg
+            #locate 1,4
+            jsr   memtofile
+            jsr   popall
+            rts
+            .bend
+
+;=============================================================================
+; Routine qui récupère les bitmaps d'un fichier.
+;=============================================================================
+loadfromfile   .block
+            jsr   pushall
+            lda   #<fname
+            sta   dsk_fnptr
+            lda   #>fname
+            sta   dsk_fnptr+1
+            lda   #(device-fname-1)
+            sta   dsk_fnlen
+            lda   device
+            and   #$0f
+            sta   dsk_dev
+            sta   dsk_lfsno
+            lda   #<bitmapmem
+            sta   dsk_data_s
+            lda   #>bitmapmem
+            sta   dsk_data_s+1
+            lda   #<endofaddr
+            sta   dsk_data_e
+            lda   #>endofaddr
+            sta   dsk_data_e+1
+            #printcxy blankmsg
+            #printcxy wait_msg
+            #locate 1,4
+            jsr   filetomem
+            jsr   popall
+            rts
+            .bend
+;=============================================================================
+; Routine qui attend la touche A.
+;=============================================================================
+attend_a    .block
+            php
+            pha
+            lda   #$41
+            pha
+            jsr   $ffd2
+            pla
+            jsr   waitkey
+            pla
+            plp
+            rts
+            .bend  
+
 

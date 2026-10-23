@@ -33,10 +33,10 @@ vzplit=scrnnewram+(6*40)+8
 fkeyleft       =    18
 f1top          =    9 
 mesgcol        =    vcyan
-menu1col1      =    vgris2
-menu1col2      =    vgris1
-menu2col1      =    vgris1 ;vgris2
-menu2col2      =    vgris    
+menu1col1      =    vvert1
+menu1col2      =    vvert
+menu2col1      =    vrose ;vgris2
+menu2col2      =    vrouge    
 flashcol       =    vblanc    ; Quand l'option de menu est activée.
 ;-----------------------------------------------------------------------------
 ; Pour le positionnement de la grille de bitmap 
