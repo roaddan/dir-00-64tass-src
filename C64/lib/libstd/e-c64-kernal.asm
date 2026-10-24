@@ -252,7 +252,7 @@ bspace2     =     $e0   ; 224                   space
 ;|8.  | #%01111111 (127/$7f) | STOP  ($  )|   q   ($11)|COMMODR($  )| SPACE ($20)|   2   ($32)|CONTROL($  )|  <-   ($1f)|   1   ($31)|
 ;+----+----------------------+------------+------------+------------+------------+------------+------------+------------+------------+
 ; +==========================================================================+
-; |     c o u l e u r s   p o s s i b l e   d e s   c a r a c t e r e s      |
+; |     C o u l e u r s   p o s s i b l e   d e s   c a r a c t e r e s      |
 ; +==========================================================================+
 ; | dec | hex |  binaire  | couleur    || dec | hex |  binaire  | couleur    |
 ; +-----+-----+-----------+------------++-----+-----+-----------+------------+
@@ -378,542 +378,542 @@ slisten=$ed0c     ; Send LISTEN command to serial bus.
 ;-----------------------------------------------------------------------------
 sflush=$ed40      ; Flush serial bus output cache at memory address $0095, to 
                   ; serial bus.
-                  ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
                   ; Description:
                   ;  - slisten send's LISTEN command to serial bus.
                   ; Imput :     -
                   ; Output :    -
                   ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-slisten2=$edb9 ; Send LISTEN secondary addressto serial bus.
-           ;----------------------------------------------------------------
-           ; Description:
-           ;  - slisten2 send's LISTEN command to serial bus.
-           ; Imput :     A= secondary address
-           ; Output :    -
-           ; Altered registers : A 
+slisten2=$edb9    ; Send LISTEN secondary addressto serial bus.
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ;  - slisten2 send's LISTEN command to serial bus.
+                  ; Imput :     A= secondary address
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-stalk2=$edb9  ; Send TALK secondary addressto serial bus.
-           ;----------------------------------------------------------------
-           ; Description:
-           ;  - stalk2 send's LISTEN command to serial bus.
-           ; Imput :     A= secondary address
-           ; Output :    -
-           ; Altered registers : A 
+stalk2=$edb9      ; Send TALK secondary addressto serial bus.
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ;  - stalk2 send's LISTEN command to serial bus.
+                  ; Imput :     A= secondary address
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-sbout=$eddd    ; Write byte to serial bus.
-           ;------------------------------------------------------------------
-           ; Description:
-           ;  - sbout write byte to serial bus.
-           ; Imput :     A= secondary address
-           ; Output :    -
-           ; Altered registers : - 
+sbout=$eddd       ; Write byte to serial bus.
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ;  - sbout write byte to serial bus.
+                  ; Imput :     A= secondary address
+                  ; Output :    -
+                  ; Altered registers : - 
 ;-----------------------------------------------------------------------------
-sutalk=$edef   ; Send UNTalk command to serial bus.
-           ;------------------------------------------------------------------
-           ; Description:
-           ;  - sutalk send's UNtalk command to serial bus.
-           ; Imput :     -
-           ; Output :    -
-           ; Altered registers : A 
+sutalk=$edef      ; Send UNTalk command to serial bus.
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ;  - sutalk send's UNtalk command to serial bus.
+                  ; Imput :     -
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-sulisten=$edfe ; Send UNLISTEN command to serial bus.
-           ;------------------------------------------------------------------
-           ; Description:
-           ;  - slisten send's UNLISTEN command to serial bus.
-           ; Imput :     -
-           ; Output :    -
-           ; Altered registers : A 
+sulisten=$edfe    ; Send UNLISTEN command to serial bus.
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ;  - slisten send's UNLISTEN command to serial bus.
+                  ; Imput :     -
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-sclkhigh=$ee85 ; Set CLOCK OUT to High
-           ;------------------------------------------------------------------
-           ; Description:
-           ;  - sclkhi set's CLOCK OUT to hight.
-           ; Imput :     -
-           ; Output :    -
-           ; Altered registers : A 
+sclkhigh=$ee85    ; Set CLOCK OUT to High
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ;  - sclkhi set's CLOCK OUT to hight.
+                  ; Imput :     -
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-sclklow=$ee8e  ; Set CLOCK OUT to low
-           ;------------------------------------------------------------------
-           ; Description:                
-           ;  - sclkhi set's CLOCK OUT to low.
-           ; Imput :     -
-           ; Output :    -
-           ; Altered registers : A 
+sclklow=$ee8e     ; Set CLOCK OUT to low
+                  ;-----------------------------------------------------------
+                  ; Description:                
+                  ;  - sclkhi set's CLOCK OUT to low.
+                  ; Imput :     -
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-sdathigh=$ee97 ; Set DATA OUT to High
-           ;----------------------------------------------------------------
-           ; Description:
-           ;  - sdtahigh set's DATA OUT to hight.
-           ; Imput :     -s
-           ; Output :    -
-           ; Altered registers : A 
+sdathigh=$ee97    ; Set DATA OUT to High
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ;  - sdtahigh set's DATA OUT to hight.
+                  ; Imput :     -s
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-sdatlow=$eea0  ; Set DATA OUT to low
-            ;----------------------------------------------------------------
-           ; Description:                
-           ;  - sdatlow set's DATA OUT to low.
-           ; Imput :     -
-           ; Output :    -
-           ; Altered registers : A 
+sdatlow=$eea0     ; Set DATA OUT to low
+                  ;-----------------------------------------------------------
+                  ; Description:                
+                  ;  - sdatlow set's DATA OUT to low.
+                  ; Imput :     -
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-sclkdta=$eea9  ; Read CLOCK IN and DATA IN.
-           ;----------------------------------------------------------------
-           ; Description:                
-           ;  - Read CLOCK IN and DATA IN.
-           ; Imput :     -
-           ; Output :    (C)arry= DATA IN; 
-           ;             (N)egative= CLOCK IN; 
-           ;             A= CLOCK IN (in bit #7)
-           ; Altered registers : A 
+sclkdta=$eea9     ; Read CLOCK IN and DATA IN.
+                  ;-----------------------------------------------------------
+                  ; Description:                
+                  ;  - Read CLOCK IN and DATA IN.
+                  ; Imput :     -
+                  ; Output :    (C)arry= DATA IN; 
+                  ;             (N)egative= CLOCK IN; 
+                  ;             A= CLOCK IN (in bit #7)
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-sbread=$f1ad   ; Read one byte from serial port.
-           ;----------------------------------------------------------------
-           ; Description:                
-           ;  - Read one byte from serial port.
-           ; Imput:     -
-           ; Output:    A Byte Read. (Read $0d, Return, if dev stat <> 0.)
-           ; Altered registers : A 
+sbread=$f1ad      ; Read one byte from serial port.
+                  ;-----------------------------------------------------------
+                  ; Description:                
+                  ;  - Read one byte from serial port.
+                  ; Imput:     -
+                  ; Output:    A Byte Read. (Read $0d, Return, if dev stat <> 0.)
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-sstdin=$F237   ; Define serial bus as standard input; do not send TALK 
-           ; secondary address if secondary address bit #7= 1.
-           ;----------------------------------------------------------------
-           ; Input: A= Device number.
-           ; Output: –
-           ; Used registers: A, X.
+sstdin=$F237      ; Define serial bus as standard input; do not send TALK 
+                  ; secondary address if secondary address bit #7= 1.
+                  ;-----------------------------------------------------------
+                  ; Input: A= Device number.
+                  ; Output: –
+                  ; Used registers: A, X.
 ;-----------------------------------------------------------------------------
-sstdout=$F279  ; Define serial bus as standard output; do not send LISTEN 
-           ; secondary address if secondary address bit #7= 1.
-           ;----------------------------------------------------------------
-           ; Input: A= Device number.
-           ; Output: –
-           ; Used registers: A, X.                
+sstdout=$F279     ; Define serial bus as standard output; do not send LISTEN 
+                  ; secondary address if secondary address bit #7= 1.
+                  ;-----------------------------------------------------------
+                  ; Input: A= Device number.
+                  ; Output: –
+                  ; Used registers: A, X.                
 ;-----------------------------------------------------------------------------
-sfopen=$F3D5   ; Open file on serial bus; do not send file name if secondary 
-           ; address bit #7= 1 or file name length= 0.
-           ;----------------------------------------------------------------
-           ; Input: –
-           ; Output: –
-           ; Used registers: A, Y.
+sfopen=$F3D5      ; Open file on serial bus; do not send file name if secondary 
+                  ; address bit #7= 1 or file name length= 0.
+                  ;-----------------------------------------------------------
+                  ; Input: –
+                  ; Output: –
+                  ; Used registers: A, Y.
 ;-----------------------------------------------------------------------------
-sutclose=$F528 ; Send UNTALK and CLOSE command to serial bus.
-           ;----------------------------------------------------------------
-           ; Input: –
-           ; Output: –
-           ; Used registers: A.
+sutclose=$F528    ; Send UNTALK and CLOSE command to serial bus.
+                  ;-----------------------------------------------------------
+                  ; Input: –
+                  ; Output: –
+                  ; Used registers: A.
 ;-----------------------------------------------------------------------------
-sulclose=$F63F ; Send UNLISTEN and CLOSE command to serial bus.
-           ;----------------------------------------------------------------
-           ; Input: –
-           ; Output: –
-           ; Used registers: A.
+sulclose=$F63F    ; Send UNLISTEN and CLOSE command to serial bus.
+                  ;-----------------------------------------------------------
+                  ; Input: –
+                  ; Output: –
+                  ; Used registers: A.
 ;-----------------------------------------------------------------------------
-sfclose=$F642  ; Close file on serial bus; do not send CLOSE secondary address 
-           ; if secondary address bit #7= 1.
-           ;----------------------------------------------------------------
-           ; Input: –
-           ; Output: –
-           ; Used registers: –
+sfclose=$F642     ; Close file on serial bus; do not send CLOSE secondary address 
+                  ; if secondary address bit #7= 1.
+                  ;-----------------------------------------------------------
+                  ; Input: –
+                  ; Output: –
+                  ; Used registers: –
 ;-----------------------------------------------------------------------------
 stimeout=$FE21 ; Unknown. (Set serial bus timeout.)
-           ;----------------------------------------------------------------
-           ; Input: A= Timeout value.
-           ; Output: –
-           ; Used registers: –
+                  ;-----------------------------------------------------------
+                  ; Input: A= Timeout value.
+                  ; Output: –
+                  ; Used registers: –
 ;-----------------------------------------------------------------------------
 ; r o u t i n e s   p r é s e n t e s   d a n s   l e   k e r n a l
 ;-----------------------------------------------------------------------------
-acptr=$ffa5    ; jmp $ee13 Recoit un caractere provenant du port serie
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - acptr est utilisÃ© pour recupÃ©rer des donnÃ©es provenant du 
-           ;   port série.
-           ;----------------------------------------------------------------
-           ; Input..: –
-           ; Output.: A= Byte read.
-           ; Used registers: A.
-           ; Stack used : 13
-           ; Register affected : A, X
-           ;----------------------------------------------------------------
-           ; Preparation.: TALK, TKSA
-           ;----------------------------------------------------------------
-           ; Error returns: See READST
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Talk et tksa doivent d'abord Ãªtre appelÃ©.
-           ;       jsr acptr
-           ;       sta $0800
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - Cet exemple ne montre que le rÃ©sultat final.
-           ; - Effectuez d'abord lâ€™appel de talk et tksa.
+acptr=$ffa5       ; jmp $ee13 Recoit un caractere provenant du port serie
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - acptr est utilisÃ© pour recupÃ©rer des donnÃ©es provenant du 
+                  ;   port série.
+                  ;-----------------------------------------------------------
+                  ; Input..: –
+                  ; Output.: A= Byte read.
+                  ; Used registers: A.
+                  ; Stack used : 13
+                  ; Register affected : A, X
+                  ;-----------------------------------------------------------
+                  ; Preparation.: TALK, TKSA
+                  ;-----------------------------------------------------------
+                  ; Error returns: See READST
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Talk et tksa doivent d'abord Ãªtre appelÃ©.
+                  ;       jsr acptr
+                  ;       sta $0800
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - Cet exemple ne montre que le rÃ©sultat final.
+                  ; - Effectuez d'abord lâ€™appel de talk et tksa.
 ;-----------------------------------------------------------------------------
-chkin=$ffc6    ; jmp ($031e) Define an input channel. 
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - chkin is used to define any opened file as an input file. 
-           ; - open must be called first.
-           ;----------------------------------------------------------------
-           ; Input..: X
-           ; Output.: -
-           ; Used registers: X.
-           ; Stack used : None
-           ; Register affected : A, X
-           ;----------------------------------------------------------------
-           ; Preparation routines: OPEN
-           ;----------------------------------------------------------------
-           ; Error returns: 3,5,6
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Define logical file #2 as an input channel.
-           ;       ldx #2
-           ;       jsr chkin
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - The x register designates which file #.
+chkin=$ffc6       ; jmp ($031e) Define an input channel. 
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - chkin is used to define any opened file as an input file. 
+                  ; - open must be called first.
+                  ;-----------------------------------------------------------
+                  ; Input..: X
+                  ; Output.: -
+                  ; Used registers: X.
+                  ; Stack used : None
+                  ; Register affected : A, X
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: OPEN
+                  ;-----------------------------------------------------------
+                  ; Error returns: 3,5,6
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Define logical file #2 as an input channel.
+                  ;       ldx #2
+                  ;       jsr chkin
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - The x register designates which file #.
 ;-----------------------------------------------------------------------------
-chkout=$ffc9   ; jmp ($0320) Define an output channel.
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - Just like chkin, but it defines the file for output. 
-           ; - open must be called first.
-           ;----------------------------------------------------------------
-           ; Input..: X
-           ; Output.: -
-           ; Used registers: X.
-           ; Stack used : None
-           ; Register affected : A, X
-           ;----------------------------------------------------------------
-           ; Preparation routines: OPEN
-           ;----------------------------------------------------------------
-           ; Error returns: 3,5,7
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Define logical file #4 as an output file.
-           ;       ldx #4
-           ;       jsr chkout
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - The x register designates which file #.
+chkout=$ffc9      ; jmp ($0320) Define an output channel.
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - Just like chkin, but it defines the file for output. 
+                  ; - open must be called first.
+                  ;-----------------------------------------------------------
+                  ; Input..: X
+                  ; Output.: -
+                  ; Used registers: X.
+                  ; Stack used : None
+                  ; Register affected : A, X
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: OPEN
+                  ;-----------------------------------------------------------
+                  ; Error returns: 3,5,7
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Define logical file #4 as an output file.
+                  ;       ldx #4
+                  ;       jsr chkout
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - The x register designates which file #.
 ;-----------------------------------------------------------------------------
-chrin=$ffcf    ; jmp ($0324) Get a character from the input channel
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - chrin will get a character from the current input device. 
-           ; - Calling open and chkin can change the input device.
-           ;----------------------------------------------------------------
-           ; Input..: -
-           ; Output.: A
-           ; Used registers: A.
-           ; Stack used : None
-           ; Register affected : A, X
-           ;----------------------------------------------------------------
-           ; Preparation routines: OPEN, CHKIN
-           ;----------------------------------------------------------------
-           ; Error returns: See READST
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Store a typed string to the screen.
-           ;       ldy #$00
-           ; loop  jsr chkin
-           ;       sta $0800,y
-           ;       iny
-           ;       cmp #$0d
-           ;       bne loop
-           ;       rts
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - This example is like an input statement. try running it.
+chrin=$ffcf       ; jmp ($0324) Get a character from the input channel
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - chrin will get a character from the current input device. 
+                  ; - Calling open and chkin can change the input device.
+                  ;-----------------------------------------------------------
+                  ; Input..: -
+                  ; Output.: A
+                  ; Used registers: A.
+                  ; Stack used : None
+                  ; Register affected : A, X
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: OPEN, CHKIN
+                  ;-----------------------------------------------------------
+                  ; Error returns: See READST
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Store a typed string to the screen.
+                  ;       ldy #$00
+                  ; loop  jsr chkin
+                  ;       sta $0800,y
+                  ;       iny
+                  ;       cmp #$0d
+                  ;       bne loop
+                  ;       rts
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - This example is like an input statement. try running it.
 ;-----------------------------------------------------------------------------
-chrout=$ffd2   ; jmp ($0326) Output a character
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - Load the accumulator with your number and call. 
-           ; - open and chkout will change the output device.
-           ;----------------------------------------------------------------
-           ; Input..: A
-           ; Output.: -
-           ; Used registers: A.
-           ; Stack used : None
-           ; Register affected : None
-           ;----------------------------------------------------------------
-           ; Preparation routines: CHKOUT, OPEN
-           ;----------------------------------------------------------------
-           ; Error returns: See READST
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Duplicate the command of cmd 4: print "a";
-           ;       ldx #4
-           ;       jsr chkout
-           ;       lda #'a
-           ;       jsr chrout
-           ;       rts
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - The letter a is printed to the screen. 
-           ; - Call open first for the printer.
+chrout=$ffd2      ; jmp ($0326) Output a character
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - Load the accumulator with your number and call. 
+                  ; - open and chkout will change the output device.
+                  ;-----------------------------------------------------------
+                  ; Input..: A
+                  ; Output.: -
+                  ; Used registers: A.
+                  ; Stack used : None
+                  ; Register affected : None
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: CHKOUT, OPEN
+                  ;-----------------------------------------------------------
+                  ; Error returns: See READST
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Duplicate the command of cmd 4: print "a";
+                  ;       ldx #4
+                  ;       jsr chkout
+                  ;       lda #'a
+                  ;       jsr chrout
+                  ;       rts
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - The letter a is printed to the screen. 
+                  ; - Call open first for the printer.
 ;-----------------------------------------------------------------------------
-cint=$ff81     ; jsr $e518 Initialize the screen editor and vic-ii chip
-           ;----------------------------------------------------------------
-           ; Description:
-           ; - cint resets the 6567 video controller chip and the screen 
-           ;   editor.
-           ;----------------------------------------------------------------
-           ; Exemple:
-           ; - Reset the 6567 chip and the 6566 vic chip.
-           ;       jsr cint
-           ;       rts
-           ;----------------------------------------------------------------
-           ; Note:
-           ; - Basically, just like pressing the stop and restore keys.
+cint=$ff81        ; jsr $e518 Initialize the screen editor and vic-ii chip
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ; - cint resets the 6567 video controller chip and the screen 
+                  ;   editor.
+                  ;-----------------------------------------------------------
+                  ; Exemple:
+                  ; - Reset the 6567 chip and the 6566 vic chip.
+                  ;       jsr cint
+                  ;       rts
+                  ;-----------------------------------------------------------
+                  ; Note:
+                  ; - Basically, just like pressing the stop and restore keys.
 ;-----------------------------------------------------------------------------
-ciout=$ffa8    ; jmp $eddd Transmit a byte over the serial bus
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - ciout will send data to the serial bus. 
-           ; - listen and second must be called first. 
-           ; - Call unlsn to finish up neatly.
-           ;----------------------------------------------------------------
-           ; Input..: A= Byte to write.
-           ; Output.: –
-           ; Used registers: A
-           ; Stack used : None
-           ; Register affected : A
-           ;----------------------------------------------------------------
-           ; Preparation routines: LISTEN, [SECOND]
-           ;----------------------------------------------------------------
-           ; Error returns: See READST
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Send the letter x to the serial bus.
-           ;       lda #'x
-           ;       jsr ciout
-           ;       rts
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - The accumulator is used to transfer the data.
+ciout=$ffa8       ; jmp $eddd Transmit a byte over the serial bus
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - ciout will send data to the serial bus. 
+                  ; - listen and second must be called first. 
+                  ; - Call unlsn to finish up neatly.
+                  ;-----------------------------------------------------------
+                  ; Input..: A= Byte to write.
+                  ; Output.: –
+                  ; Used registers: A
+                  ; Stack used : None
+                  ; Register affected : A
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: LISTEN, [SECOND]
+                  ;-----------------------------------------------------------
+                  ; Error returns: See READST
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Send the letter x to the serial bus.
+                  ;       lda #'x
+                  ;       jsr ciout
+                  ;       rts
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - The accumulator is used to transfer the data.
 ;-----------------------------------------------------------------------------
-clall=$ffe7    ; jmp ($032c) Close all open files
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - clall really does what its name implies-it closes all files 
-           ;   and resets all channels.
-           ;----------------------------------------------------------------
-           ; Input..: -
-           ; Output.: -
-           ; Used registers: -
-           ; Stack used : 11
-           ; Register affected : A, X
-           ;----------------------------------------------------------------
-           ; Preparation routines: None
-           ;----------------------------------------------------------------
-           ; Error returns: None
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Close all files.
-           ;       jsr clall
-           ;       rts
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - The clrchn routine is called automatically.
+clall=$ffe7       ; jmp ($032c) Close all open files
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - clall really does what its name implies-it closes all files 
+                  ;   and resets all channels.
+                  ;-----------------------------------------------------------
+                  ; Input..: -
+                  ; Output.: -
+                  ; Used registers: -
+                  ; Stack used : 11
+                  ; Register affected : A, X
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: None
+                  ;-----------------------------------------------------------
+                  ; Error returns: None
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Close all files.
+                  ;       jsr clall
+                  ;       rts
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - The clrchn routine is called automatically.
 ;-----------------------------------------------------------------------------
-close=$ffc3    ; jmp ($031c) Close a logical file
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - This routine will close any logical file that has been 
-           ;   opened.
-           ;----------------------------------------------------------------
-           ; Input..: A
-           ; Output.: -
-           ; Used registers: A.
-           ; Stack used : None
-           ; Register affected : A, X
-           ;----------------------------------------------------------------
-           ; Preparation routines: None
-           ;----------------------------------------------------------------
-           ; Error returns: None
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Close logical file #2.
-           ;       lda #2
-           ;       jsr close
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - The accumulator designates the file #.
+close=$ffc3       ; jmp ($031c) Close a logical file
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - This routine will close any logical file that has been 
+                  ;   opened.
+                  ;-----------------------------------------------------------
+                  ; Input..: A
+                  ; Output.: -
+                  ; Used registers: A.
+                  ; Stack used : None
+                  ; Register affected : A, X
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: None
+                  ;-----------------------------------------------------------
+                  ; Error returns: None
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Close logical file #2.
+                  ;       lda #2
+                  ;       jsr close
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - The accumulator designates the file #.
 ;-----------------------------------------------------------------------------
-clrchn=$ffcc   ; jmp ($0322) - Clear all i/o channels.
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - clrchn resets all channels and i/o registers - the input to 
-           ;   keyboard and the output to screen.
-           ;----------------------------------------------------------------
-           ; Input..: -
-           ; Output.: -
-           ; Used registers: -
-           ; Stack used : 9
-           ; Register affected : A, X
-           ;----------------------------------------------------------------
-           ; Preparation routines: OPEN, CHKIN
-           ;----------------------------------------------------------------
-           ; Error returns: See READST
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Restore default values to i/o devices.
-           ;       jsr clrchn
-           ;       rts
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - The accumulator and the x register are altered.
+clrchn=$ffcc      ; jmp ($0322) - Clear all i/o channels.
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - clrchn resets all channels and i/o registers - the input to 
+                  ;   keyboard and the output to screen.
+                  ;-----------------------------------------------------------
+                  ; Input..: -
+                  ; Output.: -
+                  ; Used registers: -
+                  ; Stack used : 9
+                  ; Register affected : A, X
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: OPEN, CHKIN
+                  ;-----------------------------------------------------------
+                  ; Error returns: See READST
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Restore default values to i/o devices.
+                  ;       jsr clrchn
+                  ;       rts
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - The accumulator and the x register are altered.
 ;-----------------------------------------------------------------------------
-getin=$ffe4    ; jmp ($032a) Get a character.
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - getin will get one piece of data from the input device. 
-           ; - Open and chkin can be used to change the input device.
-           ;----------------------------------------------------------------
-           ; Input..: -
-           ; Output.: A
-           ; Used registers: A.
-           ; Stack used : None
-           ; Register affected : A, X
-           ;----------------------------------------------------------------
-           ; Preparation routines: None
-           ;----------------------------------------------------------------
-           ; Error returns: None
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Wait for a key to be pressed.
-           ;       wait    jsr getin
-           ;               cmp #0
-           ;               beq wait
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - If the serial bus is used, then all registers are altered.
+getin=$ffe4       ; jmp ($032a) Get a character.
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - getin will get one piece of data from the input device. 
+                  ; - Open and chkin can be used to change the input device.
+                  ;-----------------------------------------------------------
+                  ; Input..: -
+                  ; Output.: A
+                  ; Used registers: A.
+                  ; Stack used : None
+                  ; Register affected : A, X
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: None
+                  ;-----------------------------------------------------------
+                  ; Error returns: None
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Wait for a key to be pressed.
+                  ;       wait    jsr getin
+                  ;               cmp #0
+                  ;               beq wait
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - If the serial bus is used, then all registers are altered.
 ;-----------------------------------------------------------------------------
-iobase=$fff3   ; jmp $e500 Define i/o memory page
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - iobase returns the low and high bytes of the starting 
-           ;   address of the i/o devices in the x and y registers.
-           ;----------------------------------------------------------------
-           ; Input..: -
-           ; Output.: X, Y
-           ; Used registers: X, Y.
-           ; Stack used : 2
-           ; Register affected : X, Y
-           ;----------------------------------------------------------------
-           ; Preparation routines: None
-           ;----------------------------------------------------------------
-           ; Error returns: None
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Set the data direction register of the user port to 0 
-           ;   (input).
-           ;       jsr iobase
-           ;       stx point
-           ;       sty point+1
-           ;       ldy #2
-           ;       lda #0
-           ;       sta (point),y
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - Point is a zero-page address used to access the ddr 
-           ;   indirectly.
+iobase=$fff3      ; jmp $e500 Define i/o memory page
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - iobase returns the low and high bytes of the starting 
+                  ;   address of the i/o devices in the x and y registers.
+                  ;-----------------------------------------------------------
+                  ; Input..: -
+                  ; Output.: X, Y
+                  ; Used registers: X, Y.
+                  ; Stack used : 2
+                  ; Register affected : X, Y
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: None
+                  ;-----------------------------------------------------------
+                  ; Error returns: None
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Set the data direction register of the user port to 0 
+                  ;   (input).
+                  ;       jsr iobase
+                  ;       stx point
+                  ;       sty point+1
+                  ;       ldy #2
+                  ;       lda #0
+                  ;       sta (point),y
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - Point is a zero-page address used to access the ddr 
+                  ;   indirectly.
 ;-----------------------------------------------------------------------------
-ioinit=$ff84   ; ($fda3) Initialize i/o devices.
-           ;----------------------------------------------------------------
-           ; Description:
-           ; - ioinit initializes all i/o devices and routines. 
-           ; - It is part of the system's powering-up routine.
-           ;----------------------------------------------------------------
-           ; Exemple:
-           ; - Initialize all i/o devices.
-           ;       jsr ioinit
-           ;       rts
-           ;----------------------------------------------------------------
-           ; Note:
-           ; - All registers are altered.
+ioinit=$ff84      ; ($fda3) Initialize i/o devices.
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ; - ioinit initializes all i/o devices and routines. 
+                  ; - It is part of the system's powering-up routine.
+                  ;-----------------------------------------------------------
+                  ; Exemple:
+                  ; - Initialize all i/o devices.
+                  ;       jsr ioinit
+                  ;       rts
+                  ;-----------------------------------------------------------
+                  ; Note:
+                  ; - All registers are altered.
 ;-----------------------------------------------------------------------------
-listen=$ffb1   ; jmp ($ed0c) Command a device on the serial bus to listen.
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - listen will command any device on the serial bus to receive 
-           ;   data.
-           ;----------------------------------------------------------------
-           ; Input..: A= Device number.
-           ; Output.: –
-           ; Used registers: A.
-           ; Stack used : None
-           ; Register affected : A
-           ;----------------------------------------------------------------
-           ; Preparation routines: None
-           ;----------------------------------------------------------------
-           ; Error returns: See READST
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Command device #8 to listen.
-           ;       lda #8
-           ;       jsr listen
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - The accumulator designates the device #.
+listen=$ffb1      ; jmp ($ed0c) Command a device on the serial bus to listen.
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - listen will command any device on the serial bus to receive 
+                  ;   data.
+                  ;-----------------------------------------------------------
+                  ; Input..: A= Device number.
+                  ; Output.: –
+                  ; Used registers: A.
+                  ; Stack used : None
+                  ; Register affected : A
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: None
+                  ;-----------------------------------------------------------
+                  ; Error returns: See READST
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Command device #8 to listen.
+                  ;       lda #8
+                  ;       jsr listen
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - The accumulator designates the device #.
 ;-----------------------------------------------------------------------------
-load=$ffd5     ; jmp $f4e9 Load device to RAM.
-           ;----------------------------------------------------------------
-           ; Description.:
-           ; - The computer will perform either the load or the verify 
-           ;   command. 
-           ; - If the ac cumulator is a 1, then load; if 0, then verify.
-           ;----------------------------------------------------------------
-           ; Input..: -
-           ; Output.: A
-           ; Used registers: A.
-           ; Stack used : None
-           ; Register affected : A, X, y
-           ;----------------------------------------------------------------
-           ; Preparation routines: SETLFS, SETNAM
-           ;----------------------------------------------------------------
-           ; Error returns: 0, 4, 5, 8, 9
-           ;----------------------------------------------------------------
-           ; Exemple.:
-           ; - Load a program into memory.
-           ;       lda #$08
-           ;       ldx #$02
-           ;       ldy #$00
-           ;       jsr setlfs
-           ;       lda #$04
-           ;       ldx #<name
-           ;       ldy #>name
-           ;       jsr setnam
-           ;       lda #$00
-           ;       ldy #$20
-           ;       jsr load
-           ;       rts
-           ;       name .byte 'file'
-           ;----------------------------------------------------------------
-           ; Note.:
-           ; - Program 'file' will be loaded into memory starting at 8192 
-           ;   decimal, x being the low byte and y being the high byte for 
-           ;   the load.
+load=$ffd5        ; jmp $f4e9 Load device to RAM.
+                  ;-----------------------------------------------------------
+                  ; Description.:
+                  ; - The computer will perform either the load or the verify 
+                  ;   command. 
+                  ; - If the ac cumulator is a 1, then load; if 0, then verify.
+                  ;-----------------------------------------------------------
+                  ; Input..: -
+                  ; Output.: A
+                  ; Used registers: A.
+                  ; Stack used : None
+                  ; Register affected : A, X, y
+                  ;-----------------------------------------------------------
+                  ; Preparation routines: SETLFS, SETNAM
+                  ;-----------------------------------------------------------
+                  ; Error returns: 0, 4, 5, 8, 9
+                  ;-----------------------------------------------------------
+                  ; Exemple.:
+                  ; - Load a program into memory.
+                  ;       lda #$08
+                  ;       ldx #$02
+                  ;       ldy #$00
+                  ;       jsr setlfs
+                  ;       lda #$04
+                  ;       ldx #<name
+                  ;       ldy #>name
+                  ;       jsr setnam
+                  ;       lda #$00
+                  ;       ldy #$20
+                  ;       jsr load
+                  ;       rts
+                  ;       name .byte 'file'
+                  ;-----------------------------------------------------------
+                  ; Note.:
+                  ; - Program 'file' will be loaded into memory starting at 8192 
+                  ;   decimal, x being the low byte and y being the high byte for 
+                  ;   the load.
 ;-----------------------------------------------------------------------------
 membot=$ff9c   ; jmp $fe34 Get/set bottom of memory.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - If the carry bit is set, then the low byte and the 
            ;   high byte of ram are returned in the x and y registers. 
            ; - If the carry bit is clear, the bottom of ram is set to the 
            ;   x and y registers.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: X, Y (C=0)
            ; Output.: X, Y (C=1)
            ; Used registers: X, Y.
            ; Stack used : None
            ; Register affected : X, Y
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns:None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Move bottom of memory up one page.
            ;       sec
@@ -922,25 +922,25 @@ membot=$ff9c   ; jmp $fe34 Get/set bottom of memory.
            ;       clc
            ;       jsr membot
            ;       rts
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - The accumulator is left alone.
 ;-----------------------------------------------------------------------------
 memtop=$ff99   ; jmp $fe25 Get/Set top of ram
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - Same principle as membot, except the top of ram is affected.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: X, Y (C=0)
            ; Output.: X, Y (C=1)
            ; Used registers: X, Y.
            ; Stack used : 2
            ; Register affected : X, Y
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Protect 1k of memory from basic.
            ;       sec
@@ -948,26 +948,26 @@ memtop=$ff99   ; jmp $fe25 Get/Set top of ram
            ;       dey
            ;       clc
            ;       jsr memtop
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - The accumulator is left alone.
 ;-----------------------------------------------------------------------------
 open=$ffc0     ; jmp ($031a) Open a logical file
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - After setlfs and setnam have been called, you can open a 
            ;   logical file.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A, X, Y
            ; Output.: -
            ; Used registers: A, X, Y.
            ; Stack used : None
            ; Register affected : A, X, Y
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: SETLFS, SETNAM
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: 1, 2, 4, 5, 6
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; Duplicate the command open 15,8,15,'i/o'
            ;       lda #3
@@ -981,130 +981,130 @@ open=$ffc0     ; jmp ($031a) Open a logical file
            ;       jsr open
            ;       rts
            ;       name .by 'i/o'
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - Opens the current name file with the current lfs.
 ;-----------------------------------------------------------------------------
 plot=$fff0     ; jmp $e50a Set or retrieve cursor location x=column, y=line
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - If the carry bit of the accumulator is set, then the 
            ;   cursor x,y is returned in the y and x registers. 
            ; - If the carry bit is clear, then the cursor is moved to x,y 
            ;   as determined by the y and x registers.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: X, Y (C=0)
            ; Output.: X, Y (C=1)
            ; Used registers: X, Y.
            ; Stack used : 2
            ; Register affected : A, X, Y
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Move cursor to row 12, column 20 (12,20).
            ;       ldx #12
            ;       ldy #20
            ;       clc
            ;       jsr plot
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - The cursor is now in the middle of the screen.
 ;-----------------------------------------------------------------------------
 ramtas=$ff87   ; ($fd50) Initialise ram, tape buffer and screen.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description:
            ; - ramtas is used to test ram, reset the top and bottom of 
            ;   memory pointers, clear $0000 to $0101 and $0200 to $03ff, 
            ;   and set the screen memory to $0400.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple:
            ; - Do ram test.
            ;       jsr ramtas
            ;       rts
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note:
            ; - All registers are altered.
 ;-----------------------------------------------------------------------------
 rdtim=$ffde    ; jmp $f6dd Read system clock
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - Locations 160-162 are transferred, in order, to the y 
            ;   and x registers and the accumulator.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Store system clock to screen.
            ;       jsr rdtim
            ;       sta 1026
            ;       stx 1025
            ;       sty 1024
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - The system clock can be translated as hours/minutes/seconds.
 ;-----------------------------------------------------------------------------
 readst=$ffb7   ; jmp $fe07 Read i/o status word
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - When called, readst returns the status of the i/o devices. 
            ; - Any error code can be translated as operator error.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: -
            ; Output.: A
            ; Used registers: A
            ; Stack used : 2
            ; Register affected : A
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Check for read error.
            ;       jsr readst
            ;       cmp #16
            ;       beq error
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - In this case, if the accumulator is 16, a read error 
            ;   occurred.
 ;-----------------------------------------------------------------------------
 restor=$ff8a   ; jmp $fd15 Restore default I/O vectors.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: -
            ; Output.: –
            ; Used registers: -
            ; Stack used : None
            ; Register affected : A, X, Y
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ;       jsr restor
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - All registers are altered.
 ;-----------------------------------------------------------------------------
 save=$ffd8     ; jmp $f5dd Save memory to a device.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - The computer will perform either the load or the verify 
            ;   command. 
            ; - If the ac cumulator is a 1, then load; if 0, then verify.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A, X, Y
            ; Output.: -
            ; Used registers: A, X, Y
            ; Stack used : None
            ; Register affected : A, X, Y
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: SETLFS, SETNAM
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: 5, 8, 9
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Load a program into memory.
            ;prog   lda #$08
@@ -1126,80 +1126,80 @@ save=$ffd8     ; jmp $f5dd Save memory to a device.
            ;       fname .byte 'progfile.prg'
            ;       fnend ; pointer to calculate filename lenght
            ;prgend
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - Program 'file' will be saved onto disk at 8192 
            ;   decimal, x being the low byte and y being the high byte for 
            ;   the load.
 ;-----------------------------------------------------------------------------
 scnkey=$ff9f   ; jmp $ea87 Scan the keyboard
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - TScan the keyboard to see if a key is pressed. 
            ;   Place that key into the keyboard buffer. 
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: -
            ; Output.: -
            ; Used registers: -
            ; Stack used : None
            ; Register affected : A, X, Y
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; get   jsr scnkey
            ;       jsr getin
            ;       cmp #0
            ;       beq get
            ;       jsr chrout
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
 ;-----------------------------------------------------------------------------
 screen=$ffed   ; jmp $e505 Return screen format
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - Screen returns the number of columns and rows the screen has 
            ;   in the x and y registers.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: -
            ; Output.: X, Y
            ; Used registers: X, Y
            ; Stack used : 2
            ; Register affected : X, Y
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Determine the screen size.
            ;       jsr screen
            ;       stx maxcol
            ;       sty maxrow
            ;       rts
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - screen allows further compatibility between the 64, the 
            ;   vic-20, and future versions of the 64.
 ;-----------------------------------------------------------------------------
 second=$ff93   ; jmp $edb9 Send secondary address after listen
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - After listen has been called, a secondary address may be 
            ;   sent.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A= Secondary address.
            ; Output.: –
            ; Used registers: A
            ; Stack used : None
            ; Register affected : A
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Address device #8 with secondary address #15.
            ;       lda #8
@@ -1207,78 +1207,78 @@ second=$ff93   ; jmp $edb9 Send secondary address after listen
            ;       lda #15
            ;       ora #60
            ;       jsr second
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - The accumulator designates the address number.
 ;-----------------------------------------------------------------------------
 setlfs=$ffba   ; jmp $fe00 Set up a logical file
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - setlfs stands for set logical address, file address, and 
            ;   secondary address. 
            ; - After setlfs is called, open may be called.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A, X, Y
            ; Output.: –
            ; Used registers: A, X, Y
            ; Stack used : 2
            ; Register affected : None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Set logical file #1, device #8, secondary address of 15.
            ;       lda #1
            ;       ldx #8
            ;       ldy #15
            ;       jsr setlfs
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - If open is called, the command will be open 1,8,15.
 ;-----------------------------------------------------------------------------
 setmsg=$ff90   ; jmp $fe18 Set kernal message output flag
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - Depending on the accumulator, either error messages, control 
            ;   messages, or neither is printed.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A
            ; Output.: –
            ; Used registers: A
            ; Stack used : 2
            ; Register affected : A
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Turn on control messages.
            ;       lda #$40
            ;       jsr setmsg
            ;       rts
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - A 128 is for error messages; a zero, for turning both off.
 ;-----------------------------------------------------------------------------
 setnam=$ffbd   ; jmp $fdf9 Set up file name
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - In order to access the open, load, or save routines, 
            ; - Setnam must be called first.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A, X, Y
            ; Output.: –
            ; Used registers: A, X, Y
            ; Stack used : None
            ; Register affected : None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Setnam will prepare the disk drive for'file#1'.
            ;       lda #6
@@ -1286,127 +1286,127 @@ setnam=$ffbd   ; jmp $fdf9 Set up file name
            ;       ldy #h,name
            ;       jsr setnam
            ;       name.by 'file#l'
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - Accumulator is file length, x= low byte, and y= high byte.
 ;-----------------------------------------------------------------------------
 settim=$ffdb   ; jmp $f6e4 Set the system clock.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - settim is the opposite of rdtim: it sets the system clock
            ;   instead of reading it.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A, X, Y
            ; Output.: –
            ; Used registers: A, X, Y
            ; Stack used : 2
            ; Register affected : None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Set system clock to 10 minutes=3600 jiffies.
            ;       lda #0
            ;       ldx #l,3600
            ;       ldy #h,3600
            ;       jsr settim
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - This allows very accurate timing for many things.
 ;-----------------------------------------------------------------------------
 settmo=$ffa2   ; jmp $fe21 Set ieee bus card timeout flag
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - settmo is used only with an ieee add-on card to access the 
            ;   serial bus.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A= Timeout value.
            ; Output.: –
            ; Used registers: A
            ; Stack used : 2
            ; Register affected : None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Disable time-outs on serial bus.
            ;       lda #0
            ;       jsr settmo
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - To enable time-outs, set the accumulator to a 128 and call 
            ;   settmo.
 ;-----------------------------------------------------------------------------
 stop=$ffe1     ; jmp ($0328) Check if stop key is pressed.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - Stop will set the z flag of the accumulator if the stop key 
            ;   was pressed.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A
            ; Output.: –
            ; Used registers: A
            ; Stack used : None
            ; Register affected : None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Check for stop key being pressed.
            ;        wait      jsr stop
            ;                  bne wait
            ;                  rts
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - stop must be called if the stop key is to remain functional.
 ;-----------------------------------------------------------------------------
 talk=$ffb4     ; jmp $ed09 Command a device on the serial bus to talk
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - This routine will command a device on the serial bus to 
            ;   send data.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A= Device number.
            ; Output.: –
            ; Used registers: A
            ; Stack used : None
            ; Register affected : A
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: See READST
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Command device #8 to talk.
            ;       lda #8
            ;       jsr talk
            ;       rts
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - The accumulator designates the file number.
 ;-----------------------------------------------------------------------------
 tksa=$ff96     ; jmp $edc7 Send a secondary address to a device commanded to talk
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - tksa is used to send a secondary address for a talk device.
            ; - Function talk must be called first.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: A= Secondary address.
            ; Output.: –
            ; Used registers: A
            ; Stack used : 2
            ; Register affected : None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: TALK
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: See READST
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Signal device #4 to talk with command #7.
            ;       lda #4
@@ -1414,84 +1414,84 @@ tksa=$ff96     ; jmp $edc7 Send a secondary address to a device commanded to tal
            ;       lda #7
            ;       jsr tksa
            ;       rts
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - This example will tell the printer to print in uppercase.
 ;-----------------------------------------------------------------------------
 udtim=$ffea    ; jmp $f69b Update the system clock
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - If you are using your own interrupt system, you can update 
            ;   the system clock by calling udtim.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: -
            ; Output.: –
            ; Used registers: -
            ; Stack used : 2
            ; Register affected : A
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Update the system clock.
            ;       jsr udtim
            ;       rts
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - It is useful to call udtim before calling stop.
 ;-----------------------------------------------------------------------------
 unlsn=$ffae    ; jmp $edfe Send an unlisten command
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - unlsn commands all devices on the serial bus to stop
            ;   receiving data.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: -
            ; Output.: –
            ; Used registers: -
            ; Stack used : None
            ; Register affected : A
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Command the serial bus to unlisten.
            ;       jsr unlsn
            ;       rts
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - The serial bus can now be used for other things.
 ;-----------------------------------------------------------------------------
 untlk=$ffab    ; jmp $edef Send an untalk command
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - All devices previously set to talk will stop sending data.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: –
            ; Output.: –
            ; Used registers: -
            ; Stack used : None
            ; Register affected : A
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: See READST
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Command serial bus to stop sending data.
            ;       jsr untlk
            ;       rts
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - Sending untlk commands all talking devices to get off the 
            ;   serial bus.
 ;-----------------------------------------------------------------------------
 vector=$ff8d   ; jmp $fd1a Read/set I/O vectors.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Description.:
            ; - If the carry bit of the accumulator is set, the start 
            ;   of a list of the current contents of the ram vectors is 
@@ -1499,17 +1499,17 @@ vector=$ff8d   ; jmp $fd1a Read/set I/O vectors.
            ; - If the carry bit is clear, there the user list pointed to by 
            ;   the x and y registers is transferred to the system ram 
            ;   vectors.
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Input..: X, Y (C=0)
            ; Output.: X, Y (C=1)
            ; Used registers: -
            ; Stack used : 2
            ; Register affected : A, X, Y
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Preparation routines: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Error returns: None
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Exemple.:
            ; - Change the input routines to new system.
            ;       sec
@@ -1524,7 +1524,7 @@ vector=$ff8d   ; jmp $fd1a Read/set I/O vectors.
            ;       jsr vector
            ;       rts
            ;       user .de 26
-           ;----------------------------------------------------------------
+                  ;-----------------------------------------------------------
            ; Note.:
            ; - The new input list can start anywhere. user is the location 
            ;   for temporary strings, and 35-36 is the utility pointer 
