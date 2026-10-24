@@ -1091,7 +1091,7 @@ devok       and   #$0f              ; On masque le MSN.
             sta   device            ; On sauvegarde le # de périphérique.
             jsr   getfname          ; On requière un nom de fichier.
             #affichemesg prompt_msg ; Affiche l'invite.
-            jsr   savetofile
+            jsr   savefile          ; Enregistre le fichier.
             jmp   out               ; On sort.
             ;-----------------------------------------------------------------
             ; Action du menu F3B. Décallage d'un bit vers la droite.
@@ -1133,7 +1133,7 @@ devok       and   #$0f              ; On masque le MSN.
             sta   device            ; On sauvegarde le # du périphérique.
             jsr   getfname          ; On récupère le nom du fichier.
             #affichemesg wait_msg   ; On demande d'attendre.
-            jsr   loadfromfile      ; Récupère de la matrice d'un medium.
+            jsr   loadfile          ; Récupère de la matrice d'un medium.
             jsr   scrredraw         ; On redessine l'écran complet.
             jmp   out               ; On sort.
             ;-----------------------------------------------------------------
@@ -1451,7 +1451,7 @@ fromstack   pla                     ; Récupère l'octet de la pile
 ;=============================================================================
 ; Routine qui sauvegarde les bitmaps dans un fichier.
 ;=============================================================================
-savetofile  .block
+savefile    .block
             jsr   pushall           ; Sauvegarde les registres
             lda   #<fname           ; Charge l'adresse 16 bits
             sta   dsk_fnptr         ; ... du pointeur de nom
@@ -1482,7 +1482,7 @@ savetofile  .block
 ;=============================================================================
 ; Routine qui récupère les bitmaps d'un fichier.
 ;=============================================================================
-loadfromfile   .block
+loadfile    .block
             jsr   pushall
             lda   #<fname
             sta   dsk_fnptr

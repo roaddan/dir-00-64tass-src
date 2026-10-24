@@ -17,45 +17,44 @@ version  = "20261021-193200"
             .include    "localcons.asm"
             .enc        "none"
 main        .block
-            jsr   pushreg
-            jsr   scrmaninit
-            #disable
-            jsr   drawcredits
-            ldx   #$03             ; Attend environ 5 secondes.
-waitmore    jsr   delay
-            dex
-            bne   waitmore
-            jsr   sid_tada
-            #printcxy menu_msg
-            jsr   screendis
-            jsr   copycharset
-            jsr   cls
-            jsr   setscrptr
-            jsr   setdfltchar
-            jsr   drawstatic
-            jsr   drawbitmap
-            lda   #$00
-            sta   fkeyset
-            jsr   drawfkeys
-            lda   #$00
-            #affichemesg prompt_msg
-            jsr   kbflushbuff
-            jsr   screenena 
+            jsr   pushreg           ; Sauvegarde les registres.
+            jsr   scrmaninit        ; Initialise l'écran.
+            #disable                ; Inhibe les changements de jeu de carac.
+            jsr   drawcredits       ; Affiche l'écran des credits. 
+            ;ldx   #$00              ; Attend environ 1 secondes.
+waitmore    ;jsr   delay
+            ;dex
+            ;bpl   waitmore
+            jsr   sid_tada          ; Joue le son de bienvenue.
+            jsr   screendis         ; Désactive l'affichage vidéo.
+            jsr   copycharset       ; Copie la matrice de caractères en ram.
+            jsr   cls               ; Efface l'écran
+            jsr   setscrptr         ; Sélectione les pointeurs d'écran
+            jsr   setdfltchar       ; Choisi le caractère de départ.
+            jsr   drawstatic        ; Affiche les elements statiques d'écran.
+            jsr   drawbitmap        ; Affiche les informations du caractère.
+            lda   #$00              ; Choisi le menu 
+            sta   fkeyset           ; ... A au départ.
+            jsr   drawfkeys         ; Affiche le menu.
+            #affichemesg prompt_msg ; Affiche l'invite.
+            jsr   kbflushbuff       ; Vide le tampon du clavier.
+            jsr   screenena         ; Active l'affichage vidéo.
             ;-----------------------------------------------------------------
-            ; Le coeur du programme se déroule dans cette routine
-            jsr   keyaction         
+            ; Le coeur du programme se déroule dans cette routine.
+            jsr   keyaction         ; 
             ;-----------------------------------------------------------------
-            jsr   cls
-            jsr   drawcredits
-            #printcxy any_msg
-printbye    inc   bye_msg
-            #printcxy bye_msg
-            jsr   delay
-            jsr   getin
-            beq   printbye
-            jsr   cls       
-endmain     jsr   popreg
-            jmp   k_warmstart 
+            jsr   scrmaninit        ; Initialise l'écran.            
+            jsr   drawcredits       ; Affiche l'écran des credits. 
+            #printcxy bye_msg       ; Quel clef pour quitter ?
+printbye    inc   any_msg           ; Change la couleur de bye_msg.
+            #printcxy any_msg       ; l'affiche
+            jsr   delay             ; Fais un delai.
+            jsr   getin             ; Regarde si une clef est entrée.
+            beq   printbye          ; pas de clef, on réaffiche.
+            jsr   cls               ; Efface l'écran
+endmain     jsr   popreg            ; Récupère les registres.
+            jsr   kbflushbuff       ; Vide le tampon du clavier.
+            jmp   k_coldstart       ; Basic soft start.
             .bend
 
 ;-----------------------------------------------------------------------------
@@ -97,5 +96,3 @@ endmain     jsr   popreg
             .include    "e-c64-sid-ii.asm"
             .include    "e-c64-sid-notes-ntsc.asm"
 ;-----------------------------------------------------------------------------
-
-
