@@ -350,40 +350,40 @@ vgrey2      =     %00001111
 ;-----------------------------------------------------------------------------
 ; R o u t i n e s   p o u r   l a   c o m m u n i c a t i o n   s é r i e
 ;-----------------------------------------------------------------------------
-;name=$0000    ; do something
-;          ;----------------------------------------------------------------
-;          ; explication
-setprms=$e1d4  ; Set parameters for LOAD, SAVE, and verify
-           ;----------------------------------------------------------------
-           ; This routine is used in common by LOAD, SAVE, an veryfy for
-           ; setting the filename, the logical file, device number, and 
-           ; secondary address, all of witch must be done prior to these 
-           ; operations. 
+;name=$0000       ; Fait quelque chose.
+;                 ;-----------------------------------------------------------
+;                 ; Description:
+setprms=$e1d4     ; Set parameters for LOAD, SAVE, and verify
+                  ;-----------------------------------------------------------
+                  ; This routine is used in common by LOAD, SAVE, an veryfy 
+                  ; for setting the filename, the logical file, device number,
+                  ; and secondary address, all of witch must be done prior to
+                  ; these operations. 
 ;-----------------------------------------------------------------------------
-stalk=$ed09    ; Send Talk command to serial bus.
-           ;----------------------------------------------------------------
-           ; Description:
-           ;  - stalk send's talk command to serial bus.
-           ; Imput :     A= Device number
-           ; Output :    -
-           ; Altered registers : A 
+stalk=$ed09       ; Send Talk command to serial bus.
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ;  - stalk send's talk command to serial bus.
+                  ; Imput :     A= Device number
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-slisten=$ed0c  ; Send LISTEN command to serial bus.
-           ;----------------------------------------------------------------
-           ; Description:
-           ;  - slisten send's LISTEN command to serial bus.
-           ; Imput :     A= Device number
-           ; Output :    -
-           ; Altered registers : A 
+slisten=$ed0c     ; Send LISTEN command to serial bus.
+                  ;-----------------------------------------------------------
+                  ; Description:
+                  ;  - slisten send's LISTEN command to serial bus.
+                  ; Imput :     A= Device number
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
-sflush=$ed40   ; Flush serial bus output cache at memory address $0095, to 
-           ; serial bus.
-           ;----------------------------------------------------------------
-           ; Description:
-           ;  - slisten send's LISTEN command to serial bus.
-           ; Imput :     -
-           ; Output :    -
-           ; Altered registers : A 
+sflush=$ed40      ; Flush serial bus output cache at memory address $0095, to 
+                  ; serial bus.
+                  ;----------------------------------------------------------------
+                  ; Description:
+                  ;  - slisten send's LISTEN command to serial bus.
+                  ; Imput :     -
+                  ; Output :    -
+                  ; Altered registers : A 
 ;-----------------------------------------------------------------------------
 slisten2=$edb9 ; Send LISTEN secondary addressto serial bus.
            ;----------------------------------------------------------------
@@ -450,7 +450,7 @@ sdathigh=$ee97 ; Set DATA OUT to High
            ; Altered registers : A 
 ;-----------------------------------------------------------------------------
 sdatlow=$eea0  ; Set DATA OUT to low
-           ;----------------------------------------------------------------
+            ;----------------------------------------------------------------
            ; Description:                
            ;  - sdatlow set's DATA OUT to low.
            ; Imput :     -
