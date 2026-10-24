@@ -235,10 +235,14 @@ drawkeyval     .block
             lda  currentkey         ; Récupère la dernière clef pesée.
             #locate   13,12
             jsr  putch              ; L'affiche dans le carré.
-            #locate   13,20
+            #locate   12,20
+            pha
+            lda   #'#'
+            jsr   $ffd2
+            pla
             jsr  atodec             ; L'affiche en décimal.
             #print    adec
-            #locate 2,20            ; Affiche la valeur de la clef en binaire
+            #locate 1,20            ; Affiche la valeur de la clef en binaire
             pha                     ; Sauvegarde la clef.
             lda  #'%'               ; Le préfixe de Binaire (%).
             jsr  putch              ;
@@ -1397,7 +1401,7 @@ allsame     .block
             jsr   pushreg           ; Sauvegarde tous les registres.
             #setzpage1  mapaddr     ; Positionne zpage1 ($fc,$fb) sur mapaddr.
             ldy   #$00              ; Index à 0.
-again       sta   (zpage2),y        ; On remplace un octet de la matrice.
+again       sta   (zpage1),y        ; On remplace un octet de la matrice.
             iny                     ; Incremente l'index.
             cpy   #$08              ; Sommes-nous au huitième.
             bne   again             ; Non. on en fait un autre.

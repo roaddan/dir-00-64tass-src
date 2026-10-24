@@ -54,13 +54,13 @@ printbye    inc   any_msg           ; Change la couleur de bye_msg.
             jsr   cls               ; Efface l'écran
 endmain     jsr   popreg            ; Récupère les registres.
             jsr   kbflushbuff       ; Vide le tampon du clavier.
-            jmp   k_coldstart       ; Basic soft start.
+            jmp   k_warmstart       ; Basic soft start.
             .bend
 
 ;-----------------------------------------------------------------------------
-; Including my self written libraries.
+; Inclure mes propres librairies.
 ;-----------------------------------------------------------------------------
-; chargement des variables locales
+; Chargement des variables locales
             .include    "localvars.asm"
 ; Chargement des macros globales 
             .include    "m-c64-utils.asm"
@@ -76,8 +76,8 @@ endmain     jsr   popreg            ; Récupère les registres.
 ; Chargement en RAM des variables des librairies à la suite du programme.
             .include    "e-c64-vars.asm"
 ;-----------------------------------------------------------------------------
-*=$c000
 ; Chargement des librairies à la page $C000.
+            *=$c000
             .include    "l-c64-timer.asm"
             .include    "l-c64-sid.asm"
             .include    "l-c64-vicii.asm"
@@ -89,7 +89,7 @@ endmain     jsr   popreg            ; Récupère les registres.
             .include    "l-cbm-disk.asm"
             .include    "l-c64-std-showregs.asm"
 ;-----------------------------------------------------------------------------
-; Chargement des constantes nécessaires aux librairies et au programmes.
+; Chargement des constantes nécessaires aux librairies.
             .include    "e-c64-kernal.asm"
             .include    "e-c64-vicii.asm"
             .include    "e-c64-basic2.asm"
