@@ -26,42 +26,54 @@ u6510map    =     $01   ; 1   6510 port utilisé comme registre de cartographie
                         ;     bit-1 HIRAM sélectionne ROM ou RAM à $e000
                         ;           1=Kernal ROM, 0=RAM          
                         ;     bit-2 CHARGEN signal
-                        ;           1=Device I/O, 0=CharRom          
+                        ;           1=Périphérique I/O, 0=CharRom          
                         ;     bit-3 Sortie ligne (DATA Out)          
-                        ;     bit-4 Détection de cassette
-                        ;           Reads button 0=Pressed, 1=Released          
+                        ;     bit-4 Détection de bouton de cassette
+                        ;           0=Appuyé, 1=Relaché          
                         ;     bit-5 Commande du moteur de la cassette
-                        ;           1=Motor on, 0=Motor off
-                        ;     bit-6 Unused.
-                        ;     bit-7 Unused.
-unused2     =     $02   ; 2       Unused.                
-adray1      =     $03   ; 3-4     Vector to routine to convert a number ...
-                        ;         ... from floating pointto signed integer.                                            
-adray2      =     $05   ; 5-6     Vector to routine to convert a number ...
-                        ;         ... from integer to floating point.
-b_charac    =     $07   ; 7       Search character for scanning ...
-                        ;         ... BASIC text input.
-b_endchr    =     $08   ; 8       Search character for scanning ... 
-                        ;         ... BASIC statement terminator or quote.
-b_trmpos    =     $09   ; 9       Cursor column position before the ...
-                        ;         ... last TAB or SPC.
-verck       =     $0a   ; 10      Flag: 0=Load or 1=Check
-b_count     =     $0b   ; 11      Index into the Text Entrées Buffer ... 
-                        ;         ... /Number of Array Subscripts.
-dimflg      =     $0c   ; 12      Flags for routine that locate or build array.
-valtyp      =     $0d   ; 13 Flag: Type of data ($ff=string or $00=numeric)
-intflg      =     $0e   ; 14 Numeric data Type ($80=Integer or $00=Float)
-garbfl      =     $0f   ; 15 Flag for list, Garbage collection, ...
-                        ;    ... and program tokenization.
-subflg      =     $10   ; 16 Flag: Subscript reference to an array or ...
-                        ;    ... a User-Defined function call (FN).
-inpflg      =     $11   ; 17 Flag: Is data input to GET, READ or INPUT.
-                        ;          ($98=READ, $40=GET, $00=INPUT)                                                                      
-tansgn      =     $12   ; 18 Flag: Sign of result of TAN or SIN.
-channl      =     $13   ; 19 Current i/o channel # (CMD logical file).
-linnum      =     $14   ; 20-21 Integer line number value.
-temppt      =     $16   ; 22      Ptr to next space in temp. string stack.
-lastpt      =     $17   ; 23-24 Ptr to last string in temp. string stack.
+                        ;           1=Moteur en marche, 0=Moteur arrêté.
+                        ;     bit-6 Non utilisée.
+                        ;     bit-7 Non utilisée.
+unused2     =     $02   ; 2   Non utilisée.                
+adray1      =     $03   ; 3-4 Routine permettant de convertir un nombre en
+                        ;     ... virgule flottante en un entier signé.                                            
+adray2      =     $05   ; 5-6 Routine permettant de convertir un nombre 
+                        ;     ... entier en nombre à virgule flottante.
+b_charac    =     $07   ; 7   Recherche de caractère pour l'analyse d'une
+                        ;     ...  saisie de texte en BASIC.
+b_endchr    =     $08   ; 8   Recherche de caractère pour l'analyse du 
+                        ;     ... terminateur ou du guillemet d'une 
+                        ;     ... instruction BASIC.
+b_trmpos    =     $09   ; 9   Position de colonne du curseur avant la dernière
+                        ;     ... tabulation ou le dernier espace.
+verck       =     $0a   ; 10  Drapeau: 0 = Charger ou 1 = Vérifier
+b_count     =     $0b   ; 11  Index dans le tampon de texte / Nombre d'indices
+                        ;     ... de tableau.
+dimflg      =     $0c   ; 12  Indicateurs pour une routine qui localise ou
+                        ;     ... construit un tableau.
+valtyp      =     $0d   ; 13  Drapeau: Type de donnée ($ff = chaîne ou
+                        ;     ... $00 = numérique)
+intflg      =     $0e   ; 14  Type de donnée numérique 
+                        ;     ... ($80= entier ou $00= nombre point flottant)
+garbfl      =     $0f   ; 15  Marquage pour les listes, ramasse-miettes 
+                        ;     ... (garbage collection) et tokenisation de 
+                        ;     ... programmes.
+subflg      =     $10   ; 16  Drapeau: Référence indicée à un tableau ou
+                        ;     ... appel à une fonction définie par 
+                        ;     ... l'utilisateur (FN).
+inpflg      =     $11   ; 17  Drapeau: Données fournies à GET, READ ou INPUT.
+                        ;     ... (98$=LECTURE, 40$=OBTENTION, 00$=ENTRÉE)                                                                     
+tansgn      =     $12   ; 18  Drapeau: Signe du résultat de TAN ou SIN.
+channl      =     $13   ; 19  Numéro du canal d’E/S courant 
+                        ;     ... (fichier logique CMD).
+linnum      =     $14   ; 20-21 Nombre entièr correspondant à un # de ligne.
+temppt      =     $16   ; 22  Pointeur vers l'emplacement suivant dans la pile
+                        ;     ... de chaînes temporaires.
+lastpt      =     $17   ; 23-24 Pointeur vers la dernière chaîne dans la pile
+                        ;       ... de chaînes temporaires.
+; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+; = = = = = = = =   T R A D U I R E  E N  F R A N Ç A I S   = = = = = = = = =                       
+; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 txttab      =     $2b   ; 43-44 Ptr to start of BASIC Program text.
 vartab      =     $2d   ; 45-46 Ptr to start of BASIC Variable area.
 arytab      =     $2f   ; 47-48 Ptr to start of BASIC Array area.
