@@ -1,12 +1,12 @@
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: e-c64-kernal.asm
 ; Cernière m.à j. : 20261025-001445
 ; Inspiration ....: 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; c64_map.asm - Carthographie memoire et declaration de constantes pour les
 ; commodores 64 et 64c
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou sans 64tass 
 ; utilisez la syntaxes ...
 ;
@@ -14,205 +14,208 @@
 ;
 ; ... en prenant soin de placer le fichier dans le meme disque ou répertoire 
 ; que votre programme.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ;* macro sur les elements importants *
-;-----------------------------------------------------------------------------
-u6510ddr    =     $00   ; 0   6510 Données de direction du port 
-                        ; ... (défaut : %xx101111), (0=input, 1=output)
-u6510map    =     $01   ; 1   6510 port utilisé comme registre de cartographie
-                        ; ... mémoire.
-                        ;     bit-0 LORAM sélectionne ROM ou RAM à $a000
-                        ;           1=Basic ROM, 0=RAM          
-                        ;     bit-1 HIRAM sélectionne ROM ou RAM à $e000
-                        ;           1=Kernal ROM, 0=RAM          
-                        ;     bit-2 CHARGEN signal
-                        ;           1=Périphérique I/O, 0=CharRom          
-                        ;     bit-3 Sortie ligne (DATA Out)          
-                        ;     bit-4 Détection de bouton de cassette
-                        ;           0=Appuyé, 1=Relaché          
-                        ;     bit-5 Commande du moteur de la cassette
-                        ;           1=Moteur en marche, 0=Moteur arrêté.
-                        ;     bit-6 Non utilisée.
-                        ;     bit-7 Non utilisée.
-unused2     =     $02   ; 2   Non utilisée.                
-adray1      =     $03   ; 3-4 Routine permettant de convertir un nombre en
-                        ;     ... virgule flottante en un entier signé.                                            
-adray2      =     $05   ; 5-6 Routine permettant de convertir un nombre 
-                        ;     ... entier en nombre à virgule flottante.
-b_charac    =     $07   ; 7   Recherche de caractère pour l'analyse d'une
-                        ;     ...  saisie de texte en BASIC.
-b_endchr    =     $08   ; 8   Recherche de caractère pour l'analyse du 
-                        ;     ... terminateur ou du guillemet d'une 
-                        ;     ... instruction BASIC.
-b_trmpos    =     $09   ; 9   Position de colonne du curseur avant la dernière
-                        ;     ... tabulation ou le dernier espace.
-verck       =     $0a   ; 10  Drapeau: 0 = Charger ou 1 = Vérifier
-b_count     =     $0b   ; 11  Index dans le tampon de texte / Nombre d'indices
-                        ;     ... de tableau.
-dimflg      =     $0c   ; 12  Indicateurs pour une routine qui localise ou
-                        ;     ... construit un tableau.
-valtyp      =     $0d   ; 13  Drapeau: Type de donnée ($ff = chaîne ou
-                        ;     ... $00 = numérique)
-intflg      =     $0e   ; 14  Type de donnée numérique 
-                        ;     ... ($80= entier ou $00= nombre point flottant)
-garbfl      =     $0f   ; 15  Marquage pour les listes, ramasse-miettes 
-                        ;     ... (garbage collection) et tokenisation de 
-                        ;     ... programmes.
-subflg      =     $10   ; 16  Drapeau: Référence indicée à un tableau ou
-                        ;     ... appel à une fonction définie par 
-                        ;     ... l'utilisateur (FN).
-inpflg      =     $11   ; 17  Drapeau: Données fournies à GET, READ ou INPUT.
-                        ;     ... (98$=LECTURE, 40$=OBTENTION, 00$=ENTRÉE)                                                                     
-tansgn      =     $12   ; 18  Drapeau: Signe du résultat de TAN ou SIN.
-channl      =     $13   ; 19  Numéro du canal d’E/S courant 
-                        ;     ... (fichier logique CMD).
-linnum      =     $14   ; 20-21 Nombre entièr correspondant à un # de ligne.
-temppt      =     $16   ; 22  Pointeur vers l'emplacement suivant dans la pile
-                        ;     ... de chaînes temporaires.
-lastpt      =     $17   ; 23-24 Pointeur vers la dernière chaîne dans la pile
-                        ;       ... de chaînes temporaires.
-txttab      =     $2b   ; 43-44 Pointeur vers le début du texte d'un programme BASIC.
-vartab      =     $2d   ; 45-46 Pointeur vers le début de la zone des variables BASIC.
-arytab      =     $2f   ; 47-48 Pointeur vers le début de la zone des tableaux BASIC.
-strebd      =     $31   ; 49-50 Pointeur vers la FIN de la zone des tableaux BASIC (+1) et vers le début de la mémoire vive (RAM) libre.
-fretop      =     $33   ; 51-52 Pointeur vers le bas de la zone de texte.
-frespc      =     $35   ; 53-54 Pointeur temporaire pour une chaîne de caractères.
-memsiz      =     $37   ; 55-56 Pointeur vers l'adresse la plus élevée utilisée par BASIC.
-curlib      =     $39   ; 57-58 Numéro de ligne BASIC actuel.
-oldlin      =     $3b   ; 59-60 Numéro de ligne BASIC précédent.
-oldtxt      =     $3d   ; 61-62 Pointeur vers l'adresse de l'instruction BASIC en cours.
-datlin      =     $3f   ; 63-64 Numéro de ligne DATA actuel.
-datptr      =     $41   ; 65-66 Pointeur vers l'adresse de l'élément de données (DATA) actuel.
-impptr      =     $43   ; 67-68 Pointeur de la source des informations pour GET, READ ou INPUT.
-varnam      =     $45   ; 69-70 Nom de la variable BASIC actuelle.
-varpnt      =     $47   ; 71-72 Pointeur vers la valeur actuelle d'une variable BASIC.
-forpnt      =     $49   ; 73-74 Pointeur temporaire vers la variable d'index utilisée par une boucle FOR.
-opptr       =     $4b   ; 75-76 Déplacement dans la table des opérateurs mathématiques.
-opmask      =     $4d   ; 77    Masque pour opération de comparaison.
+;------------------------------------------------------------------------------
+u6510ddr    =  $00   ; 0      6510 Données de direction du port 
+                     ;        ... (défaut: %xx101111), (0=input, 1=output)
+u6510map    =  $01   ; 1      6510 port utilisé comme registre de
+                     ;        ... cartographie mémoire.
+                     ;        bit-0 LORAM sélectionne ROM ou RAM à $a000
+                     ;           1=Basic ROM, 0=RAM          
+                     ;        bit-1 HIRAM sélectionne ROM ou RAM à $e000
+                     ;           1=Kernal ROM, 0=RAM          
+                     ;        bit-2 CHARGEN signal
+                     ;           1=Périphérique I/O, 0=CharRom          
+                     ;        bit-3 Sortie ligne (DATA Out)          
+                     ;        bit-4 Détection de bouton de cassette
+                     ;           0=Appuyé, 1=Relaché          
+                     ;        bit-5 Commande du moteur de la cassette
+                     ;           1=Moteur en marche, 0=Moteur arrêté.
+                     ;        bit-6 Non utilisée.
+                     ;        bit-7 Non utilisée.
+unused2     =  $02   ; 2      Non utilisée.                
+adray1      =  $03   ; 3-4    Routine permettant de convertir un nombre en
+                     ;        ... virgule flottante en un entier signé.                                            
+adray2      =  $05   ; 5-6    Routine permettant de convertir un nombre 
+                     ;        ... entier en nombre à virgule flottante.
+b_charac    =  $07   ; 7      Recherche de caractère pour l'analyse d'une
+                     ;        ...  saisie de texte en BASIC.
+b_endchr    =  $08   ; 8      Recherche de caractère pour l'analyse du 
+                     ;        ... terminateur ou du guillemet d'une 
+                     ;        ... instruction BASIC.
+b_trmpos    =  $09   ; 9      Position de colonne du curseur avant la
+                     ;        ... dernière tabulation ou le dernier espace.
+verck       =  $0a   ; 10     Drapeau: 0 = Charger ou 1 = Vérifier
+b_count     =  $0b   ; 11     Index dans le tampon de texte / Nombre d'indices
+                     ;        ... de tableau.
+dimflg      =  $0c   ; 12     Indicateurs pour une routine qui localise ou
+                     ;        ... construit un tableau.
+valtyp      =  $0d   ; 13     Drapeau: Type de donnée ($ff = chaîne ou
+                     ;        ... $00 = numérique)
+intflg      =  $0e   ; 14     Type de donnée numérique 
+                     ;        ... ($80= entier ou $00= nombre point flottant)
+garbfl      =  $0f   ; 15     Marquage pour les listes, ramasse-miettes 
+                     ;        ... (garbage collection) et tokenisation de 
+                     ;        ... programmes.
+subflg      =  $10   ; 16     Drapeau: Référence indicée à un tableau ou
+                     ;        ... appel à une fonction définie par 
+                     ;        ... l'utilisateur (FN).
+inpflg      =  $11   ; 17     Drapeau: Données fournies à GET, READ ou INPUT.
+                     ;        ... (98$=LECTURE, 40$=OBTENTION, 00$=ENTRÉE)                                                                     
+tansgn      =  $12   ; 18     Drapeau: Signe du résultat de TAN ou SIN.
+channl      =  $13   ; 19     Numéro du canal d’E/S courant 
+                     ;        ... (fichier logique CMD).
+linnum      =  $14   ; 20-21  Nombre entièr correspondant à un # de ligne.
+temppt      =  $16   ; 22     Pointeur vers l'emplacement suivant dans la pile
+                     ;        ... de chaînes temporaires.
+lastpt      =  $17   ; 23-24  Pointeur vers la dernière chaîne dans la pile
+                     ;       ... de chaînes temporaires.
+txttab      =  $2b   ; 43-44  Pointeur de début du texte d'un programme BASIC.
+vartab      =  $2d   ; 45-46  Pointeur de début de la zone des variables BASIC.
+arytab      =  $2f   ; 47-48  Pointeur de début de la zone des tableaux BASIC.
+strebd      =  $31   ; 49-50  Pointeur+1 de FIN de la zone des tableaux BASIC.
+                     ;        ... et vers le début de la mémoire (RAM) libre.
+fretop      =  $33   ; 51-52  Pointeur de bas de la zone de texte.
+frespc      =  $35   ; 53-54  Pointeur temporaire pour une chaîne de caractères.
+memsiz      =  $37   ; 55-56  Pointeur d'adresse la plus élevée utilisée par 
+                     ;        ... BASIC.
+curlib      =  $39   ; 57-58  Numéro de ligne BASIC actuel.
+oldlin      =  $3b   ; 59-60  Numéro de ligne BASIC précédent.
+oldtxt      =  $3d   ; 61-62  Pointeur vers l'adresse de l'instruction BASIC en cours.
+datlin      =  $3f   ; 63-64  Numéro de ligne DATA actuel.
+datptr      =  $41   ; 65-66  Pointeur vers l'adresse de l'élément de données (DATA) actuel.
+impptr      =  $43   ; 67-68  Pointeur de la source des informations pour GET, READ ou INPUT.
+varnam      =  $45   ; 69-70  Nom de la variable BASIC actuelle.
+varpnt      =  $47   ; 71-72  Pointeur vers la valeur actuelle d'une variable BASIC.
+forpnt      =  $49   ; 73-74  Pointeur temporaire vers la variable d'index utilisée par une boucle FOR.
+opptr       =  $4b   ; 75-76  Déplacement dans la table des opérateurs mathématiques.
+opmask      =  $4d   ; 77     Masque pour opération de comparaison.
 ; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 ; = = = = = = = =   T R A D U I R E  E N  F R A N Ç A I S   = = = = = = = = =                       
 ; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-defpnt      =     $4e   ; 78-79 Pointer to current FN descriptor.
-dscpnt      =     $50   ; 80-82 Tmp ptr to current string descriptor.
-                        ;       80-81 ptr to string
-                        ;       82    string length
-four6       =     $53   ;  83 Constant of garbage collector.
-jmper       =     $54   ;  84-86 Jump to function Instruction.
-fac1        =     $61   ;  97-102 Floating point Accumulator #1
-chrget      =     $73   ;  115
-chrgot      =     $79   ;  121
-kiostatus   =     $90   ;  144 Kernal I/O status word (st) (byte) 
-curfnlen    =     $b7   ;  183 Current filename length (byte)
-cursecadd   =     $b9   ;  185 Current secondary address (byte)
-curdevno    =     $ba   ;  186 Current Numéro de périphérique (byte)
-curfptr     =     $bb   ;  187 Current file pointer (word)
-stal        =     $c1   ;  $c1-$c2 (193-194) ptr to ram address to load/save
-lstx        =     $c5   ;  197 matrix coordinate of last key pressed
-ndx         =     $c6   ;  198 Number of character in keyboard buffer
-zpage1      =     $fb   ;  251 zero page 1 address (word)
-zpage2      =     $fd   ;  253 zero page 2 address (word)
+defpnt      =  $4e   ; 78-79  Pointeur vers le descripteur FN actuel.
+dscpnt      =  $50   ; 80-82  Pointeur temporaire vers le descripteur de 
+                     ;        ... chaîne actuel.
+                     ; 80-81  Pointeur vers une chaîne de caractères.
+                     ; 82     Longueur de chaîne.
+four6       =  $53   ; 83     Constant of garbage collector.
+jmper       =  $54   ; 84-86  Jump to function Instruction.
+fac1        =  $61   ; 97-102 Floating point Accumulator #1
+chrget      =  $73   ; 115
+chrgot      =  $79   ; 121
+kiostatus   =  $90   ; 144   Kernal I/O status word (st) (byte) 
+curfnlen    =  $b7   ; 183   Current filename length (byte)
+cursecadd   =  $b9   ; 185   Current secondary address (byte)
+curdevno    =  $ba   ; 186   Current Numéro de périphérique (byte)
+curfptr     =  $bb   ; 187   Current file pointer (word)
+stal        =  $c1   ; $c1-   $c2 (193-194) ptr to ram address to load/save
+lstx        =  $c5   ; 197    matrix coordinate of last key pressed
+ndx         =  $c6   ; 198    Number of character in keyboard buffer
+zpage1      =  $fb   ; 251    zero page 1 address (word)
+zpage2      =  $fd   ; 253    zero page 2 address (word)
 zeropage    =     zpage1
 zonepage    =     zpage2
-kbbuff      =     $277  ;  631        
-carcol      =     $286  ;  646 basic next chr colscreenram (byte)
-hibase      =     $288  ;  648
+kbbuff      =  $277  ; 631        
+carcol      =  $286  ; 646 basic next chr colscreenram (byte)
+hibase      =  $288  ; 648
 kcarcol     =     carcol
 bascol      =     carcol
-shflag      =     $28d  ; 653
-ieval       =     $30a
-cinv        =     $314  ; $314-$315 brk instruction interupt
-tbuffer     =     $33c  ; 828-1019 Cassette i/o buffer
-ibsout      =     $326  ; 806
-tpbuff      =     $33c  ; $033c-$03fb (828-1019)
-scrnram     =     $400  ; 1024 video character ram
+shflag      =  $28d  ; 653
+ieval       =  $30a
+cinv        =  $314  ; $314-$315 brk instruction interupt
+tbuffer     =  $33c  ; 828-1019 Cassette i/o buffer
+ibsout      =  $326  ; 806
+tpbuff      =  $33c  ; $033c-$03fb (828-1019)
+scrnram     =  $400  ; 1024 video character ram
 scrram0     =     scrnram
-scrram1     =     $500  ; 1280
-scrram2     =     $600  ; 1536
-scrram3     =     $700  ; 1792
-basicsta    =     $801  ; 2049  basic start address
-basicrom    =     $a000 ; 40960 Basic rom base address
-chargen     =     $d000
-sid         =     $d400 ; 54272 sid base address
-colorram    =     $d800 ; 55296 video color ram
-colram      =     $d800 ; 55296 video color ram
+scrram1     =  $500  ; 1280
+scrram2     =  $600  ; 1536
+scrram3     =  $700  ; 1792
+basicsta    =  $801  ; 2049  basic start address
+basicrom    =  $a000 ; 40960 Basic rom base address
+chargen     =  $d000
+sid         =  $d400 ; 54272 sid base address
+colorram    =  $d800 ; 55296 video color ram
+colram      =  $d800 ; 55296 video color ram
 colram0     =     colorram
-colram1     =     $d900 ; 55552
-colram2     =     $da00 ; 55808
-colram3     =     $db00 ; 56064
+colram1     =  $d900 ; 55552
+colram2     =  $da00 ; 55808
+colram3     =  $db00 ; 56064
 
 colorptr  .word     colram0,colram1,colram2,colram3
 ; ------------------------------------------------------------
 ; - C O M P L E X   I N T E R F A C E   A D A P T O R   # 1
 ; ------------------------------------------------------------
-cia1        =     $dc00 ; 56320 cia1 base address
-cia1pra     =     $dc00 ; 56320 cia1 dataport A (keyboard column Write)
-cia1prb     =     $dc01 ; 56321 cia1 dataport B (keyboard row read)
-cia1ddra    =     $dc02 ; 56322 cia1 data direction A
-cia1ddrb    =     $dc03 ; 56323 cia1 data direction B
-cia1tmalo   =     $dc04 ; 56324 cia1 timer A low byte
-cia1tmahi   =     $dc05 ; 56325 cia1 timer A high byte
-cia1tmblo   =     $dc06 ; 56326 cia1 timer B low byte
-cia1tmbhi   =     $dc07 ; 56327 cia1 timer B high byte
-cia1todten  =     $dc08 ; 56328 cia1 time of day clock seconds/10
-cia1todsec  =     $dc09 ; 56329 cia1 time of day clock seconds
-cia1todmin  =     $dc0a ; 56330 cia1 time of day clock minutes
-cia1todhrs  =     $dc0b ; 56331 cia1 time of day clock hours
-cia1sdr     =     $dc0c ; 56332 cia1 serial data port
-cia1icr     =     $dc0d ; 56333 cia1 Interupt control register
-cia1cra     =     $dc0e ; 56334 cia1 control register A
-cia1crb     =     $dc0f ; 56335 cia1 control register B
+cia1        =  $dc00 ; 56320 cia1 base address
+cia1pra     =  $dc00 ; 56320 cia1 dataport A (keyboard column Write)
+cia1prb     =  $dc01 ; 56321 cia1 dataport B (keyboard row read)
+cia1ddra    =  $dc02 ; 56322 cia1 data direction A
+cia1ddrb    =  $dc03 ; 56323 cia1 data direction B
+cia1tmalo   =  $dc04 ; 56324 cia1 timer A low byte
+cia1tmahi   =  $dc05 ; 56325 cia1 timer A high byte
+cia1tmblo   =  $dc06 ; 56326 cia1 timer B low byte
+cia1tmbhi   =  $dc07 ; 56327 cia1 timer B high byte
+cia1todten  =  $dc08 ; 56328 cia1 time of day clock seconds/10
+cia1todsec  =  $dc09 ; 56329 cia1 time of day clock seconds
+cia1todmin  =  $dc0a ; 56330 cia1 time of day clock minutes
+cia1todhrs  =  $dc0b ; 56331 cia1 time of day clock hours
+cia1sdr     =  $dc0c ; 56332 cia1 serial data port
+cia1icr     =  $dc0d ; 56333 cia1 Interupt control register
+cia1cra     =  $dc0e ; 56334 cia1 control register A
+cia1crb     =  $dc0f ; 56335 cia1 control register B
 ; ------------------------------------------------------------
 ; - C O M P L E X   I N T E R F A C E   A D A P T O R   # 2
 ; ------------------------------------------------------------
-cia2        =     $dd00 ; 56576 cia2 base address
-cia2pra     =     $dd00 ; 56576 cia2 dataport A
-cia2prb     =     $dd01 ; 56577 cia2 dataport B
-cia2ddra    =     $dd02 ; 56578 cia2 data direction A
-cia2ddrb    =     $dd03 ; 56579 cia2 data direction B
-cia2tmalo   =     $dd04 ; 56580 cia2 timer A low byte
-cia2tmahi   =     $dd05 ; 56581 cia2 timer A high byte
-cia2tmblo   =     $dd06 ; 56582 cia2 timer B low byte
-cia2tmbhi   =     $dd07 ; 56583 cia2 timer B high byte
-cia2todten  =     $dd08 ; 56584 cia2 time of day clock seconds/10
-cia2todsec  =     $dd09 ; 56585 cia2 time of day clock seconds
-cia2todmin  =     $dd0a ; 56586 cia2 time of day clock minutes
-cia2todhrs  =     $dd0b ; 56587 cia2 time of day clock hours
-cia2sdr     =     $dd0c ; 56588 cia2 serial data port
-cia2icr     =     $dd0d ; 56589 cia2 Interupt control register
-cia2cra     =     $dd0e ; 56590 cia2 control register A
-cia2crb     =     $dd0f ; 56501 cia2 control register B
-kernalrom   =     $e000 ; 57344 start of kernal rom
-irq         =     $ea31 ; 59953 irq entry point
-;-----------------------------------------------------------------------------
+cia2        =  $dd00 ; 56576 cia2 base address
+cia2pra     =  $dd00 ; 56576 cia2 dataport A
+cia2prb     =  $dd01 ; 56577 cia2 dataport B
+cia2ddra    =  $dd02 ; 56578 cia2 data direction A
+cia2ddrb    =  $dd03 ; 56579 cia2 data direction B
+cia2tmalo   =  $dd04 ; 56580 cia2 timer A low byte
+cia2tmahi   =  $dd05 ; 56581 cia2 timer A high byte
+cia2tmblo   =  $dd06 ; 56582 cia2 timer B low byte
+cia2tmbhi   =  $dd07 ; 56583 cia2 timer B high byte
+cia2todten  =  $dd08 ; 56584 cia2 time of day clock seconds/10
+cia2todsec  =  $dd09 ; 56585 cia2 time of day clock seconds
+cia2todmin  =  $dd0a ; 56586 cia2 time of day clock minutes
+cia2todhrs  =  $dd0b ; 56587 cia2 time of day clock hours
+cia2sdr     =  $dd0c ; 56588 cia2 serial data port
+cia2icr     =  $dd0d ; 56589 cia2 Interupt control register
+cia2cra     =  $dd0e ; 56590 cia2 control register A
+cia2crb     =  $dd0f ; 56501 cia2 control register B
+kernalrom   =  $e000 ; 57344 start of kernal rom
+irq         =  $ea31 ; 59953 irq entry point
+;------------------------------------------------------------------------------
 ;* Basic petscii control characters 
 ;  when printed with ?chr$(##) or jsr $ffd2 
 ;  Where keystroke are shown, []+[]=combined 
-;-----------------------------------------------------------------------------
-bstop       =     $03   ;  03 [STOP],     [CTRL]-[C]
-bwhite      =     $05   ;  05 [CTRL]+[2], [CTRL]-[E], Set colour to WHITE
-block       =     $08   ;  08 Disable char map switch with [SHIFT]+[C=]     
-bunlock     =     $09   ;  09 Enabled char map switch with [SHIFT]+[C=]      
-bcarret     =     $0d   ;  11 [RETURN]
-btext       =     $0e   ;  14 CTRL]-[N] select Upper/lowercase charset
-bcrsdn      =     $11   ;  17 [CRS-D]           Cursor DOWN 1 line
-brevcol     =     $12   ;  18 [CTRL]+[9]        REVERSE VIDEO ON
-bhome       =     $13   ;  19 [HOME]            Cursor HOME
-bdelete     =     $14   ;  20 [DELETE]          Delete 1 char
-bred        =     $1c   ;  28 [CTRL]+[3]        Set colour to RED
-bcuright    =     $1d   ;  29 [CRS-R]           Cursor RIGHT
-bgreen      =     $1e   ;  30 [CTRL]+[6]        Set colour to GREEN
-bblue       =     $1f   ;  31 [CTRL]+[7]        Set colour to BLUE
-borange     =     $81   ; 129 [C=]+[1]          Set colour to ORANGE
+;------------------------------------------------------------------------------
+bstop       =  $03   ;  03 [STOP],     [CTRL]-[C]
+bwhite      =  $05   ;  05 [CTRL]+[2], [CTRL]-[E], Set colour to WHITE
+block       =  $08   ;  08 Disable char map switch with [SHIFT]+[C=]     
+bunlock     =  $09   ;  09 Enabled char map switch with [SHIFT]+[C=]      
+bcarret     =  $0d   ;  11 [RETURN]
+btext       =  $0e   ;  14 CTRL]-[N] select Upper/lowercase charset
+bcrsdn      =  $11   ;  17 [CRS-D]           Cursor DOWN 1 line
+brevcol     =  $12   ;  18 [CTRL]+[9]        REVERSE VIDEO ON
+bhome       =  $13   ;  19 [HOME]            Cursor HOME
+bdelete     =  $14   ;  20 [DELETE]          Delete 1 char
+bred        =  $1c   ;  28 [CTRL]+[3]        Set colour to RED
+bcuright    =  $1d   ;  29 [CRS-R]           Cursor RIGHT
+bgreen      =  $1e   ;  30 [CTRL]+[6]        Set colour to GREEN
+bblue       =  $1f   ;  31 [CTRL]+[7]        Set colour to BLUE
+borange     =  $81   ; 129 [C=]+[1]          Set colour to ORANGE
 ; Clefs fonctions
-f1key       =     $85   ; 133 [F1]
-f2key       =     $86   ; 134 [F2]
-f3key       =     $87   ; 135 [F3]
-f4key       =     $88   ; 136 [F4]
-f5key       =     $89   ; 137 [F5]
-f6key       =     $8a   ; 138 [F6]
-f7key       =     $8b   ; 139 [F7]
-f8key       =     $8c   ; 140 [F8]
-dcurskey    =     $11   ; 17
+f1key       =  $85   ; 133 [F1]
+f2key       =  $86   ; 134 [F2]
+f3key       =  $87   ; 135 [F3]
+f4key       =  $88   ; 136 [F4]
+f5key       =  $89   ; 137 [F5]
+f6key       =  $8a   ; 138 [F6]
+f7key       =  $8b   ; 139 [F7]
+f8key       =  $8c   ; 140 [F8]
+dcurskey    =  $11   ; 17
 ucurskey    =     145   
 rcurskey    =     29
 lcurskey    =     157
@@ -223,26 +226,26 @@ clearkey    =     147
 delkey      =     20
 inskey      =     148
 
-bcarret1    =     $8d   ; 141 [SHIFT]+[RETURN]
-bgraph      =     $8e   ; 142 select Uppercase+graphics charset
-bblack      =     $90   ; 144 [CTRL]+[1]        Set colour to BLACK
-bcuup       =     $91   ; 145 [SHIFT]+[CRS-D]   cursor UP 1 line
-brevoff     =     $92   ; 146 [CTRL]+[0]        REVERSE VIDEO OFF
-bclear      =     $93   ; 147 [SHIFT]+[HOME]    CLEAR SCREEN
-binsert     =     $94   ; 148 [SHIFT]+[DELETE]  INSERT a char
-bbrown      =     $95   ; 149 [C=]+[2]          Set colour to BROWN
-bltred      =     $96   ; 150 [C=]+[3]          Set colour to PINK
-bdkgrey     =     $97   ; 151 [C=]+[4]          Set colour to DARK GREY
-bmdgrey     =     $98   ; 152 [C=]+[5]          Set colour to MEDIUM GREY
-bltgreen    =     $99   ; 153 [C=]+[6]          Set colour to LIGHT GREEN
-bltblue     =     $9a   ; 154 [C=]+[7]          Set colour to LIGHT BLUE
-bltgrey     =     $9b   ; 155 [C=]+[8]          Set colour to LIGHT GREY
-bmagenta    =     $9c   ; 156 [CTRL]+[5]        Set colour to MAGENTA
-bculeft     =     $9d   ; 157 [SHIFT]+[CRS-R]   cursor RIGHT 1 pos
-byellow     =     $9e   ; 158 [CTRL]+[8]        Set colour to YELLOW 
-bcyan       =     $9f   ; 159 [CTRL]+[4]        Set colour to CYAN
-bspace1     =     $a0   ; 169                   space
-bspace2     =     $e0   ; 224                   space
+bcarret1    =  $8d   ; 141 [SHIFT]+[RETURN]
+bgraph      =  $8e   ; 142 select Uppercase+graphics charset
+bblack      =  $90   ; 144 [CTRL]+[1]        Set colour to BLACK
+bcuup       =  $91   ; 145 [SHIFT]+[CRS-D]   cursor UP 1 line
+brevoff     =  $92   ; 146 [CTRL]+[0]        REVERSE VIDEO OFF
+bclear      =  $93   ; 147 [SHIFT]+[HOME]    CLEAR SCREEN
+binsert     =  $94   ; 148 [SHIFT]+[DELETE]  INSERT a char
+bbrown      =  $95   ; 149 [C=]+[2]          Set colour to BROWN
+bltred      =  $96   ; 150 [C=]+[3]          Set colour to PINK
+bdkgrey     =  $97   ; 151 [C=]+[4]          Set colour to DARK GREY
+bmdgrey     =  $98   ; 152 [C=]+[5]          Set colour to MEDIUM GREY
+bltgreen    =  $99   ; 153 [C=]+[6]          Set colour to LIGHT GREEN
+bltblue     =  $9a   ; 154 [C=]+[7]          Set colour to LIGHT BLUE
+bltgrey     =  $9b   ; 155 [C=]+[8]          Set colour to LIGHT GREY
+bmagenta    =  $9c   ; 156 [CTRL]+[5]        Set colour to MAGENTA
+bculeft     =  $9d   ; 157 [SHIFT]+[CRS-R]   cursor RIGHT 1 pos
+byellow     =  $9e   ; 158 [CTRL]+[8]        Set colour to YELLOW 
+bcyan       =  $9f   ; 159 [CTRL]+[4]        Set colour to CYAN
+bspace1     =  $a0   ; 169                   space
+bspace2     =  $e0   ; 224                   space
 ;+----+----------------------+-------------------------------------------------------------------------------------------------------+
 ;|    |                      |                                Peek from $dc01 (code in paranthesis):                                 |
 ;|row:| $dc00:               +------------+------------+------------+------------+------------+------------+------------+------------+
@@ -272,43 +275,43 @@ bspace2     =     $e0   ; 224                   space
 ; | 14  | $0  | b00001110 | blue pale  || 15  | $f  | b00001111 | gris pale  |
 ; +-----+-----+-----------+------------++-----+-----+-----------+------------+
 ; constantes de couleurs en français.
-cnoir       =     $0
-cblanc      =     $1
-crouge      =     $2
-cocean      =     $3
-cmauve      =     $4
-cvert       =     $5
-cbleu       =     $6
-cjaune      =     $7
-corange     =     $8
-cbrun       =     $9
-crose       =     $a
-cgrisfonce  =     $b
-cgrismoyen  =     $c
-cgris0      =     $b
-cgris1      =     $c
-cvertpale   =     $d
-cbleupale   =     $e
-cgrispale   =     $f
-cgris3      =     $f
+cnoir       =  $0
+cblanc      =  $1
+crouge      =  $2
+cocean      =  $3
+cmauve      =  $4
+cvert       =  $5
+cbleu       =  $6
+cjaune      =  $7
+corange     =  $8
+cbrun       =  $9
+crose       =  $a
+cgrisfonce  =  $b
+cgrismoyen  =  $c
+cgris0      =  $b
+cgris1      =  $c
+cvertpale   =  $d
+cbleupale   =  $e
+cgrispale   =  $f
+cgris3      =  $f
 ; pour anglosaxons
-cblack      =     $0
-cwhite      =     $1
-cred        =     $2
-ccyan       =     $3
-cpurple     =     $4
-cgreen      =     $5
-cblue       =     $6
-cyellow     =     $7
-;corange     =     $8 ; same as french :-)
-cbrown      =     $9
-clightred   =     $a
-cdarkgray   =     $b
-cmidgray    =     $c
-clightgreen =     $d
-clightblue  =     $e
-clightgray  =     $f
-;-----------------------------------------------------------------------------
+cblack      =  $0
+cwhite      =  $1
+cred        =  $2
+ccyan       =  $3
+cpurple     =  $4
+cgreen      =  $5
+cblue       =  $6
+cyellow     =  $7
+;corange     =  $8 ; same as french :-)
+cbrown      =  $9
+clightred   =  $a
+cdarkgray   =  $b
+cmidgray    =  $c
+clightgreen =  $d
+clightblue  =  $e
+clightgray  =  $f
+;------------------------------------------------------------------------------
 ;* vic code couleur en francais *
 ; couleur %xxxx0000
 ;              |||+-> bit 0   : Inverse tous les autres bits
@@ -318,7 +321,7 @@ clightgray  =     $f
 ;     0010=rouge, 0010=Cyan,  1010=rose  , 1011=gris      
 ;     0100=vert,  0101=mauve, 1100=gris1 , 1101=vert2           
 ;     0110=vleu,  0111=jaune, 1110=bleu1 , 1111=gris2           
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 vnoir       =     %00000000
 vblack      =     %00000000
 vblanc      =     %00000001
@@ -353,9 +356,9 @@ vblue1      =     %00001110
 vgris2      =     %00001111
 vgray2      =     %00001111
 vgrey2      =     %00001111
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; R o u t i n e s   p o u r   l a   c o m m u n i c a t i o n   s é r i e
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ;name=$0000       ; Fait quelque chose.
 ;                 ;-----------------------------------------------------------
 ;                 ; Description:
@@ -366,7 +369,7 @@ setprms=$e1d4     ; Définir les paramètres pour le LOAD, la SAVE et VERIFY.
                   ; logique, le numéro de périphérique et l'adresse 
                   ; secondaire ; toutes ces opérations doivent être 
                   ; effectuées préalablement à l'exécution de ces commandes. 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 stalk=$ed09       ; Envoyer la commande « Talk » sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
@@ -375,7 +378,7 @@ stalk=$ed09       ; Envoyer la commande « Talk » sur le bus série.
                   ; Entrée :  Acc =  Numéro de périphérique
                   ; Sortie :  -
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 slisten=$ed0c     ; Envoyer la commande LISTEN sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
@@ -383,7 +386,7 @@ slisten=$ed0c     ; Envoyer la commande LISTEN sur le bus série.
                   ; Entrée :     Acc =  Numéro de périphérique
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sflush=$ed40      ; Vider le cache de sortie du bus série, situé à l'adresse
                   ; mémoire $0095, vers le bus série.
                   ;-----------------------------------------------------------
@@ -393,7 +396,7 @@ sflush=$ed40      ; Vider le cache de sortie du bus série, situé à l'adresse
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 slisten2=$edb9    ; Envoyer l'adresse secondaire LISTEN sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
@@ -401,7 +404,7 @@ slisten2=$edb9    ; Envoyer l'adresse secondaire LISTEN sur le bus série.
                   ; Entrée : Acc = Adresse secondaire
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 stalk2=$edb9      ; Envoyer l'adresse secondaire TALK sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
@@ -409,7 +412,7 @@ stalk2=$edb9      ; Envoyer l'adresse secondaire TALK sur le bus série.
                   ; Entrée : Acc = Adresse secondaire
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sbout=$eddd       ; Write byte to serial bus.
                   ;-----------------------------------------------------------
                   ; Description:
@@ -417,7 +420,7 @@ sbout=$eddd       ; Write byte to serial bus.
                   ; Entrée : Acc = Adresse secondaire
                   ; Sortie : Nil
                   ; Registres modifiés : - 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sutalk=$edef      ; Send UNTalk command to serial bus.
                   ;-----------------------------------------------------------
                   ; Description:
@@ -425,7 +428,7 @@ sutalk=$edef      ; Send UNTalk command to serial bus.
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sulisten=$edfe    ; Send UNLISTEN command to serial bus.
                   ;-----------------------------------------------------------
                   ; Description:
@@ -433,7 +436,7 @@ sulisten=$edfe    ; Send UNLISTEN command to serial bus.
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sclkhigh=$ee85    ; Set CLOCK OUT to High
                   ;-----------------------------------------------------------
                   ; Description:
@@ -441,7 +444,7 @@ sclkhigh=$ee85    ; Set CLOCK OUT to High
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sclklow=$ee8e     ; Set CLOCK OUT to low
                   ;-----------------------------------------------------------
                   ; Description:                
@@ -449,7 +452,7 @@ sclklow=$ee8e     ; Set CLOCK OUT to low
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sdathigh=$ee97    ; Set DATA OUT to High
                   ;-----------------------------------------------------------
                   ; Description:
@@ -457,7 +460,7 @@ sdathigh=$ee97    ; Set DATA OUT to High
                   ; Entrée : Nils
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sdatlow=$eea0     ; Set DATA OUT to low
                   ;-----------------------------------------------------------
                   ; Description:                
@@ -465,7 +468,7 @@ sdatlow=$eea0     ; Set DATA OUT to low
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sclkdtAcc = $eea9     ; Read CLOCK IN and DATA IN.
                   ;-----------------------------------------------------------
                   ; Description:                
@@ -475,7 +478,7 @@ sclkdtAcc = $eea9     ; Read CLOCK IN and DATA IN.
                   ;             (N)egative= CLOCK IN; 
                   ;             Acc =  CLOCK IN (in bit #7)
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sbread=$f1ad      ; Read one byte from serial port.
                   ;-----------------------------------------------------------
                   ; Description:                
@@ -483,55 +486,55 @@ sbread=$f1ad      ; Read one byte from serial port.
                   ; Imput: Nil
                   ; Sortie:    A Byte Read. (Read $0d, Return, if dev stat <> 0.)
                   ; Registres modifiés : Acc 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sstdin=$F237      ; Define serial bus as standard input; do not send TALK 
                   ; secondary address if secondary address bit #7= 1.
                   ;-----------------------------------------------------------
                   ; Entrées: Acc =  Numéro de périphérique.
                   ; Sortie: –
                   ; Registers utilisés...: A, X.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sstdout=$F279     ; Define serial bus as standard output; do not send LISTEN 
                   ; secondary address if secondary address bit #7= 1.
                   ;-----------------------------------------------------------
                   ; Entrées: Acc =  Numéro de périphérique.
                   ; Sortie: –
                   ; Registers utilisés...: A, X.                
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sfopen=$F3D5      ; Open file on serial bus; do not send file name if secondary 
                   ; address bit #7= 1 or file name length= 0.
                   ;-----------------------------------------------------------
                   ; Entrées: –
                   ; Sortie: –
                   ; Registers utilisés...: A, Y.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sutclose=$F528    ; Send UNTALK and CLOSE command to serial bus.
                   ;-----------------------------------------------------------
                   ; Entrées: –
                   ; Sortie: –
                   ; Registers utilisés...: A.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sulclose=$F63F    ; Send UNLISTEN and CLOSE command to serial bus.
                   ;-----------------------------------------------------------
                   ; Entrées: –
                   ; Sortie: –
                   ; Registers utilisés...: A.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 sfclose=$F642     ; Close file on serial bus; do not send CLOSE secondary address 
                   ; if secondary address bit #7= 1.
                   ;-----------------------------------------------------------
                   ; Entrées: –
                   ; Sortie: –
                   ; Registers utilisés...: –
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 stimeout=$FE21 ; Unknown. (Set serial bus timeout.)
                   ;-----------------------------------------------------------
                   ; Entrées: Acc =  Timeout value.
                   ; Sortie: –
                   ; Registers utilisés...: –
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; r o u t i n e s   p r é s e n t e s   d a n s   l e   k e r n a l
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 acptr=$ffa5       ; jmp $ee13 Recoit un caractere provenant du port serie
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -556,7 +559,7 @@ acptr=$ffa5       ; jmp $ee13 Recoit un caractere provenant du port serie
                   ; Note.:
                   ; - Cet exemple ne montre que le rÃ©sultat final.
                   ; - Effectuez d'abord lâ€™appel de talk et tksa.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 chkin=$ffc6       ; jmp ($031e) Define an input channel. 
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -580,7 +583,7 @@ chkin=$ffc6       ; jmp ($031e) Define an input channel.
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The x register designates which file #.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 chkout=$ffc9      ; jmp ($0320) Define an output channel.
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -604,7 +607,7 @@ chkout=$ffc9      ; jmp ($0320) Define an output channel.
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The x register designates which file #.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 chrin=$ffcf       ; jmp ($0324) Get a character from the input channel
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -633,7 +636,7 @@ chrin=$ffcf       ; jmp ($0324) Get a character from the input channel
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - This example is like an input statement. try running it.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 chrout=$ffd2      ; jmp ($0326) Sortie a character
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -661,7 +664,7 @@ chrout=$ffd2      ; jmp ($0326) Sortie a character
                   ; Note.:
                   ; - The letter a is printed to the screen. 
                   ; - Call open first for the printer.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 cint=$ff81        ; jsr $e518 Initialize the screen editor and vic-ii chip
                   ;-----------------------------------------------------------
                   ; Description:
@@ -675,7 +678,7 @@ cint=$ff81        ; jsr $e518 Initialize the screen editor and vic-ii chip
                   ;-----------------------------------------------------------
                   ; Note:
                   ; - Basically, just like pressing the stop and restore keys.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ciout=$ffa8       ; jmp $eddd Transmit a byte over the serial bus
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -701,7 +704,7 @@ ciout=$ffa8       ; jmp $eddd Transmit a byte over the serial bus
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The accumulator is used to transfer the data.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 clall=$ffe7       ; jmp ($032c) Close all open files
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -725,7 +728,7 @@ clall=$ffe7       ; jmp ($032c) Close all open files
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The clrchn routine is called automatically.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 close=$ffc3       ; jmp ($031c) Close a logical file
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -749,7 +752,7 @@ close=$ffc3       ; jmp ($031c) Close a logical file
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The accumulator designates the file #.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 clrchn=$ffcc      ; jmp ($0322) - Clear all i/o channels.
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -773,7 +776,7 @@ clrchn=$ffcc      ; jmp ($0322) - Clear all i/o channels.
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The accumulator and the x register are altered.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 getin=$ffe4       ; jmp ($032a) Get a character.
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -798,7 +801,7 @@ getin=$ffe4       ; jmp ($032a) Get a character.
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - If the serial bus is used, then all registers are altered.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 iobase=$fff3      ; jmp $e500 Define i/o memory page
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -828,7 +831,7 @@ iobase=$fff3      ; jmp $e500 Define i/o memory page
                   ; Note.:
                   ; - Point is a zero-page address used to access the ddr 
                   ;   indirectly.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ioinit=$ff84      ; ($fda3) Initialize i/o devices.
                   ;-----------------------------------------------------------
                   ; Description:
@@ -842,7 +845,7 @@ ioinit=$ff84      ; ($fda3) Initialize i/o devices.
                   ;-----------------------------------------------------------
                   ; Note:
                   ; - All registers are altered.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 listen=$ffb1      ; jmp ($ed0c) Command a device on the serial bus to listen.
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -866,7 +869,7 @@ listen=$ffb1      ; jmp ($ed0c) Command a device on the serial bus to listen.
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The accumulator designates the device #.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 load=$ffd5        ; jmp $f4e9 Load device to RAM.
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -904,7 +907,7 @@ load=$ffd5        ; jmp $f4e9 Load device to RAM.
                   ; - Program 'file' will be loaded into memory starting at 8192 
                   ;   decimal, x being the low byte and y being the high byte for 
                   ;   the load.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 membot=$ff9c      ; jmp $fe34 Get/set bottom of memory.
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -934,7 +937,7 @@ membot=$ff9c      ; jmp $fe34 Get/set bottom of memory.
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The accumulator is left alone.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 memtop=$ff99      ; jmp $fe25 Get/Set top of ram
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -960,7 +963,7 @@ memtop=$ff99      ; jmp $fe25 Get/Set top of ram
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The accumulator is left alone.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 open=$ffc0        ; jmp ($031a) Open a logical file
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -993,7 +996,7 @@ open=$ffc0        ; jmp ($031a) Open a logical file
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - Opens the current name file with the current lfs.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 plot=$fff0        ; jmp $e50a Set or retrieve cursor location x=column, y=line
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1021,7 +1024,7 @@ plot=$fff0        ; jmp $e50a Set or retrieve cursor location x=column, y=line
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The cursor is now in the middle of the screen.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ramtas=$ff87      ; ($fd50) Initialise ram, tape buffer and screen.
                   ;-----------------------------------------------------------
                   ; Description:
@@ -1036,7 +1039,7 @@ ramtas=$ff87      ; ($fd50) Initialise ram, tape buffer and screen.
                   ;-----------------------------------------------------------
                   ; Note:
                   ; - All registers are altered.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 rdtim=$ffde       ; jmp $f6dd Read system clock
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1052,7 +1055,7 @@ rdtim=$ffde       ; jmp $f6dd Read system clock
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The system clock can be translated as hours/minutes/seconds.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 readst=$ffb7      ; jmp $fe07 Read i/o status word
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1078,7 +1081,7 @@ readst=$ffb7      ; jmp $fe07 Read i/o status word
                   ; Note.:
                   ; - In this case, if the accumulator is 16, a read error 
                   ;   occurred.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 restor=$ff8a      ; jmp $fd15 Restore default I/O vectors.
                   ;-----------------------------------------------------------
                   ; Registres d'entrées..: -
@@ -1096,7 +1099,7 @@ restor=$ff8a      ; jmp $fd15 Restore default I/O vectors.
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - All registers are altered.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 save=$ffd8        ; jmp $f5dd Save memory to a device.
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1140,7 +1143,7 @@ save=$ffd8        ; jmp $f5dd Save memory to a device.
                   ; - Program 'file' will be saved onto disk at 8192 
                   ;   decimal, x being the low byte and y being the high byte for 
                   ;   the load.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 scnkey=$ff9f      ; jmp $ea87 Scan the keyboard
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1165,7 +1168,7 @@ scnkey=$ff9f      ; jmp $ea87 Scan the keyboard
                   ;       jsr chrout
                   ;-----------------------------------------------------------
                   ; Note.:
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 screen=$ffed      ; jmp $e505 Return screen format
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1192,7 +1195,7 @@ screen=$ffed      ; jmp $e505 Return screen format
                   ; Note.:
                   ; - screen allows further compatibility between the 64, the 
                   ;   vic-20, and future versions of the 64.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 second=$ff93      ; jmp $edb9 Send secondary address after listen
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1219,7 +1222,7 @@ second=$ff93      ; jmp $edb9 Send secondary address after listen
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The accumulator designates the address number.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 setlfs=$ffba      ; jmp $fe00 Set up a logical file
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1246,7 +1249,7 @@ setlfs=$ffba      ; jmp $fe00 Set up a logical file
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - If open is called, the command will be open 1,8,15.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 setmsg=$ff90      ; jmp $fe18 Set kernal message output flag
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1271,7 +1274,7 @@ setmsg=$ff90      ; jmp $fe18 Set kernal message output flag
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - A 128 is for error messages; a zero, for turning both off.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 setnam=$ffbd      ; jmp $fdf9 Set up file name
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1298,7 +1301,7 @@ setnam=$ffbd      ; jmp $fdf9 Set up file name
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - Accumulator is file length, x= low byte, and y= high byte.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 settim=$ffdb      ; jmp $f6e4 Set the system clock.
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1324,7 +1327,7 @@ settim=$ffdb      ; jmp $f6e4 Set the system clock.
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - This allows very accurate timing for many things.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 settmo=$ffa2      ; jmp $fe21 Set ieee bus card timeout flag
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1349,7 +1352,7 @@ settmo=$ffa2      ; jmp $fe21 Set ieee bus card timeout flag
                   ; Note.:
                   ; - To enable time-outs, set the accumulator to a 128 and call 
                   ;   settmo.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 stop=$ffe1        ; jmp ($0328) Check if stop key is pressed.
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1374,7 +1377,7 @@ stop=$ffe1        ; jmp ($0328) Check if stop key is pressed.
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - stop must be called if the stop key is to remain functional.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 talk=$ffb4        ; jmp $ed09 Command a device on the serial bus to talk
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1399,7 +1402,7 @@ talk=$ffb4        ; jmp $ed09 Command a device on the serial bus to talk
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The accumulator designates the file number.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 tksa = $ff96      ; jmp $edc7 Send a secondary address to a device commanded to talk
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1426,7 +1429,7 @@ tksa = $ff96      ; jmp $edc7 Send a secondary address to a device commanded to 
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - This example will tell the printer to print in uppercase.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 udtim=$ffea       ; jmp $f69b Update the system clock
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1450,7 +1453,7 @@ udtim=$ffea       ; jmp $f69b Update the system clock
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - It is useful to call udtim before calling stop.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 unlsn=$ffae       ; jmp $edfe Send an unlisten command
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1474,7 +1477,7 @@ unlsn=$ffae       ; jmp $edfe Send an unlisten command
                   ;-----------------------------------------------------------
                   ; Note.:
                   ; - The serial bus can now be used for other things.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 untlk=$ffab       ; jmp $edef Send an untalk command
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1498,7 +1501,7 @@ untlk=$ffab       ; jmp $edef Send an untalk command
                   ; Note.:
                   ; - Sending untlk commands all talking devices to get off the 
                   ;   serial bus.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 vector=$ff8d      ; jmp $fd1a Read/set I/O vectors.
                   ;-----------------------------------------------------------
                   ; Description.:
@@ -1538,20 +1541,20 @@ vector=$ff8d      ; jmp $fd1a Read/set I/O vectors.
                   ; - The new input list can start anywhere. user is the location 
                   ;   for temporary strings, and 35-36 is the utility pointer 
                   ;   area.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ;* kernal function vectors *
 ;ayx=input ayx=outputs (c)=1 (c)=0
-;-----------------------------------------------------------------------------
-kd_poly1    =     $e043
-kd_poly2    =     $e059
-kd_rmulc    =     $e08d       ;
-kd_raddc    =     $e092       ;
-kd_rnd      =     $e097
-kd_sys      =     $e12a
-kd_save     =     $e156
-kd_verify   =     $e165
-kd_load     =     $e168
-kd_chrout   =     $f1ca
+;------------------------------------------------------------------------------
+kd_poly1    =  $e043
+kd_poly2    =  $e059
+kd_rmulc    =  $e08d       ;
+kd_raddc    =  $e092       ;
+kd_rnd      =  $e097
+kd_sys      =  $e12a
+kd_save     =  $e156
+kd_verify   =  $e165
+kd_load     =  $e168
+kd_chrout   =  $f1ca
 kcint       =     cint        ;   , init vic + ecran.
 kioinit     =     ioinit      ;   , init i/o dev.
 kramtas     =     ramtas      ;   , test de memoire.
@@ -1591,30 +1594,30 @@ kudtim      =     udtim       ;   , maj sysclock
 kscreen     =     screen      ; yx, get format ecran
 kplot       =     plot        ; yx, (c) get csr pos.
 kiobase     =     iobase      ; yx, def. i/o mem page
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Kernal entry point
-;-----------------------------------------------------------------------------
-k_echostartup     =     $e39a
-k_putch           =     $e716; 52) Print a character.       ;a--;---; Acc =  char
-k_cls             =     $e7a0
-k_cursordown      =     $e87c
-k_scrollup        =     $e8ea
-k_home            =     $e94e
-k_insertline      =     $e965
-k_screlldown      =     $e9c8
-k_devsndlstn      =     $ed0c ; 55) Send 'LISTEN'>IEEE/Serial.    ;a--;---; Acc = dev # 
-k_ieeein          =     $ee13 ; 60) Entrées from IEEE/Serial.     ;---;a--; Acc = Data byte  
-k_devsndutalk     =     $eef6 ; 58) Send 'UNTALK'>IEEE/Serial.    ;---;---;
-k_devsndulstn     =     $ef04 ; 59) Send 'UNLISTEN'>IEEE/Serial.  ;---;---; 
-k_putsysmsg       =     $f12f ; 53) Print system message.         ;--y;---; y=msg offset
-k_cloself         =     $f291 ; 61) Close logical file .          ;a--;---; Acc = file # 
-k_loadsub         =     $f49e ; 63) LOAD subroutine.              ;axy;---; Acc = # start=yyxx
-k_prnsrch         =     $f5af ; 64) Print SEARCHING if imm mode.  ;---;---;
-k_echosearch      =     $f5b3 ; 64b) Skipping test part of 64.    ;---;---; 
-k_prnfnam         =     $f5c1 ; 65) Print filename.               ;---;---;
-k_stop            =     $f6ed ; 62) Check for STOP key.           ;---;---; z=1 pressed
-k_gettaphdblk     =     $f7ea ; 66) Find a tape hdr blk.          ;a--;---; Acc = len 
-                              ;     Prerequisit: Pointer to string in zpage1  
+;------------------------------------------------------------------------------
+k_echostartup     =  $e39a
+k_putch           =  $e716; 52) Print a character.       ;a--;---; Acc =  char
+k_cls             =  $e7a0
+k_cursordown      =  $e87c
+k_scrollup        =  $e8ea
+k_home            =  $e94e
+k_insertline      =  $e965
+k_screlldown      =  $e9c8
+k_devsndlstn      =  $ed0c ; 55) Send 'LISTEN'>IEEE/Serial.    ;a--;---; Acc = dev # 
+k_ieeein          =  $ee13 ; 60) Entrées from IEEE/Serial.     ;---;a--; Acc = Data byte  
+k_devsndutalk     =  $eef6 ; 58) Send 'UNTALK'>IEEE/Serial.    ;---;---;
+k_devsndulstn     =  $ef04 ; 59) Send 'UNLISTEN'>IEEE/Serial.  ;---;---; 
+k_putsysmsg       =  $f12f ; 53) Print system message.         ;--y;---; y=msg offset
+k_cloself         =  $f291 ; 61) Close logical file .          ;a--;---; Acc = file # 
+k_loadsub         =  $f49e ; 63) LOAD subroutine.              ;axy;---; Acc = # start=yyxx
+k_prnsrch         =  $f5af ; 64) Print SEARCHING if imm mode.  ;---;---;
+k_echosearch      =  $f5b3 ; 64b) Skipping test part of 64.    ;---;---; 
+k_prnfnam         =  $f5c1 ; 65) Print filename.               ;---;---;
+k_stop            =  $f6ed ; 62) Check for STOP key.           ;---;---; z=1 pressed
+k_gettaphdblk     =  $f7ea ; 66) Find a tape hdr blk.          ;a--;---; Acc = len 
+                           ;     Prerequisit: Pointer to string in zpage1  
 k_fndtaphdblk     =    $f7ea; 67) Find any tape hdr blk.          ;---;---; 
 k_waittapplay     =    $f817; 68) Press PLAY... (wait)            ;---;---;
 k_rdtape2buff     =    $f841; 69) Read tape to buffer.            ;---;---;
@@ -1630,141 +1633,141 @@ k_warmreset       =    $fe66;     Warm resetstart
 k_warmboot        =    $fe66;     Warm resetstart
 k_warmstart       =    $fe66;     Warm resetstart
 k_devsndaddr2     =    $ff93; 56) Send second address.            ;a--;---; Acc = SAor#$60 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; getin key values
-;-----------------------------------------------------------------------------
-arrowleft         =     $5f
-ctrl_al           =     $06
-escape            =     $5f
-ctrl_escape       =     $06
-pound             =     $a9
-home              =     $13
-clear             =     $93
-uparrow           =     $5e
-pisign            =     $de
-runstop           =     $03
-cursd             =     $11
-cursu             =     $91
-cursr             =     $1d
-cursl             =     $9d
-key_f1            =     $85
-key_f3            =     $86
-key_f5            =     $87
-key_f7            =     $88
-key_f2            =     $89
-key_f4            =     $8a
-key_f6            =     $8b
-key_f8            =     $8c
-enter             =     $0d
-comd_enter        =     $8d
-key_a             =     $41
-key_b             =     $42
-key_c             =     $43
-key_d             =     $44
-key_e             =     $45
-key_f             =     $46
-key_g             =     $47
-key_h             =     $48
-key_i             =     $49
-key_j             =     $4a
-key_k             =     $4b
-key_l             =     $4c
-key_m             =     $4d
-key_n             =     $4e
-key_o             =     $4f
-key_p             =     $50
-key_q             =     $51
-key_r             =     $52
-key_s             =     $53
-key_t             =     $54
-key_u             =     $55
-key_v             =     $56
-key_w             =     $57
-key_x             =     $58
-key_y             =     $59
-key_z             =     $5a
-shift_a           =     $c1
-shift_b           =     $c2
-shift_c           =     $c3
-shift_d           =     $c4
-shift_e           =     $c5
-shift_f           =     $c6
-shift_g           =     $c7
-shift_h           =     $c8
-shift_i           =     $c9
-shift_j           =     $ca
-shift_k           =     $cb
-shift_l           =     $cc
-shift_m           =     $cd
-shift_n           =     $ce
-shift_o           =     $cf
-shift_p           =     $d0
-shift_q           =     $d1
-shift_r           =     $d2
-shift_s           =     $d3
-shift_t           =     $d4
-shift_u           =     $d5
-shift_v           =     $d6
-shift_w           =     $d7
-shift_x           =     $d8
-shift_y           =     $d9
-shift_z           =     $da
-ctrl_a            =     $01
-ctrl_b            =     $02
-ctrl_c            =     $03
-ctrl_d            =     $04
-ctrl_e            =     $05
-ctrl_f            =     $06
-ctrl_g            =     $07
-ctrl_h            =     $08
-ctrl_i            =     $09
-ctrl_j            =     $0a
-ctrl_k            =     $0b
-ctrl_l            =     $0c
-ctrl_m            =     $0d
-key_enter         =     $0d
-ctrl_n            =     $0e
-ctrl_o            =     $0f
-ctrl_p            =     $10
-ctrl_q            =     $11
-ctrl_r            =     $12
-ctrl_s            =     $13
-ctrl_t            =     $14
-ctrl_u            =     $15
-ctrl_v            =     $16
-ctrl_w            =     $17
-ctrl_x            =     $18
-ctrl_y            =     $19
-ctrl_z            =     $1a
-comd_a            =     $b0    
-comd_b            =     $bf    
-comd_c            =     $bc    
-comd_d            =     $ac    
-comd_e            =     $b1    
-comd_f            =     $bb    
-comd_g            =     $a5    
-comd_h            =     $b4    
-comd_i            =     $a2    
-comd_j            =     $b5    
-comd_k            =     $a1    
-comd_l            =     $b6    
-comd_m            =     $a7    
-comd_n            =     $aa    
-comd_o            =     $b9    
-comd_p            =     $af    
-comd_q            =     $ab    
-comd_r            =     $b2    
-comd_s            =     $ae    
-comd_t            =     $a3    
-comd_u            =     $b8    
-comd_v            =     $be    
-comd_w            =     $b3    
-comd_x            =     $bd    
-comd_y            =     $b7    
-comd_z            =     $ad    
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+arrowleft         =  $5f
+ctrl_al           =  $06
+escape            =  $5f
+ctrl_escape       =  $06
+pound             =  $a9
+home              =  $13
+clear             =  $93
+uparrow           =  $5e
+pisign            =  $de
+runstop           =  $03
+cursd             =  $11
+cursu             =  $91
+cursr             =  $1d
+cursl             =  $9d
+key_f1            =  $85
+key_f3            =  $86
+key_f5            =  $87
+key_f7            =  $88
+key_f2            =  $89
+key_f4            =  $8a
+key_f6            =  $8b
+key_f8            =  $8c
+enter             =  $0d
+comd_enter        =  $8d
+key_a             =  $41
+key_b             =  $42
+key_c             =  $43
+key_d             =  $44
+key_e             =  $45
+key_f             =  $46
+key_g             =  $47
+key_h             =  $48
+key_i             =  $49
+key_j             =  $4a
+key_k             =  $4b
+key_l             =  $4c
+key_m             =  $4d
+key_n             =  $4e
+key_o             =  $4f
+key_p             =  $50
+key_q             =  $51
+key_r             =  $52
+key_s             =  $53
+key_t             =  $54
+key_u             =  $55
+key_v             =  $56
+key_w             =  $57
+key_x             =  $58
+key_y             =  $59
+key_z             =  $5a
+shift_a           =  $c1
+shift_b           =  $c2
+shift_c           =  $c3
+shift_d           =  $c4
+shift_e           =  $c5
+shift_f           =  $c6
+shift_g           =  $c7
+shift_h           =  $c8
+shift_i           =  $c9
+shift_j           =  $ca
+shift_k           =  $cb
+shift_l           =  $cc
+shift_m           =  $cd
+shift_n           =  $ce
+shift_o           =  $cf
+shift_p           =  $d0
+shift_q           =  $d1
+shift_r           =  $d2
+shift_s           =  $d3
+shift_t           =  $d4
+shift_u           =  $d5
+shift_v           =  $d6
+shift_w           =  $d7
+shift_x           =  $d8
+shift_y           =  $d9
+shift_z           =  $da
+ctrl_a            =  $01
+ctrl_b            =  $02
+ctrl_c            =  $03
+ctrl_d            =  $04
+ctrl_e            =  $05
+ctrl_f            =  $06
+ctrl_g            =  $07
+ctrl_h            =  $08
+ctrl_i            =  $09
+ctrl_j            =  $0a
+ctrl_k            =  $0b
+ctrl_l            =  $0c
+ctrl_m            =  $0d
+key_enter         =  $0d
+ctrl_n            =  $0e
+ctrl_o            =  $0f
+ctrl_p            =  $10
+ctrl_q            =  $11
+ctrl_r            =  $12
+ctrl_s            =  $13
+ctrl_t            =  $14
+ctrl_u            =  $15
+ctrl_v            =  $16
+ctrl_w            =  $17
+ctrl_x            =  $18
+ctrl_y            =  $19
+ctrl_z            =  $1a
+comd_a            =  $b0    
+comd_b            =  $bf    
+comd_c            =  $bc    
+comd_d            =  $ac    
+comd_e            =  $b1    
+comd_f            =  $bb    
+comd_g            =  $a5    
+comd_h            =  $b4    
+comd_i            =  $a2    
+comd_j            =  $b5    
+comd_k            =  $a1    
+comd_l            =  $b6    
+comd_m            =  $a7    
+comd_n            =  $aa    
+comd_o            =  $b9    
+comd_p            =  $af    
+comd_q            =  $ab    
+comd_r            =  $b2    
+comd_s            =  $ae    
+comd_t            =  $a3    
+comd_u            =  $b8    
+comd_v            =  $be    
+comd_w            =  $b3    
+comd_x            =  $bd    
+comd_y            =  $b7    
+comd_z            =  $ad    
+;------------------------------------------------------------------------------
 ; error codes
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; if an error occurs during a kernal routine, then the carry bit of the 
 ; accumulator is set and the error code is returned in the accumulator.
 ;---------------+---------------------------------------------------------------
@@ -1788,9 +1791,9 @@ kerrf0            =     240   ; top-of-memory change rs-232 buffer allocation.
 ;========================= h e x a - d e c i m a l==============================
 ;0000000000000001111111111111111222222222222222233333333333333334444444444444444
 ;123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; a p p e l   d e   l a   s o u s   r o u t i n e   p r i n c i p a l e
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ;libtart        jsr  main       ; Programme principale doit s'appeler "main"
            ;jsr      k_coldboot
            ;rts
