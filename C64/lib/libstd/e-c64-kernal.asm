@@ -9,6 +9,7 @@
 ;-----------------------------------------------------------------------------
 ; Scripteur...: daniel lafrance, j5w 1w5, canada.
 ; Version.....: 20230328-095101
+l Révision....: 
 ; Inspiration.: isbn 0-87455-082-3
 ;-----------------------------------------------------------------------------
 ; Segmentation principales de la mÃ©moire
@@ -23,19 +24,20 @@
 ;-----------------------------------------------------------------------------
 ;* macro sur les elements importants *
 ;-----------------------------------------------------------------------------
-u6510ddr    =     $00   ; 0   6510 port data dir. reg. (def: %xx101111)
-                        ;     (0=input, 1=output)
-u6510map    =     $01   ; 1   6510 port used as memory map reg.
-                        ;     bit-0 LORAM select ROM or RAM at $a000
-                        ;           1=Basic rom, 0=RAM          
-                        ;     bit-1 HIRAM select ROM or RAM at $e000
-                        ;           1=Kernal rom, 0=RAM          
+u6510ddr    =     $00   ; 0   6510 Données de direction du port 
+                        ; ... (défaut : %xx101111), (0=input, 1=output)
+u6510map    =     $01   ; 1   6510 port utilisé comme registre de cartographie
+                        ; ... mémoire.
+                        ;     bit-0 LORAM sélectionne ROM ou RAM à $a000
+                        ;           1=Basic ROM, 0=RAM          
+                        ;     bit-1 HIRAM sélectionne ROM ou RAM à $e000
+                        ;           1=Kernal ROM, 0=RAM          
                         ;     bit-2 CHARGEN signal
                         ;           1=Device I/O, 0=CharRom          
-                        ;     bit-3 Cassette Data Sortie line          
-                        ;     bit-4 Cassette switch sense
+                        ;     bit-3 Sortie ligne (DATA Out)          
+                        ;     bit-4 Détection de cassette
                         ;           Reads button 0=Pressed, 1=Released          
-                        ;     bit-5 Cassette motor control
+                        ;     bit-5 Commande du moteur de la cassette
                         ;           1=Motor on, 0=Motor off
                         ;     bit-6 Unused.
                         ;     bit-7 Unused.
@@ -98,7 +100,7 @@ chrgot      =     $79   ;  121
 kiostatus   =     $90   ;  144 Kernal I/O status word (st) (byte) 
 curfnlen    =     $b7   ;  183 Current filename length (byte)
 cursecadd   =     $b9   ;  185 Current secondary address (byte)
-curdevno    =     $ba   ;  186 Current device number (byte)
+curdevno    =     $ba   ;  186 Current Numéro de périphérique (byte)
 curfptr     =     $bb   ;  187 Current file pointer (word)
 stal        =     $c1   ;  $c1-$c2 (193-194) ptr to ram address to load/save
 lstx        =     $c5   ;  197 matrix coordinate of last key pressed
@@ -353,139 +355,142 @@ vgrey2      =     %00001111
 ;name=$0000       ; Fait quelque chose.
 ;                 ;-----------------------------------------------------------
 ;                 ; Description:
-setprms=$e1d4     ; Set parameters for LOAD, SAVE, and verify
+setprms=$e1d4     ; Définir les paramètres pour le LOAD, la SAVE et VERIFY.
                   ;-----------------------------------------------------------
-                  ; This routine is used in common by LOAD, SAVE, an veryfy 
-                  ; for setting the filename, the logical file, device number,
-                  ; and secondary address, all of witch must be done prior to
-                  ; these operations. 
+                  ; Cette routine est utilisée en commun par LOAD, SAVE et 
+                  ; VERIFY pour définir le nom de fichier, le fichier 
+                  ; logique, le numéro de périphérique et l'adresse 
+                  ; secondaire ; toutes ces opérations doivent être 
+                  ; effectuées préalablement à l'exécution de ces commandes. 
 ;-----------------------------------------------------------------------------
-stalk=$ed09       ; Send Talk command to serial bus.
+stalk=$ed09       ; Envoyer la commande « Talk » sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
-                  ;  - stalk send's talk command to serial bus.
-                  ; Imput :     A= Device number
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ;  stalk envoie une commande de communication sur le bus 
+                  ;  série.
+                  ; Entrée :  Acc =  Numéro de périphérique
+                  ; Sortie :  -
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-slisten=$ed0c     ; Send LISTEN command to serial bus.
+slisten=$ed0c     ; Envoyer la commande LISTEN sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
-                  ;  - slisten send's LISTEN command to serial bus.
-                  ; Imput :     A= Device number
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ;  slisten envoie la commande LISTEN sur le bus série.
+                  ; Entrée :     Acc =  Numéro de périphérique
+                  ; Sortie : Nil
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sflush=$ed40      ; Flush serial bus output cache at memory address $0095, to 
-                  ; serial bus.
+sflush=$ed40      ; Vider le cache de sortie du bus série, situé à l'adresse
+                  ; mémoire $0095, vers le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
-                  ;  - slisten send's LISTEN command to serial bus.
-                  ; Imput :     -
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ;  Vider le cache de sortie du bus série, situé à l'adresse
+                  ;  mémoire $0095, vers le bus série.
+                  ; Entrée : Nil
+                  ; Sortie : Nil
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-slisten2=$edb9    ; Send LISTEN secondary addressto serial bus.
+slisten2=$edb9    ; Envoyer l'adresse secondaire LISTEN sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
-                  ;  - slisten2 send's LISTEN command to serial bus.
-                  ; Imput :     A= secondary address
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ;  slisten2 envoie la commande LISTEN sur le bus série.
+                  ; Entrée : Acc = Adresse secondaire
+                  ; Sortie : Nil
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-stalk2=$edb9      ; Send TALK secondary addressto serial bus.
+stalk2=$edb9      ; Envoyer l'adresse secondaire TALK sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
-                  ;  - stalk2 send's LISTEN command to serial bus.
-                  ; Imput :     A= secondary address
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ;  stalk2 envoie la commande LISTEN sur le bus série.
+                  ; Entrée : Acc = Adresse secondaire
+                  ; Sortie : Nil
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
 sbout=$eddd       ; Write byte to serial bus.
                   ;-----------------------------------------------------------
                   ; Description:
                   ;  - sbout write byte to serial bus.
-                  ; Imput :     A= secondary address
-                  ; Sortie :    -
-                  ; Altered registers : - 
+                  ; Entrée : Acc = Adresse secondaire
+                  ; Sortie : Nil
+                  ; Registres modifiés : - 
 ;-----------------------------------------------------------------------------
 sutalk=$edef      ; Send UNTalk command to serial bus.
                   ;-----------------------------------------------------------
                   ; Description:
                   ;  - sutalk send's UNtalk command to serial bus.
-                  ; Imput :     -
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ; Entrée : Nil
+                  ; Sortie : Nil
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
 sulisten=$edfe    ; Send UNLISTEN command to serial bus.
                   ;-----------------------------------------------------------
                   ; Description:
                   ;  - slisten send's UNLISTEN command to serial bus.
-                  ; Imput :     -
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ; Entrée : Nil
+                  ; Sortie : Nil
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
 sclkhigh=$ee85    ; Set CLOCK OUT to High
                   ;-----------------------------------------------------------
                   ; Description:
                   ;  - sclkhi set's CLOCK OUT to hight.
-                  ; Imput :     -
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ; Entrée : Nil
+                  ; Sortie : Nil
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
 sclklow=$ee8e     ; Set CLOCK OUT to low
                   ;-----------------------------------------------------------
                   ; Description:                
                   ;  - sclkhi set's CLOCK OUT to low.
-                  ; Imput :     -
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ; Entrée : Nil
+                  ; Sortie : Nil
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
 sdathigh=$ee97    ; Set DATA OUT to High
                   ;-----------------------------------------------------------
                   ; Description:
                   ;  - sdtahigh set's DATA OUT to hight.
-                  ; Imput :     -s
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ; Entrée : Nils
+                  ; Sortie : Nil
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
 sdatlow=$eea0     ; Set DATA OUT to low
                   ;-----------------------------------------------------------
                   ; Description:                
                   ;  - sdatlow set's DATA OUT to low.
-                  ; Imput :     -
-                  ; Sortie :    -
-                  ; Altered registers : A 
+                  ; Entrée : Nil
+                  ; Sortie : Nil
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sclkdta=$eea9     ; Read CLOCK IN and DATA IN.
+sclkdtAcc = $eea9     ; Read CLOCK IN and DATA IN.
                   ;-----------------------------------------------------------
                   ; Description:                
                   ;  - Read CLOCK IN and DATA IN.
-                  ; Imput :     -
+                  ; Entrée : Nil
                   ; Sortie :    (C)arry= DATA IN; 
                   ;             (N)egative= CLOCK IN; 
-                  ;             A= CLOCK IN (in bit #7)
-                  ; Altered registers : A 
+                  ;             Acc =  CLOCK IN (in bit #7)
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
 sbread=$f1ad      ; Read one byte from serial port.
                   ;-----------------------------------------------------------
                   ; Description:                
                   ;  - Read one byte from serial port.
-                  ; Imput:     -
+                  ; Imput: Nil
                   ; Sortie:    A Byte Read. (Read $0d, Return, if dev stat <> 0.)
-                  ; Altered registers : A 
+                  ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
 sstdin=$F237      ; Define serial bus as standard input; do not send TALK 
                   ; secondary address if secondary address bit #7= 1.
                   ;-----------------------------------------------------------
-                  ; Entrées: A= Device number.
+                  ; Entrées: Acc =  Numéro de périphérique.
                   ; Sortie: –
                   ; Registers utilisés...: A, X.
 ;-----------------------------------------------------------------------------
 sstdout=$F279     ; Define serial bus as standard output; do not send LISTEN 
                   ; secondary address if secondary address bit #7= 1.
                   ;-----------------------------------------------------------
-                  ; Entrées: A= Device number.
+                  ; Entrées: Acc =  Numéro de périphérique.
                   ; Sortie: –
                   ; Registers utilisés...: A, X.                
 ;-----------------------------------------------------------------------------
@@ -517,7 +522,7 @@ sfclose=$F642     ; Close file on serial bus; do not send CLOSE secondary addres
 ;-----------------------------------------------------------------------------
 stimeout=$FE21 ; Unknown. (Set serial bus timeout.)
                   ;-----------------------------------------------------------
-                  ; Entrées: A= Timeout value.
+                  ; Entrées: Acc =  Timeout value.
                   ; Sortie: –
                   ; Registers utilisés...: –
 ;-----------------------------------------------------------------------------
@@ -530,7 +535,7 @@ acptr=$ffa5       ; jmp $ee13 Recoit un caractere provenant du port serie
                   ;   port série.
                   ;-----------------------------------------------------------
                   ; Registres d'entrées..: –
-                  ; Registres de sortie..: A= Byte read.
+                  ; Registres de sortie..: Acc =  Byte read.
                   ; Registers utilisés...: A.
                   ; Pile utilisées.......: 13
                   ; Registres modifiés...: A, X
@@ -674,7 +679,7 @@ ciout=$ffa8       ; jmp $eddd Transmit a byte over the serial bus
                   ; - listen and second must be called first. 
                   ; - Call unlsn to finish up neatly.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A= Byte to write.
+                  ; Registres d'entrées..: Acc =  Byte to write.
                   ; Registres de sortie..: –
                   ; Registers utilisés...: A
                   ; Pile utilisées.......: Aucun
@@ -840,7 +845,7 @@ listen=$ffb1      ; jmp ($ed0c) Command a device on the serial bus to listen.
                   ; - listen will command any device on the serial bus to receive 
                   ;   data.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A= Device number.
+                  ; Registres d'entrées..: Acc =  Numéro de périphérique.
                   ; Registres de sortie..: –
                   ; Registers utilisés...: A.
                   ; Pile utilisées.......: Aucun
@@ -1190,7 +1195,7 @@ second=$ff93      ; jmp $edb9 Send secondary address after listen
                   ; - After listen has been called, a secondary address may be 
                   ;   sent.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A= Secondary address.
+                  ; Registres d'entrées..: Acc = Adresse secondaire.
                   ; Registres de sortie..: –
                   ; Registers utilisés...: A
                   ; Pile utilisées.......: Aucun
@@ -1322,7 +1327,7 @@ settmo=$ffa2      ; jmp $fe21 Set ieee bus card timeout flag
                   ; - settmo is used only with an ieee add-on card to access the 
                   ;   serial bus.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A= Timeout value.
+                  ; Registres d'entrées..: Acc =  Timeout value.
                   ; Registres de sortie..: –
                   ; Registers utilisés...: A
                   ; Pile utilisées.......: 2
@@ -1372,7 +1377,7 @@ talk=$ffb4        ; jmp $ed09 Command a device on the serial bus to talk
                   ; - This routine will command a device on the serial bus to 
                   ;   send data.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A= Device number.
+                  ; Registres d'entrées..: Acc =  Numéro de périphérique.
                   ; Registres de sortie..: –
                   ; Registers utilisés...: A
                   ; Pile utilisées.......: Aucun
@@ -1397,7 +1402,7 @@ tksa = $ff96      ; jmp $edc7 Send a secondary address to a device commanded to 
                   ; - tksa is used to send a secondary address for a talk device.
                   ; - Function talk must be called first.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A= Secondary address.
+                  ; Registres d'entrées..: Acc = Adresse secondaire.
                   ; Registres de sortie..: –
                   ; Registers utilisés...: A
                   ; Pile utilisées.......: 2
@@ -1586,32 +1591,32 @@ kiobase     =     iobase      ; yx, def. i/o mem page
 ; Kernal entry point
 ;-----------------------------------------------------------------------------
 k_echostartup     =     $e39a
-k_putch           =     $e716; 52) Print a character.       ;a--;---; a= char
+k_putch           =     $e716; 52) Print a character.       ;a--;---; Acc =  char
 k_cls             =     $e7a0
 k_cursordown      =     $e87c
 k_scrollup        =     $e8ea
 k_home            =     $e94e
 k_insertline      =     $e965
 k_screlldown      =     $e9c8
-k_devsndlstn      =     $ed0c ; 55) Send 'LISTEN'>IEEE/Serial.    ;a--;---; a=dev # 
-k_ieeein          =     $ee13 ; 60) Entrées from IEEE/Serial.     ;---;a--; a=Data byte  
+k_devsndlstn      =     $ed0c ; 55) Send 'LISTEN'>IEEE/Serial.    ;a--;---; Acc = dev # 
+k_ieeein          =     $ee13 ; 60) Entrées from IEEE/Serial.     ;---;a--; Acc = Data byte  
 k_devsndutalk     =     $eef6 ; 58) Send 'UNTALK'>IEEE/Serial.    ;---;---;
 k_devsndulstn     =     $ef04 ; 59) Send 'UNLISTEN'>IEEE/Serial.  ;---;---; 
 k_putsysmsg       =     $f12f ; 53) Print system message.         ;--y;---; y=msg offset
-k_cloself         =     $f291 ; 61) Close logical file .          ;a--;---; a=file # 
-k_loadsub         =     $f49e ; 63) LOAD subroutine.              ;axy;---; a=# start=yyxx
+k_cloself         =     $f291 ; 61) Close logical file .          ;a--;---; Acc = file # 
+k_loadsub         =     $f49e ; 63) LOAD subroutine.              ;axy;---; Acc = # start=yyxx
 k_prnsrch         =     $f5af ; 64) Print SEARCHING if imm mode.  ;---;---;
 k_echosearch      =     $f5b3 ; 64b) Skipping test part of 64.    ;---;---; 
 k_prnfnam         =     $f5c1 ; 65) Print filename.               ;---;---;
 k_stop            =     $f6ed ; 62) Check for STOP key.           ;---;---; z=1 pressed
-k_gettaphdblk     =     $f7ea ; 66) Find a tape hdr blk.          ;a--;---; a=len 
+k_gettaphdblk     =     $f7ea ; 66) Find a tape hdr blk.          ;a--;---; Acc = len 
                               ;     Prerequisit: Pointer to string in zpage1  
 k_fndtaphdblk     =    $f7ea; 67) Find any tape hdr blk.          ;---;---; 
 k_waittapplay     =    $f817; 68) Press PLAY... (wait)            ;---;---;
 k_rdtape2buff     =    $f841; 69) Read tape to buffer.            ;---;---;
 k_readtape        =    $f847; 70) Read tape.                      ;---;---;
 k_wrbuff2tape     =    $f864; 71) write buffer to tape.           ;---;---;
-k_wrtape          =    $f869; 72) write tape.                     ;a--;---; a=ldr len
+k_wrtape          =    $f869; 72) write tape.                     ;a--;---; Acc = ldr len
 k_resettapeio     =    $fb8e; 73) Reset tape I/O.                 ;---;---;
 k_setintvect      =    $fcbd; 74) set interupt vector.            ;---;---;
 k_coldreset       =    $fce2; 75) Power on reset.                 ;---;---;
@@ -1620,7 +1625,7 @@ k_coldboot        =    $fce2; 75) Power on reset.                 ;---;---;
 k_warmreset       =    $fe66;     Warm resetstart
 k_warmboot        =    $fe66;     Warm resetstart
 k_warmstart       =    $fe66;     Warm resetstart
-k_devsndaddr2     =    $ff93; 56) Send second address.            ;a--;---; a=SAor#$60 
+k_devsndaddr2     =    $ff93; 56) Send second address.            ;a--;---; Acc = SAor#$60 
 ;-----------------------------------------------------------------------------
 ; getin key values
 ;-----------------------------------------------------------------------------
@@ -1770,7 +1775,7 @@ kerr05            =     5     ; device not present.
 kerr06            =     6     ; file is not an input file.
 kerr07            =     7     ; file is not an output file.
 kerr08            =     8     ; file name is missing.
-kerr09            =     9     ; illegal device number.
+kerr09            =     9     ; illegal Numéro de périphérique.
 kerrf0            =     240   ; top-of-memory change rs-232 buffer allocation.
 ;---------------+---------------------------------------------------------------
 ;------------------------------ d e c i m a l-----------------------------------
