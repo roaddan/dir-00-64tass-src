@@ -77,15 +77,18 @@ arytab      =  $2f   ; 47-48  Pointeur de début de la zone des tableaux BASIC.
 strebd      =  $31   ; 49-50  Pointeur+1 de FIN de la zone des tableaux BASIC.
                      ;        ... et vers le début de la mémoire (RAM) libre.
 fretop      =  $33   ; 51-52  Pointeur de bas de la zone de texte.
-frespc      =  $35   ; 53-54  Pointeur temporaire pour une chaîne de caractères.
+frespc      =  $35   ; 53-54  Pointeur temporaire pour chaîne de caractères.
 memsiz      =  $37   ; 55-56  Pointeur d'adresse la plus élevée utilisée par 
                      ;        ... BASIC.
 curlib      =  $39   ; 57-58  Numéro de ligne BASIC actuel.
 oldlin      =  $3b   ; 59-60  Numéro de ligne BASIC précédent.
-oldtxt      =  $3d   ; 61-62  Pointeur vers l'adresse de l'instruction BASIC en cours.
+oldtxt      =  $3d   ; 61-62  Pointeur vers l'adresse de l'instruction BASIC 
+                     ;        ... en cours.
 datlin      =  $3f   ; 63-64  Numéro de ligne DATA actuel.
-datptr      =  $41   ; 65-66  Pointeur vers l'adresse de l'élément de données (DATA) actuel.
-impptr      =  $43   ; 67-68  Pointeur de la source des informations pour GET, READ ou INPUT.
+datptr      =  $41   ; 65-66  Pointeur vers l'adresse de l'élément de données
+                     ;        ... (DATA) actuel.
+impptr      =  $43   ; 67-68  Pointeur de la source des informations pour GET,
+                     ;        ... READ ou INPUT.
 varnam      =  $45   ; 69-70  Nom de la variable BASIC actuelle.
 varpnt      =  $47   ; 71-72  Pointeur vers la valeur actuelle d'une variable BASIC.
 forpnt      =  $49   ; 73-74  Pointeur temporaire vers la variable d'index utilisée par une boucle FOR.
@@ -99,17 +102,17 @@ dscpnt      =  $50   ; 80-82  Pointeur temporaire vers le descripteur de
                      ;        ... chaîne actuel.
                      ; 80-81  Pointeur vers une chaîne de caractères.
                      ; 82     Longueur de chaîne.
-four6       =  $53   ; 83     Constant of garbage collector.
-jmper       =  $54   ; 84-86  Jump to function Instruction.
-fac1        =  $61   ; 97-102 Floating point Accumulator #1
+four6       =  $53   ; 83     Constante du ramasseur d'ordures.
+jmper       =  $54   ; 84-86  Passer à l'instruction de fonction.
+fac1        =  $61   ; 97-102 Accumulateur en virgule flottante n° 1
 chrget      =  $73   ; 115
 chrgot      =  $79   ; 121
-kiostatus   =  $90   ; 144   Kernal I/O status word (st) (byte) 
-curfnlen    =  $b7   ; 183   Current filename length (byte)
-cursecadd   =  $b9   ; 185   Current secondary address (byte)
-curdevno    =  $ba   ; 186   Current Numéro de périphérique (byte)
-curfptr     =  $bb   ; 187   Current file pointer (word)
-stal        =  $c1   ; $c1-   $c2 (193-194) ptr to ram address to load/save
+kiostatus   =  $90   ; 144    Mot d'état d'E/S du noyau (st) (octet) 
+curfnlen    =  $b7   ; 183    Current filename length (byte)
+cursecadd   =  $b9   ; 185    Current secondary address (byte)
+curdevno    =  $ba   ; 186    Current Numéro de périphérique (byte)
+curfptr     =  $bb   ; 187    Current file pointer (word)
+stal        =  $c1   ; $c1-$c2 (193-194) ptr to ram address to load/save
 lstx        =  $c5   ; 197    matrix coordinate of last key pressed
 ndx         =  $c6   ; 198    Number of character in keyboard buffer
 zpage1      =  $fb   ; 251    zero page 1 address (word)
