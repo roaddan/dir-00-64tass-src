@@ -1,18 +1,11 @@
 ;-----------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .:
-; Cernière m.à j. : 
+; Nom du fichier .: e-c64-kernal.asm
+; Cernière m.à j. : 20261025-001445
 ; Inspiration ....: 
 ;-----------------------------------------------------------------------------
 ; c64_map.asm - Carthographie memoire et declaration de constantes pour les
 ; commodores 64 et 64c
-;-----------------------------------------------------------------------------
-; Scripteur...: daniel lafrance, j5w 1w5, canada.
-; Version.....: 20230328-095101
-l Révision....: 
-; Inspiration.: isbn 0-87455-082-3
-;-----------------------------------------------------------------------------
-; Segmentation principales de la mÃ©moire
 ;-----------------------------------------------------------------------------
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou sans 64tass 
 ; utilisez la syntaxes ...
