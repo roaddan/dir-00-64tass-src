@@ -71,28 +71,27 @@ temppt      =     $16   ; 22  Pointeur vers l'emplacement suivant dans la pile
                         ;     ... de chaînes temporaires.
 lastpt      =     $17   ; 23-24 Pointeur vers la dernière chaîne dans la pile
                         ;       ... de chaînes temporaires.
+txttab      =     $2b   ; 43-44 Pointeur vers le début du texte d'un programme BASIC.
+vartab      =     $2d   ; 45-46 Pointeur vers le début de la zone des variables BASIC.
+arytab      =     $2f   ; 47-48 Pointeur vers le début de la zone des tableaux BASIC.
+strebd      =     $31   ; 49-50 Pointeur vers la FIN de la zone des tableaux BASIC (+1) et vers le début de la mémoire vive (RAM) libre.
+fretop      =     $33   ; 51-52 Pointeur vers le bas de la zone de texte.
+frespc      =     $35   ; 53-54 Pointeur temporaire pour une chaîne de caractères.
+memsiz      =     $37   ; 55-56 Pointeur vers l'adresse la plus élevée utilisée par BASIC.
+curlib      =     $39   ; 57-58 Numéro de ligne BASIC actuel.
+oldlin      =     $3b   ; 59-60 Numéro de ligne BASIC précédent.
+oldtxt      =     $3d   ; 61-62 Pointeur vers l'adresse de l'instruction BASIC en cours.
+datlin      =     $3f   ; 63-64 Numéro de ligne DATA actuel.
+datptr      =     $41   ; 65-66 Pointeur vers l'adresse de l'élément de données (DATA) actuel.
+impptr      =     $43   ; 67-68 Pointeur de la source des informations pour GET, READ ou INPUT.
+varnam      =     $45   ; 69-70 Nom de la variable BASIC actuelle.
+varpnt      =     $47   ; 71-72 Pointeur vers la valeur actuelle d'une variable BASIC.
+forpnt      =     $49   ; 73-74 Pointeur temporaire vers la variable d'index utilisée par une boucle FOR.
+opptr       =     $4b   ; 75-76 Déplacement dans la table des opérateurs mathématiques.
+opmask      =     $4d   ; 77    Masque pour opération de comparaison.
 ; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 ; = = = = = = = =   T R A D U I R E  E N  F R A N Ç A I S   = = = = = = = = =                       
 ; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-txttab      =     $2b   ; 43-44 Ptr to start of BASIC Program text.
-vartab      =     $2d   ; 45-46 Ptr to start of BASIC Variable area.
-arytab      =     $2f   ; 47-48 Ptr to start of BASIC Array area.
-strebd      =     $31   ; 49-50 Ptr to END of BASIC Array area(+1) ...
-                        ; ... and start of free RAM.
-fretop      =     $33   ; 51-52 Ptr to bottom of string text area.
-frespc      =     $35   ; 53-54 Temp. ptr for string.
-memsiz      =     $37   ; 55-56 Ptr to highest address used by BASIC.
-curlib      =     $39   ; 57-58 Current BASIC line number.
-oldlin      =     $3b   ; 59-60 Previous BASIC line number.
-oldtxt      =     $3d   ; 61-62 Ptr to current BASIC statement address.
-datlin      =     $3f   ; 63-64 Current DATA line number.
-datptr      =     $41   ; 65-66 Current DATA item address ptr.
-impptr      =     $43   ; 67-68 GET, READ or INPUT info. source ptr.
-varnam      =     $45   ; 69-70 Current BASIC variable name.
-varpnt      =     $47   ; 71-72 Ptr to current BASIC variable value.
-forpnt      =     $49   ; 73-74 Temp Ptr to index variable used by FOR.
-opptr       =     $4b   ; 75-76 Math operator table displacement.
-opmask      =     $4d   ; 77 Mask for comparison operation.
 defpnt      =     $4e   ; 78-79 Pointer to current FN descriptor.
 dscpnt      =     $50   ; 80-82 Tmp ptr to current string descriptor.
                         ;       80-81 ptr to string
