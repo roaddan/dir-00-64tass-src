@@ -233,43 +233,45 @@ colorptr    .word    colram0,colram1,colram2,colram3
 ; ------------------------------------------------------------
 ; - C O M P L E X   I N T E R F A C E   A D A P T O R   # 1
 ; ------------------------------------------------------------
-cia1        =  $dc00 ; 56320 cia1 base address
-cia1pra     =  $dc00 ; 56320 cia1 dataport A (keyboard column Write)
-cia1prb     =  $dc01 ; 56321 cia1 dataport B (keyboard row read)
-cia1ddra    =  $dc02 ; 56322 cia1 data direction A
-cia1ddrb    =  $dc03 ; 56323 cia1 data direction B
-cia1tmalo   =  $dc04 ; 56324 cia1 timer A low byte
-cia1tmahi   =  $dc05 ; 56325 cia1 timer A high byte
-cia1tmblo   =  $dc06 ; 56326 cia1 timer B low byte
-cia1tmbhi   =  $dc07 ; 56327 cia1 timer B high byte
-cia1todten  =  $dc08 ; 56328 cia1 time of day clock seconds/10
-cia1todsec  =  $dc09 ; 56329 cia1 time of day clock seconds
-cia1todmin  =  $dc0a ; 56330 cia1 time of day clock minutes
-cia1todhrs  =  $dc0b ; 56331 cia1 time of day clock hours
-cia1sdr     =  $dc0c ; 56332 cia1 serial data port
-cia1icr     =  $dc0d ; 56333 cia1 Interupt control register
-cia1cra     =  $dc0e ; 56334 cia1 control register A
-cia1crb     =  $dc0f ; 56335 cia1 control register B
+CIA1        =  $dc00 ; 56320 Adresse de base du CIA1.
+CIA1pra     =  $dc00 ; 56320 Port données A (écriture colonne du clavier).
+CIA1prb     =  $dc01 ; 56321 Port données B (Lecture ligne du clavier).
+CIA1ddra    =  $dc02 ; 56322 Direction du port A.
+CIA1ddrb    =  $dc03 ; 56323 Direction du port B.
+CIA1tmalo   =  $dc04 ; 56324 LSB du timer A.
+CIA1tmahi   =  $dc05 ; 56325 MSB du timer A.
+CIA1tmblo   =  $dc06 ; 56326 LSB du timer B.
+CIA1tmbhi   =  $dc07 ; 56327 MSB du timer B.
+CIA1todten  =  $dc08 ; 56328 Secondes/10 de l'heure de la journée.
+CIA1todsec  =  $dc09 ; 56329 Secondes de l'heure de la journée.
+CIA1todmin  =  $dc0a ; 56330 Minutes de l'heure de la journée.
+CIA1todhrs  =  $dc0b ; 56331 Heures de l'heure de la journée.
+CIA1sdr     =  $dc0c ; 56332 Port de données série.
+CIA1icr     =  $dc0d ; 56333 Registre de contrôle des interruptions.
+CIA1cra     =  $dc0e ; 56334 Registre de contrôle A.
+CIA1crb     =  $dc0f ; 56335 Registre de contrôle B.
 ; ------------------------------------------------------------
 ; - C O M P L E X   I N T E R F A C E   A D A P T O R   # 2
 ; ------------------------------------------------------------
-cia2        =  $dd00 ; 56576 cia2 base address
-cia2pra     =  $dd00 ; 56576 cia2 dataport A
-cia2prb     =  $dd01 ; 56577 cia2 dataport B
-cia2ddra    =  $dd02 ; 56578 cia2 data direction A
-cia2ddrb    =  $dd03 ; 56579 cia2 data direction B
-cia2tmalo   =  $dd04 ; 56580 cia2 timer A low byte
-cia2tmahi   =  $dd05 ; 56581 cia2 timer A high byte
-cia2tmblo   =  $dd06 ; 56582 cia2 timer B low byte
-cia2tmbhi   =  $dd07 ; 56583 cia2 timer B high byte
-cia2todten  =  $dd08 ; 56584 cia2 time of day clock seconds/10
-cia2todsec  =  $dd09 ; 56585 cia2 time of day clock seconds
-cia2todmin  =  $dd0a ; 56586 cia2 time of day clock minutes
-cia2todhrs  =  $dd0b ; 56587 cia2 time of day clock hours
-cia2sdr     =  $dd0c ; 56588 cia2 serial data port
-cia2icr     =  $dd0d ; 56589 cia2 Interupt control register
-cia2cra     =  $dd0e ; 56590 cia2 control register A
-cia2crb     =  $dd0f ; 56501 cia2 control register B
+cia2        =  $dd00 ; 56576 Adresse de base du CIA2.
+cia2pra     =  $dd00 ; 56576 Port données A.
+cia2prb     =  $dd01 ; 56577 Port données B.
+cia2ddra    =  $dd02 ; 56578 Direction du port A.
+cia2ddrb    =  $dd03 ; 56579 Direction du port B.
+cia2tmalo   =  $dd04 ; 56580 LSB du timer A.
+cia2tmahi   =  $dd05 ; 56581 MSB du timer A.
+cia2tmblo   =  $dd06 ; 56582 LSB du timer B.
+cia2tmbhi   =  $dd07 ; 56583 MSB du timer B.
+cia2todten  =  $dd08 ; 56584 Secondes/10 de l'heure de la journée.
+cia2todsec  =  $dd09 ; 56585 Secondes de l'heure de la journée.
+cia2todmin  =  $dd0a ; 56586 Minutes de l'heure de la journée.
+cia2todhrs  =  $dd0b ; 56587 Heures de l'heure de la journée.
+cia2sdr     =  $dd0c ; 56588 Port de données série.
+cia2icr     =  $dd0d ; 56589 Registre de contrôle des interruptions.
+cia2cra     =  $dd0e ; 56590 Registre de contrôle A.
+cia2crb     =  $dd0f ; 56501 Registre de contrôle A.
+; ------------------------------------------------------------
+; ------------------------------------------------------------
 kernalrom   =  $e000 ; 57344 start of kernal rom
 irq         =  $ea31 ; 59953 irq entry point
 ;------------------------------------------------------------------------------
