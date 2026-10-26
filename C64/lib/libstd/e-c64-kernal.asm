@@ -107,25 +107,73 @@ jmper       =  $54   ; 84-86  Passer à l'instruction de fonction.
 fac1        =  $61   ; 97-102 Accumulateur en virgule flottante n° 1
 chrget      =  $73   ; 115
 chrgot      =  $79   ; 121
-kiostatus   =  $90   ; 144    Mot d'état d'E/S du noyau (st) (octet) 
-curfnlen    =  $b7   ; 183    Current filename length (byte)
-cursecadd   =  $b9   ; 185    Current secondary address (byte)
-curdevno    =  $ba   ; 186    Current Numéro de périphérique (byte)
-curfptr     =  $bb   ; 187    Current file pointer (word)
-stal        =  $c1   ; $c1-$c2 (193-194) ptr to ram address to load/save
-lstx        =  $c5   ; 197    matrix coordinate of last key pressed
-ndx         =  $c6   ; 198    Number of character in keyboard buffer
-zpage1      =  $fb   ; 251    zero page 1 address (word)
-zpage2      =  $fd   ; 253    zero page 2 address (word)
-zeropage    =     zpage1
-zonepage    =     zpage2
-kbbuff      =  $277  ; 631        
-carcol      =  $286  ; 646 basic next chr colscreenram (byte)
-hibase      =  $288  ; 648
-kcarcol     =     carcol
-bascol      =     carcol
-shflag      =  $28d  ; 653
-ieval       =  $30a
+kiostatus   =  $90   ; 144    Mot d'état d'E/S du noyau (st) (octet). 
+curfnlen    =  $b7   ; 183    Longueur actuelle du nom de fichier (octets).
+cursecadd   =  $b9   ; 185    Adresse secondaire actuelle (octet).
+curdevno    =  $ba   ; 186    Numéro de périphérique actuel (byte).
+curfptr     =  $bb   ; 187    Pointeur de fichier actuel (mot).
+stal        =  $c1   ; $c1    Pointeur vers une adresse RAM pour le 
+                     ;        ... chargement/la sauvegarde.
+lstx        =  $c5   ; 197    Coordonnée matricielle de la dernière touche.
+ndx         =  $c6   ; 198    Nombre de caractères dans le tampon clavier.
+zpage1      =  $fb   ; 251    Pointeur 1 de zero page (word).
+zpage2      =  $fd   ; 253    Pointeur 2 de zero page (word).
+zeropage    =  zpage1; 251    Pointeur 1 de zero page (word).
+zonepage    =  zpage2; 253    Pointeur 2 de zero page (word).
+kbbuff      =  $277  ; 631    Tampon du clavier.     
+carcol      =  $286  ; 646    Couleur du prochain caractère affiché par Basic.
+kcarcol     =  carcol; 646    Couleur du prochain caractère affiché par Basic.
+bascol      =  carcol; 646    Couleur du prochain caractère affiché par Basic.
+curscol     =  $287  ; 647    Couleur de caractère sous le curseur. 
+hibase      =  $288  ; 648    Haut de la page de la mémoire écran.
+xmax        =  $289  ; 649    Taille maximale du tampon clavier.
+rptflg      =  $28a  ; 650    Drapeau: Quel clef sera répétée.
+kount       =  $28b  ; 651    Compteur permettant de mesurer le délai entre les
+                     ;        ... répétitions de touches.
+repdelay    =  $28c  ; 652    Compteur servant à mesurer le délai avant le 
+                     ;        ... début de la première répétition de touche.
+shflag      =  $28d  ; 653    Drapeau: Appui sur les touches SHIFT/CTRL/Logo
+lstshf      =  $28e  ; 654    Dernière séquence d’appui sur les touches 
+                     ;        ... SHIFT/CTRL/Logo.
+keylog      =  $28f  ; 655(2) Routine de configuration de la table de vecteurs 
+                     ;        ... vers le clavier.
+mode        =  $291  ; 657    Indicateur: Activer ou désactiver le changement 
+                     ;        ... de jeu de caractères via la touche SHFT/Logo.
+autodn      =  $292  ; 658    Drapeau: Défilement d’écran activé.
+; rs232reg  =  $293  ; 659(5) Registres pseudo-6551 pour RS-232.
+m51crt      =  $293  ; 659    RS-232: Emul. du registre de contrôle du 6551.
+m51cdr      =  $294  ; 660    RS-232: Emul. du registre de commande du 6551.
+m51ajb      =  $295  ; 661(2) RS-232: Synchronisation des bits non normalisée.
+rsstat      =  $297  ; 663    RS-232: Emul. du registre d’état du 6551.
+bitnum      =  $298  ; 664    RS-232: Nombre de bits restant envoyer/recevoir.
+baudof      =  $299  ; 665(2) Temps nécessaire pour envoyer un peu.
+;m51buff     =  $29b  ; 667(4) Indices d'octets du début et de la fin de la 
+;                     ;        ... réception et de la transmission Tampons.
+ridbe       =  $29b  ; 667    RS-232: Index vers la fin du tampon rx.
+ridbs       =  $29c  ; 668    RS-232: Index du début du tampon rx.
+rodbs       =  $29d  ; 669    RS-232: Index du début du tampon tx.
+rodbe       =  $29e  ; 670    RS-232: Index vers la fin du tampon tx.
+irqtmp      =  $29f  ; 671(2) Zone de sauvegarde pour le vecteur IRQ lors des 
+                     ;        ... opérations d'E/S sur cassette.
+enabl       =  $2a1  ; 673    Interruptions RS-232 activées.
+libvars     =  $2a7  ; 679(89)Octets de libre pour l'usager.
+;basvect     =  $300  ; 768(12)     
+ierror      =  $300  ; 768(2) Vecteur vers la routine de gestion des messages 
+                     ;        ... d'erreur de BASIC.
+imain       =  $302  ; 770(2) Vecteur vers la boucle principale du programme 
+                     ;        ... BASIC.
+icrnch      =  $304  ; 772(2) Pointeur vers la routine qui transforme le texte
+                     ;        ... ASCII des mots-clés en jetons.
+iqplop      =  $306  ; 774(2) Vecteur vers la routine qui convertit les jetons
+                     ;        ... d'un programme BASIC en texte ASCII.
+igone       =  $3008 ; 776(2) Vecteur vers la routine qui exécute le jeton
+                     ;        ... suivant du programme BASIC.
+ieval       =  $30a  ; 778(2) Vecteur de la routine qui évalue une expression
+                     ;        ... arithmétique à un seul terme.
+sareg       =  $30c  ; 780    Zone de stockage pour le registre .A.
+sxreg       =  $30d  ; 781    Zone de stockage pour le registre d'index .X.
+syreg       =  $30e  ; 782    Zone de stockage pour le registre d'index .Y.
+spreg       =  $30f  ; 783    Zone de stockage pour le registre .P (État).
 cinv        =  $314  ; $314-$315 brk instruction interupt
 tbuffer     =  $33c  ; 828-1019 Cassette i/o buffer
 ibsout      =  $326  ; 806

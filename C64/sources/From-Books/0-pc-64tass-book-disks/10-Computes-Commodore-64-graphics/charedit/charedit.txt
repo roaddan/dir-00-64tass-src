@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd -i -L charedit.txt -o charedit.prg charedit.asm
-; Sun Oct 25 00:16:05 2026
+; Sun Oct 25 21:05:35 2026
 
 ;Offset	;Hex		;Source
 
@@ -4257,152 +4257,183 @@
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd/e-c64-kernal.asm
 
-=$00			u6510ddr    =     $00   ; 0   6510 Données de direction du port
-=$01			u6510map    =     $01   ; 1   6510 port utilisé comme registre de cartographie
-=$02			unused2     =     $02   ; 2       Unused.
-=$03			adray1      =     $03   ; 3-4     Vector to routine to convert a number ...
-=$05			adray2      =     $05   ; 5-6     Vector to routine to convert a number ...
-=$07			b_charac    =     $07   ; 7       Search character for scanning ...
-=$08			b_endchr    =     $08   ; 8       Search character for scanning ...
-=$09			b_trmpos    =     $09   ; 9       Cursor column position before the ...
-=$0a			verck       =     $0a   ; 10      Flag: 0=Load or 1=Check
-=$0b			b_count     =     $0b   ; 11      Index into the Text Entrées Buffer ...
-=$0c			dimflg      =     $0c   ; 12      Flags for routine that locate or build array.
-=$0d			valtyp      =     $0d   ; 13 Flag: Type of data ($ff=string or $00=numeric)
-=$0e			intflg      =     $0e   ; 14 Numeric data Type ($80=Integer or $00=Float)
-=$0f			garbfl      =     $0f   ; 15 Flag for list, Garbage collection, ...
-=$10			subflg      =     $10   ; 16 Flag: Subscript reference to an array or ...
-=$11			inpflg      =     $11   ; 17 Flag: Is data input to GET, READ or INPUT.
-=$12			tansgn      =     $12   ; 18 Flag: Sign of result of TAN or SIN.
-=$13			channl      =     $13   ; 19 Current i/o channel # (CMD logical file).
-=$14			linnum      =     $14   ; 20-21 Integer line number value.
-=$16			temppt      =     $16   ; 22      Ptr to next space in temp. string stack.
-=$17			lastpt      =     $17   ; 23-24 Ptr to last string in temp. string stack.
-=$2b			txttab      =     $2b   ; 43-44 Ptr to start of BASIC Program text.
-=$2d			vartab      =     $2d   ; 45-46 Ptr to start of BASIC Variable area.
-=$2f			arytab      =     $2f   ; 47-48 Ptr to start of BASIC Array area.
-=$31			strebd      =     $31   ; 49-50 Ptr to END of BASIC Array area(+1) ...
-=$33			fretop      =     $33   ; 51-52 Ptr to bottom of string text area.
-=$35			frespc      =     $35   ; 53-54 Temp. ptr for string.
-=$37			memsiz      =     $37   ; 55-56 Ptr to highest address used by BASIC.
-=$39			curlib      =     $39   ; 57-58 Current BASIC line number.
-=$3b			oldlin      =     $3b   ; 59-60 Previous BASIC line number.
-=$3d			oldtxt      =     $3d   ; 61-62 Ptr to current BASIC statement address.
-=$3f			datlin      =     $3f   ; 63-64 Current DATA line number.
-=$41			datptr      =     $41   ; 65-66 Current DATA item address ptr.
-=$43			impptr      =     $43   ; 67-68 GET, READ or INPUT info. source ptr.
-=$45			varnam      =     $45   ; 69-70 Current BASIC variable name.
-=$47			varpnt      =     $47   ; 71-72 Ptr to current BASIC variable value.
-=$49			forpnt      =     $49   ; 73-74 Temp Ptr to index variable used by FOR.
-=$4b			opptr       =     $4b   ; 75-76 Math operator table displacement.
-=$4d			opmask      =     $4d   ; 77 Mask for comparison operation.
-=$4e			defpnt      =     $4e   ; 78-79 Pointer to current FN descriptor.
-=$50			dscpnt      =     $50   ; 80-82 Tmp ptr to current string descriptor.
-=$53			four6       =     $53   ;  83 Constant of garbage collector.
-=$54			jmper       =     $54   ;  84-86 Jump to function Instruction.
-=$61			fac1        =     $61   ;  97-102 Floating point Accumulator #1
-=$73			chrget      =     $73   ;  115
-=$79			chrgot      =     $79   ;  121
-=$90			kiostatus   =     $90   ;  144 Kernal I/O status word (st) (byte)
-=$b7			curfnlen    =     $b7   ;  183 Current filename length (byte)
-=$b9			cursecadd   =     $b9   ;  185 Current secondary address (byte)
-=$ba			curdevno    =     $ba   ;  186 Current Numéro de périphérique (byte)
-=$bb			curfptr     =     $bb   ;  187 Current file pointer (word)
-=$c1			stal        =     $c1   ;  $c1-$c2 (193-194) ptr to ram address to load/save
-=$c5			lstx        =     $c5   ;  197 matrix coordinate of last key pressed
-=$c6			ndx         =     $c6   ;  198 Number of character in keyboard buffer
-=$fb			zpage1      =     $fb   ;  251 zero page 1 address (word)
-=$fd			zpage2      =     $fd   ;  253 zero page 2 address (word)
-=$fb			zeropage    =     zpage1
-=$fd			zonepage    =     zpage2
-=$277			kbbuff      =     $277  ;  631
-=$286			carcol      =     $286  ;  646 basic next chr colscreenram (byte)
-=$288			hibase      =     $288  ;  648
-=$286			kcarcol     =     carcol
-=$286			bascol      =     carcol
-=$28d			shflag      =     $28d  ; 653
-=$30a			ieval       =     $30a
-=$314			cinv        =     $314  ; $314-$315 brk instruction interupt
-=$33c			tbuffer     =     $33c  ; 828-1019 Cassette i/o buffer
-=$326			ibsout      =     $326  ; 806
-=$33c			tpbuff      =     $33c  ; $033c-$03fb (828-1019)
-=$400			scrnram     =     $400  ; 1024 video character ram
+=$00			u6510ddr    =  $00   ; 0      6510 Données de direction du port
+=$01			u6510map    =  $01   ; 1      6510 port utilisé comme registre de
+=$02			unused2     =  $02   ; 2      Non utilisée.
+=$03			adray1      =  $03   ; 3-4    Routine permettant de convertir un nombre en
+=$05			adray2      =  $05   ; 5-6    Routine permettant de convertir un nombre
+=$07			b_charac    =  $07   ; 7      Recherche de caractère pour l'analyse d'une
+=$08			b_endchr    =  $08   ; 8      Recherche de caractère pour l'analyse du
+=$09			b_trmpos    =  $09   ; 9      Position de colonne du curseur avant la
+=$0a			verck       =  $0a   ; 10     Drapeau: 0 = Charger ou 1 = Vérifier
+=$0b			b_count     =  $0b   ; 11     Index dans le tampon de texte / Nombre d'indices
+=$0c			dimflg      =  $0c   ; 12     Indicateurs pour une routine qui localise ou
+=$0d			valtyp      =  $0d   ; 13     Drapeau: Type de donnée ($ff = chaîne ou
+=$0e			intflg      =  $0e   ; 14     Type de donnée numérique
+=$0f			garbfl      =  $0f   ; 15     Marquage pour les listes, ramasse-miettes
+=$10			subflg      =  $10   ; 16     Drapeau: Référence indicée à un tableau ou
+=$11			inpflg      =  $11   ; 17     Drapeau: Données fournies à GET, READ ou INPUT.
+=$12			tansgn      =  $12   ; 18     Drapeau: Signe du résultat de TAN ou SIN.
+=$13			channl      =  $13   ; 19     Numéro du canal d’E/S courant
+=$14			linnum      =  $14   ; 20-21  Nombre entièr correspondant à un # de ligne.
+=$16			temppt      =  $16   ; 22     Pointeur vers l'emplacement suivant dans la pile
+=$17			lastpt      =  $17   ; 23-24  Pointeur vers la dernière chaîne dans la pile
+=$2b			txttab      =  $2b   ; 43-44  Pointeur de début du texte d'un programme BASIC.
+=$2d			vartab      =  $2d   ; 45-46  Pointeur de début de la zone des variables BASIC.
+=$2f			arytab      =  $2f   ; 47-48  Pointeur de début de la zone des tableaux BASIC.
+=$31			strebd      =  $31   ; 49-50  Pointeur+1 de FIN de la zone des tableaux BASIC.
+=$33			fretop      =  $33   ; 51-52  Pointeur de bas de la zone de texte.
+=$35			frespc      =  $35   ; 53-54  Pointeur temporaire pour chaîne de caractères.
+=$37			memsiz      =  $37   ; 55-56  Pointeur d'adresse la plus élevée utilisée par
+=$39			curlib      =  $39   ; 57-58  Numéro de ligne BASIC actuel.
+=$3b			oldlin      =  $3b   ; 59-60  Numéro de ligne BASIC précédent.
+=$3d			oldtxt      =  $3d   ; 61-62  Pointeur vers l'adresse de l'instruction BASIC
+=$3f			datlin      =  $3f   ; 63-64  Numéro de ligne DATA actuel.
+=$41			datptr      =  $41   ; 65-66  Pointeur vers l'adresse de l'élément de données
+=$43			impptr      =  $43   ; 67-68  Pointeur de la source des informations pour GET,
+=$45			varnam      =  $45   ; 69-70  Nom de la variable BASIC actuelle.
+=$47			varpnt      =  $47   ; 71-72  Pointeur vers la valeur actuelle d'une variable BASIC.
+=$49			forpnt      =  $49   ; 73-74  Pointeur temporaire vers la variable d'index utilisée par une boucle FOR.
+=$4b			opptr       =  $4b   ; 75-76  Déplacement dans la table des opérateurs mathématiques.
+=$4d			opmask      =  $4d   ; 77     Masque pour opération de comparaison.
+=$4e			defpnt      =  $4e   ; 78-79  Pointeur vers le descripteur FN actuel.
+=$50			dscpnt      =  $50   ; 80-82  Pointeur temporaire vers le descripteur de
+=$53			four6       =  $53   ; 83     Constante du ramasseur d'ordures.
+=$54			jmper       =  $54   ; 84-86  Passer à l'instruction de fonction.
+=$61			fac1        =  $61   ; 97-102 Accumulateur en virgule flottante n° 1
+=$73			chrget      =  $73   ; 115
+=$79			chrgot      =  $79   ; 121
+=$90			kiostatus   =  $90   ; 144    Mot d'état d'E/S du noyau (st) (octet).
+=$b7			curfnlen    =  $b7   ; 183    Longueur actuelle du nom de fichier (octets).
+=$b9			cursecadd   =  $b9   ; 185    Adresse secondaire actuelle (octet).
+=$ba			curdevno    =  $ba   ; 186    Numéro de périphérique actuel (byte).
+=$bb			curfptr     =  $bb   ; 187    Pointeur de fichier actuel (mot).
+=$c1			stal        =  $c1   ; $c1    Pointeur vers une adresse RAM pour le
+=$c5			lstx        =  $c5   ; 197    Coordonnée matricielle de la dernière touche.
+=$c6			ndx         =  $c6   ; 198    Nombre de caractères dans le tampon clavier.
+=$fb			zpage1      =  $fb   ; 251    Pointeur 1 de zero page (word).
+=$fd			zpage2      =  $fd   ; 253    Pointeur 2 de zero page (word).
+=$fb			zeropage    =  zpage1; 251    Pointeur 1 de zero page (word).
+=$fd			zonepage    =  zpage2; 253    Pointeur 2 de zero page (word).
+=$277			kbbuff      =  $277  ; 631    Tampon du clavier.
+=$286			carcol      =  $286  ; 646    Couleur du prochain caractère affiché par Basic.
+=$286			kcarcol     =  carcol; 646    Couleur du prochain caractère affiché par Basic.
+=$286			bascol      =  carcol; 646    Couleur du prochain caractère affiché par Basic.
+=$287			curscol     =  $287  ; 647    Couleur de caractère sous le curseur.
+=$288			hibase      =  $288  ; 648    Haut de la page de la mémoire écran.
+=$289			xmax        =  $289  ; 649    Taille maximale du tampon clavier.
+=$28a			rptflg      =  $28a  ; 650    Drapeau: Quel clef sera répétée.
+=$28b			kount       =  $28b  ; 651    Compteur permettant de mesurer le délai entre les
+=$28c			repdelay    =  $28c  ; 652    Compteur servant à mesurer le délai avant le
+=$28d			shflag      =  $28d  ; 653    Drapeau: Appui sur les touches SHIFT/CTRL/Logo
+=$28e			lstshf      =  $28e  ; 654    Dernière séquence d’appui sur les touches
+=$28f			keylog      =  $28f  ; 655(2) Routine de configuration de la table de vecteurs
+=$291			mode        =  $291  ; 657    Indicateur: Activer ou désactiver le changement
+=$292			autodn      =  $292  ; 658    Drapeau: Défilement d’écran activé.
+=$293			m51crt      =  $293  ; 659    RS-232: Emul. du registre de contrôle du 6551.
+=$294			m51cdr      =  $294  ; 660    RS-232: Emul. du registre de commande du 6551.
+=$295			m51ajb      =  $295  ; 661(2) RS-232: Synchronisation des bits non normalisée.
+=$297			rsstat      =  $297  ; 663    RS-232: Emul. du registre d’état du 6551.
+=$298			bitnum      =  $298  ; 664    RS-232: Nombre de bits restant envoyer/recevoir.
+=$299			baudof      =  $299  ; 665(2) Temps nécessaire pour envoyer un peu.
+=$29b			ridbe       =  $29b  ; 667    RS-232: Index vers la fin du tampon rx.
+=$29c			ridbs       =  $29c  ; 668    RS-232: Index du début du tampon rx.
+=$29d			rodbs       =  $29d  ; 669    RS-232: Index du début du tampon tx.
+=$29e			rodbe       =  $29e  ; 670    RS-232: Index vers la fin du tampon tx.
+=$29f			irqtmp      =  $29f  ; 671(2) Zone de sauvegarde pour le vecteur IRQ lors des
+=$2a1			enabl       =  $2a1  ; 673    Interruptions RS-232 activées.
+=$2a7			libvars     =  $2a7  ; 679(89)Octets de libre pour l'usager.
+=$300			ierror      =  $300  ; 768(2) Vecteur vers la routine de gestion des messages
+=$302			imain       =  $302  ; 770(2) Vecteur vers la boucle principale du programme
+=$304			icrnch      =  $304  ; 772(2) Pointeur vers la routine qui transforme le texte
+=$306			iqplop      =  $306  ; 774(2) Vecteur vers la routine qui convertit les jetons
+=$3008			igone       =  $3008 ; 776(2) Vecteur vers la routine qui exécute le jeton
+=$30a			ieval       =  $30a  ; 778(2) Vecteur de la routine qui évalue une expression
+=$30c			sareg       =  $30c  ; 780    Zone de stockage pour le registre .A.
+=$30d			sxreg       =  $30d  ; 781    Zone de stockage pour le registre d'index .X.
+=$30e			syreg       =  $30e  ; 782    Zone de stockage pour le registre d'index .Y.
+=$30f			spreg       =  $30f  ; 783    Zone de stockage pour le registre .P (État).
+=$314			cinv        =  $314  ; $314-$315 brk instruction interupt
+=$33c			tbuffer     =  $33c  ; 828-1019 Cassette i/o buffer
+=$326			ibsout      =  $326  ; 806
+=$33c			tpbuff      =  $33c  ; $033c-$03fb (828-1019)
+=$400			scrnram     =  $400  ; 1024 video character ram
 =$400			scrram0     =     scrnram
-=$500			scrram1     =     $500  ; 1280
-=$600			scrram2     =     $600  ; 1536
-=$700			scrram3     =     $700  ; 1792
-=$801			basicsta    =     $801  ; 2049  basic start address
-=$a000			basicrom    =     $a000 ; 40960 Basic rom base address
-=$d000			chargen     =     $d000
-=$d400			sid         =     $d400 ; 54272 sid base address
-=$d800			colorram    =     $d800 ; 55296 video color ram
-=$d800			colram      =     $d800 ; 55296 video color ram
+=$500			scrram1     =  $500  ; 1280
+=$600			scrram2     =  $600  ; 1536
+=$700			scrram3     =  $700  ; 1792
+=$801			basicsta    =  $801  ; 2049  basic start address
+=$a000			basicrom    =  $a000 ; 40960 Basic rom base address
+=$d000			chargen     =  $d000
+=$d400			sid         =  $d400 ; 54272 sid base address
+=$d800			colorram    =  $d800 ; 55296 video color ram
+=$d800			colram      =  $d800 ; 55296 video color ram
 =$d800			colram0     =     colorram
-=$d900			colram1     =     $d900 ; 55552
-=$da00			colram2     =     $da00 ; 55808
-=$db00			colram3     =     $db00 ; 56064
+=$d900			colram1     =  $d900 ; 55552
+=$da00			colram2     =  $da00 ; 55808
+=$db00			colram3     =  $db00 ; 56064
 >cd3e	00 d8 00 d9	colorptr  .word     colram0,colram1,colram2,colram3
 >cd42	00 da 00 db
-=$dc00			cia1        =     $dc00 ; 56320 cia1 base address
-=$dc00			cia1pra     =     $dc00 ; 56320 cia1 dataport A (keyboard column Write)
-=$dc01			cia1prb     =     $dc01 ; 56321 cia1 dataport B (keyboard row read)
-=$dc02			cia1ddra    =     $dc02 ; 56322 cia1 data direction A
-=$dc03			cia1ddrb    =     $dc03 ; 56323 cia1 data direction B
-=$dc04			cia1tmalo   =     $dc04 ; 56324 cia1 timer A low byte
-=$dc05			cia1tmahi   =     $dc05 ; 56325 cia1 timer A high byte
-=$dc06			cia1tmblo   =     $dc06 ; 56326 cia1 timer B low byte
-=$dc07			cia1tmbhi   =     $dc07 ; 56327 cia1 timer B high byte
-=$dc08			cia1todten  =     $dc08 ; 56328 cia1 time of day clock seconds/10
-=$dc09			cia1todsec  =     $dc09 ; 56329 cia1 time of day clock seconds
-=$dc0a			cia1todmin  =     $dc0a ; 56330 cia1 time of day clock minutes
-=$dc0b			cia1todhrs  =     $dc0b ; 56331 cia1 time of day clock hours
-=$dc0c			cia1sdr     =     $dc0c ; 56332 cia1 serial data port
-=$dc0d			cia1icr     =     $dc0d ; 56333 cia1 Interupt control register
-=$dc0e			cia1cra     =     $dc0e ; 56334 cia1 control register A
-=$dc0f			cia1crb     =     $dc0f ; 56335 cia1 control register B
-=$dd00			cia2        =     $dd00 ; 56576 cia2 base address
-=$dd00			cia2pra     =     $dd00 ; 56576 cia2 dataport A
-=$dd01			cia2prb     =     $dd01 ; 56577 cia2 dataport B
-=$dd02			cia2ddra    =     $dd02 ; 56578 cia2 data direction A
-=$dd03			cia2ddrb    =     $dd03 ; 56579 cia2 data direction B
-=$dd04			cia2tmalo   =     $dd04 ; 56580 cia2 timer A low byte
-=$dd05			cia2tmahi   =     $dd05 ; 56581 cia2 timer A high byte
-=$dd06			cia2tmblo   =     $dd06 ; 56582 cia2 timer B low byte
-=$dd07			cia2tmbhi   =     $dd07 ; 56583 cia2 timer B high byte
-=$dd08			cia2todten  =     $dd08 ; 56584 cia2 time of day clock seconds/10
-=$dd09			cia2todsec  =     $dd09 ; 56585 cia2 time of day clock seconds
-=$dd0a			cia2todmin  =     $dd0a ; 56586 cia2 time of day clock minutes
-=$dd0b			cia2todhrs  =     $dd0b ; 56587 cia2 time of day clock hours
-=$dd0c			cia2sdr     =     $dd0c ; 56588 cia2 serial data port
-=$dd0d			cia2icr     =     $dd0d ; 56589 cia2 Interupt control register
-=$dd0e			cia2cra     =     $dd0e ; 56590 cia2 control register A
-=$dd0f			cia2crb     =     $dd0f ; 56501 cia2 control register B
-=$e000			kernalrom   =     $e000 ; 57344 start of kernal rom
-=$ea31			irq         =     $ea31 ; 59953 irq entry point
-=$03			bstop       =     $03   ;  03 [STOP],     [CTRL]-[C]
-=$05			bwhite      =     $05   ;  05 [CTRL]+[2], [CTRL]-[E], Set colour to WHITE
-=$08			block       =     $08   ;  08 Disable char map switch with [SHIFT]+[C=]
-=$09			bunlock     =     $09   ;  09 Enabled char map switch with [SHIFT]+[C=]
-=$0d			bcarret     =     $0d   ;  11 [RETURN]
-=$0e			btext       =     $0e   ;  14 CTRL]-[N] select Upper/lowercase charset
-=$11			bcrsdn      =     $11   ;  17 [CRS-D]           Cursor DOWN 1 line
-=$12			brevcol     =     $12   ;  18 [CTRL]+[9]        REVERSE VIDEO ON
-=$13			bhome       =     $13   ;  19 [HOME]            Cursor HOME
-=$14			bdelete     =     $14   ;  20 [DELETE]          Delete 1 char
-=$1c			bred        =     $1c   ;  28 [CTRL]+[3]        Set colour to RED
-=$1d			bcuright    =     $1d   ;  29 [CRS-R]           Cursor RIGHT
-=$1e			bgreen      =     $1e   ;  30 [CTRL]+[6]        Set colour to GREEN
-=$1f			bblue       =     $1f   ;  31 [CTRL]+[7]        Set colour to BLUE
-=$81			borange     =     $81   ; 129 [C=]+[1]          Set colour to ORANGE
-=$85			f1key       =     $85   ; 133 [F1]
-=$86			f2key       =     $86   ; 134 [F2]
-=$87			f3key       =     $87   ; 135 [F3]
-=$88			f4key       =     $88   ; 136 [F4]
-=$89			f5key       =     $89   ; 137 [F5]
-=$8a			f6key       =     $8a   ; 138 [F6]
-=$8b			f7key       =     $8b   ; 139 [F7]
-=$8c			f8key       =     $8c   ; 140 [F8]
-=$11			dcurskey    =     $11   ; 17
+=$dc00			cia1        =  $dc00 ; 56320 cia1 base address
+=$dc00			cia1pra     =  $dc00 ; 56320 cia1 dataport A (keyboard column Write)
+=$dc01			cia1prb     =  $dc01 ; 56321 cia1 dataport B (keyboard row read)
+=$dc02			cia1ddra    =  $dc02 ; 56322 cia1 data direction A
+=$dc03			cia1ddrb    =  $dc03 ; 56323 cia1 data direction B
+=$dc04			cia1tmalo   =  $dc04 ; 56324 cia1 timer A low byte
+=$dc05			cia1tmahi   =  $dc05 ; 56325 cia1 timer A high byte
+=$dc06			cia1tmblo   =  $dc06 ; 56326 cia1 timer B low byte
+=$dc07			cia1tmbhi   =  $dc07 ; 56327 cia1 timer B high byte
+=$dc08			cia1todten  =  $dc08 ; 56328 cia1 time of day clock seconds/10
+=$dc09			cia1todsec  =  $dc09 ; 56329 cia1 time of day clock seconds
+=$dc0a			cia1todmin  =  $dc0a ; 56330 cia1 time of day clock minutes
+=$dc0b			cia1todhrs  =  $dc0b ; 56331 cia1 time of day clock hours
+=$dc0c			cia1sdr     =  $dc0c ; 56332 cia1 serial data port
+=$dc0d			cia1icr     =  $dc0d ; 56333 cia1 Interupt control register
+=$dc0e			cia1cra     =  $dc0e ; 56334 cia1 control register A
+=$dc0f			cia1crb     =  $dc0f ; 56335 cia1 control register B
+=$dd00			cia2        =  $dd00 ; 56576 cia2 base address
+=$dd00			cia2pra     =  $dd00 ; 56576 cia2 dataport A
+=$dd01			cia2prb     =  $dd01 ; 56577 cia2 dataport B
+=$dd02			cia2ddra    =  $dd02 ; 56578 cia2 data direction A
+=$dd03			cia2ddrb    =  $dd03 ; 56579 cia2 data direction B
+=$dd04			cia2tmalo   =  $dd04 ; 56580 cia2 timer A low byte
+=$dd05			cia2tmahi   =  $dd05 ; 56581 cia2 timer A high byte
+=$dd06			cia2tmblo   =  $dd06 ; 56582 cia2 timer B low byte
+=$dd07			cia2tmbhi   =  $dd07 ; 56583 cia2 timer B high byte
+=$dd08			cia2todten  =  $dd08 ; 56584 cia2 time of day clock seconds/10
+=$dd09			cia2todsec  =  $dd09 ; 56585 cia2 time of day clock seconds
+=$dd0a			cia2todmin  =  $dd0a ; 56586 cia2 time of day clock minutes
+=$dd0b			cia2todhrs  =  $dd0b ; 56587 cia2 time of day clock hours
+=$dd0c			cia2sdr     =  $dd0c ; 56588 cia2 serial data port
+=$dd0d			cia2icr     =  $dd0d ; 56589 cia2 Interupt control register
+=$dd0e			cia2cra     =  $dd0e ; 56590 cia2 control register A
+=$dd0f			cia2crb     =  $dd0f ; 56501 cia2 control register B
+=$e000			kernalrom   =  $e000 ; 57344 start of kernal rom
+=$ea31			irq         =  $ea31 ; 59953 irq entry point
+=$03			bstop       =  $03   ;  03 [STOP],     [CTRL]-[C]
+=$05			bwhite      =  $05   ;  05 [CTRL]+[2], [CTRL]-[E], Set colour to WHITE
+=$08			block       =  $08   ;  08 Disable char map switch with [SHIFT]+[C=]
+=$09			bunlock     =  $09   ;  09 Enabled char map switch with [SHIFT]+[C=]
+=$0d			bcarret     =  $0d   ;  11 [RETURN]
+=$0e			btext       =  $0e   ;  14 CTRL]-[N] select Upper/lowercase charset
+=$11			bcrsdn      =  $11   ;  17 [CRS-D]           Cursor DOWN 1 line
+=$12			brevcol     =  $12   ;  18 [CTRL]+[9]        REVERSE VIDEO ON
+=$13			bhome       =  $13   ;  19 [HOME]            Cursor HOME
+=$14			bdelete     =  $14   ;  20 [DELETE]          Delete 1 char
+=$1c			bred        =  $1c   ;  28 [CTRL]+[3]        Set colour to RED
+=$1d			bcuright    =  $1d   ;  29 [CRS-R]           Cursor RIGHT
+=$1e			bgreen      =  $1e   ;  30 [CTRL]+[6]        Set colour to GREEN
+=$1f			bblue       =  $1f   ;  31 [CTRL]+[7]        Set colour to BLUE
+=$81			borange     =  $81   ; 129 [C=]+[1]          Set colour to ORANGE
+=$85			f1key       =  $85   ; 133 [F1]
+=$86			f2key       =  $86   ; 134 [F2]
+=$87			f3key       =  $87   ; 135 [F3]
+=$88			f4key       =  $88   ; 136 [F4]
+=$89			f5key       =  $89   ; 137 [F5]
+=$8a			f6key       =  $8a   ; 138 [F6]
+=$8b			f7key       =  $8b   ; 139 [F7]
+=$8c			f8key       =  $8c   ; 140 [F8]
+=$11			dcurskey    =  $11   ; 17
 =145			ucurskey    =     145
 =29			rcurskey    =     29
 =157			lcurskey    =     157
@@ -4412,60 +4443,60 @@
 =147			clearkey    =     147
 =20			delkey      =     20
 =148			inskey      =     148
-=$8d			bcarret1    =     $8d   ; 141 [SHIFT]+[RETURN]
-=$8e			bgraph      =     $8e   ; 142 select Uppercase+graphics charset
-=$90			bblack      =     $90   ; 144 [CTRL]+[1]        Set colour to BLACK
-=$91			bcuup       =     $91   ; 145 [SHIFT]+[CRS-D]   cursor UP 1 line
-=$92			brevoff     =     $92   ; 146 [CTRL]+[0]        REVERSE VIDEO OFF
-=$93			bclear      =     $93   ; 147 [SHIFT]+[HOME]    CLEAR SCREEN
-=$94			binsert     =     $94   ; 148 [SHIFT]+[DELETE]  INSERT a char
-=$95			bbrown      =     $95   ; 149 [C=]+[2]          Set colour to BROWN
-=$96			bltred      =     $96   ; 150 [C=]+[3]          Set colour to PINK
-=$97			bdkgrey     =     $97   ; 151 [C=]+[4]          Set colour to DARK GREY
-=$98			bmdgrey     =     $98   ; 152 [C=]+[5]          Set colour to MEDIUM GREY
-=$99			bltgreen    =     $99   ; 153 [C=]+[6]          Set colour to LIGHT GREEN
-=$9a			bltblue     =     $9a   ; 154 [C=]+[7]          Set colour to LIGHT BLUE
-=$9b			bltgrey     =     $9b   ; 155 [C=]+[8]          Set colour to LIGHT GREY
-=$9c			bmagenta    =     $9c   ; 156 [CTRL]+[5]        Set colour to MAGENTA
-=$9d			bculeft     =     $9d   ; 157 [SHIFT]+[CRS-R]   cursor RIGHT 1 pos
-=$9e			byellow     =     $9e   ; 158 [CTRL]+[8]        Set colour to YELLOW
-=$9f			bcyan       =     $9f   ; 159 [CTRL]+[4]        Set colour to CYAN
-=$a0			bspace1     =     $a0   ; 169                   space
-=$e0			bspace2     =     $e0   ; 224                   space
-=$0			cnoir       =     $0
-=$1			cblanc      =     $1
-=$2			crouge      =     $2
-=$3			cocean      =     $3
-=$4			cmauve      =     $4
-=$5			cvert       =     $5
-=$6			cbleu       =     $6
-=$7			cjaune      =     $7
-=$8			corange     =     $8
-=$9			cbrun       =     $9
-=$a			crose       =     $a
-=$b			cgrisfonce  =     $b
-=$c			cgrismoyen  =     $c
-=$b			cgris0      =     $b
-=$c			cgris1      =     $c
-=$d			cvertpale   =     $d
-=$e			cbleupale   =     $e
-=$f			cgrispale   =     $f
-=$f			cgris3      =     $f
-=$0			cblack      =     $0
-=$1			cwhite      =     $1
-=$2			cred        =     $2
-=$3			ccyan       =     $3
-=$4			cpurple     =     $4
-=$5			cgreen      =     $5
-=$6			cblue       =     $6
-=$7			cyellow     =     $7
-=$9			cbrown      =     $9
-=$a			clightred   =     $a
-=$b			cdarkgray   =     $b
-=$c			cmidgray    =     $c
-=$d			clightgreen =     $d
-=$e			clightblue  =     $e
-=$f			clightgray  =     $f
+=$8d			bcarret1    =  $8d   ; 141 [SHIFT]+[RETURN]
+=$8e			bgraph      =  $8e   ; 142 select Uppercase+graphics charset
+=$90			bblack      =  $90   ; 144 [CTRL]+[1]        Set colour to BLACK
+=$91			bcuup       =  $91   ; 145 [SHIFT]+[CRS-D]   cursor UP 1 line
+=$92			brevoff     =  $92   ; 146 [CTRL]+[0]        REVERSE VIDEO OFF
+=$93			bclear      =  $93   ; 147 [SHIFT]+[HOME]    CLEAR SCREEN
+=$94			binsert     =  $94   ; 148 [SHIFT]+[DELETE]  INSERT a char
+=$95			bbrown      =  $95   ; 149 [C=]+[2]          Set colour to BROWN
+=$96			bltred      =  $96   ; 150 [C=]+[3]          Set colour to PINK
+=$97			bdkgrey     =  $97   ; 151 [C=]+[4]          Set colour to DARK GREY
+=$98			bmdgrey     =  $98   ; 152 [C=]+[5]          Set colour to MEDIUM GREY
+=$99			bltgreen    =  $99   ; 153 [C=]+[6]          Set colour to LIGHT GREEN
+=$9a			bltblue     =  $9a   ; 154 [C=]+[7]          Set colour to LIGHT BLUE
+=$9b			bltgrey     =  $9b   ; 155 [C=]+[8]          Set colour to LIGHT GREY
+=$9c			bmagenta    =  $9c   ; 156 [CTRL]+[5]        Set colour to MAGENTA
+=$9d			bculeft     =  $9d   ; 157 [SHIFT]+[CRS-R]   cursor RIGHT 1 pos
+=$9e			byellow     =  $9e   ; 158 [CTRL]+[8]        Set colour to YELLOW
+=$9f			bcyan       =  $9f   ; 159 [CTRL]+[4]        Set colour to CYAN
+=$a0			bspace1     =  $a0   ; 169                   space
+=$e0			bspace2     =  $e0   ; 224                   space
+=$0			cnoir       =  $0
+=$1			cblanc      =  $1
+=$2			crouge      =  $2
+=$3			cocean      =  $3
+=$4			cmauve      =  $4
+=$5			cvert       =  $5
+=$6			cbleu       =  $6
+=$7			cjaune      =  $7
+=$8			corange     =  $8
+=$9			cbrun       =  $9
+=$a			crose       =  $a
+=$b			cgrisfonce  =  $b
+=$c			cgrismoyen  =  $c
+=$b			cgris0      =  $b
+=$c			cgris1      =  $c
+=$d			cvertpale   =  $d
+=$e			cbleupale   =  $e
+=$f			cgrispale   =  $f
+=$f			cgris3      =  $f
+=$0			cblack      =  $0
+=$1			cwhite      =  $1
+=$2			cred        =  $2
+=$3			ccyan       =  $3
+=$4			cpurple     =  $4
+=$5			cgreen      =  $5
+=$6			cblue       =  $6
+=$7			cyellow     =  $7
+=$9			cbrown      =  $9
+=$a			clightred   =  $a
+=$b			cdarkgray   =  $b
+=$c			cmidgray    =  $c
+=$d			clightgreen =  $d
+=$e			clightblue  =  $e
+=$f			clightgray  =  $f
 =$00			vnoir       =     %00000000
 =$00			vblack      =     %00000000
 =$01			vblanc      =     %00000001
@@ -4561,16 +4592,16 @@
 =$ffae			unlsn=$ffae       ; jmp $edfe Send an unlisten command
 =$ffab			untlk=$ffab       ; jmp $edef Send an untalk command
 =$ff8d			vector=$ff8d      ; jmp $fd1a Read/set I/O vectors.
-=$e043			kd_poly1    =     $e043
-=$e059			kd_poly2    =     $e059
-=$e08d			kd_rmulc    =     $e08d       ;
-=$e092			kd_raddc    =     $e092       ;
-=$e097			kd_rnd      =     $e097
-=$e12a			kd_sys      =     $e12a
-=$e156			kd_save     =     $e156
-=$e165			kd_verify   =     $e165
-=$e168			kd_load     =     $e168
-=$f1ca			kd_chrout   =     $f1ca
+=$e043			kd_poly1    =  $e043
+=$e059			kd_poly2    =  $e059
+=$e08d			kd_rmulc    =  $e08d       ;
+=$e092			kd_raddc    =  $e092       ;
+=$e097			kd_rnd      =  $e097
+=$e12a			kd_sys      =  $e12a
+=$e156			kd_save     =  $e156
+=$e165			kd_verify   =  $e165
+=$e168			kd_load     =  $e168
+=$f1ca			kd_chrout   =  $f1ca
 =$ff81			kcint       =     cint        ;   , init vic + ecran.
 =$ff84			kioinit     =     ioinit      ;   , init i/o dev.
 =$ff87			kramtas     =     ramtas      ;   , test de memoire.
@@ -4610,26 +4641,26 @@
 =$ffed			kscreen     =     screen      ; yx, get format ecran
 =$fff0			kplot       =     plot        ; yx, (c) get csr pos.
 =$fff3			kiobase     =     iobase      ; yx, def. i/o mem page
-=$e39a			k_echostartup     =     $e39a
-=$e716			k_putch           =     $e716; 52) Print a character.       ;a--;---; Acc =  char
-=$e7a0			k_cls             =     $e7a0
-=$e87c			k_cursordown      =     $e87c
-=$e8ea			k_scrollup        =     $e8ea
-=$e94e			k_home            =     $e94e
-=$e965			k_insertline      =     $e965
-=$e9c8			k_screlldown      =     $e9c8
-=$ed0c			k_devsndlstn      =     $ed0c ; 55) Send 'LISTEN'>IEEE/Serial.    ;a--;---; Acc = dev #
-=$ee13			k_ieeein          =     $ee13 ; 60) Entrées from IEEE/Serial.     ;---;a--; Acc = Data byte
-=$eef6			k_devsndutalk     =     $eef6 ; 58) Send 'UNTALK'>IEEE/Serial.    ;---;---;
-=$ef04			k_devsndulstn     =     $ef04 ; 59) Send 'UNLISTEN'>IEEE/Serial.  ;---;---;
-=$f12f			k_putsysmsg       =     $f12f ; 53) Print system message.         ;--y;---; y=msg offset
-=$f291			k_cloself         =     $f291 ; 61) Close logical file .          ;a--;---; Acc = file #
-=$f49e			k_loadsub         =     $f49e ; 63) LOAD subroutine.              ;axy;---; Acc = # start=yyxx
-=$f5af			k_prnsrch         =     $f5af ; 64) Print SEARCHING if imm mode.  ;---;---;
-=$f5b3			k_echosearch      =     $f5b3 ; 64b) Skipping test part of 64.    ;---;---;
-=$f5c1			k_prnfnam         =     $f5c1 ; 65) Print filename.               ;---;---;
-=$f6ed			k_stop            =     $f6ed ; 62) Check for STOP key.           ;---;---; z=1 pressed
-=$f7ea			k_gettaphdblk     =     $f7ea ; 66) Find a tape hdr blk.          ;a--;---; Acc = len
+=$e39a			k_echostartup     =  $e39a
+=$e716			k_putch           =  $e716; 52) Print a character.       ;a--;---; Acc =  char
+=$e7a0			k_cls             =  $e7a0
+=$e87c			k_cursordown      =  $e87c
+=$e8ea			k_scrollup        =  $e8ea
+=$e94e			k_home            =  $e94e
+=$e965			k_insertline      =  $e965
+=$e9c8			k_screlldown      =  $e9c8
+=$ed0c			k_devsndlstn      =  $ed0c ; 55) Send 'LISTEN'>IEEE/Serial.    ;a--;---; Acc = dev #
+=$ee13			k_ieeein          =  $ee13 ; 60) Entrées from IEEE/Serial.     ;---;a--; Acc = Data byte
+=$eef6			k_devsndutalk     =  $eef6 ; 58) Send 'UNTALK'>IEEE/Serial.    ;---;---;
+=$ef04			k_devsndulstn     =  $ef04 ; 59) Send 'UNLISTEN'>IEEE/Serial.  ;---;---;
+=$f12f			k_putsysmsg       =  $f12f ; 53) Print system message.         ;--y;---; y=msg offset
+=$f291			k_cloself         =  $f291 ; 61) Close logical file .          ;a--;---; Acc = file #
+=$f49e			k_loadsub         =  $f49e ; 63) LOAD subroutine.              ;axy;---; Acc = # start=yyxx
+=$f5af			k_prnsrch         =  $f5af ; 64) Print SEARCHING if imm mode.  ;---;---;
+=$f5b3			k_echosearch      =  $f5b3 ; 64b) Skipping test part of 64.    ;---;---;
+=$f5c1			k_prnfnam         =  $f5c1 ; 65) Print filename.               ;---;---;
+=$f6ed			k_stop            =  $f6ed ; 62) Check for STOP key.           ;---;---; z=1 pressed
+=$f7ea			k_gettaphdblk     =  $f7ea ; 66) Find a tape hdr blk.          ;a--;---; Acc = len
 =$f7ea			k_fndtaphdblk     =    $f7ea; 67) Find any tape hdr blk.          ;---;---;
 =$f817			k_waittapplay     =    $f817; 68) Press PLAY... (wait)            ;---;---;
 =$f841			k_rdtape2buff     =    $f841; 69) Read tape to buffer.            ;---;---;
@@ -4645,135 +4676,135 @@
 =$fe66			k_warmboot        =    $fe66;     Warm resetstart
 =$fe66			k_warmstart       =    $fe66;     Warm resetstart
 =$ff93			k_devsndaddr2     =    $ff93; 56) Send second address.            ;a--;---; Acc = SAor#$60
-=$5f			arrowleft         =     $5f
-=$06			ctrl_al           =     $06
-=$5f			escape            =     $5f
-=$06			ctrl_escape       =     $06
-=$a9			pound             =     $a9
-=$13			home              =     $13
-=$93			clear             =     $93
-=$5e			uparrow           =     $5e
-=$de			pisign            =     $de
-=$03			runstop           =     $03
-=$11			cursd             =     $11
-=$91			cursu             =     $91
-=$1d			cursr             =     $1d
-=$9d			cursl             =     $9d
-=$85			key_f1            =     $85
-=$86			key_f3            =     $86
-=$87			key_f5            =     $87
-=$88			key_f7            =     $88
-=$89			key_f2            =     $89
-=$8a			key_f4            =     $8a
-=$8b			key_f6            =     $8b
-=$8c			key_f8            =     $8c
-=$0d			enter             =     $0d
-=$8d			comd_enter        =     $8d
-=$41			key_a             =     $41
-=$42			key_b             =     $42
-=$43			key_c             =     $43
-=$44			key_d             =     $44
-=$45			key_e             =     $45
-=$46			key_f             =     $46
-=$47			key_g             =     $47
-=$48			key_h             =     $48
-=$49			key_i             =     $49
-=$4a			key_j             =     $4a
-=$4b			key_k             =     $4b
-=$4c			key_l             =     $4c
-=$4d			key_m             =     $4d
-=$4e			key_n             =     $4e
-=$4f			key_o             =     $4f
-=$50			key_p             =     $50
-=$51			key_q             =     $51
-=$52			key_r             =     $52
-=$53			key_s             =     $53
-=$54			key_t             =     $54
-=$55			key_u             =     $55
-=$56			key_v             =     $56
-=$57			key_w             =     $57
-=$58			key_x             =     $58
-=$59			key_y             =     $59
-=$5a			key_z             =     $5a
-=$c1			shift_a           =     $c1
-=$c2			shift_b           =     $c2
-=$c3			shift_c           =     $c3
-=$c4			shift_d           =     $c4
-=$c5			shift_e           =     $c5
-=$c6			shift_f           =     $c6
-=$c7			shift_g           =     $c7
-=$c8			shift_h           =     $c8
-=$c9			shift_i           =     $c9
-=$ca			shift_j           =     $ca
-=$cb			shift_k           =     $cb
-=$cc			shift_l           =     $cc
-=$cd			shift_m           =     $cd
-=$ce			shift_n           =     $ce
-=$cf			shift_o           =     $cf
-=$d0			shift_p           =     $d0
-=$d1			shift_q           =     $d1
-=$d2			shift_r           =     $d2
-=$d3			shift_s           =     $d3
-=$d4			shift_t           =     $d4
-=$d5			shift_u           =     $d5
-=$d6			shift_v           =     $d6
-=$d7			shift_w           =     $d7
-=$d8			shift_x           =     $d8
-=$d9			shift_y           =     $d9
-=$da			shift_z           =     $da
-=$01			ctrl_a            =     $01
-=$02			ctrl_b            =     $02
-=$03			ctrl_c            =     $03
-=$04			ctrl_d            =     $04
-=$05			ctrl_e            =     $05
-=$06			ctrl_f            =     $06
-=$07			ctrl_g            =     $07
-=$08			ctrl_h            =     $08
-=$09			ctrl_i            =     $09
-=$0a			ctrl_j            =     $0a
-=$0b			ctrl_k            =     $0b
-=$0c			ctrl_l            =     $0c
-=$0d			ctrl_m            =     $0d
-=$0d			key_enter         =     $0d
-=$0e			ctrl_n            =     $0e
-=$0f			ctrl_o            =     $0f
-=$10			ctrl_p            =     $10
-=$11			ctrl_q            =     $11
-=$12			ctrl_r            =     $12
-=$13			ctrl_s            =     $13
-=$14			ctrl_t            =     $14
-=$15			ctrl_u            =     $15
-=$16			ctrl_v            =     $16
-=$17			ctrl_w            =     $17
-=$18			ctrl_x            =     $18
-=$19			ctrl_y            =     $19
-=$1a			ctrl_z            =     $1a
-=$b0			comd_a            =     $b0
-=$bf			comd_b            =     $bf
-=$bc			comd_c            =     $bc
-=$ac			comd_d            =     $ac
-=$b1			comd_e            =     $b1
-=$bb			comd_f            =     $bb
-=$a5			comd_g            =     $a5
-=$b4			comd_h            =     $b4
-=$a2			comd_i            =     $a2
-=$b5			comd_j            =     $b5
-=$a1			comd_k            =     $a1
-=$b6			comd_l            =     $b6
-=$a7			comd_m            =     $a7
-=$aa			comd_n            =     $aa
-=$b9			comd_o            =     $b9
-=$af			comd_p            =     $af
-=$ab			comd_q            =     $ab
-=$b2			comd_r            =     $b2
-=$ae			comd_s            =     $ae
-=$a3			comd_t            =     $a3
-=$b8			comd_u            =     $b8
-=$be			comd_v            =     $be
-=$b3			comd_w            =     $b3
-=$bd			comd_x            =     $bd
-=$b7			comd_y            =     $b7
-=$ad			comd_z            =     $ad
+=$5f			arrowleft         =  $5f
+=$06			ctrl_al           =  $06
+=$5f			escape            =  $5f
+=$06			ctrl_escape       =  $06
+=$a9			pound             =  $a9
+=$13			home              =  $13
+=$93			clear             =  $93
+=$5e			uparrow           =  $5e
+=$de			pisign            =  $de
+=$03			runstop           =  $03
+=$11			cursd             =  $11
+=$91			cursu             =  $91
+=$1d			cursr             =  $1d
+=$9d			cursl             =  $9d
+=$85			key_f1            =  $85
+=$86			key_f3            =  $86
+=$87			key_f5            =  $87
+=$88			key_f7            =  $88
+=$89			key_f2            =  $89
+=$8a			key_f4            =  $8a
+=$8b			key_f6            =  $8b
+=$8c			key_f8            =  $8c
+=$0d			enter             =  $0d
+=$8d			comd_enter        =  $8d
+=$41			key_a             =  $41
+=$42			key_b             =  $42
+=$43			key_c             =  $43
+=$44			key_d             =  $44
+=$45			key_e             =  $45
+=$46			key_f             =  $46
+=$47			key_g             =  $47
+=$48			key_h             =  $48
+=$49			key_i             =  $49
+=$4a			key_j             =  $4a
+=$4b			key_k             =  $4b
+=$4c			key_l             =  $4c
+=$4d			key_m             =  $4d
+=$4e			key_n             =  $4e
+=$4f			key_o             =  $4f
+=$50			key_p             =  $50
+=$51			key_q             =  $51
+=$52			key_r             =  $52
+=$53			key_s             =  $53
+=$54			key_t             =  $54
+=$55			key_u             =  $55
+=$56			key_v             =  $56
+=$57			key_w             =  $57
+=$58			key_x             =  $58
+=$59			key_y             =  $59
+=$5a			key_z             =  $5a
+=$c1			shift_a           =  $c1
+=$c2			shift_b           =  $c2
+=$c3			shift_c           =  $c3
+=$c4			shift_d           =  $c4
+=$c5			shift_e           =  $c5
+=$c6			shift_f           =  $c6
+=$c7			shift_g           =  $c7
+=$c8			shift_h           =  $c8
+=$c9			shift_i           =  $c9
+=$ca			shift_j           =  $ca
+=$cb			shift_k           =  $cb
+=$cc			shift_l           =  $cc
+=$cd			shift_m           =  $cd
+=$ce			shift_n           =  $ce
+=$cf			shift_o           =  $cf
+=$d0			shift_p           =  $d0
+=$d1			shift_q           =  $d1
+=$d2			shift_r           =  $d2
+=$d3			shift_s           =  $d3
+=$d4			shift_t           =  $d4
+=$d5			shift_u           =  $d5
+=$d6			shift_v           =  $d6
+=$d7			shift_w           =  $d7
+=$d8			shift_x           =  $d8
+=$d9			shift_y           =  $d9
+=$da			shift_z           =  $da
+=$01			ctrl_a            =  $01
+=$02			ctrl_b            =  $02
+=$03			ctrl_c            =  $03
+=$04			ctrl_d            =  $04
+=$05			ctrl_e            =  $05
+=$06			ctrl_f            =  $06
+=$07			ctrl_g            =  $07
+=$08			ctrl_h            =  $08
+=$09			ctrl_i            =  $09
+=$0a			ctrl_j            =  $0a
+=$0b			ctrl_k            =  $0b
+=$0c			ctrl_l            =  $0c
+=$0d			ctrl_m            =  $0d
+=$0d			key_enter         =  $0d
+=$0e			ctrl_n            =  $0e
+=$0f			ctrl_o            =  $0f
+=$10			ctrl_p            =  $10
+=$11			ctrl_q            =  $11
+=$12			ctrl_r            =  $12
+=$13			ctrl_s            =  $13
+=$14			ctrl_t            =  $14
+=$15			ctrl_u            =  $15
+=$16			ctrl_v            =  $16
+=$17			ctrl_w            =  $17
+=$18			ctrl_x            =  $18
+=$19			ctrl_y            =  $19
+=$1a			ctrl_z            =  $1a
+=$b0			comd_a            =  $b0
+=$bf			comd_b            =  $bf
+=$bc			comd_c            =  $bc
+=$ac			comd_d            =  $ac
+=$b1			comd_e            =  $b1
+=$bb			comd_f            =  $bb
+=$a5			comd_g            =  $a5
+=$b4			comd_h            =  $b4
+=$a2			comd_i            =  $a2
+=$b5			comd_j            =  $b5
+=$a1			comd_k            =  $a1
+=$b6			comd_l            =  $b6
+=$a7			comd_m            =  $a7
+=$aa			comd_n            =  $aa
+=$b9			comd_o            =  $b9
+=$af			comd_p            =  $af
+=$ab			comd_q            =  $ab
+=$b2			comd_r            =  $b2
+=$ae			comd_s            =  $ae
+=$a3			comd_t            =  $a3
+=$b8			comd_u            =  $b8
+=$be			comd_v            =  $be
+=$b3			comd_w            =  $b3
+=$bd			comd_x            =  $bd
+=$b7			comd_y            =  $b7
+=$ad			comd_z            =  $ad
 =0			kerr00            =     0     ; routine ended by the stop key.
 =1			kerr01            =     1     ; too many files open.
 =2			kerr02            =     2     ; file already open.
