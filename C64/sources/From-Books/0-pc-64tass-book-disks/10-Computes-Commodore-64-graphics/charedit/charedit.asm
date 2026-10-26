@@ -2,7 +2,7 @@
 ; Projet...: charedit
 ; Fichier..: charedit.asm
 ; Auteur...: Daniel Lafrance
-; Version..: 0.1.1
+; Version..: 0.1.2
 ; Révision.: 20261021-193200
 ;-----------------------------------------------------------------------------
 ; Historique des révisions:
@@ -54,7 +54,8 @@ printbye    inc   any_msg           ; Change la couleur de bye_msg.
             jsr   cls               ; Efface l'écran
 endmain     jsr   popreg            ; Récupère les registres.
             jsr   kbflushbuff       ; Vide le tampon du clavier.
-            jmp   k_warmstart       ; Basic soft start.
+            ;jmp   k_warmstart       ; Basic soft start.
+            rts
             .bend
 
 ;-----------------------------------------------------------------------------

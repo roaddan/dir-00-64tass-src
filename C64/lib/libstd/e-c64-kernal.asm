@@ -94,9 +94,6 @@ varpnt      =  $47   ; 71-72  Pointeur vers la valeur actuelle d'une variable BA
 forpnt      =  $49   ; 73-74  Pointeur temporaire vers la variable d'index utilisée par une boucle FOR.
 opptr       =  $4b   ; 75-76  Déplacement dans la table des opérateurs mathématiques.
 opmask      =  $4d   ; 77     Masque pour opération de comparaison.
-; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-; = = = = = = = =   T R A D U I R E  E N  F R A N Ç A I S   = = = = = = = = =                       
-; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 defpnt      =  $4e   ; 78-79  Pointeur vers le descripteur FN actuel.
 dscpnt      =  $50   ; 80-82  Pointeur temporaire vers le descripteur de 
                      ;        ... chaîne actuel.
@@ -156,7 +153,7 @@ rodbe       =  $29e  ; 670    RS-232: Index vers la fin du tampon tx.
 irqtmp      =  $29f  ; 671(2) Zone de sauvegarde pour le vecteur IRQ lors des 
                      ;        ... opérations d'E/S sur cassette.
 enabl       =  $2a1  ; 673    Interruptions RS-232 activées.
-libvars     =  $2a7  ; 679(89)Octets de libre pour l'usager.
+libvars1    =  $2a7  ; 679(89)Octets de libre pour l'usager.
 ;basvect     =  $300  ; 768(12)     
 ierror      =  $300  ; 768(2) Vecteur vers la routine de gestion des messages 
                      ;        ... d'erreur de BASIC.
@@ -174,27 +171,65 @@ sareg       =  $30c  ; 780    Zone de stockage pour le registre .A.
 sxreg       =  $30d  ; 781    Zone de stockage pour le registre d'index .X.
 syreg       =  $30e  ; 782    Zone de stockage pour le registre d'index .Y.
 spreg       =  $30f  ; 783    Zone de stockage pour le registre .P (État).
-cinv        =  $314  ; $314-$315 brk instruction interupt
-tbuffer     =  $33c  ; 828-1019 Cassette i/o buffer
-ibsout      =  $326  ; 806
-tpbuff      =  $33c  ; $033c-$03fb (828-1019)
-scrnram     =  $400  ; 1024 video character ram
-scrram0     =     scrnram
-scrram1     =  $500  ; 1280
-scrram2     =  $600  ; 1536
-scrram3     =  $700  ; 1792
-basicsta    =  $801  ; 2049  basic start address
-basicrom    =  $a000 ; 40960 Basic rom base address
-chargen     =  $d000
-sid         =  $d400 ; 54272 sid base address
-colorram    =  $d800 ; 55296 video color ram
-colram      =  $d800 ; 55296 video color ram
-colram0     =     colorram
-colram1     =  $d900 ; 55552
-colram2     =  $da00 ; 55808
-colram3     =  $db00 ; 56064
-
-colorptr  .word     colram0,colram1,colram2,colram3
+; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+; = = = = = = = =   T R A D U I R E  E N  F R A N Ç A I S   = = = = = = = = =                       
+; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+usradd      =  $311  ; 785(2) Adresse de la routine USR.
+libvar1     =  $313  ; 7887   Octet libre.
+cinv        =  $314  ; 788(2) Vecteur vers la routine d'interruption IRQ.
+cbinv       =  $316  ; 790(2) Vecteur: Interruption par instruction BRK.
+nminv       =  $318  ; 792(2) Vecteur: Interruption non masquable.
+iopen       =  $31a  ; 794(2) Vecteur vers la routine OPEN du noyau.
+                     ;        ... (actuellement à 62282, $F34A)
+iclose      =  $31c  ; 796(2) Vecteur vers la routine CLOSE du noyau.
+                     ;        ... (actuellement à 62097, $F291)
+ichkin      =  $31e  ; 798(2) Vecteur vers la routine CHKIN du noyau.
+                     ;        ... (actuellement à 61966, $F20E)
+ichkout     =  $320  ; 800(2) Vecteur vers la routine CKOUT du noyau.
+                     ;        ... (actuellement à 62032, $F250)
+iclrch      =  $322  ; 802(2) Vecteur vers la routine CLRCHN.
+                     ;        ... (actuellement à 62259, $F333)
+ibasin      =  $324  ; 804(2) Vecteur vers la routine CHRIN du noyau.
+                     ;        ... (actuellement à 61783, $F157)
+ibsout      =  $326  ; 806(2) Vecteur vers la routine CHROUT du noyau.
+                     ;        ... (actuellement à 61898, $F1CA)
+istop       =  $328  ; 808(2) Vecteur vers la routine d'arrêt (STOP) du noyau.
+                     ;        ... (actuellement à 63213, $F6ED)
+igetin      =  $32a  ; 810(2) Vecteur vers la routine GETIN du noyau.
+                     ;        ... (actuellement à 61758, $F13E)
+iclall      =  $32c  ; 812(2) Vecteur vers la routine CLALL du noyau.
+                     ;        ... (actuellement à 62255, $F32F)
+usrcmd      =  $32e  ; 814(2) Vecteur vers une commande définie par
+                     ;        ... l'utilisateur.
+                     ;        ...(pointe actuellement vers BRK à 65126, $FE66)
+iload       =  $330  ; 816(2) Vecteur vers la routine de chargement (LOAD) du
+                     ;        ... noyau.
+                     ;        ... (actuellement à 62622, $F49E)
+isave       =  $332  ; 818(2) Vecteur : Routine de sauvegarde (SAVE) du noyau
+                     ;        ... (Kernal).
+                     ;        ... (actuellement à 62941, $F5DD)
+librevars2  =  $334  ; 820(8) Octets libres.
+tbuffer     =  $33c  ; 828(192)Tampon d'E/S pour cassette.
+librevars3  =  $3fc  ; 1020(4) Octets libres.
+;-----------------------------------------------------------------------------
+; = = = = =   M é m o i r e   v i d é o   = = = = =
+;-----------------------------------------------------------------------------
+scrnram     =  $400  ; 1024   Mémoire vive (RAM) vidéo (Caractères)
+scrram0     =  scrnram        ; Page 0    
+scrram1     =  $500  ; 1280   ; Page 1     
+scrram2     =  $600  ; 1536   ; Page 2  
+scrram3     =  $700  ; 1792   ; Page 3  
+basicsta    =  $801  ; 2049   Adresse de début BASIC
+basicrom    =  $a000 ; 40960  Adresse de base de la ROM BASIC
+chargen     =  $d000 ; 53248  Adresse de base de la ROM CHARGEN
+sid         =  $d400 ; 54272  Adresse de base de la SID
+colorram    =  $d800 ; 55296  Mémoire couleur vidéo (RAM)
+colram      =  $d800 ; 55296  Mémoire couleur vidéo (RAM)
+colram0     =     colorram    ; Page 0
+colram1     =  $d900 ; 55552  ; Page 1
+colram2     =  $da00 ; 55808  ; Page 2
+colram3     =  $db00 ; 56064  ; Page 3
+colorptr    .word    colram0,colram1,colram2,colram3
 ; ------------------------------------------------------------
 ; - C O M P L E X   I N T E R F A C E   A D A P T O R   # 1
 ; ------------------------------------------------------------
