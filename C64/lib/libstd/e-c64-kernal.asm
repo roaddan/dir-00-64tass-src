@@ -4,8 +4,8 @@
 ; Cernière m.à j. : 20261025-001445
 ; Inspiration ....: 
 ;------------------------------------------------------------------------------
-; c64_map.asm - Carthographie memoire et declaration de constantes pour les
-; commodores 64 et 64c
+; e-c64-kernal.asm - Carthographie memoire et declaration de constantes pour
+;                    les commodores 64 et 64c
 ;------------------------------------------------------------------------------
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou sans 64tass 
 ; utilisez la syntaxes ...

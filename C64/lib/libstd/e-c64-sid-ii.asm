@@ -1,34 +1,34 @@
 ;------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: e-c64-sid-ii.asm
-; Cernière m.à j. : 20261025-001445
+; Cernière m.à j. : 20261027-151103 Francisation des commentaires,
 ; Inspiration ....: 
 ;------------------------------------------------------------------------------
 sidbase =   $d400
-; Voice 1
-frelo1  =   $d400 ; 54272 - Voice 1 contrôle de la fréquence (LSB).
-frehi1  =   $d401 ; 54273 - Voice 1 contrôle de la fréquence (MSB).
-pwlo1   =   $d402 ; 54274 - Voice 1 largeur de forme d'onde impulsion (LSB).
-pwhi1   =   $d403 ; 54275 - Voice 1 largeur de forme d'onde impulsion (MSB).
-vcreg1  =   $d404 ; 54276 - Voice 1 registre de contrôle.
+; Voix 1
+frelo1  =   $d400 ; 54272 - Voix 1 contrôle de la fréquence (LSB).
+frehi1  =   $d401 ; 54273 - Voix 1 contrôle de la fréquence (MSB).
+pwlo1   =   $d402 ; 54274 - Voix 1 largeur de forme d'onde impulsion (LSB).
+pwhi1   =   $d403 ; 54275 - Voix 1 largeur de forme d'onde impulsion (MSB).
+vcreg1  =   $d404 ; 54276 - Voix 1 registre de contrôle.
 atdcy1  =   $d405 ; 54277 - Voive 1 registre d'attaque/déclin.
-surel1  =   $d406 ; 54278 - Voice 1 registre de contrôle Maintien/Relâchement.
-; Voice 2
-frelo2  =   $d407 ; 54279 - Voice 2 contrôle de la fréquence (LSB).
-frehi2  =   $d408 ; 54280 - Voice 2 contrôle de la fréquence (MSB).
-pwlo2   =   $d409 ; 54281 - Voice 2 largeur de forme d'onde impulsion (LSB).
-pwhi2   =   $d40a ; 54282 - Voice 2 largeur de forme d'onde impulsion (MSB).
-vcreg2  =   $d40b ; 54283 - Voice 2 registre de contrôle.
+surel1  =   $d406 ; 54278 - Voix 1 registre de contrôle Maintien/Relâchement.
+; Voix 2
+frelo2  =   $d407 ; 54279 - Voix 2 contrôle de la fréquence (LSB).
+frehi2  =   $d408 ; 54280 - Voix 2 contrôle de la fréquence (MSB).
+pwlo2   =   $d409 ; 54281 - Voix 2 largeur de forme d'onde impulsion (LSB).
+pwhi2   =   $d40a ; 54282 - Voix 2 largeur de forme d'onde impulsion (MSB).
+vcreg2  =   $d40b ; 54283 - Voix 2 registre de contrôle.
 atdcy2  =   $d40c ; 54284 - Voive 2 registre d'attaque/déclin.
-surel2  =   $d40d ; 54285 - Voice 2 registre de contrôle Maintien/Relâchement.
-; Voice 3
-frelo3  =   $d40e ; 54286 - Voice 2 contrôle de la fréquence (LSB).
-frehi3  =   $d40f ; 54287 - Voice 2 contrôle de la fréquence (MSB).
-pwlo3   =   $d410 ; 54288 - Voice 2 largeur de forme d'onde impulsion (LSB).
-pwhi3   =   $d411 ; 54289 - Voice 2 largeur de forme d'onde impulsion (MSB).
-vcreg3  =   $d412 ; 54290 - Voice 2 registre de contrôle.
+surel2  =   $d40d ; 54285 - Voix 2 registre de contrôle Maintien/Relâchement.
+; Voix 3
+frelo3  =   $d40e ; 54286 - Voix 2 contrôle de la fréquence (LSB).
+frehi3  =   $d40f ; 54287 - Voix 2 contrôle de la fréquence (MSB).
+pwlo3   =   $d410 ; 54288 - Voix 2 largeur de forme d'onde impulsion (LSB).
+pwhi3   =   $d411 ; 54289 - Voix 2 largeur de forme d'onde impulsion (MSB).
+vcreg3  =   $d412 ; 54290 - Voix 2 registre de contrôle.
 atdcy3  =   $d413 ; 54291 - Voive 2 registre d'attaque/déclin.
-surel3  =   $d414 ; 54292 - Voice 2 registre de contrôle Maintien/Relâchement.
+surel3  =   $d414 ; 54292 - Voix 2 registre de contrôle Maintien/Relâchement.
 
 cutlo   =   $d415 ; 54293 - Bits 0-2 = Partie basse de la fréquence de coupure 
                   ;                    du filtre.

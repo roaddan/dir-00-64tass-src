@@ -1,20 +1,22 @@
 ;-------------------------------------------------------------------------------
-; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
-; Nom du fichier .: lib-c64-sid-notes-ntsc.asm
-; Cernière m.à j. : 
+; Scripteur ......: Daniel Lafrance, Québec, canada.
+; Nom du fichier .: e-c64-sid-notes-ntsc.asm
+; Cernière m.à j. : 20261027-151103 Francisation des commentaires,
 ; Inspiration ....: Programmers guide to the Commodore 64.
 ;-------------------------------------------------------------------------------
-; SID note frequency calculated for a NTSC system with a 1022727 Hz Chrystal.
+; Fréquence des notes SID calculée pour un système NTSC doté d'un quartz à 
+; 1022727 Hz.
 ;-------------------------------------------------------------------------------
-; Values are limited to the humain audible frequencies (20hx to 20000hz) and 
-; to the maximum frequency register value of the sid II ($ffff : 65535)
+; Les valeurs sont limitées aux fréquences audibles par l'être humain 
+; (20 Hz à 20 000 Hz) ainsi qu'à la valeur maximale du registre de fréquence 
+; du SID II ($FFFF:65535).
 ;
 ; doN=C, dodN=C#, reN=D, redN=D#, miN=E ,faN=F, 
 ; fadN=F#, solN=G, soldN=G#, laN=A ,ladN=A#, siN=B
 ; 
-; Where N is the octave number from 0 to 7
+; Où N est le numéro de l'octave, de 0 à 7
 ;-------------------------------------------------------------------------------
-silence     = $0000 ; Silence (no frequency)
+silence     = $0000 ; Silence (pas de fréquence)
 ;-------------------------------------------------------------------------------
 ; Octave 0
 ;-------------------------------------------------------------------------------
