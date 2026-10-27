@@ -1,6 +1,6 @@
 ;-----------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .:
+; Nom du fichier .: e-c64-basic2.asm
 ; Cernière m.à j. : 
 ; Inspiration ....: 
 ;-----------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou avec 64tass
 ; utilisez la syntaxes ...
 ;
-;         .include "map-c64-basic2.asm"
+;         .include "e-c64-basic2.asm"
 ;
 ; ... en prenant soin de placer le fichier dans le meme disque ou répertoire
 ; que votre programme.

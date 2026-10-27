@@ -233,23 +233,23 @@ colorptr    .word    colram0,colram1,colram2,colram3
 ; ------------------------------------------------------------
 ; - C O M P L E X   I N T E R F A C E   A D A P T O R   # 1
 ; ------------------------------------------------------------
-CIA1        =  $dc00 ; 56320 Adresse de base du CIA1.
-CIA1pra     =  $dc00 ; 56320 Port données A (écriture colonne du clavier).
-CIA1prb     =  $dc01 ; 56321 Port données B (Lecture ligne du clavier).
-CIA1ddra    =  $dc02 ; 56322 Direction du port A.
-CIA1ddrb    =  $dc03 ; 56323 Direction du port B.
-CIA1tmalo   =  $dc04 ; 56324 LSB du timer A.
-CIA1tmahi   =  $dc05 ; 56325 MSB du timer A.
-CIA1tmblo   =  $dc06 ; 56326 LSB du timer B.
-CIA1tmbhi   =  $dc07 ; 56327 MSB du timer B.
-CIA1todten  =  $dc08 ; 56328 Secondes/10 de l'heure de la journée.
-CIA1todsec  =  $dc09 ; 56329 Secondes de l'heure de la journée.
-CIA1todmin  =  $dc0a ; 56330 Minutes de l'heure de la journée.
-CIA1todhrs  =  $dc0b ; 56331 Heures de l'heure de la journée.
-CIA1sdr     =  $dc0c ; 56332 Port de données série.
-CIA1icr     =  $dc0d ; 56333 Registre de contrôle des interruptions.
-CIA1cra     =  $dc0e ; 56334 Registre de contrôle A.
-CIA1crb     =  $dc0f ; 56335 Registre de contrôle B.
+cia1        =  $dc00 ; 56320 Adresse de base du CIA1.
+cia1pra     =  $dc00 ; 56320 Port données A (écriture colonne du clavier).
+cia1prb     =  $dc01 ; 56321 Port données B (Lecture ligne du clavier).
+cia1ddra    =  $dc02 ; 56322 Direction du port A.
+cia1ddrb    =  $dc03 ; 56323 Direction du port B.
+cia1tmalo   =  $dc04 ; 56324 LSB du timer A.
+cia1tmahi   =  $dc05 ; 56325 MSB du timer A.
+cia1tmblo   =  $dc06 ; 56326 LSB du timer B.
+cia1tmbhi   =  $dc07 ; 56327 MSB du timer B.
+cia1todten  =  $dc08 ; 56328 Secondes/10 de l'heure de la journée.
+cia1todsec  =  $dc09 ; 56329 Secondes de l'heure de la journée.
+cia1todmin  =  $dc0a ; 56330 Minutes de l'heure de la journée.
+cia1todhrs  =  $dc0b ; 56331 Heures de l'heure de la journée.
+cia1sdr     =  $dc0c ; 56332 Port de données série.
+cia1icr     =  $dc0d ; 56333 Registre de contrôle des interruptions.
+cia1cra     =  $dc0e ; 56334 Registre de contrôle A.
+cia1crb     =  $dc0f ; 56335 Registre de contrôle B.
 ; ------------------------------------------------------------
 ; - C O M P L E X   I N T E R F A C E   A D A P T O R   # 2
 ; ------------------------------------------------------------
@@ -504,219 +504,227 @@ stalk2=$edb9      ; Envoyer l'adresse secondaire TALK sur le bus série.
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sbout=$eddd       ; Write byte to serial bus.
+sbout=$eddd       ; Écrire un octet sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
-                  ;  - sbout write byte to serial bus.
+                  ;  sbout écrit un octet sur le bus série.
                   ; Entrée : Acc = Adresse secondaire
                   ; Sortie : Nil
                   ; Registres modifiés : - 
 ;-----------------------------------------------------------------------------
-sutalk=$edef      ; Send UNTalk command to serial bus.
+sutalk=$edef      ; Envoyer la commande UNTALK sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description:
-                  ;  - sutalk send's UNtalk command to serial bus.
+                  ;  sutalk envoie la commande UNTALK sur le bus série.
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sulisten=$edfe    ; Send UNLISTEN command to serial bus.
+sulisten=$edfe    ; Envoyer la commande UNLISTEN au bus série.
                   ;-----------------------------------------------------------
                   ; Description:
-                  ;  - slisten send's UNLISTEN command to serial bus.
+                  ;  slisten envoie la commande UNLISTEN sur le bus série.
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sclkhigh=$ee85    ; Set CLOCK OUT to High
+sclkhigh=$ee85    ; Réglez CLOCK OUT sur « High »
                   ;-----------------------------------------------------------
                   ; Description:
-                  ;  - sclkhi set's CLOCK OUT to hight.
+                  ;  sclkhi règle CLOCK OUT sur « High ».
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sclklow=$ee8e     ; Set CLOCK OUT to low
+sclklow=$ee8e     ; Réglez CLOCK OUT sur « Low »
                   ;-----------------------------------------------------------
                   ; Description:                
-                  ;  - sclkhi set's CLOCK OUT to low.
+                  ;  sclkhi règle CLOCK OUT sur « High ».
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sdathigh=$ee97    ; Set DATA OUT to High
+sdathigh=$ee97    ; Réglez DATA OUT sur l'état « High ».
                   ;-----------------------------------------------------------
                   ; Description:
-                  ;  - sdtahigh set's DATA OUT to hight.
+                  ;  sdtahigh règle DATA OUT sur l'état « High ».
                   ; Entrée : Nils
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sdatlow=$eea0     ; Set DATA OUT to low
+sdatlow=$eea0     ; Réglez DATA OUT sur l'état «Low ».
                   ;-----------------------------------------------------------
                   ; Description:                
-                  ;  - sdatlow set's DATA OUT to low.
+                  ;  - sdatlow règle DATA OUT sur l'état « Low ».
                   ; Entrée : Nil
                   ; Sortie : Nil
                   ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sclkdtAcc = $eea9     ; Read CLOCK IN and DATA IN.
+sclkdtAcc = $eea9 ; Lire CLOCK IN et DATA IN.
                   ;-----------------------------------------------------------
                   ; Description:                
-                  ;  - Read CLOCK IN and DATA IN.
+                  ;  sclkdtAcc Lit CLOCK IN et DATA IN.
                   ; Entrée : Nil
-                  ; Sortie :    (C)arry= DATA IN; 
-                  ;             (N)egative= CLOCK IN; 
-                  ;             Acc =  CLOCK IN (in bit #7)
+                  ; Sortie :    (C)arry      = DATA IN; 
+                  ;             (N)egative   = CLOCK IN; 
+                  ;             Acc          = CLOCK IN (sur bit #7)
                   ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sbread=$f1ad      ; Read one byte from serial port.
+sbread=$f1ad      ; Lire un octet depuis le port série.
                   ;-----------------------------------------------------------
                   ; Description:                
-                  ;  - Read one byte from serial port.
+                  ;  sbread lit un octet depuis le port série.
                   ; Imput: Nil
-                  ; Sortie:    A Byte Read. (Read $0d, Return, if dev stat <> 0.)
+                  ; Sortie:    Acc Octet lu. 
+                  ;            (Lit $0d, Return, si état de l'appareil <> 0.)
                   ; Registres modifiés : Acc 
 ;-----------------------------------------------------------------------------
-sstdin=$F237      ; Define serial bus as standard input; do not send TALK 
-                  ; secondary address if secondary address bit #7= 1.
+sstdin=$f237      ; Définitz le bus série comme entrée standard,
+                  ;  n’envoit pas l’adresse secondaire TALK si le bit 
+                  ;  d’adresse secondaire #7 = 1.
                   ;-----------------------------------------------------------
                   ; Entrées: Acc =  Numéro de périphérique.
                   ; Sortie: –
-                  ; Registers utilisés...: A, X.
+                  ; Registers utilisés....: A, X.
 ;-----------------------------------------------------------------------------
-sstdout=$F279     ; Define serial bus as standard output; do not send LISTEN 
-                  ; secondary address if secondary address bit #7= 1.
+sstdout=$f279     ; Définissez le bus série comme sortie standard; 
+                  ;  N’envoit pas l’adresse secondaire LISTEN si le bit 
+                  ;  d’adresse secondaire #7 = 1.
                   ;-----------------------------------------------------------
                   ; Entrées: Acc =  Numéro de périphérique.
                   ; Sortie: –
-                  ; Registers utilisés...: A, X.                
+                  ; Registers utilisés....: A, X.                
 ;-----------------------------------------------------------------------------
-sfopen=$F3D5      ; Open file on serial bus; do not send file name if secondary 
-                  ; address bit #7= 1 or file name length= 0.
+sfopen=$f3d5      ; Ouvrir le fichier sur le bus série ; ne pas envoyer 
+                  ;  le nom du fichier si le bit d'adresse secondaire #7 = 1 ou 
+                  ;  si la longueur du nom du fichier=0.
                   ;-----------------------------------------------------------
                   ; Entrées: –
                   ; Sortie: –
-                  ; Registers utilisés...: A, Y.
+                  ; Registers utilisés....: A, Y.
 ;-----------------------------------------------------------------------------
-sutclose=$F528    ; Send UNTALK and CLOSE command to serial bus.
+sutclose=$f528    ; Envoyer les commandes UNTALK et CLOSE sur le bus série.
                   ;-----------------------------------------------------------
                   ; Entrées: –
                   ; Sortie: –
-                  ; Registers utilisés...: A.
+                  ; Registers utilisés....: A.
 ;-----------------------------------------------------------------------------
-sulclose=$F63F    ; Send UNLISTEN and CLOSE command to serial bus.
+sulclose=$f63f    ; Envoyer les commandes UNLISTEN et CLOSE sur le bus série.
                   ;-----------------------------------------------------------
                   ; Entrées: –
                   ; Sortie: –
-                  ; Registers utilisés...: A.
+                  ; Registers utilisés....: A.
 ;-----------------------------------------------------------------------------
-sfclose=$F642     ; Close file on serial bus; do not send CLOSE secondary address 
-                  ; if secondary address bit #7= 1.
+sfclose=$f642     ; Ferme le fichier sur le bus série;
+                  ;  n'envoyez pas l'adresse secondaire CLOSE si le bit 
+                  ;  d'adresse secondaire #7 = 1.
                   ;-----------------------------------------------------------
                   ; Entrées: –
                   ; Sortie: –
-                  ; Registers utilisés...: –
+                  ; Registers utilisés....: –
 ;-----------------------------------------------------------------------------
-stimeout=$FE21 ; Unknown. (Set serial bus timeout.)
+stimeout=$fe21    ; Définir le délai d’attente du bus série.
                   ;-----------------------------------------------------------
-                  ; Entrées: Acc =  Timeout value.
+                  ; Entrées: Acc =  Valeur du delai d'attente. (ms)
                   ; Sortie: –
-                  ; Registers utilisés...: –
+                  ; Registers utilisés....: –
 ;-----------------------------------------------------------------------------
 ; r o u t i n e s   p r é s e n t e s   d a n s   l e   k e r n a l
 ;-----------------------------------------------------------------------------
-acptr=$ffa5       ; jmp $ee13 Recoit un caractere provenant du port serie
+acptr=$ffa5       ; jmp $ee13 Recoit un caractère provenant du port serie
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - acptr est utilisÃ© pour recupÃ©rer des donnÃ©es provenant du 
-                  ;   port série.
+                  ; - acptr est utilisé pour recupérer des données provenant du port série.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: –
-                  ; Registres de sortie..: Acc =  Byte read.
-                  ; Registers utilisés...: A.
-                  ; Pile utilisées.......: 13
-                  ; Registres modifiés...: A, X
+                  ; Registres d'entrées...: –
+                  ; Registres de sortie...: Acc =  Byte read.
+                  ; Registers utilisés....: A.
+                  ; Pile utilisées........: 13
+                  ; Registres modifiés....: A, X
                   ;-----------------------------------------------------------
                   ; Preparation.: TALK, TKSA
                   ;-----------------------------------------------------------
                   ; Erreurs retournés: See READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
-                  ; - Talk et tksa doivent d'abord Ãªtre appelÃ©.
+                  ; - Talk et tksa doivent d'abord Ãªtre appelé.
                   ;       jsr acptr
                   ;       sta $0800
                   ;-----------------------------------------------------------
                   ; Note.:
-                  ; - Cet exemple ne montre que le rÃ©sultat final.
-                  ; - Effectuez d'abord lâ€™appel de talk et tksa.
+                  ; - Cet exemple ne montre que le résultat final.
+                  ; - Effectuez d'abord l'appel de talk et tksa.
 ;-----------------------------------------------------------------------------
 chkin=$ffc6       ; jmp ($031e) Define an input channel. 
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - chkin is used to define any opened file as an input file. 
-                  ; - open must be called first.
+                  ; - chkin sert à définir tout fichier ouvert comme fichier 
+                  ;   d'entrée.
+                  ; - OPEN doit être appelé en premier.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: X
-                  ; Registres de sortie..: -
-                  ; Registers utilisés...: X.
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A, X
+                  ; Registres d'entrées...: X
+                  ; Registres de sortie...: -
+                  ; Registers utilisés....: X.
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A, X
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: OPEN
                   ;-----------------------------------------------------------
                   ; Erreurs retournés: 3,5,6
                   ;-----------------------------------------------------------
                   ; Exemple.:
-                  ; - Define logical file #2 as an input channel.
+                  ; - Définit le fichier logique n° 2 comme canal d'entrée.
                   ;       ldx #2
                   ;       jsr chkin
                   ;-----------------------------------------------------------
                   ; Note.:
-                  ; - The x register designates which file #.
+                  ; - Le registre x désigne le numéro de fichier.
 ;-----------------------------------------------------------------------------
-chkout=$ffc9      ; jmp ($0320) Define an output channel.
+chkout=$ffc9      ; jmp ($0320) Définir un canal de sortie.
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - Just like chkin, but it defines the file for output. 
-                  ; - open must be called first.
+                  ; - Tout comme chkin, mais permet de définir le fichier de 
+                  ;   sortie. 
+                  ; - OPEN doit être appelé en premier.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: X
-                  ; Registres de sortie..: -
-                  ; Registers utilisés...: X.
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A, X
+                  ; Registres d'entrées...: X
+                  ; Registres de sortie...: -
+                  ; Registers utilisés....: X.
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A, X
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: OPEN
                   ;-----------------------------------------------------------
                   ; Erreurs retournés: 3,5,7
                   ;-----------------------------------------------------------
                   ; Exemple.:
-                  ; - Define logical file #4 as an output file.
+                  ; - Définit le fichier logique n°4 comme fichier de sortie.
                   ;       ldx #4
                   ;       jsr chkout
                   ;-----------------------------------------------------------
                   ; Note.:
-                  ; - The x register designates which file #.
+                  ; - Le registre x désigne le numéro de fichier.
 ;-----------------------------------------------------------------------------
-chrin=$ffcf       ; jmp ($0324) Get a character from the input channel
+chrin=$ffcf       ; jmp ($0324) Récupère 1 caractère depuis le canal d'entrée.
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - chrin will get a character from the current input device. 
-                  ; - Calling open and chkin can change the input device.
+                  ; - chrin récupère un caractère depuis le périphérique 
+                  ;   d'entrée actuel.
+                  ; - L'appel de OPEN et CHKIN peut modifier le périphérique 
+                  ;   d'entrée.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: A
-                  ; Registers utilisés...: A.
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A, X
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: A
+                  ; Registers utilisés....: A.
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A, X
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: OPEN, CHKIN
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: See READST
+                  ; Erreurs retournés: Voir READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
-                  ; - Store a typed string to the screen.
+                  ; - Enregistre une chaîne saisie à l’écran.
                   ;       ldy #$00
                   ; loop  jsr chkin
                   ;       sta $0800,y
@@ -726,26 +734,27 @@ chrin=$ffcf       ; jmp ($0324) Get a character from the input channel
                   ;       rts
                   ;-----------------------------------------------------------
                   ; Note.:
-                  ; - This example is like an input statement. try running it.
+                  ; - Cet exemple s'apparente à une instruction INPUT. 
+                  ;   Essayez de l'exécuter.
 ;-----------------------------------------------------------------------------
-chrout=$ffd2      ; jmp ($0326) Sortie a character
+chrout=$ffd2      ; jmp ($0326) Sortie de caractère au périphérique actuel.
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - Load the accumulator with your number and call. 
-                  ; - open and chkout will change the output device.
+                  ; - Charge l'accumulateur avec votre caractère et appelez. 
+                  ; - open et chkout modifieront le périphérique de sortie.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A
-                  ; Registres de sortie..: -
-                  ; Registers utilisés...: A.
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: Aucun
+                  ; Registres d'entrées...: A
+                  ; Registres de sortie...: -
+                  ; Registers utilisés....: A.
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: Aucun
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: CHKOUT, OPEN
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: See READST
+                  ; Erreurs retournés: Voir READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
-                  ; - Duplicate the command of cmd 4: print "a";
+                  ; - Duplique la commande CMD 4 : print "a";
                   ;       ldx #4
                   ;       jsr chkout
                   ;       lda #'a
@@ -753,22 +762,23 @@ chrout=$ffd2      ; jmp ($0326) Sortie a character
                   ;       rts
                   ;-----------------------------------------------------------
                   ; Note.:
-                  ; - The letter a is printed to the screen. 
-                  ; - Call open first for the printer.
+                  ; - La lettre « a » s’affiche à l’écran.
+                  ; - Appel de OPEN en premier pour l'imprimante.
 ;-----------------------------------------------------------------------------
-cint=$ff81        ; jsr $e518 Initialize the screen editor and vic-ii chip
+cint=$ff81        ; jsr $e518 Initialise l'éditeur d'écran et la puce vic-ii.
                   ;-----------------------------------------------------------
                   ; Description:
-                  ; - cint resets the 6567 video controller chip and the screen 
-                  ;   editor.
+                  ; - cint réinitialise la puce de contrôle vidéo 6567 ainsi 
+                  ;   que l'éditeur d'écran.
                   ;-----------------------------------------------------------
                   ; Exemple:
-                  ; - Reset the 6567 chip and the 6566 vic chip.
+                  ; - Réinitialisez la puce 6567 et la puce VIC 6566.
                   ;       jsr cint
                   ;       rts
                   ;-----------------------------------------------------------
                   ; Note:
-                  ; - Basically, just like pressing the stop and restore keys.
+                  ; - En gros, c’est exactement comme si l’on appuyait sur les
+                  ;   touches « STOP » et « RESTORE ».
 ;-----------------------------------------------------------------------------
 ciout=$ffa8       ; jmp $eddd Transmit a byte over the serial bus
                   ;-----------------------------------------------------------
@@ -777,11 +787,11 @@ ciout=$ffa8       ; jmp $eddd Transmit a byte over the serial bus
                   ; - listen and second must be called first. 
                   ; - Call unlsn to finish up neatly.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: Acc =  Byte to write.
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A
+                  ; Registres d'entrées...: Acc =  Byte to write.
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: LISTEN, [SECOND]
                   ;-----------------------------------------------------------
@@ -802,11 +812,11 @@ clall=$ffe7       ; jmp ($032c) Close all open files
                   ; - clall really does what its name implies-it closes all files 
                   ;   and resets all channels.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: -
-                  ; Registers utilisés...: -
-                  ; Pile utilisées.......: 11
-                  ; Registres modifiés...: A, X
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: -
+                  ; Registers utilisés....: -
+                  ; Pile utilisées........: 11
+                  ; Registres modifiés....: A, X
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -826,11 +836,11 @@ close=$ffc3       ; jmp ($031c) Close a logical file
                   ; - This routine will close any logical file that has been 
                   ;   opened.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A
-                  ; Registres de sortie..: -
-                  ; Registers utilisés...: A.
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A, X
+                  ; Registres d'entrées...: A
+                  ; Registres de sortie...: -
+                  ; Registers utilisés....: A.
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A, X
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -850,11 +860,11 @@ clrchn=$ffcc      ; jmp ($0322) - Clear all i/o channels.
                   ; - clrchn resets all channels and i/o registers - the input to 
                   ;   keyboard and the output to screen.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: -
-                  ; Registers utilisés...: -
-                  ; Pile utilisées.......: 9
-                  ; Registres modifiés...: A, X
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: -
+                  ; Registers utilisés....: -
+                  ; Pile utilisées........: 9
+                  ; Registres modifiés....: A, X
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: OPEN, CHKIN
                   ;-----------------------------------------------------------
@@ -874,11 +884,11 @@ getin=$ffe4       ; jmp ($032a) Get a character.
                   ; - getin will get one piece of data from the input device. 
                   ; - Open and chkin can be used to change the input device.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: A
-                  ; Registers utilisés...: A.
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A, X
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: A
+                  ; Registers utilisés....: A.
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A, X
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -899,11 +909,11 @@ iobase=$fff3      ; jmp $e500 Define i/o memory page
                   ; - iobase returns the low and high bytes of the starting 
                   ;   address of the i/o devices in the x and y registers.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: X, Y
-                  ; Registers utilisés...: X, Y.
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: X, Y
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: X, Y
+                  ; Registers utilisés....: X, Y.
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: X, Y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -943,11 +953,11 @@ listen=$ffb1      ; jmp ($ed0c) Command a device on the serial bus to listen.
                   ; - listen will command any device on the serial bus to receive 
                   ;   data.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: Acc =  Numéro de périphérique.
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A.
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A
+                  ; Registres d'entrées...: Acc =  Numéro de périphérique.
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A.
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -968,11 +978,11 @@ load=$ffd5        ; jmp $f4e9 Load device to RAM.
                   ;   command. 
                   ; - If the ac cumulator is a 1, then load; if 0, then verify.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: A
-                  ; Registers utilisés...: A.
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A, X, y
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: A
+                  ; Registers utilisés....: A.
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A, X, y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: SETLFS, SETNAM
                   ;-----------------------------------------------------------
@@ -1007,11 +1017,11 @@ membot=$ff9c      ; jmp $fe34 Get/set bottom of memory.
                   ; - If the carry bit is clear, the bottom of ram is set to the 
                   ;   x and y registers.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: X, Y (C=0)
-                  ; Registres de sortie..: X, Y (C=1)
-                  ; Registers utilisés...: X, Y.
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: X, Y
+                  ; Registres d'entrées...: X, Y (C=0)
+                  ; Registres de sortie...: X, Y (C=1)
+                  ; Registers utilisés....: X, Y.
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: X, Y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1034,11 +1044,11 @@ memtop=$ff99      ; jmp $fe25 Get/Set top of ram
                   ; Description.:
                   ; - Same principle as membot, except the top of ram is affected.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: X, Y (C=0)
-                  ; Registres de sortie..: X, Y (C=1)
-                  ; Registers utilisés...: X, Y.
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: X, Y
+                  ; Registres d'entrées...: X, Y (C=0)
+                  ; Registres de sortie...: X, Y (C=1)
+                  ; Registers utilisés....: X, Y.
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: X, Y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1061,11 +1071,11 @@ open=$ffc0        ; jmp ($031a) Open a logical file
                   ; - After setlfs and setnam have been called, you can open a 
                   ;   logical file.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A, X, Y
-                  ; Registres de sortie..: -
-                  ; Registers utilisés...: A, X, Y.
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A, X, Y
+                  ; Registres d'entrées...: A, X, Y
+                  ; Registres de sortie...: -
+                  ; Registers utilisés....: A, X, Y.
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A, X, Y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: SETLFS, SETNAM
                   ;-----------------------------------------------------------
@@ -1096,11 +1106,11 @@ plot=$fff0        ; jmp $e50a Set or retrieve cursor location x=column, y=line
                   ; - If the carry bit is clear, then the cursor is moved to x,y 
                   ;   as determined by the y and x registers.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: X, Y (C=0)
-                  ; Registres de sortie..: X, Y (C=1)
-                  ; Registers utilisés...: X, Y.
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: A, X, Y
+                  ; Registres d'entrées...: X, Y (C=0)
+                  ; Registres de sortie...: X, Y (C=1)
+                  ; Registers utilisés....: X, Y.
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: A, X, Y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1153,11 +1163,11 @@ readst=$ffb7      ; jmp $fe07 Read i/o status word
                   ; - When called, readst returns the status of the i/o devices. 
                   ; - Any error code can be translated as operator error.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: A
-                  ; Registers utilisés...: A
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: A
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: A
+                  ; Registers utilisés....: A
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: A
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1175,11 +1185,11 @@ readst=$ffb7      ; jmp $fe07 Read i/o status word
 ;-----------------------------------------------------------------------------
 restor=$ff8a      ; jmp $fd15 Restore default I/O vectors.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: -
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A, X, Y
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: -
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A, X, Y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1198,11 +1208,11 @@ save=$ffd8        ; jmp $f5dd Save memory to a device.
                   ;   command. 
                   ; - If the ac cumulator is a 1, then load; if 0, then verify.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A, X, Y
-                  ; Registres de sortie..: -
-                  ; Registers utilisés...: A, X, Y
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A, X, Y
+                  ; Registres d'entrées...: A, X, Y
+                  ; Registres de sortie...: -
+                  ; Registers utilisés....: A, X, Y
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A, X, Y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: SETLFS, SETNAM
                   ;-----------------------------------------------------------
@@ -1241,11 +1251,11 @@ scnkey=$ff9f      ; jmp $ea87 Scan the keyboard
                   ; - TScan the keyboard to see if a key is pressed. 
                   ;   Place that key into the keyboard buffer. 
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: -
-                  ; Registers utilisés...: -
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A, X, Y
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: -
+                  ; Registers utilisés....: -
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A, X, Y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1266,11 +1276,11 @@ screen=$ffed      ; jmp $e505 Return screen format
                   ; - Screen returns the number of columns and rows the screen has 
                   ;   in the x and y registers.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: X, Y
-                  ; Registers utilisés...: X, Y
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: X, Y
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: X, Y
+                  ; Registers utilisés....: X, Y
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: X, Y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1293,11 +1303,11 @@ second=$ff93      ; jmp $edb9 Send secondary address after listen
                   ; - After listen has been called, a secondary address may be 
                   ;   sent.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: Acc = Adresse secondaire.
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A
+                  ; Registres d'entrées...: Acc = Adresse secondaire.
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1321,11 +1331,11 @@ setlfs=$ffba      ; jmp $fe00 Set up a logical file
                   ;   secondary address. 
                   ; - After setlfs is called, open may be called.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A, X, Y
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A, X, Y
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: Aucun
+                  ; Registres d'entrées...: A, X, Y
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A, X, Y
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: Aucun
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1347,11 +1357,11 @@ setmsg=$ff90      ; jmp $fe18 Set kernal message output flag
                   ; - Depending on the accumulator, either error messages, control 
                   ;   messages, or neither is printed.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: A
+                  ; Registres d'entrées...: A
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: A
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1372,11 +1382,11 @@ setnam=$ffbd      ; jmp $fdf9 Set up file name
                   ; - In order to access the open, load, or save routines, 
                   ; - Setnam must be called first.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A, X, Y
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A, X, Y
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: Aucun
+                  ; Registres d'entrées...: A, X, Y
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A, X, Y
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: Aucun
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1399,11 +1409,11 @@ settim=$ffdb      ; jmp $f6e4 Set the system clock.
                   ; - settim is the opposite of rdtim: it sets the system clock
                   ;   instead of reading it.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A, X, Y
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A, X, Y
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: Aucun
+                  ; Registres d'entrées...: A, X, Y
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A, X, Y
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: Aucun
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1425,11 +1435,11 @@ settmo=$ffa2      ; jmp $fe21 Set ieee bus card timeout flag
                   ; - settmo is used only with an ieee add-on card to access the 
                   ;   serial bus.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: Acc =  Timeout value.
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: Aucun
+                  ; Registres d'entrées...: Acc =  Timeout value.
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: Aucun
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1450,11 +1460,11 @@ stop=$ffe1        ; jmp ($0328) Check if stop key is pressed.
                   ; - Stop will set the z flag of the accumulator if the stop key 
                   ;   was pressed.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: A
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: Aucun
+                  ; Registres d'entrées...: A
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: Aucun
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1475,11 +1485,11 @@ talk=$ffb4        ; jmp $ed09 Command a device on the serial bus to talk
                   ; - This routine will command a device on the serial bus to 
                   ;   send data.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: Acc =  Numéro de périphérique.
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A
+                  ; Registres d'entrées...: Acc =  Numéro de périphérique.
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1500,11 +1510,11 @@ tksa = $ff96      ; jmp $edc7 Send a secondary address to a device commanded to 
                   ; - tksa is used to send a secondary address for a talk device.
                   ; - Function talk must be called first.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: Acc = Adresse secondaire.
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: A
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: Aucun
+                  ; Registres d'entrées...: Acc = Adresse secondaire.
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: A
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: Aucun
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: TALK
                   ;-----------------------------------------------------------
@@ -1527,11 +1537,11 @@ udtim=$ffea       ; jmp $f69b Update the system clock
                   ; - If you are using your own interrupt system, you can update 
                   ;   the system clock by calling udtim.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: -
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: A
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: -
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: A
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1551,11 +1561,11 @@ unlsn=$ffae       ; jmp $edfe Send an unlisten command
                   ; - unlsn commands all devices on the serial bus to stop
                   ;   receiving data.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: -
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: -
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A
+                  ; Registres d'entrées...: -
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: -
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1574,11 +1584,11 @@ untlk=$ffab       ; jmp $edef Send an untalk command
                   ; Description.:
                   ; - All devices previously set to talk will stop sending data.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: –
-                  ; Registres de sortie..: –
-                  ; Registers utilisés...: -
-                  ; Pile utilisées.......: Aucun
-                  ; Registres modifiés...: A
+                  ; Registres d'entrées...: –
+                  ; Registres de sortie...: –
+                  ; Registers utilisés....: -
+                  ; Pile utilisées........: Aucun
+                  ; Registres modifiés....: A
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
@@ -1603,11 +1613,11 @@ vector=$ff8d      ; jmp $fd1a Read/set I/O vectors.
                   ;   the x and y registers is transferred to the system ram 
                   ;   vectors.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées..: X, Y (C=0)
-                  ; Registres de sortie..: X, Y (C=1)
-                  ; Registers utilisés...: -
-                  ; Pile utilisées.......: 2
-                  ; Registres modifiés...: A, X, Y
+                  ; Registres d'entrées...: X, Y (C=0)
+                  ; Registres de sortie...: X, Y (C=1)
+                  ; Registers utilisés....: -
+                  ; Pile utilisées........: 2
+                  ; Registres modifiés....: A, X, Y
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------

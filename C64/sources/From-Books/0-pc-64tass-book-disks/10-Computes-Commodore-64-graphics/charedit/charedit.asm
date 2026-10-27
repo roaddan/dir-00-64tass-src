@@ -14,7 +14,7 @@
 version  = "20261021-193200" 
 ;-----------------------------------------------------------------------------
             .include    "e-header-c64.asm"
-            .include    "localcons.asm"
+            .include    "local-const.asm"
             .enc        "none"
 main        .block
             jsr   pushreg           ; Sauvegarde les registres.
@@ -55,18 +55,19 @@ printbye    inc   any_msg           ; Change la couleur de bye_msg.
 endmain     jsr   popreg            ; Récupère les registres.
             jsr   kbflushbuff       ; Vide le tampon du clavier.
             ;jmp   k_warmstart       ; Basic soft start.
-            rts
+            jmp     cint
+            ;rts
             .bend
 
 ;-----------------------------------------------------------------------------
 ; Inclure mes propres librairies.
 ;-----------------------------------------------------------------------------
 ; Chargement des variables locales
-            .include    "localvars.asm"
+            .include    "local-vars.asm"
 ; Chargement des macros globales 
             .include    "m-c64-utils.asm"
 ; et locales.
-            .include    "localmacro.asm"
+            .include    "local-macros.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement du code spécifique au programmes et ...
             .include    "routines.asm"

@@ -1,6 +1,6 @@
 ;-----------------------------------------------------------------------------
 ; Projet...: charedit
-; Fichier..: localcons.asm
+; Fichier..: local-const.asm
 ; Auteur...: Daniel Lafrance
 ; Version..: 0.1.1
 ; Révision.: 2026-10-16
@@ -49,7 +49,7 @@ grid_right     =    grid_left + 7
 ; Pour la couleur des caractères à l'écran et de l'écran de présentation.
 ;-----------------------------------------------------------------------------
 charcolor      =    vvert1  
-charscolor     =    vbleu
+charscolor     =    vgris
 whoamicol      =    vcyan
 
 
