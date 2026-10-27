@@ -10,7 +10,7 @@
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou sans 64tass 
 ; utilisez la syntaxes ...
 ;
-;         .include "c64_map.s"
+;         .include "e-c64_kernal.s"
 ;
 ; ... en prenant soin de placer le fichier dans le meme disque ou répertoire 
 ; que votre programme.
@@ -90,9 +90,12 @@ datptr      =  $41   ; 65-66  Pointeur vers l'adresse de l'élément de données
 impptr      =  $43   ; 67-68  Pointeur de la source des informations pour GET,
                      ;        ... READ ou INPUT.
 varnam      =  $45   ; 69-70  Nom de la variable BASIC actuelle.
-varpnt      =  $47   ; 71-72  Pointeur vers la valeur actuelle d'une variable BASIC.
-forpnt      =  $49   ; 73-74  Pointeur temporaire vers la variable d'index utilisée par une boucle FOR.
-opptr       =  $4b   ; 75-76  Déplacement dans la table des opérateurs mathématiques.
+varpnt      =  $47   ; 71-72  Pointeur vers la valeur actuelle d'une variable 
+                     ;        ... BASIC.
+forpnt      =  $49   ; 73-74  Pointeur temporaire vers la variable d'index 
+                     ;        ... utilisée par une boucle FOR.
+opptr       =  $4b   ; 75-76  Déplacement dans la table des opérateurs 
+                     ;        ... mathématiques.
 opmask      =  $4d   ; 77     Masque pour opération de comparaison.
 defpnt      =  $4e   ; 78-79  Pointeur vers le descripteur FN actuel.
 dscpnt      =  $50   ; 80-82  Pointeur temporaire vers le descripteur de 
@@ -125,8 +128,8 @@ curscol     =  $287  ; 647    Couleur de caractère sous le curseur.
 hibase      =  $288  ; 648    Haut de la page de la mémoire écran.
 xmax        =  $289  ; 649    Taille maximale du tampon clavier.
 rptflg      =  $28a  ; 650    Drapeau: Quel clef sera répétée.
-kount       =  $28b  ; 651    Compteur permettant de mesurer le délai entre les
-                     ;        ... répétitions de touches.
+kount       =  $28b  ; 651    Compteur permettant de mesurer le délai entre
+                     ;        ... les répétitions de touches.
 repdelay    =  $28c  ; 652    Compteur servant à mesurer le délai avant le 
                      ;        ... début de la première répétition de touche.
 shflag      =  $28d  ; 653    Drapeau: Appui sur les touches SHIFT/CTRL/Logo
@@ -135,7 +138,7 @@ lstshf      =  $28e  ; 654    Dernière séquence d’appui sur les touches
 keylog      =  $28f  ; 655(2) Routine de configuration de la table de vecteurs 
                      ;        ... vers le clavier.
 mode        =  $291  ; 657    Indicateur: Activer ou désactiver le changement 
-                     ;        ... de jeu de caractères via la touche SHFT/Logo.
+                     ;        ... de jeu caractères via la touche SHFT/Logo.
 autodn      =  $292  ; 658    Drapeau: Défilement d’écran activé.
 ; rs232reg  =  $293  ; 659(5) Registres pseudo-6551 pour RS-232.
 m51crt      =  $293  ; 659    RS-232: Emul. du registre de contrôle du 6551.
@@ -171,9 +174,6 @@ sareg       =  $30c  ; 780    Zone de stockage pour le registre .A.
 sxreg       =  $30d  ; 781    Zone de stockage pour le registre d'index .X.
 syreg       =  $30e  ; 782    Zone de stockage pour le registre d'index .Y.
 spreg       =  $30f  ; 783    Zone de stockage pour le registre .P (État).
-; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-; = = = = = = = =   T R A D U I R E  E N  F R A N Ç A I S   = = = = = = = = =                       
-; = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 usradd      =  $311  ; 785(2) Adresse de la routine USR.
 libvar1     =  $313  ; 7887   Octet libre.
 cinv        =  $314  ; 788(2) Vecteur vers la routine d'interruption IRQ.
@@ -644,7 +644,7 @@ acptr=$ffa5       ; jmp $ee13 Recoit un caractère provenant du port serie
                   ;-----------------------------------------------------------
                   ; Preparation.: TALK, TKSA
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: See READST
+                  ; Erreurs retournées....: See READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Talk et tksa doivent d'abord Ãªtre appelé.
@@ -670,7 +670,7 @@ chkin=$ffc6       ; jmp ($031e) Define an input channel.
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: OPEN
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: 3,5,6
+                  ; Erreurs retournées....: 3,5,6
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Définit le fichier logique n° 2 comme canal d'entrée.
@@ -695,7 +695,7 @@ chkout=$ffc9      ; jmp ($0320) Définir un canal de sortie.
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: OPEN
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: 3,5,7
+                  ; Erreurs retournées....: 3,5,7
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Définit le fichier logique n°4 comme fichier de sortie.
@@ -721,7 +721,7 @@ chrin=$ffcf       ; jmp ($0324) Récupère 1 caractère depuis le canal d'entré
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: OPEN, CHKIN
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: Voir READST
+                  ; Erreurs retournées....: Voir READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Enregistre une chaîne saisie à l’écran.
@@ -751,7 +751,7 @@ chrout=$ffd2      ; jmp ($0326) Sortie de caractère au périphérique actuel.
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: CHKOUT, OPEN
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: Voir READST
+                  ; Erreurs retournées....: Voir READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Duplique la commande CMD 4 : print "a";
@@ -780,14 +780,14 @@ cint=$ff81        ; jsr $e518 Initialise l'éditeur d'écran et la puce vic-ii.
                   ; - En gros, c’est exactement comme si l’on appuyait sur les
                   ;   touches « STOP » et « RESTORE ».
 ;-----------------------------------------------------------------------------
-ciout=$ffa8       ; jmp $eddd Transmit a byte over the serial bus
+ciout=$ffa8       ; jmp $eddd Transmettre un octet sur le bus série.
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - ciout will send data to the serial bus. 
-                  ; - listen and second must be called first. 
-                  ; - Call unlsn to finish up neatly.
+                  ; - ciout enverra des données vers le bus série.
+                  ; - LISTEN et SECOND doivent être appelés en premier. 
+                  ; - Appelez UNLSN pour conclure en proprement.
                   ;-----------------------------------------------------------
-                  ; Registres d'entrées...: Acc =  Byte to write.
+                  ; Registres d'entrées...: Acc = Octet à écrire.
                   ; Registres de sortie...: –
                   ; Registers utilisés....: A
                   ; Pile utilisées........: Aucun
@@ -795,22 +795,23 @@ ciout=$ffa8       ; jmp $eddd Transmit a byte over the serial bus
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: LISTEN, [SECOND]
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: See READST
+                  ; Erreurs retournées....: Voir READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
-                  ; - Send the letter x to the serial bus.
+                  ; - Envoyez la lettre x sur le bus série.
                   ;       lda #'x
                   ;       jsr ciout
                   ;       rts
                   ;-----------------------------------------------------------
                   ; Note.:
-                  ; - The accumulator is used to transfer the data.
+                  ; - L'accumulateur est utilisé pour transférer les données.
 ;-----------------------------------------------------------------------------
-clall=$ffe7       ; jmp ($032c) Close all open files
+clall=$ffe7       ; jmp ($032c) Fermer tous les fichiers ouverts.
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - clall really does what its name implies-it closes all files 
-                  ;   and resets all channels.
+                  ; - « clall » fait réellement ce que son nom suggère:
+                  ;   il ferme tous les fichiers et réinitialise tous les 
+                  ;   canaux.
                   ;-----------------------------------------------------------
                   ; Registres d'entrées...: -
                   ; Registres de sortie...: -
@@ -823,12 +824,17 @@ clall=$ffe7       ; jmp ($032c) Close all open files
                   ; Erreurs retournés.....: Aucun
                   ;-----------------------------------------------------------
                   ; Exemple.:
-                  ; - Close all files.
+                  ; - Fermez tous les fichiers.
                   ;       jsr clall
                   ;       rts
                   ;-----------------------------------------------------------
                   ; Note.:
-                  ; - The clrchn routine is called automatically.
+                  ; - La routine CLRCHN est appelée automatiquement.
+
+; * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+; * * * * * * * *   T R A D U I R E  E N  F R A N Ç A I S   * * * * * * * * =                       
+; * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
 ;-----------------------------------------------------------------------------
 close=$ffc3       ; jmp ($031c) Close a logical file
                   ;-----------------------------------------------------------
@@ -868,7 +874,7 @@ clrchn=$ffcc      ; jmp ($0322) - Clear all i/o channels.
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: OPEN, CHKIN
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: See READST
+                  ; Erreurs retournées....: See READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Restore default values to i/o devices.
@@ -961,7 +967,7 @@ listen=$ffb1      ; jmp ($ed0c) Command a device on the serial bus to listen.
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: See READST
+                  ; Erreurs retournées....: See READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Command device #8 to listen.
@@ -986,7 +992,7 @@ load=$ffd5        ; jmp $f4e9 Load device to RAM.
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: SETLFS, SETNAM
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: 0, 4, 5, 8, 9
+                  ; Erreurs retournées....: 0, 4, 5, 8, 9
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Load a program into memory.
@@ -1025,7 +1031,7 @@ membot=$ff9c      ; jmp $fe34 Get/set bottom of memory.
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés:None
+                  ; Erreurs retournées....:None
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Move bottom of memory up one page.
@@ -1079,7 +1085,7 @@ open=$ffc0        ; jmp ($031a) Open a logical file
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: SETLFS, SETNAM
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: 1, 2, 4, 5, 6
+                  ; Erreurs retournées....: 1, 2, 4, 5, 6
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; Duplicate the command open 15,8,15,'i/o'
@@ -1216,7 +1222,7 @@ save=$ffd8        ; jmp $f5dd Save memory to a device.
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: SETLFS, SETNAM
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: 5, 8, 9
+                  ; Erreurs retournées....: 5, 8, 9
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Load a program into memory.
@@ -1493,7 +1499,7 @@ talk=$ffb4        ; jmp $ed09 Command a device on the serial bus to talk
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: See READST
+                  ; Erreurs retournées....: See READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Command device #8 to talk.
@@ -1518,7 +1524,7 @@ tksa = $ff96      ; jmp $edc7 Send a secondary address to a device commanded to 
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: TALK
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: See READST
+                  ; Erreurs retournées....: See READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Signal device #4 to talk with command #7.
@@ -1592,7 +1598,7 @@ untlk=$ffab       ; jmp $edef Send an untalk command
                   ;-----------------------------------------------------------
                   ; Routines préparatoires: Aucune
                   ;-----------------------------------------------------------
-                  ; Erreurs retournés: See READST
+                  ; Erreurs retournées....: See READST
                   ;-----------------------------------------------------------
                   ; Exemple.:
                   ; - Command serial bus to stop sending data.

@@ -1,17 +1,14 @@
 ;-----------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: e-c64-basic2.asm
-; Cernière m.à j. : 
-; Inspiration ....: 
+; Dernière m.à j. : 20261026-223332
+; Révision........: 20261024-222156, Francisation des commentaires,
+; Inspiration ....: Mapping The C64 
+;                   Sheldon Leemon 
+;                   ISBN: 0-87455-082-3
 ;-----------------------------------------------------------------------------
-; map-c64-basic2.asm - Carthographie memoire et declaration de constantes pour
+; e-c64-basic2.asm - Carthographie memoire et declaration de constantes pour
 ; le Basic 2.0 du commodores 64 et 64c
-;-----------------------------------------------------------------------------
-; Scripteur...: Daniel Lafrance, Trois-Rivières, Québec, Canada.
-; Version.....: 20230610-223618
-; Révision....: 20261024-222156, Francisation des commentaires,
-; Inspiration.: isbn 0-9692086-0-X
-; Auteur......: Karl J.H. Hildon
 ;-----------------------------------------------------------------------------
 ; Segmentation principales de la mémoire
 ;-----------------------------------------------------------------------------
