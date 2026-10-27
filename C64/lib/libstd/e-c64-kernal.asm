@@ -1276,8 +1276,8 @@ save=$ffd8        ; jmp $f5dd Enregistrer la mémoire sur un appareil.
 scnkey=$ff9f      ; jmp $ea87 Scan the keyboard
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - TScan the keyboard to see if a key is pressed. 
-                  ;   Place that key into the keyboard buffer. 
+                  ; - Examinez le clavier pour voir si une touche est enfoncée. 
+                  ;   Place cette touche dans le tampon du clavier.
                   ;-----------------------------------------------------------
                   ; Registres d'entrées...: Aucun
                   ; Registres de sortie...: Aucun
@@ -1298,11 +1298,11 @@ scnkey=$ff9f      ; jmp $ea87 Scan the keyboard
                   ;-----------------------------------------------------------
                   ; Note.:
 ;-----------------------------------------------------------------------------
-screen=$ffed      ; jmp $e505 Return screen format
+screen=$ffed      ; jmp $e505 Format d'écran de retour.
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - Screen returns the number of columns and rows the screen has 
-                  ;   in the x and y registers.
+                  ; - Screen renvoie le nombre de colonnes et de lignes de 
+                  ;   l'écran dans les registres x et y.
                   ;-----------------------------------------------------------
                   ; Registres d'entrées...: Aucun
                   ; Registres de sortie...: X, Y
@@ -1315,21 +1315,21 @@ screen=$ffed      ; jmp $e505 Return screen format
                   ; Erreurs retournées....: Aucun
                   ;-----------------------------------------------------------
                   ; Exemple.:
-                  ; - Determine the screen size.
+                  ; - Déterminez la taille de l’écran.
                   ;       jsr screen
                   ;       stx maxcol
                   ;       sty maxrow
                   ;       rts
                   ;-----------------------------------------------------------
                   ; Note.:
-                  ; - screen allows further compatibility between the 64, the 
-                  ;   vic-20, and future versions of the 64.
+                  ; - L'écran permet une compatibilité accrue entre le 64, le 
+                  ;   VIC-20 et les futures versions du 64.
 ;-----------------------------------------------------------------------------
-second=$ff93      ; jmp $edb9 Send secondary address after listen
+second=$ff93      ; jmp $edb9 Envoyer l'adresse secondaire après l'écoute.
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - After listen has been called, a secondary address may be 
-                  ;   sent.
+                  ; - Une fois la commande « listen » émise, une adresse 
+                  ;   secondaire peut être envoyée.
                   ;-----------------------------------------------------------
                   ; Registres d'entrées...: Acc = Adresse secondaire.
                   ; Registres de sortie...: –
@@ -1342,21 +1342,22 @@ second=$ff93      ; jmp $edb9 Send secondary address after listen
                   ; Erreurs retournées....: Aucun
                   ;-----------------------------------------------------------
                   ; Exemple.:
-                  ; - Address device #8 with secondary address #15.
+                  ; - Adresse le périphérique n° 8 avec l'adresse secondaire 
+                  ;   n° 15.
                   ;       lda #8
                   ;       jsr listen
-                  ;       lda #15
                   ;       ora #60
                   ;       jsr second
                   ;-----------------------------------------------------------
                   ; Note.:
-                  ; - The accumulator designates the address number.
+                  ; - L'accumulateur désigne le numéro d'adresse.
 ;-----------------------------------------------------------------------------
-setlfs=$ffba      ; jmp $fe00 Set up a logical file
+setlfs=$ffba      ; jmp $fe00 Prépare un fichier logique.
                   ;-----------------------------------------------------------
                   ; Description.:
-                  ; - setlfs stands for set logical address, file address, and 
-                  ;   secondary address. 
+                  ; - « setlfs » signifie « set logical address, file address,
+                  ;   and secondary address » (définir l'adresse logique, 
+                  ;   l'adresse de fichier et l'adresse secondaire).
                   ; - After setlfs is called, open may be called.
                   ;-----------------------------------------------------------
                   ; Registres d'entrées...: A, X, Y
