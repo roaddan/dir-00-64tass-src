@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd -i -L charedit.txt -o charedit.prg charedit.asm
-; Mon Oct 26 22:36:57 2026
+; Tue Oct 27 00:14:47 2026
 
 ;Offset	;Hex		;Source
 
@@ -65,7 +65,7 @@
 =16			grid_bot       =    grid_top + 7
 =8			grid_right     =    grid_left + 7
 =$0d			charcolor      =    vvert1
-=$0b			charscolor     =    vgris
+=$0c			charscolor     =    vgris1
 =$03			whoamicol      =    vcyan
 
 ;******  Return to file: charedit.asm
@@ -767,7 +767,7 @@
 .0eb3	ae ed 08	            ldx  previouskey        ; Replace le caractère précédente
 .0eb6	bd 42 c8	            lda  asciitorom,x       ; ... dans sa
 .0eb9	aa		            tax                     ; ... couleur
-.0eba	a9 0b		            lda  #charscolor        ; ... normale
+.0eba	a9 0c		            lda  #charscolor        ; ... normale
 .0ebc	9d 00 d8	            sta  colorram,x         ; ... sur l'écran.
 .0ebf	ae ec 08	            ldx  currentkey         ; Place le caractère actuel
 .0ec2	bd 42 c8	            lda  asciitorom,x       ; ... dans sa
@@ -1005,7 +1005,7 @@
 .10d8	a2 00		            ldx   #$00              ; Index à 0.
 .10da	8a		nextc       txa                     ; On fait un caractère de l'index.
 .10db	9d 00 04	            sta   scrnnewram,x      ; On affiche directement en ram vidéo.
-.10de	a9 0b		            lda   #charscolor       ; On charge la couleur.
+.10de	a9 0c		            lda   #charscolor       ; On charge la couleur.
 .10e0	9d 00 d8	            sta   colorram,x        ; On la place en ram couleur.
 .10e3	e8		            inx                     ; Incrémente l'index.
 .10e4	e0 80		            cpx   #$80              ; Sommes nous à la fin?
@@ -4578,22 +4578,22 @@
 =$ff81			cint=$ff81        ; jsr $e518 Initialise l'éditeur d'écran et la puce vic-ii.
 =$ffa8			ciout=$ffa8       ; jmp $eddd Transmettre un octet sur le bus série.
 =$ffe7			clall=$ffe7       ; jmp ($032c) Fermer tous les fichiers ouverts.
-=$ffc3			close=$ffc3       ; jmp ($031c) Close a logical file
-=$ffcc			clrchn=$ffcc      ; jmp ($0322) - Clear all i/o channels.
-=$ffe4			getin=$ffe4       ; jmp ($032a) Get a character.
-=$fff3			iobase=$fff3      ; jmp $e500 Define i/o memory page
-=$ff84			ioinit=$ff84      ; ($fda3) Initialize i/o devices.
-=$ffb1			listen=$ffb1      ; jmp ($ed0c) Command a device on the serial bus to listen.
-=$ffd5			load=$ffd5        ; jmp $f4e9 Load device to RAM.
-=$ff9c			membot=$ff9c      ; jmp $fe34 Get/set bottom of memory.
-=$ff99			memtop=$ff99      ; jmp $fe25 Get/Set top of ram
-=$ffc0			open=$ffc0        ; jmp ($031a) Open a logical file
-=$fff0			plot=$fff0        ; jmp $e50a Set or retrieve cursor location x=column, y=line
-=$ff87			ramtas=$ff87      ; ($fd50) Initialise ram, tape buffer and screen.
-=$ffde			rdtim=$ffde       ; jmp $f6dd Read system clock
-=$ffb7			readst=$ffb7      ; jmp $fe07 Read i/o status word
-=$ff8a			restor=$ff8a      ; jmp $fd15 Restore default I/O vectors.
-=$ffd8			save=$ffd8        ; jmp $f5dd Save memory to a device.
+=$ffc3			close=$ffc3       ; jmp ($031c) Fermer un fichier logique.
+=$ffcc			clrchn=$ffcc      ; jmp ($0322) - Effacer tous les canaux d'E/S.
+=$ffe4			getin=$ffe4       ; jmp ($032a) Obtient un caractère.
+=$fff3			iobase=$fff3      ; jmp $e500 Définir une page mémoire d'E/S
+=$ff84			ioinit=$ff84      ; ($fda3) Initialiser les périphériques d’E/S.
+=$ffb1			listen=$ffb1      ; jmp ($ed0c) Ordonnez à un périphérique sur le bus série
+=$ffd5			load=$ffd5        ; jmp $f4e9 Charger le périphérique en mémoire vive (RAM).
+=$ff9c			membot=$ff9c      ; jmp $fe34 Obtient/définie l'adresse inférieure de la
+=$ff99			memtop=$ff99      ; jmp $fe25 Obtenir/Définir l'adresse supérieure de la RAM.
+=$ffc0			open=$ffc0        ; jmp ($031a) Ouvrir un fichier logique.
+=$fff0			plot=$fff0        ; jmp $e50a Définir ou récupérer la position du curseur :
+=$ff87			ramtas=$ff87      ; ($fd50) Initialiser la mémoire vive, le tampon clavier et
+=$ffde			rdtim=$ffde       ; jmp $f6dd Lire l'horloge système.
+=$ffb7			readst=$ffb7      ; jmp $fe07 Lire le mot d'état des E/S.
+=$ff8a			restor=$ff8a      ; jmp $fd15 Restaurer les vecteurs d’E/S par défaut.
+=$ffd8			save=$ffd8        ; jmp $f5dd Enregistrer la mémoire sur un appareil.
 =$ff9f			scnkey=$ff9f      ; jmp $ea87 Scan the keyboard
 =$ffed			screen=$ffed      ; jmp $e505 Return screen format
 =$ff93			second=$ff93      ; jmp $edb9 Send secondary address after listen
