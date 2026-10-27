@@ -275,65 +275,69 @@ cia2crb     =  $dd0f ; 56501 Registre de contrôle A.
 kernalrom   =  $e000 ; 57344 start of kernal rom
 irq         =  $ea31 ; 59953 irq entry point
 ;------------------------------------------------------------------------------
-;* Basic petscii control characters 
-;  when printed with ?chr$(##) or jsr $ffd2 
-;  Where keystroke are shown, []+[]=combined 
+;  Caractères de contrôle PETSCII de base, obtenus via `?chr$(##)` ou 
+;  `jsr $ffd2`. Lorsque des touches sont indiquées, `[]+[]` signifie une 
+;  combinaison de touches.
 ;------------------------------------------------------------------------------
 bstop       =  $03   ;  03 [STOP],     [CTRL]-[C]
-bwhite      =  $05   ;  05 [CTRL]+[2], [CTRL]-[E], Set colour to WHITE
-block       =  $08   ;  08 Disable char map switch with [SHIFT]+[C=]     
-bunlock     =  $09   ;  09 Enabled char map switch with [SHIFT]+[C=]      
+bwhite      =  $05   ;  05 [CTRL]+[2], [CTRL]-[E], Sélectionne le blanc
+block       =  $08   ;  08 Désactiver le changement de table de caractères 
+                     ;     ...  avec [SHIFT]+[C=].     
+bunlock     =  $09   ;  09 Activer le changement de table de caractères 
+                     ;     ...  avec [SHIFT]+[C=].
 bcarret     =  $0d   ;  11 [RETURN]
-btext       =  $0e   ;  14 CTRL]-[N] select Upper/lowercase charset
-bcrsdn      =  $11   ;  17 [CRS-D]           Cursor DOWN 1 line
-brevcol     =  $12   ;  18 [CTRL]+[9]        REVERSE VIDEO ON
-bhome       =  $13   ;  19 [HOME]            Cursor HOME
-bdelete     =  $14   ;  20 [DELETE]          Delete 1 char
-bred        =  $1c   ;  28 [CTRL]+[3]        Set colour to RED
-bcuright    =  $1d   ;  29 [CRS-R]           Cursor RIGHT
-bgreen      =  $1e   ;  30 [CTRL]+[6]        Set colour to GREEN
-bblue       =  $1f   ;  31 [CTRL]+[7]        Set colour to BLUE
-borange     =  $81   ; 129 [C=]+[1]          Set colour to ORANGE
-; Clefs fonctions
-f1key       =  $85   ; 133 [F1]
-f2key       =  $86   ; 134 [F2]
-f3key       =  $87   ; 135 [F3]
-f4key       =  $88   ; 136 [F4]
-f5key       =  $89   ; 137 [F5]
-f6key       =  $8a   ; 138 [F6]
-f7key       =  $8b   ; 139 [F7]
-f8key       =  $8c   ; 140 [F8]
-dcurskey    =  $11   ; 17
-ucurskey    =     145   
-rcurskey    =     29
-lcurskey    =     157
-larrowkey   =     95
-uarrowkey   =     94
-homekey     =     19
-clearkey    =     147
-delkey      =     20
-inskey      =     148
-
-bcarret1    =  $8d   ; 141 [SHIFT]+[RETURN]
-bgraph      =  $8e   ; 142 select Uppercase+graphics charset
-bblack      =  $90   ; 144 [CTRL]+[1]        Set colour to BLACK
-bcuup       =  $91   ; 145 [SHIFT]+[CRS-D]   cursor UP 1 line
-brevoff     =  $92   ; 146 [CTRL]+[0]        REVERSE VIDEO OFF
-bclear      =  $93   ; 147 [SHIFT]+[HOME]    CLEAR SCREEN
-binsert     =  $94   ; 148 [SHIFT]+[DELETE]  INSERT a char
-bbrown      =  $95   ; 149 [C=]+[2]          Set colour to BROWN
-bltred      =  $96   ; 150 [C=]+[3]          Set colour to PINK
-bdkgrey     =  $97   ; 151 [C=]+[4]          Set colour to DARK GREY
-bmdgrey     =  $98   ; 152 [C=]+[5]          Set colour to MEDIUM GREY
-bltgreen    =  $99   ; 153 [C=]+[6]          Set colour to LIGHT GREEN
-bltblue     =  $9a   ; 154 [C=]+[7]          Set colour to LIGHT BLUE
-bltgrey     =  $9b   ; 155 [C=]+[8]          Set colour to LIGHT GREY
-bmagenta    =  $9c   ; 156 [CTRL]+[5]        Set colour to MAGENTA
-bculeft     =  $9d   ; 157 [SHIFT]+[CRS-R]   cursor RIGHT 1 pos
-byellow     =  $9e   ; 158 [CTRL]+[8]        Set colour to YELLOW 
-bcyan       =  $9f   ; 159 [CTRL]+[4]        Set colour to CYAN
-bspace1     =  $a0   ; 169                   space
-bspace2     =  $e0   ; 224                   space
+btext       =  $0e   ;  14 CTRL]-[N] Sélectionner le jeu de caractères 
+                     ;     ... majuscules/minuscules.
+bcrsdn      =  $11   ;  17 [CRS-D]...........Déscend le curseur d'une ligne.
+brevcol     =  $12   ;  18 [CTRL]+[9]........Vidéo Inversée Activée.
+bhome       =  $13   ;  19 [HOME]............Curseur en début d'écran.
+bdelete     =  $14   ;  20 [DELETE]..........Supprimer 1 caractère.
+bred        =  $1c   ;  28 [CTRL]+[3]........Sélectionne le ROUGE
+bcuright    =  $1d   ;  29 [CRS-R]...........Déplace le curseur vers la DROITE.
+bgreen      =  $1e   ;  30 [CTRL]+[6]........Sélectionne le VERT.
+bblue       =  $1f   ;  31 [CTRL]+[7]........Sélectionne le BLEU.
+borange     =  $81   ; 129 [C=]+[1]..........Sélectionne le ORANGE.
+; Clefs fonctions.
+f1key       =  $85   ; 133 Code de la touche [F1].
+f2key       =  $86   ; 134 Code de la touche [F2].
+f3key       =  $87   ; 135 Code de la touche [F3].
+f4key       =  $88   ; 136 Code de la touche [F4].
+f5key       =  $89   ; 137 Code de la touche [F5].
+f6key       =  $8a   ; 138 Code de la touche [F6].
+f7key       =  $8b   ; 139 Code de la touche [F7].
+f8key       =  $8c   ; 140 Code de la touche [F8].
+; Autres touches.
+dcurskey    =  $11   ;  17 Code de la touche curseur vers le bas.
+ucurskey    =  $91   ; 145 Code de la touche curseur vers le haut.
+rcurskey    =  $1d   ;  29 Code de la touche curseur vers la droite.
+lcurskey    =  $9d   ; 157 Code de la touche curseur vers la gauche.
+larrowkey   =  $5f   ;  95 Code de la touche flèche à gauche [<-].
+uarrowkey   =  $5e   ;  94 Code de la touche flèche vers le haut.
+homekey     =  $13   ;  19 Code de la touche [HOME].
+clearkey    =  $93   ; 147 Code de la touche [CLEAR]. 
+delkey      =  $14   ;  20 Code de la touche [DELETE]. 
+inskey      =  $94   ; 148 Code de la touche [INSERT]. 
+; 
+bcarret1    =  $8d   ; 141 [SHIFT]+[RETURN].
+bgraph      =  $8e   ; 142 Sélectionner le jeu majuscules + graphiques.
+bblack      =  $90   ; 144 [CTRL]+[1]        Sélectionne le NOIR.
+bcuup       =  $91   ; 145 [SHIFT]+[CRS-D]   Curseur 1 ligne vers le haut.
+brevoff     =  $92   ; 146 [CTRL]+[0]        Vidéo Inversée désactivée.
+bclear      =  $93   ; 147 [SHIFT]+[HOME]    CLEAR SCREEN.
+binsert     =  $94   ; 148 [SHIFT]+[DELETE]  INSERT a char.
+bbrown      =  $95   ; 149 [C=]+[2]          Sélectionne le BRUN.
+bltred      =  $96   ; 150 [C=]+[3]          Sélectionne le ROSE.
+bdkgrey     =  $97   ; 151 [C=]+[4]          Sélectionne le GRIS FONCÉ.
+bmdgrey     =  $98   ; 152 [C=]+[5]          Sélectionne le GRIS MOYEN.
+bltgreen    =  $99   ; 153 [C=]+[6]          Sélectionne le VERT PÂLE.
+bltblue     =  $9a   ; 154 [C=]+[7]          Sélectionne le BLEU PÂLE.
+bltgrey     =  $9b   ; 155 [C=]+[8]          Sélectionne le GRIS PÂLE.
+bmagenta    =  $9c   ; 156 [CTRL]+[5]        Sélectionne le MAGENTA.
+bculeft     =  $9d   ; 157 [SHIFT]+[CRS-R]   Déplace le curseur vers la GAUCHE.
+byellow     =  $9e   ; 158 [CTRL]+[8]        Sélectionne le JAUNE. 
+bcyan       =  $9f   ; 159 [CTRL]+[4]        Sélectionne le CYAN.
+bspace1     =  $a0   ; 169                   Espace.
+bspace2     =  $e0   ; 224                   Espace.
 ;+----+----------------------+-------------------------------------------------------------------------------------------------------+
 ;|    |                      |                                Peek from $dc01 (code in paranthesis):                                 |
 ;|row:| $dc00:               +------------+------------+------------+------------+------------+------------+------------+------------+
@@ -362,7 +366,7 @@ bspace2     =  $e0   ; 224                   space
 ; | 12  | $0  | b00001100 | gris moyen || 13  | $d  | b00001101 | vert pale  |
 ; | 14  | $0  | b00001110 | blue pale  || 15  | $f  | b00001111 | gris pale  |
 ; +-----+-----+-----------+------------++-----+-----+-----------+------------+
-; constantes de couleurs en français.
+; Code de couleurs pour la mémoire vidéo en français.
 cnoir       =  $0
 cblanc      =  $1
 crouge      =  $2
