@@ -23,8 +23,8 @@
 ;           .include    "lib-c64-drawbox.asm"
 ;           .include    "macros-64tass.asm"
 ;
-; ... en prenant soin de placer le fichier dans le meme disque ou répertoire que
-; votre programme ou d'accès de vos librairies.
+; ... en prenant soin de placer le fichier dans le meme disque ou répertoire 
+; que votre programme ou d'accès de vos librairies.
 ;------------------------------------------------------------------------------
 
 ;------------------------------------------------------------------------------
@@ -37,33 +37,33 @@
 ;              5) colour...........: La couleur de la fenêtre. >16=inverse.
 ;              6) titre............: Titre de la fenêtre.
 ;------------------------------------------------------------------------------
-drawbox         .macro top, left, width, height, colour, title
-                php                 ; Sauvegarde les registres.
-                pha
-                lda #\top           ; Initialise le paramètre top et la ...
-                sta drawbox_top
-                sta drawbox_curline ; ... position de la ligne à traiter.
-                lda #\left          ; Initialise le paramètre left.
-                sta drawbox_left
-                lda #\width         ; Initialise le paramètre width.
-                sta drawbox_width
-                lda #\height        ; Initialise le paramètre height.
-                sta drawbox_height
-                lda #\colour        ; Initialise le paramètre colour.
-                sta drawbox_colour
-                pla                 ; Récupère les registres.
-                plp
-                jsr db_drawbox      ; Dessine la fenêtre.
+drawbox     .macro top, left, width, height, colour, title
+            php                     ; Sauvegarde les registres.
+            pha
+            lda   #\top             ; Initialise le paramètre top et la ...
+            sta   drawbox_top
+            sta   drawbox_curline   ; ... position de la ligne à traiter.
+            lda   #\left            ; Initialise le paramètre left.
+            sta   drawbox_left
+            lda   #\width           ; Initialise le paramètre width.
+            sta   drawbox_width
+            lda   #\height          ; Initialise le paramètre height.
+            sta   drawbox_height
+            lda   #\colour          ; Initialise le paramètre colour.
+            sta   drawbox_colour
+            pla                     ; Récupère les registres.
+            plp
+            jsr   db_drawbox        ; Dessine la fenêtre.
                                     ; Affiche le titre.
-                .if \colour < 16 
-                    lda #18         ; le titre zzzzzz
-                    jsr chrout
-                    #print_cxy \colour,\left+1,\top,\title
-                    lda #146
-                    jsr chrout
-                .else                    
-                    #print_cxy \colour,\left+1,\top,\title
-                .endif
+            .if \colour < 16 
+                 lda #18            ; le titre zzzzzz
+                 jsr chrout
+                 #print_cxy \colour,\left+1,\top,\title
+                 lda #146
+                 jsr chrout
+            .else                    
+                 #print_cxy \colour,\left+1,\top,\title
+            .endif
                 .endm
 
 ;------------------------------------------------------------------------------
@@ -72,20 +72,20 @@ drawbox         .macro top, left, width, height, colour, title
 ;               utilisant les caractères graphiques disponnible dand les modes
 ;               majuscule et minuscule.
 ;------------------------------------------------------------------------------
-db_tline        .block
-                php                 ; Sauvegarde les registres.
-                pha
-                lda #tleft          ; Coin suppérieur gauche.
-                sta db_left
-                lda #hline          ; Ligne horizontale.
-                sta db_mid
-                lda #tright         ; Coin suppérieur droit.
-                sta db_right
-                plp                 ; Récupère les registres.
-                pla
-                jsr db_drawline
-                rts
-                .bend          
+db_tline    .block
+            php                     ; Sauvegarde les registres.
+            pha
+            lda   #tleft            ; Coin suppérieur gauche.
+            sta   db_left
+            lda   #hline            ; Ligne horizontale.
+            sta   db_mid
+            lda   #tright           ; Coin suppérieur droit.
+            sta   db_right
+            plp                     ; Récupère les registres.
+            pla
+            jsr   db_drawline
+            rts
+            .bend          
 
 ;------------------------------------------------------------------------------
 ; Fonction: db_bline
@@ -93,20 +93,20 @@ db_tline        .block
 ;               utilisant les caractères graphiques disponnible dand les modes
 ;               majuscule et minuscule.
 ;------------------------------------------------------------------------------
-db_bline        .block
-                php                 ; Sauvegarde les registres.
-                pha
-                lda #bleft          ; Coin inférieur gauche.
-                sta db_left
-                lda #hline          ; Ligne horizontale.
-                sta db_mid
-                lda #bright         ; Coin inférieur droit.
-                sta db_right
-                plp                 ; Récupère les registres.
-                pla
-                jsr db_drawline
-                rts
-                .bend
+db_bline    .block
+            php                     ; Sauvegarde les registres.
+            pha
+            lda   #bleft            ; Coin inférieur gauche.
+            sta   db_left
+            lda   #hline            ; Ligne horizontale.
+            sta   db_mid
+            lda   #bright           ; Coin inférieur droit.
+            sta   db_right
+            plp                     ; Récupère les registres.
+            pla
+            jsr   db_drawline
+            rts
+            .bend
 
 ;------------------------------------------------------------------------------
 ; Fonction: db_eline
@@ -114,20 +114,20 @@ db_bline        .block
 ;               utilisant les caractères graphiques disponnible dand les modes
 ;               majuscule et minuscule.
 ;------------------------------------------------------------------------------
-db_eline        .block
-                php                 ; Sauvegarde les registres.
-                pha
-                lda #vline          ; Ligne verticale.
-                sta db_left
-                lda #space          ; Caractère espace.
-                sta db_mid
-                lda #vline          ; Ligne verticale.
-                sta db_right
-                plp                 ; Récupère les registres.
-                pla
-                jsr db_drawline
-                rts
-                .bend
+db_eline    .block
+            php                     ; Sauvegarde les registres.
+            pha
+            lda   #vline            ; Ligne verticale.
+            sta   db_left
+            lda   #space            ; Caractère espace.
+            sta   db_mid
+            lda   #vline            ; Ligne verticale.
+            sta   db_right
+            plp                     ; Récupère les registres.
+            pla
+            jsr   db_drawline
+            rts
+            .bend
 
 ;------------------------------------------------------------------------------
 ; Fonction: db_mline
