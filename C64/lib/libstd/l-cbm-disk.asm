@@ -251,13 +251,6 @@ dsk_putmesg    .block
                jsr pop
                rts    
                .bend      
-
-dsk_data_s     .word     $0000     ; Data start example addresses
-dsk_data_e     .word     $2000     ; Data end 
-dsk_dev        .byte     $08       ; Device number
-dsk_lfsno      .byte     $00       ; Logical file number
-dsk_fnptr      .word     $00       ; Pointer to filename
-dsk_fnlen      .byte     0         ; Number of character in filename.
-dsk_msg0       .byte     141       ; Miscilinaous file message.
+dsk_msg0       .byte 141   ; Miscilinaous file message.
                .null     "saving "
 

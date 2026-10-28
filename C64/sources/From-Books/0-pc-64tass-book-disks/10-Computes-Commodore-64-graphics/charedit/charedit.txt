@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd -i -L charedit.txt -o charedit.prg charedit.asm
-; Tue Oct 27 16:54:19 2026
+; Tue Oct 27 22:31:40 2026
 
 ;Offset	;Hex		;Source
 
@@ -2010,23 +2010,23 @@
 .1957			savefile
 .1957	20 45 c4	            jsr   pushall           ; Sauvegarde les registres
 .195a	a9 fb		            lda   #<fname           ; Charge l'adresse 16 bits
-.195c	8d 27 cb	            sta   dsk_fnptr         ; ... du pointeur de nom
+.195c	8d c1 29	            sta   dsk_fnptr         ; ... du pointeur de nom
 .195f	a9 08		            lda   #>fname           ; ... de fichier dans
-.1961	8d 28 cb	            sta   dsk_fnptr+1       ; ... le pointeur standard du Kernal.
+.1961	8d c2 29	            sta   dsk_fnptr+1       ; ... le pointeur standard du Kernal.
 .1964	a9 0d		            lda   #(device-fname-1) ; Charge la longueur du nom de fichier
-.1966	8d 29 cb	            sta   dsk_fnlen         ; ... la place dans la variable du Kernal.
+.1966	8d c3 29	            sta   dsk_fnlen         ; ... la place dans la variable du Kernal.
 .1969	ad 09 09	            lda   device            ; Charge le no de périphérique
 .196c	29 0f		            and   #$0f              ; ... le masque pour limiter la valeur.
-.196e	8d 26 cb	            sta   dsk_lfsno         ; ... le place dans la variable du Kernal
-.1971	8d 25 cb	            sta   dsk_dev           ; ... pour les no. primaire et secondaire.
+.196e	8d c0 29	            sta   dsk_lfsno         ; ... le place dans la variable du Kernal
+.1971	8d bf 29	            sta   dsk_dev           ; ... pour les no. primaire et secondaire.
 .1974	a9 00		            lda   #<bitmapmem       ; Copie l'adresse 16 bits du debut de la
-.1976	8d 21 cb	            sta   dsk_data_s        ; ... matrice de point dans l'espace
+.1976	8d bb 29	            sta   dsk_data_s        ; ... matrice de point dans l'espace
 .1979	a9 30		            lda   #>bitmapmem       ; ... réservée à cet
-.197b	8d 22 cb	            sta   dsk_data_s+1      ; ... effet.
+.197b	8d bc 29	            sta   dsk_data_s+1      ; ... effet.
 .197e	a9 00		            lda   #<endofaddr       ; Copie l'adresse 16 bits de la fin de la
-.1980	8d 23 cb	            sta   dsk_data_e        ; ... matrice de point dans l'espace
+.1980	8d bd 29	            sta   dsk_data_e        ; ... matrice de point dans l'espace
 .1983	a9 50		            lda   #>endofaddr       ; ... réservée à cet
-.1985	8d 24 cb	            sta   dsk_data_e+1      ; ... effet.
+.1985	8d be 29	            sta   dsk_data_e+1      ; ... effet.
 .1988	20 b3 c4	                   jsr  pushregs
 .198b	a2 31		               ldx  #<blankmsg
 .198d	a0 1a		               ldy  #>blankmsg
@@ -2048,23 +2048,23 @@
 .19b6			loadfile
 .19b6	20 45 c4	            jsr   pushall
 .19b9	a9 fb		            lda   #<fname
-.19bb	8d 27 cb	            sta   dsk_fnptr
+.19bb	8d c1 29	            sta   dsk_fnptr
 .19be	a9 08		            lda   #>fname
-.19c0	8d 28 cb	            sta   dsk_fnptr+1
+.19c0	8d c2 29	            sta   dsk_fnptr+1
 .19c3	a9 0d		            lda   #(device-fname-1)
-.19c5	8d 29 cb	            sta   dsk_fnlen
+.19c5	8d c3 29	            sta   dsk_fnlen
 .19c8	ad 09 09	            lda   device
 .19cb	29 0f		            and   #$0f
-.19cd	8d 25 cb	            sta   dsk_dev
-.19d0	8d 26 cb	            sta   dsk_lfsno
+.19cd	8d bf 29	            sta   dsk_dev
+.19d0	8d c0 29	            sta   dsk_lfsno
 .19d3	a9 00		            lda   #<bitmapmem
-.19d5	8d 21 cb	            sta   dsk_data_s
+.19d5	8d bb 29	            sta   dsk_data_s
 .19d8	a9 30		            lda   #>bitmapmem
-.19da	8d 22 cb	            sta   dsk_data_s+1
+.19da	8d bc 29	            sta   dsk_data_s+1
 .19dd	a9 00		            lda   #<endofaddr
-.19df	8d 23 cb	            sta   dsk_data_e
+.19df	8d bd 29	            sta   dsk_data_e
 .19e2	a9 50		            lda   #>endofaddr
-.19e4	8d 24 cb	            sta   dsk_data_e+1
+.19e4	8d be 29	            sta   dsk_data_e+1
 .19e7	20 b3 c4	                   jsr  pushregs
 .19ea	a2 31		               ldx  #<blankmsg
 .19ec	a0 1a		               ldy  #>blankmsg
@@ -2471,93 +2471,87 @@
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd/e-c64-vars.asm
 
->2149	00		libre       .byte 0  ; *
->214a	00		rp          .byte 0  ; libre-$01;1 byte $cfff
->214b	00		ra          .byte 0  ; rp-1     ;1 byte $cffe
->214c	00		rx          .byte 0  ; ra-1     ;1 byte $cffd
->214d	00		ry          .byte 0  ; rx-1     ;1 byte $cffc
->214e	00		rs          .byte 0  ; ry-1     ;1 byte $cffb
->214f	00		pc          .byte 0  ; rs-2     ;2 byte $cff9-$cffa
->2150	00		curcol      .byte 0  ; pc-1     ;1 byte $cff6
->2151	00 00		memptr      .word 0  ; curcol-1;1 word $cff7-$cff8
->2153	00 00		src         .word 0  ; memptr-2
->2155	00 00		dst         .word 0  ; memptr-4
->2157	00 00		loopcount   .word 0  ; memptr-6
->2159	00		hexv        .byte 0  ; loopcount
->215a	00 00 00 00	hexstr      .fill 5,0  ; hexv-$05 ;5 byte
->215e	00
->215f	00		a2hexpfx    .byte 0  ; hexv-$06 ;1 byte
->2160	00		a2hexpy     .byte 0  ; hexv-$07 ;1 byte
->2161	00		a2hexpx     .byte 0  ; hexv-$08 ;1 byte
->2162	00		a2hexpos    .byte 0  ; hexv-$08 ;0 byte
->2163	00		a2hexcol    .byte 0  ; hexv-$09 ;1 byte
->2164	00		binv        .byte 0  ; a2hexcol
->2165	00 00 00 00	binstr      .fill 9,0  ; binv-$09 ;9 byte
->2169	00 00 00 00 00
->216e	00		a2binpfx    .byte 0  ; binv-$0a ;1 byte
->216f	00		a2binpy     .byte 0  ; binv-$0b ;1 byte
->2170	00		a2binpx     .byte 0  ; binv-$0c ;1 byte
->2171	00		a2binpos    .byte 0  ; binv-$0c ;0 byte
->2172	00		a2bincol    .byte 0  ; binv-$0d ;1 byte
->2173	00		decv        .byte 0  ; a2bincol
->2174	00 00 00 00	decstr      .fill 6,0  ; decv-$06 ;6 byte
->2178	00 00
->217a	00		a2decpfx    .byte 0  ; decv-$07 ;1 byte
->217b	00		a2decpy     .byte 0  ; decv-$08 ;1 byte
->217c	00		a2decpx     .byte 0  ; decv-$09 ;1 byte
->217d	00		a2decpos    .byte 0  ; decv-$09 ;0 byte
->217e	00		a2deccol    .byte 0  ; decv-$0a ;1 byte
->217f	00		offset      .byte 0  ; decv-$0b ;1 byte
->2180	00		fltv     .byte 0  ; offset
->2181	00 00 00 00	fvar1    .fill 6,0  ; fltv-6  ; 6 byte
->2185	00 00
->2187	00 00 00 00	fvar2    .fill 6,0  ; fltv-12 ; 6 byte
->218b	00 00
->218d	00 00 00 00	float1   .fill 20,0  ; fltv-32 ;20 byte
->2191	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->21a1	00 00 00 00	float2   .fill 20,0  ; fltv-52 ;20 byte
->21a5	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->21b5	00		tval1    .byte 0  ; fltv-53 ; 1 byte
->21b6	00 00		tval2    .word 0  ; fltv-55 ; 2 byte
->21b8	00		reponse  .byte 0  ; tval2-2 ; 2 byte
->21b9	00		edbox    .byte 0  ; reponse
->21ba	00		cleft    .byte 0  ; edbox-1 ;1 byte
->21bb	00		cright   .byte 0  ; edbox-2 ;1 byte
->21bc	00		cmid     .byte 0  ; edbox-3 ;1 byte
->21bd	00		dbtop    .byte 0  ; edbox-4 ;1 byte
->21be	00		dbleft   .byte 0  ; edbox-5 ;1 byte
->21bf	00		dbwdth   .byte 0  ; edbox-6 ;1 byte
->21c0	00		dbhght   .byte 0  ; edbox-7 ;1 byte
->21c1	00		dbcoul   .byte 0  ; edbox-8 ;1 byte
->21c2	00		dbclin   .byte 0  ; edbox-9 ;1 byte
->21c3	00		ekeyb    .byte 0  ; dbclin
->21c4	00		curx     .byte 0  ; ekeyb-1 ;1 byte
->21c5	00		cury     .byte 0  ; ekeyb-2 ;1 byte
->21c6	00		clef     .byte 0  ; ekeyb-3 ;1 byte
->21c7	00		len      .byte 0  ; clef-1  ;1 byte
->21c8	00		cx       .byte 0  ; clef-2  ;1 byte
->21c9	00		cy       .byte 0  ; clef-3  ;1 byte
->21ca	00		bcol     .byte 0  ; clef-4  ;1 byte
->21cb	00		escr     .byte 0  ; bcol
->21cc	00		loops    .byte 0  ; escr-1       ; 1 byte
->21cd	00 00		loop16   .word 0  ; loops-2      ; 2 byte
->21cf	00 00 00 00	scrncar  .fill 1024,0 ; loop16-1024  ;1k byte
->21d3	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>2149	00		rp                .byte 0  ;
+>214a	00		ra                .byte 0  ;
+>214b	00		rx                .byte 0  ;
+>214c	00		ry                .byte 0  ;
+>214d	00		rs                .byte 0  ;
+>214e	00		pc                .byte 0  ;
+>214f	00		curcol            .byte 0  ;
+>2150	00 00		memptr            .word 0  ;
+>2152	00 00		src               .word 0  ;
+>2154	00 00		dst               .word 0  ;
+>2156	00 00		loopcount         .word 0  ; Variable utilisée dans l-cbm-mem.asm.
+>2158	00		a2hexcol          .byte 0  ;
+.2159			a2hexpos
+>2159	00		a2hexpx           .byte 0  ;
+>215a	00		a2hexpy           .byte 0  ;
+>215b	00		a2hexpfx          .byte 0  ;
+>215c	00 00 00 00	hexstr            .fill 4,0;
+>2160	00		                  .byte 0  ;
+>2161	00		a2bincol          .byte 0  ;
+.2162			a2binpos
+>2162	00		a2binpx           .byte 0  ;
+>2163	00		a2binpy           .byte 0  ;
+>2164	00		a2binpfx          .byte 0  ;
+>2165	00 00 00 00	binstr            .fill 8,0;
+>2169	00 00 00 00
+>216d	00		                  .byte 0  ;
+>216e	00		a2deccol          .byte 0  ;
+.216f			a2decpos
+>216f	00		a2decpx           .byte 0  ;
+>2170	00		a2decpy           .byte 0  ;
+>2171	00		a2decpfx          .byte 0  ;
+>2172	00 00 00 00	decstr            .fill 5,0      ;
+>2176	00
+>2177	00		                  .byte 0  ;
+>2178	00 00 00 00	fvar1             .fill 6,0      ;
+>217c	00 00
+>217e	00 00 00 00	fvar2             .fill 6,0      ;
+>2182	00 00
+>2184	00 00 00 00	float1            .fill 20,0     ;
+>2188	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>2198	00 00 00 00	float2            .fill 20,0     ;
+>219c	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>21ac	00		tval1             .byte 0  ;
+>21ad	00 00		tval2             .word 0  ;
+>21af	00 00		reponse           .word 0  ;
+>21b1	00		curx              .byte 0  ;
+>21b2	00		cury              .byte 0  ;
+>21b3	00		clef              .byte 0  ;
+>21b4	00		len               .byte 0  ;
+>21b5	00		cx                .byte 0  ;
+>21b6	00		cy                .byte 0  ;
+>21b7	00		bcol              .byte 0  ;
+>21b8	00		loops             .byte 0  ;
+>21b9	00 00		loop16            .word 0  ;
+>21bb	00 00 00 00	scrncar           .fill 1024,0   ; Zone de sauvegarde de la RAM ecran.
+>21bf	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 ;	...repeated 62 times (992 bytes)...
->25c3	00 00 00 00 00 00 00 00 00 00 00 00
->25cf	00 00 00 00	scrncol  .fill 1024,0 ; scrncar-1024 ;1k byte
->25d3	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>25af	00 00 00 00 00 00 00 00 00 00 00 00
+>25bb	00 00 00 00	scrncol           .fill 1024,0   ; Zone de sauvegarde de la RAM couleur.
+>25bf	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 ;	...repeated 62 times (992 bytes)...
->29c3	00 00 00 00 00 00 00 00 00 00 00 00
->29cf	00		diskvar .byte 0  ; scrncol
->29d0	00 00		ddatas  .word 0  ; diskvar-2 ;2 byte Data start
->29d2	00 00		ddatae  .word 0  ; diskvar-4 ;2 byte Data end
->29d4	00		ddev    .byte 0  ; diskvar-5 ;1 byte Dev number
->29d5	00		dlfsno  .byte 0  ; diskvar-6 ;1 byte Lfs
->29d6	00 00		dfnptr  .word 0  ; diskvar-8 ;2 byte Ptrnfichier
->29d8	00		dfnlen  .byte 0  ; diskvar-9 ;1 byte lenfilename
->29d9	00		genbyte1 .byte 0  ; dfnlen-1 ; 1 byte
->29da	00 00		genword1 .word 0  ; dfnlen-3 ; 2 byte
+>29af	00 00 00 00 00 00 00 00 00 00 00 00
+>29bb	00 00		dsk_data_s        .word $0000 ; Pointeur sur le début des données.
+>29bd	00 20		dsk_data_e        .word $2000 ; Pointeur sur la fin des données.
+>29bf	08		dsk_dev           .byte $08   ; No. de périphérique.
+>29c0	00		dsk_lfsno         .byte $00   ; No. de fichier logique.
+>29c1	00 00		dsk_fnptr         .word $00   ; Pointeur vers le nom du fichier.
+>29c3	00		dsk_fnlen         .byte 0     ; Nombre de caractère dans le nom de fichier.
+>29c4	00		db_left           .byte 0  ; Caractère Gauche de la ligne courante.
+>29c5	00		db_right          .byte 0  ; Caractère droit de la ligne courante.
+>29c6	00		db_mid            .byte 0  ; Caractère central de la ligne courante.
+>29c7	00		drawbox_top       .byte 0  ; Coordonné du haut de la boite.
+>29c8	00		drawbox_left      .byte 0  ; Coordonné de la gauche de la boîte.
+>29c9	00		drawbox_width     .byte 0  ; Largeur de la boîte.
+>29ca	00		drawbox_height    .byte 0  ; Hauteur de la boîte.
+>29cb	00		drawbox_colour    .byte 0  ; Couleur de la boîte.
+>29cc	00		drawbox_curline   .byte 0  ; No de la ligne courante à dessiner.
+>29cd	00		drawbox_bascol    .byte 0  ; Case de mémorisation de la couleur Basic.
+>29ce	00		offset            .byte 0
+>29cf	00		genbyte1          .byte 0  ;
+>29d0	00 00		genword1          .word 0  ;
 
 ;******  Return to file: charedit.asm
 
@@ -2910,9 +2904,9 @@
 .c256	85 fc		               sta  zpage1+1            ; ... dans le Msb de zpage1.
 .c258	48		            pha
 .c259	a9 ff		        lda  #<$0000+(8191)
-.c25b	8d 57 21	        sta  loopcount
+.c25b	8d 56 21	        sta  loopcount
 .c25e	a9 1f		        lda  #>$0000+(8191)
-.c260	8d 58 21	        sta  loopcount+1
+.c260	8d 57 21	        sta  loopcount+1
 .c263	68		            pla
 .c264	a0 00		               ldy  #$00
 .c266	a9 0f		next           lda  #$0f
@@ -2932,9 +2926,9 @@
 .c284	84 fc		               sty  zpage1+1            ; ... dans le Msb de zpage1.
 .c286	48		            pha
 .c287	a9 00		        lda  #<$0000+(1024)
-.c289	8d 57 21	        sta  loopcount
+.c289	8d 56 21	        sta  loopcount
 .c28c	a9 04		        lda  #>$0000+(1024)
-.c28e	8d 58 21	        sta  loopcount+1
+.c28e	8d 57 21	        sta  loopcount+1
 .c291	68		            pla
 .c292	a0 00		               ldy  #$00
 .c294	b1 fb		next           lda  (zpage1),y
@@ -2961,9 +2955,9 @@
 .c2bc	84 fc		               sty  zpage1+1            ; ... dans le Msb de zpage1.
 .c2be	48		            pha
 .c2bf	a9 00		        lda  #<$0000+(1024)
-.c2c1	8d 57 21	        sta  loopcount
+.c2c1	8d 56 21	        sta  loopcount
 .c2c4	a9 04		        lda  #>$0000+(1024)
-.c2c6	8d 58 21	        sta  loopcount+1
+.c2c6	8d 57 21	        sta  loopcount+1
 .c2c9	68		            pla
 .c2ca	a0 00		               ldy  #$00
 .c2cc	b1 fb		next           lda  (zpage1),y
@@ -3157,7 +3151,7 @@
 .c415	08		               php                 ; Sauvegarde le registre de
 .c416	48		               pha                 ;   status et le registre a.
 .c417	20 cd c6	               jsr  atohex         ; Convertion de a en hexadécimal.
-.c41a	a2 62		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
+.c41a	a2 59		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
 .c41c	a0 21		               ldy  #>a2hexpos     ;   hexa dans $YYXX.
 .c41e	20 b7 c3	               jsr  putsxy         ; Positionne et affiche la chaîne.
 .c421	68		               pla                 ; Récupère le registre a et
@@ -3166,7 +3160,7 @@
 .c424			putrahexcxy
 .c424	20 b3 c4	               jsr  pushreg        ; Sauvegarde tous les registres.
 .c427	20 cd c6	               jsr  atohex         ; Convertion de a en hexadécimal.
-.c42a	a2 62		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
+.c42a	a2 59		               ldx  #<a2hexpos     ; Charge l'adresse de la chaîne
 .c42c	a0 21		               ldy  #>a2hexpos     ;   hexa dans $YYXX.
 .c42e	20 b7 c3	               jsr  putsxy         ; Colore, positionne et affiche la
 .c431	20 e2 c4	               jsr  popreg         ; Récupère tous les registres.
@@ -3193,13 +3187,13 @@
 .c445			push
 .c445	08		          php            ; stack : flg, pcl, pch
 .c446	78		          sei
-.c447	8d 4b 21	          sta  ra        ; save a
+.c447	8d 4a 21	          sta  ra        ; save a
 .c44a	68		          pla            ; stack : pcl, pch
-.c44b	8d 4a 21	          sta  rp        ; save rp
+.c44b	8d 49 21	          sta  rp        ; save rp
 .c44e	68		          pla            ; stack : pch
-.c44f	8d 4f 21	          sta  pc        ; save pcl
+.c44f	8d 4e 21	          sta  pc        ; save pcl
 .c452	68		          pla            ; stack : -
-.c453	8d 50 21	          sta  pc+1      ; save pch
+.c453	8d 4f 21	          sta  pc+1      ; save pch
 .c456	a5 fb		          lda  zpage1    ; get zpage1 low byte
 .c458	48		          pha            ; stack : zp1l
 .c459	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
@@ -3208,21 +3202,21 @@
 .c45e	48		          pha            ; stack : zp2l, zp1h, zp1l
 .c45f	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
 .c461	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
-.c462	ad 4a 21	          lda  rp        ; get rp
+.c462	ad 49 21	          lda  rp        ; get rp
 .c465	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
-.c466	ad 4b 21	          lda  ra        ; get a
+.c466	ad 4a 21	          lda  ra        ; get a
 .c469	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c46a	8a		          txa            ; get x
 .c46b	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c46c	98		          tya            ; get y
 .c46d	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c46e	ad 50 21	          lda  pc+1      ; get pch
+.c46e	ad 4f 21	          lda  pc+1      ; get pch
 .c471	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c472	ad 4f 21	          lda  pc        ; get pcl
+.c472	ad 4e 21	          lda  pc        ; get pcl
 .c475	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c476	ad 4a 21	          lda  rp        ; get rp
+.c476	ad 49 21	          lda  rp        ; get rp
 .c479	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c47a	ad 4b 21	          lda  ra        ; get a
+.c47a	ad 4a 21	          lda  ra        ; get a
 .c47d	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c47e	58		          cli
 .c47f	60		          rts
@@ -3232,17 +3226,17 @@
 .c480			pop
 .c480	78		          sei
 .c481	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c482	8d 4f 21	          sta  pc        ; save pcl
+.c482	8d 4e 21	          sta  pc        ; save pcl
 .c485	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c486	8d 50 21	          sta  pc+1      ; save pch
+.c486	8d 4f 21	          sta  pc+1      ; save pch
 .c489	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c48a	a8		          tay            ; set y
 .c48b	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c48c	aa		          tax            ; set x
 .c48d	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
-.c48e	8d 4b 21	          sta  ra        ; save a
+.c48e	8d 4a 21	          sta  ra        ; save a
 .c491	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
-.c492	8d 4a 21	          sta  rp        ; save rp
+.c492	8d 49 21	          sta  rp        ; save rp
 .c495	68		          pla            ; stack : zp2l, zp1h, zp1l
 .c496	85 fe		          sta  zpage2+1  ; get zpage1 low byte
 .c498	68		          pla            ; stack : zp1h, zp1l
@@ -3251,13 +3245,13 @@
 .c49c	85 fc		          sta  zpage1+1  ; get zpage2 low byte
 .c49e	68		          pla            ; stack :
 .c49f	85 fb		          sta  zpage1    ; get zpage1 High byte
-.c4a1	ad 50 21	          lda  pc+1      ; get pch
+.c4a1	ad 4f 21	          lda  pc+1      ; get pch
 .c4a4	48		          pha            ; stack : pch
-.c4a5	ad 4f 21	          lda  pc
+.c4a5	ad 4e 21	          lda  pc
 .c4a8	48		          pha            ; stack : pcl, pch
-.c4a9	ad 4a 21	          lda  rp        ; get rp
+.c4a9	ad 49 21	          lda  rp        ; get rp
 .c4ac	48		          pha            ; stack : rp, pcl, pch
-.c4ad	ad 4b 21	          lda  ra        ; set ra
+.c4ad	ad 4a 21	          lda  ra        ; set ra
 .c4b0	58		          cli
 .c4b1	28		          plp            ; stack : pcl, pch
 .c4b2	60		          rts
@@ -3265,28 +3259,28 @@
 .c4b3			pushreg
 .c4b3	08		          php            ; stack : flg, pcl, pch
 .c4b4	78		          sei
-.c4b5	8d 4b 21	          sta  ra        ; save a
+.c4b5	8d 4a 21	          sta  ra        ; save a
 .c4b8	68		          pla            ; stack : pcl, pch
-.c4b9	8d 4a 21	          sta  rp        ; save rp
+.c4b9	8d 49 21	          sta  rp        ; save rp
 .c4bc	68		          pla            ; stack : pch
-.c4bd	8d 4f 21	          sta  pc        ; save pcl
+.c4bd	8d 4e 21	          sta  pc        ; save pcl
 .c4c0	68		          pla            ; stack : -
-.c4c1	8d 50 21	          sta  pc+1      ; save pch
-.c4c4	ad 4a 21	          lda  rp        ; get rp
+.c4c1	8d 4f 21	          sta  pc+1      ; save pch
+.c4c4	ad 49 21	          lda  rp        ; get rp
 .c4c7	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
-.c4c8	ad 4b 21	          lda  ra        ; get a
+.c4c8	ad 4a 21	          lda  ra        ; get a
 .c4cb	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c4cc	8a		          txa            ; get x
 .c4cd	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c4ce	98		          tya            ; get y
 .c4cf	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4d0	ad 50 21	          lda  pc+1      ; get pch
+.c4d0	ad 4f 21	          lda  pc+1      ; get pch
 .c4d3	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4d4	ad 4f 21	          lda  pc        ; get pcl
+.c4d4	ad 4e 21	          lda  pc        ; get pcl
 .c4d7	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4d8	ad 4a 21	          lda  rp        ; get rp
+.c4d8	ad 49 21	          lda  rp        ; get rp
 .c4db	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4dc	ad 4b 21	          lda  ra        ; get a
+.c4dc	ad 4a 21	          lda  ra        ; get a
 .c4df	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c4e0	58		          cli
 .c4e1	60		          rts
@@ -3296,24 +3290,24 @@
 .c4e2			popreg
 .c4e2	78		          sei
 .c4e3	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4e4	8d 4f 21	          sta  pc        ; save pcl
+.c4e4	8d 4e 21	          sta  pc        ; save pcl
 .c4e7	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c4e8	8d 50 21	          sta  pc+1      ; save pch
+.c4e8	8d 4f 21	          sta  pc+1      ; save pch
 .c4eb	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c4ec	a8		          tay            ; set y
 .c4ed	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c4ee	aa		          tax            ; set x
 .c4ef	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
-.c4f0	8d 4b 21	          sta  ra        ; save a
+.c4f0	8d 4a 21	          sta  ra        ; save a
 .c4f3	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
-.c4f4	8d 4a 21	          sta  rp        ; save rp
-.c4f7	ad 50 21	          lda  pc+1      ; get pch
+.c4f4	8d 49 21	          sta  rp        ; save rp
+.c4f7	ad 4f 21	          lda  pc+1      ; get pch
 .c4fa	48		          pha            ; stack : pch
-.c4fb	ad 4f 21	          lda  pc
+.c4fb	ad 4e 21	          lda  pc
 .c4fe	48		          pha            ; stack : pcl, pch
-.c4ff	ad 4a 21	          lda  rp        ; get rp
+.c4ff	ad 49 21	          lda  rp        ; get rp
 .c502	48		          pha            ; stack : rp, pcl, pch
-.c503	ad 4b 21	          lda  ra        ; set ra
+.c503	ad 4a 21	          lda  ra        ; set ra
 .c506	58		          cli
 .c507	28		          plp            ; stack : pcl, pch
 .c508	60		          rts
@@ -3511,13 +3505,13 @@
 .c647	28		               plp
 .c648	60		               rts
 .c649			loop
-.c649	ce 57 21	               dec  loopcount
+.c649	ce 56 21	               dec  loopcount
 .c64c	d0 03		               bne  norep
-.c64e	ce 58 21	               dec  loopcount+1
-.c651	ad 57 21	norep          lda  loopcount
+.c64e	ce 57 21	               dec  loopcount+1
+.c651	ad 56 21	norep          lda  loopcount
 .c654	c9 00		               cmp  #$00
 .c656	d0 05		               bne  out
-.c658	4d 58 21	               eor  loopcount+1
+.c658	4d 57 21	               eor  loopcount+1
 .c65b	c9 ff		               cmp  #$ff
 .c65d	60		out            rts
 >c65e	28		ymult          .byte     40
@@ -3544,8 +3538,8 @@
 .c67e			putahexfmtxy
 .c67e	20 45 c4	               jsr  push
 .c681	20 cd c6	               jsr  atohex
-.c684	ae 61 21	               ldx  a2hexpx
-.c687	ac 60 21	               ldy  a2hexpy
+.c684	ae 59 21	               ldx  a2hexpx
+.c687	ac 5a 21	               ldy  a2hexpy
 .c68a	20 53 c3	               jsr  gotoxy
 .c68d	a2 69		               ldx  #<a2hexprefix
 .c68f	a0 c6		               ldy  #>a2hexprefix
@@ -3854,7 +3848,7 @@
 
 .c942			diskerror
 .c942	20 45 c4	               jsr  push
-.c945	ad 25 cb	               lda  dsk_dev   ; Select device 8
+.c945	ad bf 29	               lda  dsk_dev   ; Select device 8
 .c948	85 ba		               sta  $ba       ;
 .c94a	20 b4 ff	               jsr  talk      ; $ffb4 |a  , iec-cmd dev parle
 .c94d	a9 6f		               lda  #$6f
@@ -3877,7 +3871,7 @@
 .c972	85 bc		               sta  $bc       ; L0136 - Current filename lsb.
 .c974	a9 01		               lda  #$01      ; L0138 - set ...
 .c976	85 b7		               sta  $b7       ; L013A - ... length of current filename
-.c978	ad 25 cb	               lda  dsk_dev   ; L013C - set 8 as ...
+.c978	ad bf 29	               lda  dsk_dev   ; L013C - set 8 as ...
 .c97b	85 ba		               sta  $ba       ; L013E - ... current serial sevice.
 .c97d	a9 60		               lda  #$60      ; L0140 - set $60 to ...
 .c97f	85 b9		               sta  $b9       ; L0142 - ... secondary address
@@ -3925,20 +3919,20 @@
 .c9dc			memtofile
 .c9dc	20 ff ca	               jsr  dsk_putmesg
 .c9df	20 45 c4	               jsr  push
-.c9e2	ad 29 cb	               lda  dsk_fnlen
-.c9e5	ae 27 cb	               ldx  dsk_fnptr      ; load fname addr. lbyte
-.c9e8	ac 28 cb	               ldy  dsk_fnptr+1
+.c9e2	ad c3 29	               lda  dsk_fnlen
+.c9e5	ae c1 29	               ldx  dsk_fnptr      ; load fname addr. lbyte
+.c9e8	ac c2 29	               ldy  dsk_fnptr+1
 .c9eb	20 bd ff	               jsr  setnam         ; call setnam
-.c9ee	ad 26 cb	               lda  dsk_lfsno
-.c9f1	ae 25 cb	               ldx  dsk_dev        ; specified device
+.c9ee	ad c0 29	               lda  dsk_lfsno
+.c9f1	ae bf 29	               ldx  dsk_dev        ; specified device
 .c9f4	a0 00		skip           ldy  #$00
 .c9f6	20 ba ff	               jsr  setlfs         ; call setlfs
-.c9f9	ad 21 cb	               lda  dsk_data_s     ; put data start lbyte in stal
+.c9f9	ad bb 29	               lda  dsk_data_s     ; put data start lbyte in stal
 .c9fc	85 c1		               sta  stal
-.c9fe	ad 22 cb	               lda  dsk_data_s+1   ; put data start hbyte in stal
+.c9fe	ad bc 29	               lda  dsk_data_s+1   ; put data start hbyte in stal
 .ca01	85 c2		               sta  stal+1
-.ca03	ae 23 cb	               ldx  dsk_data_e     ; put data end lbyte in x
-.ca06	ac 24 cb	               ldy  dsk_data_e+1   ; put data end hbyte in y
+.ca03	ae bd 29	               ldx  dsk_data_e     ; put data end lbyte in x
+.ca06	ac be 29	               ldy  dsk_data_e+1   ; put data end hbyte in y
 .ca09	a9 c1		               lda  #stal          ; start address located in $c1/$c2
 .ca0b	20 d8 ff	               jsr  save           ; call save
 .ca0e	90 00		               bcc  noerror        ; if carry set, a load error has happened
@@ -3946,12 +3940,12 @@
 .ca13	60		               rts
 .ca14			filetomem
 .ca14	20 45 c4	               jsr push
-.ca17	ad 29 cb	               lda dsk_fnlen  ; Loads filename lenght.
-.ca1a	ae 27 cb	               ldx dsk_fnptr  ; Points x and y to the filename
-.ca1d	ac 28 cb	               ldy dsk_fnptr+1;pointer
+.ca17	ad c3 29	               lda dsk_fnlen  ; Loads filename lenght.
+.ca1a	ae c1 29	               ldx dsk_fnptr  ; Points x and y to the filename
+.ca1d	ac c2 29	               ldy dsk_fnptr+1;pointer
 .ca20	20 bd ff	               jsr setnam     ; call setnam
-.ca23	ad 26 cb	               lda dsk_lfsno  ; Loads Acc with the logical file number
-.ca26	ae 25 cb	               ldx dsk_dev    ; default to device 8
+.ca23	ad c0 29	               lda dsk_lfsno  ; Loads Acc with the logical file number
+.ca26	ae bf 29	               ldx dsk_dev    ; default to device 8
 .ca29	a0 01		               ldy #$01       ; not $01 means: load to address stored in file
 .ca2b	20 ba ff	               jsr setlfs     ; call setlfs
 .ca2e	a9 00		               lda #$00       ; $00 means: load to memory (not verify)
@@ -4019,251 +4013,245 @@
 >caf7	4b 20 45 52 52 4f 52 00
 .caff			dsk_putmesg
 .caff	20 45 c4	               jsr push
-.cb02	a2 2a		               ldx #<dsk_msg0
+.cb02	a2 21		               ldx #<dsk_msg0
 .cb04	a0 cb		               ldy #>dsk_msg0
 .cb06	20 39 c3	               jsr puts
 .cb09	a9 20		               lda #$20
 .cb0b	20 33 c3	               jsr putch
-.cb0e	ae 27 cb	               ldx dsk_fnptr
-.cb11	ac 28 cb	               ldy dsk_fnptr+1
+.cb0e	ae c1 29	               ldx dsk_fnptr
+.cb11	ac c2 29	               ldy dsk_fnptr+1
 .cb14	20 39 c3	               jsr puts
-.cb17	ad 26 cb	               lda dsk_lfsno
+.cb17	ad c0 29	               lda dsk_lfsno
 .cb1a	20 c3 ff	               jsr close
 .cb1d	20 80 c4	               jsr pop
 .cb20	60		               rts
->cb21	00 00		dsk_data_s     .word     $0000     ; Data start example addresses
->cb23	00 20		dsk_data_e     .word     $2000     ; Data end
->cb25	08		dsk_dev        .byte     $08       ; Device number
->cb26	00		dsk_lfsno      .byte     $00       ; Logical file number
->cb27	00 00		dsk_fnptr      .word     $00       ; Pointer to filename
->cb29	00		dsk_fnlen      .byte     0         ; Number of character in filename.
->cb2a	8d		dsk_msg0       .byte     141       ; Miscilinaous file message.
->cb2b	53 41 56 49	               .null     "saving "
->cb2f	4e 47 20 00
+>cb21	8d		dsk_msg0       .byte 141   ; Miscilinaous file message.
+>cb22	53 41 56 49	               .null     "saving "
+>cb26	4e 47 20 00
 
 ;******  Return to file: charedit.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd/l-c64-std-showregs.asm
 
-.cb33			showregs
+.cb2a			showregs
 =23			line    =   23
 =0			coln    =   0
 =$01			colr    =   vblanc
-.cb33	08		               php                 ; Sauvegarde le registre de status sur stack.
-.cb34	8d 28 cd	               sta  rega           ; Sauvegarde Acc en mémoire.
-.cb37	68		               pla                 ; Récupère le registre de status du stack.
-.cb38	8d 2b cd	               sta  regp           ; Sauvegarde le registre de status en mémoire.
-.cb3b	8e 29 cd	               stx  regx           ; Sauvegarde le registre X en mémoire.
-.cb3e	8c 2a cd	               sty  regy           ; Sauvegarde le registre Y en mémoire.
-.cb41	ba		               tsx                 ; Copie le registre S dans X.
-.cb42	8e 2c cd	               stx  regs           ; Sauvegarde le registre S en mémoire.
-.cb45	68		               pla                 ; Récupère le MSB de l'adresse de retour ...
-.cb46	8d 2e cd	               sta  regpcl         ; ... et le sauvegarde en mémoire ...
-.cb49	8d 30 cd	               sta  regpcl2        ; ... une seconde fois.
-.cb4c	68		               pla                 ; Récupère le LSB de l'adresse de retour ...
-.cb4d	8d 2d cd	               sta  regpch         ; ... et le sauvegarde en mémoire ...
-.cb50	8d 2f cd	               sta  regpch2        ; ... une seconde fois.
-.cb53	ad 28 cd	               lda  rega           ; On commence par le registre Acc.
-.cb56	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cb57	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cb5a	8d c5 cc	               sta  vala+1         ; ... et le place dans la chaine.
-.cb5d	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.cb5e	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cb61	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
-.cb64	8d c4 cc	               sta  vala           ; ... et le place dans la chaine.
-.cb67	ad 2a cd	               lda  regy           ; Ensuite, le registre Y.
-.cb6a	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cb6b	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cb6e	8d dc cc	               sta  valy+1         ; ... et le place dans la chaine.
-.cb71	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.cb72	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cb75	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
-.cb78	8d db cc	               sta  valy           ; ... et le place dans la chaine.
-.cb7b	ad 29 cd	               lda  regx           ; Ensuite, le registre X.
-.cb7e	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cb7f	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cb82	8d d0 cc	               sta  valx+1         ; ... et le place dans la chaine.
-.cb85	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.cb86	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cb89	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
-.cb8c	8d cf cc	               sta  valx           ; ... et le place dans la chaine.
-.cb8f	ad 2b cd	               lda  regp           ; Ensuite, le registre de status.
-.cb92	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cb93	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cb96	8d e7 cc	               sta  valp+1         ; ... et le place dans la chaine.
-.cb99	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.cb9a	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cb9d	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
-.cba0	8d e6 cc	               sta  valp           ; ... et le place dans la chaine.
-.cba3	ad 2c cd	               lda  regs           ; Ensuite, le pointeur de stack.
-.cba6	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cba7	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cbaa	8d f2 cc	               sta  vals+1         ; ... et le place dans la chaine.
-.cbad	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.cbae	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cbb1	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
-.cbb4	8d f1 cc	               sta  vals           ; ... et le place dans la chaine.
-.cbb7	38		               sec                 ; Prépade le ADC en plaçant 0 dans Carry.
-.cbb8	ad 30 cd	               lda  regpcl2        ; On charge la LSB de l'adresse de retour.
-.cbbb	69 00		               adc  #$00           ; On y ajoute 1.
-.cbbd	90 03		               bcc  noreport       ; Si pas de Carry on ne fait pas de report.
-.cbbf	ee 2f cd	               inc  regpch2        ; ... en incrémentant le MSB.
-.cbc2	8d 30 cd	noreport       sta  regpcl2        ; On le sauvegarde.
-.cbc5	ad 30 cd	               lda  regpcl2        ; On récupère la partie basse du compteur.
-.cbc8	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cbc9	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cbcc	8d 02 cd	               sta  valpcl+1       ; ... et lace le code à la position "---X".
-.cbcf	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.cbd0	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cbd3	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
-.cbd6	8d 01 cd	               sta  valpcl         ; ... et lace le code à la position "--X-".
-.cbd9	ad 2f cd	               lda regpch2         ; On récupère la partie haute du compteur.
-.cbdc	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cbdd	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cbe0	8d 00 cd	               sta  valpch+1       ; ... et lace le code à la position "-X--".
-.cbe3	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
-.cbe4	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cbe7	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
-.cbea	8d ff cc	               sta  valpch         ; ... et lace le code à la position "X---".
-.cbed	a5 fb		               lda  zpage1         ; On charge le LSB de ZP1 ($fb).
-.cbef	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cbf0	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cbf3	8d 13 cd	               sta  valz1l+1       ; ... et lace le code à la position "---X".
-.cbf6	68		               pla
-.cbf7	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cbfa	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
-.cbfd	8d 12 cd	               sta  valz1l         ; ... et lace le code à la position "--X-".
-.cc00	a5 fc		               lda  zpage1+1         ; On charge le MSB de ZP1 ($fc).
-.cc02	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cc03	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cc06	8d 11 cd	               sta  valz1h+1       ; ... et lace le code à la position "-X--".
-.cc09	68		               pla
-.cc0a	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cc0d	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
-.cc10	8d 10 cd	               sta  valz1h         ; ... et lace le code à la position "X---".
-.cc13	a5 fd		               lda  zpage2         ; On charge le LSB de ZP2 ($fd).
-.cc15	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cc16	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cc19	8d 24 cd	               sta  valz2l+1       ; ... et lace le code à la position "---X".
-.cc1c	68		               pla
-.cc1d	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cc20	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
-.cc23	8d 23 cd	               sta  valz2l         ; ... et lace le code à la position "--X-".
-.cc26	a5 fe		               lda  zpage2+1       ; On charge le MSB de ZP2 ($fc).
-.cc28	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
-.cc29	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
-.cc2c	8d 22 cd	               sta  valz2h+1       ; ... et lace le code à la position "-X--".
-.cc2f	68		               pla
-.cc30	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
-.cc33	20 ba c6	               jsr  nibtohex
-.cc36	8d 21 cd	               sta  valz2h         ; ... et lace le code à la position "X---".
-.cc39	20 b3 c4	                   jsr  pushregs
-.cc3c	a2 bc		               ldx  #<srega
-.cc3e	a0 cc		               ldy  #>srega
-.cc40	20 e0 c3	                   jsr  putscxy
-.cc43	20 e2 c4	                   jsr  popregs
-.cc46	20 b3 c4	                   jsr  pushregs
-.cc49	a2 c8		               ldx  #<sregx
-.cc4b	a0 cc		               ldy  #>sregx
-.cc4d	20 e0 c3	                   jsr  putscxy
-.cc50	20 e2 c4	                   jsr  popregs
-.cc53	20 b3 c4	                   jsr  pushregs
-.cc56	a2 d3		               ldx  #<sregy
-.cc58	a0 cc		               ldy  #>sregy
-.cc5a	20 e0 c3	                   jsr  putscxy
-.cc5d	20 e2 c4	                   jsr  popregs
-.cc60	20 b3 c4	                   jsr  pushregs
-.cc63	a2 df		               ldx  #<sregp
-.cc65	a0 cc		               ldy  #>sregp
-.cc67	20 e0 c3	                   jsr  putscxy
-.cc6a	20 e2 c4	                   jsr  popregs
-.cc6d	20 b3 c4	                   jsr  pushregs
-.cc70	a2 ea		               ldx  #<sregs
-.cc72	a0 cc		               ldy  #>sregs
-.cc74	20 e0 c3	                   jsr  putscxy
-.cc77	20 e2 c4	                   jsr  popregs
-.cc7a	20 b3 c4	                   jsr  pushregs
-.cc7d	a2 f6		               ldx  #<sregpc
-.cc7f	a0 cc		               ldy  #>sregpc
-.cc81	20 e0 c3	                   jsr  putscxy
-.cc84	20 e2 c4	                   jsr  popregs
-.cc87	20 b3 c4	                   jsr  pushregs
-.cc8a	a2 06		               ldx  #<sregz1
-.cc8c	a0 cd		               ldy  #>sregz1
-.cc8e	20 e0 c3	                   jsr  putscxy
-.cc91	20 e2 c4	                   jsr  popregs
-.cc94	20 b3 c4	                   jsr  pushregs
-.cc97	a2 17		               ldx  #<sregz2
-.cc99	a0 cd		               ldy  #>sregz2
-.cc9b	20 e0 c3	                   jsr  putscxy
-.cc9e	20 e2 c4	                   jsr  popregs
-.cca1	ad 2d cd	               lda  regpch         ; On replace ls MSB l'adresse de retour ...
-.cca4	48		               pha                 ; ... à la bonne position sur la pile.
-.cca5	ad 2e cd	               lda  regpcl         ; On replace ls LSB l'adresse de retour ...
-.cca8	48		               pha                 ; ... à la bonne position sur la pile.
-.cca9	ae 2c cd	               ldx  regs           ; On replace tous les registre à leurs ...
-.ccac	9a		               txs                 ; ...
-.ccad	ac 2a cd	               ldy  regy           ; ...
-.ccb0	ae 29 cd	               ldx  regx           ; ...
-.ccb3	ad 2b cd	               lda  regp           ; ...
-.ccb6	48		               pha                 ; ...
-.ccb7	ad 28 cd	               lda  rega           ; ...
-.ccba	28		               plp                 ; ... valeurs initiales
-.ccbb	60		               rts
->ccbc	07 01 17	srega   .byte   cyellow,coln+1,line
->ccbf	20 20 41 3a	        .text   '  a:$' ;4,24
->ccc3	24
->ccc4	00 00 20 00	vala    .byte   0,0,32,0
->ccc8	03 09 17	sregx   .byte   ccyan,coln+9,line
->cccb	20 58 3a 24	        .text   ' x:$' ;4,24
->cccf	00 00 20 00	valx    .byte   0,0,32,0
->ccd3	0d 10 17	sregy   .byte   clightgreen,coln+16,line
->ccd6	20 59 3a 20	        .text   ' y: $' ;4,24
->ccda	24
->ccdb	00 00 20 00	valy    .byte   0,0,32,0
->ccdf	08 18 17	sregp   .byte   corange,coln+24,line
->cce2	20 50 3a 24	        .text   ' p:$' ;4,24
->cce6	00 00 20 00	valp    .byte   0,0,32,0
->ccea	0a 1f 17	sregs   .byte   clightred,coln+31,line
->cced	20 53 3a 24	        .text   ' s:$' ;4,24
->ccf1	00 00 20 20	vals    .byte   0,0,32,32,0
->ccf5	00
->ccf6	0e 01 18 20	sregpc  .byte   clightblue,coln+1,line+1,32
->ccfa	20 50 43 3a	        .text   ' pc:$' ;4,24
->ccfe	24
->ccff	00 00		valpch  .byte   0,0
->cd01	00 00 20 20	valpcl  .byte   0,0,32,32,0
->cd05	00
->cd06	04 0d 18 20	sregz1  .byte   cpurple,coln+13,line+1,32
->cd0a	20 5a 50 31	        .text   ' zp1:$' ;4,24
->cd0e	3a 24
->cd10	00 00		valz1h  .byte   0,0
->cd12	00 00 20 20	valz1l  .byte   0,0,32,32,0
->cd16	00
->cd17	0f 1a 18 20	sregz2  .byte   clightgray,coln+26,line+1,32
->cd1b	20 5a 50 32	        .text   ' zp2:$' ;4,24
->cd1f	3a 24
->cd21	00 00		valz2h  .byte   0,0
->cd23	00 00 20 20	valz2l  .byte   0,0,32,32,0
->cd27	00
->cd28	00		rega    .byte   0
->cd29	00		regx    .byte   0
->cd2a	00		regy    .byte   0
->cd2b	00		regp    .byte   0
->cd2c	00		regs    .byte   0
->cd2d	00		regpch  .byte   0
->cd2e	00		regpcl  .byte   0
->cd2f	00		regpch2 .byte   0
->cd30	00		regpcl2 .byte   0
->cd31	00		vzp1h   .byte   0
->cd32	00		vzp1l   .byte   0
->cd33	00		vzp2h   .byte   0
->cd34	00		vzp2l   .byte   0
-.cd35			showregsrev
-.cd35	20 35 c4	                jsr setinverse     ; On se place en mode inverse vidéo.
-.cd38	20 33 cb	                jsr showregs
-.cd3b	20 3d c4	                jsr clrinverse     ; On quitte le mode inverse vidéo.
+.cb2a	08		               php                 ; Sauvegarde le registre de status sur stack.
+.cb2b	8d 1f cd	               sta  rega           ; Sauvegarde Acc en mémoire.
+.cb2e	68		               pla                 ; Récupère le registre de status du stack.
+.cb2f	8d 22 cd	               sta  regp           ; Sauvegarde le registre de status en mémoire.
+.cb32	8e 20 cd	               stx  regx           ; Sauvegarde le registre X en mémoire.
+.cb35	8c 21 cd	               sty  regy           ; Sauvegarde le registre Y en mémoire.
+.cb38	ba		               tsx                 ; Copie le registre S dans X.
+.cb39	8e 23 cd	               stx  regs           ; Sauvegarde le registre S en mémoire.
+.cb3c	68		               pla                 ; Récupère le MSB de l'adresse de retour ...
+.cb3d	8d 25 cd	               sta  regpcl         ; ... et le sauvegarde en mémoire ...
+.cb40	8d 27 cd	               sta  regpcl2        ; ... une seconde fois.
+.cb43	68		               pla                 ; Récupère le LSB de l'adresse de retour ...
+.cb44	8d 24 cd	               sta  regpch         ; ... et le sauvegarde en mémoire ...
+.cb47	8d 26 cd	               sta  regpch2        ; ... une seconde fois.
+.cb4a	ad 1f cd	               lda  rega           ; On commence par le registre Acc.
+.cb4d	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cb4e	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cb51	8d bc cc	               sta  vala+1         ; ... et le place dans la chaine.
+.cb54	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
+.cb55	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cb58	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.cb5b	8d bb cc	               sta  vala           ; ... et le place dans la chaine.
+.cb5e	ad 21 cd	               lda  regy           ; Ensuite, le registre Y.
+.cb61	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cb62	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cb65	8d d3 cc	               sta  valy+1         ; ... et le place dans la chaine.
+.cb68	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
+.cb69	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cb6c	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.cb6f	8d d2 cc	               sta  valy           ; ... et le place dans la chaine.
+.cb72	ad 20 cd	               lda  regx           ; Ensuite, le registre X.
+.cb75	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cb76	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cb79	8d c7 cc	               sta  valx+1         ; ... et le place dans la chaine.
+.cb7c	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
+.cb7d	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cb80	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.cb83	8d c6 cc	               sta  valx           ; ... et le place dans la chaine.
+.cb86	ad 22 cd	               lda  regp           ; Ensuite, le registre de status.
+.cb89	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cb8a	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cb8d	8d de cc	               sta  valp+1         ; ... et le place dans la chaine.
+.cb90	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
+.cb91	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cb94	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.cb97	8d dd cc	               sta  valp           ; ... et le place dans la chaine.
+.cb9a	ad 23 cd	               lda  regs           ; Ensuite, le pointeur de stack.
+.cb9d	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cb9e	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cba1	8d e9 cc	               sta  vals+1         ; ... et le place dans la chaine.
+.cba4	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
+.cba5	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cba8	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.cbab	8d e8 cc	               sta  vals           ; ... et le place dans la chaine.
+.cbae	38		               sec                 ; Prépade le ADC en plaçant 0 dans Carry.
+.cbaf	ad 27 cd	               lda  regpcl2        ; On charge la LSB de l'adresse de retour.
+.cbb2	69 00		               adc  #$00           ; On y ajoute 1.
+.cbb4	90 03		               bcc  noreport       ; Si pas de Carry on ne fait pas de report.
+.cbb6	ee 26 cd	               inc  regpch2        ; ... en incrémentant le MSB.
+.cbb9	8d 27 cd	noreport       sta  regpcl2        ; On le sauvegarde.
+.cbbc	ad 27 cd	               lda  regpcl2        ; On récupère la partie basse du compteur.
+.cbbf	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cbc0	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cbc3	8d f9 cc	               sta  valpcl+1       ; ... et lace le code à la position "---X".
+.cbc6	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
+.cbc7	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cbca	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.cbcd	8d f8 cc	               sta  valpcl         ; ... et lace le code à la position "--X-".
+.cbd0	ad 26 cd	               lda regpch2         ; On récupère la partie haute du compteur.
+.cbd3	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cbd4	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cbd7	8d f7 cc	               sta  valpch+1       ; ... et lace le code à la position "-X--".
+.cbda	68		               pla                 ; Récupère la valeur de l'Acc temporaire.
+.cbdb	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cbde	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.cbe1	8d f6 cc	               sta  valpch         ; ... et lace le code à la position "X---".
+.cbe4	a5 fb		               lda  zpage1         ; On charge le LSB de ZP1 ($fb).
+.cbe6	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cbe7	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cbea	8d 0a cd	               sta  valz1l+1       ; ... et lace le code à la position "---X".
+.cbed	68		               pla
+.cbee	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cbf1	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.cbf4	8d 09 cd	               sta  valz1l         ; ... et lace le code à la position "--X-".
+.cbf7	a5 fc		               lda  zpage1+1         ; On charge le MSB de ZP1 ($fc).
+.cbf9	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cbfa	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cbfd	8d 08 cd	               sta  valz1h+1       ; ... et lace le code à la position "-X--".
+.cc00	68		               pla
+.cc01	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cc04	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.cc07	8d 07 cd	               sta  valz1h         ; ... et lace le code à la position "X---".
+.cc0a	a5 fd		               lda  zpage2         ; On charge le LSB de ZP2 ($fd).
+.cc0c	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cc0d	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cc10	8d 1b cd	               sta  valz2l+1       ; ... et lace le code à la position "---X".
+.cc13	68		               pla
+.cc14	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cc17	20 ba c6	               jsr  nibtohex       ; Converti le second quartet (0-F) ...
+.cc1a	8d 1a cd	               sta  valz2l         ; ... et lace le code à la position "--X-".
+.cc1d	a5 fe		               lda  zpage2+1       ; On charge le MSB de ZP2 ($fc).
+.cc1f	48		               pha                 ; Sauvegarde temporaire de la valeur de Acc.
+.cc20	20 ba c6	               jsr  nibtohex       ; Converti le premier quartet (0-F) ...
+.cc23	8d 19 cd	               sta  valz2h+1       ; ... et lace le code à la position "-X--".
+.cc26	68		               pla
+.cc27	20 c6 c6	               jsr  lsra4bits      ; Divise par 16 la valeur de l'Acc.
+.cc2a	20 ba c6	               jsr  nibtohex
+.cc2d	8d 18 cd	               sta  valz2h         ; ... et lace le code à la position "X---".
+.cc30	20 b3 c4	                   jsr  pushregs
+.cc33	a2 b3		               ldx  #<srega
+.cc35	a0 cc		               ldy  #>srega
+.cc37	20 e0 c3	                   jsr  putscxy
+.cc3a	20 e2 c4	                   jsr  popregs
+.cc3d	20 b3 c4	                   jsr  pushregs
+.cc40	a2 bf		               ldx  #<sregx
+.cc42	a0 cc		               ldy  #>sregx
+.cc44	20 e0 c3	                   jsr  putscxy
+.cc47	20 e2 c4	                   jsr  popregs
+.cc4a	20 b3 c4	                   jsr  pushregs
+.cc4d	a2 ca		               ldx  #<sregy
+.cc4f	a0 cc		               ldy  #>sregy
+.cc51	20 e0 c3	                   jsr  putscxy
+.cc54	20 e2 c4	                   jsr  popregs
+.cc57	20 b3 c4	                   jsr  pushregs
+.cc5a	a2 d6		               ldx  #<sregp
+.cc5c	a0 cc		               ldy  #>sregp
+.cc5e	20 e0 c3	                   jsr  putscxy
+.cc61	20 e2 c4	                   jsr  popregs
+.cc64	20 b3 c4	                   jsr  pushregs
+.cc67	a2 e1		               ldx  #<sregs
+.cc69	a0 cc		               ldy  #>sregs
+.cc6b	20 e0 c3	                   jsr  putscxy
+.cc6e	20 e2 c4	                   jsr  popregs
+.cc71	20 b3 c4	                   jsr  pushregs
+.cc74	a2 ed		               ldx  #<sregpc
+.cc76	a0 cc		               ldy  #>sregpc
+.cc78	20 e0 c3	                   jsr  putscxy
+.cc7b	20 e2 c4	                   jsr  popregs
+.cc7e	20 b3 c4	                   jsr  pushregs
+.cc81	a2 fd		               ldx  #<sregz1
+.cc83	a0 cc		               ldy  #>sregz1
+.cc85	20 e0 c3	                   jsr  putscxy
+.cc88	20 e2 c4	                   jsr  popregs
+.cc8b	20 b3 c4	                   jsr  pushregs
+.cc8e	a2 0e		               ldx  #<sregz2
+.cc90	a0 cd		               ldy  #>sregz2
+.cc92	20 e0 c3	                   jsr  putscxy
+.cc95	20 e2 c4	                   jsr  popregs
+.cc98	ad 24 cd	               lda  regpch         ; On replace ls MSB l'adresse de retour ...
+.cc9b	48		               pha                 ; ... à la bonne position sur la pile.
+.cc9c	ad 25 cd	               lda  regpcl         ; On replace ls LSB l'adresse de retour ...
+.cc9f	48		               pha                 ; ... à la bonne position sur la pile.
+.cca0	ae 23 cd	               ldx  regs           ; On replace tous les registre à leurs ...
+.cca3	9a		               txs                 ; ...
+.cca4	ac 21 cd	               ldy  regy           ; ...
+.cca7	ae 20 cd	               ldx  regx           ; ...
+.ccaa	ad 22 cd	               lda  regp           ; ...
+.ccad	48		               pha                 ; ...
+.ccae	ad 1f cd	               lda  rega           ; ...
+.ccb1	28		               plp                 ; ... valeurs initiales
+.ccb2	60		               rts
+>ccb3	07 01 17	srega   .byte   cyellow,coln+1,line
+>ccb6	20 20 41 3a	        .text   '  a:$' ;4,24
+>ccba	24
+>ccbb	00 00 20 00	vala    .byte   0,0,32,0
+>ccbf	03 09 17	sregx   .byte   ccyan,coln+9,line
+>ccc2	20 58 3a 24	        .text   ' x:$' ;4,24
+>ccc6	00 00 20 00	valx    .byte   0,0,32,0
+>ccca	0d 10 17	sregy   .byte   clightgreen,coln+16,line
+>cccd	20 59 3a 20	        .text   ' y: $' ;4,24
+>ccd1	24
+>ccd2	00 00 20 00	valy    .byte   0,0,32,0
+>ccd6	08 18 17	sregp   .byte   corange,coln+24,line
+>ccd9	20 50 3a 24	        .text   ' p:$' ;4,24
+>ccdd	00 00 20 00	valp    .byte   0,0,32,0
+>cce1	0a 1f 17	sregs   .byte   clightred,coln+31,line
+>cce4	20 53 3a 24	        .text   ' s:$' ;4,24
+>cce8	00 00 20 20	vals    .byte   0,0,32,32,0
+>ccec	00
+>cced	0e 01 18 20	sregpc  .byte   clightblue,coln+1,line+1,32
+>ccf1	20 50 43 3a	        .text   ' pc:$' ;4,24
+>ccf5	24
+>ccf6	00 00		valpch  .byte   0,0
+>ccf8	00 00 20 20	valpcl  .byte   0,0,32,32,0
+>ccfc	00
+>ccfd	04 0d 18 20	sregz1  .byte   cpurple,coln+13,line+1,32
+>cd01	20 5a 50 31	        .text   ' zp1:$' ;4,24
+>cd05	3a 24
+>cd07	00 00		valz1h  .byte   0,0
+>cd09	00 00 20 20	valz1l  .byte   0,0,32,32,0
+>cd0d	00
+>cd0e	0f 1a 18 20	sregz2  .byte   clightgray,coln+26,line+1,32
+>cd12	20 5a 50 32	        .text   ' zp2:$' ;4,24
+>cd16	3a 24
+>cd18	00 00		valz2h  .byte   0,0
+>cd1a	00 00 20 20	valz2l  .byte   0,0,32,32,0
+>cd1e	00
+>cd1f	00		rega    .byte   0
+>cd20	00		regx    .byte   0
+>cd21	00		regy    .byte   0
+>cd22	00		regp    .byte   0
+>cd23	00		regs    .byte   0
+>cd24	00		regpch  .byte   0
+>cd25	00		regpcl  .byte   0
+>cd26	00		regpch2 .byte   0
+>cd27	00		regpcl2 .byte   0
+>cd28	00		vzp1h   .byte   0
+>cd29	00		vzp1l   .byte   0
+>cd2a	00		vzp2h   .byte   0
+>cd2b	00		vzp2l   .byte   0
+.cd2c			showregsrev
+.cd2c	20 35 c4	                jsr setinverse     ; On se place en mode inverse vidéo.
+.cd2f	20 2a cb	                jsr showregs
+.cd32	20 3d c4	                jsr clrinverse     ; On quitte le mode inverse vidéo.
 
 ;******  Return to file: charedit.asm
 
@@ -4402,8 +4390,8 @@
 =$d900			colram1     =  $d900 ; 55552  ; Page 1
 =$da00			colram2     =  $da00 ; 55808  ; Page 2
 =$db00			colram3     =  $db00 ; 56064  ; Page 3
->cd3e	00 d8 00 d9	colorptr    .word    colram0,colram1,colram2,colram3
->cd42	00 da 00 db
+>cd35	00 d8 00 d9	colorptr    .word    colram0,colram1,colram2,colram3
+>cd39	00 da 00 db
 =$dc00			cia1        =  $dc00 ; 56320 Adresse de base du CIA1.
 =$dc00			cia1pra     =  $dc00 ; 56320 Port données A (écriture colonne du clavier).
 =$dc01			cia1prb     =  $dc01 ; 56321 Port données B (Lecture ligne du clavier).

@@ -1,16 +1,16 @@
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Scripteur .......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier ..: lib-c64-drawbox.asm
 ; Version .........: 20250925-143216
 ; Dernière m.à j. .: 20250926-165220
 ; Inspiration  ....: 
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; lib-c64-drawbox.asm - Fonctions d'affichage de fenetres par l'utilisation des 
 ; routines du rom BASIC du Commodores 64 et 64c. 
 ;
 ; Note: Compatibilité avec le Vic-20 à vérifier.
-;-------------------------------------------------------------------------------
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou avec 64tass utilisez
 ; la syntaxes ... 
 ;
@@ -25,9 +25,9 @@
 ;
 ; ... en prenant soin de placer le fichier dans le meme disque ou répertoire que
 ; votre programme ou d'accès de vos librairies.
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Macro: drawbox
 ; Description: Macro qui initialise les paramètres de la fenetre à être 
 ;              dessinée et appelle la fonction qui dessine la fenêtre.
@@ -36,7 +36,7 @@
 ;              3,4) width et height: La largeur et la hauteur de la fenêtre.
 ;              5) colour...........: La couleur de la fenêtre. >16=inverse.
 ;              6) titre............: Titre de la fenêtre.
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 drawbox         .macro top, left, width, height, colour, title
                 php                 ; Sauvegarde les registres.
                 pha
@@ -66,12 +66,12 @@ drawbox         .macro top, left, width, height, colour, title
                 .endif
                 .endm
 
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Fonction: db_tline
 ; Description:  Fonction qui dessine la ligne suppérieur d'une boite texte en 
 ;               utilisant les caractères graphiques disponnible dand les modes
 ;               majuscule et minuscule.
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 db_tline        .block
                 php                 ; Sauvegarde les registres.
                 pha
@@ -87,12 +87,12 @@ db_tline        .block
                 rts
                 .bend          
 
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Fonction: db_bline
 ; Description:  Fonction qui dessine la ligne inférieure d'une boite texte en 
 ;               utilisant les caractères graphiques disponnible dand les modes
 ;               majuscule et minuscule.
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 db_bline        .block
                 php                 ; Sauvegarde les registres.
                 pha
@@ -108,12 +108,12 @@ db_bline        .block
                 rts
                 .bend
 
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Fonction: db_eline
 ; Description:  Fonction qui dessine une ligne vide d'une boite texte en 
 ;               utilisant les caractères graphiques disponnible dand les modes
 ;               majuscule et minuscule.
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 db_eline        .block
                 php                 ; Sauvegarde les registres.
                 pha
@@ -129,12 +129,12 @@ db_eline        .block
                 rts
                 .bend
 
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Fonction: db_mline
 ; Description:  Fonction qui dessine une ligne horozontale d'une boite texte en 
 ;               utilisant les caractères graphiques disponnible dand les modes
 ;               majuscule et minuscule.
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 db_hline        .block
                 php                 ; Sauvegarde les registres.
                 pha
@@ -150,7 +150,7 @@ db_hline        .block
                 rts
                 .bend
 
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Fonction: db_drawline
 ; Description:  Fonction qui dessine une ligne horozontale d'une boite texte en 
 ;               utilisant les caractères graphiques disponnible dand les modes
@@ -158,7 +158,7 @@ db_hline        .block
 ;
 ; Note :  Appelé par les fonction suivantes:
 ;         db_tline, db_bline, db_eline ou db_hline
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 db_drawline     .block
                 jsr pushreg         ; Sauvegarde les registres.
                 lda bascol          ; Sauvegarde de la ...
@@ -191,7 +191,7 @@ noreverse       ldx drawbox_curline ; On positionne le curseur au ...
                 rts
                 .bend
 
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Fonction: db_drawbox
 ; Description:  Fonction qui dessine une ligne horozontale d'une boite texte en 
 ;               utilisant les caractères graphiques disponnible dand les modes
@@ -200,7 +200,7 @@ noreverse       ldx drawbox_curline ; On positionne le curseur au ...
 ; Note :  Appelé par la macro drawbox.
 ;         
 ; Utilise les fonctions : db_tline, db_bline, db_eline ou db_hline
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 db_drawbox      .block
                 jsr pushreg         ; Sauvegarde les registres.
                 ldx drawbox_height  ; Récupère la hauteur de la fenètre.
@@ -216,10 +216,11 @@ lastline        jsr db_bline        ; Dessine la ligne inférieure.
                 rts
                 .bend
 
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+; Constantes pour fichier l-c64-drawbox.asm.
 ; Constantes des caractères de dessin de boîte disponnible dans tous les modes
 ; de caractères (majuscule et minuscule).
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 tleft           =       176         ; Coin suppérieur gauche.
 tright          =       174         ; Coin suppérieur droit.
 bleft           =       173         ; Coin inférieur gauche.
@@ -230,16 +231,3 @@ vline           =       221         ; Ligne verticale.
 hline           =       192         ; Ligne horizontale.
 space           =       32          ; Caractère espace.
 
-;-------------------------------------------------------------------------------
-; Variables globales des paramètres de dessin de fenetre texte.
-;-------------------------------------------------------------------------------
-db_left         .byte   0           ; Caractère Gauche de la ligne courante. 
-db_right        .byte   0           ; Caractère droit de la ligne courante.
-db_mid          .byte   0           ; Caractère central de la ligne courante.
-drawbox_top     .byte   0           ; Coordonné du haut de la boite.
-drawbox_left    .byte   0           ; Coordonné de la gauche de la boîte.
-drawbox_width   .byte   0           ; Largeur de la boîte.
-drawbox_height  .byte   0           ; Hauteur de la boîte.
-drawbox_colour  .byte   0           ; Couleur de la boîte.
-drawbox_curline .byte   0           ; No de la ligne courante à dessiner.
-drawbox_bascol  .byte   0           ; Case de mémorisation de la couleur Basic.   
