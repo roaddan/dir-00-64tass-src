@@ -1,6 +1,6 @@
 ;--------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .: header-c64.asm
+; Nom du fichier .: e-header-c64.asm
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
 ; Entete de programme assembleur pour demarrage à partir du BASIC 2.0 du 
