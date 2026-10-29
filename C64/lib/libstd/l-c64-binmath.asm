@@ -1,43 +1,41 @@
-;-------------------------------------------------------------------------------
+;-----------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .: l-c64-binmath.asm
-; Création .......: Quelque part en 2025.
-; Cernière m.à j. : 20250521
-; Inspiration ....: 
-; Note ...........: En création.
+; Nom du fichier .: e-c64-Basic2.asm
+; Type fichier....: Variables
+; Creation........: 20151208 
+; Version.........: 0.0.1
+; Révision........:
 ;-------------------------------------------------------------------------------
 
 ;-------------------------------------------------------------------------------
 ; Variables publiques.
 ;-------------------------------------------------------------------------------
-bmnum0         .word     $0000
-bmnum1         .word     $0000
-bmnum2         .word     $0000
-bmovfl         .byte     $00
+bmnum0         .word $0000
+bmnum1         .word $0000
+bmnum2         .word $0000
+bmovfl         .byte $00
 
 ;-------------------------------------------------------------------------------
-; add a to bnnum0
+; Ajout de l'accumulateur à une case mémoire 16 bits.
 ;-------------------------------------------------------------------------------
 bmaddacc       .block
-               php
-               pha
-               lda  #$00
-               sta  bmovfl
-               pla
-               pha
-               clc
-               adc  bmnum0
-               sta  bmnum0
-               bcc  norep
-               inc  bmnum0+1  
-norep          bcc  norep2
-               lda  #$01
-               sta  bmovfl              
-norep2         pla
-               plp  
+               php                  ; Sauvegarde minimaliste 
+               pha                  ; ... des registres.
+               lda   #$00           ; On place 0 dans 
+               sta   bmovfl         ; ... la variable de débordement.
+               pla                  ; On récupère Acc
+               pha                  ; Pour pouvoir sortir sans altération.
+               clc                  ; Report à 0.
+               adc   bmnum0         ; Ajoute Acc à LSB du nombre 16 bit. 
+               sta   bmnum0         ; ... et l'enregistre.
+               bcc   norep          ; Si carry est vide, pas de report à faire.
+               inc   bmnum0+1       ; On fait le report.
+norep          bcc   norep2         ; Si carry est vide, pas de débordement. 
+               inc   bmovfl         ; On augmente l'octet de débordement de 1.     
+norep          pla                  ; Récupération minimaliste
+               plp                  ; ... des registres.
                rts
                .bend
-
 
 
 bmtester       .block
