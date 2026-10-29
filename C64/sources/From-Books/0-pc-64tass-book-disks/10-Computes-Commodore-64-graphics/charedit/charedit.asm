@@ -53,48 +53,46 @@ printbye    inc   any_msg           ; Change la couleur de bye_msg.
             beq   printbye          ; pas de clef, on réaffiche.
             jsr   cls               ; Efface l'écran
 endmain     jsr   popreg            ; Récupère les registres.
-            jsr   kbflushbuff       ; Vide le tampon du clavier.
-            ;jmp   k_warmstart       ; Basic soft start.
-            jmp     cint
-            ;rts
+            ;jsr   kbflushbuff       ; Vide le tampon du clavier.
+            rts
             .bend
 
 ;-----------------------------------------------------------------------------
 ; Inclure mes propres librairies.
 ;-----------------------------------------------------------------------------
 ; Chargement des variables locales
-            .include    "local-vars.asm"
+            .include    "local-vars.asm"     ; Variables de ce programme.
 ; Chargement des macros globales 
-            .include    "m-c64-utils.asm"
+            .include    "m-c64-utils.asm"    ; Macros générales du C64
 ; et locales.
-            .include    "local-macros.asm"
+            .include    "local-macros.asm"   ; Macros de ce programmes
 ;-----------------------------------------------------------------------------
 ; Chargement du code spécifique au programmes et ...
-            .include    "routines.asm"
+            .include    "routines.asm"       ; Les routines de ce programme.
 ; ... de ses chaines de caractères, ..
-            .include    "strings_fr.asm"
-;            .include    "strings_en.asm"
+            .include    "strings_fr.asm"     ; Les chaines en français.
+;            .include    "strings_en.asm"     ; Les chaines en anglais.
 ;-----------------------------------------------------------------------------
 ; Chargement en RAM des variables des librairies à la suite du programme.
-            .include    "e-c64-vars.asm"
+            .include    "e-c64-vars.asm"     ; Les variables générales du C64.
 ;-----------------------------------------------------------------------------
 ; Chargement des librairies à la page $C000.
-            *=$c000
-            .include    "l-c64-timer.asm"
-            .include    "l-c64-sid.asm"
-            .include    "l-c64-vicii.asm"
-            .include    "l-c64-basic2.asm" 
-            .include    "l-cbm-push.asm"
-            .include    "l-cbm-mem.asm"
-            .include    "l-cbm-hex.asm"
-            .include    "l-cbm-keyb.asm"
-            .include    "l-cbm-disk.asm"
-            .include    "l-c64-std-showregs.asm"
+            *=$c000                          ; Les librairies de code:
+            .include    "l-c64-timer.asm"    ; ... divers de delais,  
+            .include    "l-c64-sid.asm"      ; ... d'utilisation du SID,
+            .include    "l-c64-vicii.asm"    ; ... d'utilisation du VICII,
+            .include    "l-c64-basic2.asm"   ; ... de routine utilisant Basic.
+            .include    "l-cbm-stack.asm"    ; ... de gestion de la pile.
+            .include    "l-cbm-mem.asm"      ; ... de gestion mémoire,
+            .include    "l-cbm-hex.asm"      ; ... de conversions diverses, 
+            .include    "l-cbm-keyb.asm"     ; ... d'utilisation du clavier, 
+            .include    "l-cbm-disk.asm"     ; ... d'utilisation des media. 
 ;-----------------------------------------------------------------------------
 ; Chargement des constantes nécessaires aux librairies.
-            .include    "e-c64-kernal.asm"
-            .include    "e-c64-vicii.asm"
-            .include    "e-c64-basic2.asm"
-            .include    "e-c64-sid-ii.asm"
-            .include    "e-c64-sid-notes-ntsc.asm"
+                                                  ; Les constantes associées; 
+            .include    "e-c64-kernal.asm"        ; ... au noyeau (Kernal),
+            .include    "e-c64-vicii.asm"         ; ... au VICII,
+            .include    "e-c64-basic2.asm"        ; ... à la ROM Basic,
+            .include    "e-c64-sid-ii.asm"        ; ... au SID,
+            .include    "e-c64-sid-notes-ntsc.asm"; ... aux fréquences NTSC.
 ;-----------------------------------------------------------------------------

@@ -1,31 +1,32 @@
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Scripteur .......: Daniel Lafrance, Québec, canada.
-; Nom du fichier ..: lib-c64-basic2.asm
+; Nom du fichier ..: l-c64-basic2.asm
 ; Version .........: 20230610-223618
 ; Dernière m.à j. .: 20250523
 ; Inspiration  ....: 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; lib-c64-basic2.asm - Fonctions d'affichage par l'utilisation des routines du 
 ; rom BASIC du Commodores 64 et 64c. 
 ;
 ; Note: Compatibilité avec le Vic-20 à vérifier.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou avec 64tass 
 ; utilisez la syntaxes ... 
 ;
-;         .include "map-c64-kernal.asm"
-;         .include "map-c64-basic2.asm"
-;         .include "lib-c64-basic2.asm"
+;         .include "e-c64-kernal.asm"
+;         .include "e-c64-basic2.asm"
+;         .include "e-cbm-stack.asm"
+;         .include "l-c64-basic2.asm"
 ;
 ; ... en prenant soin de placer le fichier dans le meme disque ou répertoire 
 ;     que votre programme.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Initialisation des paramêtres de base pour la gestion de l'écran.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 scrmaninit     .block  
                jsr  pushreg        ; Sauvegarde tous les registres
                jsr  screendis      ; Disable screen
@@ -41,11 +42,11 @@ scrmaninit     .block
                rts
                .bend  
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Place le curseur à la position HOME et efface l'écran.
 ; Entrée  : Aucune.
 ; Sortie  : Aucune.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 cls            .block
                php                 ; Sauvegarde les registres  
                pha                 ;   modifiés.
@@ -56,11 +57,11 @@ cls            .block
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Place le caractère A à la position du curseur X fois.
 ; Entrée  : Acc le caractère, X le nombre de fois. $00 = 256.
 ; Sortie  : Aucune.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putnch         .block
                jsr  pushreg        ; Sauvegarde tous les registres.
 again          jsr  chrout         ; On affiche A.
@@ -70,12 +71,12 @@ out            jsr  popreg         ; Récupère tous les registres.
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Place le caractère A à la position du
 ; curseur.
 ; Entrée  : Aucune.
 ; Sortie  : Aucune.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putch          .block
                php                 ; Sauvegarde le registre de status.
                jsr  chrout         ; Affiche le caractère de Acc.
@@ -83,11 +84,11 @@ putch          .block
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Affiche la chaine0 pointée par $YYXX
 ; Entrée  : $YYXX adresse de la chaîne se terminant par 0.
 ; Sortie  : Aucune.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putsyx
 puts
             .block
@@ -104,13 +105,13 @@ exit        jsr  popregs      ; Récupère registres.
             rts
             .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Positionne le curseyr à la position X et Y. 
 ; Entrée  : X = colonne, Y = ligne.
 ; Sortie  : Aucune.
 ; limites x(0-39), Y(0-24)
 gotoxy
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
         .block
         jsr pushregs
         txa ; interchange x et y
@@ -136,11 +137,11 @@ allok   clc
         jsr popregs
         rts
         .bend
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Positionne C=1 ou Sauvegarde C=0 le curseur et la couleur par défaut.
 ; Entrée  : Carry = 0 pour sauvegarder, carry = 1 pour récupérer.
 ; Sortie  : Aucune.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 cursor         .block
 bascol    =    $0286               ; debugme
                jsr  pushreg        ; Sauvegarde tous les registres.
@@ -163,11 +164,11 @@ cy   .byte     $00
 bcol .byte     $00
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Sauvegarde de la position du curseur.
 ; Entrée  : Aucune.
 ; Sortie  : Aucune.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 cursave        .block
                php
                sec
@@ -176,11 +177,11 @@ cursave        .block
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Récupération de la position du curseur.
 ; Entrée  : Aucune.
 ; Sortie  : Aucune.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 
 curput         .block
                php
@@ -190,7 +191,7 @@ curput         .block
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Affiche une chaîne de caractères se terminani par 0 à une position
 ; x,y du curseur. 
 ; Entrée  : Adresse $YYXX de la chaine de caractères se terminant 
@@ -199,7 +200,7 @@ curput         .block
 ;             positions X et Y (colonne, ligne) de la position du
 ;             texte. 
 ; Sortie  : Aucune.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putsxy         .block
                jsr  pushall        ; Sauvegarde registres, ZP1 et ZP2. 
                stx  zpage1         ; On place la position de la  
@@ -223,7 +224,7 @@ py        .byte     $00
 zp1       .word     $00
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Affiche une chaîne de caractères se terminani par 0 à une position
 ; x,y du curseur et dans une couleur donnée  
 ; Entrée  :  Adresse $YYXX de la chaine de caractères se terminant 
@@ -232,7 +233,7 @@ zp1       .word     $00
 ;              couleur du texte et les positions X et Y 
 ;              (colonne, ligne) de la position du texte. 
 ; Sortie  : Aucune.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putscxy        .block
                jsr  pushall        ; Sauvegarde registres, ZP1 et ZP2. 
                stx  zpage1         ; On place la position de la  
@@ -255,12 +256,12 @@ putscxy        .block
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Affiche le contenu du registre A en hexadécimal à la position du
 ; curseur.
 ; Entrée  : A
 ; Sortie  : Valeur hexadécimale à la position du curseur.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putrahex       .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                jsr  atohex         ; Conversion de a chaîne hexa.
@@ -271,14 +272,14 @@ putrahex       .block
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Affiche le contenu du registre A en hexadécimal à la position
 ; déterminé par les deux variables (a2hexpx,a2hexpy).
 ; Y-(msb).
 ; **Note : a2hexpx et a2hexpy doivent être modifiées avant l'appel.
 ; Entrée : A
 ; Sortie : X=a2hexpx, Y=a2hexpy.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 kputrahexxy
 bputrahexxy    
 putrahexxy     .block
@@ -293,7 +294,7 @@ putrahexxy     .block
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Transforme le contenu du registre A en exadécimal dans la couleur et 
 ; la position déterminé par les trois premier octets de la variable 
 ; a2hexcol.
@@ -304,7 +305,7 @@ putrahexxy     .block
 ; **Note : a2hexcol, a2hexpx et a2hexpy
 ;          doivent être modifiées avant 
 ;          l'appel.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putrahexcxy    .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                jsr  atohex         ; Convertion de a en hexadécimal.
@@ -331,6 +332,6 @@ clrinverse     .block
                pla
                rts
                .bend
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 
 
