@@ -1,7 +1,7 @@
 ;------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: l-c64-joystick.asm
-; Cernière m.à j. : 20261029-000000 Francisation des commentaires,
+; Cernière m.à j. : 20261030-000000 Francisation des commentaires,
 ; Inspiration ....:
 ;------------------------------------------------------------------------------
 ;------------------------------------------------------------------------------
@@ -292,150 +292,211 @@ no_update      pla                  ; Récupération minimale
                rts
                .bend
 ;------------------------------------------------------------------------------
-;
+; js1_correct effectue les calculs pour mettre à jour les divers variables du
+; ... pseudo curseur de souris du port de jeu #1. 
 ;------------------------------------------------------------------------------
 js1_correct    .block
-               php
-               pha
+               php                  ; Sauvegarde minimale
+               pha                  ; ... des registres.
                ;---------------------------------------------------------------
-               ; Port 1 X
+               ; Port 1 X - On divise la position X pixel par 8 pour trouver la
+               ;            colonne caractère ou se trouve le curseur.
                ;---------------------------------------------------------------
-               lda   js1_pixx
-               sta   vallsb
-               lda   js1_pixx+1
-               ror                  ; ex = %0000000100000001 = 257 pixel
-               ror   vallsb         ; Cnnnnnnn      On divise par 8 pc les
-               lsr   vallsb         ; 0Cnnnnnn      caracteres de 8 pixels
-               lsr   vallsb         ; 00Cnnnnn
-               lda   vallsb         ; devient = %00100000 = 32
-               sta   js1_x
+               lda   js1_pixx       ; Charge le LSB de X
+               sta   vallsb         ; ... et le place dans vallsb.
+               lda   js1_pixx+1     ; Crarge le MSB de X.
+               ror                  ; Comme seul le bit 0 est significatif dans 
+                                    ; le MSB de la coordonnée X, on le décale 
+                                    ; ... vers le carry (ROR) pour ensuite le 
+                                    ; ... décallé (ROR) dans vallsb. 
+                                    ; ex= %0000000100000001 = 257 pixel
+               ror   vallsb         ; ... %10000000 - On divise par 8 pixel 
+               lsr   vallsb         ; ... %01000000 - ... pour trouver la  
+               lsr   vallsb         ; ... %00100000 - ... colonne.
+               lda   vallsb         ; ... %devient = %00100000 = Colonne # 32.
+               sta   js1_x          ; Sauvegarde la position caractère X.
                ;---------------------------------------------------------------
-               ; Port 1 Y
+               ; Port 1 Y - On divise la position Y pixel par 8 pour trouver la
+               ;            ligne de caractère ou se trouve le curseur.
                ;---------------------------------------------------------------
-               lda   js1_pixy
-               sta   vallsb
-               lsr   vallsb         ; Cnnnnnnn     On divise par 8 pc les
-               lsr   vallsb         ; 0Cnnnnnn     caracteres de 8 pixels
-               lsr   vallsb         ; 00Cnnnnn
-               lda   vallsb         ; devient = %00100000 = 32
-               sta   js1_y
-               pla
-               plp
+               lda   js1_pixy       ; Charge le LSB de Y       
+               sta   vallsb         ; ... et le place dans vallsb.
+                                    ; ex= %00011110 =  30 pixel
+               lsr   vallsb         ; ... %00001111 - En divise par 8 pixels
+               lsr   vallsb         ; ... %00000111 - ... pour trouver la      
+               lsr   vallsb         ; ... %00000011 - ... ligne.
+               lda   vallsb         ; devient = %00000011 = Ligne # 3
+               sta   js1_y          ; Sauvegarde la position caractère Y.
+               pla                  ; Récupération minimale
+               plp                  ; ... des registres.
                rts
 vallsb         .byte 0
-regx           .byte 0
                .bend
 ;------------------------------------------------------------------------------
-;
+; js2_correct effectue les calculs pour mettre à jour les divers variables du
+; ... pseudo curseur de souris du port de jeu #1. 
 ;------------------------------------------------------------------------------
 js2_correct    .block
-               php
-               pha
+               php                  ; Sauvegarde minimale
+               pha                  ; ... des registres.
                ;---------------------------------------------------------------
-               ; Port 2 X
+               ; Port 2 X - On divise la position X pixel par 8 pour trouver la
+               ;            colonne caractère ou se trouve le curseur.
                ;---------------------------------------------------------------
-               lda   js2_pixx
-               sta   vallsb
-               lda   js2_pixx+1
-               ror                  ; ex = %0000000100000001 = 257 pixel
-               ror   vallsb         ; Cnnnnnnn     On divise par 8 pc les
-               lsr   vallsb         ; 0Cnnnnnn     caracteres de 8 pixels
-               lsr   vallsb         ; 00Cnnnnn
-               lda   vallsb         ; devient = %00100000 = 32
-               sta   js2_x
+               lda   js2_pixx       ; Charge le LSB de X
+               sta   vallsb         ; ... et le place dans vallsb.
+               lda   js2_pixx+1     ; Crarge le MSB de X.
+               ror                  ; Comme seul le bit 0 est significatif dans 
+                                    ; le MSB de la coordonnée X, on le décale 
+                                    ; ... vers le carry (ROR) pour ensuite le 
+                                    ; ... décallé (ROR) dans vallsb. 
+                                    ; ex= %0000000100000001 = 257 pixel
+               ror   vallsb         ; ... %10000000 - On divise par 8 pixel 
+               lsr   vallsb         ; ... %01000000 - ... pour trouver la  
+               lsr   vallsb         ; ... %00100000 - ... colonne.
+               lda   vallsb         ; ... %devient = %00100000 = Colonne # 32.
+               sta   js2_x          ; Sauvegarde la position caractère X.
                ;---------------------------------------------------------------
-               ; Port 2 Y
+               ; Port 2 Y - On divise la position Y pixel par 8 pour trouver la
+               ;            ligne de caractère ou se trouve le curseur.
                ;---------------------------------------------------------------
-               lda   js2_pixy
-               sta   vallsb
-               lsr   vallsb         ; Cnnnnnnn     On divise par 8 pc les
-               lsr   vallsb         ; 0Cnnnnnn     caracteres de 8 pixels
-               lsr   vallsb         ; 00Cnnnnn
-               lda   vallsb         ; devient = %00100000 = 32
-               sta   js2_y
-               pla
-               plp
+               lda   js2_pixy       ; Charge le LSB de Y       
+               sta   vallsb         ; ... et le place dans vallsb.
+                                    ; ex= %00011110 =  30 pixel
+               lsr   vallsb         ; ... %00001111 - En divise par 8 pixels
+               lsr   vallsb         ; ... %00000111 - ... pour trouver la      
+               lsr   vallsb         ; ... %00000011 - ... ligne.
+               lda   vallsb         ; devient = %00000011 = Ligne # 3
+               sta   js2_y          ; Sauvegarde la position caractère Y.
+               pla                  ; Récupération minimale
+               plp                  ; ... des registres.
                rts
 vallsb         .byte 0
-regx           .byte 0
                .bend
 ;------------------------------------------------------------------------------
-;
+; Affiche les valeurs des deux ports jeu. 
 ;------------------------------------------------------------------------------
 js_showvals    .block
-               ;jsr   js1_showvals
+               jsr   js1_showvals
                jsr   js2_showvals
                rts
                .bend
 ;------------------------------------------------------------------------------
-;
+; Affiche les valeurs du Port jeu #1 et les valeurs calculées.
 ;------------------------------------------------------------------------------
 js1_showvals   .block
-               jsr   push
-               lda   js1_x          ; La valeur 8 bits de js1_ X
-               jsr   a2hex
-               lda   a2hexstr+1
-               sta   js1_val8+19
-               lda   a2hexstr+2
-               sta   js1_val8+20
-               lda   js1_pixx       ; La valeur 16 bits de js1_ X
-               jsr   a2hex
-               lda   a2hexstr+1
-               sta   js1_val16+14
-               lda   a2hexstr+2
-               sta   js1_val16+15
-               lda   js1_pixx+1
-               jsr   a2hex
-               lda   a2hexstr+1
-               sta   js1_val16+12
-               lda   a2hexstr+2
-               sta   js1_val16+13
+               jsr   pushregs       ; Sauvegarde les registres.
+               lda   js1_x          ; Charge la valeur 8 bits de js1_ X.
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js1_val8+19    ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js1_val8+20    ; ...
+               lda   js1_pixx       ; La valeur LSB 16 bits de js1_pixx
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js1_val16+14   ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js1_val16+15   ; ...
+               lda   js1_pixx+1     ; La valeur MSB 16 bits de js1_pixx
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js1_val16+12   ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js1_val16+13   ; ...
                lda   js1_y          ; La valeyr 8 bits de js1_ Y
-               jsr     a2hex
-               ;lda  a2hexstr
-               ;sta  js1_val+21
-               lda   a2hexstr+1
-               sta   js1_val8+23
-               lda   a2hexstr+2
-               sta   js1_val8+24
-               lda   js1_pixy       ; La valeur 16 bits de js1_ Y
-               jsr   a2hex
-               lda   a2hexstr+1
-               sta   js1_val16+20
-               lda   a2hexstr+2
-               sta   js1_val16+21
-               lda   #0
-               jsr   a2hex
-               lda   a2hexstr+1
-               sta   js1_val16+18
-               lda   a2hexstr+2
-               sta   js1_val16+19
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js1_val8+23    ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js1_val8+24    ; ...
+               lda   js1_pixy       ; La valeur 8 bits de js1_pixY
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js1_val16+20   ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js1_val16+21   ; ...
+               lda   #0             ; Charge 0 dans Acc.
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js1_val16+18   ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js1_val16+19   ; ...
                lda   js1_fire       ; Le bouton fire de js1_
-               jsr   a2hex
-               lda   a2hexstr+2
-               sta   js1_val8+33
-               ldx   #<js1_val8
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+2     ; Copie le résultat. 
+               sta   js1_val8+33    ; ... dans les chaines d'affichage.
+               ldx   #<js1_val8     ; Affiche js1_val8
                ldy   #>js1_val8
                jsr   putscxy
-               ldx   #<js1_val16
+               ldx   #<js1_val16    ; Affiche js1_val16
                ldy   #>js1_val16
                jsr   putscxy
-               jsr   pop
+               jsr   popregs        ; Récupère les registres.
                rts
                .bend
 
-js_updatecurs  .block
-               jsr   pushregs
-               ;lda   js_oldx
-               ;cmp   #$ff
-               ;beq   running
-               ;ldx   js2_x
-               ;ldy   js2_y
-               ;stx   js_oldx
-               ;sty   js_oldy
-               ;jsr   js_eoraddrxy
+;------------------------------------------------------------------------------
+; Affiche les valeurs du Port jeu #2 et les valeurs calculées.
+;------------------------------------------------------------------------------
+js2_showvals   .block
+               jsr   pushregs       ; Sauvegarde les registres.
+               lda   js2_x          ; Charge la valeur 8 bits de js2_ X.
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js2_val8+19    ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js2_val8+20    ; ...
+               lda   js2_pixx       ; La valeur LSB 16 bits de js2_pixx
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js2_val16+14   ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js2_val16+15   ; ...
+               lda   js2_pixx+1     ; La valeur MSB 16 bits de js2_pixx
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js2_val16+12   ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js2_val16+13   ; ...
+               lda   js2_y          ; La valeyr 8 bits de js2_ Y
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js2_val8+23    ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js2_val8+24    ; ...
+               lda   js2_pixy       ; La valeur 8 bits de js2_pixY
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js2_val16+20   ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js2_val16+21   ; ...
+               lda   #0             ; Charge 0 dans Acc.
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+1     ; Copie le résultat. 
+               sta   js2_val16+18   ; ... dans les chaines d'affichage.
+               lda   a2hexstr+2     ; ...
+               sta   js2_val16+19   ; ...
+               lda   js2_fire       ; Le bouton fire de js2_
+               jsr   atohex         ; La convertie en hexadecimal.
+               lda   a2hexstr+2     ; Copie le résultat. 
+               sta   js2_val8+33    ; ... dans les chaines d'affichage.
+               ldx   #<js2_val8     ; Affiche js2_val8
+               ldy   #>js2_val8
+               jsr   putscxy
+               ldx   #<js2_val16    ; Affiche js2_val16
+               ldy   #>js2_val16
+               jsr   putscxy
+               jsr   popregs        ; Récupère les registres.
+               rts
+               .bend
 
-running        lda   js2_x          ; on réécrit l'ancien caractèere àa sa place
+;------------------------------------------------------------------------------
+;
+;------------------------------------------------------------------------------
+js_updatecurs  .block
+               jsr   pushregs       ; Sauvegarde les registres.
+running        lda   js2_x          
                cmp   js_x
                beq   chky
                sta   js_x
@@ -467,8 +528,7 @@ showit         lda   #0
                jsr   xy2addr
                ldy   addr2
                ldx   addr2+1
-               ;jsr   showregs
-               jsr   popregs
+               jsr   popregs        ; Récupère les registres.
                rts
 flag           .byte   0
                .bend
@@ -495,66 +555,6 @@ js_eoraddrxy   .block
                rts
                .bend
 
-;------------------------------------------------------------------------------
-; Affiche les valeurs des joystick et les valeurs calculées.
-;------------------------------------------------------------------------------
-js2_showvals   .block
-               jsr   push                   ; stack : y, x, a, flg
-               lda   js2_x          ; La valeur 8 bits de js2_ X
-               jsr   a2hex
-               lda   a2hexstr
-               sta   js2_val8+19
-               lda   a2hexstr+1
-               sta   js2_val8+20
-               ;lda   js2_pixx      ; La valeur 16 bits de js2_ X
-               lda   js2_clickx
-               jsr   a2hex
-               lda   a2hexstr
-               sta   js2_val16+14
-               lda   a2hexstr+1
-               sta   js2_val16+15
-               ;lda   js2_pixx+1
-               lda   js2_clickx+1
-               jsr   a2hex
-               lda   a2hexstr
-               sta   js2_val16+12
-               lda   a2hexstr+1
-               sta   js2_val16+13
-               lda   js2_y          ; La valeur 8 bits de js2_ Y
-               jsr   a2hex
-               lda   a2hexstr
-               sta   js2_val8+23
-               lda   a2hexstr+1
-               sta   js2_val8+24
-               ;lda   js2_pixy      ; La valeur 16 bits de js2_ Y
-               lda   js2_clicky
-               jsr   a2hex
-               lda   a2hexstr
-               sta   js2_val16+20
-               lda   a2hexstr+1
-               sta   js2_val16+21
-               lda   #0
-               jsr   a2hex
-               lda   a2hexstr
-               sta   js2_val16+18
-               lda   a2hexstr+1
-               sta   js2_val16+19
-               lda   js2_fire       ; Le bouton fire de js2_
-               jsr   a2hex
-               lda   a2hexstr+1
-               sta   js2_val8+33
-               ldx   #<js2_val8     ; On affiche les données
-               ldy   #>js2_val8
-               jsr   putscxy
-               ldx   #<js2_val16a
-               ldy   #>js2_val16a
-               jsr   putscxy
-               ldx   #<js2_val16
-               ldy   #>js2_val16
-               jsr   putscxy
-               jsr   pop
-               rts
-               .bend
 
 
 js_x           .byte 0              ; J1 Variable coordonnée X actuelle.
@@ -578,6 +578,7 @@ js1_flag       .byte 0              ; J1 Drapeau du bouton Feu.
 js1_clickx     .word 0              ; J1 Coord. X où le bouton feu est pesé.
 js1_clicky     .byte 0              ; J1 Coord. Y où le bouton feu est pesé.
 js1_events     .byte 0              ; J1 Évenement.
+
 
 js2_pixx       .word 0              ; J2 Coord. X en pixel.
 js2_pixy       .byte 0              ; J2 Coord. Y en pixel.
