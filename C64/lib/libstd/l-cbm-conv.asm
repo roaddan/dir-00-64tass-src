@@ -1,7 +1,7 @@
 ;--------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .:
-; Cernière m.à j. : 
+; Nom du fichier .: l-cbm-conv.asm
+; Cernière m.à j. : 20261030-000000 Francisation des commentaires,
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
 ; Nomprog: hexutil.s
