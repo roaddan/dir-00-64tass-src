@@ -426,12 +426,12 @@ js1_showvals   .block
                jsr   atohex         ; La convertie en hexadecimal.
                lda   a2hexstr+2     ; Copie le résultat. 
                sta   js1_val8+33    ; ... dans les chaines d'affichage.
-               ldx   #<js1_val8     ; Affiche js1_val8
-               ldy   #>js1_val8
-               jsr   putscxy
-               ldx   #<js1_val16    ; Affiche js1_val16
-               ldy   #>js1_val16
-               jsr   putscxy
+               ldx   #<js1_val8     ; On charge 
+               ldy   #>js1_val8     ; ... et on
+               jsr   putscxy        ; ... affiche js1_val8.
+               ldx   #<js1_val16    ; On charge
+               ldy   #>js1_val16    ; ... et on 
+               jsr   putscxy        ; ... affiche js1_val16.
                jsr   popregs        ; Récupère les registres.
                rts
                .bend
@@ -481,12 +481,12 @@ js2_showvals   .block
                jsr   atohex         ; La convertie en hexadecimal.
                lda   a2hexstr+2     ; Copie le résultat. 
                sta   js2_val8+33    ; ... dans les chaines d'affichage.
-               ldx   #<js2_val8     ; Affiche js2_val8
-               ldy   #>js2_val8
-               jsr   putscxy
-               ldx   #<js2_val16    ; Affiche js2_val16
-               ldy   #>js2_val16
-               jsr   putscxy
+               ldx   #<js2_val8     ; On charge
+               ldy   #>js2_val8     ; ... et on    
+               jsr   putscxy        ; ... affiche js2_val8
+               ldx   #<js2_val16    ; On charge
+               ldy   #>js2_val16    ; ... et on
+               jsr   putscxy        ; ... affiche js2_val16
                jsr   popregs        ; Récupère les registres.
                rts
                .bend
@@ -496,67 +496,71 @@ js2_showvals   .block
 ;------------------------------------------------------------------------------
 js_updatecurs  .block
                jsr   pushregs       ; Sauvegarde les registres.
-running        lda   js2_x          
-               cmp   js_x
-               beq   chky
-               sta   js_x
-               inc   flag
-chky           lda   js2_y
-               cmp   js_y
-               beq   chkflag
-               sta   js_y
-               inc   flag
-chkflag        lda   flag
-               beq   showit
-               ldx   js_oldx
-               ldy   js_oldy
-               jsr   js_eoraddrxy
-               ldx   js_x
-               ldy   js_y
-               jsr   js_eoraddrxy
-               lda   js_x
-               sta   js_oldx
-               lda   js_y
-               sta   js_oldy
-showit         lda   #0
-               sta   flag
-               sta   addr1
-               lda   #$04
-               sta   addr1+1
-               ldx   js_x
-               ldy   js_y
-               jsr   xy2addr
-               ldy   addr2
-               ldx   addr2+1
+running        lda   js2_x          ; On regarde si la position X
+               cmp   js_x           ; ... a changée.
+               beq   chky           ; Si non, on regarde la coordonnée y.
+               sta   js_x           ; On copy la nouvelle position dans js_x.
+               inc   flag           ; Un flag pour signaler le changement. 
+chky           lda   js2_y          ; On regarde si la position Y
+               cmp   js_y           ; ... a changée.
+               beq   chkflag        ; Si non, on traite les changements.
+               sta   js_y           ; On copy la nouvelle position dans js_y.
+               inc   flag           ; Un flag pour signaler le changement. 
+chkflag        lda   flag           ; On regarde si un flag est levé.
+               beq   showit         ; 
+               ldx   js_oldx        ; On récupère la vielle coordonnée
+               ldy   js_oldy        ; ... dans X et Y.
+               jsr   js_eoraddrxy   ; On fait l'inversion.
+               ldx   js_x           ; On charge la nouvelle position 
+               ldy   js_y           ; ... dans x et y.
+               jsr   js_eoraddrxy   ; On fait l'inversion.
+               lda   js_x           ; On copie la nouvelle position x et y
+               sta   js_oldx        ; ... comme vielle position.
+               lda   js_y           ; ...  
+               sta   js_oldy        ; ...
+showit         lda   #0             ; On retire 
+               sta   flag           ; ... le drapeau d'action.
+               sta   addr1          ; On remet l'adresse replace 
+               lda   #$04           ; ... addr1 à l'adresse 
+               sta   addr1+1        ; ... $0400.
+               ldx   js_x           ; On prend les nouvelles
+               ldy   js_y           ; ... coordonnées et 
+               jsr   xy2addr        ; ... on calcule l'adresse equivalente
+               ldy   addr2          ; ... pour la mémoriser dans 
+               ldx   addr2+1        ; ... addr2.
                jsr   popregs        ; Récupère les registres.
                rts
 flag           .byte   0
                .bend
 
+;------------------------------------------------------------------------------
+; Fonction qui inverse le caractèere àa l'écran en fonction de la position 
+; de la souris virtuelle géré par la manette de jeu.
+;------------------------------------------------------------------------------
 js_eoraddrxy   .block
                jsr   pushall        ; Sauvegarde des registres.
-               ;jsr   showregs
-               jsr   savezp2        
-               lda   #$04
+               lda   #$04           ; $0400 est l'adresse de la mémoire vidéo.
                sta   addr1+1
-               lda   #0
+               lda   #$00
                sta   addr1
-               jsr   xy2addr
-               ldy   addr2
-               sty   zpage2
-               ldx   addr2+1
-               stx   zpage2+1
-               ldy   #0
-               lda   (zpage2),y
-               eor   #%01000000
-               sta   (zpage2),y
-               jsr   restzp2
+               lda   #40            ; Place 40 comme multiplicateur de ligne
+               sta   ymult          ; ... dans la variable de multiplication. 
+               jsr   xy2addr        ; Calcul l'adresse résultante.
+               ldy   addr2          ; Prend le LSB de cette adresse et
+               sty   zpage2         ; ... le place dans le LSB de zpage2.
+               ldx   addr2+1        ; Fais de même avec le MSB, mais
+               stx   zpage2+1       ; ... cette fois dans le MSB de zpage2.
+               ldy   #0             ; Un index à 0.
+               lda   (zpage2),y     ; On charge le caractère àa l'endroit. 
+               eor   #%01000000     ; On l'inverse.
+               sta   (zpage2),y     ; et on le replace.
                jsr   popall
                rts
                .bend
 
-
-
+;------------------------------------------------------------------------------
+;
+;------------------------------------------------------------------------------
 js_x           .byte 0              ; J1 Variable coordonnée X actuelle.
 js_y           .byte 0              ; J1 Variable coordonnée Y actuelle.
 js_oldx        .byte $ff            ; J1 Variable ancienne coordonnée X.

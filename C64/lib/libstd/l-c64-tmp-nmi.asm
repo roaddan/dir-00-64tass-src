@@ -1,6 +1,6 @@
 ;-------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .: lib-c64-nmi.asm
+; Nom du fichier .: l-c64-tmp-nmi.asm
 ; Cernière m.à j. : 20250521
 ; Inspiration ....: 
 ;-------------------------------------------------------------------------------

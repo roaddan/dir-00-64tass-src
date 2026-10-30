@@ -1,9 +1,10 @@
 ;-------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .: lib-c64-joystick.asm
+; Nom du fichier .: lib-c64-mcd-joystick.asm
 ; Version ........: Quelque part en 2023
 ; Cernière m.à j. : 20250521
-; Inspiration ....: 
+; Note ...........: Dans le nom du fichier, mcd veux dire Multi-Color Display.
+;                   Affichage en mode multi-couleur du VICII.
 ;-------------------------------------------------------------------------------
 ; Lecture de la des manettes de commande numériques.
 ;-------------------------------------------------------------------------------

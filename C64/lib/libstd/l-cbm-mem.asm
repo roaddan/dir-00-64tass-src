@@ -215,12 +215,7 @@ restzp2
 ;              addr2 = addr1 + x + (y * ymult)  
 ;---------------------------------------------------------------------
 xy2addr        .block
-               php
-               pha
-               txa
-               pha
-               tya
-               pha
+               jsr   pushregs
                lda  addr1+1
                sta  addr2+1
                lda  addr1     
@@ -240,12 +235,7 @@ addx           txa
                bcc  thatsit
                inc  addr2+1
 thatsit        sta  addr2
-               pla
-               tay
-               pla
-               tax
-               pla
-               plp
+               jsr   popregs
                rts
                .bend
 

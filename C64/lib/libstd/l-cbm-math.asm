@@ -1,3 +1,9 @@
+;------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, Québec, canada.
+; Nom du fichier .: l-cbm-math.asm
+; Cernière m.à j. : 20261030-000000 Francisation des commentaires,
+; Inspiration ....:
+;------------------------------------------------------------------------------
 ;! headstart
 ;*= $801
 ;.word (+), 10

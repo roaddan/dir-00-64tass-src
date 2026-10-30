@@ -1,8 +1,9 @@
 ;--------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .:
+; Nom du fichier .: l-c64-mcd-text.asm
 ; Cernière m.à j. : 
-; Inspiration ....: 
+; Note ...........: Dans le nom du fichier, mcd veux dire Multi-Color Display.
+;                   Affichage en mode multi-couleur du VICII.
 ;--------------------------------------------------------------------------------
 ; Program ...: VICII Multi Color mode screen managing utilities
 ; Fichier ...: c64_lib_text_mc.asm
