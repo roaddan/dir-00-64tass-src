@@ -534,9 +534,9 @@ flag           .byte   0
                .bend
 
 js_eoraddrxy   .block
-               jsr   pushall
+               jsr   pushall        ; Sauvegarde des registres.
                ;jsr   showregs
-               jsr   savezp2
+               jsr   savezp2        
                lda   #$04
                sta   addr1+1
                lda   #0
