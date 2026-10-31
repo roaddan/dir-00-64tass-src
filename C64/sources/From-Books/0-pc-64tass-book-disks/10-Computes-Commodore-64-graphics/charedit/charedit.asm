@@ -73,8 +73,8 @@ endmain        jsr   pop            ; Récupère les registres.
 ; Chargement des constantes et des chaines de caractères locales.
 ;-----------------------------------------------------------------------------
                .include    "local-const.asm"
-               .include    "strings_fr.asm"     ; Les chaines en français.
-;               .include    "strings_en.asm"     ; Les chaines en anglais.
+;               .include    "strings_fr.asm"     ; Les chaines en français.
+               .include    "strings_en.asm"     ; Les chaines en anglais.
 ;-----------------------------------------------------------------------------
 ; ... et du code spécifique au programmes.
 ;-----------------------------------------------------------------------------

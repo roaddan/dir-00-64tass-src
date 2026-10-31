@@ -1,7 +1,10 @@
 ;--------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, G9B-0S5, canada.
 ; Nom du fichier .: e-c64-vicii.asm
-; Cernière m.à j. : 20261027-223250
+; Type fichier....: Constantes
+; Creation........: 20151208 
+; Version.........: 0.1.0
+; Révisions.......: 20261027-223250 Francisation des commentaires.
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
 viciiscn    =   $0400

@@ -1,7 +1,10 @@
 ;------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .: e-header-c64.asm
-; Inspiration ....: 
+; Nom du fichier .: h-header-c64.asm
+; Type fichier....: Librairie (Entête)
+; Creation........: 20251208 
+; Version.........: 0.1.0
+; Révisions.......: 20261020 Francisation des commentaires.
 ;------------------------------------------------------------------------------
 ; Entete de programme assembleur pour demarrage à partir du BASIC 2.0 du 
 ; COMMODORE C64.

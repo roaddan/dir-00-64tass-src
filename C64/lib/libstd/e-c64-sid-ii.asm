@@ -1,8 +1,10 @@
 ;------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: e-c64-sid-ii.asm
-; Cernière m.à j. : 20261027-151103 Francisation des commentaires,
-; Inspiration ....: 
+; Type fichier....: Constantes
+; Creation........: 20151208 
+; Version.........: 0.1.0
+; Révisions.......: 20261027-151103 Francisation des commentaires,
 ;------------------------------------------------------------------------------
 sidbase =   $d400
 ; Voix 1

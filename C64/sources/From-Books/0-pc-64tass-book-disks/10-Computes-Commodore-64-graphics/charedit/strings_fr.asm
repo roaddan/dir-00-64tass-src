@@ -298,10 +298,8 @@ f8bbutton   .byte     menu2col2,fkeyleft,f1top+10
             .byte     0
 
 ; Variables locales
-txt0        .null     "petscii..: "
-txt1        .null     "code clef:  "
+txt1        .null     "ascii....:  "
 txt2        .null     "bitmap...:"
-txt3        .null     "index....:  "
+txt3        .null     "petscii..:  "
 txt4        .null     "mapadr...:"
 txt5        .null     "cursval..:"
-txt6        .null     "stack......:"

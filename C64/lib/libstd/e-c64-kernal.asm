@@ -1,8 +1,10 @@
 ;------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: e-c64-kernal.asm
-; Cernière m.à j. : 20261025-001445
-; Inspiration ....: 
+; Type fichier....: Constantes
+; Creation........: 20151208 
+; Version.........: 0.1.0
+; Révisions.......:
 ;------------------------------------------------------------------------------
 ; e-c64-kernal.asm - Carthographie memoire et declaration de constantes pour
 ;                    les commodores 64 et 64c

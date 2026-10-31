@@ -1,9 +1,9 @@
 ;-----------------------------------------------------------------------------
-; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .: e-c64-Basic2.asm
-; Type fichier....: Variables
+; Scripteur.......: Daniel Lafrance, Québec, canada.
+; Nom du fichier..: e-c64-Basic2.asm
+; Type fichier....: Constantes
 ; Creation........: 20151208 
-; Version.........:
+; Version.........: 0.1.0
 ; Révision........: 20261026-223332
 ;                   20261024-222156, Francisation des commentaires,
 ; Inspiration ....: Mapping The C64 

@@ -1,17 +1,17 @@
 ;------------------------------------------------------------------------------
 ; Scripteur........: Daniel Lafrance, Québec, canada.
 ; Nom du fichier...: l-c64-basic2.asm
-; Version..........: 20230610-223618
+; Type fichier.....: Constantes
+; Creation.........: 20230610-223618
+; Version..........: 0.1.0
 ; Révision.........: 20250523
 ;                    20261028 - Francisation des commentaires.
-; Inspiration......: 
 ;------------------------------------------------------------------------------
 ; lib-c64-basic2.asm - Fonctions d'affichage par l'utilisation des routines du 
 ; rom BASIC du Commodores 64 et 64c. 
 ;
 ; Note: Compatibilité avec le Vic-20 à vérifier.
 ;------------------------------------------------------------------------------
-
 ;------------------------------------------------------------------------------
 ; Pour l'utilisation de ce fichier dans turbo-macro-pro ou avec 64tass 
 ; utilisez la syntaxes ... 
@@ -29,7 +29,7 @@
 ; Initialisation des paramêtres de base pour la gestion de l'écran.
 ;------------------------------------------------------------------------------
 scrmaninit     .block  
-               jsr   push        ; Sauvegarde tous les registres
+               jsr   push           ; Sauvegarde tous les registres
                jsr   screendis      ; Disable screen
                lda   #vbleu         ; Place bleue pour la couleur  
                sta   vicbackcol     ;   d'arrière plan,  
@@ -39,7 +39,7 @@ scrmaninit     .block
                sta   bascol         ; texte.
                jsr   cls            ; Efface l'écran.
                jsr   screenena      ; enable screen
-               jsr   pop         ; Récupère tous les registres.
+               jsr   pop            ; Récupère tous les registres.
                rts
                .bend  
 
@@ -49,12 +49,12 @@ scrmaninit     .block
 ; Sortie  : Aucune.
 ;------------------------------------------------------------------------------
 cls            .block
-               php                 ; Sauvegarde les registres  
-               pha                 ;   modifiés.
-               lda   #$93          ; Affiche le code basic de  
-               jsr   chrout        ;   d'effacement d'écran.
-               pla                 ; Récupère les registres  
-               plp                 ;   modifiés.
+               php                  ; Sauvegarde les registres  
+               pha                  ;   modifiés.
+               lda   #$93           ; Affiche le code basic de  
+               jsr   chrout         ;   d'effacement d'écran.
+               pla                  ; Récupère les registres  
+               plp                  ;   modifiés.
                rts
                .bend
 
@@ -64,11 +64,11 @@ cls            .block
 ; Sortie  : Aucune.
 ;------------------------------------------------------------------------------
 putnch         .block
-               jsr   push       ; Sauvegarde tous les registres.
-again          jsr   chrout        ; On affiche A.
-               dex                 ; Un de moins à faire.
-               bne   again         ; Si pas à 0 on en affiche encore.
-out            jsr   pop        ; Récupère tous les registres.
+               jsr   push           ; Sauvegarde tous les registres.
+again          jsr   chrout         ; On affiche A.
+               dex                  ; Un de moins à faire.
+               bne   again          ; Si pas à 0 on en affiche encore.
+out            jsr   pop            ; Récupère tous les registres.
                rts
                .bend
 
@@ -79,9 +79,9 @@ out            jsr   pop        ; Récupère tous les registres.
 ; Sortie  : Aucune.
 ;------------------------------------------------------------------------------
 putch          .block
-               php                 ; Sauvegarde le registre de status.
-               jsr   chrout        ; Affiche le caractère de Acc.
-               plp                 ; Récupère le registre de status.
+               php                  ; Sauvegarde le registre de status.
+               jsr   chrout         ; Affiche le caractère de Acc.
+               plp                  ; Récupère le registre de status.
                rts
                .bend
 
@@ -93,7 +93,7 @@ putch          .block
 putsyx
 puts
                .block
-               jsr   push       ; Sauvegarde registres.
+               jsr   push           ; Sauvegarde registres.
                stx   zpage1         ; Place l'adresse de la chaine   
                sty   zpage1+1       ;   dans ZP1.
                ldy   #0             ; Initialise l'index du mode (ZP),Y 
@@ -102,7 +102,7 @@ next           lda   (zpage1),y     ; Lit un charactère.
                jsr   chrout         ; Affiche le caractères.
                jsr   inczp1         ; Inc. le pointeur ZP1 en 16 bits.
                jmp   next           ; Saute chercher le prochain carac.
-exit           jsr   pop        ; Récupère registres.
+exit           jsr   pop            ; Récupère registres.
                rts
                .bend
 
@@ -114,7 +114,7 @@ exit           jsr   pop        ; Récupère registres.
 ;------------------------------------------------------------------------------
 gotoxy
                .block
-               jsr   push       ; Sauvegarde les registres.
+               jsr   push           ; Sauvegarde les registres.
                txa                  ; Interchange x et y.
                pha                  ; Acc. sur pile.
                tya                  ; Y da s Acc.
@@ -135,7 +135,7 @@ tyhigh         cpy   #40            ; Verifie la limite supérieure de Y.
                ldy   #39            ; Trop grand on le force à 39.
 allok          clc                  ; carry à 0 pour positionner le curseur.
                jsr   plot           ; La routine Kernal de positionnement.
-               jsr   pop        ; Récupère les registres.
+               jsr   pop            ; Récupère les registres.
                rts
                .bend
 ;------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ allok          clc                  ; carry à 0 pour positionner le curseur.
 ; Sortie  : Aucune.
 ;------------------------------------------------------------------------------
 cursor         .block
-               jsr   push        ; Sauvegarde tous les registres.
+               jsr   push           ; Sauvegarde tous les registres.
                bcc   restore        ; Si C=0 c'est une récupération.
                jsr   kplot          ; On récupère la position du  
                sty   cx             ;   curseur et on la sauvegarde  
@@ -157,7 +157,7 @@ restore        ldx   cy             ; Comme C=1, On charge x avec
                jsr   kplot          ; On positionne le curseur.
                lda   bcol           ; On replace la couleur par basic  
                sta   bascol         ;   sauvegardé.
-out            jsr   pop         ; Récupère tous les registres.
+out            jsr   pop            ; Récupère tous les registres.
                rts
                .bend
 

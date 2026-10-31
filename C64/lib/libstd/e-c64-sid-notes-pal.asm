@@ -1,7 +1,10 @@
 ;-------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: e-c64-sid-notes-PAL.asm
-; Cernière m.à j. : 20261027-151103 Francisation des commentaires,
+; Type fichier....: Constantes
+; Creation........: 20151208 
+; Version.........: 0.1.0
+; Révisions.......: 20261027-151103 Francisation des commentaires,
 ; Inspiration ....: Programmers guide to the Commodore 64.
 ;-------------------------------------------------------------------------------
 ; Fréquence des notes SID calculée pour un système PAL avec un quartz à 
