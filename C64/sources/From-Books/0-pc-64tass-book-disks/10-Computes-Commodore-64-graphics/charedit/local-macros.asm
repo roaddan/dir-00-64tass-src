@@ -12,8 +12,8 @@ putmesg       .macro msgptr
 
 brkpoint       .macro  char
                jsr   push
-               ldx   #10
-               ldy   #24
+               ldx   #12
+               ldy   #23
                jsr   gotoxy
                #outstr  brkmsg
                lda   #\char

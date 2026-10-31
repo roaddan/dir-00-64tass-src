@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd -i -L charedit.txt -o charedit.prg charedit.asm
-; Fri Oct 30 23:52:24 2026
+; Sat Oct 31 01:47:46 2026
 
 ;Offset	;Hex		;Source
 
@@ -28,90 +28,55 @@
 .0815			main
 .0815	20 ae c4	               jsr   push           ; Sauvegarde les registres.
 .0818	20 fd c2	               jsr   scrmaninit     ; Initialise l'écran.
-.081b	20 1c c3	               jsr   cls
-.081e	a9 01		               lda   #$01
-.0820	a2 02		               ldx   #$02
-.0822	a0 03		               ldy   #$03
-.0824	85 fb		               sta   zpage1
-.0826	86 fc		               stx   zpage1+1
-.0828	86 fd		               stx   zpage2
-.082a	84 fe		               sty   zpage2+1
-.082c	20 11 cb	               jsr   regsphoto
-.082f	20 5a cb	               jsr   showregs
-.0832	08		            php
-.0833	48		            pha
-.0834	a9 0d		            lda   #13
-.0836	20 d2 ff	            jsr   chrout
-.0839	68		            pla
-.083a	28		            plp
-.083b	20 ae c4	            jsr   push
-.083e	a0 cc		            ldy   #>contstr+1
-.0840	a2 e3		            ldx   #<contstr
-.0842	20 39 c3	            jsr   putsyx
-.0845	20 dd c4	            jsr   pop
-.0848	20 ae c4	               jsr   push
-.084b	a2 0a		               ldx   #10
-.084d	a0 18		               ldy   #24
-.084f	20 53 c3	               jsr   gotoxy
-.0852	20 ae c4	            jsr   push
-.0855	a0 0a		            ldy   #>brkmsg+1
-.0857	a2 3d		            ldx   #<brkmsg
-.0859	20 39 c3	            jsr   putsyx
-.085c	20 dd c4	            jsr   pop
-.085f	a9 43		               lda   #'c'
-.0861	20 8b c6	               jsr   waitkey
-.0864	20 dd c4	               jsr   pop
-.0867	20 dd c4	               jsr   pop
-.086a	00		               brk
-.086b	20 ae c4	               jsr   push           ; Sauvegarde les registres.
-.086e	20 fd c2	               jsr   scrmaninit     ; Initialise l'écran.
-.0871	08		                   php
-.0872	48		                   pha
-.0873	a9 08		               lda  #$08
-.0875	20 d2 ff	                   jsr  $ffd2
-.0878	68		                   pla
-.0879	28		                   plp
-.087a	20 84 12	               jsr   drawcredits    ; Affiche l'écran des credits.
-.087d			waitmore
-.087d	20 aa c0	               jsr   sid_tada       ; Joue le son de bienvenue.
-.0880	20 9e 17	               jsr   copycharset    ; Copie la matrice de caractères en ram.
-.0883	20 1c c3	               jsr   cls            ; Efface l'écran
-.0886	20 88 17	               jsr   setscrptr      ; Sélectione les pointeurs d'écran
-.0889	20 10 13	               jsr   setdfltchar    ; Choisi le caractère de départ.
-.088c	20 f9 17	               jsr   drawstatic     ; Affiche les elements statiques d'écran.
-.088f	20 cb 16	               jsr   drawbitmap     ; Affiche les informations du caractère.
-.0892	a9 00		               lda   #$00           ; Choisi le menu
-.0894	8d 1a 0a	               sta   fkeyset        ; ... A au départ.
-.0897	20 40 18	               jsr   drawfkeys      ; Affiche le menu.
-.089a	20 ae c4	               jsr  push
-.089d	a2 5b		               ldx  #<blankmsg
-.089f	a0 0a		               ldy  #>blankmsg
-.08a1	20 d7 c3	               jsr  putscxy
-.08a4	a2 87		               ldx  #<prompt_msg
-.08a6	a0 0a		               ldy  #>prompt_msg
-.08a8	20 d7 c3	               jsr  putscxy
-.08ab	20 dd c4	               jsr  pop
-.08ae	20 82 c6	               jsr   kbflushbuff    ; Vide le tampon du clavier.
-.08b1	20 ae 14	               jsr   keyaction      ;
-.08b4	20 fd c2	               jsr   scrmaninit     ; Initialise l'écran.
-.08b7	20 84 12	               jsr   drawcredits    ; Affiche l'écran des credits.
-.08ba	20 ae c4	                   jsr  push
-.08bd	a2 f3		               ldx  #<bye_msg
-.08bf	a0 0e		               ldy  #>bye_msg
-.08c1	20 d7 c3	                   jsr  putscxy
-.08c4	20 dd c4	                   jsr  pop
-.08c7	ee 16 0f	printbye       inc   any_msg        ; Change la couleur de bye_msg.
-.08ca	20 ae c4	                   jsr  push
-.08cd	a2 16		               ldx  #<any_msg
-.08cf	a0 0f		               ldy  #>any_msg
-.08d1	20 d7 c3	                   jsr  putscxy
-.08d4	20 dd c4	                   jsr  pop
-.08d7	20 11 1a	               jsr   delay          ; Fais un delai.
-.08da	20 e4 ff	               jsr   getin          ; Regarde si une clef est entrée.
-.08dd	f0 e8		               beq   printbye       ; pas de clef, on réaffiche.
-.08df	20 1c c3	               jsr   cls            ; Efface l'écran
-.08e2	20 dd c4	endmain        jsr   pop            ; Récupère les registres.
-.08e5	60		               rts
+.081b	08		                   php
+.081c	48		                   pha
+.081d	a9 08		               lda  #$08
+.081f	20 d2 ff	                   jsr  $ffd2
+.0822	68		                   pla
+.0823	28		                   plp
+.0824	20 84 12	               jsr   drawcredits    ; Affiche l'écran des credits.
+.0827			waitmore
+.0827	20 aa c0	               jsr   sid_tada       ; Joue le son de bienvenue.
+.082a	20 f1 c1	               jsr   screendis      ; Désactive l'affichage vidéo.
+.082d	20 9e 17	               jsr   copycharset    ; Copie la matrice de caractères en ram.
+.0830	20 1c c3	               jsr   cls            ; Efface l'écran
+.0833	20 88 17	               jsr   setscrptr      ; Sélectione les pointeurs d'écran
+.0836	20 10 13	               jsr   setdfltchar    ; Choisi le caractère de départ.
+.0839	20 f9 17	               jsr   drawstatic     ; Affiche les elements statiques d'écran.
+.083c	20 cb 16	               jsr   drawbitmap     ; Affiche les informations du caractère.
+.083f	a9 00		               lda   #$00           ; Choisi le menu
+.0841	8d 1a 0a	               sta   fkeyset        ; ... A au départ.
+.0844	20 40 18	               jsr   drawfkeys      ; Affiche le menu.
+.0847	20 ae c4	               jsr  push
+.084a	a2 5b		               ldx  #<blankmsg
+.084c	a0 0a		               ldy  #>blankmsg
+.084e	20 d7 c3	               jsr  putscxy
+.0851	a2 87		               ldx  #<prompt_msg
+.0853	a0 0a		               ldy  #>prompt_msg
+.0855	20 d7 c3	               jsr  putscxy
+.0858	20 dd c4	               jsr  pop
+.085b	20 82 c6	               jsr   kbflushbuff    ; Vide le tampon du clavier.
+.085e	20 fe c1	               jsr   screenena      ; Active l'affichage vidéo.
+.0861	20 ae 14	               jsr   keyaction      ;
+.0864	20 fd c2	               jsr   scrmaninit     ; Initialise l'écran.
+.0867	20 84 12	               jsr   drawcredits    ; Affiche l'écran des credits.
+.086a	20 ae c4	                   jsr  push
+.086d	a2 f3		               ldx  #<bye_msg
+.086f	a0 0e		               ldy  #>bye_msg
+.0871	20 d7 c3	                   jsr  putscxy
+.0874	20 dd c4	                   jsr  pop
+.0877	ee 16 0f	printbye       inc   any_msg        ; Change la couleur de bye_msg.
+.087a	20 ae c4	                   jsr  push
+.087d	a2 16		               ldx  #<any_msg
+.087f	a0 0f		               ldy  #>any_msg
+.0881	20 d7 c3	                   jsr  putscxy
+.0884	20 dd c4	                   jsr  pop
+.0887	20 11 1a	               jsr   delay          ; Fais un delai.
+.088a	20 e4 ff	               jsr   getin          ; Regarde si une clef est entrée.
+.088d	f0 e8		               beq   printbye       ; pas de clef, on réaffiche.
+.088f	20 1c c3	               jsr   cls            ; Efface l'écran
+.0892	20 dd c4	endmain        jsr   pop            ; Récupère les registres.
+.0895	60		               rts
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd/m-c64-utils.asm
 
@@ -4058,6 +4023,8 @@
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd/l-c64-showregs.asm
 
+=13			regxloc        = 13
+=8			regyloc        = 8
 .cb11			regsphoto
 .cb11	08		               php                  ; Sauve le registre P. stack-> p, pch, pcl
 .cb12	8d 00 0a	               sta   vrega          ; Sauve Acc en mémoire.
@@ -4102,168 +4069,196 @@
 .cb65	28		            plp
 .cb66	18		               clc
 .cb67	ee 06 0a	               inc   vregpcl
-.cb6a	90 03		               bcc   norep
+.cb6a	90 14		               bcc   norep
 .cb6c	ee 05 0a	               inc   vregpch
-.cb6f	ad 00 0a	norep          lda   vrega
-.cb72	20 ae c4	            jsr   push
-.cb75	a0 cc		            ldy   #>ra_str+1
-.cb77	a2 83		            ldx   #<ra_str
-.cb79	20 39 c3	            jsr   putsyx
-.cb7c	20 dd c4	            jsr   pop
-.cb7f	20 c4 c9	               jsr   putahexfmt
-.cb82	08		            php
-.cb83	48		            pha
-.cb84	a9 0d		            lda   #13
-.cb86	20 d2 ff	            jsr   chrout
-.cb89	68		            pla
-.cb8a	28		            plp
-.cb8b	ad 01 0a	               lda   vregx
-.cb8e	20 ae c4	            jsr   push
-.cb91	a0 cc		            ldy   #>rx_str+1
-.cb93	a2 8f		            ldx   #<rx_str
-.cb95	20 39 c3	            jsr   putsyx
-.cb98	20 dd c4	            jsr   pop
-.cb9b	20 c4 c9	               jsr   putahexfmt
-.cb9e	08		            php
-.cb9f	48		            pha
-.cba0	a9 0d		            lda   #13
-.cba2	20 d2 ff	            jsr   chrout
-.cba5	68		            pla
-.cba6	28		            plp
-.cba7	ad 02 0a	               lda   vregy
-.cbaa	20 ae c4	            jsr   push
-.cbad	a0 cc		            ldy   #>ry_str+1
-.cbaf	a2 9b		            ldx   #<ry_str
-.cbb1	20 39 c3	            jsr   putsyx
-.cbb4	20 dd c4	            jsr   pop
-.cbb7	20 c4 c9	               jsr   putahexfmt
-.cbba	08		            php
-.cbbb	48		            pha
-.cbbc	a9 0d		            lda   #13
-.cbbe	20 d2 ff	            jsr   chrout
-.cbc1	68		            pla
-.cbc2	28		            plp
-.cbc3	ad 03 0a	               lda   vregp
-.cbc6	20 ae c4	            jsr   push
-.cbc9	a0 cc		            ldy   #>sr_str+1
-.cbcb	a2 a7		            ldx   #<sr_str
-.cbcd	20 39 c3	            jsr   putsyx
-.cbd0	20 dd c4	            jsr   pop
-.cbd3	20 c4 c9	               jsr   putahexfmt
-.cbd6	08		            php
-.cbd7	48		            pha
-.cbd8	a9 0d		            lda   #13
-.cbda	20 d2 ff	            jsr   chrout
-.cbdd	68		            pla
-.cbde	28		            plp
-.cbdf	ad 04 0a	               lda   vregs
-.cbe2	20 ae c4	            jsr   push
-.cbe5	a0 cc		            ldy   #>sp_str+1
-.cbe7	a2 b3		            ldx   #<sp_str
-.cbe9	20 39 c3	            jsr   putsyx
-.cbec	20 dd c4	            jsr   pop
-.cbef	20 c4 c9	               jsr   putahexfmt
-.cbf2	08		            php
-.cbf3	48		            pha
-.cbf4	a9 0d		            lda   #13
-.cbf6	20 d2 ff	            jsr   chrout
-.cbf9	68		            pla
-.cbfa	28		            plp
-.cbfb	ac 05 0a	               ldy   vregpch
-.cbfe	ae 06 0a	               ldx   vregpcl
-.cc01	20 28 ca	               jsr   yxtohex
-.cc04	20 ae c4	            jsr   push
-.cc07	a0 cc		            ldy   #>pc_str+1
-.cc09	a2 bf		            ldx   #<pc_str
-.cc0b	20 39 c3	            jsr   putsyx
-.cc0e	20 dd c4	            jsr   pop
-.cc11	20 ae c4	            jsr   push
-.cc14	a0 2a		            ldy   #>a2hexpfx+1
-.cc16	a2 ef		            ldx   #<a2hexpfx
-.cc18	20 39 c3	            jsr   putsyx
-.cc1b	20 dd c4	            jsr   pop
-.cc1e	08		            php
-.cc1f	48		            pha
-.cc20	a9 0d		            lda   #13
-.cc22	20 d2 ff	            jsr   chrout
-.cc25	68		            pla
-.cc26	28		            plp
-.cc27	ac 07 0a	               ldy   vzp1h
-.cc2a	ae 08 0a	               ldx   vzp1l
-.cc2d	20 28 ca	               jsr   yxtohex
-.cc30	20 ae c4	            jsr   push
-.cc33	a0 cc		            ldy   #>z1_str+1
-.cc35	a2 cb		            ldx   #<z1_str
-.cc37	20 39 c3	            jsr   putsyx
-.cc3a	20 dd c4	            jsr   pop
+.cb6f	20 ae c4	               jsr   push
+.cb72	38		               sec
+.cb73	20 f0 ff	               jsr   plot
+.cb76	e8		               inx
+.cb77	a0 0d		               ldy   #regxloc
+.cb79	18		               clc
+.cb7a	20 f0 ff	               jsr   plot
+.cb7d	20 dd c4	               jsr   pop
+.cb80	ad 00 0a	norep          lda   vrega
+.cb83	20 ae c4	            jsr   push
+.cb86	a0 cc		            ldy   #>ra_str+1
+.cb88	a2 eb		            ldx   #<ra_str
+.cb8a	20 39 c3	            jsr   putsyx
+.cb8d	20 dd c4	            jsr   pop
+.cb90	20 c4 c9	               jsr   putahexfmt
+.cb93	20 ae c4	               jsr   push
+.cb96	38		               sec
+.cb97	20 f0 ff	               jsr   plot
+.cb9a	e8		               inx
+.cb9b	a0 0d		               ldy   #regxloc
+.cb9d	18		               clc
+.cb9e	20 f0 ff	               jsr   plot
+.cba1	20 dd c4	               jsr   pop
+.cba4	ad 01 0a	               lda   vregx
+.cba7	20 ae c4	            jsr   push
+.cbaa	a0 cc		            ldy   #>rx_str+1
+.cbac	a2 f7		            ldx   #<rx_str
+.cbae	20 39 c3	            jsr   putsyx
+.cbb1	20 dd c4	            jsr   pop
+.cbb4	20 c4 c9	               jsr   putahexfmt
+.cbb7	20 ae c4	               jsr   push
+.cbba	38		               sec
+.cbbb	20 f0 ff	               jsr   plot
+.cbbe	e8		               inx
+.cbbf	a0 0d		               ldy   #regxloc
+.cbc1	18		               clc
+.cbc2	20 f0 ff	               jsr   plot
+.cbc5	20 dd c4	               jsr   pop
+.cbc8	ad 02 0a	               lda   vregy
+.cbcb	20 ae c4	            jsr   push
+.cbce	a0 cd		            ldy   #>ry_str+1
+.cbd0	a2 03		            ldx   #<ry_str
+.cbd2	20 39 c3	            jsr   putsyx
+.cbd5	20 dd c4	            jsr   pop
+.cbd8	20 c4 c9	               jsr   putahexfmt
+.cbdb	20 ae c4	               jsr   push
+.cbde	38		               sec
+.cbdf	20 f0 ff	               jsr   plot
+.cbe2	e8		               inx
+.cbe3	a0 0d		               ldy   #regxloc
+.cbe5	18		               clc
+.cbe6	20 f0 ff	               jsr   plot
+.cbe9	20 dd c4	               jsr   pop
+.cbec	ad 03 0a	               lda   vregp
+.cbef	20 ae c4	            jsr   push
+.cbf2	a0 cd		            ldy   #>sr_str+1
+.cbf4	a2 0f		            ldx   #<sr_str
+.cbf6	20 39 c3	            jsr   putsyx
+.cbf9	20 dd c4	            jsr   pop
+.cbfc	20 c4 c9	               jsr   putahexfmt
+.cbff	20 ae c4	               jsr   push
+.cc02	38		               sec
+.cc03	20 f0 ff	               jsr   plot
+.cc06	e8		               inx
+.cc07	a0 0d		               ldy   #regxloc
+.cc09	18		               clc
+.cc0a	20 f0 ff	               jsr   plot
+.cc0d	20 dd c4	               jsr   pop
+.cc10	ad 04 0a	               lda   vregs
+.cc13	20 ae c4	            jsr   push
+.cc16	a0 cd		            ldy   #>sp_str+1
+.cc18	a2 1b		            ldx   #<sp_str
+.cc1a	20 39 c3	            jsr   putsyx
+.cc1d	20 dd c4	            jsr   pop
+.cc20	20 c4 c9	               jsr   putahexfmt
+.cc23	20 ae c4	               jsr   push
+.cc26	38		               sec
+.cc27	20 f0 ff	               jsr   plot
+.cc2a	e8		               inx
+.cc2b	a0 0d		               ldy   #regxloc
+.cc2d	18		               clc
+.cc2e	20 f0 ff	               jsr   plot
+.cc31	20 dd c4	               jsr   pop
+.cc34	ac 05 0a	               ldy   vregpch
+.cc37	ae 06 0a	               ldx   vregpcl
+.cc3a	20 28 ca	               jsr   yxtohex
 .cc3d	20 ae c4	            jsr   push
-.cc40	a0 2a		            ldy   #>a2hexpfx+1
-.cc42	a2 ef		            ldx   #<a2hexpfx
+.cc40	a0 cd		            ldy   #>pc_str+1
+.cc42	a2 27		            ldx   #<pc_str
 .cc44	20 39 c3	            jsr   putsyx
 .cc47	20 dd c4	            jsr   pop
-.cc4a	08		            php
-.cc4b	48		            pha
-.cc4c	a9 0d		            lda   #13
-.cc4e	20 d2 ff	            jsr   chrout
-.cc51	68		            pla
-.cc52	28		            plp
-.cc53	ac 09 0a	               ldy   vzp2h
-.cc56	ae 0a 0a	               ldx   vzp2l
-.cc59	20 28 ca	               jsr   yxtohex
-.cc5c	20 ae c4	            jsr   push
-.cc5f	a0 cc		            ldy   #>z2_str+1
-.cc61	a2 d7		            ldx   #<z2_str
-.cc63	20 39 c3	            jsr   putsyx
-.cc66	20 dd c4	            jsr   pop
-.cc69	20 ae c4	            jsr   push
-.cc6c	a0 2a		            ldy   #>a2hexpfx+1
-.cc6e	a2 ef		            ldx   #<a2hexpfx
-.cc70	20 39 c3	            jsr   putsyx
-.cc73	20 dd c4	            jsr   pop
-.cc76	08		            php
-.cc77	48		            pha
-.cc78	a9 0d		            lda   #13
-.cc7a	20 d2 ff	            jsr   chrout
-.cc7d	68		            pla
-.cc7e	28		            plp
-.cc7f	20 dd c4	               jsr   pop
-.cc82	60		               rts
->cc83	05		ra_str         .byte b_blanc
->cc84	41 2e 2e 2e	               .text "a......: "
->cc88	2e 2e 2e 3a 20
->cc8d	99 00		               .byte b_vertp, 0
->cc8f	05		rx_str         .byte b_blanc
->cc90	58 2e 2e 2e	               .text "x......: "
->cc94	2e 2e 2e 3a 20
->cc99	99 00		               .byte b_vertp, 0
->cc9b	05		ry_str         .byte b_blanc
->cc9c	59 2e 2e 2e	               .text "y......: "
->cca0	2e 2e 2e 3a 20
->cca5	99 00		               .byte b_vertp, 0
->cca7	05		sr_str         .byte b_blanc
->cca8	53 52 2e 2e	               .text "sr.....: "
->ccac	2e 2e 2e 3a 20
->ccb1	99 00		               .byte b_vertp, 0
->ccb3	05		sp_str         .byte b_blanc
->ccb4	53 50 2e 2e	               .text "sp.....: "
->ccb8	2e 2e 2e 3a 20
->ccbd	99 00		               .byte b_vertp, 0
->ccbf	05		pc_str         .byte b_blanc
->ccc0	50 43 2e 2e	               .text "pc.....: "
->ccc4	2e 2e 2e 3a 20
->ccc9	99 00		               .byte b_vertp, 0
->cccb	05		z1_str         .byte b_blanc
->cccc	5a 50 41 47	               .text "zpage1.: "
->ccd0	45 31 2e 3a 20
->ccd5	99 00		               .byte b_vertp, 0
->ccd7	05		z2_str         .byte b_blanc
->ccd8	5a 50 41 47	               .text "zpage2.: "
->ccdc	45 32 2e 3a 20
->cce1	99 00		               .byte b_vertp, 0
->cce3	96		contstr        .byte b_rose
->cce4	5b 43 5d 20	               .text "[c] pour continuer"
->cce8	50 4f 55 52 20 43 4f 4e 54 49 4e 55 45 52
->ccf6	05 00		               .byte b_blanc, 0
+.cc4a	20 ae c4	            jsr   push
+.cc4d	a0 2a		            ldy   #>a2hexpfx+1
+.cc4f	a2 ef		            ldx   #<a2hexpfx
+.cc51	20 39 c3	            jsr   putsyx
+.cc54	20 dd c4	            jsr   pop
+.cc57	20 ae c4	               jsr   push
+.cc5a	38		               sec
+.cc5b	20 f0 ff	               jsr   plot
+.cc5e	e8		               inx
+.cc5f	a0 0d		               ldy   #regxloc
+.cc61	18		               clc
+.cc62	20 f0 ff	               jsr   plot
+.cc65	20 dd c4	               jsr   pop
+.cc68	ac 07 0a	               ldy   vzp1h
+.cc6b	ae 08 0a	               ldx   vzp1l
+.cc6e	20 28 ca	               jsr   yxtohex
+.cc71	20 ae c4	            jsr   push
+.cc74	a0 cd		            ldy   #>z1_str+1
+.cc76	a2 33		            ldx   #<z1_str
+.cc78	20 39 c3	            jsr   putsyx
+.cc7b	20 dd c4	            jsr   pop
+.cc7e	20 ae c4	            jsr   push
+.cc81	a0 2a		            ldy   #>a2hexpfx+1
+.cc83	a2 ef		            ldx   #<a2hexpfx
+.cc85	20 39 c3	            jsr   putsyx
+.cc88	20 dd c4	            jsr   pop
+.cc8b	20 ae c4	               jsr   push
+.cc8e	38		               sec
+.cc8f	20 f0 ff	               jsr   plot
+.cc92	e8		               inx
+.cc93	a0 0d		               ldy   #regxloc
+.cc95	18		               clc
+.cc96	20 f0 ff	               jsr   plot
+.cc99	20 dd c4	               jsr   pop
+.cc9c	ac 09 0a	               ldy   vzp2h
+.cc9f	ae 0a 0a	               ldx   vzp2l
+.cca2	20 28 ca	               jsr   yxtohex
+.cca5	20 ae c4	            jsr   push
+.cca8	a0 cd		            ldy   #>z2_str+1
+.ccaa	a2 3f		            ldx   #<z2_str
+.ccac	20 39 c3	            jsr   putsyx
+.ccaf	20 dd c4	            jsr   pop
+.ccb2	20 ae c4	            jsr   push
+.ccb5	a0 2a		            ldy   #>a2hexpfx+1
+.ccb7	a2 ef		            ldx   #<a2hexpfx
+.ccb9	20 39 c3	            jsr   putsyx
+.ccbc	20 dd c4	            jsr   pop
+.ccbf	20 ae c4	               jsr   push
+.ccc2	38		               sec
+.ccc3	20 f0 ff	               jsr   plot
+.ccc6	e8		               inx
+.ccc7	a0 0d		               ldy   #regxloc
+.ccc9	18		               clc
+.ccca	20 f0 ff	               jsr   plot
+.cccd	20 dd c4	               jsr   pop
+.ccd0	20 dd c4	               jsr   pop
+.ccd3	60		               rts
+>ccd4	9e		reg_titre      .byte b_jaune
+>ccd5	43 4f 4e 54	               .null "contenu des registres"
+>ccd9	45 4e 55 20 44 45 53 20 52 45 47 49 53 54 52 45
+>cce9	53 00
+>cceb	05		ra_str         .byte b_blanc
+>ccec	41 2e 2e 2e	               .text "a......: "
+>ccf0	2e 2e 2e 3a 20
+>ccf5	99 00		               .byte b_vertp, 0
+>ccf7	05		rx_str         .byte b_blanc
+>ccf8	58 2e 2e 2e	               .text "x......: "
+>ccfc	2e 2e 2e 3a 20
+>cd01	99 00		               .byte b_vertp, 0
+>cd03	05		ry_str         .byte b_blanc
+>cd04	59 2e 2e 2e	               .text "y......: "
+>cd08	2e 2e 2e 3a 20
+>cd0d	99 00		               .byte b_vertp, 0
+>cd0f	05		sr_str         .byte b_blanc
+>cd10	53 52 2e 2e	               .text "sr.....: "
+>cd14	2e 2e 2e 3a 20
+>cd19	99 00		               .byte b_vertp, 0
+>cd1b	05		sp_str         .byte b_blanc
+>cd1c	53 50 2e 2e	               .text "sp.....: "
+>cd20	2e 2e 2e 3a 20
+>cd25	99 00		               .byte b_vertp, 0
+>cd27	05		pc_str         .byte b_blanc
+>cd28	50 43 2e 2e	               .text "pc.....: "
+>cd2c	2e 2e 2e 3a 20
+>cd31	99 00		               .byte b_vertp, 0
+>cd33	05		z1_str         .byte b_blanc
+>cd34	5a 50 41 47	               .text "zpage1.: "
+>cd38	45 31 2e 3a 20
+>cd3d	99 00		               .byte b_vertp, 0
+>cd3f	05		z2_str         .byte b_blanc
+>cd40	5a 50 41 47	               .text "zpage2.: "
+>cd44	45 32 2e 3a 20
+>cd49	99 00		               .byte b_vertp, 0
+>cd4b	96		contstr        .byte b_rose
+>cd4c	5b 43 5d 20	               .text "[c] pour continuer"
+>cd50	50 4f 55 52 20 43 4f 4e 54 49 4e 55 45 52
+>cd5e	05 00		               .byte b_blanc, 0
 
 ;******  Return to file: charedit.asm
 
@@ -4402,8 +4397,8 @@
 =$d900			colram1     =  $d900 ; 55552  ; Page 1
 =$da00			colram2     =  $da00 ; 55808  ; Page 2
 =$db00			colram3     =  $db00 ; 56064  ; Page 3
->ccf8	00 d8 00 d9	colorptr    .word    colram0,colram1,colram2,colram3
->ccfc	00 da 00 db
+>cd60	00 d8 00 d9	colorptr    .word    colram0,colram1,colram2,colram3
+>cd64	00 da 00 db
 =$dc00			cia1        =  $dc00 ; 56320 Adresse de base du CIA1.
 =$dc00			cia1pra     =  $dc00 ; 56320 Port données A (écriture colonne du clavier).
 =$dc01			cia1prb     =  $dc01 ; 56321 Port données B (Lecture ligne du clavier).

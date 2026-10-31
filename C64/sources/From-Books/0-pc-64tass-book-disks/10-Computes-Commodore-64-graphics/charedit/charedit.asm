@@ -18,19 +18,6 @@ version  = "20261028       "
 main           .block
                jsr   push           ; Sauvegarde les registres.
                jsr   scrmaninit     ; Initialise l'écran.
-               jsr   cls
-               lda   #$01
-               ldx   #$02
-               ldy   #$03
-               sta   zpage1
-               stx   zpage1+1
-               stx   zpage2
-               sty   zpage2+1
-               #printregs
-               jsr   pop
-               brk
-               jsr   push           ; Sauvegarde les registres.
-               jsr   scrmaninit     ; Initialise l'écran.
                #disable             ; Inhibe les changements de jeu de carac.
                jsr   drawcredits    ; Affiche l'écran des credits. 
                ;ldx   #$00           ; Attend environ 1 secondes.
@@ -38,7 +25,7 @@ waitmore       ;jsr   delay
                ;dex
                ;bpl   waitmore
                jsr   sid_tada       ; Joue le son de bienvenue.
-               ;jsr   screendis      ; Désactive l'affichage vidéo.
+               jsr   screendis      ; Désactive l'affichage vidéo.
                jsr   copycharset    ; Copie la matrice de caractères en ram.
                jsr   cls            ; Efface l'écran
                jsr   setscrptr      ; Sélectione les pointeurs d'écran
@@ -50,7 +37,7 @@ waitmore       ;jsr   delay
                jsr   drawfkeys      ; Affiche le menu.
                #putmesg prompt_msg  ; Affiche l'invite.
                jsr   kbflushbuff    ; Vide le tampon du clavier.
-               ;jsr   screenena      ; Active l'affichage vidéo.
+               jsr   screenena      ; Active l'affichage vidéo.
                ;---------------------------------------------------------------
                ; Le coeur du programme se déroule dans cette routine.
                jsr   keyaction      ; 
