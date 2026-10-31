@@ -18,44 +18,44 @@ version  = "20261028       "
                .enc        "none"
 main           .block
                jsr   push           ; Sauvegarde les registres.
-               jsr   scrmaninit        ; Initialise l'écran.
-               #disable                ; Inhibe les changements de jeu de carac.
-               jsr   drawcredits       ; Affiche l'écran des credits. 
-               ;ldx   #$00              ; Attend environ 1 secondes.
+               jsr   scrmaninit     ; Initialise l'écran.
+               #disable             ; Inhibe les changements de jeu de carac.
+               jsr   drawcredits    ; Affiche l'écran des credits. 
+               ;ldx   #$00           ; Attend environ 1 secondes.
 waitmore       ;jsr   delay
                ;dex
                ;bpl   waitmore
-               jsr   sid_tada          ; Joue le son de bienvenue.
-            jsr   screendis         ; Désactive l'affichage vidéo.
-            jsr   copycharset       ; Copie la matrice de caractères en ram.
-            jsr   cls               ; Efface l'écran
-            jsr   setscrptr         ; Sélectione les pointeurs d'écran
-            jsr   setdfltchar       ; Choisi le caractère de départ.
-            jsr   drawstatic        ; Affiche les elements statiques d'écran.
-            jsr   drawbitmap        ; Affiche les informations du caractère.
-            lda   #$00              ; Choisi le menu 
-            sta   fkeyset           ; ... A au départ.
-            jsr   drawfkeys         ; Affiche le menu.
-            #affichemesg prompt_msg ; Affiche l'invite.
-            jsr   kbflushbuff       ; Vide le tampon du clavier.
-            jsr   screenena         ; Active l'affichage vidéo.
-            ;-----------------------------------------------------------------
-            ; Le coeur du programme se déroule dans cette routine.
-            jsr   keyaction         ; 
-            ;-----------------------------------------------------------------
-            jsr   scrmaninit        ; Initialise l'écran.            
-            jsr   drawcredits       ; Affiche l'écran des credits. 
-            #printcxy bye_msg       ; Quel clef pour quitter ?
-printbye    inc   any_msg           ; Change la couleur de bye_msg.
-            #printcxy any_msg       ; l'affiche
-            jsr   delay             ; Fais un delai.
-            jsr   getin             ; Regarde si une clef est entrée.
-            beq   printbye          ; pas de clef, on réaffiche.
-            jsr   cls               ; Efface l'écran
-endmain     jsr   pop             ; Récupère les registres.
-            ;jsr   kbflushbuff       ; Vide le tampon du clavier.
-            rts
-            .bend
+               jsr   sid_tada       ; Joue le son de bienvenue.
+               ;jsr   screendis      ; Désactive l'affichage vidéo.
+               jsr   copycharset    ; Copie la matrice de caractères en ram.
+               jsr   cls            ; Efface l'écran
+               jsr   setscrptr      ; Sélectione les pointeurs d'écran
+               jsr   setdfltchar    ; Choisi le caractère de départ.
+               jsr   drawstatic     ; Affiche les elements statiques d'écran.
+               jsr   drawbitmap     ; Affiche les informations du caractère.
+               lda   #$00           ; Choisi le menu 
+               sta   fkeyset        ; ... A au départ.
+               jsr   drawfkeys      ; Affiche le menu.
+               #putmesg prompt_msg  ; Affiche l'invite.
+               jsr   kbflushbuff    ; Vide le tampon du clavier.
+               ;jsr   screenena      ; Active l'affichage vidéo.
+               ;---------------------------------------------------------------
+               ; Le coeur du programme se déroule dans cette routine.
+               jsr   keyaction      ; 
+               ;---------------------------------------------------------------
+               jsr   scrmaninit     ; Initialise l'écran.            
+               jsr   drawcredits    ; Affiche l'écran des credits. 
+               #printcxy bye_msg    ; Quel clef pour quitter ?
+printbye       inc   any_msg        ; Change la couleur de bye_msg.
+               #printcxy any_msg    ; l'affiche
+               jsr   delay          ; Fais un delai.
+               jsr   getin          ; Regarde si une clef est entrée.
+               beq   printbye       ; pas de clef, on réaffiche.
+               jsr   cls            ; Efface l'écran
+endmain        jsr   pop            ; Récupère les registres.
+               ;jsr   kbflushbuff    ; Vide le tampon du clavier.
+               rts
+               .bend
 
 ;-----------------------------------------------------------------------------
 ; Inclure mes propres librairies.

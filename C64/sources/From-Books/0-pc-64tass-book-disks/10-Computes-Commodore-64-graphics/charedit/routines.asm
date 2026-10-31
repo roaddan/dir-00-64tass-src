@@ -13,27 +13,27 @@
 ;=============================================================================
 ; Routine qui redessine l'écran de travail.
 ;=============================================================================
-scrredraw   .block
-            jsr   push           ; Sauvegarde les registres.
-            jsr   screendis         ; Inhibe l'affichage
-            jsr   cls               ; Efface l'écran
-            jsr   drawstatic        ; Affiche les éléments statiques d'écran.
-            jsr   drawfkeys         ; Affiche le menu de clefs fonctions.
-            lda   currentkey        ; Affiche le caractère actuellement
-            ; jsr   drawkeyval        ; ... représenté.
-            jsr   drawbitmap        ; Affiche la représentation bitmap du car.
-            #affichemesg prompt_msg ; Affiche un invite.
-            jsr   screenena         ; Permet l'affichage d'écran.
-            jsr   pop            ; Récupère les registres.
-            rts                     
-            .bend
+scrredraw      .block
+               jsr   push           ; Sauvegarde les registres.
+               jsr   screendis      ; Inhibe l'affichage
+               jsr   cls            ; Efface l'écran
+               jsr   drawstatic     ; Affiche les éléments statiques d'écran.
+               jsr   drawfkeys      ; Affiche le menu de clefs fonctions.
+               lda   currentkey     ; Affiche le caractère actuellement
+               ;jsr   drawkeyval    ; ... représenté.
+               jsr   drawbitmap     ; Affiche la représentation bitmap du car.
+               #putmesg prompt_msg  ; Affiche un invite.
+               jsr   screenena      ; Permet l'affichage d'écran.
+               jsr   pop            ; Récupère les registres.
+               rts                     
+               .bend
 
 ;=============================================================================
 ; Routine qui capture un nom de fichier de 6 lettres entré par l'usager.
 ;=============================================================================
 getfname    .block
             jsr   push           ; Sauvegarde les registres.
-            #affichemesg fname_msg  ; Affiche l'invite.
+            #putmesg fname_msg  ; Affiche l'invite.
             ldx  #$00               ; X à 0.
             stx  count              ; pour compter les caractères
 getanother  jsr  getalnum           ; Lit un car alphanum
@@ -45,7 +45,7 @@ getanother  jsr  getalnum           ; Lit un car alphanum
             cpx  #$06               ; 6 et s'il y a 6 lettre
             beq  finish             ; Le nom est terminé.
             jmp  getanother         ; Sinon on en demande un autre.
-finish      #affichemesg pfname     ; Affiche le nom du fichier
+finish      #putmesg pfname     ; Affiche le nom du fichier
             jsr   pop            ; Récupère les registres.
             rts
 count       .byte     0
@@ -112,7 +112,7 @@ out         jsr   popall            ; Récupère registres et pointeur ZP.
 ;=============================================================================
 getvalidkey .block
             jsr   push           ; Sauvegarde les registres.
-            #affichemesg cp_char_msg
+            #putmesg cp_char_msg
 getgoodkey  jsr   getkey            ; Obtient une clef.
             sta   copykey           ; Garde une copie de la clef.
             tax                     ; La transfere dans X.
@@ -379,8 +379,8 @@ doquit
 ;=============================================================================
 editor      .block 
             jsr   push           ; Sauvegarde les registres.
-            #affichemesg exit_msg   ;
-            #affichemesg edit_msg   ;
+            #putmesg exit_msg   ;
+            #putmesg edit_msg   ;
             jsr   setcurs           ; Positionne les curseurs.
             lda   currentkey        ; Li la clef actuelle.
             #locate   17,5          ; 
@@ -788,8 +788,8 @@ drawstatic  .block
             jsr  drawchars          ; Affiche les 128 caractères à l'écran
             jsr  drawgrid           ; Affiche la grille de bitmap. 
             jsr  drawfkeys          ; Affiche le menu de clefs fonction.
-            #affichemesg redraw_msg ; Affiche le message pour CTRL-R.
-            #affichemesg quit_msg   ; Affiche le message pour CTRL-X.
+            #putmesg redraw_msg ; Affiche le message pour CTRL-R.
+            #putmesg quit_msg   ; Affiche le message pour CTRL-X.
             rts
             .bend
 
@@ -1004,7 +1004,7 @@ f1action    .block
             ;-----------------------------------------------------------------
 menua       lda   #$ff              ; On se met en mode édition.
             sta   editmode          ; Drapeau pour indiquer le mode edition.
-            #affichemesg f1a_msg    ; Affiche l'invite de f1a.
+            #putmesg f1a_msg    ; Affiche l'invite de f1a.
             #flashfkey f1abutton    ; Clignotte le menu sélectionné.
             lda   #vgris            ; Du gris
             jsr   setmenuacolor     ; ... pour les autres options.
@@ -1013,12 +1013,12 @@ menua       lda   #$ff              ; On se met en mode édition.
             jsr   drawfkeys         ; Redessine le menu.
             lda   #vgris            ; Le gris pour
             sta   redraw_msg        ; ... le messages redessiner
-            #affichemesg redraw_msg ; ... que nous affichons.
+            #putmesg redraw_msg ; ... que nous affichons.
             jsr   editor            ; On invoque la fonction d'étition.
             lda   #vrose            ; Le gris pour
             sta   redraw_msg        ; ... le messages redessiner 
-            #affichemesg redraw_msg ; ... que nous affichons.
-            #affichemesg menua_msg  ; Réaffiche le menu a
+            #putmesg redraw_msg ; ... que nous affichons.
+            #putmesg menua_msg  ; Réaffiche le menu a
             jsr   rstmenucol        ; Restaure les couleurs du menu.
             jsr   drawfkeys         ; Redessine les clefs fonction.
             lda   #$00              ; On sort du mode édition.
@@ -1027,11 +1027,11 @@ menua       lda   #$ff              ; On se met en mode édition.
             ;-----------------------------------------------------------------
             ; Action du menu F1B. Permutation verticale.
             ;-----------------------------------------------------------------
-menub       #affichemesg f1b_msg    ; Affiche le message menu f1b.
+menub       #putmesg f1b_msg    ; Affiche le message menu f1b.
             #flashfkey f1bbutton    ; Clognotte l'option choisi.
             jsr   flipvert          ; On permute verticalement le bitmap.
             jsr   drawbitmap        ; On redessine les affichages bitmap.
-out         #affichemesg prompt_msg ; Affiche l'invite.
+out         #putmesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1050,7 +1050,7 @@ f2action    .block
             ;-----------------------------------------------------------------
             ; Action du menu F2A. Copier d'un autre caractère.
             ;-----------------------------------------------------------------
-menua       #affichemesg f2a_msg    ; Affiche l'invite de f2a.
+menua       #putmesg f2a_msg    ; Affiche l'invite de f2a.
             #flashfkey f2abutton    ; Clignotte le menu sélectionné.
             jsr   copychar          ; Effectue la copie du caractèreé
             jsr   drawbitmap        ; Redessine les information.
@@ -1058,11 +1058,11 @@ menua       #affichemesg f2a_msg    ; Affiche l'invite de f2a.
             ;-----------------------------------------------------------------
             ; Action du menu F2b. Permutation horizontale.
             ;-----------------------------------------------------------------
-menub       #affichemesg f2b_msg    ; Affiche l'invite de f2b.
+menub       #putmesg f2b_msg    ; Affiche l'invite de f2b.
             #flashfkey f2bbutton    ; Clignotte le menu sélectionné.
             jsr   fliphorz          ; Effectue la permutation horiz. des bits. 
             jsr   drawbitmap        ; Redessine les information.          
-out         #affichemesg prompt_msg ; Affiche l'invite.
+out         #putmesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1081,7 +1081,7 @@ f3action    .block
             ;-----------------------------------------------------------------
             ; Action du menu F3A. Sauvegarde de la matrice sur medium.
             ;-----------------------------------------------------------------
-menua       #affichemesg f3a_msg    ; Affiche l'invite de f3a.
+menua       #putmesg f3a_msg    ; Affiche l'invite de f3a.
             #flashfkey f3abutton    ; Clignotte le menu sélectionné.
 getagain    jsr   getkey            ; Récupère une clef
             cmp   #$31              ; Le lecteur cassette ?
@@ -1094,17 +1094,17 @@ getagain    jsr   getkey            ; Récupère une clef
 devok       and   #$0f              ; On masque le MSN.
             sta   device            ; On sauvegarde le # de périphérique.
             jsr   getfname          ; On requière un nom de fichier.
-            #affichemesg prompt_msg ; Affiche l'invite.
+            #putmesg prompt_msg ; Affiche l'invite.
             jsr   savefile          ; Enregistre le fichier.
             jmp   out               ; On sort.
             ;-----------------------------------------------------------------
             ; Action du menu F3B. Décallage d'un bit vers la droite.
             ;-----------------------------------------------------------------
-menub       #affichemesg f3b_msg    ; Affiche l'invite de f3b.
+menub       #putmesg f3b_msg    ; Affiche l'invite de f3b.
             #flashfkey f3bbutton    ; Clignotte le menu sélectionné.
             jsr   scrollright       ; Décallage d'un bit vers la droite.
             jsr   drawbitmap        ; Redessine les information.             
-out         #affichemesg prompt_msg ; Affiche l'invite.
+out         #putmesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1123,7 +1123,7 @@ f4action    .block
             ;-----------------------------------------------------------------
             ; Action du menu F4A. Récupère de la matrice sur medium.
             ;-----------------------------------------------------------------
-menua       #affichemesg f4a_msg    ; Affiche l'invite de f4a.    
+menua       #putmesg f4a_msg    ; Affiche l'invite de f4a.    
             #flashfkey f4abutton    ; Clignotte le menu sélectionné.
 getagain    jsr   getkey            ; Récupère une clef
             cmp   #$31              ; Le lecteur cassette ?
@@ -1136,18 +1136,18 @@ getagain    jsr   getkey            ; Récupère une clef
 devok       and   #$0f              ; On masque le MSN.
             sta   device            ; On sauvegarde le # du périphérique.
             jsr   getfname          ; On récupère le nom du fichier.
-            #affichemesg wait_msg   ; On demande d'attendre.
+            #putmesg wait_msg   ; On demande d'attendre.
             jsr   loadfile          ; Récupère de la matrice d'un medium.
             jsr   scrredraw         ; On redessine l'écran complet.
             jmp   out               ; On sort.
             ;-----------------------------------------------------------------
             ; Action du menu F4B. Décallage d'un bit vers la gauche.
             ;-----------------------------------------------------------------
-menub       #affichemesg f4b_msg    ; Affiche l'invite de f4b.
+menub       #putmesg f4b_msg    ; Affiche l'invite de f4b.
             #flashfkey f4bbutton    ; Clignotte le menu sélectionné.
             jsr   scrollleft        ; Décallage d'un bit vers la gauche.
             jsr   drawbitmap        ; Redessine les information.            
-out         #affichemesg prompt_msg ; Affiche l'invite.
+out         #putmesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1164,18 +1164,18 @@ f5action    .block
             ;-----------------------------------------------------------------
             ; Action du menu F5A.
             ;-----------------------------------------------------------------
-menua       #affichemesg f5a_msg    ; Affiche l'invite de f5a.
+menua       #putmesg f5a_msg    ; Affiche l'invite de f5a.
             #flashfkey f5abutton    ; Clignotte le menu sélectionné.
             jsr   clearchar         ; PLace tous les bits à 0.
             jmp   out               ; On sort.
             ;-----------------------------------------------------------------
             ; Action du menu F5B.
             ;-----------------------------------------------------------------
-menub       #affichemesg f5b_msg    ; Affiche l'invite de f5b.
+menub       #putmesg f5b_msg    ; Affiche l'invite de f5b.
             #flashfkey f5bbutton    ; Clignotte le menu sélectionné.
             jsr   scrollup          ; Décale la matrice vers le haut.
 out         jsr   drawbitmap        ; Redessine les information. 
-            #affichemesg prompt_msg ; Affiche l'invite.
+            #putmesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1192,7 +1192,7 @@ f6action    .block
             ;-----------------------------------------------------------------
             ; Action du menu F6A.
             ;-----------------------------------------------------------------
-menua       #affichemesg f6a_msg    ; Affiche l'invite de f6a.
+menua       #putmesg f6a_msg    ; Affiche l'invite de f6a.
             #flashfkey f6abutton    ; Clignotte le menu sélectionné.
             jsr   fillchar          ; PLace tous les bits à 1.
             jsr   drawbitmap        ; Redessine les information. 
@@ -1200,11 +1200,11 @@ menua       #affichemesg f6a_msg    ; Affiche l'invite de f6a.
             ;-----------------------------------------------------------------
             ; Action du menu F6B.
             ;-----------------------------------------------------------------
-menub       #affichemesg f6b_msg    ; Affiche l'invite de f6b.
+menub       #putmesg f6b_msg    ; Affiche l'invite de f6b.
             #flashfkey f6bbutton    ; Clignotte le menu sélectionné.
             jsr   scrolldown        ; Décale la matrice vers le bas.
             jsr   drawbitmap        ; Redessine les information.            
-out         #affichemesg prompt_msg ; Affiche l'invite.
+out         #putmesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1221,7 +1221,7 @@ f7action    .block
             ;-----------------------------------------------------------------
             ; Action du menu F7A.
             ;-----------------------------------------------------------------
-menua       #affichemesg f7a_msg    ; Affiche l'invite de f7a.
+menua       #putmesg f7a_msg    ; Affiche l'invite de f7a.
             #flashfkey f7abutton    ; Clignotte le menu sélectionné.
             jsr   copycharset       ; Recopie le jeu de caractères de la ROM.
             jsr   drawbitmap        ; Redessine les information.
@@ -1229,11 +1229,11 @@ menua       #affichemesg f7a_msg    ; Affiche l'invite de f7a.
             ;-----------------------------------------------------------------
             ; Action du menu F7B.
             ;-----------------------------------------------------------------
-menub       #affichemesg f7b_msg    ; Affiche l'invite de f7b.
+menub       #putmesg f7b_msg    ; Affiche l'invite de f7b.
             #flashfkey f7bbutton    ; Clignotte le menu sélectionné.
             jsr   reverse           ; Inverse les bits du bitmap.
             jsr   drawbitmap        ; Redessine les information.            
-out         #affichemesg prompt_msg ; Affiche l'invite.
+out         #putmesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts
@@ -1250,18 +1250,18 @@ f8action    .block
             ;-----------------------------------------------------------------
             ; Action du menu F8A.
             ;-----------------------------------------------------------------
-menua       #affichemesg menub_msg  ; Affiche l'invite de f8a.
+menua       #putmesg menub_msg  ; Affiche l'invite de f8a.
             #flashfkey f8abutton    ; Clignotte le menu sélectionné.
             jmp   swapit            ; Permute les menus d'action.
             ;-----------------------------------------------------------------
             ; Action du menu F8B.
             ;-----------------------------------------------------------------
-menub       #affichemesg menua_msg  ; Affiche l'invite de f8b.
+menub       #putmesg menua_msg  ; Affiche l'invite de f8b.
             #flashfkey f8bbutton    ; Clignotte le menu sélectionné.            
 swapit      eor   #$ff              ; Permute les
             sta   fkeyset           ; ... menus d'action.
             jsr   drawfkeys         ; Redessine le menu.
-out         #affichemesg prompt_msg ; Affiche l'invite.
+out         #putmesg prompt_msg ; Affiche l'invite.
             pla                     ; Récupération minimaliste
             plp                     ; ... des registres.
             rts

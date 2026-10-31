@@ -1,5 +1,5 @@
 
-affichemesg    .macro msgptr
+putmesg       .macro msgptr
                jsr  push
                ldx  #<blankmsg
                ldy  #>blankmsg
@@ -8,6 +8,17 @@ affichemesg    .macro msgptr
                ldy  #>\msgptr
                jsr  putscxy
                jsr  pop
+               .endm
+
+brkpoint       .macro  char
+               jsr   push
+               ldx   #0
+               ldy   #0
+               jsr   plot
+               #putmesg  brkmsg
+               lda   #\char
+               jsr   waitkey
+               jsr   pop
                .endm
 
 flashfkey      .macro fkeyptr

@@ -43,9 +43,10 @@ putahexfmt     .block
 ;; Affiche Acc. en hexadécimal
 ;------------------------------------------------------------------------------
 putahex        .block
-               jsr  push
-               jsr  atohex
-               jsr  printahex
+               jsr   push
+               jsr   atohex
+               jsr   printahex
+               jsr   pop
                rts
                .bend
 
