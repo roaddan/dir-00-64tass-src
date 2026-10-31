@@ -13,19 +13,19 @@
 ;-----------------------------------------------------------------------------
 version  = "20261028       " 
 ;-----------------------------------------------------------------------------
-            .include    "e-header-c64.asm"
-            .include    "local-const.asm"
-            .enc        "none"
-main        .block
-            jsr   pushreg           ; Sauvegarde les registres.
-            jsr   scrmaninit        ; Initialise l'écran.
-            #disable                ; Inhibe les changements de jeu de carac.
-            jsr   drawcredits       ; Affiche l'écran des credits. 
-            ;ldx   #$00              ; Attend environ 1 secondes.
-waitmore    ;jsr   delay
-            ;dex
-            ;bpl   waitmore
-            jsr   sid_tada          ; Joue le son de bienvenue.
+               .include    "e-header-c64.asm"
+               .include    "local-const.asm"
+               .enc        "none"
+main           .block
+               jsr   push           ; Sauvegarde les registres.
+               jsr   scrmaninit        ; Initialise l'écran.
+               #disable                ; Inhibe les changements de jeu de carac.
+               jsr   drawcredits       ; Affiche l'écran des credits. 
+               ;ldx   #$00              ; Attend environ 1 secondes.
+waitmore       ;jsr   delay
+               ;dex
+               ;bpl   waitmore
+               jsr   sid_tada          ; Joue le son de bienvenue.
             jsr   screendis         ; Désactive l'affichage vidéo.
             jsr   copycharset       ; Copie la matrice de caractères en ram.
             jsr   cls               ; Efface l'écran
@@ -52,7 +52,7 @@ printbye    inc   any_msg           ; Change la couleur de bye_msg.
             jsr   getin             ; Regarde si une clef est entrée.
             beq   printbye          ; pas de clef, on réaffiche.
             jsr   cls               ; Efface l'écran
-endmain     jsr   popreg            ; Récupère les registres.
+endmain     jsr   pop             ; Récupère les registres.
             ;jsr   kbflushbuff       ; Vide le tampon du clavier.
             rts
             .bend
@@ -75,6 +75,7 @@ endmain     jsr   popreg            ; Récupère les registres.
 ;-----------------------------------------------------------------------------
 ; Chargement en RAM des variables des librairies à la suite du programme.
             .include    "e-c64-vars.asm"     ; Les variables générales du C64.
+            .include    "e-cbm-vars.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement des librairies à la page $C000.
             *=$c000                          ; Les librairies de code:
@@ -84,9 +85,10 @@ endmain     jsr   popreg            ; Récupère les registres.
             .include    "l-c64-basic2.asm"   ; ... de routine utilisant Basic.
             .include    "l-cbm-stack.asm"    ; ... de gestion de la pile.
             .include    "l-cbm-mem.asm"      ; ... de gestion mémoire,
-            .include    "l-cbm-hex.asm"      ; ... de conversions diverses, 
             .include    "l-cbm-keyb.asm"     ; ... d'utilisation du clavier, 
             .include    "l-cbm-disk.asm"     ; ... d'utilisation des media. 
+            .include    "l-cbm-conv.asm"     ; ... de conversions diverses, 
+;            .include    "l-c64-showregs.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement des constantes nécessaires aux librairies.
                                                   ; Les constantes associées; 

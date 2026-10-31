@@ -215,7 +215,7 @@ restzp2
 ;              addr2 = addr1 + x + (y * ymult)  
 ;---------------------------------------------------------------------
 xy2addr        .block
-               jsr   pushregs
+               jsr   push
                lda  addr1+1
                sta  addr2+1
                lda  addr1     
@@ -235,7 +235,7 @@ addx           txa
                bcc  thatsit
                inc  addr2+1
 thatsit        sta  addr2
-               jsr   popregs
+               jsr   pop
                rts
                .bend
 
@@ -261,15 +261,7 @@ norep          lda  loopcount
                cmp  #$ff
 out            rts
                .bend
-;-------------------------------------------------------------------------------
-; Variables globales
-;-------------------------------------------------------------------------------
-ymult          .byte     40                
-addr1          .word     $0000    
-addr2          .word     $0000
-bytecnt        .word     $0000       
-zp1            .word     $0000
-zp2            .word     $0000
-;loopcount      .word     $0000
+
+
 
 

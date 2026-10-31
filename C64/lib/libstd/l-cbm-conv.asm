@@ -1,9 +1,9 @@
-;--------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: l-cbm-conv.asm
 ; Cernière m.à j. : 20261030-000000 Francisation des commentaires,
 ; Inspiration ....: 
-;--------------------------------------------------------------------------------
+;---------------------------------------------------------------------------------
 ; Nomprog: hexutil.s
 ; Auteur.: daniel lafrance
 ; Version: 0.1
@@ -12,51 +12,54 @@
 ; Descrition:
 ; Fonction utilitaires de conversion en hexadécimal.
 ; ** Note: Utilise: butils.asm
-;-------------------------------------------------------------------------------
-a2hexprefix    .byte     "$"            ; pour aputs
-a2hexstr       .word     $00
-               .word     $00
-               .byte     0              ; 0 end string
-abincol        .byte     1
-abinbkcol      .byte     %00000000           
-abin           .null     "00000000"
-adec           .null     "   "
+;--------------------------------------------------------------------------------
                
-;-----------------------------------------------------------------------------
-;
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+; Affiche Acc. en hexadécimal formatté à la position (X,Y).
+;------------------------------------------------------------------------------
 putahexfmtxy   .block
-               jsr  push
-               jsr  atohex
-               ldx  a2hexpx
-               ldy  a2hexpy
-               jsr  gotoxy
-               ldx  #<a2hexprefix
-               ldy  #>a2hexprefix
-               jsr  puts
-               jsr  pop
+               jsr   push
+               jsr   atohex
+               ldx   a2hexpx
+               ldy   a2hexpy
+               jsr   gotoxy
+               jsr   printahexpref
+               jsr   pop
                rts
                .bend
                
-;-----------------------------------------------------------------------------
-;
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+; Affiche Acc. en hexadécimal formatté.
+;------------------------------------------------------------------------------
 putahexfmt     .block
-               jsr  push
-               jsr  atohex
-               ldx  #<a2hexprefix
-               ldy  #>a2hexprefix
-               jsr  puts
-               jsr  pop
+               jsr   push
+               jsr   atohex
+               jsr   printahexpref
+               jsr   pop
                rts
                .bend
                
-;-----------------------------------------------------------------------------
-;
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+;; Affiche Acc. en hexadécimal
+;------------------------------------------------------------------------------
 putahex        .block
                jsr  push
                jsr  atohex
+               jsr  printahex
+               rts
+               .bend
+
+printahexpref  .block
+               jsr  push
+               ldx  #<a2hexpfx 
+               ldy  #>a2hexpfx 
+               jsr  puts
+               jsr  pop
+               rts
+               .bend
+               
+printahex      .block
+               jsr  push
                ldx  #<a2hexstr
                ldy  #>a2hexstr
                jsr  puts
@@ -64,11 +67,11 @@ putahex        .block
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Transforme le quartets le moins significatif du registre A en son équivalent 
 ; hexadécimal.
 ; La méthode décimal est employé puisque c'est la plus rapide.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 nibtohex        .block          
                php             
                and  #$0f    
@@ -81,9 +84,9 @@ nibtohex        .block
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Décale le contenu du registre A de 4 bits vers la droite.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 lsra4bits      .block
                php
                lsr     
@@ -93,7 +96,7 @@ lsra4bits      .block
                plp
                rts
                .bend
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Transforme le contenu du registre A dans son équivalent Petscii hehadécimal.
 ; Le résultat est une chaine-0.
 ;    Entré : A
@@ -107,7 +110,7 @@ lsra4bits      .block
 ; a2hexpos - modifie position
 ; a2hexstr - affiche la chaine
 ; a2hexstr+1 - sans afficher le ($)
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 atohex      .block
             php
             pha
@@ -124,10 +127,10 @@ atohex      .block
             plp
             rts
             .bend
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Converti l'adresse contenu dans $YYXX en hexadécimal.
-;-----------------------------------------------------------------------------
-yx2hex         .block
+;------------------------------------------------------------------------------
+yxtohex        .block
                jsr  push
                txa
                pha
@@ -135,14 +138,15 @@ yx2hex         .block
                tax
                pla
                tay
-               jsr xy2hex
-               jsr  pop                     
+               jsr  xytohex
+               jsr  pop 
+               rts                    
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Converti l'adresse contenu dans $XXYY en hexadécimal.
-;-----------------------------------------------------------------------------
-xy2hex         .block
+;------------------------------------------------------------------------------
+xytohex        .block
                jsr  push
                jsr  atohex
                txa
@@ -163,14 +167,15 @@ xy2hex         .block
                sta  a2hexstr+3
                lda  #$00                ; 0 ended string
                sta  a2hexstr+4
-               jsr  pop                     
+               jsr  pop
+               rts                     
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Converti le contenu de A en chaine  binaire dans abin. 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 atobin         .block
-               jsr  pushreg
+               jsr  push
                ldx  #8
                ldy  #0
                clc
@@ -179,53 +184,53 @@ nextbit        rol
                adc  #$00
                and  #$01
                jsr  nibtohex
-               sta  abin,y
+               sta  a2binstr,y
                pla
                iny
                dex
                bne  nextbit
                lda  #0
-               sta  abin,y
-               jsr  popreg
+               sta  a2binstr,y
+               jsr  pop
                rts
                .bend          
 
 abinsetmccol   .block
-               jsr  pushreg
-               jsr  popreg
+               jsr  push
+               jsr  pop
                rts
                .bend
 
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Affiche le contenu de abin à la position du curseur.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putabin        .block
                jsr     atobin
                jsr     push
-               ldx     #<abin
-               ldy     #>abin
+               ldx     #<a2binstr
+               ldy     #>a2binstr
                jsr     puts
                jsr     pop
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; affiche le contenu de abin à la position du curseur.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 printabin      .block
                jsr     push
-               ldx     #<abin
-               ldy     #>abin
+               ldx     #<a2binstr
+               ldy     #>a2binstr
                jsr     puts
                jsr     pop
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Affiche le contenu de abin à la position du curseur en le préfixan du
 ; symbole (%).
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putabinfmt     .block
                php
                pha
@@ -237,28 +242,28 @@ putabinfmt     .block
                rts
                .bend        
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Affiche le contenu de abin à la position x, y.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putabinxy      .block
                jsr     gotoxy
                jsr     putabin
                rts
                .bend                
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Affiche le contenu de abin à la position x, y en le préfixan du symbole (%).
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putabinfmtxy   .block
                jsr     gotoxy
                jsr     putabinfmt
                rts
                .bend
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Converti le contenu de A en chaine decimale dans adec.
 ; On décrémente X jusqu'a 0 en aditionnant 1 a Y,A.  
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 atodec         .block
                jsr  push
                sed            ; On se place en mode décimal.
@@ -275,31 +280,31 @@ decx           dex            ; X=X-1
                pha            ; A sur le stack.
                tya            ; Y dans A (MSB)
                jsr  nibtohex  ; a hex petsci ... 
-               sta  adec      ; ... dans tampon.
+               sta  a2decstr   ; ... dans tampon.
                pla            ; Récupere A
                pha            ; 
                jsr  nibtohex
-               sta  adec+2
+               sta  a2decstr+2
                pla
                ror
                ror
                ror
                ror
                jsr  nibtohex
-               sta  adec+1
+               sta  a2decstr+1
                cld            ; On revient en mode binaire.
-               jsr  pull
+               jsr  pop
                rts
                .bend          
 
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ;
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 putadec        .block
                jsr  push
                jsr  atodec
-               ldx  #<adec
-               ldy  #>adec+1
+               ldx  #<a2decstr
+               ldy  #>a2decstr+1
                jsr  puts 
                jsr  pop
                rts

@@ -29,7 +29,7 @@
 ; Initialisation des paramêtres de base pour la gestion de l'écran.
 ;------------------------------------------------------------------------------
 scrmaninit     .block  
-               jsr   pushreg        ; Sauvegarde tous les registres
+               jsr   push        ; Sauvegarde tous les registres
                jsr   screendis      ; Disable screen
                lda   #vbleu         ; Place bleue pour la couleur  
                sta   vicbackcol     ;   d'arrière plan,  
@@ -39,7 +39,7 @@ scrmaninit     .block
                sta   bascol         ; texte.
                jsr   cls            ; Efface l'écran.
                jsr   screenena      ; enable screen
-               jsr   popreg         ; Récupère tous les registres.
+               jsr   pop         ; Récupère tous les registres.
                rts
                .bend  
 
@@ -64,11 +64,11 @@ cls            .block
 ; Sortie  : Aucune.
 ;------------------------------------------------------------------------------
 putnch         .block
-               jsr   pushreg       ; Sauvegarde tous les registres.
+               jsr   push       ; Sauvegarde tous les registres.
 again          jsr   chrout        ; On affiche A.
                dex                 ; Un de moins à faire.
                bne   again         ; Si pas à 0 on en affiche encore.
-out            jsr   popreg        ; Récupère tous les registres.
+out            jsr   pop        ; Récupère tous les registres.
                rts
                .bend
 
@@ -93,7 +93,7 @@ putch          .block
 putsyx
 puts
                .block
-               jsr   pushregs       ; Sauvegarde registres.
+               jsr   push       ; Sauvegarde registres.
                stx   zpage1         ; Place l'adresse de la chaine   
                sty   zpage1+1       ;   dans ZP1.
                ldy   #0             ; Initialise l'index du mode (ZP),Y 
@@ -102,7 +102,7 @@ next           lda   (zpage1),y     ; Lit un charactère.
                jsr   chrout         ; Affiche le caractères.
                jsr   inczp1         ; Inc. le pointeur ZP1 en 16 bits.
                jmp   next           ; Saute chercher le prochain carac.
-exit           jsr   popregs        ; Récupère registres.
+exit           jsr   pop        ; Récupère registres.
                rts
                .bend
 
@@ -114,7 +114,7 @@ exit           jsr   popregs        ; Récupère registres.
 ;------------------------------------------------------------------------------
 gotoxy
                .block
-               jsr   pushregs       ; Sauvegarde les registres.
+               jsr   push       ; Sauvegarde les registres.
                txa                  ; Interchange x et y.
                pha                  ; Acc. sur pile.
                tya                  ; Y da s Acc.
@@ -135,7 +135,7 @@ tyhigh         cpy   #40            ; Verifie la limite supérieure de Y.
                ldy   #39            ; Trop grand on le force à 39.
 allok          clc                  ; carry à 0 pour positionner le curseur.
                jsr   plot           ; La routine Kernal de positionnement.
-               jsr   popregs        ; Récupère les registres.
+               jsr   pop        ; Récupère les registres.
                rts
                .bend
 ;------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ allok          clc                  ; carry à 0 pour positionner le curseur.
 ; Sortie  : Aucune.
 ;------------------------------------------------------------------------------
 cursor         .block
-               jsr   pushreg        ; Sauvegarde tous les registres.
+               jsr   push        ; Sauvegarde tous les registres.
                bcc   restore        ; Si C=0 c'est une récupération.
                jsr   kplot          ; On récupère la position du  
                sty   cx             ;   curseur et on la sauvegarde  
@@ -157,7 +157,7 @@ restore        ldx   cy             ; Comme C=1, On charge x avec
                jsr   kplot          ; On positionne le curseur.
                lda   bcol           ; On replace la couleur par basic  
                sta   bascol         ;   sauvegardé.
-out            jsr   popreg         ; Récupère tous les registres.
+out            jsr   pop         ; Récupère tous les registres.
                rts
                .bend
 
@@ -252,12 +252,12 @@ putscxy        .block
 ; Sortie  : Valeur hexadécimale à la position du curseur.
 ;------------------------------------------------------------------------------
 putrahex       .block
-               jsr   pushreg        ; Sauvegarde tous les registres.
+               jsr   push        ; Sauvegarde tous les registres.
                jsr   atohex         ; Conversion de a chaîne hexa.
-               ldx   #<a2hexstr     ; Charge l'adresse de la chaîne 
-               ldy   #>a2hexstr     ; ... hexa dans $YYXX. 
+               ldx   #<a2hexstr      ; Charge l'adresse de la chaîne 
+               ldy   #>a2hexstr      ; ... hexa dans $YYXX. 
                jsr   puts           ; Affiche la chaîne.
-               jsr   popreg         ; Récupère tous les registres.
+               jsr   pop         ; Récupère tous les registres.
                rts
                .bend
 
@@ -294,13 +294,13 @@ putrahexxy     .block
 ;          l'appel.
 ;------------------------------------------------------------------------------
 putrahexcxy    .block
-               jsr   pushreg        ; Sauvegarde tous les registres.
+               jsr   push        ; Sauvegarde tous les registres.
                jsr   atohex         ; Convertion de a en hexadécimal.
                ldx   #<a2hexpos     ; Charge l'adresse de la chaîne 
                ldy   #>a2hexpos     ; ... hexa dans $YYXX. 
                jsr   putsxy         ; Colore, positionne et affiche la
                                     ; ... chaîne.
-               jsr   popreg         ; Récupère tous les registres.
+               jsr   pop         ; Récupère tous les registres.
                rts
                .bend
 

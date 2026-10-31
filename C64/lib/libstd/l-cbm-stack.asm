@@ -4,8 +4,7 @@
 ; Cernière m.à j. : 
 ; Inspiration ....: 
 ;--------------------------------------------------------------------------------
-pushall
-push      .block         ; stack : pcl, pch
+pushall  .block         ; stack : pcl, pch
           php            ; stack : flg, pcl, pch  
           sei
           sta  ra        ; save a
@@ -41,12 +40,9 @@ push      .block         ; stack : pcl, pch
           plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
           cli
           rts
-
           .bend
-pullall
-pull
-popall
-pop       .block         ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+
+popall    .block         ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
           sei
           pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
           sta  pc        ; save pcl
@@ -78,9 +74,9 @@ pop       .block         ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1
           cli
           plp            ; stack : pcl, pch              
           rts
-          .bend       
-pushregs
-pushreg   .block         ; stack : pcl, pch
+          .bend 
+
+push      .block         ; stack : pcl, pch
           php            ; stack : flg, pcl, pch  
           sei
           sta  ra        ; save a
@@ -110,10 +106,7 @@ pushreg   .block         ; stack : pcl, pch
           rts
           .bend
 
-popregs
-pullregs
-pullreg
-popreg    .block         ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
+pop       .block         ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
           sei
           pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
           sta  pc        ; save pcl

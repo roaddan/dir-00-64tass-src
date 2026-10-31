@@ -1,17 +1,17 @@
 
 affichemesg    .macro msgptr
-               jsr  pushreg
+               jsr  push
                ldx  #<blankmsg
                ldy  #>blankmsg
                jsr  putscxy
                ldx  #<\msgptr
                ldy  #>\msgptr
                jsr  putscxy
-               jsr  popreg
+               jsr  pop
                .endm
 
 flashfkey      .macro fkeyptr
-               jsr  pushreg
+               jsr  push
                lda  \fkeyptr
                pha
                lda  #146
@@ -29,5 +29,5 @@ flashfkey      .macro fkeyptr
                ldx  #<\fkeyptr
                ldy  #>\fkeyptr
                jsr  putscxy
-               jsr  popreg
+               jsr  pop
                .endm
