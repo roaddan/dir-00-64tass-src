@@ -1,0 +1,11 @@
+vrega          .byte 0
+vregx          .byte 0
+vregy          .byte 0
+vregp          .byte 0
+vregs          .byte 0
+vregpch        .byte 0
+vregpcl        .byte 0
+vzp1h          .byte 0
+vzp1l          .byte 0
+vzp2h          .byte 0
+vzp2l          .byte 0

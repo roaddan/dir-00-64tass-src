@@ -13,7 +13,8 @@
 ; Fonction utilitaires de conversion en hexadécimal.
 ; ** Note: Utilise: butils.asm
 ;--------------------------------------------------------------------------------
-               
+; Ces fonctions nécessite l'inclusion des déclarations de variables:
+;              .include "e-cbm-vars"               
 ;------------------------------------------------------------------------------
 ; Affiche Acc. en hexadécimal formatté à la position (X,Y).
 ;------------------------------------------------------------------------------
@@ -73,13 +74,13 @@ printahex      .block
 ; hexadécimal.
 ; La méthode décimal est employé puisque c'est la plus rapide.
 ;------------------------------------------------------------------------------
-nibtohex        .block          
+nibtohex       .block          
                php             
-               and  #$0f    
+               and   #$0f    
                sed
                clc
-               adc  #$90
-               adc  #$40
+               adc   #$90
+               adc   #$40
                cld
                plp
                rts
@@ -112,33 +113,33 @@ lsra4bits      .block
 ; a2hexstr - affiche la chaine
 ; a2hexstr+1 - sans afficher le ($)
 ;------------------------------------------------------------------------------
-atohex      .block
-            php
-            pha
-            pha
-            jsr  lsra4bits
-            jsr  nibtohex
-            sta  a2hexstr
-            pla
-            jsr  nibtohex
-            sta  a2hexstr+1
-            lda  #$00                ; set end of string
-            sta  a2hexstr+2
-            pla
-            plp
-            rts
-            .bend
+atohex         .block
+               php
+               pha
+               pha
+               jsr   lsra4bits
+               jsr   nibtohex
+               sta   a2hexstr
+               pla
+               jsr   nibtohex
+               sta   a2hexstr+1
+               lda   #$00                ; set end of string
+               sta   a2hexstr+2
+               pla
+               plp
+               rts
+               .bend
 ;------------------------------------------------------------------------------
 ; Converti l'adresse contenu dans $YYXX en hexadécimal.
 ;------------------------------------------------------------------------------
 yxtohex        .block
-               jsr  push
-               txa
-               pha
-               tya
-               tax
-               pla
-               tay
+               jsr   push
+               txa                  ; x -> a
+               pha                  ; a -> stack
+               tya                  ; y -> a
+               tax                  ; a -> x
+               pla                  ; stack -> a
+               tay                  ; a -> y
                jsr  xytohex
                jsr  pop 
                rts                    

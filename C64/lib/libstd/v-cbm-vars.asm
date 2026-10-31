@@ -17,15 +17,15 @@ a2hexcol          .byte 0  ;
 a2hexpos                   ;
 a2hexpx           .byte 0  ;
 a2hexpy           .byte 0  ;
-a2hexpfx          .byte 0  ;
-a2hexstr           .fill 4,0;
+a2hexpfx          .byte '$';
+a2hexstr          .fill 4,0;
                   .byte 0  ;
 ;------------------------------------------------------------------------------
 a2bincol          .byte 0  ;
 a2binpos                   ;
 a2binpx           .byte 0  ;
 a2binpy           .byte 0  ;
-a2binpfx          .byte 0  ;
+a2binpfx          .byte '%'  ;
 a2binstr            .fill 8,0;
                   .byte 0  ;
 ;------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ a2deccol          .byte 0  ;
 a2decpos                   ;
 a2decpx           .byte 0  ;
 a2decpy           .byte 0  ;
-a2decpfx          .byte 0  ;
+a2decpfx          .byte '#'  ;
 a2decstr            .fill 5,0;
                   .byte 0  ;
 ;------------------------------------------------------------------------------

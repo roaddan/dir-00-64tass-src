@@ -12,10 +12,10 @@ putmesg       .macro msgptr
 
 brkpoint       .macro  char
                jsr   push
-               ldx   #0
-               ldy   #0
-               jsr   plot
-               #putmesg  brkmsg
+               ldx   #10
+               ldy   #24
+               jsr   gotoxy
+               #outstr  brkmsg
                lda   #\char
                jsr   waitkey
                jsr   pop

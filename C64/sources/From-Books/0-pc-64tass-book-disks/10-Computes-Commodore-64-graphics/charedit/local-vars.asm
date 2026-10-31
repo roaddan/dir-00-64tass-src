@@ -33,4 +33,4 @@ device         .byte     8
 tmpbyte        .byte     $00
 copykey        .byte     0  
 tempbyte       .byte     0
-brkmsg         .null "Message d'arret."
+brkmsg         .null "message d'arret."

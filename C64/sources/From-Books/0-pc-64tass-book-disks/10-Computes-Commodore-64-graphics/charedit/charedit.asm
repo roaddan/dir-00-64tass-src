@@ -13,10 +13,22 @@
 ;-----------------------------------------------------------------------------
 version  = "20261028       " 
 ;-----------------------------------------------------------------------------
-               .include    "e-header-c64.asm"
-               .include    "local-const.asm"
+               .include    "h-header-c64.asm"
                .enc        "none"
 main           .block
+               jsr   push           ; Sauvegarde les registres.
+               jsr   scrmaninit     ; Initialise l'écran.
+               jsr   cls
+               lda   #$01
+               ldx   #$02
+               ldy   #$03
+               sta   zpage1
+               stx   zpage1+1
+               stx   zpage2
+               sty   zpage2+1
+               #printregs
+               jsr   pop
+               brk
                jsr   push           ; Sauvegarde les registres.
                jsr   scrmaninit     ; Initialise l'écran.
                #disable             ; Inhibe les changements de jeu de carac.
@@ -60,24 +72,34 @@ endmain        jsr   pop            ; Récupère les registres.
 ;-----------------------------------------------------------------------------
 ; Inclure mes propres librairies.
 ;-----------------------------------------------------------------------------
-; Chargement des variables locales
-            .include    "local-vars.asm"     ; Variables de ce programme.
 ; Chargement des macros globales 
             .include    "m-c64-utils.asm"    ; Macros générales du C64
 ; et locales.
             .include    "local-macros.asm"   ; Macros de ce programmes
 ;-----------------------------------------------------------------------------
-; Chargement du code spécifique au programmes et ...
+; Chargement des variables locales
+;-----------------------------------------------------------------------------
+            *=$0a00
+            .include    "v_c64_showregs.asm"
+            .include    "local-vars.asm"     ; Variables de ce programme.
+;-----------------------------------------------------------------------------
+; Chargement des constantes et des chaines de caractères locales.
+;-----------------------------------------------------------------------------
+               .include    "local-const.asm"
+               .include    "strings_fr.asm"     ; Les chaines en français.
+;               .include    "strings_en.asm"     ; Les chaines en anglais.
+;-----------------------------------------------------------------------------
+; ... et du code spécifique au programmes.
+;-----------------------------------------------------------------------------
             .include    "routines.asm"       ; Les routines de ce programme.
-; ... de ses chaines de caractères, ..
-            .include    "strings_fr.asm"     ; Les chaines en français.
-;            .include    "strings_en.asm"     ; Les chaines en anglais.
 ;-----------------------------------------------------------------------------
 ; Chargement en RAM des variables des librairies à la suite du programme.
-            .include    "e-c64-vars.asm"     ; Les variables générales du C64.
-            .include    "e-cbm-vars.asm"
+;-----------------------------------------------------------------------------
+            .include    "v-c64-vars.asm"     ; Les variables générales du C64.
+            .include    "v-cbm-vars.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement des librairies à la page $C000.
+;-----------------------------------------------------------------------------
             *=$c000                          ; Les librairies de code:
             .include    "l-c64-timer.asm"    ; ... divers de delais,  
             .include    "l-c64-sid.asm"      ; ... d'utilisation du SID,
@@ -88,7 +110,7 @@ endmain        jsr   pop            ; Récupère les registres.
             .include    "l-cbm-keyb.asm"     ; ... d'utilisation du clavier, 
             .include    "l-cbm-disk.asm"     ; ... d'utilisation des media. 
             .include    "l-cbm-conv.asm"     ; ... de conversions diverses, 
-;            .include    "l-c64-showregs.asm"
+            .include    "l-c64-showregs.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement des constantes nécessaires aux librairies.
                                                   ; Les constantes associées; 
