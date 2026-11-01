@@ -97,10 +97,12 @@ inczpage1
 inczp1         .block
                php
                pha
-               inc  zpage1
-               lda  zpage1
-               bne  nopage
-               inc  zpage1+1
+               clc
+               lda   #$01
+               adc   zpage1
+               sta   zpage1
+               bcc   nopage
+               inc   zpage1+1
 nopage         pla
                plp         
                rts
@@ -112,12 +114,12 @@ deczpage1
 deczp1         .block
                php
                pha
-               dec  zpage1
-               lda  zpage1
-               cmp  #$ff
-               beq  report
-               bne  nopage
-report         dec  zpage1+1     
+               lda   #$00
+               sec
+               sbc   zpage1
+               sta   zpage1
+               bcs   nopage
+               dec   zpage1+1     
 nopage         pla
                plp         
                rts
@@ -129,11 +131,13 @@ inczpage2
 inczp2         .block
                php
                pha
-               inc  zpage2
-               lda  zpage2
-               bne  nopage
-               inc  zpage2+1
-nopage         pla        
+               clc
+               lda   #$01
+               adc   zpage2
+               sta   zpage2
+               bcc   nopage
+               inc   zpage2+1
+nopage         pla
                plp         
                rts
                .bend
@@ -143,13 +147,15 @@ nopage         pla
 deczpage2
 deczp2         .block
                php
-               dec  zpage2
-               lda  zpage2
-               cmp  #$ff
-               beq  report
-               bne  nopage
-report         dec  zpage2+1
-nopage         plp         
+               pha
+               lda   #$00
+               sec   
+               sbc   zpage2
+               sta   zpage2
+               bcs   nopage
+               dec   zpage2+1
+nopage         pla
+               plp         
                rts
                .bend
 ;---------------------------------------------------------------------

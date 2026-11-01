@@ -1313,11 +1313,11 @@ scrolldown  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
             #setzpage1  mapaddr     ; Positionne zpage1 ($fc,$fb) sur mapaddr.
             #setzpage2  mapaddr     ; Positionne zpage2 ($fe,$fd) sur mapaddr.
-            jsr   inczp2            ; On incrémente zpage2.
+            jsr   deczp2            ; On décrémente zpage2.
             ldy   #$07              ; Index à 7
             lda   (zpage1),y        ; On mémorise le dernier octet 
             sta   tmpbyte           ; ... de la matrice.
-again       dey                     ; On recule l'index.
+again       iny                     ; On recule l'index.
             lda   (zpage2),y        ; On decale les octets suivant 
             sta   (zpage1),y        ; ... vers le bas du caractère.
             cpy   #$00              ; En sommes-nous à l'avant dernier?
