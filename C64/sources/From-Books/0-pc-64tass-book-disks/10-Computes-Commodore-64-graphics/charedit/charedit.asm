@@ -13,7 +13,7 @@
 ;-----------------------------------------------------------------------------
 version  = "20261028       " 
 ;-----------------------------------------------------------------------------
-               .include    "h-header-c64.asm"
+               .include "h-header-c64.asm"
                .enc        "none"
 main           .block
                jsr   push           ; Sauvegarde les registres.
@@ -60,50 +60,54 @@ endmain        jsr   pop            ; Récupère les registres.
 ; Inclure mes propres librairies.
 ;-----------------------------------------------------------------------------
 ; Chargement des macros globales 
-            .include    "m-c64-utils.asm"    ; Macros générales du C64
+               .include "m-c64-utils.asm"    ; Macros générales du C64
 ; et locales.
-            .include    "local-macros.asm"   ; Macros de ce programmes
-;-----------------------------------------------------------------------------
-; Chargement des variables locales
-;-----------------------------------------------------------------------------
-;             *=$2000
-            .include    "v_c64_showregs.asm"
-            .include    "local-vars.asm"     ; Variables de ce programme.
-;-----------------------------------------------------------------------------
-; Chargement des constantes et des chaines de caractères locales.
-;-----------------------------------------------------------------------------
-               .include    "local-const.asm"
-;               .include    "strings_fr.asm"     ; Les chaines en français.
-               .include    "strings_en.asm"     ; Les chaines en anglais.
+               .include "local-macros.asm"   ; Macros de ce programmes
 ;-----------------------------------------------------------------------------
 ; ... et du code spécifique au programmes.
 ;-----------------------------------------------------------------------------
-            .include    "routines.asm"       ; Les routines de ce programme.
+               .include "routines.asm"       ; Les routines de ce programme.
+;-----------------------------------------------------------------------------
+; Chargement des variables locales
+;-----------------------------------------------------------------------------
+               .include "v-c64-showregs.asm"
+               .include "local-vars.asm"     ; Variables de ce programme.
+;-----------------------------------------------------------------------------
+; Chargement des chaines de caractères locales.
+;-----------------------------------------------------------------------------
+               .include "strings_fr.asm"     ; Les chaines en français.
+;               .include "strings_en.asm"     ; Les chaines en anglais.
+;-----------------------------------------------------------------------------
+; Chargement des constantes locales.
+;-----------------------------------------------------------------------------
+               .include "local-const.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement en RAM des variables des librairies à la suite du programme.
 ;-----------------------------------------------------------------------------
-            .include    "v-c64-vars.asm"     ; Les variables générales du C64.
-            .include    "v-cbm-vars.asm"
+               .include "v-c64-vars.asm"     ; Les variables générales du C64.
+               .include "v-cbm-vars.asm"
 ;-----------------------------------------------------------------------------
 ; Chargement des librairies à la page $C000.
 ;-----------------------------------------------------------------------------
-            *=$c000                          ; Les librairies de code:
-            .include    "l-c64-timer.asm"    ; ... divers de delais,  
-            .include    "l-c64-sid.asm"      ; ... d'utilisation du SID,
-            .include    "l-c64-vicii.asm"    ; ... d'utilisation du VICII,
-            .include    "l-c64-basic2.asm"   ; ... de routine utilisant Basic.
-            .include    "l-cbm-stack.asm"    ; ... de gestion de la pile.
-            .include    "l-cbm-mem.asm"      ; ... de gestion mémoire,
-            .include    "l-cbm-keyb.asm"     ; ... d'utilisation du clavier, 
-            .include    "l-cbm-disk.asm"     ; ... d'utilisation des media. 
-            .include    "l-cbm-conv.asm"     ; ... de conversions diverses, 
-            .include    "l-c64-showregs.asm"
+               *=$c000                       ; Les librairies de code:
+romstart       jmp   romstart
+               .include "l-c64-timer.asm"    ; ... divers de delais,  
+               .include "l-c64-sid.asm"      ; ... d'utilisation du SID,
+               .include "l-c64-vicii.asm"    ; ... d'utilisation du VICII,
+               .include "l-c64-basic2.asm"   ; ... de routine utilisant Basic.
+               .include "l-cbm-stack.asm"    ; ... de gestion de la pile.
+               .include "l-cbm-mem.asm"      ; ... de gestion mémoire,
+               .include "l-cbm-keyb.asm"     ; ... d'utilisation du clavier, 
+               .include "l-cbm-disk.asm"     ; ... d'utilisation des media. 
+               .include "l-cbm-conv.asm"     ; ... de conversions diverses, 
+               .include "l-c64-showregs.asm"
+romend         jmp   romend
 ;-----------------------------------------------------------------------------
 ; Chargement des constantes nécessaires aux librairies.
                                                   ; Les constantes associées; 
-            .include    "e-c64-kernal.asm"        ; ... au noyeau (Kernal),
-            .include    "e-c64-vicii.asm"         ; ... au VICII,
-            .include    "e-c64-basic2.asm"        ; ... à la ROM Basic,
-            .include    "e-c64-sid-ii.asm"        ; ... au SID,
-            .include    "e-c64-sid-notes-ntsc.asm"; ... aux fréquences NTSC.
+               .include "e-c64-kernal.asm"        ; ... au noyeau (Kernal),
+               .include "e-c64-vicii.asm"         ; ... au VICII,
+               .include "e-c64-basic2.asm"        ; ... à la ROM Basic,
+               .include "e-c64-sid-ii.asm"        ; ... au SID,
+               .include "e-c64-sid-notes-ntsc.asm"; ... aux fréquences NTSC.
 ;-----------------------------------------------------------------------------

@@ -22,7 +22,7 @@
 # Le nom de base du fichier principal de votre projet 
 # (sans extension ; .asm est supposé).
 # Cela peut varier d'un projet à l'autre.
-SOURCENAME=template
+SOURCENAME=scrolltext
 # Emplacement final où les fichiers assemblés doivent être copiés.
 PRGDIR=dir-00-64tass-bin
 # Le chemin d'accès complet au répertoire partagé commun du projet pour des 
@@ -151,13 +151,13 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 #                       # Pour transférer ... 
-#		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
-#		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
-#		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
-#		$(FTPASMCMD)	# ... le fichier source ASM.
-#		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
+		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
+		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
+		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
+		$(FTPASMCMD)	# ... le fichier source ASM.
+		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
 #		$(FTPCRTCMD)	# ... le fichier de cartouche CRT résultant.
-		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
+#		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
 
 # -----------------------------------------------------------------------------
 # Lorsqu'il est appelé avec « make ftp ».

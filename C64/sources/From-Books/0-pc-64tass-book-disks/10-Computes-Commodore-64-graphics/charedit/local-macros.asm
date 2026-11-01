@@ -10,16 +10,7 @@ putmesg       .macro msgptr
                jsr  pop
                .endm
 
-brkpoint       .macro  char
-               jsr   push
-               ldx   #12
-               ldy   #23
-               jsr   gotoxy
-               #outstr  brkmsg
-               lda   #\char
-               jsr   waitkey
-               jsr   pop
-               .endm
+
 
 flashfkey      .macro fkeyptr
                jsr  push

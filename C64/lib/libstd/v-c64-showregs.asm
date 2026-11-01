@@ -53,4 +53,15 @@ z2_str         .byte b_blanc
 contstr        .byte b_rose
                .text "[c] pour continuer"
                .byte b_blanc, 0
+brkmsg         .null "message d'arret."
 
+brkpoint       .macro  char
+               jsr   push
+               ldx   #12
+               ldy   #23
+               jsr   gotoxy
+               #outstr  brkmsg
+               lda   #\char
+               jsr   waitkey
+               jsr   pop
+               .endm

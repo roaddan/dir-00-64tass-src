@@ -17,9 +17,9 @@ headerb        .text          "             essai01.prg "
                .byte     $0d,0
 
 shortcuts      .byte     $0d
-               .byte     ucurkey,ucurkey
-               .byte     rcurkey,rcurkey,rcurkey,rcurkey
-               .byte     rcurkey,rcurkey,rcurkey,rcurkey,rcurkey      
+               .byte     b_crsr_up,b_crsr_up
+               .byte     b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right
+               .byte     b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right,b_crsr_right      
                .text          " R A C C O U R C I S "
                .text          "  S H O R T C U T S  "
                .byte     $0d

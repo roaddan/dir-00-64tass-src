@@ -1,0 +1,82 @@
+
+; 64tass Turbo Assembler Macro V1.59.3120 listing file
+; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd -i -L scrolltext.txt -o scrolltext.prg scrolltext.asm
+; Sun Nov  1 00:28:31 2026
+
+;Offset	;Hex		;Source
+
+;******  Processing input file: scrolltext.asm
+
+>0801	0b 08 0a 00	.word (+), 10
+>0805	9e 32 30 36	.null $9e, "2061"
+>0809	31 00
+>080b	00 00		+ .word 0
+.080d	20 81 ff	               jsr   $ff81
+.0810	20 84 ff	               jsr   $ff84
+.0813	20 8a ff	               jsr   $ff8a
+.0816	a2 00		               ldx   #$00
+.0818	8e 20 d0	               stx   $d020          ;black border
+.081b	8e 21 d0	               stx   $d021          ;black screen
+.081e	ca		               dex
+.081f	8e 86 02	               stx   $0286          ;light grey cursor
+.0822	20 44 e5	               jsr   $e544          ;clear screen
+.0825	a9 00		               lda   #$00
+.0827	8d a2 08	               sta   smooth         ;clear var
+.082a	85 f0		               sta   $f0
+.082c	a9 30		               lda   #$30           ;set text start to $3000 (zp $f0+$f1)
+.082e	85 f1		               sta   $f1
+.0830	78		               sei                  ;set up irq
+.0831	a9 01		               lda   #$01
+.0833	8d 1a d0	               sta   $d01a
+.0836	8d 0d dc	               sta   $dc0d
+.0839	a9 51		               lda   #<irq
+.083b	8d 14 03	               sta   $0314
+.083e	a9 08		               lda   #>irq
+.0840	8d 15 03	               sta   $0315
+.0843	a9 1b		               lda   #$1b
+.0845	8d 11 d0	               sta   $d011
+.0848	a9 fa		               lda   #$fa
+.084a	8d 12 d0	               sta   $d012
+.084d	58		               cli
+.084e	4c 4e 08	               jmp   *
+.0851	ee 19 d0	irq            inc   $d019
+.0854	20 6a 08	               jsr   scroller       ;scroll
+.0857	a9 1b		               lda   #$1b
+.0859	8d 11 d0	               sta   $d011
+.085c	a9 fa		               lda   #$fa
+.085e	8d 12 d0	               sta   $d012
+.0861	ad a2 08	               lda   smooth         ;smooth it
+.0864	8d 16 d0	               sta   $d016
+.0867	4c 31 ea	               jmp   $ea31
+.086a			scroller
+.086a	ad a2 08	               lda   smooth
+.086d	38		               sec
+.086e	e9 01		               sbc   #$01           ;$01-$07 Higher is faster scroll
+.0870	90 04		               bcc   scroll0
+.0872	8d a2 08	               sta   smooth
+.0875	60		               rts
+.0876	29 07		scroll0        and   #$07           ;only 3 bits needed for smooth
+.0878	8d a2 08	               sta   smooth
+.087b	a2 00		               ldx   #$00
+.087d	bd 01 04	move0          lda   $0401,x        ;move first $28 characters on top line
+.0880	9d 00 04	               sta   $0400,x
+.0883	e8		               inx
+.0884	e0 28		               cpx   #$28
+.0886	d0 f5		               bne   move0
+.0888	a0 00		               ldy   #$00
+.088a	b1 f0		               lda   ($f0),y        ;fetch 1 char from scroll text
+.088c	c9 ff		               cmp   #$ff           ;if value is $ff reset text to $3000
+.088e	f0 09		               beq   zp0
+.0890	e6 f0		               inc   $f0            ;inc $f0/$f1 to fetch next scrolltext char
+.0892	a5 f0		               lda   $f0
+.0894	d0 02		               bne   noc0
+.0896	e6 f1		               inc   $f1
+.0898	60		noc0           rts
+.0899	a9 00		zp0            lda   #$00
+.089b	85 f0		               sta   $f0
+.089d	a9 30		               lda   #$30
+.089f	85 f1		               sta   $f1
+.08a1	60		               rts
+>08a2	00		smooth         .byte $00
+
+;******  End of listing

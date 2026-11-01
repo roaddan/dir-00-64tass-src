@@ -1,9 +1,9 @@
 ;-------------------------------------------------------------------------------
                 Version = "20250405-231555"
 ;-------------------------------------------------------------------------------                
-               .include    "header-c64.asm"
-               .include    "macros-64tass.asm"
-               .include    "lib-c64-ultimateii.asm"
+               .include    "h-header-c64.asm"
+;               .include    "m-64tass.asm"
+               .include    "m-c64-utils.asm"
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
@@ -12,21 +12,21 @@
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
-               .include    "./strings_en.asm" 
+               .include    "strings_en.asm" 
 
 ;-------------------------------------------------------------------------------
 ;
 ;-------------------------------------------------------------------------------
 main           .block
                jsr scrmaninit
-               #lowercase
+               #tolower
                #disable
 ;               jsr aide
 ;               jsr anykey
-               mycolor
+               #mycolor
                jsr essai01
                #enable
-               #uppercase
+               #toupper
                jsr  cls
                #mycolor
 ;               jmp b_warmstart
@@ -36,7 +36,7 @@ main           .block
 ;
 ;-------------------------------------------------------------------------------
 aide           .block       
-               #lowercase
+               #tolower
                jsr cls
                #print line
                #print headera
@@ -78,7 +78,7 @@ putit          jsr  putch
                jmp  moredata
 nodata         jsr  uiifsenddataacc
                jsr  updatestatus
-               jsr  showregs 
+               #printregs 
                jsr  anykey
                pla
                plp
@@ -124,13 +124,22 @@ updatestatus   .block
 ;-------------------------------------------------------------------------------
 ; Je mets les libtrairies à la fin pour que le code du projet se place aux debut
 ;-------------------------------------------------------------------------------
+               .include  "l-c64-ultimateii.asm"
+
+
+               .include  "v-c64-vars.asm"
+               .include  "v-cbm-vars.asm"
+               .include  "v-c64-showregs.asm"
+
+
 ;*=$c000        
-               .include  "map-c64-kernal.asm"
-               .include  "map-c64-vicii.asm" 
-               .include  "map-c64-basic2.asm"
-               .include  "lib-c64-basic2.asm"
-               .include  "lib-cbm-pushpop.asm"
-               .include  "lib-cbm-mem.asm"
-               .include  "lib-cbm-hex.asm"
-               .include  "lib-cbm-keyb.asm"
-               .include  "lib-c64-showregs.asm"
+               .include  "e-c64-kernal.asm"
+               .include  "e-c64-vicii.asm" 
+               .include  "e-c64-basic2.asm"
+               .include  "l-c64-basic2.asm"
+               .include  "l-c64-vicii.asm"
+               .include  "l-cbm-stack.asm"
+               .include  "l-cbm-mem.asm"
+               .include  "l-cbm-conv.asm"
+               .include  "l-cbm-keyb.asm"
+               .include  "l-c64-showregs.asm"
