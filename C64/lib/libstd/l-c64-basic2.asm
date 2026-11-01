@@ -93,16 +93,16 @@ putch          .block
 putsyx
 puts
                .block
-               jsr   push           ; Sauvegarde registres.
+               jsr   pushall        ; Sauvegarde registres.
                stx   zpage1         ; Place l'adresse de la chaine   
-               sty   zpage1+1       ;   dans ZP1.
+               sty   zpage1+1       ; ... dans ZP1.
                ldy   #0             ; Initialise l'index du mode (ZP),Y 
 next           lda   (zpage1),y     ; Lit un charactère.
                beq   exit           ; Si $00 on sort.
                jsr   chrout         ; Affiche le caractères.
                jsr   inczp1         ; Inc. le pointeur ZP1 en 16 bits.
                jmp   next           ; Saute chercher le prochain carac.
-exit           jsr   pop            ; Récupère registres.
+exit           jsr   popall         ; Récupère registres.
                rts
                .bend
 

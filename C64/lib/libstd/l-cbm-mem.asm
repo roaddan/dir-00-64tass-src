@@ -97,8 +97,8 @@ inczpage1
 inczp1         .block
                php
                pha
-               clc
                lda   #$01
+               clc
                adc   zpage1
                sta   zpage1
                bcc   nopage
@@ -114,7 +114,7 @@ deczpage1
 deczp1         .block
                php
                pha
-               lda   #$00
+               lda   #$01
                sec
                sbc   zpage1
                sta   zpage1
@@ -131,8 +131,8 @@ inczpage2
 inczp2         .block
                php
                pha
-               clc
                lda   #$01
+               clc
                adc   zpage2
                sta   zpage2
                bcc   nopage
@@ -148,7 +148,7 @@ deczpage2
 deczp2         .block
                php
                pha
-               lda   #$00
+               lda   #$01
                sec   
                sbc   zpage2
                sta   zpage2

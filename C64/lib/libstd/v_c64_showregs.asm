@@ -14,12 +14,9 @@ vregx          .byte 0
 vregy          .byte 0
 vregsp         .byte 0
 vregsr         .byte 0
-vregpch        .byte 0
-vregpcl        .byte 0
-vzp1h          .byte 0
-vzp1l          .byte 0
-vzp2h          .byte 0
-vzp2l          .byte 0
+vregpc         .word 0
+vzp1           .word 0
+vzp2           .word 0
 ;------------------------------------------------------------------------------
 ; Constantes de caractères pour l'affichage des registres.
 ;------------------------------------------------------------------------------

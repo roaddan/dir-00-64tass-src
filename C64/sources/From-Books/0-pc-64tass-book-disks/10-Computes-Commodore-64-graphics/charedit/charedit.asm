@@ -18,6 +18,22 @@ version  = "20261028       "
 main           .block
                jsr   push           ; Sauvegarde les registres.
                jsr   scrmaninit     ; Initialise l'écran.
+               lda   #$00
+               sta   zpage1
+               sta   zpage1+1
+               sta   zpage2
+               sta   zpage2+1
+               #printregs
+tstloop        jsr   inczp1
+               #printregs
+               jsr   inczp2
+               #printregs
+               jsr   deczp1
+               #printregs
+               jsr   deczp2
+               #printregs
+               jmp   tstloop
+               brk 
                #disable             ; Inhibe les changements de jeu de carac.
                jsr   drawcredits    ; Affiche l'écran des credits. 
                ;ldx   #$00           ; Attend environ 1 secondes.
@@ -66,7 +82,7 @@ endmain        jsr   pop            ; Récupère les registres.
 ;-----------------------------------------------------------------------------
 ; Chargement des variables locales
 ;-----------------------------------------------------------------------------
-            *=$0a00
+;             *=$2000
             .include    "v_c64_showregs.asm"
             .include    "local-vars.asm"     ; Variables de ce programme.
 ;-----------------------------------------------------------------------------
