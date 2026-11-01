@@ -15,18 +15,20 @@ version  = "20261028       "
 ;-----------------------------------------------------------------------------
                .include "h-header-c64.asm"
                .enc     "none"
-pointeur   = $0401
+point1         .word $4321
+point2         =     $0402
 main           .block
-               lda   #$87
-               sta   pointeur+1
-               lda   #$65
-               sta   pointeur
-               lda   #$00
-               #ptrtozp1 $0400
-               #printregs
-               rts
+               jsr   cls
+               #setloop 65535
+;               #printregs
+               #printval16bin point1
+               #outcar  13
+               #printptr16bin point1
+               jsr   getkey
                .bend
-
+chainecol      .byte 15
+chainepos      .byte 10,10
+chaine         .null "chaine test."
 ;-----------------------------------------------------------------------------
 ; Inclure mes propres librairies.
 ;-----------------------------------------------------------------------------
