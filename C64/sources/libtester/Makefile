@@ -22,7 +22,7 @@
 # Le nom de base du fichier principal de votre projet 
 # (sans extension ; .asm est supposé).
 # Cela peut varier d'un projet à l'autre.
-SOURCENAME=template
+SOURCENAME=libtester
 # Emplacement final où les fichiers assemblés doivent être copiés.
 PRGDIR=dir-00-64tass-bin
 # Le chemin d'accès complet au répertoire partagé commun du projet pour des 
