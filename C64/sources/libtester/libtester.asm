@@ -15,7 +15,14 @@ version  = "20261028       "
 ;-----------------------------------------------------------------------------
                .include "h-header-c64.asm"
                .enc     "none"
+pointeur   = $0401
 main           .block
+               lda   #$87
+               sta   pointeur+1
+               lda   #$65
+               sta   pointeur
+               lda   #$00
+               #ptrtozp1 $0400
                #printregs
                rts
                .bend
