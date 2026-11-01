@@ -1313,19 +1313,17 @@ scrolldown  .block
             jsr   pushall           ; Sauvegarde registres et pointeur ZP.
             #setzpage1  mapaddr     ; Positionne zpage1 ($fc,$fb) sur mapaddr.
             #setzpage2  mapaddr     ; Positionne zpage2 ($fe,$fd) sur mapaddr.
-            jsr   deczp2            ; On décrémente zpage2.
-            ldy   #$07              ; Index à 7
-            lda   (zpage1),y        ; On mémorise le dernier octet 
-            sta   tmpbyte           ; ... de la matrice.
-again       iny                     ; On recule l'index.
-            lda   (zpage2),y        ; On decale les octets suivant 
-            sta   (zpage1),y        ; ... vers le bas du caractère.
-            cpy   #$00              ; En sommes-nous à l'avant dernier?
-            bne   again             ; Non, on continue.
-            ldy   #$00              ; Index à 0.  
-            lda   tmpbyte           ; On récupère le dernier octet et 
-            sta   (zpage1),y        ; ... on le place en premier.
-            jsr   popall            ; Récupère registres et pointeur ZP.
+            ldy      #$07           ; Index à 7
+            lda      (zpage1),y     ; On mémorise le dernier octet 
+            sta      tmpbyte
+            jsr      deczp2         ; On décrémente zpage2.
+again       lda      (zpage2),y     ; On decale les octets suivant 
+            sta      (zpage1),y     ; ... vers le bas du caractère.
+            dey
+            bne      again    
+            lda      tmpbyte
+            sta      (zpage1),y 
+            jsr      popall            ; Récupère registres et pointeur ZP.
             rts
             .bend
 
