@@ -1,9 +1,11 @@
 ;------------------------------------------------------------------------------
 ; Scripteur .......: Daniel Lafrance, Québec, canada.
-; Nom du fichier ..: lib-c64-drawbox.asm
-; Version .........: 20250925-143216
+; Nom du fichier ..: l-c64-drawbox.asm
+; Type fichier.....: Librairie
+; Creation.........: 20250610-223618
+; Version..........: 0.1.0
 ; Dernière m.à j. .: 20250926-165220
-; Inspiration  ....: 
+;                    20261101-105644 Francisation des commentaires.  
 ;------------------------------------------------------------------------------
 ; lib-c64-drawbox.asm - Fonctions d'affichage de fenetres par l'utilisation des 
 ; routines du rom BASIC du Commodores 64 et 64c. 
@@ -38,21 +40,21 @@
 ;              6) titre............: Titre de la fenêtre.
 ;------------------------------------------------------------------------------
 drawbox        .macro top, left, width, height, colour, title
-               php                  ; Sauvegarde les registres.
-               pha
-               lda   #\top          ; Initialise le paramètre top et la ...
-               sta   drawbox_top
+               php                  ; Sauvegarde minimaliste
+               pha                  ; ... des registres.
+               lda   #\top          ; Initialise le paramètre 
+               sta   drawbox_top    ; ... top et la
                sta   drawbox_curline; ... position de la ligne à traiter.
-               lda   #\left         ; Initialise le paramètre left.
-               sta   drawbox_left
-               lda   #\width        ; Initialise le paramètre width.
-               sta   drawbox_width
-               lda   #\height       ; Initialise le paramètre height.
-               sta   drawbox_height
+               lda   #\left         ; Initialise le 
+               sta   drawbox_left   ; ... paramètre left.
+               lda   #\width        ; Initialise le 
+               sta   drawbox_width  ; ... paramètre width.
+               lda   #\height       ; Initialise le
+               sta   drawbox_height ; ... paramètre height.
                lda   #\colour       ; Initialise le paramètre colour.
-               sta   drawbox_colour
-               pla                  ; Récupère les registres.
-               plp
+               sta   drawbox_colour ; ... paramètre colour.
+               pla                  ; Récupération minimaliste 
+               plp                  ; ... des registres.
                jsr   db_drawbox     ; Dessine la fenêtre.
                                     ; Affiche le titre.
                .if \colour < 16 
