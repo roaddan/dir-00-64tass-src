@@ -75,16 +75,16 @@ drawbox        .macro top, left, width, height, colour, title
 ;               majuscule et minuscule.
 ;------------------------------------------------------------------------------
 db_tline       .block
-               php                  ; Sauvegarde les registres.
-               pha
+               php                  ; Sauvegarde minimaliste
+               pha                  ; ... des registres.
                lda   #tleft         ; Coin suppérieur gauche.
                sta   db_left
                lda   #hline         ; Ligne horizontale.
                sta   db_mid
                lda   #tright        ; Coin suppérieur droit.
                sta   db_right
-               plp                  ; Récupère les registres.
-               pla
+               pla                  ; Récupération minimaliste 
+               plp                  ; ... des registres.
                jsr   db_drawline
                rts
                .bend          
@@ -96,16 +96,16 @@ db_tline       .block
 ;               majuscule et minuscule.
 ;------------------------------------------------------------------------------
 db_bline       .block
-               php                  ; Sauvegarde les registres.
-               pha
+               php                  ; Sauvegarde minimaliste
+               pha                  ; ... des registres.
                lda   #bleft         ; Coin inférieur gauche.
                sta   db_left
                lda   #hline         ; Ligne horizontale.
                sta   db_mid
                lda   #bright        ; Coin inférieur droit.
                sta   db_right
-               plp                  ; Récupère les registres.
-               pla
+               pla                  ; Récupération minimaliste 
+               plp                  ; ... des registres.
                jsr   db_drawline
                rts
                .bend
@@ -117,16 +117,16 @@ db_bline       .block
 ;               majuscule et minuscule.
 ;------------------------------------------------------------------------------
 db_eline       .block
-               php                  ; Sauvegarde les registres.
-               pha
+               php                  ; Sauvegarde minimaliste
+               pha                  ; ... des registres.
                lda   #vline         ; Ligne verticale.
                sta   db_left
                lda   #space         ; Caractère espace.
                sta   db_mid
                lda   #vline         ; Ligne verticale.
                sta   db_right
-               plp                  ; Récupère les registres.
-               pla
+               pla                  ; Récupération minimaliste 
+               plp                  ; ... des registres.
                jsr   db_drawline
                rts
                .bend
@@ -138,16 +138,16 @@ db_eline       .block
 ;               majuscule et minuscule.
 ;------------------------------------------------------------------------------
 db_hline       .block
-               php                  ; Sauvegarde les registres.
-               pha
+               php                  ; Sauvegarde minimaliste
+               pha                  ; ... des registres.
                lda   #hleft         ; Extrémité gauche d'une ligne médianne.
                sta   db_left
                lda   #hline         ; Ligne horizontale.
                sta   db_mid
                lda   #hright        ; Extrémité droite d'une ligne médianne.
                sta   db_right
-               plp                  ; Récupère les registres.
-               pla
+               pla                  ; Récupération minimaliste 
+               plp                  ; ... des registres.
                jsr   db_drawline
                rts
                .bend

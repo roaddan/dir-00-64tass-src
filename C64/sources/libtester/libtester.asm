@@ -23,7 +23,7 @@ main           .block
                #drawbox  2,2,20,15,cblanc,chaine 
                #printcxy   chainecol
                ldx   #cgris0
-               #printregs
+               #showregs
                #println chaine
                #println chaine
                #printxyfmt 12,15,'?',chaine
@@ -33,7 +33,7 @@ main           .block
                #outcar 13
                #printwordbin point1
                lda   colram 
-               #printregs
+               #showregs
                rts
                .bend
 
