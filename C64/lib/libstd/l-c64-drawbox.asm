@@ -162,7 +162,7 @@ db_hline       .block
 ;         db_tline, db_bline, db_eline ou db_hline
 ;------------------------------------------------------------------------------
 db_drawline     .block
-               jsr   pushreg        ; Sauvegarde les registres.
+               jsr   push           ; Sauvegarde les registres.
                lda   bascol         ; Sauvegarde de la ...
                sta   drawbox_bascol ; ... couleur basic.
                lda   drawbox_colour ; Sélectionne la couleur...     
@@ -189,7 +189,7 @@ noreverse      ldx   drawbox_curline; On positionne le curseur au ...
                lda   drawbox_bascol ; On récupère et replace la ...
                sta   bascol         ; ... couleur de basic.
                inc   drawbox_curline; Passe à la ligne suivante.
-               jsr   popreg         ; Récupère les registres.
+               jsr   pop            ; Récupère les registres.
                rts
                .bend
 
@@ -204,7 +204,7 @@ noreverse      ldx   drawbox_curline; On positionne le curseur au ...
 ; Utilise les fonctions : db_tline, db_bline, db_eline ou db_hline
 ;------------------------------------------------------------------------------
 db_drawbox      .block
-               jsr   pushreg        ; Sauvegarde les registres.
+               jsr   push        ; Sauvegarde les registres.
                ldx   drawbox_height ; Récupère la hauteur de la fenètre.
                jsr   db_tline       ; Dessine la ligne suppérieure.
                dex                  ; Soustrait 2 pour tenir compte des ...
@@ -214,7 +214,7 @@ moreline       jsr   db_eline       ; Dessine une ligne vide de la boîte.
                dex                  ; Une ligne de moins à faire.
                bne   moreline       ; On passe à la prochaine s'il en reste.
 lastline       jsr   db_bline       ; Dessine la ligne inférieure.
-               jsr   popreg         ; Récupère les registres.
+               jsr   pop         ; Récupère les registres.
                rts
                .bend
 

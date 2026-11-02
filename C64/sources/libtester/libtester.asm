@@ -11,20 +11,29 @@
 ;-----------------------------------------------------------------------------
 
 ;-----------------------------------------------------------------------------
-version  = "20261028       " 
+version  = "20261028     " 
 ;-----------------------------------------------------------------------------
                .include "h-header-c64.asm"
                .enc     "none"
 point1         .word $4321
 point2         =     $0402
 main           .block
-               jsr   cls
                #tolower
-               #outstrxy chainepos
-               #mescol
-               jsr   cls
-               ;#printregs
-               jsr   getkey
+               #setzpage1  24*40
+               #drawbox  2,2,20,15,cblanc,chaine 
+               #printcxy   chainecol
+               ldx   #cgris0
+               #printregs
+               #println chaine
+               #println chaine
+               #printxyfmt 12,15,'?',chaine
+               #outcar 13
+               #outcar 13
+               #printptr16bin point1 
+               #outcar 13
+               #printwordbin point1
+               lda   colram 
+               #printregs
                rts
                .bend
 
@@ -79,6 +88,7 @@ romstart       jmp   romstart
                .include "l-cbm-disk.asm"     ; ... d'utilisation des media. 
                .include "l-cbm-conv.asm"     ; ... de conversions diverses, 
                .include "l-c64-showregs.asm"
+               .include "l-c64-drawbox.asm"
 romend         jmp   romend
 ;-----------------------------------------------------------------------------
 ; Chargement des constantes nécessaires aux librairies.

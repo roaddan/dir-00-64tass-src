@@ -189,9 +189,84 @@ bmphrrow       .byte     $00
 bmphrcol       .byte     $00
 bmphrmask      .byte     $00
 
+savetext       .block
+               jsr   pushall
+               #setzpage1  $0400
+               #setzpage2  scrncar
+               #setloop 25*40
+               ldy   #$00
+more           lda   (zpage1),y
+               sta   (zpage2),y   
+               jsr   inczp1
+               jsr   inczp2
+               jsr   loop
+               bne   more
+               jsr   popall
+               rts
+               .bend
 
+resttext       .block
+               jsr   pushall
+               #setzpage1  $0400
+               #setzpage2  scrncar
+               #setloop 25*40
+               ldy   #$00
+more           lda   (zpage2),y
+               sta   (zpage1),y   
+               jsr   inczp1
+               jsr   inczp2
+               jsr   loop
+               bne   more
+               jsr   popall
+               rts
+               .bend
 
+savecolr       .block
+               jsr   pushall
+               #setzpage1  colram
+               #setzpage2  scrncol
+               #setloop 25*40
+               ldy   #$00
+more           lda   (zpage1),y
+               sta   (zpage2),y   
+               jsr   inczp1
+               jsr   inczp2
+               jsr   loop
+               bne   more
+               jsr   popall
+               rts
+               .bend
 
+restcolr       .block
+               jsr   pushall
+               #setzpage1  colram
+               #setzpage2  scrncol
+               #setloop 25*40
+               ldy   #$00
+more           lda   (zpage2),y
+               sta   (zpage1),y   
+               jsr   inczp1
+               jsr   inczp2
+               jsr   loop
+               bne   more
+               jsr   popall
+               rts
+               .bend
+
+fillcolr       .block
+               jsr   pushall
+               #setzpage1  colram
+               #setloop 25*40
+               ldy   #$00
+more           txa
+               and   #$0f
+               sta   (zpage1),y
+               jsr   inczp1
+               jsr   loop
+               bne   more
+               jsr   popall
+               rts
+               .bend
 
 
 

@@ -61,6 +61,7 @@ gkagain     jsr getin   ; Tente de lire une clef.
             .bend
 
 ;--------------------------------------------------------------------------------
+clrkbbuff
 kbflushbuff .block      
 ;--------------------------------------------------------------------------------
             php         ;\ Sauvegarde les drapeaux 
@@ -84,7 +85,7 @@ nogood      jsr getin   ; Tente de lire une clef.
             ; jsr chrout  ; L'affiche.
             cmp thekey  ; La compare avec celle attendue.
             bne nogood  ; Boucle si ce l'est pas la bonne. 
-            jsr chrout  ; L'affiche quand elle est bonne.
+            ;jsr chrout  ; L'affiche quand elle est bonne.
             pla         ;\ Récupère l'accmulateur et 
             plp         ;/  les drapeaux.
             rts

@@ -21,7 +21,7 @@ vzp2           .word 0
 ; Constantes de caractères pour l'affichage des registres.
 ;------------------------------------------------------------------------------
 reg_titre      .byte b_jaune,18
-               .text " contenu des registres "
+               .text "  Etat des registres  "
                .byte 146, 0
 ra_str         .byte b_blanc
                .text "a......: "
@@ -50,9 +50,9 @@ z1_str         .byte b_blanc
 z2_str         .byte b_blanc
                .text "zpage2.: " 
                .byte b_vertp, 0 
-contstr        .byte b_rose
-               .text "[c] pour continuer"
-               .byte b_blanc, 0
+contstr        .byte b_jaune,18
+               .text " [C] pour continuer "
+               .byte b_blanc,146,0
 brkmsg         .null "message d'arret."
 
 brkpoint       .macro  char
