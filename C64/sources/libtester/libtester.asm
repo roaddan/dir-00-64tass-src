@@ -19,13 +19,15 @@ point1         .word $4321
 point2         =     $0402
 main           .block
                jsr   cls
-               #setloop 65535
-;               #printregs
-               #printval16bin point1
-               #outcar  13
-               #printptr16bin point1
+               #tolower
+               #outstrxy chainepos
+               #mescol
+               jsr   cls
+               ;#printregs
                jsr   getkey
+               rts
                .bend
+
 chainecol      .byte 15
 chainepos      .byte 10,10
 chaine         .null "chaine test."
