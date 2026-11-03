@@ -59,8 +59,8 @@ bcmd4          .word $0000          ;  L'adresse de la commande Basic suivante.
 ; A p p e l   d u  p r o g r a m m e  p r i n c i p a l e .
 ;------------------------------------------------------------------------------
 hpgmstart      jsr   main           ;  Le programme principale doit s'appeler
-                                    ;  ... "main" 
-               ;jmp   k_warmstart    ; Basic soft start.
-               jmp   cint
-               rts                   ;  ... doit se rerminer par un RTS.
+                                    ;  ... "main"
+               jsr   clrkbbuff                         
+               jmp   k_coldstart    ; Basic soft start.
+               rts                  ;  ... doit se rerminer par un RTS.
 ;------------------------------------------------------------------------------

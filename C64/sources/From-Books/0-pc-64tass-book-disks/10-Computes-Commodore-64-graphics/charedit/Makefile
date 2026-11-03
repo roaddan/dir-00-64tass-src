@@ -151,12 +151,18 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 #                       # Pour transférer ... 
 		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
-		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
+#		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
 		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
-		$(FTPASMCMD)	# ... le fichier source ASM.
-		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
+#		$(FTPASMCMD)	# ... le fichier source ASM.
+#		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
 #		$(FTPCRTCMD)	# ... le fichier de cartouche CRT résultant.
 #		$(VICE) $(AUTOSTART) & # pour charger vice avec arguments.
+		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=/Usb0/dir-remote/d81/$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
+		sleep 3
+		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/b:mount?image=/Usb0/dir-remote/d81/datadisk.d81&type=d81&mode=readwrite' -H 'accept: application/json'
+#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=%2fUsb0%2Fdir-remote%2Fd81%2F$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
+		sleep 3
+		/usr/bin/curl -X 'PUT' 'http://ip200/v1/runners:run_prg?file=/Usb0/dir-remote/prg/$(SOURCENAME).prg' -H 'accept: application/json'
 		
 # -----------------------------------------------------------------------------
 # Lorsqu'il est appelé avec « make ftp ».

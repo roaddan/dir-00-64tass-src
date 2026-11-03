@@ -1,225 +1,244 @@
-;-------------------------------------------------------------------------------               
-;
-;-------------------------------------------------------------------------------               
+;-------------------------------------------------------------------------------
+; Initialise les sones mémoire pour les sprites.
+;-------------------------------------------------------------------------------
 sprt_init       .block
                jsr   pushall
-;               ldy     sprt_ptr6+1
-;               ldx     sprt_ptr6
-;               jsr     sprt_setimage
+;               ldy   sprt_ptr6+1
+;               ldx   sprt_ptr6
+;               jsr   sprt_setimage
                lda   sprt_ptr
-               jsr     sprt_loadptr
+               jsr   sprt_loadptr
 ;---------------POKE VIC+$15,4  53269 Sprite enable 76543210
-               lda     vic+$15 ; enable sprite 2
-               ora     #%00000100
-               sta     vic+$15
-;---------------POKE 2042,13
-               lda     #$0d
-               sta     $7fa
-;---------------Source ZP2 
-               lda     sprt_ptr0
-               sta     zpage1
-               lda     sprt_ptr0+1
-               sta     zpage1+1
+               lda   vicsprctl      ; Affiche le sprite # 2
+               and   #%00000000     ; Masque tous les sprites.
+               ora   #%00000100     ; Permet le sprite #2 76543(2)10
+               sta   vicsprctl
+;------------------------------------------------------------------------------
+; Pointeur sur la définition des sprites.
+;2040>sprt0, 2041>sprt1, 2042>sprt2, 2043>sprt3
+;2044>sprt4, 2045>sprt5, 2046>sprt6, 2047>sprt7
+; Le nombre placé à cette adresse * 64 = adresse de la définition.
+; exemple: $0d (13*64=832 ou $340)
+; Adresses possible avec la carthographie originale du VicII.
+;  0*64 =   0 ($0000),  1*64 =  64 ($0040),
+;  2*64 = 128 ($0080),  3*64 = 192 ($00c0),
+;  4*64 = 256 ($0100),  5*64 = 320 ($0140),
+;  6*64 = 384 ($0180),  7*64 = 448 ($01c0),
+;  8*64 = 512 ($0200),  9*64 = 576 ($0240),
+; 10*64 = 640 ($0280), 11*64 = 704 ($02c0),
+; 12*64 = 768 ($0300), 13*64 = 832 ($0340),
+; 14*64 = 896 ($0380), 15*64 = 960 ($03c0),
+;------------------------------------------------------------------------------
+;---------------POKE 2042,13--------
+               lda   #$0d           ; On donne le no. de page de la définition
+               sta   $7fa           ; pour le sprite #2.
+; On se prépare à copier les données
 ;---------------Destination ZP2 832 ou $340
-               lda     #$40
-               sta     zpage2
-               lda     #$03
-               sta     zpage2+1
-               ldy     #65
-               lda     (zpage1),y      ; sprite y offset
-               sta     sprt_yoffset
-               dey
-               lda     (zpage1),y      ; sprite x offset
-               sta     sprt_xoffset
-               dey
-               lda     (zpage1),y      ; sprite color
-               sta     $d029
-               dey
-               ldy     #62     
-nextbyte        lda     (zpage1),y
-               sta     (zpage2),y
-               dey
-               bne     nextbyte
-;               ldy     #$07
-;nexty           tya
-;               sta     $d026,y   ; 53287 Sprite 0 color
-;               dey
-;               bne     nexty
-;               sta     $d028   ; 53288 Sprite 1 color
-;               lda     #sprt_color
-;               sta     $d029   ; 53289 Sprite 2 color
-;               sta     $d02a   ; 53290 Sprite 3 color
-;               sta     $d02b   ; 53291 Sprite 4 color
-;               sta     $d02c   ; 53292 Sprite 5 color
-;               sta     $d02d   ; 53293 Sprite 6 color
-;               sta     $d02e   ; 53294 Sprite 7 color
-               jsr     popall
-               rts
-               .bend
-sprt_ptr        .byte   $01 
-;-------------------------------------------------------------------------------               
-;
-;-------------------------------------------------------------------------------               
-sprt_calcpos    .block
-               jsr     push
-               lda     #0
-               sta     sprt_x+1
-               sta     sprt_y+1
-               lda     js_2pixx+1
-               clc
-               rol
-               rol
-               sta     sprt_x+1
-               lda     js_2pixx
-               clc
-               adc     sprt_xoffset
-               sta     sprt_x
-               bcc     norepx
-               lda     sprt_x+1
-               ora     #$04
-               sta     sprt_x+1
-norepx          lda     js_2pixy
-               clc
-               adc     sprt_yoffset
-               sta     sprt_y
-               jsr     pop
-               rts
-               .bend
-;-------------------------------------------------------------------------------               
-;
-;-------------------------------------------------------------------------------               
-sprt_move       .block
-               jsr     push
-               jsr     sprt_calcpos
-               lda     sprt_x
-               sta     vic+$04
-               lda     sprt_x+1
-               sta     vic+$10
-               lda     sprt_y
-               sta     vic+$05
-               jsr     sprt_showpos
-               jsr     pop
-               rts
-               .bend
-;-------------------------------------------------------------------------------               
-;
-;-------------------------------------------------------------------------------               
-sprt_showpos    .block
-               jsr     push
-;---------------la valeur 16 bits de js_sprite
-               lda     sprt_x
-               jsr     a2hex
-               lda     a2hexstr 
-               sta     sprite_pos+26
-               lda     a2hexstr+1 
-               sta     sprite_pos+27
+               lda   #$40           ;On place le LSB l'adresse $340 (832)
+               sta   zpage2         ;... dans le LSB de zpage2.
+               lda   #$03           ;On place le MSB l'adresse $340 (832)
+               sta   zpage2+1       ;... dans le MSB de zpage2.
+;---------------Source ZP2
+               lda   sprt_ptr0      ; Charge le LSB de l'adresse du sprite 0
+               sta   zpage1         ; ... et le place dans le LSB de zpage1.
+               lda   sprt_ptr0+1    ; Charge le MSB de l'adresse du sprite 0
+               sta   zpage1+1       ; ... et le place dans le MSB de zpage1.
 
-               lda     sprt_x+1
-               jsr     a2hex
-               lda     a2hexstr 
-               sta     sprite_pos+24
-               lda     a2hexstr+1 
-               sta     sprite_pos+25
-               
-               lda     sprt_y
-               jsr     a2hex
-               lda     a2hexstr 
-               sta     sprite_pos+32
-               lda     a2hexstr+1 
-               sta     sprite_pos+33
-               
-               lda     #0
-               jsr     a2hex
-               lda     a2hexstr 
-               sta     sprite_pos+30
-               lda     a2hexstr+1 
-               sta     sprite_pos+31
-               
-               ldx     #<sprite_pos
-               ldy     #>sprite_pos
-               jsr     putscxy
-               jsr     pop
+               ldy   #65
+               lda   (zpage1),y      ; sprite y offset
+               sta   sprt_yoffset
+               dey
+               lda   (zpage1),y      ; sprite x offset
+               sta   sprt_xoffset
+               dey
+               lda   (zpage1),y      ; sprite color
+               sta   $d029
+               dey
+               ldy   #62
+nextbyte       lda   (zpage1),y
+               sta   (zpage2),y
+               dey
+               bne   nextbyte
+;               ldy   #$07
+;nexty           tya
+;               sta   $d026,y   ; 53287 Sprite 0 color
+;               dey
+;               bne   nexty
+;               sta   $d028   ; 53288 Sprite 1 color
+;               lda   #sprt_color
+;               sta   $d029   ; 53289 Sprite 2 color
+;               sta   $d02a   ; 53290 Sprite 3 color
+;               sta   $d02b   ; 53291 Sprite 4 color
+;               sta   $d02c   ; 53292 Sprite 5 color
+;               sta   $d02d   ; 53293 Sprite 6 color
+;               sta   $d02e   ; 53294 Sprite 7 color
+               jsr   popall
                rts
                .bend
-;-------------------------------------------------------------------------------               
+sprt_ptr       .byte $01
+;-------------------------------------------------------------------------------
 ;
-;-------------------------------------------------------------------------------               
-sprt_loadptr2   .block               
-               jsr     push               
+;-------------------------------------------------------------------------------
+sprt_calcpos    .block
+               jsr   push
+               lda   #0
+               sta   sprt_x+1
+               sta   sprt_y+1
+               lda   js_2pixx+1
+               clc
+               rol
+               rol
+               sta   sprt_x+1
+               lda   js_2pixx
+               clc
+               adc   sprt_xoffset
+               sta   sprt_x
+               bcc   norepx
+               lda   sprt_x+1
+               ora   #$04
+               sta   sprt_x+1
+norepx         lda   js_2pixy
+               clc
+               adc   sprt_yoffset
+               sta   sprt_y
+               jsr   pop
+               rts
+               .bend
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+sprt_move       .block
+               jsr    push
+               jsr   sprt_calcpos
+               lda   sprt_x
+               sta   vic+$04
+               lda   sprt_x+1
+               sta   vic+$10
+               lda   sprt_y
+               sta   vic+$05
+               jsr   sprt_showpos
+               jsr   pop
+               rts
+               .bend
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+sprt_showpos    .block
+               jsr   push
+;---------------la valeur 16 bits de js_sprite
+               lda   sprt_x
+               jsr   a2hex
+               lda   a2hexstr
+               sta   sprite_pos+26
+               lda   a2hexstr+1
+               sta   sprite_pos+27
+
+               lda   sprt_x+1
+               jsr   a2hex
+               lda   a2hexstr
+               sta   sprite_pos+24
+               lda   a2hexstr+1
+               sta   sprite_pos+25
+
+               lda   sprt_y
+               jsr   a2hex
+               lda   a2hexstr
+               sta   sprite_pos+32
+               lda   a2hexstr+1
+               sta   sprite_pos+33
+
+               lda   #0
+               jsr   a2hex
+               lda   a2hexstr
+               sta   sprite_pos+30
+               lda   a2hexstr+1
+               sta   sprite_pos+31
+
+               ldx   #<sprite_pos
+               ldy   #>sprite_pos
+               jsr   putscxy
+               jsr   pop
+               rts
+               .bend
+;-------------------------------------------------------------------------------
+;
+;-------------------------------------------------------------------------------
+sprt_loadptr2   .block
+               jsr   push
                tax
-               stx     sprt_ptr
-               lda     sprt_ptr0+1
-               sta     calcbuff+1
-               lda     sprt_ptr0
-               sta     calcbuff
-               cpx     #0
-               beq     addrok
-               lda     calcbuff
-nextx           clc
-               adc     #66
-               bcc     nocarry
-               inc     calcbuff+1
-nocarry         sta     calcbuff
+               stx   sprt_ptr
+               lda   sprt_ptr0+1
+               sta   calcbuff+1
+               lda   sprt_ptr0
+               sta   calcbuff
+               cpx   #0
+               beq   addrok
+               lda   calcbuff
+nextx          clc
+               adc   #66
+               bcc   nocarry
+               inc   calcbuff+1
+nocarry        sta   calcbuff
                dex
-               bne     nextx
-addrok          ldy     calcbuff+1            
-               ldx     calcbuff          
-;               jsr     showregs
-               jsr     sprt_setimage
-               jsr     pop
+               bne   nextx
+addrok         ldy   calcbuff+1
+               ldx   calcbuff
+;               jsr   showregs
+               jsr   sprt_setimage
+               jsr   pop
                rts
-calcbuff        .word   $0
+calcbuff       .word $0
                .bend
-;-------------------------------------------------------------------------------               
+;-------------------------------------------------------------------------------
 ;
-;-------------------------------------------------------------------------------               
-sprt_loadptr    .block               
-               jsr     push               
-               lda     sprt_ptr
+;-------------------------------------------------------------------------------
+sprt_loadptr    .block
+               jsr   push
+               lda   sprt_ptr
                clc
                rol
                tay
-               lda     sprt_ptr0,y
+               lda   sprt_ptr0,y
                tax
-               lda     sprt_ptr0+1,y
+               lda   sprt_ptr0+1,y
                tay
-;               jsr     showregs
-               jsr     sprt_setimage
-               jsr     pop
+;               jsr   showregs
+               jsr   sprt_setimage
+               jsr   pop
                rts
-calcbuff        .word   $0
+calcbuff       .word $0
                .bend
-;-------------------------------------------------------------------------------               
+;-------------------------------------------------------------------------------
 ;
-;-------------------------------------------------------------------------------               
+;-------------------------------------------------------------------------------
 sprt_setimage   .block
-               jsr     push
-               jsr     savezp1
-               jsr     savezp2
-               sty     zpage1+1
-               stx     zpage1
-               ldy     #>sprt_image
-               sty     zpage2+1
-               ldy     #<sprt_image
-               sty     zpage2
-               ldy     #66
-nextbyte        lda     (zpage1),y
-               sta     (zpage2),y
+               jsr   push
+               jsr   savezp1
+               jsr   savezp2
+               sty   zpage1+1
+               stx   zpage1
+               ldy   #>sprt_image
+               sty   zpage2+1
+               ldy   #<sprt_image
+               sty   zpage2
+               ldy   #66
+nextbyte       lda   (zpage1),y
+               sta   (zpage2),y
                dey
-               bne     nextbyte
-               jsr     restzp2
-               jsr     restzp1
-               jsr     pop
+               bne   nextbyte
+               jsr   restzp2
+               jsr   restzp1
+               jsr   pop
                rts
                .bend
-sprt_xoffset    .byte   $00               
-sprt_yoffset    .byte   $00               
-sprt_x          .word   $0000
-sprt_y          .word   $0000     
-;0     
-sprt_image      .fill 66
+sprt_xoffset   .byte $00
+sprt_yoffset   .byte $00
+sprt_x         .word $0000
+sprt_y         .word $0000
+;0
+sprt_image     .fill 66
 ;1
-sprt_crxair     .byte $00, $00, $00, $00, $00, $00 ; 6
+sprt_crxair    .byte $00, $00, $00, $00, $00, $00 ; 6
                .byte $00, $66, $00, $00, $3c, $00 ; 12
                .byte $00, $18, $00, $00, $00, $00 ; 18
                .byte $00, $00, $00, $00, $18, $00 ; 24
@@ -230,8 +249,8 @@ sprt_crxair     .byte $00, $00, $00, $00, $00, $00 ; 6
                .byte $00, $18, $00, $00, $3c, $00 ; 54
                .byte $00, $66, $00, $00, $00, $00 ; 60
                .byte $00, $00, $00, $01, $0c, $28 ; 66, X,X,X color, xoffset, yoffset
-;2               
-sprt_mouse      .byte $80, $00, $00, $e0, $00, $00 ; 6
+;2
+sprt_mouse     .byte $80, $00, $00, $e0, $00, $00 ; 6
                .byte $b8, $00, $00, $ce, $00, $00 ; 12
                .byte $83, $80, $00, $c0, $e0, $00 ; 18
                .byte $80, $18, $00, $c0, $3c, $00 ; 24
@@ -242,8 +261,8 @@ sprt_mouse      .byte $80, $00, $00, $e0, $00, $00 ; 6
                .byte $00, $40, $00, $00, $00, $00 ; 54
                .byte $00, $00, $00, $00, $00, $00 ; 60
                .byte $00, $00, $00, $01, $18, $31 ; 66, X,X,X color, xoffset, yoffset
-;3               
-sprt_pointer    .byte $00, $7c, $00, $01, $83, $00 ; 6
+;3
+sprt_pointer   .byte $00, $7c, $00, $01, $83, $00 ; 6
                .byte $06, $10, $c0, $08, $00, $30 ; 12
                .byte $12, $10, $88, $20, $00, $08 ; 18
                .byte $40, $ba, $04, $40, $6c, $04 ; 24
@@ -254,8 +273,8 @@ sprt_pointer    .byte $00, $7c, $00, $01, $83, $00 ; 6
                .byte $06, $10, $c0, $01, $83, $00 ; 54
                .byte $00, $7c, $00, $00, $00, $00 ; 60
                .byte $00, $00, $00, $01, $0c, $28 ; 66, X,X,X color, xoffset, yoffset
-;4               
-sprt_pointer2   .byte $55, $55, $55, $aa, $aa, $aa ; 6
+;4
+sprt_pointer2  .byte $55, $55, $55, $aa, $aa, $aa ; 6
                .byte $55, $55, $55, $aa, $aa, $aa ; 12
                .byte $55, $55, $55, $aa, $aa, $aa ; 18
                .byte $54, $00, $55, $aa, $00, $2a ; 24
@@ -266,8 +285,8 @@ sprt_pointer2   .byte $55, $55, $55, $aa, $aa, $aa ; 6
                .byte $55, $55, $55, $aa, $aa, $aa ; 54
                .byte $55, $55, $55, $aa, $aa, $aa ; 60
                .byte $55, $55, $55, $01, $0c, $28 ; 66, X,X,X color, xoffset, yoffset
-;5               
-sprt_hand       .byte $06, $00, $00, $0f, $00, $00 ; 6
+;5
+sprt_hand      .byte $06, $00, $00, $0f, $00, $00 ; 6
                .byte $19, $80, $00, $10, $80, $00 ; 12
                .byte $19, $80, $00, $16, $b1, $8c ; 18
                .byte $10, $ca, $52, $10, $84, $21 ; 24
@@ -278,8 +297,8 @@ sprt_hand       .byte $06, $00, $00, $0f, $00, $00 ; 6
                .byte $40, $ff, $e2, $40, $00, $02 ; 54
                .byte $3c, $00, $04, $02, $00, $08 ; 60
                .byte $03, $ff, $f8, $01, $12, $31 ; 66, X,X,X color, xoffset, yoffset
-;6               
-sprt_ultraman   .byte $00, $3e, $00, $01, $c1, $c0 ; 6
+;6
+sprt_ultraman  .byte $00, $3e, $00, $01, $c1, $c0 ; 6
                .byte $0e, $3e, $30, $08, $41, $08 ; 12
                .byte $10, $1c, $04, $10, $22, $04 ; 18
                .byte $24, $1c, $12, $23, $00, $62 ; 24
@@ -290,8 +309,8 @@ sprt_ultraman   .byte $00, $3e, $00, $01, $c1, $c0 ; 6
                .byte $10, $7f, $04, $08, $00, $08 ; 54
                .byte $06, $3e, $30, $01, $c1, $c0 ; 60
                .byte $00, $3e, $00, $01, $0c, $28 ; 66, X,X,X color, xoffset, yoffset
-;7               
-sprt_male       .byte $00, $1c, $00, $00, $3e, $00 ; 6
+;7
+sprt_male      .byte $00, $1c, $00, $00, $3e, $00 ; 6
                .byte $00, $3e, $00, $00, $3e, $00 ; 12
                .byte $00, $1c, $00, $00, $08, $00 ; 18
                .byte $00, $ff, $80, $00, $ff, $80 ; 24
@@ -301,9 +320,9 @@ sprt_male       .byte $00, $1c, $00, $00, $3e, $00 ; 6
                .byte $01, $94, $c0, $00, $14, $00 ; 48
                .byte $00, $14, $00, $00, $14, $00 ; 54
                .byte $00, $36, $00, $00, $77, $00 ; 60
-               .byte $00, $77 ,$00, $01, $0c, $2f ; 66, X,X,X color, xoffset, yoffset               
-;8               
-sprt_robot      .byte $00, $3c, $00, $00, $24, $00 ; 6
+               .byte $00, $77 ,$00, $01, $0c, $2f ; 66, X,X,X color, xoffset, yoffset
+;8
+sprt_robot     .byte $00, $3c, $00, $00, $24, $00 ; 6
                .byte $00, $66, $18, $00, $66, $38 ; 12
                .byte $00, $24, $38, $00, $3c, $10 ; 18
                .byte $00, $18, $10, $00, $18, $10 ; 24
@@ -313,9 +332,9 @@ sprt_robot      .byte $00, $3c, $00, $00, $24, $00 ; 6
                .byte $18, $3c, $00, $00, $3c, $00 ; 48
                .byte $00, $24, $00, $00, $24, $00 ; 54
                .byte $00, $24, $00, $03, $e7, $c0 ; 60
-               .byte $03, $e7, $c0, $01, $0c, $28 ; 66, X,X,X color, xoffset, yoffset               
-;9               
-sprt_femme      .byte $00, $1c, $00, $00, $3e, $00 ; 6
+               .byte $03, $e7, $c0, $01, $0c, $28 ; 66, X,X,X color, xoffset, yoffset
+;9
+sprt_femme     .byte $00, $1c, $00, $00, $3e, $00 ; 6
                .byte $00, $3e, $00, $00, $3e, $00 ; 12
                .byte $00, $1c, $00, $00, $08, $00 ; 18
                .byte $00, $7f, $00, $00, $ff, $80 ; 24
@@ -326,23 +345,23 @@ sprt_femme      .byte $00, $1c, $00, $00, $3e, $00 ; 6
                .byte $00, $7f, $00, $00, $ff, $80 ; 54
                .byte $00, $36, $00, $00, $77, $00 ; 60
                .byte $00, $55 ,$00, $01, $0c, $2f ; 66, X,X,X color, xoffset, yoffset
-               
-sprt_ptr0       .word  sprt_image + (0*66)                   
-sprt_ptr1       .word  sprt_image + (1*66)                   
-sprt_ptr2       .word  sprt_image + (2*66)                   
-sprt_ptr3       .word  sprt_image + (3*66)                   
-sprt_ptr4       .word  sprt_image + (4*66)                   
-sprt_ptr5       .word  sprt_image + (5*66)                   
-sprt_ptr6       .word  sprt_image + (6*66)                      
-sprt_ptr7       .word  sprt_image + (7*66)                      
-sprt_ptr8       .word  sprt_image + (8*66)                      
-sprt_ptr9       .word  sprt_image + (9*66)                      
-testbyte        .byte 255                      
-sprt_txtcol     =       vjaune         
-sprt_txtbak     =       bkcol0        
-sprt_color      =       vwhite               
-sprite_pos      .byte   sprt_txtcol,sprt_txtbak,4,14
-;                       0000000000111111111122222222223333333333                       
-;                       0123456789012345678901234567890123456789                              
-               .text       "Sprite pos. (x,y):($0000,$0000)"
+
+sprt_ptr0      .word sprt_image + (0*66)
+sprt_ptr1      .word sprt_image + (1*66)
+sprt_ptr2      .word sprt_image + (2*66)
+sprt_ptr3      .word sprt_image + (3*66)
+sprt_ptr4      .word sprt_image + (4*66)
+sprt_ptr5      .word sprt_image + (5*66)
+sprt_ptr6      .word sprt_image + (6*66)
+sprt_ptr7      .word sprt_image + (7*66)
+sprt_ptr8      .word sprt_image + (8*66)
+sprt_ptr9      .word sprt_image + (9*66)
+testbyte       .byte 255
+sprt_txtcol    =     vjaune
+sprt_txtbak    =     bkcol0
+sprt_color     =     vwhite
+sprite_pos     .byte sprt_txtcol,sprt_txtbak,4,14
+;                     0000000000111111111122222222223333333333
+;                     0123456789012345678901234567890123456789
+               .text "Sprite pos. (x,y):($0000,$0000)"
                .byte   0

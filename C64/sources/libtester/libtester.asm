@@ -20,20 +20,18 @@ point2         =     $0402
 main           .block
                #tolower
                #setzpage1  24*40
-               #drawbox  2,2,20,15,cblanc,chaine 
-               #printcxy   chainecol
-               ldx   #cgris0
-               #showregs
-               #println chaine
-               #println chaine
-               #printxyfmt 12,15,'?',chaine
-               #outcar 13
-               #outcar 13
-               #printptr16bin point1 
-               #outcar 13
-               #printwordbin point1
+               ;#drawbox  2,2,20,15,cblanc,chaine 
                lda   colram 
+               ;jsr   sid_tada
+               lda   #$00
+               tay
+               tax
+               jsr   getkey
                #showregs
+               #showregs
+               #showregs
+               #showregs
+               jsr   getkey
                rts
                .bend
 

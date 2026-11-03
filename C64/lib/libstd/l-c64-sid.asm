@@ -5,38 +5,50 @@
 sid_v1offset     =  0
 sid_v2offset     =  7
 sid_v3offset     =  14
-vic_son        .byte sid_v1offset + 24,  8        ; sid+24=54296,  15 Volume.
-               .byte sid_v1offset +  5,  190      ; sid+ 5=54277, 190 A.D.S = 0.
-               .byte sid_v1offset +  6,  248      ; sid+ 6=54278, 248 S=Max, r=15
-               .byte sid_v1offset +  1,  $10      ; 
-               .byte sid_v1offset +  0,  $c4      ; 
-               .byte sid_v1offset +  4,  %00010001; sid+ 4=54276,  17 V1S = Triangle.
+vic_son        .byte sid_v1offset + 24,  15        ; sid+24=54296,  15 Volume.
+               .byte sid_v1offset +  5,  190       ; sid+ 5=54277, 190 A.D.S = 0.
+               .byte sid_v1offset +  6,  248       ; sid+ 6=54278, 248 S=Max, r=15
+               .byte sid_v1offset +  1,  $10       ; 
+               .byte sid_v1offset +  0,  $c4       ; 
+               .byte sid_v1offset +  4,  %00010001 ; sid+ 4=54276,  17 V1S = Triangle.
                .byte $ff,  $ff
                    
-vic_son2       .byte sid_v2offset + 4,    8      ; sid+24=54296,  15   Volume.
-               .byte sid_v2offset + 5,  190      ; sid+ 5=54277, 190   A.D.S = 0.
-               .byte sid_v2offset + 6,  248      ; sid+ 6=54278, 248   S=Max, r=15
-               .byte sid_v2offset + 1,  $15      ; sid+ 1=54273,  20   Frequence = 40 * 256
-               .byte sid_v2offset + 0,  $20      ; sid+ 1=54273,  20   Frequence = 40 * 256
-               .byte sid_v2offset + 4,  %00100001; sid+ 4=54276,  17   V1S = Triangle.
+vic_son2       .byte sid_v2offset + 4,   15        ; sid+24=54296,  15 Volume.
+               .byte sid_v2offset + 5,  190        ; sid+ 5=54277, 190 A.D.S = 0.
+               .byte sid_v2offset + 6,  248        ; sid+ 6=54278, 248 S=Max, r=15
+               .byte sid_v2offset + 1,  $15        ; sid+ 1=54273,  20 Frequence = 40 * 256
+               .byte sid_v2offset + 0,  $20        ; sid+ 1=54273,  20 Frequence = 40 * 256
+               .byte sid_v2offset + 4,  %00100001  ; sid+ 4=54276,  17 V1S = Triangle.
                .byte $ff,  $ff
                
-vic_son3       .byte sid_v3offset + 4,    8      ; sid+24=54296,  15   Volume.
-               .byte sid_v3offset + 5,  190      ; sid+ 5=54277, 190   A.D.S = 0.
-               .byte sid_v3offset + 6,  248      ; sid+ 6=54278, 248   S=Max, r=15
-               .byte sid_v3offset + 1,  $19      ; sid+ 1=54273,  20   Frequence = 40 * 256
-               .byte sid_v3offset + 0,  $1f      ; sid+ 1=54273,  20   Frequence = 40 * 256
-               .byte sid_v3offset + 2,  %11111111; sid+ 4=54276,  17   V1S = Triangle.
-               .byte sid_v3offset + 4,  %01000001; sid+ 4=54276,  17   V1S = Triangle.
+vic_son3       .byte sid_v3offset + 4,   15        ; sid+24=54296,  15   Volume.
+               .byte sid_v3offset + 5,  190        ; sid+ 5=54277, 190   A.D.S = 0.
+               .byte sid_v3offset + 6,  248        ; sid+ 6=54278, 248   S=Max, r=15
+               .byte sid_v3offset + 1,  $19        ; sid+ 1=54273,  20   Frequence = 40 * 256
+               .byte sid_v3offset + 0,  $1f        ; sid+ 1=54273,  20   Frequence = 40 * 256
+               .byte sid_v3offset + 4,  %01000001  ; sid+ 4=54276,  17   V1S = Triangle.
                .byte   $ff,  $ff
 
-sid_v1note     .macro xyimm
+; Place une note dans le 
+sid_note     .macro voix,freq
                php
                pha
-               lda #<\xyimm
-               sta sid+0
-               lda #>\xyimm
-               sta sid+1
+               .if \voix=2 
+                  lda   #<\freq
+                  sta   sid+7
+                  lda   #>\freq
+                  sta   sid+8
+               .elif \voix=3
+                  lda   #<\freq
+                  sta   sid+14
+                  lda   #>\freq
+                  sta   sid+15
+               .else
+                  lda   #<\freq
+                  sta   sid+0
+                  lda   #>\freq
+                  sta   sid+1
+               .endif               
                pla
                plp
                .endm
@@ -47,7 +59,7 @@ sid_prog       .macro xyimm
                ldy #>\xyimm
                jsr sid_progdata
                jsr pop
-               endm
+               .endm
 
 sid_progtest   .block
                jsr push
@@ -150,46 +162,63 @@ sid_alloff      .block
 sid_tada       .block
                #sid_prog vic_son
                jsr ti_dcroche
-               #sid_v1note re4
+               #sid_note 1,re4
                jsr ti_dcroche
-               #sid_v1note mi4
+               #sid_note 1,mi4
                jsr ti_dcroche
-               #sid_v1note fa4
+               #sid_note 1,fa4
                jsr ti_dcroche
-               #sid_v1note sol4
+               #sid_note 1,sol4
                jsr ti_dcroche
-               #sid_v1note la4
+               #sid_note 1,la4
                jsr ti_dcroche
-               #sid_v1note si4
+               #sid_note 1,si4
                jsr ti_dcroche
-               #sid_v1note do5
+               #sid_note 1,do5
                #sid_prog vic_son2
                #sid_prog vic_son3
-               jsr ti_blanche
+               jsr ti_noirepnt
                jsr sid_alloff
                rts
                .bend
 
 sid_guitar     .block
-               #sid_prog vic_son
-               jsr ti_dcroche
-               #sid_v1note mi3
-               jsr ti_blanche
-               #sid_v1note la3
-               jsr ti_blanche
-               #sid_v1note re4
-               jsr ti_blanche
-               #sid_v1note sol4
-               jsr ti_blanche
-               #sid_v1note si4
-               jsr ti_blanche
-               #sid_v1note mi5
-               jsr ti_ronde
+               #sid_prog vic_son2
+               jsr ti_croche
+               #sid_note 2,mi3
+               jsr ti_croche
+               #sid_note 2,la3
+               jsr ti_croche
+               #sid_note 2,re4
+               jsr ti_croche
+               #sid_note 2,sol4
+               jsr ti_croche
+               #sid_note 2,si4
+               jsr ti_croche
+               #sid_note 2,mi5
+               jsr ti_noirepnt
                jsr sid_alloff
                rts
                .bend
 
-
+sid_guitar2     .block
+               #sid_prog vic_son3
+               jsr ti_dcroche
+               #sid_note 3,mi3
+               jsr ti_dcroche
+               #sid_note 3,la3
+               jsr ti_dcroche
+               #sid_note 3,re4
+               jsr ti_dcroche
+               #sid_note 3,sol4
+               jsr ti_dcroche
+               #sid_note 3,si4
+               jsr ti_dcroche
+               #sid_note 3,mi5
+               jsr ti_noirepnt
+               jsr sid_alloff
+               rts
+               .bend
 
 sid_lib_vector .word   sid_v1off,sid_v2off,sid_v3off
 
@@ -219,7 +248,22 @@ ti_noire       .block
                rts
                .bend
 
+ti_noirepnt    .block
+               jsr ti_croche
+               jsr ti_croche
+               jsr ti_croche
+               rts
+               .bend
+
+
 ti_blanche     .block
+               jsr ti_noire
+               jsr ti_noire
+               rts
+               .bend
+
+ti_blanchepnt  .block
+               jsr ti_noire
                jsr ti_noire
                jsr ti_noire
                rts
