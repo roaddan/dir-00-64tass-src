@@ -151,21 +151,21 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 #                       # Pour transférer ... 
-		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
-		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
-		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
+#		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
+#		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
+#		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
 #		$(FTPASMCMD)	# ... le fichier source ASM.
 #		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
 #		$(FTPCRTCMD)	# ... le fichier de cartouche CRT résultant.
-#		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
+		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
 # Chargement du disque programme
-		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=/Usb0/dir-remote/d81/$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
-		sleep 3
+#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=/Usb0/dir-remote/d81/$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
+#		sleep 3
 # Chargement du disque de données
-		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/b:mount?image=/Usb0/dir-remote/d81/datadisk.d81&type=d81&mode=readwrite' -H 'accept: application/json'
-		sleep 3
+#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/b:mount?image=/Usb0/dir-remote/d81/datadisk.d81&type=d81&mode=readwrite' -H 'accept: application/json'
+#		sleep 3
 # Démarrage du programme.
-		/usr/bin/curl -X 'PUT' 'http://ip200/v1/runners:run_prg?file=/Usb0/dir-remote/prg/$(SOURCENAME).prg' -H 'accept: application/json'
+#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/runners:run_prg?file=/Usb0/dir-remote/prg/$(SOURCENAME).prg' -H 'accept: application/json'
 # -----------------------------------------------------------------------------
 # Lorsqu'il est appelé avec « make ftp ».
 # ** À l'aide de commentaires, vous pouvez masquer ou activer n'importe quelle action.

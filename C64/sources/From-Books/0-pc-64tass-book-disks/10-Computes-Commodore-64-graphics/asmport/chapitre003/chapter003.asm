@@ -31,13 +31,19 @@ mainloop       jsr   getkey
 
 isit_plus      cmp   #'+'
                bne   isit_moins
-               inc   couleur1
+               ;inc   couleur1
+               ;lda   couleur1
+               ;and   #$0f
+               ;sta   couleur1
                jsr   sub_c
                jmp   mainloop
 
 isit_moins     cmp   #'-'
                bne   isit_0
-               inc   couleur1
+               dec   couleur1
+               ;lda   couleur1
+               ;and   #$0f
+               ;sta   couleur1
                jsr   sub_c
                jmp   mainloop
 
@@ -121,10 +127,6 @@ encore         lda   couleur1
                jsr   inczpage1
                jsr   loop
                bne   encore
-               inc   couleur1
-               lda   couleur1
-               ;and   #$0f
-               sta   couleur1
                jsr   maingraph
                jsr   drawman
                pla
