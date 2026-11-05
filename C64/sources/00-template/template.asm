@@ -22,23 +22,21 @@ main           .block
 ;-----------------------------------------------------------------------------
 ; Inclure mes propres librairies.
 ;-----------------------------------------------------------------------------
-; Chargement des macros globales 
-               .include "m-c64-utils.asm"    ; Macros générales du C64
-; et locales.
-               .include "m-locals.asm"       ; Macros de ce programmes
+; Chargement des macros locales.
+               .include "local-macros.asm"       ; Macros de ce programmes
 ;-----------------------------------------------------------------------------
 ; ... et du code spécifique au programmes.
 ;-----------------------------------------------------------------------------
-               .include "l-routines.asm"     ; Les routines de ce programme.
-               .include "e-locals.asm"       ; Variables de ce programme.
+               .include "local-code.asm"     ; Les routines de ce programme.
 ;-----------------------------------------------------------------------------
 ; Chargement des variables locales
 ;-----------------------------------------------------------------------------
+               .include "local-variables.asm"       ; Variables de ce programme.
 ;-----------------------------------------------------------------------------
 ; Chargement des chaines de caractères locales.
 ;-----------------------------------------------------------------------------
-               .include "v-francais.asm"     ; Les chaines en français.
-;               .include "v-english.asm"     ; Les chaines en anglais.
+               .include "local-francais.asm"     ; Les chaines en français.
+;               .include "local-english.asm"     ; Les chaines en anglais.
 ;-----------------------------------------------------------------------------
 ; Chargement des constantes locales.
 ;-----------------------------------------------------------------------------
