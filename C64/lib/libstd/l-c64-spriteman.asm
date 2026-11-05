@@ -44,11 +44,11 @@ sprt_init       .block
                lda   sprt_ptr0+1    ; Charge le MSB de l'adresse du sprite 0
                sta   zpage1+1       ; ... et le place dans le MSB de zpage1.
 
-               ldy   #65
-               lda   (zpage1),y      ; sprite y offset
-               sta   sprt_yoffset
+               ldy   #65            
+               lda   (zpage1),y     ; sprite y offset
+               sta   sprt_yoffset   
                dey
-               lda   (zpage1),y      ; sprite x offset
+               lda   (zpage1),y     ; sprite x offset
                sta   sprt_xoffset
                dey
                lda   (zpage1),y      ; sprite color
@@ -60,7 +60,7 @@ nextbyte       lda   (zpage1),y
                dey
                bne   nextbyte
 ;               ldy   #$07
-;nexty           tya
+;nexty          tya
 ;               sta   $d026,y   ; 53287 Sprite 0 color
 ;               dey
 ;               bne   nexty

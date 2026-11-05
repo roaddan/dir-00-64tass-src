@@ -23,23 +23,23 @@
 ;------------------------------------------------------------------------------
 ; 1 REM PROGRAMMATION ASSEMBLEUR SUR C64.
 ;------------------------------------------------------------------------------
-;              .byte $00            ;  Basic commence avec un $00 à $0801.
-;bcmd1          .word bcmd2          ;  Adresse de la commande basic suivante.
-;               .word 1              ;  Numero de la ligne Basic.
-;               .byte $8F            ;  Le token de la commande REM du Basic 
-;                                    ;  ... ($8F=REM)
-;               .text " programmation assembleur sur c64."   
-;                                    ; Texte a afficher suite au REM.
+              .byte $00            ;  Basic commence avec un $00 à $0801.
+bcmd1          .word bcmd2          ;  Adresse de la commande basic suivante.
+               .word 1              ;  Numero de la ligne Basic.
+               .byte $8F            ;  Le token de la commande REM du Basic 
+                                    ;  ... ($8F=REM)
+               .text " programmation assembleur sur c64."   
+                                    ; Texte a afficher suite au REM.
 ;------------------------------------------------------------------------------
 ; 2 REM PAR DANIEL LAFRANCE.
 ;------------------------------------------------------------------------------
-;               .byte $00            ;  Un zéro pour indiquer la fin de cette 
-;bcmd2          .word bcmd3          ;  Adresse de la commande basic suivante.
-;               .word 2              ;  Numero de la ligne Basic.
-;               .byte $8F            ;  Le token de la commande REM du Basic 
-;                                    ;  ... ($8F=REM)
-;               .text " par daniel lafrance."   
-;                                    ;  texte a afficher suite au REM.
+               .byte $00            ;  Un zéro pour indiquer la fin de cette 
+bcmd2          .word bcmd3          ;  Adresse de la commande basic suivante.
+               .word 2              ;  Numero de la ligne Basic.
+               .byte $8F            ;  Le token de la commande REM du Basic 
+                                    ;  ... ($8F=REM)
+               .text " par daniel lafrance."   
+                                    ;  texte a afficher suite au REM.
 ;------------------------------------------------------------------------------
 ; 3 SYS02129
 ;------------------------------------------------------------------------------
