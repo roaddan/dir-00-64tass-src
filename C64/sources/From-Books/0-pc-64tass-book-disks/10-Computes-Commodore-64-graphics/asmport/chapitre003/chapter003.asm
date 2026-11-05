@@ -31,19 +31,17 @@ mainloop       jsr   getkey
 
 isit_plus      cmp   #'+'
                bne   isit_moins
-               ;inc   couleur1
-               ;lda   couleur1
-               ;and   #$0f
-               ;sta   couleur1
+               inc   couleur1
+               inc   patern
+               jsr   paintbkgnd
                jsr   sub_c
                jmp   mainloop
 
 isit_moins     cmp   #'-'
                bne   isit_0
                dec   couleur1
-               ;lda   couleur1
-               ;and   #$0f
-               ;sta   couleur1
+               inc   patern
+               jsr   paintbkgnd
                jsr   sub_c
                jmp   mainloop
 
@@ -150,7 +148,7 @@ paintbkgnd     .block
                php
                pha
                #ldzp1ptr 24527
-               #setloop  8001
+               #setloop  8008
 encore         lda   patern
                sta   (zpage1),y
                jsr   inczpage1

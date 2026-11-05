@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd -i -L chapter003.txt -o chapter003.prg chapter003.asm
-; Thu Nov  5 11:38:02 2026
+; Thu Nov  5 15:02:37 2026
 
 ;Offset	;Hex		;Source
 
@@ -53,224 +53,325 @@
 .0869	28		               plp                  ; ... des registres.
 .086a	20 8b c6	               jsr   push           ; Sauvegarde les registres.
 .086d	a0 0a		               ldy   #>texte_m+1    ; Le MSB de l'adresse dans Y.
-.086f	a2 0e		               ldx   #<texte_m      ; Le LSB de l'adresse dans X.
+.086f	a2 7d		               ldx   #<texte_m      ; Le LSB de l'adresse dans X.
 .0871	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .0874	20 ba c6	               jsr   pop            ; Récupère les registres.
-.0877	20 f2 08	               jsr   sub_g
-.087a	20 3d 09	               jsr   sub_c
-.087d	20 97 09	               jsr   paintbkgnd
-.0880	20 7e 09	               jsr   maingraph
-.0883	20 c3 09	               jsr   drawman
+.0877	20 01 09	               jsr   sub_g
+.087a	20 64 09	               jsr   sub_c
+.087d	20 ce 09	               jsr   paintbkgnd
+.0880	20 a5 09	               jsr   maingraph
+.0883	20 fa 09	               jsr   drawman
 .0886	20 61 c8	mainloop       jsr   getkey
 .0889	c9 2b		isit_plus      cmp   #'+'
-.088b	d0 06		               bne   isit_moins
-.088d	20 3d 09	               jsr   sub_c
-.0890	4c 86 08	               jmp   mainloop
-.0893	c9 2d		isit_moins     cmp   #'-'
-.0895	d0 09		               bne   isit_0
-.0897	ce 5b 08	               dec   couleur1
-.089a	20 3d 09	               jsr   sub_c
-.089d	4c 86 08	               jmp   mainloop
-.08a0	c9 30		isit_0         cmp   #'0'
-.08a2	d0 0b		               bne   isit_1
-.08a4	a9 00		               lda   #$0
-.08a6	8d 5c 08	               sta   patern
-.08a9	20 97 09	               jsr   paintbkgnd
+.088b	d0 0f		               bne   isit_moins
+.088d	ee 5b 08	               inc   couleur1
+.0890	ee 5c 08	               inc   patern
+.0893	20 ce 09	               jsr   paintbkgnd
+.0896	20 64 09	               jsr   sub_c
+.0899	4c 86 08	               jmp   mainloop
+.089c	c9 2d		isit_moins     cmp   #'-'
+.089e	d0 0f		               bne   isit_0
+.08a0	ce 5b 08	               dec   couleur1
+.08a3	ee 5c 08	               inc   patern
+.08a6	20 ce 09	               jsr   paintbkgnd
+.08a9	20 64 09	               jsr   sub_c
 .08ac	4c 86 08	               jmp   mainloop
-.08af	c9 31		isit_1         cmp   #'1'
-.08b1	d0 0b		               bne   isit_b
-.08b3	a9 ff		               lda   #$ff
+.08af	c9 30		isit_0         cmp   #'0'
+.08b1	d0 0b		               bne   isit_1
+.08b3	a9 00		               lda   #$0
 .08b5	8d 5c 08	               sta   patern
-.08b8	20 97 09	               jsr   paintbkgnd
+.08b8	20 ce 09	               jsr   paintbkgnd
 .08bb	4c 86 08	               jmp   mainloop
-.08be	c9 42		isit_b         cmp   #'b'
-.08c0	d0 09		               bne   isit_g
-.08c2	ee 5c 08	               inc   patern
-.08c5	20 97 09	               jsr   paintbkgnd
-.08c8	4c 86 08	               jmp   mainloop
-.08cb	c9 47		isit_g         cmp   #'g'
-.08cd	d0 06		               bne   isit_t
-.08cf	20 f2 08	               jsr   sub_g
-.08d2	4c 86 08	               jmp   mainloop
-.08d5	c9 54		isit_t         cmp   #'t'
-.08d7	d0 06		               bne   isit_c
-.08d9	20 13 09	               jsr   sub_t
-.08dc	4c 86 08	               jmp   mainloop
-.08df	c9 43		isit_c         cmp   #'c'
-.08e1	d0 06		               bne   isit_x
-.08e3	20 3d 09	               jsr   sub_c
-.08e6	4c 86 08	               jmp   mainloop
-.08e9	c9 58		isit_x         cmp   #'x'
-.08eb	f0 03		               beq   out
-.08ed	4c 86 08	               jmp   mainloop
-.08f0	28		out            plp
-.08f1	60		               rts
-.08f2			sub_g
-.08f2	08		               php
-.08f3	48		               pha
-.08f4	20 8b c6	               jsr   push           ; Sauvegarde les registres.
-.08f7	a0 0a		               ldy   #>texte_g+1    ; Le MSB de l'adresse dans Y.
-.08f9	a2 27		               ldx   #<texte_g      ; Le LSB de l'adresse dans X.
-.08fb	20 16 c5	               jsr   putsyx         ; Affiche le texte.
-.08fe	20 ba c6	               jsr   pop            ; Récupère les registres.
-.0901	a9 3b		               lda   #59
-.0903	8d 11 d0	               sta   53265
-.0906	a9 1d		               lda   #29
-.0908	8d 18 d0	               sta   53272
-.090b	a9 c6		               lda   #198
-.090d	8d 00 dd	               sta   56576
-.0910	68		               pla
-.0911	28		               plp
-.0912	60		               rts
-.0913			sub_t
-.0913	08		               php
-.0914	48		               pha
-.0915	20 8b c6	               jsr   push           ; Sauvegarde les registres.
-.0918	a0 0a		               ldy   #>texte_t+1    ; Le MSB de l'adresse dans Y.
-.091a	a2 46		               ldx   #<texte_t      ; Le LSB de l'adresse dans X.
-.091c	20 16 c5	               jsr   putsyx         ; Affiche le texte.
-.091f	20 ba c6	               jsr   pop            ; Récupère les registres.
-.0922	a9 1b		               lda   #27
-.0924	8d 11 d0	               sta   53265
-.0927	a9 15		               lda   #21
-.0929	8d 18 d0	               sta   53272
-.092c	a9 c7		               lda   #199
-.092e	8d 00 dd	               sta   56576
-.0931	08		               php                  ; Sauvegarde minimaliste
-.0932	48		               pha                  ; ... des registres.
-.0933	a9 0e		               lda   #14        ; Charge le code dans Acc pour
-.0935	20 d2 ff	               jsr   chrout         ; ... l'afficher avec $ffd2.
-.0938	68		               pla                  ; Récupération minimaliste
-.0939	28		               plp                  ; ... des registres.
-.093a	68		               pla
-.093b	28		               plp
-.093c	60		               rts
-.093d			sub_c
+.08be	c9 31		isit_1         cmp   #'1'
+.08c0	d0 0b		               bne   isit_b
+.08c2	a9 ff		               lda   #$ff
+.08c4	8d 5c 08	               sta   patern
+.08c7	20 ce 09	               jsr   paintbkgnd
+.08ca	4c 86 08	               jmp   mainloop
+.08cd	c9 42		isit_b         cmp   #'b'
+.08cf	d0 09		               bne   isit_g
+.08d1	ee 5c 08	               inc   patern
+.08d4	20 ce 09	               jsr   paintbkgnd
+.08d7	4c 86 08	               jmp   mainloop
+.08da	c9 47		isit_g         cmp   #'g'
+.08dc	d0 06		               bne   isit_t
+.08de	20 01 09	               jsr   sub_g
+.08e1	4c 86 08	               jmp   mainloop
+.08e4	c9 54		isit_t         cmp   #'t'
+.08e6	d0 06		               bne   isit_c
+.08e8	20 2e 09	               jsr   sub_t
+.08eb	4c 86 08	               jmp   mainloop
+.08ee	c9 43		isit_c         cmp   #'c'
+.08f0	d0 06		               bne   isit_x
+.08f2	20 64 09	               jsr   sub_c
+.08f5	4c 86 08	               jmp   mainloop
+.08f8	c9 58		isit_x         cmp   #'x'
+.08fa	f0 03		               beq   out
+.08fc	4c 86 08	               jmp   mainloop
+.08ff	28		out            plp
+.0900	60		               rts
+.0901			sub_g
+.0901	08		               php
+.0902	48		               pha
+.0903	20 8b c6	               jsr   push           ; Sauvegarde les registres.
+.0906	a0 0a		               ldy   #>texte_g+1    ; Le MSB de l'adresse dans Y.
+.0908	a2 96		               ldx   #<texte_g      ; Le LSB de l'adresse dans X.
+.090a	20 16 c5	               jsr   putsyx         ; Affiche le texte.
+.090d	20 ba c6	               jsr   pop            ; Récupère les registres.
+.0910	08		               php
+.0911	48		               pha
+.0912	a9 3b		               lda   #59
+.0914	8d 11 d0	               sta   53265
+.0917	68		               pla
+.0918	28		               plp
+.0919	08		               php
+.091a	48		               pha
+.091b	a9 1d		               lda   #29
+.091d	8d 18 d0	               sta   53272
+.0920	68		               pla
+.0921	28		               plp
+.0922	08		               php
+.0923	48		               pha
+.0924	a9 c6		               lda   #198
+.0926	8d 00 dd	               sta   56576
+.0929	68		               pla
+.092a	28		               plp
+.092b	68		               pla
+.092c	28		               plp
+.092d	60		               rts
+.092e			sub_t
+.092e	08		               php
+.092f	48		               pha
+.0930	20 8b c6	               jsr   push           ; Sauvegarde les registres.
+.0933	a0 0a		               ldy   #>texte_t+1    ; Le MSB de l'adresse dans Y.
+.0935	a2 b5		               ldx   #<texte_t      ; Le LSB de l'adresse dans X.
+.0937	20 16 c5	               jsr   putsyx         ; Affiche le texte.
+.093a	20 ba c6	               jsr   pop            ; Récupère les registres.
 .093d	08		               php
 .093e	48		               pha
-.093f	20 8b c6	               jsr   push           ; Sauvegarde les registres.
-.0942	a0 0a		               ldy   #>texte_c+1    ; Le MSB de l'adresse dans Y.
-.0944	a2 65		               ldx   #<texte_c      ; Le LSB de l'adresse dans X.
-.0946	20 16 c5	               jsr   putsyx         ; Affiche le texte.
-.0949	20 ba c6	               jsr   pop            ; Récupère les registres.
-.094c	08		               php                  ; Sauvegarde minimaliste
-.094d	48		               pha                  ; ... des registres.
-.094e	a9 00		               lda   #<17408      ;Charge le LSB du ptr et
-.0950	85 fb		               sta   zpage1         ; ... copie dans LSB de zpage1.
-.0952	a9 44		               lda   #>17408      ;Charge le MSB du ptr et
-.0954	85 fc		               sta   zpage1+1       ; ... copie dans MSB de zpage1.
-.0956	68		               pla                  ; Récupération minimaliste
-.0957	28		               plp                  ; ... des registres.
+.093f	a9 1b		               lda   #27
+.0941	8d 11 d0	               sta   53265
+.0944	68		               pla
+.0945	28		               plp
+.0946	08		               php
+.0947	48		               pha
+.0948	a9 15		               lda   #21
+.094a	8d 18 d0	               sta   53272
+.094d	68		               pla
+.094e	28		               plp
+.094f	08		               php
+.0950	48		               pha
+.0951	a9 c7		               lda   #199
+.0953	8d 00 dd	               sta   56576
+.0956	68		               pla
+.0957	28		               plp
 .0958	08		               php                  ; Sauvegarde minimaliste
 .0959	48		               pha                  ; ... des registres.
-.095a	a9 e8		               lda  #<1000       ; Charge le LSB du nombre 16 bits
-.095c	8d 8a 0a	               sta  loopcount       ; ... et le place en mémoire.
-.095f	a9 03		               lda  #>1000       ; Charge le MSB du nombre 16 bits
-.0961	8d 8b 0a	               sta  loopcount+1     ; ... et le place en mémoire.
-.0964	68		               pla                  ; Récupération minimaliste
-.0965	28		               plp                  ; ... des registres.
-.0966	a0 00		               ldy   #$00
-.0968	ad 5b 08	encore         lda   couleur1
-.096b	91 fb		               sta   (zpage1),y
-.096d	20 72 c7	               jsr   inczpage1
-.0970	20 25 c8	               jsr   loop
-.0973	d0 f3		               bne   encore
-.0975	20 7e 09	               jsr   maingraph
-.0978	20 c3 09	               jsr   drawman
-.097b	68		               pla
-.097c	28		               plp
-.097d	60		               rts
-.097e			maingraph
-.097e	08		               php
-.097f	48		               pha
-.0980	a9 00		               lda   #0
-.0982	8d aa 46	               sta   18090
-.0985	a9 11		               lda   #17
-.0987	8d d2 46	               sta   18130
-.098a	a9 11		               lda   #17
-.098c	8d fa 46	               sta   18170
-.098f	a9 11		               lda   #17
-.0991	8d 22 47	               sta   18210
-.0994	68		               pla
-.0995	28		               plp
-.0996	60		               rts
-.0997			paintbkgnd
-.0997	08		               php
-.0998	48		               pha
-.0999	08		               php                  ; Sauvegarde minimaliste
-.099a	48		               pha                  ; ... des registres.
-.099b	a9 cf		               lda   #<24527      ;Charge le LSB du ptr et
-.099d	85 fb		               sta   zpage1         ; ... copie dans LSB de zpage1.
-.099f	a9 5f		               lda   #>24527      ;Charge le MSB du ptr et
-.09a1	85 fc		               sta   zpage1+1       ; ... copie dans MSB de zpage1.
-.09a3	68		               pla                  ; Récupération minimaliste
-.09a4	28		               plp                  ; ... des registres.
-.09a5	08		               php                  ; Sauvegarde minimaliste
-.09a6	48		               pha                  ; ... des registres.
-.09a7	a9 41		               lda  #<8001       ; Charge le LSB du nombre 16 bits
-.09a9	8d 8a 0a	               sta  loopcount       ; ... et le place en mémoire.
-.09ac	a9 1f		               lda  #>8001       ; Charge le MSB du nombre 16 bits
-.09ae	8d 8b 0a	               sta  loopcount+1     ; ... et le place en mémoire.
-.09b1	68		               pla                  ; Récupération minimaliste
-.09b2	28		               plp                  ; ... des registres.
-.09b3	ad 5c 08	encore         lda   patern
-.09b6	91 fb		               sta   (zpage1),y
-.09b8	20 72 c7	               jsr   inczpage1
-.09bb	20 25 c8	               jsr   loop
-.09be	d0 f3		               bne   encore
+.095a	a9 0e		               lda   #14        ; Charge le code dans Acc pour
+.095c	20 d2 ff	               jsr   chrout         ; ... l'afficher avec $ffd2.
+.095f	68		               pla                  ; Récupération minimaliste
+.0960	28		               plp                  ; ... des registres.
+.0961	68		               pla
+.0962	28		               plp
+.0963	60		               rts
+.0964			sub_c
+.0964	08		               php
+.0965	48		               pha
+.0966	20 8b c6	               jsr   push           ; Sauvegarde les registres.
+.0969	a0 0a		               ldy   #>texte_c+1    ; Le MSB de l'adresse dans Y.
+.096b	a2 d4		               ldx   #<texte_c      ; Le LSB de l'adresse dans X.
+.096d	20 16 c5	               jsr   putsyx         ; Affiche le texte.
+.0970	20 ba c6	               jsr   pop            ; Récupère les registres.
+.0973	08		               php                  ; Sauvegarde minimaliste
+.0974	48		               pha                  ; ... des registres.
+.0975	a9 00		               lda   #<17408      ;Charge le LSB du ptr et
+.0977	85 fb		               sta   zpage1         ; ... copie dans LSB de zpage1.
+.0979	a9 44		               lda   #>17408      ;Charge le MSB du ptr et
+.097b	85 fc		               sta   zpage1+1       ; ... copie dans MSB de zpage1.
+.097d	68		               pla                  ; Récupération minimaliste
+.097e	28		               plp                  ; ... des registres.
+.097f	08		               php                  ; Sauvegarde minimaliste
+.0980	48		               pha                  ; ... des registres.
+.0981	a9 e8		               lda  #<1000       ; Charge le LSB du nombre 16 bits
+.0983	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
+.0986	a9 03		               lda  #>1000       ; Charge le MSB du nombre 16 bits
+.0988	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
+.098b	68		               pla                  ; Récupération minimaliste
+.098c	28		               plp                  ; ... des registres.
+.098d	a0 00		               ldy   #$00
+.098f	ad 5b 08	encore         lda   couleur1
+.0992	91 fb		               sta   (zpage1),y
+.0994	20 72 c7	               jsr   inczpage1
+.0997	20 25 c8	               jsr   loop
+.099a	d0 f3		               bne   encore
+.099c	20 a5 09	               jsr   maingraph
+.099f	20 fa 09	               jsr   drawman
+.09a2	68		               pla
+.09a3	28		               plp
+.09a4	60		               rts
+.09a5			maingraph
+.09a5	08		               php
+.09a6	48		               pha
+.09a7	08		               php
+.09a8	48		               pha
+.09a9	a9 00		               lda   #0
+.09ab	8d aa 46	               sta   18090
+.09ae	68		               pla
+.09af	28		               plp
+.09b0	08		               php
+.09b1	48		               pha
+.09b2	a9 11		               lda   #17
+.09b4	8d d2 46	               sta   18130
+.09b7	68		               pla
+.09b8	28		               plp
+.09b9	08		               php
+.09ba	48		               pha
+.09bb	a9 11		               lda   #17
+.09bd	8d fa 46	               sta   18170
 .09c0	68		               pla
 .09c1	28		               plp
-.09c2	60		               rts
-.09c3			drawman
-.09c3	08		               php
-.09c4	48		               pha
-.09c5	a9 11		               lda   #17
-.09c7	8d 02 44	               sta   17410
-.09ca	a9 22		               lda   #34
-.09cc	8d 29 44	               sta   17449
-.09cf	a9 22		               lda   #34
-.09d1	8d 2a 44	               sta   17450
-.09d4	a9 22		               lda   #34
-.09d6	8d 2b 44	               sta   17451
-.09d9	a9 22		               lda   #34
-.09db	8d 52 44	               sta   17490
-.09de	a9 00		               lda   #0
-.09e0	8d 79 44	               sta   17529
-.09e3	a9 00		               lda   #0
-.09e5	8d 7b 44	               sta   17531
-.09e8	a9 99		               lda   #153
-.09ea	8d 31 44	               sta   17457
-.09ed	a9 99		               lda   #153
-.09ef	8d 55 44	               sta   17493
-.09f2	a9 99		               lda   #153
-.09f4	8d 56 44	               sta   17494
-.09f7	a9 99		               lda   #153
-.09f9	8d 57 44	               sta   17495
-.09fc	a9 99		               lda   #153
-.09fe	8d 58 44	               sta   17496
-.0a01	a9 99		               lda   #153
-.0a03	8d 7e 44	               sta   17534
-.0a06	a9 99		               lda   #153
-.0a08	8d 80 44	               sta   17536
-.0a0b	68		               pla
-.0a0c	28		               plp
-.0a0d	60		               rts
->0a0e	cc 45 53 20	texte_m        .text "Les touches g,t,c,ou x."
->0a12	54 4f 55 43 48 45 53 20 47 2c 54 2c 43 2c 4f 55
->0a22	20 58 2e
->0a25	0d 00		               .byte 13,0
->0a27	cc 41 20 53	texte_g        .text "La sous-routine g fonctionne."
->0a2b	4f 55 53 2d 52 4f 55 54 49 4e 45 20 47 20 46 4f
->0a3b	4e 43 54 49 4f 4e 4e 45 2e
->0a44	0d 00		               .byte 13,0
->0a46	cc 41 20 53	texte_t        .text "La sous-routine t fonctionne."
->0a4a	4f 55 53 2d 52 4f 55 54 49 4e 45 20 54 20 46 4f
->0a5a	4e 43 54 49 4f 4e 4e 45 2e
->0a63	0d 00		               .byte 13,0
->0a65	cc 41 20 53	texte_c        .text "La sous-routine c fonctionne."
->0a69	4f 55 53 2d 52 4f 55 54 49 4e 45 20 43 20 46 4f
->0a79	4e 43 54 49 4f 4e 4e 45 2e
->0a82	0d 00		               .byte 13,0
+.09c2	08		               php
+.09c3	48		               pha
+.09c4	a9 11		               lda   #17
+.09c6	8d 22 47	               sta   18210
+.09c9	68		               pla
+.09ca	28		               plp
+.09cb	68		               pla
+.09cc	28		               plp
+.09cd	60		               rts
+.09ce			paintbkgnd
+.09ce	08		               php
+.09cf	48		               pha
+.09d0	08		               php                  ; Sauvegarde minimaliste
+.09d1	48		               pha                  ; ... des registres.
+.09d2	a9 cf		               lda   #<24527      ;Charge le LSB du ptr et
+.09d4	85 fb		               sta   zpage1         ; ... copie dans LSB de zpage1.
+.09d6	a9 5f		               lda   #>24527      ;Charge le MSB du ptr et
+.09d8	85 fc		               sta   zpage1+1       ; ... copie dans MSB de zpage1.
+.09da	68		               pla                  ; Récupération minimaliste
+.09db	28		               plp                  ; ... des registres.
+.09dc	08		               php                  ; Sauvegarde minimaliste
+.09dd	48		               pha                  ; ... des registres.
+.09de	a9 48		               lda  #<8008       ; Charge le LSB du nombre 16 bits
+.09e0	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
+.09e3	a9 1f		               lda  #>8008       ; Charge le MSB du nombre 16 bits
+.09e5	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
+.09e8	68		               pla                  ; Récupération minimaliste
+.09e9	28		               plp                  ; ... des registres.
+.09ea	ad 5c 08	encore         lda   patern
+.09ed	91 fb		               sta   (zpage1),y
+.09ef	20 72 c7	               jsr   inczpage1
+.09f2	20 25 c8	               jsr   loop
+.09f5	d0 f3		               bne   encore
+.09f7	68		               pla
+.09f8	28		               plp
+.09f9	60		               rts
+.09fa			drawman
+.09fa	08		               php
+.09fb	48		               pha
+.09fc	08		               php
+.09fd	48		               pha
+.09fe	a9 11		               lda   #17
+.0a00	8d 02 44	               sta   17410
+.0a03	68		               pla
+.0a04	28		               plp
+.0a05	08		               php
+.0a06	48		               pha
+.0a07	a9 22		               lda   #34
+.0a09	8d 29 44	               sta   17449
+.0a0c	68		               pla
+.0a0d	28		               plp
+.0a0e	08		               php
+.0a0f	48		               pha
+.0a10	a9 22		               lda   #34
+.0a12	8d 2a 44	               sta   17450
+.0a15	68		               pla
+.0a16	28		               plp
+.0a17	08		               php
+.0a18	48		               pha
+.0a19	a9 22		               lda   #34
+.0a1b	8d 2b 44	               sta   17451
+.0a1e	68		               pla
+.0a1f	28		               plp
+.0a20	08		               php
+.0a21	48		               pha
+.0a22	a9 22		               lda   #34
+.0a24	8d 52 44	               sta   17490
+.0a27	68		               pla
+.0a28	28		               plp
+.0a29	08		               php
+.0a2a	48		               pha
+.0a2b	a9 00		               lda   #0
+.0a2d	8d 79 44	               sta   17529
+.0a30	68		               pla
+.0a31	28		               plp
+.0a32	08		               php
+.0a33	48		               pha
+.0a34	a9 00		               lda   #0
+.0a36	8d 7b 44	               sta   17531
+.0a39	68		               pla
+.0a3a	28		               plp
+.0a3b	08		               php
+.0a3c	48		               pha
+.0a3d	a9 99		               lda   #153
+.0a3f	8d 31 44	               sta   17457
+.0a42	68		               pla
+.0a43	28		               plp
+.0a44	08		               php
+.0a45	48		               pha
+.0a46	a9 99		               lda   #153
+.0a48	8d 55 44	               sta   17493
+.0a4b	68		               pla
+.0a4c	28		               plp
+.0a4d	08		               php
+.0a4e	48		               pha
+.0a4f	a9 99		               lda   #153
+.0a51	8d 56 44	               sta   17494
+.0a54	68		               pla
+.0a55	28		               plp
+.0a56	08		               php
+.0a57	48		               pha
+.0a58	a9 99		               lda   #153
+.0a5a	8d 57 44	               sta   17495
+.0a5d	68		               pla
+.0a5e	28		               plp
+.0a5f	08		               php
+.0a60	48		               pha
+.0a61	a9 99		               lda   #153
+.0a63	8d 58 44	               sta   17496
+.0a66	68		               pla
+.0a67	28		               plp
+.0a68	08		               php
+.0a69	48		               pha
+.0a6a	a9 99		               lda   #153
+.0a6c	8d 7e 44	               sta   17534
+.0a6f	68		               pla
+.0a70	28		               plp
+.0a71	08		               php
+.0a72	48		               pha
+.0a73	a9 99		               lda   #153
+.0a75	8d 80 44	               sta   17536
+.0a78	68		               pla
+.0a79	28		               plp
+.0a7a	68		               pla
+.0a7b	28		               plp
+.0a7c	60		               rts
+>0a7d	cc 45 53 20	texte_m        .text "Les touches g,t,c,ou x."
+>0a81	54 4f 55 43 48 45 53 20 47 2c 54 2c 43 2c 4f 55
+>0a91	20 58 2e
+>0a94	0d 00		               .byte 13,0
+>0a96	cc 41 20 53	texte_g        .text "La sous-routine g fonctionne."
+>0a9a	4f 55 53 2d 52 4f 55 54 49 4e 45 20 47 20 46 4f
+>0aaa	4e 43 54 49 4f 4e 4e 45 2e
+>0ab3	0d 00		               .byte 13,0
+>0ab5	cc 41 20 53	texte_t        .text "La sous-routine t fonctionne."
+>0ab9	4f 55 53 2d 52 4f 55 54 49 4e 45 20 54 20 46 4f
+>0ac9	4e 43 54 49 4f 4e 4e 45 2e
+>0ad2	0d 00		               .byte 13,0
+>0ad4	cc 41 20 53	texte_c        .text "La sous-routine c fonctionne."
+>0ad8	4f 55 53 2d 52 4f 55 54 49 4e 45 20 43 20 46 4f
+>0ae8	4e 43 54 49 4f 4e 4e 45 2e
+>0af1	0d 00		               .byte 13,0
 
 ;******  Processing file: local-macros.asm
 
@@ -304,160 +405,160 @@
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd/v-c64-vars.asm
 
->0a84	00 00		memptr            .word 0  ;
->0a86	00 00		src               .word 0  ;
->0a88	00 00		dst               .word 0  ;
->0a8a	00 00		loopcount         .word 0  ; Variable utilisée dans l-cbm-mem.asm.
->0a8c	00 00 00 00	fvar1             .fill 6,0      ;
->0a90	00 00
->0a92	00 00 00 00	fvar2             .fill 6,0      ;
->0a96	00 00
->0a98	00 00 00 00	float1            .fill 20,0     ;
->0a9c	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->0aac	00 00 00 00	float2            .fill 20,0     ;
->0ab0	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->0ac0	00		tval1             .byte 0  ;
->0ac1	00 00		tval2             .word 0  ;
->0ac3	00 00		reponse           .word 0  ;
->0ac5	00		curx              .byte 0  ;
->0ac6	00		cury              .byte 0  ;
->0ac7	00		clef              .byte 0  ;
->0ac8	00		len               .byte 0  ;
->0ac9	00		cx                .byte 0  ;
->0aca	00		cy                .byte 0  ;
->0acb	00		bcol              .byte 0  ;
->0acc	00		loops             .byte 0  ;
->0acd	00 00		loop16            .word 0  ;
->0acf	00 00 00 00	scrncar           .fill 1024,0   ; Zone de sauvegarde de la RAM ecran.
->0ad3	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>0af3	00 00		memptr            .word 0  ;
+>0af5	00 00		src               .word 0  ;
+>0af7	00 00		dst               .word 0  ;
+>0af9	00 00		loopcount         .word 0  ; Variable utilisée dans l-cbm-mem.asm.
+>0afb	00 00 00 00	fvar1             .fill 6,0      ;
+>0aff	00 00
+>0b01	00 00 00 00	fvar2             .fill 6,0      ;
+>0b05	00 00
+>0b07	00 00 00 00	float1            .fill 20,0     ;
+>0b0b	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>0b1b	00 00 00 00	float2            .fill 20,0     ;
+>0b1f	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>0b2f	00		tval1             .byte 0  ;
+>0b30	00 00		tval2             .word 0  ;
+>0b32	00 00		reponse           .word 0  ;
+>0b34	00		curx              .byte 0  ;
+>0b35	00		cury              .byte 0  ;
+>0b36	00		clef              .byte 0  ;
+>0b37	00		len               .byte 0  ;
+>0b38	00		cx                .byte 0  ;
+>0b39	00		cy                .byte 0  ;
+>0b3a	00		bcol              .byte 0  ;
+>0b3b	00		loops             .byte 0  ;
+>0b3c	00 00		loop16            .word 0  ;
+>0b3e	00 00 00 00	scrncar           .fill 1024,0   ; Zone de sauvegarde de la RAM ecran.
+>0b42	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 ;	...repeated 62 times (992 bytes)...
->0ec3	00 00 00 00 00 00 00 00 00 00 00 00
->0ecf	00 00 00 00	scrncol           .fill 1024,0   ; Zone de sauvegarde de la RAM couleur.
->0ed3	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>0f32	00 00 00 00 00 00 00 00 00 00 00 00
+>0f3e	00 00 00 00	scrncol           .fill 1024,0   ; Zone de sauvegarde de la RAM couleur.
+>0f42	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 ;	...repeated 62 times (992 bytes)...
->12c3	00 00 00 00 00 00 00 00 00 00 00 00
->12cf	00 00		dsk_data_s        .word $0000 ; Pointeur sur le début des données.
->12d1	00 20		dsk_data_e        .word $2000 ; Pointeur sur la fin des données.
->12d3	08		dsk_dev           .byte $08   ; No. de périphérique.
->12d4	00		dsk_lfsno         .byte $00   ; No. de fichier logique.
->12d5	00 00		dsk_fnptr         .word $00   ; Pointeur vers le nom du fichier.
->12d7	00		dsk_fnlen         .byte 0     ; Nombre de caractère dans le nom de fichier.
->12d8	00		db_left           .byte 0     ; Caractère Gauche de la ligne courante.
->12d9	00		db_right          .byte 0     ; Caractère droit de la ligne courante.
->12da	00		db_mid            .byte 0     ; Caractère central de la ligne courante.
->12db	00		drawbox_top       .byte 0     ; Coordonné du haut de la boite.
->12dc	00		drawbox_left      .byte 0     ; Coordonné de la gauche de la boîte.
->12dd	00		drawbox_width     .byte 0     ; Largeur de la boîte.
->12de	00		drawbox_height    .byte 0     ; Hauteur de la boîte.
->12df	00		drawbox_colour    .byte 0     ; Couleur de la boîte.
->12e0	00		drawbox_curline   .byte 0        ; No de la ligne courante à dessiner.
->12e1	00		drawbox_bascol    .byte 0        ; Case de mémorisation de la couleur Basic.
->12e2	00		offset            .byte 0
->12e3	00		genbyte1          .byte 0  ;
->12e4	00 00		genword1          .word 0  ;
+>1332	00 00 00 00 00 00 00 00 00 00 00 00
+>133e	00 00		dsk_data_s        .word $0000 ; Pointeur sur le début des données.
+>1340	00 20		dsk_data_e        .word $2000 ; Pointeur sur la fin des données.
+>1342	08		dsk_dev           .byte $08   ; No. de périphérique.
+>1343	00		dsk_lfsno         .byte $00   ; No. de fichier logique.
+>1344	00 00		dsk_fnptr         .word $00   ; Pointeur vers le nom du fichier.
+>1346	00		dsk_fnlen         .byte 0     ; Nombre de caractère dans le nom de fichier.
+>1347	00		db_left           .byte 0     ; Caractère Gauche de la ligne courante.
+>1348	00		db_right          .byte 0     ; Caractère droit de la ligne courante.
+>1349	00		db_mid            .byte 0     ; Caractère central de la ligne courante.
+>134a	00		drawbox_top       .byte 0     ; Coordonné du haut de la boite.
+>134b	00		drawbox_left      .byte 0     ; Coordonné de la gauche de la boîte.
+>134c	00		drawbox_width     .byte 0     ; Largeur de la boîte.
+>134d	00		drawbox_height    .byte 0     ; Hauteur de la boîte.
+>134e	00		drawbox_colour    .byte 0     ; Couleur de la boîte.
+>134f	00		drawbox_curline   .byte 0        ; No de la ligne courante à dessiner.
+>1350	00		drawbox_bascol    .byte 0        ; Case de mémorisation de la couleur Basic.
+>1351	00		offset            .byte 0
+>1352	00		genbyte1          .byte 0  ;
+>1353	00 00		genword1          .word 0  ;
 
 ;******  Return to file: chapter003.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd/v-cbm-vars.asm
 
->12e6	00		a2hexcol          .byte 0  ;
-.12e7			a2hexpos
->12e7	00		a2hexpx           .byte 0  ;
->12e8	00		a2hexpy           .byte 0  ;
->12e9	24		a2hexpfx          .byte '$';
->12ea	00 00 00 00	a2hexstr          .fill 4,0;
->12ee	00		                  .byte 0  ;
->12ef	00		a2bincol          .byte 0  ;
-.12f0			a2binpos
->12f0	00		a2binpx           .byte 0  ;
->12f1	00		a2binpy           .byte 0  ;
->12f2	25		a2binpfx          .byte '%'  ;
->12f3	00 00 00 00	a2binstr            .fill 8,0;
->12f7	00 00 00 00
->12fb	00		                  .byte 0  ;
->12fc	00		a2deccol          .byte 0  ;
-.12fd			a2decpos
->12fd	00		a2decpx           .byte 0  ;
->12fe	00		a2decpy           .byte 0  ;
->12ff	23		a2decpfx          .byte '#'  ;
->1300	00 00 00 00	a2decstr            .fill 5,0;
->1304	00
->1305	00		                  .byte 0  ;
->1306	00		rp                .byte 0  ;
->1307	00		ra                .byte 0  ;
->1308	00		rx                .byte 0  ;
->1309	00		ry                .byte 0  ;
->130a	00		rs                .byte 0  ;
->130b	00		pc                .byte 0  ;
->130c	00		curcol            .byte 0  ;
->130d	28		ymult          .byte     40
->130e	00 00		addr1          .word     $0000
->1310	00 00		addr2          .word     $0000
->1312	00 00		bytecnt        .word     $0000
->1314	00 00		zp1            .word     $0000
->1316	00 00		zp2            .word     $0000
+>1355	00		a2hexcol          .byte 0  ;
+.1356			a2hexpos
+>1356	00		a2hexpx           .byte 0  ;
+>1357	00		a2hexpy           .byte 0  ;
+>1358	24		a2hexpfx          .byte '$';
+>1359	00 00 00 00	a2hexstr          .fill 4,0;
+>135d	00		                  .byte 0  ;
+>135e	00		a2bincol          .byte 0  ;
+.135f			a2binpos
+>135f	00		a2binpx           .byte 0  ;
+>1360	00		a2binpy           .byte 0  ;
+>1361	25		a2binpfx          .byte '%'  ;
+>1362	00 00 00 00	a2binstr            .fill 8,0;
+>1366	00 00 00 00
+>136a	00		                  .byte 0  ;
+>136b	00		a2deccol          .byte 0  ;
+.136c			a2decpos
+>136c	00		a2decpx           .byte 0  ;
+>136d	00		a2decpy           .byte 0  ;
+>136e	23		a2decpfx          .byte '#'  ;
+>136f	00 00 00 00	a2decstr            .fill 5,0;
+>1373	00
+>1374	00		                  .byte 0  ;
+>1375	00		rp                .byte 0  ;
+>1376	00		ra                .byte 0  ;
+>1377	00		rx                .byte 0  ;
+>1378	00		ry                .byte 0  ;
+>1379	00		rs                .byte 0  ;
+>137a	00		pc                .byte 0  ;
+>137b	00		curcol            .byte 0  ;
+>137c	28		ymult          .byte     40
+>137d	00 00		addr1          .word     $0000
+>137f	00 00		addr2          .word     $0000
+>1381	00 00		bytecnt        .word     $0000
+>1383	00 00		zp1            .word     $0000
+>1385	00 00		zp2            .word     $0000
 
 ;******  Return to file: chapter003.asm
 
 
 ;******  Processing file: /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd/v-c64-showregs.asm
 
->1318	00		vrega          .byte 0
->1319	00		vregx          .byte 0
->131a	00		vregy          .byte 0
->131b	00		vregsp         .byte 0
->131c	00		vregsr         .byte 0
->131d	00 00		vregpc         .word 0
->131f	00 00		vzp1           .word 0
->1321	00 00		vzp2           .word 0
->1323	9e 12		reg_titre      .byte b_jaune,18
->1325	20 20 c5 54	               .text "  Etat des registres  "
->1329	41 54 20 44 45 53 20 52 45 47 49 53 54 52 45 53
->1339	20 20
->133b	92 00		               .byte 146, 0
->133d	05		ra_str         .byte b_blanc
->133e	41 2e 2e 2e	               .text "a......: "
->1342	2e 2e 2e 3a 20
->1347	99 00		               .byte b_vertp, 0
->1349	05		rx_str         .byte b_blanc
->134a	58 2e 2e 2e	               .text "x......: "
->134e	2e 2e 2e 3a 20
->1353	99 00		               .byte b_vertp, 0
->1355	05		ry_str         .byte b_blanc
->1356	59 2e 2e 2e	               .text "y......: "
->135a	2e 2e 2e 3a 20
->135f	99 00		               .byte b_vertp, 0
->1361	05		srh_str        .byte b_blanc
->1362	5b 4e 56 2d	               .text "[nv-bdizc]"
->1366	42 44 49 5a 43 5d
->136c	99 00		               .byte b_vertp, 0
->136e	05		sr_str         .byte b_blanc
->136f	53 52 2e 2e	               .text "sr.....: "
->1373	2e 2e 2e 3a 20
->1378	99 00		               .byte b_vertp, 0
->137a	05		sp_str         .byte b_blanc
->137b	53 50 2e 2e	               .text "sp.....: "
->137f	2e 2e 2e 3a 20
->1384	99 00		               .byte b_vertp, 0
->1386	05		pc_str         .byte b_blanc
->1387	50 43 2e 2e	               .text "pc.....: "
->138b	2e 2e 2e 3a 20
->1390	99 00		               .byte b_vertp, 0
->1392	05		z1_str         .byte b_blanc
->1393	5a 50 41 47	               .text "zpage1.: "
->1397	45 31 2e 3a 20
->139c	99 00		               .byte b_vertp, 0
->139e	05		z2_str         .byte b_blanc
->139f	5a 50 41 47	               .text "zpage2.: "
->13a3	45 32 2e 3a 20
->13a8	99 00		               .byte b_vertp, 0
->13aa	9e 12		contstr        .byte b_jaune,18
->13ac	20 5b c3 5d	               .text " [C] pour continuer "
->13b0	20 50 4f 55 52 20 43 4f 4e 54 49 4e 55 45 52 20
->13c0	05 92 00	               .byte b_blanc,146,0
->13c3	4d 45 53 53	brkmsg         .null "message d'arret."
->13c7	41 47 45 20 44 27 41 52 52 45 54 2e 00
+>1387	00		vrega          .byte 0
+>1388	00		vregx          .byte 0
+>1389	00		vregy          .byte 0
+>138a	00		vregsp         .byte 0
+>138b	00		vregsr         .byte 0
+>138c	00 00		vregpc         .word 0
+>138e	00 00		vzp1           .word 0
+>1390	00 00		vzp2           .word 0
+>1392	9e 12		reg_titre      .byte b_jaune,18
+>1394	20 20 c5 54	               .text "  Etat des registres  "
+>1398	41 54 20 44 45 53 20 52 45 47 49 53 54 52 45 53
+>13a8	20 20
+>13aa	92 00		               .byte 146, 0
+>13ac	05		ra_str         .byte b_blanc
+>13ad	41 2e 2e 2e	               .text "a......: "
+>13b1	2e 2e 2e 3a 20
+>13b6	99 00		               .byte b_vertp, 0
+>13b8	05		rx_str         .byte b_blanc
+>13b9	58 2e 2e 2e	               .text "x......: "
+>13bd	2e 2e 2e 3a 20
+>13c2	99 00		               .byte b_vertp, 0
+>13c4	05		ry_str         .byte b_blanc
+>13c5	59 2e 2e 2e	               .text "y......: "
+>13c9	2e 2e 2e 3a 20
+>13ce	99 00		               .byte b_vertp, 0
+>13d0	05		srh_str        .byte b_blanc
+>13d1	5b 4e 56 2d	               .text "[nv-bdizc]"
+>13d5	42 44 49 5a 43 5d
+>13db	99 00		               .byte b_vertp, 0
+>13dd	05		sr_str         .byte b_blanc
+>13de	53 52 2e 2e	               .text "sr.....: "
+>13e2	2e 2e 2e 3a 20
+>13e7	99 00		               .byte b_vertp, 0
+>13e9	05		sp_str         .byte b_blanc
+>13ea	53 50 2e 2e	               .text "sp.....: "
+>13ee	2e 2e 2e 3a 20
+>13f3	99 00		               .byte b_vertp, 0
+>13f5	05		pc_str         .byte b_blanc
+>13f6	50 43 2e 2e	               .text "pc.....: "
+>13fa	2e 2e 2e 3a 20
+>13ff	99 00		               .byte b_vertp, 0
+>1401	05		z1_str         .byte b_blanc
+>1402	5a 50 41 47	               .text "zpage1.: "
+>1406	45 31 2e 3a 20
+>140b	99 00		               .byte b_vertp, 0
+>140d	05		z2_str         .byte b_blanc
+>140e	5a 50 41 47	               .text "zpage2.: "
+>1412	45 32 2e 3a 20
+>1417	99 00		               .byte b_vertp, 0
+>1419	9e 12		contstr        .byte b_jaune,18
+>141b	20 5b c3 5d	               .text " [C] pour continuer "
+>141f	20 50 4f 55 52 20 43 4f 4e 54 49 4e 55 45 52 20
+>142f	05 92 00	               .byte b_blanc,146,0
+>1432	4d 45 53 53	brkmsg         .null "message d'arret."
+>1436	41 47 45 20 44 27 41 52 52 45 54 2e 00
 
 ;******  Return to file: chapter003.asm
 
@@ -911,9 +1012,9 @@
 .c307	08		               php                  ; Sauvegarde minimaliste
 .c308	48		               pha                  ; ... des registres.
 .c309	a9 ff		               lda  #<$0000+(8191)       ; Charge le LSB du nombre 16 bits
-.c30b	8d 8a 0a	               sta  loopcount       ; ... et le place en mémoire.
+.c30b	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
 .c30e	a9 1f		               lda  #>$0000+(8191)       ; Charge le MSB du nombre 16 bits
-.c310	8d 8b 0a	               sta  loopcount+1     ; ... et le place en mémoire.
+.c310	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
 .c313	68		               pla                  ; Récupération minimaliste
 .c314	28		               plp                  ; ... des registres.
 .c315	a0 00		               ldy  #$00
@@ -935,9 +1036,9 @@
 .c337	08		               php                  ; Sauvegarde minimaliste
 .c338	48		               pha                  ; ... des registres.
 .c339	a9 00		               lda  #<$0000+(1024)       ; Charge le LSB du nombre 16 bits
-.c33b	8d 8a 0a	               sta  loopcount       ; ... et le place en mémoire.
+.c33b	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
 .c33e	a9 04		               lda  #>$0000+(1024)       ; Charge le MSB du nombre 16 bits
-.c340	8d 8b 0a	               sta  loopcount+1     ; ... et le place en mémoire.
+.c340	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
 .c343	68		               pla                  ; Récupération minimaliste
 .c344	28		               plp                  ; ... des registres.
 .c345	a0 00		               ldy  #$00
@@ -966,9 +1067,9 @@
 .c371	08		               php                  ; Sauvegarde minimaliste
 .c372	48		               pha                  ; ... des registres.
 .c373	a9 00		               lda  #<$0000+(1024)       ; Charge le LSB du nombre 16 bits
-.c375	8d 8a 0a	               sta  loopcount       ; ... et le place en mémoire.
+.c375	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
 .c378	a9 04		               lda  #>$0000+(1024)       ; Charge le MSB du nombre 16 bits
-.c37a	8d 8b 0a	               sta  loopcount+1     ; ... et le place en mémoire.
+.c37a	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
 .c37d	68		               pla                  ; Récupération minimaliste
 .c37e	28		               plp                  ; ... des registres.
 .c37f	a0 00		               ldy  #$00
@@ -1015,18 +1116,18 @@
 .c3c0	28		               plp                  ; ... des registres.
 .c3c1	08		               php                  ; Sauvegarde minimaliste
 .c3c2	48		               pha                  ; ... des registres.
-.c3c3	a9 cf		               lda  #<scrncar         ; Charge le LSB du paramètre
+.c3c3	a9 3e		               lda  #<scrncar         ; Charge le LSB du paramètre
 .c3c5	85 fd		               sta  zpage2          ; ... le place dans $00fb.
-.c3c7	a9 0a		               lda  #>scrncar+1       ; Charge le MSB du paramètre
+.c3c7	a9 0b		               lda  #>scrncar+1       ; Charge le MSB du paramètre
 .c3c9	85 fe		               sta  zpage2+1        ; ... le place dans $00fc.
 .c3cb	68		               pla                  ; Récupération minimaliste
 .c3cc	28		               plp                  ; ... des registres.
 .c3cd	08		               php                  ; Sauvegarde minimaliste
 .c3ce	48		               pha                  ; ... des registres.
 .c3cf	a9 e8		               lda  #<25*40       ; Charge le LSB du nombre 16 bits
-.c3d1	8d 8a 0a	               sta  loopcount       ; ... et le place en mémoire.
+.c3d1	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
 .c3d4	a9 03		               lda  #>25*40       ; Charge le MSB du nombre 16 bits
-.c3d6	8d 8b 0a	               sta  loopcount+1     ; ... et le place en mémoire.
+.c3d6	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
 .c3d9	68		               pla                  ; Récupération minimaliste
 .c3da	28		               plp                  ; ... des registres.
 .c3db	a0 00		               ldy   #$00
@@ -1050,18 +1151,18 @@
 .c3fe	28		               plp                  ; ... des registres.
 .c3ff	08		               php                  ; Sauvegarde minimaliste
 .c400	48		               pha                  ; ... des registres.
-.c401	a9 cf		               lda  #<scrncar         ; Charge le LSB du paramètre
+.c401	a9 3e		               lda  #<scrncar         ; Charge le LSB du paramètre
 .c403	85 fd		               sta  zpage2          ; ... le place dans $00fb.
-.c405	a9 0a		               lda  #>scrncar+1       ; Charge le MSB du paramètre
+.c405	a9 0b		               lda  #>scrncar+1       ; Charge le MSB du paramètre
 .c407	85 fe		               sta  zpage2+1        ; ... le place dans $00fc.
 .c409	68		               pla                  ; Récupération minimaliste
 .c40a	28		               plp                  ; ... des registres.
 .c40b	08		               php                  ; Sauvegarde minimaliste
 .c40c	48		               pha                  ; ... des registres.
 .c40d	a9 e8		               lda  #<25*40       ; Charge le LSB du nombre 16 bits
-.c40f	8d 8a 0a	               sta  loopcount       ; ... et le place en mémoire.
+.c40f	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
 .c412	a9 03		               lda  #>25*40       ; Charge le MSB du nombre 16 bits
-.c414	8d 8b 0a	               sta  loopcount+1     ; ... et le place en mémoire.
+.c414	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
 .c417	68		               pla                  ; Récupération minimaliste
 .c418	28		               plp                  ; ... des registres.
 .c419	a0 00		               ldy   #$00
@@ -1085,18 +1186,18 @@
 .c43c	28		               plp                  ; ... des registres.
 .c43d	08		               php                  ; Sauvegarde minimaliste
 .c43e	48		               pha                  ; ... des registres.
-.c43f	a9 cf		               lda  #<scrncol         ; Charge le LSB du paramètre
+.c43f	a9 3e		               lda  #<scrncol         ; Charge le LSB du paramètre
 .c441	85 fd		               sta  zpage2          ; ... le place dans $00fb.
-.c443	a9 0e		               lda  #>scrncol+1       ; Charge le MSB du paramètre
+.c443	a9 0f		               lda  #>scrncol+1       ; Charge le MSB du paramètre
 .c445	85 fe		               sta  zpage2+1        ; ... le place dans $00fc.
 .c447	68		               pla                  ; Récupération minimaliste
 .c448	28		               plp                  ; ... des registres.
 .c449	08		               php                  ; Sauvegarde minimaliste
 .c44a	48		               pha                  ; ... des registres.
 .c44b	a9 e8		               lda  #<25*40       ; Charge le LSB du nombre 16 bits
-.c44d	8d 8a 0a	               sta  loopcount       ; ... et le place en mémoire.
+.c44d	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
 .c450	a9 03		               lda  #>25*40       ; Charge le MSB du nombre 16 bits
-.c452	8d 8b 0a	               sta  loopcount+1     ; ... et le place en mémoire.
+.c452	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
 .c455	68		               pla                  ; Récupération minimaliste
 .c456	28		               plp                  ; ... des registres.
 .c457	a0 00		               ldy   #$00
@@ -1120,18 +1221,18 @@
 .c47a	28		               plp                  ; ... des registres.
 .c47b	08		               php                  ; Sauvegarde minimaliste
 .c47c	48		               pha                  ; ... des registres.
-.c47d	a9 cf		               lda  #<scrncol         ; Charge le LSB du paramètre
+.c47d	a9 3e		               lda  #<scrncol         ; Charge le LSB du paramètre
 .c47f	85 fd		               sta  zpage2          ; ... le place dans $00fb.
-.c481	a9 0e		               lda  #>scrncol+1       ; Charge le MSB du paramètre
+.c481	a9 0f		               lda  #>scrncol+1       ; Charge le MSB du paramètre
 .c483	85 fe		               sta  zpage2+1        ; ... le place dans $00fc.
 .c485	68		               pla                  ; Récupération minimaliste
 .c486	28		               plp                  ; ... des registres.
 .c487	08		               php                  ; Sauvegarde minimaliste
 .c488	48		               pha                  ; ... des registres.
 .c489	a9 e8		               lda  #<25*40       ; Charge le LSB du nombre 16 bits
-.c48b	8d 8a 0a	               sta  loopcount       ; ... et le place en mémoire.
+.c48b	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
 .c48e	a9 03		               lda  #>25*40       ; Charge le MSB du nombre 16 bits
-.c490	8d 8b 0a	               sta  loopcount+1     ; ... et le place en mémoire.
+.c490	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
 .c493	68		               pla                  ; Récupération minimaliste
 .c494	28		               plp                  ; ... des registres.
 .c495	a0 00		               ldy   #$00
@@ -1156,9 +1257,9 @@
 .c4b9	08		               php                  ; Sauvegarde minimaliste
 .c4ba	48		               pha                  ; ... des registres.
 .c4bb	a9 e8		               lda  #<25*40       ; Charge le LSB du nombre 16 bits
-.c4bd	8d 8a 0a	               sta  loopcount       ; ... et le place en mémoire.
+.c4bd	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
 .c4c0	a9 03		               lda  #>25*40       ; Charge le MSB du nombre 16 bits
-.c4c2	8d 8b 0a	               sta  loopcount+1     ; ... et le place en mémoire.
+.c4c2	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
 .c4c5	68		               pla                  ; Récupération minimaliste
 .c4c6	28		               plp                  ; ... des registres.
 .c4c7	a0 00		               ldy   #$00
@@ -1250,15 +1351,15 @@
 .c559	20 8b c6	               jsr   push           ; Sauvegarde tous les registres.
 .c55c	90 12		               bcc   restore        ; Si C=0 c'est une récupération.
 .c55e	20 f0 ff	               jsr   kplot          ; On récupère la position du
-.c561	8c c9 0a	               sty   cx             ;   curseur et on la sauvegarde
-.c564	8e ca 0a	               stx   cy             ;   dans les vars locales.
+.c561	8c 38 0b	               sty   cx             ;   curseur et on la sauvegarde
+.c564	8e 39 0b	               stx   cy             ;   dans les vars locales.
 .c567	ad 86 02	               lda   bascol         ; On sauvegarde la couleur
-.c56a	8d cb 0a	               sta   bcol           ; BASIC du texte.
+.c56a	8d 3a 0b	               sta   bcol           ; BASIC du texte.
 .c56d	4c 7f c5	               jmp   out            ; c'est fini on sort.
-.c570	ae ca 0a	restore        ldx   cy             ; Comme C=1, On charge x avec
-.c573	ac c9 0a	               ldy   cx             ;   la ligne, y ace  la col.
+.c570	ae 39 0b	restore        ldx   cy             ; Comme C=1, On charge x avec
+.c573	ac 38 0b	               ldy   cx             ;   la ligne, y ace  la col.
 .c576	20 f0 ff	               jsr   kplot          ; On positionne le curseur.
-.c579	ad cb 0a	               lda   bcol           ; On replace la couleur par basic
+.c579	ad 3a 0b	               lda   bcol           ; On replace la couleur par basic
 .c57c	8d 86 02	               sta   bascol         ;   sauvegardé.
 .c57f	20 ba c6	out            jsr   pop            ; Récupère tous les registres.
 .c582	60		               rts
@@ -1311,8 +1412,8 @@
 .c5d8			putrahex
 .c5d8	20 8b c6	               jsr   push        ; Sauvegarde tous les registres.
 .c5db	20 f1 cb	               jsr   atohex         ; Conversion de a chaîne hexa.
-.c5de	a2 ea		               ldx   #<a2hexstr      ; Charge l'adresse de la chaîne
-.c5e0	a0 12		               ldy   #>a2hexstr      ; ... hexa dans $YYXX.
+.c5de	a2 59		               ldx   #<a2hexstr      ; Charge l'adresse de la chaîne
+.c5e0	a0 13		               ldy   #>a2hexstr      ; ... hexa dans $YYXX.
 .c5e2	20 16 c5	               jsr   puts           ; Affiche la chaîne.
 .c5e5	20 ba c6	               jsr   pop         ; Récupère tous les registres.
 .c5e8	60		               rts
@@ -1320,8 +1421,8 @@
 .c5e9	08		               php                  ; Sauvegarde le registre de
 .c5ea	48		               pha                  ; ... status et le registre a.
 .c5eb	20 f1 cb	               jsr   atohex         ; Convertion de a en hexadécimal.
-.c5ee	a2 e7		               ldx   #<a2hexpos     ; Charge l'adresse de la chaîne
-.c5f0	a0 12		               ldy   #>a2hexpos     ; ... hexa dans $YYXX.
+.c5ee	a2 56		               ldx   #<a2hexpos     ; Charge l'adresse de la chaîne
+.c5f0	a0 13		               ldy   #>a2hexpos     ; ... hexa dans $YYXX.
 .c5f2	20 91 c5	               jsr   putsxy         ; Positionne et affiche la chaîne.
 .c5f5	68		               pla                  ; Récupère le registre a et
 .c5f6	28		               plp                  ; ... le registre de status.
@@ -1329,8 +1430,8 @@
 .c5f8			putrahexcxy
 .c5f8	20 8b c6	               jsr   push        ; Sauvegarde tous les registres.
 .c5fb	20 f1 cb	               jsr   atohex         ; Convertion de a en hexadécimal.
-.c5fe	a2 e7		               ldx   #<a2hexpos     ; Charge l'adresse de la chaîne
-.c600	a0 12		               ldy   #>a2hexpos     ; ... hexa dans $YYXX.
+.c5fe	a2 56		               ldx   #<a2hexpos     ; Charge l'adresse de la chaîne
+.c600	a0 13		               ldy   #>a2hexpos     ; ... hexa dans $YYXX.
 .c602	20 91 c5	               jsr   putsxy         ; Colore, positionne et affiche la
 .c605	20 ba c6	               jsr   pop         ; Récupère tous les registres.
 .c608	60		               rts
@@ -1359,13 +1460,13 @@
 .c61d			pushall
 .c61d	08		          php            ; stack : flg, pcl, pch
 .c61e	78		          sei
-.c61f	8d 07 13	          sta  ra        ; save a
+.c61f	8d 76 13	          sta  ra        ; save a
 .c622	68		          pla            ; stack : pcl, pch
-.c623	8d 06 13	          sta  rp        ; save rp
+.c623	8d 75 13	          sta  rp        ; save rp
 .c626	68		          pla            ; stack : pch
-.c627	8d 0b 13	          sta  pc        ; save pcl
+.c627	8d 7a 13	          sta  pc        ; save pcl
 .c62a	68		          pla            ; stack : -
-.c62b	8d 0c 13	          sta  pc+1      ; save pch
+.c62b	8d 7b 13	          sta  pc+1      ; save pch
 .c62e	a5 fb		          lda  zpage1    ; get zpage1 low byte
 .c630	48		          pha            ; stack : zp1l
 .c631	a5 fc		          lda  zpage1+1  ; get zpage1 High byte
@@ -1374,38 +1475,38 @@
 .c636	48		          pha            ; stack : zp2l, zp1h, zp1l
 .c637	a5 fe		          lda  zpage2+1  ; get zpage2 High byte
 .c639	48		          pha            ; stack : zp2h, zp2l, zp1h, zp1l
-.c63a	ad 06 13	          lda  rp        ; get rp
+.c63a	ad 75 13	          lda  rp        ; get rp
 .c63d	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
-.c63e	ad 07 13	          lda  ra        ; get a
+.c63e	ad 76 13	          lda  ra        ; get a
 .c641	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c642	8a		          txa            ; get x
 .c643	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c644	98		          tya            ; get y
 .c645	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c646	ad 0c 13	          lda  pc+1      ; get pch
+.c646	ad 7b 13	          lda  pc+1      ; get pch
 .c649	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c64a	ad 0b 13	          lda  pc        ; get pcl
+.c64a	ad 7a 13	          lda  pc        ; get pcl
 .c64d	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c64e	ad 06 13	          lda  rp        ; get rp
+.c64e	ad 75 13	          lda  rp        ; get rp
 .c651	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c652	ad 07 13	          lda  ra        ; get a
+.c652	ad 76 13	          lda  ra        ; get a
 .c655	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c656	58		          cli
 .c657	60		          rts
 .c658			popall
 .c658	78		          sei
 .c659	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c65a	8d 0b 13	          sta  pc        ; save pcl
+.c65a	8d 7a 13	          sta  pc        ; save pcl
 .c65d	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c65e	8d 0c 13	          sta  pc+1      ; save pch
+.c65e	8d 7b 13	          sta  pc+1      ; save pch
 .c661	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c662	a8		          tay            ; set y
 .c663	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c664	aa		          tax            ; set x
 .c665	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
-.c666	8d 07 13	          sta  ra        ; save a
+.c666	8d 76 13	          sta  ra        ; save a
 .c669	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
-.c66a	8d 06 13	          sta  rp        ; save rp
+.c66a	8d 75 13	          sta  rp        ; save rp
 .c66d	68		          pla            ; stack : zp2l, zp1h, zp1l
 .c66e	85 fe		          sta  zpage2+1  ; get zpage1 low byte
 .c670	68		          pla            ; stack : zp1h, zp1l
@@ -1414,65 +1515,65 @@
 .c674	85 fc		          sta  zpage1+1  ; get zpage2 low byte
 .c676	68		          pla            ; stack :
 .c677	85 fb		          sta  zpage1    ; get zpage1 High byte
-.c679	ad 0c 13	          lda  pc+1      ; get pch
+.c679	ad 7b 13	          lda  pc+1      ; get pch
 .c67c	48		          pha            ; stack : pch
-.c67d	ad 0b 13	          lda  pc
+.c67d	ad 7a 13	          lda  pc
 .c680	48		          pha            ; stack : pcl, pch
-.c681	ad 06 13	          lda  rp        ; get rp
+.c681	ad 75 13	          lda  rp        ; get rp
 .c684	48		          pha            ; stack : rp, pcl, pch
-.c685	ad 07 13	          lda  ra        ; set ra
+.c685	ad 76 13	          lda  ra        ; set ra
 .c688	58		          cli
 .c689	28		          plp            ; stack : pcl, pch
 .c68a	60		          rts
 .c68b			push
 .c68b	08		          php            ; stack : flg, pcl, pch
 .c68c	78		          sei
-.c68d	8d 07 13	          sta  ra        ; save a
+.c68d	8d 76 13	          sta  ra        ; save a
 .c690	68		          pla            ; stack : pcl, pch
-.c691	8d 06 13	          sta  rp        ; save rp
+.c691	8d 75 13	          sta  rp        ; save rp
 .c694	68		          pla            ; stack : pch
-.c695	8d 0b 13	          sta  pc        ; save pcl
+.c695	8d 7a 13	          sta  pc        ; save pcl
 .c698	68		          pla            ; stack : -
-.c699	8d 0c 13	          sta  pc+1      ; save pch
-.c69c	ad 06 13	          lda  rp        ; get rp
+.c699	8d 7b 13	          sta  pc+1      ; save pch
+.c69c	ad 75 13	          lda  rp        ; get rp
 .c69f	48		          pha            ; stack : flg, zp2h, zp2l, zp1h, zp1l
-.c6a0	ad 07 13	          lda  ra        ; get a
+.c6a0	ad 76 13	          lda  ra        ; get a
 .c6a3	48		          pha            ; stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c6a4	8a		          txa            ; get x
 .c6a5	48		          pha            ; stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c6a6	98		          tya            ; get y
 .c6a7	48		          pha            ; stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c6a8	ad 0c 13	          lda  pc+1      ; get pch
+.c6a8	ad 7b 13	          lda  pc+1      ; get pch
 .c6ab	48		          pha            ; stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c6ac	ad 0b 13	          lda  pc        ; get pcl
+.c6ac	ad 7a 13	          lda  pc        ; get pcl
 .c6af	48		          pha            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c6b0	ad 06 13	          lda  rp        ; get rp
+.c6b0	ad 75 13	          lda  rp        ; get rp
 .c6b3	48		          pha            ; stack : flg, pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c6b4	ad 07 13	          lda  ra        ; get a
+.c6b4	ad 76 13	          lda  ra        ; get a
 .c6b7	28		          plp            ; stack : pcl, pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c6b8	58		          cli
 .c6b9	60		          rts
 .c6ba			pop
 .c6ba	78		          sei
 .c6bb	68		          pla            ; get pcl stack : pch, y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c6bc	8d 0b 13	          sta  pc        ; save pcl
+.c6bc	8d 7a 13	          sta  pc        ; save pcl
 .c6bf	68		          pla            ; get pch stack : y, x, a, flg, zp2h, zp2l, zp1h, zp1l
-.c6c0	8d 0c 13	          sta  pc+1      ; save pch
+.c6c0	8d 7b 13	          sta  pc+1      ; save pch
 .c6c3	68		          pla            ; get y stack : x, a, flg, zp2h, zp2l, zp1h, zp1l
 .c6c4	a8		          tay            ; set y
 .c6c5	68		          pla            ; get x stack : a, flg, zp2h, zp2l, zp1h, zp1l
 .c6c6	aa		          tax            ; set x
 .c6c7	68		          pla            ; get a stack : flg, zp2h, zp2l, zp1h, zp1l
-.c6c8	8d 07 13	          sta  ra        ; save a
+.c6c8	8d 76 13	          sta  ra        ; save a
 .c6cb	68		          pla            ; get flag stack : zp2h, zp2l, zp1h, zp1l
-.c6cc	8d 06 13	          sta  rp        ; save rp
-.c6cf	ad 0c 13	          lda  pc+1      ; get pch
+.c6cc	8d 75 13	          sta  rp        ; save rp
+.c6cf	ad 7b 13	          lda  pc+1      ; get pch
 .c6d2	48		          pha            ; stack : pch
-.c6d3	ad 0b 13	          lda  pc
+.c6d3	ad 7a 13	          lda  pc
 .c6d6	48		          pha            ; stack : pcl, pch
-.c6d7	ad 06 13	          lda  rp        ; get rp
+.c6d7	ad 75 13	          lda  rp        ; get rp
 .c6da	48		          pha            ; stack : rp, pcl, pch
-.c6db	ad 07 13	          lda  ra        ; set ra
+.c6db	ad 76 13	          lda  ra        ; set ra
 .c6de	58		          cli
 .c6df	28		          plp            ; stack : pcl, pch
 .c6e0	60		          rts
@@ -1610,18 +1711,18 @@
 .c7b6	08		               php
 .c7b7	48		               pha
 .c7b8	a5 fb		               lda  zpage1
-.c7ba	8d 14 13	               sta  zp1
+.c7ba	8d 83 13	               sta  zp1
 .c7bd	a5 fc		               lda  zpage1+1
-.c7bf	8d 15 13	               sta  zp1+1
+.c7bf	8d 84 13	               sta  zp1+1
 .c7c2	68		               pla
 .c7c3	28		               plp
 .c7c4	60		               rts
 .c7c5			restzp1
 .c7c5	08		               php
 .c7c6	48		               pha
-.c7c7	ad 14 13	               lda  zp1
+.c7c7	ad 83 13	               lda  zp1
 .c7ca	85 fb		               sta  zpage1
-.c7cc	ad 15 13	               lda  zp1+1
+.c7cc	ad 84 13	               lda  zp1+1
 .c7cf	85 fc		               sta  zpage1+1
 .c7d1	68		               pla
 .c7d2	28		               plp
@@ -1630,53 +1731,53 @@
 .c7d4	08		               php
 .c7d5	48		               pha
 .c7d6	a5 fd		               lda  zpage2
-.c7d8	8d 16 13	               sta  zp2
+.c7d8	8d 85 13	               sta  zp2
 .c7db	a5 fe		               lda  zpage2+1
-.c7dd	8d 17 13	               sta  zp2+1
+.c7dd	8d 86 13	               sta  zp2+1
 .c7e0	68		               pla
 .c7e1	28		               plp
 .c7e2	60		               rts
 .c7e3			restzp2
 .c7e3	08		               php
 .c7e4	48		               pha
-.c7e5	ad 16 13	               lda  zp2
+.c7e5	ad 85 13	               lda  zp2
 .c7e8	85 fd		               sta  zpage2
-.c7ea	ad 17 13	               lda  zp2+1
+.c7ea	ad 86 13	               lda  zp2+1
 .c7ed	85 fe		               sta  zpage2+1
 .c7ef	68		               pla
 .c7f0	28		               plp
 .c7f1	60		               rts
 .c7f2			xy2addr
 .c7f2	20 8b c6	               jsr   push
-.c7f5	ad 0f 13	               lda  addr1+1
-.c7f8	8d 11 13	               sta  addr2+1
-.c7fb	ad 0e 13	               lda  addr1
-.c7fe	8d 10 13	               sta  addr2
+.c7f5	ad 7e 13	               lda  addr1+1
+.c7f8	8d 80 13	               sta  addr2+1
+.c7fb	ad 7d 13	               lda  addr1
+.c7fe	8d 7f 13	               sta  addr2
 .c801	c0 00		               cpy  #$00
 .c803	f0 0f		               beq  addx
 .c805	18		moreline       clc
-.c806	6d 0d 13	               adc  ymult
+.c806	6d 7c 13	               adc  ymult
 .c809	90 03		               bcc  norepy
-.c80b	ee 11 13	               inc  addr2+1
-.c80e	8d 10 13	norepy         sta  addr2
+.c80b	ee 80 13	               inc  addr2+1
+.c80e	8d 7f 13	norepy         sta  addr2
 .c811	88		               dey
 .c812	d0 f1		               bne  moreline
 .c814	8a		addx           txa
 .c815	18		               clc
-.c816	6d 10 13	               adc  addr2
+.c816	6d 7f 13	               adc  addr2
 .c819	90 03		               bcc  thatsit
-.c81b	ee 11 13	               inc  addr2+1
-.c81e	8d 10 13	thatsit        sta  addr2
+.c81b	ee 80 13	               inc  addr2+1
+.c81e	8d 7f 13	thatsit        sta  addr2
 .c821	20 ba c6	               jsr   pop
 .c824	60		               rts
 .c825			loop
-.c825	ce 8a 0a	               dec  loopcount
+.c825	ce f9 0a	               dec  loopcount
 .c828	d0 03		               bne  norep
-.c82a	ce 8b 0a	               dec  loopcount+1
-.c82d	ad 8a 0a	norep          lda  loopcount
+.c82a	ce fa 0a	               dec  loopcount+1
+.c82d	ad f9 0a	norep          lda  loopcount
 .c830	c9 00		               cmp  #$00
 .c832	d0 05		               bne  out
-.c834	4d 8b 0a	               eor  loopcount+1
+.c834	4d fa 0a	               eor  loopcount+1
 .c837	c9 ff		               cmp  #$ff
 .c839	60		out            rts
 
@@ -1807,7 +1908,7 @@
 
 .c9aa			diskerror
 .c9aa	20 8b c6	               jsr  push
-.c9ad	ad d3 12	               lda  dsk_dev   ; Select device 8
+.c9ad	ad 42 13	               lda  dsk_dev   ; Select device 8
 .c9b0	85 ba		               sta  $ba       ;
 .c9b2	20 b4 ff	               jsr  talk      ; $ffb4 |a  , iec-cmd dev parle
 .c9b5	a9 6f		               lda  #$6f
@@ -1830,7 +1931,7 @@
 .c9da	85 bc		               sta  $bc       ; L0136 - Current filename lsb.
 .c9dc	a9 01		               lda  #$01      ; L0138 - set ...
 .c9de	85 b7		               sta  $b7       ; L013A - ... length of current filename
-.c9e0	ad d3 12	               lda  dsk_dev   ; L013C - set 8 as ...
+.c9e0	ad 42 13	               lda  dsk_dev   ; L013C - set 8 as ...
 .c9e3	85 ba		               sta  $ba       ; L013E - ... current serial sevice.
 .c9e5	a9 60		               lda  #$60      ; L0140 - set $60 to ...
 .c9e7	85 b9		               sta  $b9       ; L0142 - ... secondary address
@@ -1878,20 +1979,20 @@
 .ca44			memtofile
 .ca44	20 67 cb	               jsr  dsk_putmesg
 .ca47	20 8b c6	               jsr  push
-.ca4a	ad d7 12	               lda  dsk_fnlen
-.ca4d	ae d5 12	               ldx  dsk_fnptr      ; load fname addr. lbyte
-.ca50	ac d6 12	               ldy  dsk_fnptr+1
+.ca4a	ad 46 13	               lda  dsk_fnlen
+.ca4d	ae 44 13	               ldx  dsk_fnptr      ; load fname addr. lbyte
+.ca50	ac 45 13	               ldy  dsk_fnptr+1
 .ca53	20 bd ff	               jsr  setnam         ; call setnam
-.ca56	ad d4 12	               lda  dsk_lfsno
-.ca59	ae d3 12	               ldx  dsk_dev        ; specified device
+.ca56	ad 43 13	               lda  dsk_lfsno
+.ca59	ae 42 13	               ldx  dsk_dev        ; specified device
 .ca5c	a0 00		skip           ldy  #$00
 .ca5e	20 ba ff	               jsr  setlfs         ; call setlfs
-.ca61	ad cf 12	               lda  dsk_data_s     ; put data start lbyte in stal
+.ca61	ad 3e 13	               lda  dsk_data_s     ; put data start lbyte in stal
 .ca64	85 c1		               sta  stal
-.ca66	ad d0 12	               lda  dsk_data_s+1   ; put data start hbyte in stal
+.ca66	ad 3f 13	               lda  dsk_data_s+1   ; put data start hbyte in stal
 .ca69	85 c2		               sta  stal+1
-.ca6b	ae d1 12	               ldx  dsk_data_e     ; put data end lbyte in x
-.ca6e	ac d2 12	               ldy  dsk_data_e+1   ; put data end hbyte in y
+.ca6b	ae 40 13	               ldx  dsk_data_e     ; put data end lbyte in x
+.ca6e	ac 41 13	               ldy  dsk_data_e+1   ; put data end hbyte in y
 .ca71	a9 c1		               lda  #stal          ; start address located in $c1/$c2
 .ca73	20 d8 ff	               jsr  save           ; call save
 .ca76	90 00		               bcc  noerror        ; if carry set, a load error has happened
@@ -1899,12 +2000,12 @@
 .ca7b	60		               rts
 .ca7c			filetomem
 .ca7c	20 8b c6	               jsr push
-.ca7f	ad d7 12	               lda dsk_fnlen  ; Loads filename lenght.
-.ca82	ae d5 12	               ldx dsk_fnptr  ; Points x and y to the filename
-.ca85	ac d6 12	               ldy dsk_fnptr+1;pointer
+.ca7f	ad 46 13	               lda dsk_fnlen  ; Loads filename lenght.
+.ca82	ae 44 13	               ldx dsk_fnptr  ; Points x and y to the filename
+.ca85	ac 45 13	               ldy dsk_fnptr+1;pointer
 .ca88	20 bd ff	               jsr setnam     ; call setnam
-.ca8b	ad d4 12	               lda dsk_lfsno  ; Loads Acc with the logical file number
-.ca8e	ae d3 12	               ldx dsk_dev    ; default to device 8
+.ca8b	ad 43 13	               lda dsk_lfsno  ; Loads Acc with the logical file number
+.ca8e	ae 42 13	               ldx dsk_dev    ; default to device 8
 .ca91	a0 01		               ldy #$01       ; not $01 means: load to address stored in file
 .ca93	20 ba ff	               jsr setlfs     ; call setlfs
 .ca96	a9 00		               lda #$00       ; $00 means: load to memory (not verify)
@@ -1977,10 +2078,10 @@
 .cb6e	20 16 c5	               jsr puts
 .cb71	a9 20		               lda #$20
 .cb73	20 10 c5	               jsr putch
-.cb76	ae d5 12	               ldx dsk_fnptr
-.cb79	ac d6 12	               ldy dsk_fnptr+1
+.cb76	ae 44 13	               ldx dsk_fnptr
+.cb79	ac 45 13	               ldy dsk_fnptr+1
 .cb7c	20 16 c5	               jsr puts
-.cb7f	ad d4 12	               lda dsk_lfsno
+.cb7f	ad 43 13	               lda dsk_lfsno
 .cb82	20 c3 ff	               jsr close
 .cb85	20 ba c6	               jsr pop
 .cb88	60		               rts
@@ -1996,8 +2097,8 @@
 .cb92			putahexfmtxy
 .cb92	20 8b c6	               jsr   push
 .cb95	20 f1 cb	               jsr   atohex
-.cb98	ae e7 12	               ldx   a2hexpx
-.cb9b	ac e8 12	               ldy   a2hexpy
+.cb98	ae 56 13	               ldx   a2hexpx
+.cb9b	ac 57 13	               ldy   a2hexpy
 .cb9e	20 30 c5	               jsr   gotoxy
 .cba1	20 c2 cb	               jsr   printahexpref
 .cba4	20 ba c6	               jsr   pop
@@ -2016,15 +2117,15 @@
 .cbc1	60		               rts
 .cbc2			printahexpref
 .cbc2	20 8b c6	               jsr  push
-.cbc5	a2 e9		               ldx  #<a2hexpfx
-.cbc7	a0 12		               ldy  #>a2hexpfx
+.cbc5	a2 58		               ldx  #<a2hexpfx
+.cbc7	a0 13		               ldy  #>a2hexpfx
 .cbc9	20 16 c5	               jsr  puts
 .cbcc	20 ba c6	               jsr  pop
 .cbcf	60		               rts
 .cbd0			printahex
 .cbd0	20 8b c6	               jsr  push
-.cbd3	a2 ea		               ldx  #<a2hexstr
-.cbd5	a0 12		               ldy  #>a2hexstr
+.cbd3	a2 59		               ldx  #<a2hexstr
+.cbd5	a0 13		               ldy  #>a2hexstr
 .cbd7	20 16 c5	               jsr  puts
 .cbda	20 ba c6	               jsr  pop
 .cbdd	60		               rts
@@ -2052,12 +2153,12 @@
 .cbf3	48		               pha
 .cbf4	20 ea cb	               jsr   lsra4bits
 .cbf7	20 de cb	               jsr   nibtohex
-.cbfa	8d ea 12	               sta   a2hexstr
+.cbfa	8d 59 13	               sta   a2hexstr
 .cbfd	68		               pla
 .cbfe	20 de cb	               jsr   nibtohex
-.cc01	8d eb 12	               sta   a2hexstr+1
+.cc01	8d 5a 13	               sta   a2hexstr+1
 .cc04	a9 00		               lda   #$00                ; set end of string
-.cc06	8d ec 12	               sta   a2hexstr+2
+.cc06	8d 5b 13	               sta   a2hexstr+2
 .cc09	68		               pla
 .cc0a	28		               plp
 .cc0b	60		               rts
@@ -2079,20 +2180,20 @@
 .cc23	48		               pha
 .cc24	20 ea cb	               jsr  lsra4bits
 .cc27	20 de cb	               jsr  nibtohex
-.cc2a	8d ea 12	               sta  a2hexstr
+.cc2a	8d 59 13	               sta  a2hexstr
 .cc2d	68		               pla
 .cc2e	20 de cb	               jsr  nibtohex
-.cc31	8d eb 12	               sta  a2hexstr+1
+.cc31	8d 5a 13	               sta  a2hexstr+1
 .cc34	98		               tya
 .cc35	48		               pha
 .cc36	20 ea cb	               jsr  lsra4bits
 .cc39	20 de cb	               jsr  nibtohex
-.cc3c	8d ec 12	               sta  a2hexstr+2
+.cc3c	8d 5b 13	               sta  a2hexstr+2
 .cc3f	68		               pla
 .cc40	20 de cb	               jsr  nibtohex
-.cc43	8d ed 12	               sta  a2hexstr+3
+.cc43	8d 5c 13	               sta  a2hexstr+3
 .cc46	a9 00		               lda  #$00                ; 0 ended string
-.cc48	8d ee 12	               sta  a2hexstr+4
+.cc48	8d 5d 13	               sta  a2hexstr+4
 .cc4b	20 ba c6	               jsr  pop
 .cc4e	60		               rts
 .cc4f			atobin
@@ -2105,13 +2206,13 @@
 .cc59	69 00		               adc  #$00
 .cc5b	29 01		               and  #$01
 .cc5d	20 de cb	               jsr  nibtohex
-.cc60	99 f3 12	               sta  a2binstr,y
+.cc60	99 62 13	               sta  a2binstr,y
 .cc63	68		               pla
 .cc64	c8		               iny
 .cc65	ca		               dex
 .cc66	d0 ef		               bne  nextbit
 .cc68	a9 00		               lda  #0
-.cc6a	99 f3 12	               sta  a2binstr,y
+.cc6a	99 62 13	               sta  a2binstr,y
 .cc6d	20 ba c6	               jsr  pop
 .cc70	60		               rts
 .cc71			abinsetmccol
@@ -2121,15 +2222,15 @@
 .cc78			putabin
 .cc78	20 4f cc	               jsr     atobin
 .cc7b	20 8b c6	               jsr     push
-.cc7e	a2 f3		               ldx     #<a2binstr
-.cc80	a0 12		               ldy     #>a2binstr
+.cc7e	a2 62		               ldx     #<a2binstr
+.cc80	a0 13		               ldy     #>a2binstr
 .cc82	20 16 c5	               jsr     puts
 .cc85	20 ba c6	               jsr     pop
 .cc88	60		               rts
 .cc89			printabin
 .cc89	20 8b c6	               jsr     push
-.cc8c	a2 f3		               ldx     #<a2binstr
-.cc8e	a0 12		               ldy     #>a2binstr
+.cc8c	a2 62		               ldx     #<a2binstr
+.cc8e	a0 13		               ldy     #>a2binstr
 .cc90	20 16 c5	               jsr     puts
 .cc93	20 ba c6	               jsr     pop
 .cc96	60		               rts
@@ -2165,25 +2266,25 @@
 .ccc4	48		               pha            ; A sur le stack.
 .ccc5	98		               tya            ; Y dans A (MSB)
 .ccc6	20 de cb	               jsr  nibtohex  ; a hex petsci ...
-.ccc9	8d 00 13	               sta  a2decstr   ; ... dans tampon.
+.ccc9	8d 6f 13	               sta  a2decstr   ; ... dans tampon.
 .cccc	68		               pla            ; Récupere A
 .cccd	48		               pha            ;
 .ccce	20 de cb	               jsr  nibtohex
-.ccd1	8d 02 13	               sta  a2decstr+2
+.ccd1	8d 71 13	               sta  a2decstr+2
 .ccd4	68		               pla
 .ccd5	6a		               ror
 .ccd6	6a		               ror
 .ccd7	6a		               ror
 .ccd8	6a		               ror
 .ccd9	20 de cb	               jsr  nibtohex
-.ccdc	8d 01 13	               sta  a2decstr+1
+.ccdc	8d 70 13	               sta  a2decstr+1
 .ccdf	d8		               cld            ; On revient en mode binaire.
 .cce0	20 ba c6	               jsr  pop
 .cce3	60		               rts
 .cce4			putadec
 .cce4	20 8b c6	               jsr  push
 .cce7	20 b2 cc	               jsr  atodec
-.ccea	a2 00		               ldx  #<a2decstr
+.ccea	a2 6f		               ldx  #<a2decstr
 .ccec	a0 13		               ldy  #>a2decstr+1
 .ccee	20 16 c5	               jsr  puts
 .ccf1	20 ba c6	               jsr  pop
@@ -2198,34 +2299,34 @@
 =8			ryloc        = 8
 .ccf5			regsphoto
 .ccf5	08		               php                  ; Sauve le registre P. stack-> p, pch, pcl
-.ccf6	8d 18 13	               sta   vrega          ; Sauve Acc en mémoire.
+.ccf6	8d 87 13	               sta   vrega          ; Sauve Acc en mémoire.
 .ccf9	68		               pla                  ; stack-> pcl, pch
-.ccfa	8d 1c 13	               sta   vregsr         ; Sauve SR en mémoire.
-.ccfd	8e 19 13	               stx   vregx          ; Sauve X en mémoire.
-.cd00	8c 1a 13	               sty   vregy          ; Sauve Y en mémoire.
+.ccfa	8d 8b 13	               sta   vregsr         ; Sauve SR en mémoire.
+.ccfd	8e 88 13	               stx   vregx          ; Sauve X en mémoire.
+.cd00	8c 89 13	               sty   vregy          ; Sauve Y en mémoire.
 .cd03	ba		               tsx                  ; Copie SP san X.
-.cd04	8e 1b 13	               stx   vregsp         ; Sauve SP en mémoire.
+.cd04	8e 8a 13	               stx   vregsp         ; Sauve SP en mémoire.
 .cd07	68		               pla                  ; Récupère pcl. stack-> pch
-.cd08	8d 1d 13	               sta   vregpc         ; Sauve pcl en mémoire.
+.cd08	8d 8c 13	               sta   vregpc         ; Sauve pcl en mémoire.
 .cd0b	68		               pla                  ; Récupère pch. stack->
-.cd0c	8d 1e 13	               sta   vregpc+1       ; Sauve pch en mémoire.
+.cd0c	8d 8d 13	               sta   vregpc+1       ; Sauve pch en mémoire.
 .cd0f	a5 fb		               lda   zpage1         ; Fais une copie du LSB de zpage1
-.cd11	8d 1f 13	               sta   vzp1           ; ... mémoire.
+.cd11	8d 8e 13	               sta   vzp1           ; ... mémoire.
 .cd14	a5 fc		               lda   zpage1+1       ; Fais une copie du MSB de zpage1
-.cd16	8d 20 13	               sta   vzp1+1         ; ... mémoire.
+.cd16	8d 8f 13	               sta   vzp1+1         ; ... mémoire.
 .cd19	a5 fd		               lda   zpage2         ; Fais une copie du LSB de zpage2
-.cd1b	8d 21 13	               sta   vzp2           ; ... mémoire.
+.cd1b	8d 90 13	               sta   vzp2           ; ... mémoire.
 .cd1e	a5 fe		               lda   zpage2+1       ; Fais une copie du MSB de zpage2
-.cd20	8d 22 13	               sta   vzp2+1         ; ... mémoire.
-.cd23	ad 1e 13	               lda   vregpc+1       ; Récupère le MSB du PC et le remet
+.cd20	8d 91 13	               sta   vzp2+1         ; ... mémoire.
+.cd23	ad 8d 13	               lda   vregpc+1       ; Récupère le MSB du PC et le remet
 .cd26	48		               pha                  ; ... sur la pile. stack-> pch
-.cd27	ad 1d 13	               lda   vregpc         ; Récupère le LSB du PC et le remet
+.cd27	ad 8c 13	               lda   vregpc         ; Récupère le LSB du PC et le remet
 .cd2a	48		               pha                  ; ... sur la pile. stack-> pcl, pch
-.cd2b	ac 1a 13	               ldy   vregy          ; Récupère la valeur de Y.
-.cd2e	ae 19 13	               ldx   vregx          ; Récupère la valeur de X.
-.cd31	ad 1c 13	               lda   vregsr         ; Récupère la valeur du registre de status
+.cd2b	ac 89 13	               ldy   vregy          ; Récupère la valeur de Y.
+.cd2e	ae 88 13	               ldx   vregx          ; Récupère la valeur de X.
+.cd31	ad 8b 13	               lda   vregsr         ; Récupère la valeur du registre de status
 .cd34	48		               pha                  ; ... remet sur stack-> p, pcl, pch
-.cd35	ad 18 13	               lda   vrega          ; Récupère la valeur de l'Acc.
+.cd35	ad 87 13	               lda   vrega          ; Récupère la valeur de l'Acc.
 .cd38	28		               plp                  ; Récupère le status. stack-> pcl, pch
 .cd39	60		               rts                  ; L'adresse de retour est sur la pile.
 .cd3a			printregs
@@ -2237,9 +2338,9 @@
 .cd44	68		               pla                  ; Récupération minimaliste
 .cd45	28		               plp                  ; ... des registres.
 .cd46	18		               clc                  ; Carry à 0 pour.
-.cd47	ee 1d 13	               inc   vregpc         ; Incrémente le LSB de l'adresse de retour.
+.cd47	ee 8c 13	               inc   vregpc         ; Incrémente le LSB de l'adresse de retour.
 .cd4a	90 03		               bcc   norep          ; Si Carry à 0 pas de report.
-.cd4c	ee 1e 13	               inc   vregpc+1       ; Report à faire sur le MSB.
+.cd4c	ee 8d 13	               inc   vregpc+1       ; Report à faire sur le MSB.
 .cd4f			norep
 .cd4f	20 1d c6	               jsr   pushall        ; Sauvegarde les registres.
 .cd52	38		               sec                  ; Carry = 1, plot = get
@@ -2249,10 +2350,10 @@
 .cd59	18		               clc                  ; Carry = 0, plot = set
 .cd5a	20 f0 ff	               jsr   plot           ; POsitionne le curseur.
 .cd5d	20 58 c6	               jsr   popall         ; Récupère les registres.
-.cd60	ad 18 13	               lda   vrega          ; Charge la valeur du registre Acc.
+.cd60	ad 87 13	               lda   vrega          ; Charge la valeur du registre Acc.
 .cd63	20 8b c6	               jsr   push           ; Sauvegarde les registres.
 .cd66	a0 13		               ldy   #>ra_str+1    ; Le MSB de l'adresse dans Y.
-.cd68	a2 3d		               ldx   #<ra_str      ; Le LSB de l'adresse dans X.
+.cd68	a2 ac		               ldx   #<ra_str      ; Le LSB de l'adresse dans X.
 .cd6a	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .cd6d	20 ba c6	               jsr   pop            ; Récupère les registres.
 .cd70	20 a8 cb	               jsr   putahexfmt     ; Affiche la valeur en hexadécimal.
@@ -2264,10 +2365,10 @@
 .cd7d	18		               clc                  ; Carry = 0, plot = set
 .cd7e	20 f0 ff	               jsr   plot           ; POsitionne le curseur.
 .cd81	20 58 c6	               jsr   popall         ; Récupère les registres.
-.cd84	ad 19 13	               lda   vregx          ; Charge la valeur du registre x.
+.cd84	ad 88 13	               lda   vregx          ; Charge la valeur du registre x.
 .cd87	20 8b c6	               jsr   push           ; Sauvegarde les registres.
 .cd8a	a0 13		               ldy   #>rx_str+1    ; Le MSB de l'adresse dans Y.
-.cd8c	a2 49		               ldx   #<rx_str      ; Le LSB de l'adresse dans X.
+.cd8c	a2 b8		               ldx   #<rx_str      ; Le LSB de l'adresse dans X.
 .cd8e	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .cd91	20 ba c6	               jsr   pop            ; Récupère les registres.
 .cd94	20 a8 cb	               jsr   putahexfmt     ; Affiche la valeur en hexadécimal.
@@ -2279,10 +2380,10 @@
 .cda1	18		               clc                  ; Carry = 0, plot = set
 .cda2	20 f0 ff	               jsr   plot           ; POsitionne le curseur.
 .cda5	20 58 c6	               jsr   popall         ; Récupère les registres.
-.cda8	ad 1a 13	               lda   vregy          ; Charge la valeur du registre y.
+.cda8	ad 89 13	               lda   vregy          ; Charge la valeur du registre y.
 .cdab	20 8b c6	               jsr   push           ; Sauvegarde les registres.
 .cdae	a0 13		               ldy   #>ry_str+1    ; Le MSB de l'adresse dans Y.
-.cdb0	a2 55		               ldx   #<ry_str      ; Le LSB de l'adresse dans X.
+.cdb0	a2 c4		               ldx   #<ry_str      ; Le LSB de l'adresse dans X.
 .cdb2	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .cdb5	20 ba c6	               jsr   pop            ; Récupère les registres.
 .cdb8	20 a8 cb	               jsr   putahexfmt     ; Affiche la valeur en hexadécimal.
@@ -2294,10 +2395,10 @@
 .cdc5	18		               clc                  ; Carry = 0, plot = set
 .cdc6	20 f0 ff	               jsr   plot           ; POsitionne le curseur.
 .cdc9	20 58 c6	               jsr   popall         ; Récupère les registres.
-.cdcc	ad 1c 13	               lda   vregsr         ; Charge la valeur du registre sr.
+.cdcc	ad 8b 13	               lda   vregsr         ; Charge la valeur du registre sr.
 .cdcf	20 8b c6	               jsr   push           ; Sauvegarde les registres.
 .cdd2	a0 13		               ldy   #>srh_str+1    ; Le MSB de l'adresse dans Y.
-.cdd4	a2 61		               ldx   #<srh_str      ; Le LSB de l'adresse dans X.
+.cdd4	a2 d0		               ldx   #<srh_str      ; Le LSB de l'adresse dans X.
 .cdd6	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .cdd9	20 ba c6	               jsr   pop            ; Récupère les registres.
 .cddc	20 1d c6	               jsr   pushall        ; Sauvegarde les registres.
@@ -2310,7 +2411,7 @@
 .cdea	20 58 c6	               jsr   popall         ; Récupère les registres.
 .cded	20 8b c6	               jsr   push           ; Sauvegarde les registres.
 .cdf0	a0 13		               ldy   #>sr_str+1    ; Le MSB de l'adresse dans Y.
-.cdf2	a2 6e		               ldx   #<sr_str      ; Le LSB de l'adresse dans X.
+.cdf2	a2 dd		               ldx   #<sr_str      ; Le LSB de l'adresse dans X.
 .cdf4	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .cdf7	20 ba c6	               jsr   pop            ; Récupère les registres.
 .cdfa	20 97 cc	               jsr   putabinfmt     ; Affiche la valeur en hexadécimal.
@@ -2322,10 +2423,10 @@
 .ce07	18		               clc                  ; Carry = 0, plot = set
 .ce08	20 f0 ff	               jsr   plot           ; POsitionne le curseur.
 .ce0b	20 58 c6	               jsr   popall         ; Récupère les registres.
-.ce0e	ad 1b 13	               lda   vregsp         ; Charge la valeur du registre sp.
+.ce0e	ad 8a 13	               lda   vregsp         ; Charge la valeur du registre sp.
 .ce11	20 8b c6	               jsr   push           ; Sauvegarde les registres.
 .ce14	a0 13		               ldy   #>sp_str+1    ; Le MSB de l'adresse dans Y.
-.ce16	a2 7a		               ldx   #<sp_str      ; Le LSB de l'adresse dans X.
+.ce16	a2 e9		               ldx   #<sp_str      ; Le LSB de l'adresse dans X.
 .ce18	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .ce1b	20 ba c6	               jsr   pop            ; Récupère les registres.
 .ce1e	20 a8 cb	               jsr   putahexfmt     ; Affiche la valeur en hexadécimal.
@@ -2337,17 +2438,17 @@
 .ce2b	18		               clc                  ; Carry = 0, plot = set
 .ce2c	20 f0 ff	               jsr   plot           ; POsitionne le curseur.
 .ce2f	20 58 c6	               jsr   popall         ; Récupère les registres.
-.ce32	ae 1e 13	               ldx   vregpc+1       ; Charge la valeur MSB du registre pc.
-.ce35	ac 1d 13	               ldy   vregpc         ; Charge la valeur LSB du registre pc.
+.ce32	ae 8d 13	               ldx   vregpc+1       ; Charge la valeur MSB du registre pc.
+.ce35	ac 8c 13	               ldy   vregpc         ; Charge la valeur LSB du registre pc.
 .ce38	20 1c cc	               jsr   xytohex        ; Converti YYXX en hexadécimal 16 bits.
 .ce3b	20 8b c6	               jsr   push           ; Sauvegarde les registres.
 .ce3e	a0 13		               ldy   #>pc_str+1    ; Le MSB de l'adresse dans Y.
-.ce40	a2 86		               ldx   #<pc_str      ; Le LSB de l'adresse dans X.
+.ce40	a2 f5		               ldx   #<pc_str      ; Le LSB de l'adresse dans X.
 .ce42	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .ce45	20 ba c6	               jsr   pop            ; Récupère les registres.
 .ce48	20 8b c6	               jsr   push           ; Sauvegarde les registres.
-.ce4b	a0 12		               ldy   #>a2hexpfx+1    ; Le MSB de l'adresse dans Y.
-.ce4d	a2 e9		               ldx   #<a2hexpfx      ; Le LSB de l'adresse dans X.
+.ce4b	a0 13		               ldy   #>a2hexpfx+1    ; Le MSB de l'adresse dans Y.
+.ce4d	a2 58		               ldx   #<a2hexpfx      ; Le LSB de l'adresse dans X.
 .ce4f	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .ce52	20 ba c6	               jsr   pop            ; Récupère les registres.
 .ce55	20 1d c6	               jsr   pushall        ; Sauvegarde les registres.
@@ -2358,17 +2459,17 @@
 .ce5f	18		               clc                  ; Carry = 0, plot = set
 .ce60	20 f0 ff	               jsr   plot           ; POsitionne le curseur.
 .ce63	20 58 c6	               jsr   popall         ; Récupère les registres.
-.ce66	ae 20 13	               ldx   vzp1+1         ; Charge la valeur MSB se zpage1.
-.ce69	ac 1f 13	               ldy   vzp1           ; Charge la valeur LSB se zpage1.
+.ce66	ae 8f 13	               ldx   vzp1+1         ; Charge la valeur MSB se zpage1.
+.ce69	ac 8e 13	               ldy   vzp1           ; Charge la valeur LSB se zpage1.
 .ce6c	20 1c cc	               jsr   xytohex        ; Converti YYXX en hexadécimal 16 bits.
 .ce6f	20 8b c6	               jsr   push           ; Sauvegarde les registres.
-.ce72	a0 13		               ldy   #>z1_str+1    ; Le MSB de l'adresse dans Y.
-.ce74	a2 92		               ldx   #<z1_str      ; Le LSB de l'adresse dans X.
+.ce72	a0 14		               ldy   #>z1_str+1    ; Le MSB de l'adresse dans Y.
+.ce74	a2 01		               ldx   #<z1_str      ; Le LSB de l'adresse dans X.
 .ce76	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .ce79	20 ba c6	               jsr   pop            ; Récupère les registres.
 .ce7c	20 8b c6	               jsr   push           ; Sauvegarde les registres.
-.ce7f	a0 12		               ldy   #>a2hexpfx+1    ; Le MSB de l'adresse dans Y.
-.ce81	a2 e9		               ldx   #<a2hexpfx      ; Le LSB de l'adresse dans X.
+.ce7f	a0 13		               ldy   #>a2hexpfx+1    ; Le MSB de l'adresse dans Y.
+.ce81	a2 58		               ldx   #<a2hexpfx      ; Le LSB de l'adresse dans X.
 .ce83	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .ce86	20 ba c6	               jsr   pop            ; Récupère les registres.
 .ce89	20 1d c6	               jsr   pushall        ; Sauvegarde les registres.
@@ -2379,17 +2480,17 @@
 .ce93	18		               clc                  ; Carry = 0, plot = set
 .ce94	20 f0 ff	               jsr   plot           ; POsitionne le curseur.
 .ce97	20 58 c6	               jsr   popall         ; Récupère les registres.
-.ce9a	ae 22 13	               ldx   vzp2+1         ; Charge la valeur MSB se zpage2.
-.ce9d	ac 21 13	               ldy   vzp2           ; Charge la valeur LSB se zpage3.
+.ce9a	ae 91 13	               ldx   vzp2+1         ; Charge la valeur MSB se zpage2.
+.ce9d	ac 90 13	               ldy   vzp2           ; Charge la valeur LSB se zpage3.
 .cea0	20 1c cc	               jsr   xytohex        ; Converti YYXX en hexadécimal 16 bits.
 .cea3	20 8b c6	               jsr   push           ; Sauvegarde les registres.
-.cea6	a0 13		               ldy   #>z2_str+1    ; Le MSB de l'adresse dans Y.
-.cea8	a2 9e		               ldx   #<z2_str      ; Le LSB de l'adresse dans X.
+.cea6	a0 14		               ldy   #>z2_str+1    ; Le MSB de l'adresse dans Y.
+.cea8	a2 0d		               ldx   #<z2_str      ; Le LSB de l'adresse dans X.
 .ceaa	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .cead	20 ba c6	               jsr   pop            ; Récupère les registres.
 .ceb0	20 8b c6	               jsr   push           ; Sauvegarde les registres.
-.ceb3	a0 12		               ldy   #>a2hexpfx+1    ; Le MSB de l'adresse dans Y.
-.ceb5	a2 e9		               ldx   #<a2hexpfx      ; Le LSB de l'adresse dans X.
+.ceb3	a0 13		               ldy   #>a2hexpfx+1    ; Le MSB de l'adresse dans Y.
+.ceb5	a2 58		               ldx   #<a2hexpfx      ; Le LSB de l'adresse dans X.
 .ceb7	20 16 c5	               jsr   putsyx         ; Affiche le texte.
 .ceba	20 ba c6	               jsr   pop            ; Récupère les registres.
 .cebd	20 58 c6	               jsr   popall         ; Récupère les registres.
