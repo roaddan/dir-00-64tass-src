@@ -16,7 +16,7 @@ version  = "20261028       "
                .include "h-header-c64.asm"
                .enc     "none"
 couleur1       .byte 14
-patern         .byte 0
+patern         .byte %10101010
 main           .block
                php
                jsr   cls
@@ -33,16 +33,16 @@ isit_plus      cmp   #'+'
                bne   isit_moins
                inc   couleur1
                inc   patern
-               jsr   paintbkgnd
                jsr   sub_c
+               jsr   paintbkgnd
                jmp   mainloop
 
 isit_moins     cmp   #'-'
                bne   isit_0
                dec   couleur1
                inc   patern
-               jsr   paintbkgnd
                jsr   sub_c
+               jsr   paintbkgnd
                jmp   mainloop
 
 isit_0         cmp   #'0'
@@ -147,8 +147,8 @@ maingraph      .block
 paintbkgnd     .block
                php
                pha
-               #ldzp1ptr 24527
-               #setloop  8008
+               #ldzp1ptr 24575-(6*8) 
+               #setloop  32576-24575
 encore         lda   patern
                sta   (zpage1),y
                jsr   inczpage1

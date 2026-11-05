@@ -1,7 +1,7 @@
 
 ; 64tass Turbo Assembler Macro V1.59.3120 listing file
 ; 64tass -C -m -a -I /Users/Locals/CBM/00-usbkey32go/dir-00-64tass-src/C64/lib/libstd -i -L chapter003.txt -o chapter003.prg chapter003.asm
-; Thu Nov  5 15:02:37 2026
+; Thu Nov  5 17:56:04 2026
 
 ;Offset	;Hex		;Source
 
@@ -41,7 +41,7 @@
 ;******  Return to file: chapter003.asm
 
 >085b	0e		couleur1       .byte 14
->085c	00		patern         .byte 0
+>085c	aa		patern         .byte %10101010
 .085d			main
 .085d	08		               php
 .085e	20 f9 c4	               jsr   cls
@@ -66,15 +66,15 @@
 .088b	d0 0f		               bne   isit_moins
 .088d	ee 5b 08	               inc   couleur1
 .0890	ee 5c 08	               inc   patern
-.0893	20 ce 09	               jsr   paintbkgnd
-.0896	20 64 09	               jsr   sub_c
+.0893	20 64 09	               jsr   sub_c
+.0896	20 ce 09	               jsr   paintbkgnd
 .0899	4c 86 08	               jmp   mainloop
 .089c	c9 2d		isit_moins     cmp   #'-'
 .089e	d0 0f		               bne   isit_0
 .08a0	ce 5b 08	               dec   couleur1
 .08a3	ee 5c 08	               inc   patern
-.08a6	20 ce 09	               jsr   paintbkgnd
-.08a9	20 64 09	               jsr   sub_c
+.08a6	20 64 09	               jsr   sub_c
+.08a9	20 ce 09	               jsr   paintbkgnd
 .08ac	4c 86 08	               jmp   mainloop
 .08af	c9 30		isit_0         cmp   #'0'
 .08b1	d0 0b		               bne   isit_1
@@ -244,17 +244,17 @@
 .09cf	48		               pha
 .09d0	08		               php                  ; Sauvegarde minimaliste
 .09d1	48		               pha                  ; ... des registres.
-.09d2	a9 cf		               lda   #<24527      ;Charge le LSB du ptr et
+.09d2	a9 cf		               lda   #<24575-(6*8)      ;Charge le LSB du ptr et
 .09d4	85 fb		               sta   zpage1         ; ... copie dans LSB de zpage1.
-.09d6	a9 5f		               lda   #>24527      ;Charge le MSB du ptr et
+.09d6	a9 5f		               lda   #>24575-(6*8)      ;Charge le MSB du ptr et
 .09d8	85 fc		               sta   zpage1+1       ; ... copie dans MSB de zpage1.
 .09da	68		               pla                  ; Récupération minimaliste
 .09db	28		               plp                  ; ... des registres.
 .09dc	08		               php                  ; Sauvegarde minimaliste
 .09dd	48		               pha                  ; ... des registres.
-.09de	a9 48		               lda  #<8008       ; Charge le LSB du nombre 16 bits
+.09de	a9 41		               lda  #<32576-24575       ; Charge le LSB du nombre 16 bits
 .09e0	8d f9 0a	               sta  loopcount       ; ... et le place en mémoire.
-.09e3	a9 1f		               lda  #>8008       ; Charge le MSB du nombre 16 bits
+.09e3	a9 1f		               lda  #>32576-24575       ; Charge le MSB du nombre 16 bits
 .09e5	8d fa 0a	               sta  loopcount+1     ; ... et le place en mémoire.
 .09e8	68		               pla                  ; Récupération minimaliste
 .09e9	28		               plp                  ; ... des registres.
