@@ -23,7 +23,7 @@
 ;------------------------------------------------------------------------------
 ; 1 REM PROGRAMMATION ASSEMBLEUR SUR C64.
 ;------------------------------------------------------------------------------
-              .byte $00            ;  Basic commence avec un $00 à $0801.
+               .byte $00            ;  Basic commence avec un $00 à $0801.
 bcmd1          .word bcmd2          ;  Adresse de la commande basic suivante.
                .word 1              ;  Numero de la ligne Basic.
                .byte $8F            ;  Le token de la commande REM du Basic 
@@ -45,7 +45,7 @@ bcmd2          .word bcmd3          ;  Adresse de la commande basic suivante.
 ;------------------------------------------------------------------------------
                .byte $00            ;  Un zéro pour indiquer la fin de cette 
 bcmd3          .word bcmd4          ;  Adresse de la commande basic suivante.
-               .word 0              ;  Numero de la ligne Basic.
+               .word 3              ;  Numero de la ligne Basic.
                .byte $9e            ;  Le token de la commande SYS du Basic
                                     ;  ... ($9e=SYS)
                                     ;  L'adresse le la première instruction

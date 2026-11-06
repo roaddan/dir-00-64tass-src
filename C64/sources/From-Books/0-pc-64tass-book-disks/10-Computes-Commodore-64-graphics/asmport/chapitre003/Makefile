@@ -51,7 +51,6 @@ OUTDIRV20=$(BASEDIR)/dir-00-64tass-src/V20/prgbin
 # Chemin complet vers le programme assembleur 64tass.
 # Cela peut être remplacé par n'importe quel assembleur de votre choix.
 TASS=/usr/bin/64tass
-#
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
 # -----------------------------------------------------------------------------
@@ -72,7 +71,6 @@ X64SC=$(VICEBIN)/x64sc
 C1541=$(VICEBIN)/c1541
 # Complete path to the cartconv cartridge converter program.
 CARTCONV=$(VICEBIN)/cartconv
-#
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
 #-------------------------------------------------------------------------------
@@ -106,6 +104,13 @@ AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81:$(SOURCENAME)
 # -----------------------------------------------------------------------------
 # ------------------ S E C T I O N   O P T I O N N E L L E --------------------
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# --------------------- 1 5 4 1  U L T I M A T E  I I  +-----------------------
+# -----------------------------------------------------------------------------
+U2PCMD1=/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=/Usb0/dir-remote/d81/$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
+U2PCMD2=/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/b:mount?image=/Usb0/dir-remote/d81/datadisk.d81&type=d81&mode=readwrite' -H 'accept: application/json'
+U2PRUN =/usr/bin/curl -X 'PUT' 'http://ip200/v1/runners:run_prg?file=/Usb0/dir-remote/prg/$(SOURCENAME).prg' -H 'accept: application/json'
+#
 # -----------------------------------------------------------------------------
 # -------------------------- F T P   S E C T I O N ----------------------------
 # -----------------------------------------------------------------------------
@@ -151,20 +156,24 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 #                       # Pour transférer ... 
-#		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
+		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
 #		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
 #		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
 #		$(FTPASMCMD)	# ... le fichier source ASM.
 #		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
 #		$(FTPCRTCMD)	# ... le fichier de cartouche CRT résultant.
-		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
+#		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
 # Chargement du disque programme
+#		$(U2PCMD1)
 #		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=/Usb0/dir-remote/d81/$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
 #	   sleep 3
 # Chargement du disque de données
+#		$(U2PCMD2)
 #		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/b:mount?image=/Usb0/dir-remote/d81/datadisk.d81&type=d81&mode=readwrite' -H 'accept: application/json'
 #		sleep 3
 # Démarrage du programme.
+		$(U2PRUN)
+		sleep 3
 #		/usr/bin/curl -X 'PUT' 'http://ip200/v1/runners:run_prg?file=/Usb0/dir-remote/prg/$(SOURCENAME).prg' -H 'accept: application/json'
 # -----------------------------------------------------------------------------
 # Lorsqu'il est appelé avec « make ftp ».

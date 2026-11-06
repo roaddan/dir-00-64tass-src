@@ -16,23 +16,39 @@ version  = "20261028       "
                .include "h-header-c64.asm"
                .enc     "none"
 couleur1       .byte 14
-patern         .byte %10101010
+patern         .byte %00001111
 main           .block
                php
                jsr   cls
                #tolower
                #outstr   texte_m
+               jsr   screendis
                jsr   sub_g
                jsr   sub_c
                jsr   paintbkgnd
                jsr   maingraph
                jsr   drawman
-mainloop       jsr   getkey
+mainloop       jsr   screenena
+               jsr   getkey
+               jsr   screendis
+
+isit_splus     cmp   #$db
+               bne   isit_smoins
+               inc   patern
+               jsr   sub_c
+               jsr   paintbkgnd
+               jmp   mainloop
+
+isit_smoins    cmp   #$dd
+               bne   isit_plus
+               dec   patern
+               jsr   sub_c
+               jsr   paintbkgnd
+               jmp   mainloop
 
 isit_plus      cmp   #'+'
                bne   isit_moins
                inc   couleur1
-               inc   patern
                jsr   sub_c
                jsr   paintbkgnd
                jmp   mainloop
@@ -40,7 +56,6 @@ isit_plus      cmp   #'+'
 isit_moins     cmp   #'-'
                bne   isit_0
                dec   couleur1
-               inc   patern
                jsr   sub_c
                jsr   paintbkgnd
                jmp   mainloop
@@ -82,9 +97,20 @@ isit_c         cmp   #'c'
 
 isit_x         cmp   #'x'
                beq   out
+               jsr   $ffd2
+               pha
+               jsr   $ffd2
+               lda   #':'
+               pla   
+               jsr   putahexfmt
+               pha
+               lda   #13
+               jsr   $ffd2
+               pla   
                jmp   mainloop
 
-out            plp
+out            jsr   sub_t
+               plp
                rts
                .bend
 
@@ -108,6 +134,7 @@ sub_t          .block
                #poke 53272,21
                #poke 56576,199
                #tolower
+               jsr   screenena
                pla
                plp
                rts
@@ -147,13 +174,16 @@ maingraph      .block
 paintbkgnd     .block
                php
                pha
-               #ldzp1ptr 24575-(6*8) 
-               #setloop  32576-24575
+               cli
+               #ldzp1ptr 24575-48
+               #setloop  (32576-24575)+48
+
 encore         lda   patern
                sta   (zpage1),y
                jsr   inczpage1
                jsr   loop
                bne   encore
+               sei
                pla
                plp
                rts
@@ -163,13 +193,13 @@ encore         lda   patern
 drawman        .block
                php
                pha
-               #poke 17410,17
+               #poke 17410,170
                #poke 17449,34
                #poke 17450,34
                #poke 17451,34
                #poke 17490,34
-               #poke 17529,0
-               #poke 17531,0
+               #poke 17529,67
+               #poke 17531,67
 
                #poke 17457,153
                #poke 17493,153
