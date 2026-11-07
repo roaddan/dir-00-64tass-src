@@ -16,7 +16,7 @@ version  = "20261028       "
                .include "h-header-c64.asm"
                .enc     "none"
 couleur1       .byte 14
-patern         .byte %00001111
+patern         .byte %00000000
 main           .block
                php
                jsr   cls
@@ -178,7 +178,9 @@ paintbkgnd     .block
                #ldzp1ptr 24575-48
                #setloop  (32576-24575)+48
 
-encore         lda   patern
+encore         
+               inc   patern
+               lda   patern
                sta   (zpage1),y
                jsr   inczpage1
                jsr   loop
