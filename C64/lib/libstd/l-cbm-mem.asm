@@ -83,10 +83,12 @@ compte    .word     $0000
 ;---------------------------------------------------------------------
 ;
 ;---------------------------------------------------------------------
-decword        .block
-               jsr  push
-               stx  zpage2
-               sty  zpage2+1
+decwordyx      .block
+               jsr   push
+               stx   zpage2
+               sty   zpage2+1
+               jsr   inczp2
+
                jsr  pop
                rts
                .bend

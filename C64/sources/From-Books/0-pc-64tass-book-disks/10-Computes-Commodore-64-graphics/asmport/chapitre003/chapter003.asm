@@ -22,6 +22,21 @@ main           .block
                jsr   cls
                #tolower
                #outstr   texte_m
+binagain       jsr   random8
+               #locate  5,22
+               jsr   putabinfmt
+               ;cmp   #$0f
+               ;beq   statit
+               ;and   #$07
+               ;cmp   #$05
+               ;beq   binagain
+statit         jsr   stat
+               jmp   binagain
+               plp
+               rts
+
+
+;graphic       php
                jsr   screendis
                jsr   sub_g
                jsr   sub_c
@@ -178,9 +193,9 @@ paintbkgnd     .block
                #ldzp1ptr 24575-48
                #setloop  (32576-24575)+48
 
-encore         
-               inc   patern
-               lda   patern
+encore         jsr   random8
+               and   #$0f
+               sta   patern
                sta   (zpage1),y
                jsr   inczpage1
                jsr   loop
