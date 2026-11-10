@@ -11,7 +11,7 @@
 ;-----------------------------------------------------------------------------
 
 ;-----------------------------------------------------------------------------
-version  = "20261028       " 
+version  = "20261028      0" 
 ;-----------------------------------------------------------------------------
                .include "h-header-c64.asm"
                .enc     "none"
@@ -20,10 +20,11 @@ patern         .byte %00000000
 main           .block
                php
                jsr   cls
+               #v20col
                #tolower
                #outstr   texte_m
 binagain       jsr   random8
-               #locate  5,22
+               #locate  26,0
                jsr   putabinfmt
                ;cmp   #$0f
                ;beq   statit

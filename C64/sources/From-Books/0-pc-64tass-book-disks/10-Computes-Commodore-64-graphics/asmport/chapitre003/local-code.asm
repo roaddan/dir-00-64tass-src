@@ -6,18 +6,13 @@ nosame         jsr   $e0d3
                eor   $8c
                eor   $8d
                eor   $8e
-               ;eor   $8e
-               ;eor   $8d
-               ;eor   $8c
-               ;bit   tmpb
-               ;bmi   checkv
-               ;eor   #$ff
-               ;jmp   out
-checkv         ;bvs   out
-               ;and   #$7f
-               ;cmp   tmpb
-               ;beq   nosame
-out            ;sta   tmpb
+;               pha
+;               jsr   $e0d3
+;               pla
+;               eor   $8a
+;               eor   $8c
+;               eor   $8d
+;               eor   $8e
                plp
                rts
 
