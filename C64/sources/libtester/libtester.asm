@@ -23,18 +23,34 @@ main           .block
                ;#drawbox  2,2,20,15,cblanc,chaine 
                lda   colram 
                ;jsr   sid_tada
+               ; On met les registres à zero.   
                lda   #$00
-               tay
-               tax
-               jsr   getkey
-               #showregs
-               #showregs
-               #showregs
-               #showregs
-               jsr   getkey
+               #deekxy  motvide
+               ; On charge a et x à la valeur de mot.
+               #deekax  mot
+               ; On copie mot dans mot 2.
+               #dokeax  mot2
+               ; On vide AX
+               #deekax  motvide
+               ; On le recharge avec mot 2 A=$12 x=$34
+               #deekax  mot2
+               #showregs            ; = = = = = S H O W R E G S = = = = = = = =
+               inc   mot
+               #deekax  motvide
+               #deekax  mot
+               #showregs            ; = = = = = S H O W R E G S = = = = = = = =
+               #deekay  motvide
+               #deekxy  mot2
+               #showregs            ; = = = = = S H O W R E G S = = = = = = = =
+               #deekxy  motvide
+               #deekyx  mot2
+               #showregs            ; = = = = = S H O W R E G S = = = = = = = =
                rts
                .bend
 
+mot            .word $1234           
+motvide        .word $000
+mot2           .word $000
 chainecol      .byte 15
 chainepos      .byte 10,10
 chaine         .null "chaine test."

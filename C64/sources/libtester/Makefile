@@ -79,7 +79,7 @@ CARTCONV=$(VICEBIN)/cartconv
 # Ces options vous permettent de monter un image disque utilitaire dans le 
 # lecteur 9.
 # Chemin complet vers le disque utilitaire c64 à monter sur le lecteur 9.
-TMPSEP06=-9 $(BASEDIR)/dir-disk-img/d64/turbo-macro-pro-sep06.d64
+TMPSEP06=-9 $(BASEDIR)/d-disk-img/d64/turbo-macro-pro-sep06.d64
 # Chemin complet vers le disque utilitaire Vic20 à monter sur le lecteur 9.
 V20MKASM=-9 $(BASEDIR)/dir-00-64tass-src/V20/utils/V20MikroAsmbler.d64
 # Chemin vers les programmes utilitaires que vous voulez copier sur les disques
@@ -129,7 +129,7 @@ FTPCMDPATH=/usr/bin/lftp
 # Remarque : Le chemin suivant doit exister sur les disques USB de la cartouche
 #            ... Ultimate II+.
 # Où placer les fichiers sur l'Ultimate II+.
-FTPBASDIR=/Usb0/dir-remote
+FTPBASDIR=/Usb0/d-remote
 FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
 FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
 FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye
@@ -151,21 +151,21 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 #                       # Pour transférer ... 
-#		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
+		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
 #		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
 #		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
 #		$(FTPASMCMD)	# ... le fichier source ASM.
 #		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
 #		$(FTPCRTCMD)	# ... le fichier de cartouche CRT résultant.
-		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
+#		$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
 # Chargement du disque programme
-#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=/Usb0/dir-remote/d81/$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
+#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=/Usb0/d-remote/d81/$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
 #		sleep 3
 # Chargement du disque de données
-#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/b:mount?image=/Usb0/dir-remote/d81/datadisk.d81&type=d81&mode=readwrite' -H 'accept: application/json'
+#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/b:mount?image=/Usb0/d-remote/d81/datadisk.d81&type=d81&mode=readwrite' -H 'accept: application/json'
 #		sleep 3
 # Démarrage du programme.
-#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/runners:run_prg?file=/Usb0/dir-remote/prg/$(SOURCENAME).prg' -H 'accept: application/json'
+		/usr/bin/curl -X 'PUT' 'http://ip200/v1/runners:run_prg?file=/Usb0/d-remote/prg/$(SOURCENAME).prg' -H 'accept: application/json'
 # -----------------------------------------------------------------------------
 # Lorsqu'il est appelé avec « make ftp ».
 # ** À l'aide de commentaires, vous pouvez masquer ou activer n'importe quelle action.
