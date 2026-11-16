@@ -6,13 +6,6 @@ nosame         jsr   $e0d3
                eor   $8c
                eor   $8d
                eor   $8e
-;               pha
-;               jsr   $e0d3
-;               pla
-;               eor   $8a
-;               eor   $8c
-;               eor   $8d
-;               eor   $8e
                plp
                rts
 

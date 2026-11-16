@@ -20,9 +20,15 @@ patern         .byte %00000000
 main           .block
                php
                jsr   cls
-               #v20col
+               #c64col
                #tolower
+               jsr   showrandom8
                #outstr   texte_m
+               plp
+               rts
+               .bend
+               
+showrandom8    .block
 binagain       jsr   random8
                #locate  26,0
                jsr   putabinfmt
@@ -33,11 +39,11 @@ binagain       jsr   random8
                ;beq   binagain
 statit         jsr   stat
                jmp   binagain
-               plp
                rts
+               .bend
 
-
-;graphic       php
+graphic        .block
+               php
                jsr   screendis
                jsr   sub_g
                jsr   sub_c
