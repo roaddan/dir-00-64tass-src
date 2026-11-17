@@ -22,12 +22,13 @@ main           .block
                jsr   cls
                #c64col
                #tolower
-               jsr   showrandom8
+               ;jsr   showrandom8
+               jsr   graphic
                #outstr   texte_m
                plp
                rts
                .bend
-               
+
 showrandom8    .block
 binagain       jsr   random8
                #locate  26,0
@@ -54,14 +55,14 @@ mainloop       jsr   screenena
                jsr   getkey
                jsr   screendis
 
-isit_splus     cmp   #$db
-               bne   isit_smoins
+isit_q         cmp   #'q'
+               bne   isit_w
                inc   patern
                jsr   sub_c
                jsr   paintbkgnd
                jmp   mainloop
 
-isit_smoins    cmp   #$dd
+isit_w         cmp   #'w'
                bne   isit_plus
                dec   patern
                jsr   sub_c
@@ -201,7 +202,7 @@ paintbkgnd     .block
                #setloop  (32576-24575)+48
 
 encore         jsr   random8
-               and   #$0f
+               ;and   #$0f
                sta   patern
                sta   (zpage1),y
                jsr   inczpage1
@@ -217,6 +218,7 @@ encore         jsr   random8
 drawman        .block
                php
                pha
+               ; Dessine un bonhomme.
                #poke 17410,170
                #poke 17449,34
                #poke 17450,34
@@ -224,7 +226,7 @@ drawman        .block
                #poke 17490,34
                #poke 17529,67
                #poke 17531,67
-
+               ; Dessine son chien.
                #poke 17457,153
                #poke 17493,153
                #poke 17494,153
