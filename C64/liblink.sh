@@ -21,9 +21,9 @@ do
     cp -f ${C64LIBDIR}/Makefile.linux ${I}
 done
 
-for I in $(find ${C64SRCDIR} -type f -iname "Makefile.macos")
-do
-    echo ${I}
-    cp -f ${C64LIBDIR}/Makefile.macos ${I}
-done
+#for I in $(find ${C64SRCDIR} -type f -iname "Makefile.macos")
+#do
+#    echo ${I}
+#    cp -f ${C64LIBDIR}/Makefile.macos ${I}
+#done
 

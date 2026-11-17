@@ -22,17 +22,16 @@
 # Le nom de base du fichier principal de votre projet 
 # (sans extension ; .asm est supposé).
 # Cela peut varier d'un projet à l'autre.
-SOURCENAME=charedit
+SOURCENAME=template
 # Emplacement final où les fichiers assemblés doivent être copiés.
 PRGDIR=dir-00-64tass-bin
 # Le chemin d'accès complet au répertoire partagé commun du projet pour des 
 # éléments tels que librairies, fichiers data, images, etc.
 BASEDIR=/Users/Locals/CBM/00-usbkey32go
-C64DIR=$(BASEDIR)/dir-00-64tass-src/C64
 # 64tass allows to include libraries of code and routines of your making.
 # Le chemin complet vers le répertoire de votre bibliothèque globales.
-LIBDIR=$(C64DIR)/lib/libstd
-#LIBDIR=$(C64DIR)/lib/librom
+LIBDIR=$(BASEDIR)/dir-00-64tass-src/C64/lib/libstd
+#LIBDIR=$(BASEDIR)/dir-00-64tass-src/C64/lib/librom
 # -----------------------------------------------------------------------------
 # Dépendances des libraries pour valider tous les changements.
 # -----------------------------------------------------------------------------
@@ -43,7 +42,8 @@ DEPENDANCES=$(DEPSLOCALES) $(LIBDEPS)
 # Le fichier make étant exécuté depuis votre projet, les informations ... 
 # ... suivantes servent à spécifier l'emplacement des fichiers générés. 
 # Chemin complet où seront déposés les fichiers compilés.
-OUTDIRC64=$(C64DIR)/prgbin
+OUTDIRC64=$(BASEDIR)/dir-00-64tass-src/C64/prgbin
+OUTDIRV20=$(BASEDIR)/dir-00-64tass-src/V20/prgbin
 #
 # -----------------------------------------------------------------------------
 # -----------------------S E C T I O N   6 4 T A S S  -------------------------
@@ -51,7 +51,6 @@ OUTDIRC64=$(C64DIR)/prgbin
 # Chemin complet vers le programme assembleur 64tass.
 # Cela peut être remplacé par n'importe quel assembleur de votre choix.
 TASS=/usr/bin/64tass
-#
 # -----------------------------------------------------------------------------
 # ------------------------- V I C E   S E C T I O N ---------------------------
 # -----------------------------------------------------------------------------
@@ -63,31 +62,33 @@ TASS=/usr/bin/64tass
 # Complete path to the Vic20 emulator's programs.
 VICEBIN=/usr/bin
 # Complete path to the Vic20 emulator program.
-V20=$(VICEBIN)/xvic
+V20=$(VICEBIN)/xvic -directory /usr/local/share/vice 
 # Complete path to the C64 emulator program.
-X64=$(VICEBIN)/x64
+X64=$(VICEBIN)/x64 -directory /usr/local/share/vice 
 # Complete path to the C64sc emulator program.
-X64SC=$(VICEBIN)/x64sc
+X64SC=$(VICEBIN)/x64sc -directory /usr/local/share/vice 
 # Complete path to the c1541 disk creation program.
 C1541=$(VICEBIN)/c1541
 # Complete path to the cartconv cartridge converter program.
 CARTCONV=$(VICEBIN)/cartconv
-#
 #-------------------------------------------------------------------------------
 # ===== C B M   D R I V E S   S E C T I O N =====
 #-------------------------------------------------------------------------------
-# Chemin vers les programmes utilitaires que vous voulez copier sur les disques
-# ... destination.
-UTILSDIR=$(C64DIR)/utils
 # Ces options vous permettent de monter un image disque utilitaire dans le 
 # lecteur 9.
 # Chemin complet vers le disque utilitaire c64 à monter sur le lecteur 9.
-TMPSEP06= -9 $(UTILSDIR)/d64/turbo-macro-pro-sep06.d64
+TMPSEP06=-9 $(BASEDIR)/d-disk-img/d64/turbo-macro-pro-sep06.d64
+# Chemin complet vers le disque utilitaire Vic20 à monter sur le lecteur 9.
+V20MKASM=-9 $(BASEDIR)/dir-00-64tass-src/V20/utils/V20MikroAsmbler.d64
+# Chemin vers les programmes utilitaires que vous voulez copier sur les disques
+# ... destination.
+UTILSDIR=$(BASEDIR)/dir-00-64tass-src/C64/utils
 DBC=$(UTILSDIR)/dbc
 JBMON64=$(UTILSDIR)/jbmon
-TMPAPP=$(UTILSDIR)/tmp
 #CHAREDIT=charedit-fr.prg
 J2TESTER=$(UTILSDIR)/j2tester
+TMP=$(UTILSDIR)/tmp
+DATADSK=-9 $(SOURCENAME)data.d81
 #
 #-------------------------------------------------------------------------------
 # Quelques autres variables, simplement pour réduire la longueur des lignes de 
@@ -105,6 +106,13 @@ AUTOSTART=-autostart $(BASEDIR)/$(PRGDIR)/d81/$(SOURCENAME).d81:$(SOURCENAME)
 # -----------------------------------------------------------------------------
 # ------------------ S E C T I O N   O P T I O N N E L L E --------------------
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# --------------------- 1 5 4 1  U L T I M A T E  I I  +-----------------------
+# -----------------------------------------------------------------------------
+U2PCMD1=/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=/Usb0/d-remote/d81/$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
+U2PCMD2=/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/b:mount?image=/Usb0/d-remote/d81/$(SOURCENAME)data.d81&type=d81&mode=readwrite' -H 'accept: application/json'
+U2PRUN =/usr/bin/curl -X 'PUT' 'http://ip200/v1/runners:run_prg?file=/Usb0/d-remote/prg/$(SOURCENAME).prg' -H 'accept: application/json'
+#
 # -----------------------------------------------------------------------------
 # -------------------------- F T P   S E C T I O N ----------------------------
 # -----------------------------------------------------------------------------
@@ -128,7 +136,7 @@ FTPCMDPATH=/usr/bin/lftp
 # Remarque : Le chemin suivant doit exister sur les disques USB de la cartouche
 #            ... Ultimate II+.
 # Où placer les fichiers sur l'Ultimate II+.
-FTPBASDIR=/Usb0/dir-remote
+FTPBASDIR=/Usb0/d-remote
 FTPASMARG=cd $(FTPBASDIR)/asm; put $(SOURCENAME).asm; bye
 FTPTXTARG=cd $(FTPBASDIR)/txt; put $(SOURCENAME).txt; bye
 FTPPRGARG=cd $(FTPBASDIR)/prg; put $(SOURCENAME).prg; bye
@@ -150,20 +158,29 @@ FTPCRTCMD=$(FTPCMDPATH) -e "$(FTPCRTARG)" $(FTPSVRIP)
 # -----------------------------------------------------------------------------
 all: 	$(SOURCENAME).d64	# To compile the source file and crate disk.
 #                       # Pour transférer ... 
-		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
+#		$(FTPPRGCMD)	# ... le fichier de programme PRG résultant.
 #		$(FTPD64CMD)	# ... le fichier disque D64 résultant.
-		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
+#		$(FTPD81CMD)	# ... le fichier disque D81 résultant.
 #		$(FTPASMCMD)	# ... le fichier source ASM.
 #		$(FTPTXTCMD) 	# ... le fichier TXT résultant.
 #		$(FTPCRTCMD)	# ... le fichier de cartouche CRT résultant.
-#		$(VICE) $(AUTOSTART) & # pour charger vice avec arguments.
-		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=/Usb0/dir-remote/d81/$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
-		sleep 3
-		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/b:mount?image=/Usb0/dir-remote/d81/datadisk.d81&type=d81&mode=readwrite' -H 'accept: application/json'
-#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=%2fUsb0%2Fdir-remote%2Fd81%2F$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
-		sleep 3
-		/usr/bin/curl -X 'PUT' 'http://ip200/v1/runners:run_prg?file=/Usb0/dir-remote/prg/$(SOURCENAME).prg' -H 'accept: application/json'
-		
+		$(VICE) $(AUTOSTART) $(DATADSK) 
+		#$(VICE) $(AUTOSTART) $(TMPSEP06) & # pour charger vice avec arguments.
+# -----------------------------------------------------------------------------
+# Section pour le 1541 ultimate II + 
+# -----------------------------------------------------------------------------
+# Chargement du disque programme
+#		$(U2PCMD1)
+#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/a:mount?image=/Usb0/d-remote/d81/$(SOURCENAME).d81&type=d81&mode=readwrite' -H 'accept: application/json'
+#	   sleep 3
+# Chargement du disque de données
+#		$(U2PCMD2)
+#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/drives/b:mount?image=/Usb0/d-remote/d81/datadisk.d81&type=d81&mode=readwrite' -H 'accept: application/json'
+#		sleep 3
+# Démarrage du programme.
+#		$(U2PRUN)
+#		sleep 3
+#		/usr/bin/curl -X 'PUT' 'http://ip200/v1/runners:run_prg?file=/Usb0/d-remote/prg/$(SOURCENAME).prg' -H 'accept: application/json'
 # -----------------------------------------------------------------------------
 # Lorsqu'il est appelé avec « make ftp ».
 # ** À l'aide de commentaires, vous pouvez masquer ou activer n'importe quelle action.
@@ -192,21 +209,25 @@ clean:
 
 $(SOURCENAME).d64: $(SOURCENAME).prg
 		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME).d64 -attach $(SOURCENAME).d64 \
-		-write $(SOURCENAME).prg $(SOURCENAME) \
-		-write $(DBC) dbc \
-		-write $(JBMON64) jbmon64 \
-		-write $(J2TESTER) j2tester \
-		-write $(TMPAPP) tmp
+		-write $(SOURCENAME).prg $(SOURCENAME)
 		cp -f  $(SOURCENAME).d64 $(BASEDIR)/$(PRGDIR)/d64
 		cp -f  $(SOURCENAME).d64 $(OUTDIR)
+		$(C1541) -format $(SOURCENAME),0 d64 $(SOURCENAME)data.d64 -attach $(SOURCENAME)data.d64 \
+			-write $(DBC) dbc \
+			-write $(JBMON64) jbmon64 \
+			-write $(TMP) tmp
+		cp -f  $(SOURCENAME)data.d64 $(BASEDIR)/$(PRGDIR)/d81
+		cp -f  $(SOURCENAME)data.d64 $(OUTDIR)
 		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME).d81 -attach $(SOURCENAME).d81 \
-		-write $(SOURCENAME).prg $(SOURCENAME) \
-		-write $(DBC) dbc \
-		-write $(JBMON64) jbmon64 \
-		-write $(J2TESTER) j2tester \
-		-write $(TMPAPP) tmp
+		-write $(SOURCENAME).prg $(SOURCENAME)
 		cp -f  $(SOURCENAME).d81 $(BASEDIR)/$(PRGDIR)/d81
 		cp -f  $(SOURCENAME).d81 $(OUTDIR)
+		$(C1541) -format $(SOURCENAME),0 d81 $(SOURCENAME)data.d81 -attach $(SOURCENAME)data.d81 \
+			-write $(DBC) dbc \
+			-write $(JBMON64) jbmon64 \
+			-write $(TMP) tmp
+		cp -f  $(SOURCENAME)data.d81 $(BASEDIR)/$(PRGDIR)/d81
+		cp -f  $(SOURCENAME)data.d81 $(OUTDIR)
 
 # Assemblage et distribution des fichiers résultants.
 $(SOURCENAME).prg: $(SOURCENAME).asm $(DEPENDANCES)

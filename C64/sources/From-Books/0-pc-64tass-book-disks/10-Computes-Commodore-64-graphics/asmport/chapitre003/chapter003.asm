@@ -1,6 +1,6 @@
 ;-----------------------------------------------------------------------------
 ; Projet...: 
-; Fichier..: template.asm
+; Fichier..: chapter003.asm
 ; Auteur...: Daniel Lafrance
 ; Version..: 0.1.2
 ; Révision.: 20261028-000000
@@ -55,14 +55,22 @@ mainloop       jsr   screenena
                jsr   getkey
                jsr   screendis
 
-isit_q         cmp   #'q'
-               bne   isit_w
+isit_r         cmp   #'r'
+               bne   isit_i
+               jsr   random8
+               sta   patern
+               jsr   sub_c
+               jsr   paintbkgnd
+               jmp   mainloop
+
+isit_i         cmp   #'i'
+               bne   isit_d
                inc   patern
                jsr   sub_c
                jsr   paintbkgnd
                jmp   mainloop
 
-isit_w         cmp   #'w'
+isit_d         cmp   #'d'
                bne   isit_plus
                dec   patern
                jsr   sub_c
@@ -85,21 +93,25 @@ isit_moins     cmp   #'-'
 
 isit_0         cmp   #'0'
                bne   isit_1
-               lda   #$0
+               lda   #$00
                sta   patern
+               jsr   sub_c
                jsr   paintbkgnd
                jmp   mainloop
 
 isit_1         cmp   #'1'
-               bne   isit_b
+               bne   isit_5
                lda   #$ff
                sta   patern
+               jsr   sub_c
                jsr   paintbkgnd
                jmp   mainloop
 
-isit_b         cmp   #'b'
+isit_5         cmp   #'5'
                bne   isit_g
-               inc   patern
+               lda   #%01100110
+               sta   patern
+               jsr   sub_c
                jsr   paintbkgnd
                jmp   mainloop
 
@@ -185,6 +197,7 @@ encore         lda   couleur1
 maingraph      .block
                php
                pha
+               ; on trace le phare;
                #poke 18090,0
                #poke 18130,17
                #poke 18170,17
@@ -197,13 +210,12 @@ maingraph      .block
 paintbkgnd     .block
                php
                pha
+               pha
                cli
                #ldzp1ptr 24575-48
                #setloop  (32576-24575)+48
-
-encore         jsr   random8
-               ;and   #$0f
-               sta   patern
+               pla
+encore         lda   patern
                sta   (zpage1),y
                jsr   inczpage1
                jsr   loop
@@ -224,8 +236,8 @@ drawman        .block
                #poke 17450,34
                #poke 17451,34
                #poke 17490,34
-               #poke 17529,67
-               #poke 17531,67
+               #poke 17529,34
+               #poke 17531,34
                ; Dessine son chien.
                #poke 17457,153
                #poke 17493,153
