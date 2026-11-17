@@ -122,9 +122,9 @@ uii_time_get   =     $26   ; $01 $26 [id] -> Renvoie l'heure/la date actuelle
 uii_time_set   =     $27   ; $01 $27 <Y> <M> <D> <H> <M> <S>
 ;                          ; Y = année en cours - 1900
 uii_dos_echo   =     $f0   ; $01 $f0 
-;===============================================
-; 541 Ultimate II+ Commandlist definition
-;===============================================
+;==============================================================================
+; Définition de la liste des commandes pour le 1541 Ultimate II+
+;==============================================================================
 uiicmdgetid    .byte $01,$01,$00
 uiicmdgettime  .byte $01,$26,$00
 
@@ -149,73 +149,85 @@ txbflag        .byte 0
 ;*******************************************************************************
 
 ;-------------------------------------------------------------------------------
-; Return Zero flag set if 1541 Ultimate II+ busy.
-; Z=0 if Busy flag is on, Z=1 If busy is off.
+; Retourne le drapeau « Zero » si le 1541 Ultimate II+ est occupé.
+; Z=0 si le drapeau « occupé » est activé, 
+; Z=1 si le drapeau « occupé » est désactivé.
 ;-------------------------------------------------------------------------------
-uiifisbusy  .block
-         pha
-         lda   uiicmdstat  
-         and   #%00000001  ; Mask bit 0 of the command status register. 
-                     ; 1=Busy, 0=Free.
-                     ; Zf=0  , Zf=1,  BNE if Busy, BEQ if free.
-         eor   #%00000001  ; Reverse Logic  BEQ if Busy, BNE if free.   
-         pla
-         rts
-         .bend
+uiifisbusy     .block
+               pha
+               lda   uiicmdstat  
+               and   #%00000001     ; Masquer le bit 0 du registre d'état. 
+                                    ; 1 = Occupé, 0 = Libre.
+                                    ; Zf=0  , Zf=1,  
+                                    ; BNE si occupé, BEQ si libre.
+               eor   #%00000001     ; Logique inversée : BEQ si occupé, 
+                                    ;                    BNE si libre.  
+               pla
+               rts
+               .bend
 
 ;-------------------------------------------------------------------------------
-; Wait while 1541 Ultimate II+ is busy.
+; Attend pendant que le 1541 Ultimate II+ est occupé.
 ;-------------------------------------------------------------------------------
 uiifbusywait   .block
-         php
-wait        jsr   uiifisbusy
-         beq   wait        ; Waiting for Busy to disappear.
-         plp
-         rts
-         .bend
+               php
+wait           jsr   uiifisbusy
+               beq   wait           ; En attente de la disparition de « Busy ».
+               plp
+               rts
+               .bend
 
 ;-------------------------------------------------------------------------------
-; Check if 1541 Ultimate II+ has send a data acc.
-; Z=1 Data Acc is 1, z=0 if Data acc os 0
+; Vérifiez si le 1541 Ultimate II+ a envoyé un accusé de réception de données.
+; Z=1 si Data Acc vaut 1 
+; Z=0 si Data Acc vaut 0.
 ;-------------------------------------------------------------------------------
 uiifisdataacc  .block
-         pha
-         lda   uiidatastat
-         and   #%00000010  ; Mask bit 1 of the command status register. 
-                     ; 1=Dacc, 0=/Dacc.
-                     ; Zf=0  , Zf=1,  BNE if Dacc, BEQ if /Dacc.
-         eor   #%00000010  ; Reverse Logic  BEQ if Dacc, BNE if /Dacc.     
-out         pla
-         rts
-         .bend
+               pha
+               lda   uiidatastat
+               and   #%00000010     ; Masquer le bit 1 du registre d'état de 
+                                    ; ... la commande.
+                                    ; 1=Dacc, 0=/Dacc.
+                                    ; Zf=0  , Zf=1,  BNE si Dacc, BEQ si /Dacc.
+               eor   #%00000010     ; Logique inversée : BEQ si Dacc,  
+                                    ;                    BNE si /Dacc.     
+               pla
+               rts
+               .bend
 
 ;-------------------------------------------------------------------------------
-; Wait for Acc flag to appear.
+; Attendre l'apparition du témoin Acc.
 ;-------------------------------------------------------------------------------
 uiifdaccwait   .block
-         php
-wait        jsr   uiifisdataacc
-         bne   wait        ; Waiting for Dacc to appears.
-         plp
-         rts
-         .bend
+               php
+wait           jsr   uiifisdataacc
+               bne   wait           ; En attente de l'apparition de Dacc.
+               plp
+               rts
+               .bend
 
 ;-------------------------------------------------------------------------------
-; Return Carry flag representing 1541 Ultimate II+ abort (bit 2) condition.
-; Z=1 if abort pending, Z=0 if no abort pending.
+; Renvoie le drapeau Carry (retenue) indiquant une condition d'abandon (bit 2) 
+; sur le 1541 Ultimate II+.
+; Z=1 si une annulation est en attente, 
+; Z=0 si aucune annulation n’est en attente.
 ;-------------------------------------------------------------------------------
 uiifisabortp   .block
-         pha ; Bit 2
-         lda   uiicmdstat
-         and   #%00000100  ; Mask bit 2 of the command status register. 
-                     ; 1=Abort pending, 0=/Abort pending.
-                     ; Zf=0, Zf=1,  BNE if Abort pending
-                     ;              BEQ if No Abort pending.
-         eor   #%00000100  ; Rev. Logic   BEQ if Abort pending 
-                     ;              BNE if No Abort pending.
-         pla
-         rts
-         .bend
+               pha                  ; Bit 2
+               lda   uiicmdstat
+               and   #%00000100     ; Masquer le bit 2 du registre d'état de la
+                                    ; ... commande.
+                                    ;        1 = abandon en attente, 
+                                    ;        0 = /abandon en attente.
+                                    ;  Zf=0, Zf=1, 
+                                    ;        BNE si abandon est en attente
+                                    ;        BEQ si aucun abandon.
+               eor   #%00000100     ; Logique inv. 
+                                    ;        BEQ si abandon est en attente
+                                    ;        BNE si aucun abandon.
+               pla
+               rts
+               .bend
 
 uiifabortpwait .block
          php
