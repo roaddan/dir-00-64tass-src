@@ -6,7 +6,8 @@
 ; Version.........: 0.0.1
 ; Révisions.......: 20161117 Francisation des commentaires,
 ;------------------------------------------------------------------------------
-; 1541 Ultimate II+ DOS Include file for constants and functions:
+; Fichier d'inclusion DOS pour 1541 Ultimate II+ contenant des constantes et 
+; des fonctions :
 ;-------------------------------------------------------------------------------
                .include    "m-c64-ultimateii.asm"
 ;-------------------------------------------------------------------------------
@@ -25,97 +26,102 @@ uiictrlreg     =     $df1c ;(Write)          * CONTROL REGISTER *
    uiicmdbusy  =     $01
    uiidatalast =     $02
    uiidatamore =     $03
-   uiicmdstat  =     $df1c ;(Read) default $00 * CMD STATUS REGISTER *
-   uiicmddata  =     $df1d ;(Write)          * COMMAND DATA REGISTER *
-   uiiidenreg  =     $df1d ;(Read)  default $c9 * API ID REGISTER *
-   uiirxdata   =     $df1e ;(Read only)         * DATA REGISTER *
-   uiidatastat =     $df1f ;(Read only)         * DATA STATUS REGISTER *
- 
+   ; 
+   uiicmdstat  =     $df1c ;(Lecture) ($00) * REGISTRE D'ÉTAT DE COMMANDE
+   uiicmddata  =     $df1d ;(Écriture)      * REGISTRE DE DONNÉES DE COMMANDE
+   uiiidenreg  =     $df1d ;(Lecture) ($c9) * REGISTRE D'IDENTIFIANT API
+   uiirxdata   =     $df1e ;(Lecture seule) * REGISTRE DE DONNÉES
+   uiidatastat =     $df1f ;(Lecture seule) * rEGISTRE DE STATUS DES DONNÉES
 ;-------------------------------------------------------------------------------
-; 1541 Ultimate II+ DOS Command structure :  $01 CMD [XX] <FILENAME> 
+; Structure des commandes DOS du 1541 Ultimate II+ :  $01 CMD [XX] <FILENAME> 
 ;-------------------------------------------------------------------------------
 ;-------------------------------------------------------------------------------
 ; CMD list
 ;-------------------------------------------------------------------------------
-uii_identify   =     $01   ; $01 $01 -> Read Id String as "ULTIMATE-II DOS V1.0"
-
+uii_identify   =     $01   ; $01 $01 -> Lire la chaîne d’identifiant comme:
+                           ;                        "ULTIMATE-II DOS V1.0"
 ;-------------------------------------------------------------------------------
-; File access commands.
+; Commandes d'accès aux fichiers.
 ;-------------------------------------------------------------------------------
-uii_file_open  =     $02   ; Open file for ...
+uii_file_open  =     $02   ; Ouvrir le fichier pour...
 ;-------------------------------------------------------------------------------
 ; File access sub-command.
 ;-------------------------------------------------------------------------------
-uii_fa_read    =     $01   ; $01 $02 $01 <filename> -> ... reading.
-uii_fa_write   =     $02   ; $01 $02 $02 <filename> -> ... writing. 
-uii_fa_new     =     $04   ; $01 $02 $04 <filename> -> ... creating/writing.
-uii_fa_ovwri   =     $08   ; $01 $02 $08 <filename> -> ... overwriting.
-uii_file_close =     $03   ; $01 $03 -> close opened file.
-uii_read_data  =     $04  ; $01 $04 [len_lo] [len_hi]
+uii_fa_read    =     $01   ; $01 $02 $01 <nomfichier> -> ... lecture.
+uii_fa_write   =     $02   ; $01 $02 $02 <nomfichier> -> ... ecriture. 
+uii_fa_new     =     $04   ; $01 $02 $04 <nomfichier> -> ... creation/ecriture.
+uii_fa_ovwri   =     $08   ; $01 $02 $08 <nomfichier> -> ... remplacement.
+uii_file_close =     $03   ; $01 $03 -> ferme le fichier ouvert.
+uii_read_data  =     $04   ; $01 $04 [len_lo] [len_hi]
 uii_writ_data  =     $05   ; $01 $05 [dummy] [dummy] [data...]
 uii_file_seek  =     $06   ; $01 $06 [posl] [posml] [posmh] [posh].
 ;-------------------------------------------------------------------------------
-uii_file_info  =     $07   ; $01 $07 -> returns current open file info.
-uii_file_stat  =     $08   ; $01 $08 <filename> -> returns file info.
+uii_file_info  =     $07   ; $01 $07 -> renvoie des informations sur le ...
+                           ;            ... fichier actuellement ouvert.
+uii_file_stat  =     $08   ; $01 $08 <nomfichier> -> Renvoie des informations 
+                           ;                         ... sur le fichier.
 ;-------------------------------------------------------------------------------
-; File info/stat structure.
+; Structure des informations/statistiques de fichier.
 ;-------------------------------------------------------------------------------
-; dword  size -> file size.
-; word   date -> last modifief date.
-; word   time -> last modifief time.
+; dword  size -> grandeur du fichier
+; word   date -> date de la dernière modification.
+; word   time -> heure de la dernière modification.
 ; char   extension[3]
-; byte   attrib
-; char filename[] 
+; byte   attributs
+; char   nomfichier[] 
 ;-------------------------------------------------------------------------------
-uii_file_del   =     $09   ; $01 $09 <filename> -> delete/scratch file.
-uii_file_ren   =     $0a   ; $01 $0a <filename> $00 <newname>
-uii_file_copy  =     $0b   ; $01 $0b <source> $00 <destination>
-
+uii_file_del   =     $09   ; $01 $09 <nomfichier> -> Supprimer/effacer fichier.
+uii_file_ren   =     $0a   ; $01 $0a <nomfichier> $00 <nouveaunom> -> renommer.
+uii_file_copy  =     $0b   ; $01 $0b <source> $00 <destination> -> copier.
 ;-------------------------------------------------------------------------------
-; Directory access commands.
+; Commandes d'accès aux répertoires.
 ;-------------------------------------------------------------------------------
-uii_dir_change =     $11   ; $01 $11 <directory name>
-uii_dir_pwd    =     $12   ; $01 $12 
-uii_dir_open   =     $13   ; $01 $13 
-uii_dir_read   =     $14   ; $01 $14
+uii_dir_change =     $11   ; $01 $11 <nom du répertoire> Change de répertoire.
+uii_dir_pwd    =     $12   ; $01 $12 Retourne le nom du répertoire actuel.
+uii_dir_open   =     $13   ; $01 $13 Ouvre un répertoire.
+uii_dir_read   =     $14   ; $01 $14 Lit le contenu du répertoire.
 ;-------------------------------------------------------------------------------
-; Read dir output : attr <filename> attr <filename> ... 
-; byte attribute 
-; char filename []
+; Structure de la lecture d'un répertoire :
+;  attr <nomfichier> attr <nomfichier> ... 
+;              byte  attr   
+;              char  nomfichier []
 ; 
-; Attribute description.
+; Description de l’attribut.
 ;  ; Bit 7-6 ; Bit 5   ; Bit 4 ; Bit 3  ; Bit 2  ; Bit 1  ; Bit 0  ;
 ;  ; Unused  ; Archive ; Dir   ; Volume ; System ; Hidden ; Readonly ; 
 ;-------------------------------------------------------------------------------
-uii_dir_cp_ui  =     $15   ; $01 $15 -> makes UI current path as API current path.
-uii_dir_mkdir  =     $16   ; $01 $16 <dirname> -> Create directory under current.
-uii_dir_home   =     $17   ; $01 $17 -> makes UI home path as API current path.
-
+uii_dir_cp_ui  =     $15   ; $01 $15 -> Définit le chemin actuel de l'interface
+                           ;            ... utilisateur comme étant le chemin 
+                           ;            ... actuel de l'API.
+uii_dir_mkdir  =     $16   ; $01 $16 <nomrep> 
+                           ;         -> Créer un répertoire dans le 
+                           ;            ... répertoire courant.
+uii_dir_home   =     $17   ; $01 $17 -> Définit le chemin d'accueil de 
+                           ;            ... l'interface utilisateur comme étant
+                           ;            ...  le chemin actuel de l'API.
 ;-------------------------------------------------------------------------------
-; REU access command.
+; Commande d'accès REU.
 ;-------------------------------------------------------------------------------
 uii_reu_load   =     $21   
 ;     $01 $21 [addL] [addML] [addMH] [addH] [lenL] [lenML] [lenMH] [lenH] 
 uii_reu_save   =     $22   
 ;     $01 $22 [addL] [addML] [addMH] [addH] [lenL] [lenML] [lenMH] [lenH] 
-
 ;-------------------------------------------------------------------------------
-; Virtual disk drive command.
+; Commande de lecteur de disque virtuel.
 ;-------------------------------------------------------------------------------
-uii_dsk_mount  =     $23   ; $01 $23 <id> <filename>
+uii_dsk_mount  =     $23   ; $01 $23 <id> <nomfichier>
 uii_dsk_umount =     $24   ; $01 $24 <id>
 uii_dsk_swap   =     $25   ; $01 $25 <id>
-
 ;-------------------------------------------------------------------------------
-; RTC command
+; Commande RTC
 ;-------------------------------------------------------------------------------
-uii_time_get   =     $26   ; $01 $26 [id] -> returns current RTC time/date.
-;                          ; If id = 1 returns "www yyyy/mm/dd hh:mm:ss" format.
+uii_time_get   =     $26   ; $01 $26 [id] -> Renvoie l'heure/la date actuelle 
+                           ;                 ... du RTC.
+;                          ; Si id = 1, le format renvoyé est :
+                           ;        « www yyyy/mm/dd hh:mm:ss ».
 uii_time_set   =     $27   ; $01 $27 <Y> <M> <D> <H> <M> <S>
-;                          ; Y = current Year - 1900
-
+;                          ; Y = année en cours - 1900
 uii_dos_echo   =     $f0   ; $01 $f0 
-
 ;===============================================
 ; 541 Ultimate II+ Commandlist definition
 ;===============================================
