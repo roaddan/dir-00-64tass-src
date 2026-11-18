@@ -1,4 +1,11 @@
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+; Scripteur ......: Daniel Lafrance, Québec, canada.
+; Nom du fichier .: l-c64-sid.asm
+; Type fichier....: Librairie 
+; Creation........: 20251208 
+; Version.........: 0.1.0
+; Révisions.......: 20261118-000000 Francisation des commentaires,
+;------------------------------------------------------------------------------;-----------------------------------------------------------------------------
 ; Joue un BEEP sur le SID.
 ;-----------------------------------------------------------------------------
 ;                  reg,valeur
@@ -30,24 +37,24 @@ vic_son3       .byte sid_v3offset + 4,   15        ; sid+24=54296,  15   Volume.
                .byte   $ff,  $ff
 
 ; Place une note dans le 
-sid_note     .macro voix,freq
+sid_note       .macro voix,freq
                php
                pha
                .if \voix=2 
-                  lda   #<\freq
-                  sta   sid+7
-                  lda   #>\freq
-                  sta   sid+8
+                     lda   #<\freq
+                     sta   sid+7
+                     lda   #>\freq
+                     sta   sid+8
                .elif \voix=3
-                  lda   #<\freq
-                  sta   sid+14
-                  lda   #>\freq
-                  sta   sid+15
+                     lda   #<\freq
+                     sta   sid+14
+                     lda   #>\freq
+                     sta   sid+15
                .else
-                  lda   #<\freq
-                  sta   sid+0
-                  lda   #>\freq
-                  sta   sid+1
+                     lda   #<\freq
+                     sta   sid+0
+                     lda   #>\freq
+                     sta   sid+1
                .endif               
                pla
                plp
@@ -67,7 +74,7 @@ sid_progtest   .block
                ldy #>vic_son
                jsr sid_progdata
                jsr pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;-----------------------------------------------------------------------------
@@ -76,110 +83,113 @@ sid_progtest   .block
 ; x (LSB) et Y(MSB) contiennet l'adresse du début des couples de données.
 ;-----------------------------------------------------------------------------
 sid_progdata   .block
-               jsr pushall
-               stx $fb
-               sty $fc
-               lda #$00
-               tax
-               tay
-sid_progcmd    lda ($fb),y        ; On programme le SID pour le son.
-               tax
-               iny
-               lda ($fb),y
-               iny
-               cpx #$ff
-               beq sid_progout
-               sta sid,x
-               jmp sid_progcmd
-sid_progout    jsr popall
-               rts
+               jsr   pushall        ; Sauvegarde tous les registres et zp.
+               stx   $fb            ; Place X sur le LSB de ZP1.
+               sty   $fc            ; Place Y sur le MSB de ZP1.
+               lda   #$00           ; Place 0 dans
+               tax                  ; ... X et 
+               tay                  ; ... Y.
+               ; On programme le SID pour le son.
+sid_progcmd    lda   ($fb),y        ; On charge le couple de données 
+               tax                  ; ... Le no du registre dans X
+               iny                  ; ... et puis 
+               lda   ($fb),y        ; ... la donnée dans A. 
+               iny                  ; On se prépare pour le prochain couple.
+               cpx   #$ff           ; Sommes nous à la fin des données?
+               beq   sid_progout    ; Oui on sort.
+               sta   sid,x          ; Non, on ecrit la donnée dans le registre.
+               jmp   sid_progcmd    ; On retourne voir le prochain couple.
+sid_progout    jsr   popall         ; Récupère zp et tous les registres.
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;-----------------------------------------------------------------------------
 ; clearsid : Remet à 0 tous les registres du SID.
 ;-----------------------------------------------------------------------------
 sid_clear      .block
-               php
-               pha
-               tya
-               pha
-               lda #$00
-               ldy #$1d
-sidclrreg      dey
-               php
-               sta sid,y
-               plp
-               bne sidclrreg  
-               pla
-               tay
-               pla
-               plp
-               rts
+               jsr   push           ; Sauvegarde les registres.
+               lda   #$00           ; Charge 0 dans A.
+               ldy   #$1c           ; Le sit occupe 28 registres. (0 à 1c)
+sidclrreg      sta   sid,y          ; On les met à O de $1c à %00.
+               dey                  ; on décrémente l'offset.
+               bpl   sidclrreg      ; si Y > 0, on continue.
+               jsr   pop            ; Récupère les registres.
+               rts                  ; Môman, c'est fini.
                .bend
 
-sid_v1off      .block
-               php
-               pha
-               lda #%00010000
-               sta vcreg1
-               pla
-               plp
-               rts
+;-----------------------------------------------------------------------------
+; Inhibe l'oscillateur de la voix 1.
+;-----------------------------------------------------------------------------
+sid_v1off      .block               
+               php                  ; Sauvegarde le status et 
+               pha                  ; ... accumulateur
+               lda   #%00010000     ; Bit3 = 1, inhibe l'oscillateur.
+               sta   sidregctl1     ; Place dans le registre de contrôle.
+               pla                  ; Récupère l'accumulateur et
+               plp                  ; ... le status.
+               rts                  ; Môman, c'est fini.
                .bend
 
+;-----------------------------------------------------------------------------
+; Inhibe l'oscillateur de la voix 2.
+;-----------------------------------------------------------------------------
 sid_v2off      .block
-               php
-               pha
-               lda #%00010000
-               sta vcreg2
-               pla
-               plp
-               rts
+               php                  ; Sauvegarde le status et 
+               pha                  ; ... accumulateur
+               lda   #%00010000     ; Bit3 = 1, inhibe l'oscillateur.
+               sta   sidregctl2     ; Place dans le registre de contrôle.
+               pla                  ; Récupère l'accumulateur et
+               plp                  ; ... le status.
+               rts                  ; Môman, c'est fini.
                .bend
 
+;-----------------------------------------------------------------------------
+; Inhibe l'oscillateur de la voix 3.
+;-----------------------------------------------------------------------------
 sid_v3off      .block
-               php
-               pha
-               lda #%00010000
-               sta vcreg3
-               pla
-               plp
-               rts
+               php                  ; Sauvegarde le status et 
+               pha                  ; ... accumulateur
+               lda   #%00010000     ; Bit3 = 1, inhibe l'oscillateur.
+               sta   sidregctl3     ; Place dans le registre de contrôle.
+               pla                  ; Récupère l'accumulateur et
+               plp                  ; ... le status.
+               rts                  ; Môman, c'est fini.
                .bend
 
 sid_alloff      .block
-               php
-               pha
-               lda #%00010000
-               sta vcreg1
-               sta vcreg2
-               sta vcreg3
-               pla
-               plp
-               rts
+               php                  ; Sauvegarde le status et 
+               pha                  ; ... accumulateur
+               lda   #%00010000     ; Bit3 = 1, inhibe l'oscillateur.
+               sta   sidregctl1     ; Place dans le registre de contrôle.
+               lda   #%00010000     ; Bit3 = 1, inhibe l'oscillateur.
+               sta   sidregctl2     ; Place dans le registre de contrôle.
+               lda   #%00010000     ; Bit3 = 1, inhibe l'oscillateur.
+               sta   sidregctl3     ; Place dans le registre de contrôle.
+               pla                  ; Récupère l'accumulateur et
+               plp                  ; ... le status.
+               rts                  ; Môman, c'est fini.
                .bend  
 
 sid_tada       .block
-               #sid_prog vic_son
-               jsr ti_dcroche
-               #sid_note 1,re4
-               jsr ti_dcroche
-               #sid_note 1,mi4
-               jsr ti_dcroche
-               #sid_note 1,fa4
-               jsr ti_dcroche
-               #sid_note 1,sol4
-               jsr ti_dcroche
-               #sid_note 1,la4
-               jsr ti_dcroche
-               #sid_note 1,si4
-               jsr ti_dcroche
-               #sid_note 1,do5
-               #sid_prog vic_son2
-               #sid_prog vic_son3
-               jsr ti_noirepnt
-               jsr sid_alloff
-               rts
+               #sid_prog vic_son    ; On programme le SID.
+               #sid_note 1,re4      ; On joue un ré (D) 4ième octave
+               jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
+               #sid_note 1,mi4      ; On joue un mi (E) 4ième octave
+               jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
+               #sid_note 1,fa4      ; On joue un fa (F) 4ième octave
+               jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
+               #sid_note 1,sol4      ; On joue un sol (G) 4ième octave
+               jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
+               #sid_note 1,la4      ; On joue un la (A) 4ième octave
+               jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
+               #sid_note 1,si4      ; On joue un si (B) 4ième octave
+               jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
+               #sid_note 1,do5      ; On joue un do (C) 4ième octave
+               #sid_prog vic_son2   ; On programme les autres 
+               #sid_prog vic_son3   ; ... voix.
+               jsr ti_noirepnt      ; On maintien pendant une noire.
+               jsr sid_alloff       ; On les éteint tous.
+               rts                  ; Môman, c'est fini.
                .bend
 
 sid_guitar     .block
@@ -198,7 +208,7 @@ sid_guitar     .block
                #sid_note 2,mi5
                jsr ti_noirepnt
                jsr sid_alloff
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 sid_guitar2     .block
@@ -217,7 +227,7 @@ sid_guitar2     .block
                #sid_note 3,mi5
                jsr ti_noirepnt
                jsr sid_alloff
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 sid_lib_vector .word   sid_v1off,sid_v2off,sid_v3off
@@ -233,46 +243,46 @@ ti_dcroche     .block
                tax
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ti_croche      .block
                jsr ti_dcroche
                jsr ti_dcroche
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ti_noire       .block
                jsr ti_croche
                jsr ti_croche
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ti_noirepnt    .block
                jsr ti_croche
                jsr ti_croche
                jsr ti_croche
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 
 ti_blanche     .block
                jsr ti_noire
                jsr ti_noire
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ti_blanchepnt  .block
                jsr ti_noire
                jsr ti_noire
                jsr ti_noire
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ti_ronde       .block
                jsr ti_blanche
                jsr ti_blanche
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 
