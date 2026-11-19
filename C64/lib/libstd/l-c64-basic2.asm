@@ -1,11 +1,12 @@
 ;------------------------------------------------------------------------------
 ; Scripteur........: Daniel Lafrance, Québec, canada.
 ; Nom du fichier...: l-c64-basic2.asm
-; Type fichier.....: Constantes
+; Type fichier.....: Code
 ; Creation.........: 20230610-223618
 ; Version..........: 0.1.0
 ; Révision.........: 20250523
 ;                    20261028 - Francisation des commentaires.
+; Variables dans ..: v-c64-vars.asm.
 ;------------------------------------------------------------------------------
 ; lib-c64-basic2.asm - Fonctions d'affichage par l'utilisation des routines du 
 ; rom BASIC du Commodores 64 et 64c. 

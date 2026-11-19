@@ -1,23 +1,16 @@
 ;-----------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
 ; Nom du fichier .: e-c64-Basic2.asm
-; Type fichier....: Variables
+; Type fichier....: Code
 ; Creation........: 20151208 
 ; Version.........: 0.0.1
-; Révision........:
-;-------------------------------------------------------------------------------
+; Révision........: 20261119 - Francisation des commentaires.
+; Variables dans..: v-c64-vars.asm
+;------------------------------------------------------------------------------
 
-;-------------------------------------------------------------------------------
-; Variables publiques.
-;-------------------------------------------------------------------------------
-bmnum0         .word $0000
-bmnum1         .word $0000
-bmnum2         .word $0000
-bmovfl         .byte $00
-
-;-------------------------------------------------------------------------------
-; Ajout de l'accumulateur à une case mémoire 16 bits.
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+; Ajout la valeur de l'accumulateur à une case mémoire 16 bits.
+;------------------------------------------------------------------------------
 bmaddacc       .block
                php                  ; Sauvegarde minimaliste 
                pha                  ; ... des registres.
@@ -37,24 +30,26 @@ norep          pla                  ; Récupération minimaliste
                rts
                .bend
 
-
+;------------------------------------------------------------------------------
+; Fonction test pour la sous-routine bmaddacc 
+;------------------------------------------------------------------------------
 bmtester       .block
-               jsr  pushreg
-               lda  #1
-               jsr  bmaddacc
-               ldy  bmnum0
-               ldx  bmnum0+1
-               lda  bmovfl
-               jsr  showregs
-               jsr  popreg  
+               jsr   push           ; Sauvegarde tous les registres.
+               lda   #1             ; Pour tester on ajoute 1
+               jsr   bmaddacc       ; ... au nombre 16 bit en mémoire.
+               ldx   bmnum0         ; On charge l'adresse ou se trouve 
+               lda   bmnum0+1       ; ... le résultat dans $AAXX
+               ldy   bmovfl         ; On charge le registre ovfl dans Y.
+               jsr   showregs       ; On affiche le contenue des registres.
+               jsr   pop            ; Récupère tous les registres.
                rts
                .bend
 
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; add2word
 ; adresse   = XXYY X=MSB, Y=LSB
 ; valeur    = A
-;-------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 add2word       .block 
                jsr  pushall
                sty  zpage1+1
@@ -64,7 +59,7 @@ add2word       .block
                .bend 
     
 add2word2      .block
-               jsr  pushreg
+               jsr  push
                sty adddo+1     ; LSB
                sty adddo2+1    ; LSB
                sty addrep+1    ; LSB
@@ -96,7 +91,7 @@ addnorep       jsr pop
 ; valeur    = A
 ;----------------------------------------
 sub2word2      .block
-               jsr pushreg
+               jsr push
                sty subdo+1     ; LSB
                sty subdo2+1    ; LSB
                sty subrep+1    ; LSB
@@ -127,7 +122,7 @@ subrep         lda $ffff
 subrep2        sta $ffff
 subnorep       ldx memcount+1
                ldy memcount
-               jsr popreg
+               jsr pop
                rts
 memcount       .word $00
             .bend

@@ -5,14 +5,15 @@
 ; Creation........: 20251208 
 ; Version.........: 0.1.0
 ; Révisions.......: 20261118-000000 Francisation des commentaires,
-;------------------------------------------------------------------------------;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ; Joue un BEEP sur le SID.
-;-----------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 ;                  reg,valeur
 sid_v1offset     =  0
 sid_v2offset     =  7
 sid_v3offset     =  14
-vic_son        .byte sid_v1offset + 24,  15        ; sid+24=54296,  15 Volume.
+vic_son1       .byte sid_v1offset + 24,  15        ; sid+24=54296,  15 Volume.
                .byte sid_v1offset +  5,  190       ; sid+ 5=54277, 190 A.D.S = 0.
                .byte sid_v1offset +  6,  248       ; sid+ 6=54278, 248 S=Max, r=15
                .byte sid_v1offset +  1,  $10       ; 
@@ -28,52 +29,58 @@ vic_son2       .byte sid_v2offset + 4,   15        ; sid+24=54296,  15 Volume.
                .byte sid_v2offset + 4,  %00100001  ; sid+ 4=54276,  17 V1S = Triangle.
                .byte $ff,  $ff
                
-vic_son3       .byte sid_v3offset + 4,   15        ; sid+24=54296,  15   Volume.
-               .byte sid_v3offset + 5,  190        ; sid+ 5=54277, 190   A.D.S = 0.
-               .byte sid_v3offset + 6,  248        ; sid+ 6=54278, 248   S=Max, r=15
-               .byte sid_v3offset + 1,  $19        ; sid+ 1=54273,  20   Frequence = 40 * 256
-               .byte sid_v3offset + 0,  $1f        ; sid+ 1=54273,  20   Frequence = 40 * 256
-               .byte sid_v3offset + 4,  %01000001  ; sid+ 4=54276,  17   V1S = Triangle.
-               .byte   $ff,  $ff
+vic_son3       .byte sid_v2offset + 4,   15        ; sid+24=54296,  15 Volume.
+               .byte sid_v2offset + 5,  190        ; sid+ 5=54277, 190 A.D.S = 0.
+               .byte sid_v2offset + 6,  248        ; sid+ 6=54278, 248 S=Max, r=15
+               .byte sid_v2offset + 1,  $15        ; sid+ 1=54273,  20 Frequence = 40 * 256
+               .byte sid_v2offset + 0,  $20        ; sid+ 1=54273,  20 Frequence = 40 * 256
+               .byte sid_v2offset + 4,  %00100001  ; sid+ 4=54276,  17 V1S = Triangle.
+               .byte $ff,  $ff
 
-; Place une note dans le 
+;------------------------------------------------------------------------------
+; Place une note dans les registres de fréquence de la voix sélectionnée dans
+; les paramètres d'entrées. 
+;------------------------------------------------------------------------------
 sid_note       .macro voix,freq
                php                  ; Sauvegarde le status et 
                pha                  ; ... accumulateur
-               .if \voix=2 
-                     lda   #<\freq
-                     sta   sid+7
-                     lda   #>\freq
-                     sta   sid+8
-               .elif \voix=3
-                     lda   #<\freq
-                     sta   sid+14
-                     lda   #>\freq
-                     sta   sid+15
-               .else
-                     lda   #<\freq
-                     sta   sid+0
-                     lda   #>\freq
-                     sta   sid+1
+               .if \voix=2          ; S'il s'agit de la voix 2.
+                     lda   #<\freq  ; On place la fréquence
+                     sta   sid+7    ; ... LSB à $D407 
+                     lda   #>\freq  ; ... et
+                     sta   sid+8    ; ... MSB à $D408.
+               .elif \voix=3        ; S'il s'agit de la voix 3.
+                     lda   #<\freq  ; On place la fréquence
+                     sta   sid+14   ; ... LSB à $D40E 
+                     lda   #>\freq  ; ... et
+                     sta   sid+15   ; ... MSB à $D40F.
+               .else                ; Par défaut la voix 1.
+                     lda   #<\freq  ; On place la fréquence
+                     sta   sid+0    ; ... LSB à $D400 
+                     lda   #>\freq  ; ... et
+                     sta   sid+1    ; ... MSB à $D401.
                .endif               
                pla                  ; Récupère l'accumulateur et
                plp                  ; ... le status.
                .endm
-
+;------------------------------------------------------------------------------
+; Programme le sid avec les paramêtres placées en mémoire à l'adresse donnée
+; en argument immédiaté
+;------------------------------------------------------------------------------
 sid_prog       .macro xyimm
-               jsr push
-               ldx #<\xyimm
-               ldy #>\xyimm
-               jsr sid_progdata
-               jsr pop
+               jsr   push           ; Sauvegarde les registres.
+               ldx   #<\xyimm       ; Charge dans X le LSB de l'adresse.
+               ldy   #>\xyimm       ; Charge dans Y le MSB de l'adresse.
+               jsr   sid_progdata   ; Appelle la fonction de programmation.
+               jsr   pop            ; Récupère les registres.
                .endm
 
 sid_progtest   .block
-               jsr push
-               ldx #<vic_son
-               ldy #>vic_son
-               jsr sid_progdata
-               jsr pop
+               jsr   push           ; Sauvegarde les registres.
+               ldx   #<vic_son1      ; Charge dans X le LSB de l'adresse.
+               ldy   #>vic_son1      ; Charge dans Y le MSB de l'adresse.
+               jsr   sid_progdata   ; Appelle la fonction de programmation.
+               jsr   pop            ; Récupèere les registres.
                rts                  ; Môman, c'est fini.
                .bend
 
@@ -171,14 +178,14 @@ sid_alloff      .block
                .bend  
 
 sid_tada       .block
-               #sid_prog vic_son    ; On programme le SID.
+               #sid_prog vic_son1    ; On programme le SID.
                #sid_note 1,re4      ; On joue un ré (D) 4ième octave
                jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
                #sid_note 1,mi4      ; On joue un mi (E) 4ième octave
                jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
                #sid_note 1,fa4      ; On joue un fa (F) 4ième octave
                jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
-               #sid_note 1,sol4      ; On joue un sol (G) 4ième octave
+               #sid_note 1,sol4     ; On joue un sol (G) 4ième octave
                jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
                #sid_note 1,la4      ; On joue un la (A) 4ième octave
                jsr ti_dcroche       ; ... pendant le temps d'une demi croche.
@@ -187,46 +194,62 @@ sid_tada       .block
                #sid_note 1,do5      ; On joue un do (C) 4ième octave
                #sid_prog vic_son2   ; On programme les autres 
                #sid_prog vic_son3   ; ... voix.
-               jsr ti_noirepnt      ; On maintien pendant une noire.
+               jsr ti_blanche       ; On maintien pendant une noire.
                jsr sid_alloff       ; On les éteint tous.
                rts                  ; Môman, c'est fini.
                .bend
 
-sid_guitar     .block
-               #sid_prog vic_son2
-               jsr ti_croche
-               #sid_note 2,mi3
-               jsr ti_croche
-               #sid_note 2,la3
-               jsr ti_croche
-               #sid_note 2,re4
-               jsr ti_croche
-               #sid_note 2,sol4
-               jsr ti_croche
-               #sid_note 2,si4
-               jsr ti_croche
-               #sid_note 2,mi5
-               jsr ti_noirepnt
-               jsr sid_alloff
+sid_guitar1    .block
+               #sid_prog vic_son1   ;
+               #sid_note 1,mi4      ; On joue un mi (E) 3ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 1,la4      ; On joue un la (A) 3ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 1,re5      ; On joue un re (D) 4ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 1,sol5     ; On joue un sol (G) 4ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 1,si5      ; On joue un si (B) 4ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 1,mi6      ; On joue un mi (E) 5ième octave
+               jsr ti_ronde         ; ... pendant le temps d'une noire.
+               jsr sid_alloff       ; On les éteint tous.
                rts                  ; Môman, c'est fini.
                .bend
 
-sid_guitar2     .block
+sid_guitar2    .block
+               #sid_prog vic_son2   ;
+               #sid_note 2,mi3      ; On joue un mi (E) 3ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 2,la3      ; On joue un la (A) 3ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 2,re4      ; On joue un re (D) 4ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 2,sol4     ; On joue un sol (G) 4ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 2,si4      ; On joue un si (B) 4ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 2,mi5      ; On joue un mi (E) 5ième octave
+               jsr ti_ronde         ; ... pendant le temps d'une noire.
+               jsr sid_alloff       ; On les éteint tous.
+               rts                  ; Môman, c'est fini.
+               .bend
+
+sid_guitar3     .block
                #sid_prog vic_son3
-               jsr ti_dcroche
-               #sid_note 3,mi3
-               jsr ti_dcroche
-               #sid_note 3,la3
-               jsr ti_dcroche
-               #sid_note 3,re4
-               jsr ti_dcroche
-               #sid_note 3,sol4
-               jsr ti_dcroche
-               #sid_note 3,si4
-               jsr ti_dcroche
-               #sid_note 3,mi5
-               jsr ti_noirepnt
-               jsr sid_alloff
+               #sid_note 3,mi2      ; On joue un mi (E) 3ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 4,la2      ; On joue un la (A) 3ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 4,re3      ; On joue un re (D) 4ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 4,sol3     ; On joue un sol (G) 4ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 4,si3      ; On joue un si (B) 4ième octave
+               jsr ti_croche        ; ... pendant le temps d'une demi croche.
+               #sid_note 4,mi4      ; On joue un mi (E) 5ième octave
+               jsr ti_ronde         ; ... pendant le temps d'une noire.
+               jsr sid_alloff       ; On les éteint tous.
                rts                  ; Môman, c'est fini.
                .bend
 
@@ -235,12 +258,8 @@ sid_lib_vector .word   sid_v1off,sid_v2off,sid_v3off
 ti_dcroche     .block
                php
                pha
-               txa
-               pha
-               ldx #$10
+               lda #$10
                jsr delai
-               pla
-               tax
                pla
                plp
                rts                  ; Môman, c'est fini.
