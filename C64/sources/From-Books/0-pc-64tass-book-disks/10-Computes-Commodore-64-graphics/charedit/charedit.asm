@@ -21,9 +21,6 @@ main           .block
                #disable             ; Inhibe les changements de jeu de carac.
                jsr   drawcredits    ; Affiche l'écran des credits. 
                jsr   sid_tada       ; Joue le son de bienvenue.
-               jsr   sid_guitar1
-               jsr   sid_guitar2
-               jsr   sid_guitar3
                jsr   screendis      ; Désactive l'affichage vidéo.
                jsr   copycharset    ; Copie la matrice de caractères en ram.
                jsr   cls            ; Efface l'écran

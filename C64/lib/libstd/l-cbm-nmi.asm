@@ -20,7 +20,7 @@ nmivect  = $0318
          sta nmivect+1
          pla
          plp
-         rts
+         rts                  ; Môman, c'est fini.
          .bend
 initnmistd
          .block
@@ -35,5 +35,5 @@ nmivect  = $0318
          sta nmivect+1
          pla
          plp
-         rts
+         rts                  ; Môman, c'est fini.
          .bend

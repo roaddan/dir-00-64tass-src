@@ -16,7 +16,7 @@ wait        jsr k_stop  ; Cherche la clef [RUN/STOP].
             bne  wait   ;  Elle n'est pas pesée.
             pla         ;\ Récupère l'accmulateur et 
             plp         ;/  les drapeaux.
-            rts
+            rts                  ; Môman, c'est fini.
             .bend
 
 ;--------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ nokey       lda 203     ; Lit la matrice de la clef actuelle dans le tampon.
 ;            sta 198     ;/  du clavier.
             pla         ;\ Récupère l'accmulateur et 
             plp         ;/  les drapeaux.
-            rts
+            rts                  ; Môman, c'est fini.
             .bend
 
 ;--------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ iskey       lda 203     ; Lit la matrice de la clef actuelle dans le tampon.
             bne iskey   ; On attend qu'il y en aie aucune.
             pla         ;\ Récupère l'accmulateur et 
             plp         ;/  les drapeaux.
-            rts
+            rts                  ; Môman, c'est fini.
             .bend
 
 ;--------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ getkey      .block      ; Retourne une clef appuyée dans Acc.
 gkagain     jsr getin   ; Tente de lire une clef.
             beq gkagain ; 0=Aucune, alors on attend.
             plp         ; Récupère les drapeaux.
-            rts
+            rts                  ; Môman, c'est fini.
             .bend
 
 ;--------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ kbflushbuff .block
             sta 198     ;/  du clavier.
             pla         ;\ Récupère l'accmulateur et 
             plp         ;/  les drapeaux.
-            rts
+            rts                  ; Môman, c'est fini.
             .bend
 
 ;--------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ nogood      jsr getin   ; Tente de lire une clef.
             ;jsr chrout  ; L'affiche quand elle est bonne.
             pla         ;\ Récupère l'accmulateur et 
             plp         ;/  les drapeaux.
-            rts
+            rts                  ; Môman, c'est fini.
             .bend
 
 ;--------------------------------------------------------------------------------

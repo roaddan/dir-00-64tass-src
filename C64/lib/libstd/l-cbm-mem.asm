@@ -18,7 +18,7 @@ bf1            sta  (zpage1),y
                bne  bf1
                jsr  restzp1
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ; Rempli les pages de Y à Y+X avec le code de A
@@ -31,7 +31,7 @@ mf1            jsr  blkfill
                dex
                bne  mf1
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ;    
@@ -74,7 +74,7 @@ decit          dec  compte
                ;jsr  showregs 
                jmp  destin             
 fini           jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
 words
 s         .word     $0000
 d         .word     $0000
@@ -90,7 +90,7 @@ decwordyx      .block
                jsr   inczp2
 
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ;
@@ -108,7 +108,7 @@ inczp1         .block
                inc   zpage1+1
 nopage         pla
                plp         
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ;
@@ -126,7 +126,7 @@ deczp1         .block
                dec   zpage1+1     
 nopage         pla
                plp         
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ;
@@ -144,7 +144,7 @@ inczp2         .block
                inc   zpage2+1
 nopage         pla
                plp         
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ;
@@ -162,7 +162,7 @@ deczp2         .block
                dec   zpage2+1
 nopage         pla
                plp         
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ;
@@ -176,7 +176,7 @@ savezp1        .block
                sta  zp1+1
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ;
@@ -190,7 +190,7 @@ restzp1        .block
                sta  zpage1+1
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ;
@@ -205,7 +205,7 @@ savezp2
                sta  zp2+1
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ;
@@ -220,7 +220,7 @@ restzp2
                sta  zpage2+1
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ; Calcule 16bits de :
@@ -248,7 +248,7 @@ addx           txa
                inc  addr2+1
 thatsit        sta  addr2
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;*******************************************************************************
@@ -271,7 +271,7 @@ norep          lda  loopcount
                bne  out
                eor  loopcount+1
                cmp  #$ff
-out            rts
+out            rts                  ; Môman, c'est fini.
                .bend
 
 

@@ -16,6 +16,6 @@ delaiy         nop
                dex
                bne   delaix
                jsr   pop
-               rts           
+               rts                  ; Môman, c'est fini.           
                .bend
 

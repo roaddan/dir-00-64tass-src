@@ -10,7 +10,7 @@
 ;               .block
 ;               jsr  pushreg        ; Sauvegarde tous les registres.
 ;               jsr  popreg         ; Récupère tous les registres.
-;               rts
+;               rts                  ; Môman, c'est fini.
 ;               .bend
 ;------------------------------------------------------------------------------
 ; N O T E : Dans les commentaire les acronymes suivant signifient :
@@ -42,7 +42,7 @@ b_praxstr      .block
                jsr  pushreg        ; Sauvegarde tous les registres.
                jsr  b_axout
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ b_getascnum     .block
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  b_getbufflen   ; Calcule la longueur de la chaîne dans var. 
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend               
 
 ;------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ clear          sta  $0200,y        ;   tampon d'entrée de BASIC.
                dey                 ; 
                bne  clear          ; 60 octets.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ b_printbuff     .block
                lda  b_bufflenght   ; Charge la longueur de la chaîne.
                jsr  b_strout       ; Affiche la chaine
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -122,7 +122,7 @@ b_insub          .block
                jsr  b_chrget       ; Lit un jeton du périphérique d'entrée.
                jsr  b_ascflt       ; Conv. la chaîne ascii en PF dans FAC1.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ b_readmemfloat     .block
                sta  $7b            ;
                jsr  b_clearbuff    ; Efface le tampon d'entrée de BASIC.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
 ; Variables locale privées
 b_v7a          .byte     $00
 b_v7b          .byte     $00
@@ -189,7 +189,7 @@ b_mul2fptomem     .block
                ldy  #>b_numresult  ;   être copié.
                jsr  b_f1tmem       ; Copie FAC1 en mémoire.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -209,7 +209,7 @@ b_mul2fptoasc     .block
                                    ; FAC1 = FAC1 X FVAR.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -228,7 +228,7 @@ nxtchar        iny                 ;   cherchant le caractère $00
                iny                 ; On ajuste Y pour la longueur de la chaîne.
                sty  b_bufflenght   ; Sauvegarde dans le variable.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -244,7 +244,7 @@ b_outsub          .block
                                    ;   périphérique de sortie.
                jsr  b_clearbuff    ; Efface le tampon d'entrée de BASIC.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -258,7 +258,7 @@ b_fac1x10          .block
                jsr  b_f1x10        ; Multiplie FAC1 par 10.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -285,7 +285,7 @@ b_fac1d10          .block
                sta  $66            ;   de FAC1 a 1 (neg).
 notneg          jsr  b_facasc      ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -301,7 +301,7 @@ b_fac1square     .block
                jsr  b_f1xf2        ; Multiplie FAC1 et FAC2. FAC1=FAC1xFAC2.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -319,7 +319,7 @@ b_fvardfac1     .block
                jsr  b_fvdf1        ; Divise FVAR et FAC1. (FAC1=FVAR/FAC1).
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -339,7 +339,7 @@ b_fac2dfac1     .block
                jsr  b_f2df1        ; Effectue la division: FAC1 = FAC2 / FAC1.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -357,7 +357,7 @@ b_fac1pfvar     .block
                jsr  b_f1pfv        ; Effectue l'adition: FAC1 = FAC1 + FVAR.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -376,7 +376,7 @@ b_fac2sfac1     .block
                jsr  b_f2sf1        ; Effec. la soustraction: FAC1 = FAC2 - FAC1.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -394,7 +394,7 @@ b_fvarsfac1     .block
                jsr  b_fvsf1        ; Effec. la soustraction: FAC1 = FVAR - FAC1.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -410,7 +410,7 @@ b_accpfac1     .block
                jsr  b_f1pacc       ; Effectue l'adition: FAC1 = FAC1 + ACC.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -430,7 +430,7 @@ b_fac2pfac1     .block
                jsr  b_f1pf2        ; Effactue l'adition: FAC1 = FAC1 + FAC2.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -451,7 +451,7 @@ b_fac1powfac2
                jsr  b_expon        ; Calcul FAC1 = FAC1 ^ FAC2.
                jsr  b_facasc       ; Conv. P.F. FAC1 vers chaîne ascii à $0100.
                jsr  popreg         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -479,5 +479,5 @@ is12           cpy  #12
 doit           dex
                bne  more
                jsr  popall
-               rts     
+               rts                  ; Môman, c'est fini.     
                .bend

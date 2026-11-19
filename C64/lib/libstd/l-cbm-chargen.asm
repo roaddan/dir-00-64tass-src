@@ -10,7 +10,7 @@ charram        .word     $0000
 chargen2ram    .block
                jsr  setcharram
                jsr  cpchar2ram
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;---------------------------------------------------------------------
 ; recoit un numéro de caractère et l'adresse $XXYY de sa définition.
@@ -53,7 +53,7 @@ nextrol        lda  charadd
                sta  charadd+1
 
                jmp  pop
-               rts
+               rts                  ; Môman, c'est fini.
 charadd   .word $0000
                .bend               
 setcharram     .block
@@ -61,7 +61,7 @@ setcharram     .block
                sty  charram
                stx  charram+1     
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
                
 cpchar2ram     .block
@@ -98,5 +98,5 @@ nextbyte       lda  (zpage1),y
                ora  #1        ; or 1
                sta  cia1+14   ; poke 56334
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend                

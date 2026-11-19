@@ -26,7 +26,7 @@ putahexfmtxy   .block
                jsr   gotoxy
                jsr   printahexpref
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
                
 ;------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ putahexfmt     .block
                jsr   atohex
                jsr   printahexpref
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
                
 ;------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ putahex        .block
                jsr   atohex
                jsr   printahex
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 printahexpref  .block
@@ -57,7 +57,7 @@ printahexpref  .block
                ldy  #>a2hexpfx 
                jsr  puts
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
                
 printahex      .block
@@ -66,7 +66,7 @@ printahex      .block
                ldy  #>a2hexstr
                jsr  puts
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ nibtohex       .block
                adc   #$40
                cld
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ lsra4bits      .block
                lsr
                lsr
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;------------------------------------------------------------------------------
 ; Transforme le contenu du registre A dans son équivalent Petscii hehadécimal.
@@ -127,7 +127,7 @@ atohex         .block
                sta   a2hexstr+2
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;------------------------------------------------------------------------------
 ; Converti l'adresse contenu dans $YYXX en hexadécimal.
@@ -142,7 +142,7 @@ yxtohex        .block
                tay                  ; a -> y
                jsr  xytohex
                jsr  pop 
-               rts                    
+               rts                  ; Môman, c'est fini.                    
                .bend
 
 ;------------------------------------------------------------------------------
@@ -170,7 +170,7 @@ xytohex        .block
                lda  #$00                ; 0 ended string
                sta  a2hexstr+4
                jsr  pop
-               rts                     
+               rts                  ; Môman, c'est fini.                     
                .bend
 
 ;------------------------------------------------------------------------------
@@ -194,13 +194,13 @@ nextbit        rol
                lda  #0
                sta  a2binstr,y
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend          
 
 abinsetmccol   .block
                jsr  push
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 
@@ -214,7 +214,7 @@ putabin        .block
                ldy     #>a2binstr
                jsr     puts
                jsr     pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -226,7 +226,7 @@ printabin      .block
                ldy     #>a2binstr
                jsr     puts
                jsr     pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ putabinfmt     .block
                pla
                jsr     putabin
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend        
 
 ;------------------------------------------------------------------------------
@@ -250,7 +250,7 @@ putabinfmt     .block
 putabinxy      .block
                jsr     gotoxy
                jsr     putabin
-               rts
+               rts                  ; Môman, c'est fini.
                .bend                
 
 ;------------------------------------------------------------------------------
@@ -259,7 +259,7 @@ putabinxy      .block
 putabinfmtxy   .block
                jsr     gotoxy
                jsr     putabinfmt
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -296,7 +296,7 @@ decx           dex            ; X=X-1
                sta  a2decstr+1
                cld            ; On revient en mode binaire.
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend          
 
 ;------------------------------------------------------------------------------
@@ -309,5 +309,5 @@ putadec        .block
                ldy  #>a2decstr+1
                jsr  puts 
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend

@@ -27,7 +27,7 @@ norep          bcc   norep2         ; Si carry est vide, pas de débordement.
                inc   bmovfl         ; On augmente l'octet de débordement de 1.     
 norep          pla                  ; Récupération minimaliste
                plp                  ; ... des registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -42,37 +42,65 @@ bmtester       .block
                ldy   bmovfl         ; On charge le registre ovfl dans Y.
                jsr   showregs       ; On affiche le contenue des registres.
                jsr   pop            ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
-; add2word
-; adresse   = XXYY X=MSB, Y=LSB
+; addtoword: Aditionne la valeur de Acc. d'une valeur 16 bit en mémoire.
+; adresse   = $YYXX Y=MSB, X=LSB
 ; valeur    = A
 ;------------------------------------------------------------------------------
-add2word       .block 
-               jsr  pushall
-               sty  zpage1+1
-               stx  zpage1
-               jsr  popall
-               rts
+addtoword      .block 
+               jsr   pushall        ; Sauvegarde tous les registres et zps.
+               sty   zpage1+1       ; Place le MSB de l'adresse dans $fc
+               stx   zpage1         ; ... et son LSB dans $fb
+               ldy   #$00           ; Index à 0 pour le mode indirect.
+               clc                  ; ACD avec carry à 0.
+               adc   (zpage1),y      ; Ajoute Acc. au LSB de la valeur pointée.
+               bcc   noreport       ; Si C=0 pas de report à faire.
+               iny
+               inc   (zpage1),y   ; Ajoute 1 au MSB de la valeur pointée.
+noreport       jsr   popall         ; Récupère tous les registres et zps.
+               rts                  ; Môman, c'est fini.
                .bend 
+
+;------------------------------------------------------------------------------
+; subtoword: soustrait la valeur de Acc. d'une valeur 16 bit en mémoire.
+; adresse   = $YYXX Y=MSB, X=LSB
+; valeur    = A
+;------------------------------------------------------------------------------
+subtoword      .block
+               jsr   pushall        ; Sauvegarde tous les registres et zps.
+               sty   zpage1+1       ; Place le MSB de l'adresse dans $fc. 
+               sty   zpage1         ; Place le LSB de l'adresse dans $fb.
+               ldy   #$00           ; Index à 0 pour le mode indirect.
+               sta   zpage2         ; Puisque sbc fait Acc-memoire on doit
+               lda   (zpage1),Y     ; ... inverser les opérandes. 
+               sec                  ; Prépare au cas d'emprunt.
+               sbc   zpage2         ; On fait la soustraction.
+               sta   (zpage1),y     ; On sauvegarde le LSB du résultat.
+               bcs   pasemprunt     ; Pas d'emprunt on saute.
+               iny                  ; Pointe le MSB.
+               dec   (zpage1),y     ; Fait l'emprunt si nécessaire.
+pasemprunt     jsr   popall         ; Récupère tous les registres et zps.
+               rts                  ; Môman, c'est fini.
+               .bend
     
-add2word2      .block
-               jsr  push
-               sty adddo+1     ; LSB
-               sty adddo2+1    ; LSB
-               sty addrep+1    ; LSB
-               stx adddo+2     ; MSB
-               stx adddo2+2    ; MSB
-               stx addrep+2    ; MSB
+addtwoword     .block
+               jsr   push
+               sty   adddo+1     ; LSB
+               sty   adddo2+1    ; LSB
+               sty   addrep+1    ; LSB
+               stx   adddo+2     ; MSB
+               stx   adddo2+2    ; MSB
+               stx   addrep+2    ; MSB
                pha             ; Sauve  
                clc
-               lda #$01
-               adc addrep+1    ; LSB+1
-               sta addrep+1
-               bcc addsamepage 
-               inc addrep+2    ; MSB+1
+               lda   #$01
+               adc   addrep+1    ; LSB+1
+               sta   addrep+1
+               bcc   addsamepage 
+               inc   addrep+2    ; MSB+1
 addsamepage    ;brk
                pla
                clc
@@ -81,48 +109,6 @@ adddo2         sta $ffff
                bcc addnorep
 addrep         inc $ffff
 addnorep       jsr pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
-
-;----------------------------------------
-; sub2word
-; adresse   = XXYY X=MSB, Y=LSB
-; valeur    = A
-;----------------------------------------
-sub2word2      .block
-               jsr push
-               sty subdo+1     ; LSB
-               sty subdo2+1    ; LSB
-               sty subrep+1    ; LSB
-               sty subrep2+1   ; LSB
-               stx subdo+2     ; MSB
-               stx subdo2+2    ; MSB
-               stx subrep+2    ; MSB
-               stx subrep2+2   ; MSB
-               sta subdo+4     ; Sauve  
-               clc
-               lda #$01
-               adc subrep+1    ; LSB+1
-               sta subrep+1
-               sta subrep2+1
-               bcc subsamepage
-               inc subrep+2    ; MSB+1
-               lda subrep+2
-               sta subrep2+2
-subsamepage    brk
-               pla
-               sec
-subdo          lda $ffff       ; LSB-1
-               sbc #$ff
-subdo2         sta $ffff
-               bcc subnorep
-subrep         lda $ffff
-               sbc #$00        ; MSB-1
-subrep2        sta $ffff
-subnorep       ldx memcount+1
-               ldy memcount
-               jsr pop
-               rts
-memcount       .word $00
-            .bend

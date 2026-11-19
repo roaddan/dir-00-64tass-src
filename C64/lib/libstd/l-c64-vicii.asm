@@ -14,7 +14,7 @@ screendis      .block
                sta  $d011
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ screenena      .block
                sta  $d011
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;*******************************************************************************
@@ -54,7 +54,7 @@ victohighres   .block
                sta  $0038  
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ victonormal   .block
                jsr  cls
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ next           lda  #$0f
                jsr  loop
                bne  next
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ next           lda  (zpage1),y
                jsr  loop
                bne  next
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
 vicbmpbackcol  .byte     $00
                .bend
 
@@ -154,7 +154,7 @@ next           lda  (zpage1),y
                jsr  loop
                bne  next
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
 vicbmpforecol  .byte     $00
                .bend
 
@@ -178,7 +178,7 @@ bmphrcalccoords  .block
                pha
                tya
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 vicbmpfill     .block
@@ -202,7 +202,7 @@ more           lda   (zpage1),y
                jsr   loop
                bne   more
                jsr   popall
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 resttext       .block
@@ -218,7 +218,7 @@ more           lda   (zpage2),y
                jsr   loop
                bne   more
                jsr   popall
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 savecolr       .block
@@ -234,7 +234,7 @@ more           lda   (zpage1),y
                jsr   loop
                bne   more
                jsr   popall
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 restcolr       .block
@@ -250,7 +250,7 @@ more           lda   (zpage2),y
                jsr   loop
                bne   more
                jsr   popall
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 fillcolr       .block
@@ -265,7 +265,7 @@ more           txa
                jsr   loop
                bne   more
                jsr   popall
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 

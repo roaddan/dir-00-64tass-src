@@ -73,7 +73,7 @@ nextbyte       lda   (zpage1),y
 ;               sta   $d02d   ; 53293 Sprite 6 color
 ;               sta   $d02e   ; 53294 Sprite 7 color
                jsr   popall
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 sprt_ptr       .byte $01
 ;-------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ norepx         lda   js_2pixy
                adc   sprt_yoffset
                sta   sprt_y
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;-------------------------------------------------------------------------------
 ;
@@ -118,7 +118,7 @@ sprt_move       .block
                sta   vic+$05
                jsr   sprt_showpos
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;-------------------------------------------------------------------------------
 ;
@@ -158,7 +158,7 @@ sprt_showpos    .block
                ldy   #>sprite_pos
                jsr   putscxy
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;-------------------------------------------------------------------------------
 ;
@@ -186,7 +186,7 @@ addrok         ldy   calcbuff+1
 ;               jsr   showregs
                jsr   sprt_setimage
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
 calcbuff       .word $0
                .bend
 ;-------------------------------------------------------------------------------
@@ -205,7 +205,7 @@ sprt_loadptr    .block
 ;               jsr   showregs
                jsr   sprt_setimage
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
 calcbuff       .word $0
                .bend
 ;-------------------------------------------------------------------------------
@@ -229,7 +229,7 @@ nextbyte       lda   (zpage1),y
                jsr   restzp2
                jsr   restzp1
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 sprt_xoffset   .byte $00
 sprt_yoffset   .byte $00

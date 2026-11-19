@@ -86,7 +86,7 @@ db_tline       .block
                pla                  ; Récupération minimaliste 
                plp                  ; ... des registres.
                jsr   db_drawline
-               rts
+               rts                  ; Môman, c'est fini.
                .bend          
 
 ;------------------------------------------------------------------------------
@@ -107,7 +107,7 @@ db_bline       .block
                pla                  ; Récupération minimaliste 
                plp                  ; ... des registres.
                jsr   db_drawline
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ db_eline       .block
                pla                  ; Récupération minimaliste 
                plp                  ; ... des registres.
                jsr   db_drawline
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ db_hline       .block
                pla                  ; Récupération minimaliste 
                plp                  ; ... des registres.
                jsr   db_drawline
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ noreverse      ldx   drawbox_curline; On positionne le curseur au ...
                sta   bascol         ; ... couleur de basic.
                inc   drawbox_curline; Passe à la ligne suivante.
                jsr   pop            ; Récupère les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -215,7 +215,7 @@ moreline       jsr   db_eline       ; Dessine une ligne vide de la boîte.
                bne   moreline       ; On passe à la prochaine s'il en reste.
 lastline       jsr   db_bline       ; Dessine la ligne inférieure.
                jsr   pop         ; Récupère les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------

@@ -27,7 +27,7 @@ nextchar       jsr  acptr     ; $ffa5 |a  , rx serie.
                bne  nextchar  ; No, get next char
                jsr  untlk     ;$ffab      , iec-cmc stop talk
                jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
                 .bend
 
 ;-------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ loop2          lda  #$0d      ; L0188  - Load CR in a
                bne  loop1     ; L018f - Loop to next dir entry.
 exit           jsr  sfclose   ; L0191 - $f642 ... close file.
                jsr  pop
-               rts            ; L0194
+               rts                  ; Môman, c'est fini.            ; L0194
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ exit           jsr  sfclose   ; L0191 - $f642 ... close file.
 directory      .block
                jsr  diskdir
                jsr  diskerror
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ skip           ldy  #$00
                jsr  save           ; call save
                bcc  noerror        ; if carry set, a load error has happened
 noerror        jsr  pop
-               rts 
+               rts                  ; Môman, c'est fini. 
                .bend
 
 ;=============================================================================
@@ -146,7 +146,7 @@ noerror        jsr  pop
 ;                   sta  dsk_data_e+1
 ;                   jsr  memtofile
 ;                   jsr  pop
-;                   rts               
+;                   rts                  ; Môman, c'est fini.               
 ;=============================================================================
 
 ;-------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ filetomem      .block
                bcc noerror      ; if carry set, a load error has happened
                jsr  error       
 noerror        jsr pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;-------------------------------------------------------------------------------
@@ -218,7 +218,7 @@ isit00         cmp  #$00
                ; ... error handling ...
 printerror     jsr  puts
 noerror        jsr  pop
-               rts
+               rts                  ; Môman, c'est fini.
 dsk_msg1       .byte     141
                .null     "succes" 
 dsk_emsg01     .byte     141
@@ -249,7 +249,7 @@ dsk_putmesg    .block
                lda dsk_lfsno
                jsr close    
                jsr pop
-               rts    
+               rts                  ; Môman, c'est fini.    
                .bend      
 dsk_msg0       .byte 141   ; Miscilinaous file message.
                .null     "saving "

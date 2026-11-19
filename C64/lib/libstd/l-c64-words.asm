@@ -14,7 +14,7 @@ add2word    .block
             stx zpage1
             
             jsr pop
-            rts
+            rts                  ; Môman, c'est fini.
             .bend 
     
 add2word2   .block
@@ -40,7 +40,7 @@ adddo2      sta $ffff
             bcc addnorep
 addrep      inc $ffff
 addnorep    jsr pop
-            rts
+            rts                  ; Môman, c'est fini.
             .bend
 ;----------------------------------------
 ; sub2word
@@ -81,6 +81,6 @@ subnorep    ldx memcount+1
             ldy memcount
             brk
             jsr pop
-            rts
+            rts                  ; Môman, c'est fini.
             .bend
             

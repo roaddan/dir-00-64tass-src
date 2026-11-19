@@ -37,7 +37,7 @@ js_init        .block
 js_scan        .block
                jsr   js1_scan       ; Sonde le port1.
                jsr   js2_scan       ; Sonde le port2.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;------------------------------------------------------------------------------
 ; js1_scan sonde et interprète l'entrée du port de jeu #1.
@@ -289,7 +289,7 @@ js2_check      lda   js2_flag       ; Doit-on traiter une action sur le port 2.
                sta   js2_flag       ; ... le traitement est terminé.
 no_update      pla                  ; Récupération minimale
                plp                  ; ... des registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;------------------------------------------------------------------------------
 ; js1_correct effectue les calculs pour mettre à jour les divers variables du
@@ -329,7 +329,7 @@ js1_correct    .block
                sta   js1_y          ; Sauvegarde la position caractère Y.
                pla                  ; Récupération minimale
                plp                  ; ... des registres.
-               rts
+               rts                  ; Môman, c'est fini.
 vallsb         .byte 0
                .bend
 ;------------------------------------------------------------------------------
@@ -370,7 +370,7 @@ js2_correct    .block
                sta   js2_y          ; Sauvegarde la position caractère Y.
                pla                  ; Récupération minimale
                plp                  ; ... des registres.
-               rts
+               rts                  ; Môman, c'est fini.
 vallsb         .byte 0
                .bend
 ;------------------------------------------------------------------------------
@@ -379,7 +379,7 @@ vallsb         .byte 0
 js_showvals    .block
                jsr   js1_showvals
                jsr   js2_showvals
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;------------------------------------------------------------------------------
 ; Affiche les valeurs du Port jeu #1 et les valeurs calculées.
@@ -433,7 +433,7 @@ js1_showvals   .block
                ldy   #>js1_val16    ; ... et on 
                jsr   putscxy        ; ... affiche js1_val16.
                jsr   popregs        ; Récupère les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -488,7 +488,7 @@ js2_showvals   .block
                ldy   #>js2_val16    ; ... et on
                jsr   putscxy        ; ... affiche js2_val16
                jsr   popregs        ; Récupère les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -529,7 +529,7 @@ showit         lda   #0             ; On retire
                ldy   addr2          ; ... pour la mémoriser dans 
                ldx   addr2+1        ; ... addr2.
                jsr   popregs        ; Récupère les registres.
-               rts
+               rts                  ; Môman, c'est fini.
 flag           .byte   0
                .bend
 
@@ -555,7 +555,7 @@ js_eoraddrxy   .block
                eor   #%01000000     ; On l'inverse.
                sta   (zpage2),y     ; et on le replace.
                jsr   popall
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------

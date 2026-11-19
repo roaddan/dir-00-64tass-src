@@ -41,7 +41,7 @@ scrmaninit     .block
                jsr   cls            ; Efface l'écran.
                jsr   screenena      ; enable screen
                jsr   pop            ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend  
 
 ;------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ cls            .block
                jsr   chrout         ;   d'effacement d'écran.
                pla                  ; Récupère les registres  
                plp                  ;   modifiés.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ again          jsr   chrout         ; On affiche A.
                dex                  ; Un de moins à faire.
                bne   again          ; Si pas à 0 on en affiche encore.
 out            jsr   pop            ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ putch          .block
                php                  ; Sauvegarde le registre de status.
                jsr   chrout         ; Affiche le caractère de Acc.
                plp                  ; Récupère le registre de status.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ next           lda   (zpage1),y     ; Lit un charactère.
                jsr   inczp1         ; Inc. le pointeur ZP1 en 16 bits.
                jmp   next           ; Saute chercher le prochain carac.
 exit           jsr   popall         ; Récupère registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ tyhigh         cpy   #40            ; Verifie la limite supérieure de Y.
 allok          clc                  ; carry à 0 pour positionner le curseur.
                jsr   plot           ; La routine Kernal de positionnement.
                jsr   pop            ; Récupère les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;------------------------------------------------------------------------------
 ; Positionne C=1 ou Sauvegarde C=0 le curseur et la couleur par défaut.
@@ -159,7 +159,7 @@ restore        ldx   cy             ; Comme C=1, On charge x avec
                lda   bcol           ; On replace la couleur par basic  
                sta   bascol         ;   sauvegardé.
 out            jsr   pop            ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -172,7 +172,7 @@ cursave        .block
                sec                  ; Le carry à 1 pour sauvegarder (X,Y).
                jsr   cursor         ; Voir cette fonction plus haut.
                plp                  ; Récupère le status.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -186,7 +186,7 @@ curput         .block
                clc                  ; Le carry à 0 pour récupérer (X,Y).
                jsr   cursor         ; Voir cette fonction plus haut.
                plp                  ; Récupère le status.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -215,7 +215,7 @@ putsxy         .block
                ldy   zpage1+1       ; ... de la chaine et on  
                jsr   puts           ; ... l'affiche.
                jsr   popall         ; Récupère registre, ZP1 et ZP2.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -243,7 +243,7 @@ putscxy        .block
                pla                  ; On replace la couleur basic  
                sta   bascol         ; ... que nous avions sauvegardée.
                jsr   popall         ; Récupère registre, ZP1 et ZP2.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -259,7 +259,7 @@ putrahex       .block
                ldy   #>a2hexstr      ; ... hexa dans $YYXX. 
                jsr   puts           ; Affiche la chaîne.
                jsr   pop         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -279,7 +279,7 @@ putrahexxy     .block
                jsr   putsxy         ; Positionne et affiche la chaîne.
                pla                  ; Récupère le registre a et  
                plp                  ; ... le registre de status.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -302,7 +302,7 @@ putrahexcxy    .block
                jsr   putsxy         ; Colore, positionne et affiche la
                                     ; ... chaîne.
                jsr   pop         ; Récupère tous les registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 setinverse     .block
@@ -312,7 +312,7 @@ setinverse     .block
                jsr   chrout         ; ... est affiché.
                pla                  ; Récupération minimaliste 
                plp                  ; ... des registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 clrinverse     .block
@@ -322,7 +322,7 @@ clrinverse     .block
                jsr   chrout         ; ... est affiché.
                pla                  ; Récupération minimaliste 
                plp                  ; ... des registres.
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;------------------------------------------------------------------------------
 

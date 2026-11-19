@@ -163,7 +163,7 @@ uiifisbusy     .block
                eor   #%00000001     ; Logique inversée : BEQ si occupé, 
                                     ;                    BNE si libre.  
                pla
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ uiifbusywait   .block
 wait           jsr   uiifisbusy
                beq   wait           ; En attente de la disparition de « Busy ».
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ uiifisdataacc  .block
                eor   #%00000010     ; Logique inversée : BEQ si Dacc,  
                                     ;                    BNE si /Dacc.     
                pla
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -203,7 +203,7 @@ uiifdaccwait   .block
 wait           jsr   uiifisdataacc
                bne   wait           ; En attente de l'apparition de Dacc.
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -226,7 +226,7 @@ uiifisabortp   .block
                                     ;        BEQ si abandon est en attente
                                     ;        BNE si aucun abandon.
                pla
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -237,7 +237,7 @@ uiifabortpwait .block
 wait           jsr   uiifisabortp
                bne   wait           ; En attendant que Dacc apparaisse.
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -256,7 +256,7 @@ uiifiscerror   .block
                eor   #%00001000     ; Logique inv.    BEQ si ERREUR   
                                     ;                 BNE si pas d'ERREUR
                pla 
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -276,7 +276,7 @@ uiifgetcmdstat .block
                lsr
                and   #%00000011     ; On masque les bits 2 à 7.
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -294,7 +294,7 @@ uiifisrdataavail
                eor   #%00000010     ; Logique inv.    BEQ si ERREUR   
                                     ;                 BNE si pas d'ERREUR
                pla
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -315,7 +315,7 @@ uiifisstatdata .block
                                     ; BEQ, si données statistiques disponibles.
                                     ; BNE, si aucune donnée statistique.
                pla 
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -336,7 +336,7 @@ uiifisrespdata .block
                                     ; BEQ, si données statistiques disponibles.
                                     ; BNE, si aucune donnée statistique.
                pla 
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;*******************************************************************************
@@ -354,7 +354,7 @@ uiifsendpushcmd
                sta   uiictrlreg  
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -369,7 +369,7 @@ uiifsenddataacc
                sta   uiictrlreg  
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
          
 ;------------------------------------------------------------------------------
@@ -382,7 +382,7 @@ uiifsendabort  .block
                sta   uiictrlreg  
                pla
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
          
 ;------------------------------------------------------------------------------
@@ -394,7 +394,7 @@ notyet         jsr   uiifgetcmdstat
                cmp   #$00
                bne   notyet
                plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -406,7 +406,7 @@ uiifismoredata .block
                and   #%00000010
                eor   #%00000010
                pla
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -416,7 +416,7 @@ uiifismoredata .block
 uiifputcmdbyte .block
                jsr   uiifbusywait
                sta   uiicmddata
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 ;------------------------------------------------------------------------------
 ; Écrit une commande terminée par un octet nul dans le tampon de commandes du
@@ -435,7 +435,7 @@ next           lda   (zpage1),y
 finish         lda   #$01
                sta   uiictrlreg
                jsr   pop
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -450,7 +450,7 @@ uiifreadrxdata .block
                jmp   outdata
 nodata         lda   #$00
 outdata        plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
 ;------------------------------------------------------------------------------
@@ -465,6 +465,6 @@ uiifreadsdata  .block
                jmp   outdata
 nodata         lda   #$00
 outdata        plp
-               rts
+               rts                  ; Môman, c'est fini.
                .bend
 
