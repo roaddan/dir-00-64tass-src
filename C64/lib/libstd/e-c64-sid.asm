@@ -1,6 +1,6 @@
 ;------------------------------------------------------------------------------
 ; Scripteur ......: Daniel Lafrance, Québec, canada.
-; Nom du fichier .: e-c64-sid-ii.asm
+; Nom du fichier .: e-c64-sid.asm
 ; Type fichier....: Constantes
 ; Creation........: 20151208 
 ; Version.........: 0.1.0

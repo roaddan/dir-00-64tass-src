@@ -20,10 +20,6 @@ main           .block
                jsr   scrmaninit     ; Initialise l'écran.
                #disable             ; Inhibe les changements de jeu de carac.
                jsr   drawcredits    ; Affiche l'écran des credits. 
-               ;ldx   #$00           ; Attend environ 1 secondes.
-waitmore       ;jsr   delay
-               ;dex
-               ;bpl   waitmore
                jsr   sid_tada       ; Joue le son de bienvenue.
                jsr   screendis      ; Désactive l'affichage vidéo.
                jsr   copycharset    ; Copie la matrice de caractères en ram.
@@ -108,6 +104,6 @@ romend         jmp   romend
                .include "e-c64-kernal.asm"        ; ... au noyeau (Kernal),
                .include "e-c64-vicii.asm"         ; ... au VICII,
                .include "e-c64-basic2.asm"        ; ... à la ROM Basic,
-               .include "e-c64-sid-ii.asm"        ; ... au SID,
+               .include "e-c64-sid.asm"        ; ... au SID,
                .include "e-c64-sid-notes-ntsc.asm"; ... aux fréquences NTSC.
 ;-----------------------------------------------------------------------------

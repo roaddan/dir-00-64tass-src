@@ -38,8 +38,8 @@ vic_son3       .byte sid_v3offset + 4,   15        ; sid+24=54296,  15   Volume.
 
 ; Place une note dans le 
 sid_note       .macro voix,freq
-               php
-               pha
+               php                  ; Sauvegarde le status et 
+               pha                  ; ... accumulateur
                .if \voix=2 
                      lda   #<\freq
                      sta   sid+7
@@ -56,8 +56,8 @@ sid_note       .macro voix,freq
                      lda   #>\freq
                      sta   sid+1
                .endif               
-               pla
-               plp
+               pla                  ; Récupère l'accumulateur et
+               plp                  ; ... le status.
                .endm
 
 sid_prog       .macro xyimm
